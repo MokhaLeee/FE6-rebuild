@@ -102,7 +102,7 @@ TmApplyTsa: @ 0x0800043C
 
 	arm_func_start PutOamHi
 PutOamHi: @ 0x08000494
-	push {r4, r5, r6, r7}
+	push {r0-r7}
 	ldr r7, .L08000490 @ =gOamHiPutIt
 PutOamLoExt:
 	ldr r5, [r7]
@@ -142,7 +142,7 @@ PutOamLoExt:
 	subs r4, r4, #1
 	bne .L080004D0
 .L08000528:
-	pop {r4, r5, r6, r7}
+	pop {r0-r7}
 	bx lr
 	.align 2, 0
 .L08000530: .4byte gOamLoPutIt

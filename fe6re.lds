@@ -322,7 +322,6 @@ SECTIONS
         src/ai_script.o(.text);
         src/ai_battle.o(.text);
         src/ai_080326C4.o(.text);
-        asm/code-sio.o(.text);
         src/ui.o(.text);
         src/menu.o(.text);
         src/mapselect.o(.text);
@@ -467,6 +466,8 @@ SECTIONS
         *libc.a:memset.o(.text);
         *libc.a:strcpy.o(.text);
 
+        src/sio.o(.text);
+
         asm/code_linker_stubs.o(.text);
 
         /* .rodata */
@@ -510,7 +511,6 @@ SECTIONS
         . = ALIGN(4); src/unitpanel.o(.rodata);
         . = ALIGN(4); src/battlepreview.o(.rodata);
         . = ALIGN(4); data/rodata_105DD0.o(.rodata);
-        . = ALIGN(4); data/sio_rodata.o(.rodata);
         . = ALIGN(4); src/ai_order.o(.rodata);
         . = ALIGN(4); src/ai_perform.o(.rodata);
         . = ALIGN(4); src/ai_utility.o(.rodata);
@@ -518,8 +518,6 @@ SECTIONS
         . = ALIGN(4); src/ai_data.o(.rodata);
         . = ALIGN(4); src/ai_battle.o(.rodata);
         . = ALIGN(4); src/ai_080326C4.o(.rodata);
-        . = ALIGN(4); src/code_sio.o(.rodata);
-        . = ALIGN(4); data/sio_data.o(.rodata);
         . = ALIGN(4); src/ui.o(.rodata);
         . = ALIGN(4); src/ui_img.o(.rodata);
         . = ALIGN(4); src/banim_efxquake_data.o(.rodata);
@@ -656,7 +654,6 @@ SECTIONS
         . = ALIGN(4); src/ai_data.o(.data);
         . = ALIGN(4); src/ai_battle.o(.data);
         . = ALIGN(4); src/ai_080326C4.o(.data);
-        . = ALIGN(4); data/sio_data.o(.data);
         . = ALIGN(4); src/ui.o(.data);
         . = ALIGN(4); src/menu.o(.data);
         . = ALIGN(4); src/mapselect.o(.data);
@@ -870,11 +867,12 @@ SECTIONS
         . = ALIGN(4); src/opanim6.o(.data);
         . = ALIGN(4); data/opanim6.o(.data);
         . = ALIGN(4); src/titlescreen.o(.data);
+        . = ALIGN(4); src/sio_rodata.o(.rodata);
 
-        . = ALIGN(4); data/_maybayunused_692308.o(.data);
         . = ALIGN(4); src/banimdata_table.o(.data);
+
+        . = 0x6A1000;
         . = ALIGN(4); src/banimdata.o(.data);
-        . = ALIGN(4); data/_maybayunused_7E989C.o(.data);
         . = ALIGN(4); src/banimdata_terraininfo.o(.rodata);
         . = ALIGN(4); src/banimdata_terraininfo_data.o(.data);
         . = ALIGN(4); src/banimdata_charpal.o(.rodata);

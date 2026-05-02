@@ -309,9 +309,6 @@ void func_fe6_080483E0(struct ProcEkrBattleEnding *proc)
 
 	if (GetBattleAnimArenaFlag() != 1)
 		ApplyChapterMapPalettes();
-
-	if (GetBanimLinkArenaFlag() == 1)
-		func_fe6_0803CF58();
 	
 	Proc_Break(proc);
 }
