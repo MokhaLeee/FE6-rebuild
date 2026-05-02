@@ -1,0 +1,167 @@
+#pragma once
+
+#include "prelude.h"
+
+#include "event.h"
+#include "unit.h"
+#include "eventinfo.h"
+
+struct ChapterEventInfo
+{
+    /* 00 */ EventListScr const * event_list_turn;
+    /* 04 */ EventListScr const * event_list_talk;
+    /* 08 */ EventListScr const * event_list_tile;
+    /* 0C */ EventListScr const * event_list_move;
+    /* 10 */ struct UnitInfo const * units_red;
+    /* 14 */ struct UnitInfo const * units_blue;
+    /* 18 */ EventScr const * event_script_victory;
+};
+
+struct ChapterInfo const * GetChapterInfo(int chapter);
+u8 const * GetChapterMap(int chapter);
+struct MapChangeInfo const * GetChapterMapChanges(int chapter);
+struct ChapterEventInfo const * GetChapterEventInfo(int chapter);
+char const * GetChapterUnk_0802BBD0(int chapter);
+
+/* 1 */
+extern u16 MapAsset14_Img[];
+extern u16 MapAsset13_Img[];
+extern u16 MapAsset12_Img[];
+extern u16 MapAsset11_Img[];
+extern u16 MapAsset1c_Img[];
+extern u16 MapAsset10_Img[];
+extern u16 MapAsset09_Img[];
+extern u16 MapAsset08_Img[];
+extern u16 MapAsset07_Img[];
+extern u16 MapAsset06_Img[];
+extern u16 MapAsset05_Img[];
+extern u16 MapAsset04_Img[];
+extern u16 MapAsset03_Img[];
+extern u16 MapAsset02_Img[];
+extern u16 MapAsset8b_TsaConf[];
+extern u16 MapAsset14_TsaConf[];
+extern u16 MapAsset13b_TsaConf[];
+extern u16 MapAsset13_TsaConf[];
+extern u16 MapAsset12_TsaConf[];
+extern u16 MapAsset11_TsaConf[];
+extern u16 MapAsset1c_TsaConf[];
+extern u16 MapAsset10_TsaConf[];
+extern u16 MapAsset09_TsaConf[];
+extern u16 MapAsset08_TsaConf[];
+extern u16 MapAsset01B_TsaConf[];
+extern u16 MapAsset07_TsaConf[];
+extern u16 MapAsset06_TsaConf[];
+extern u16 MapAsset05_TsaConf[];
+extern u16 MapAsset04_TsaConf[];
+extern u16 MapAsset03_TsaConf[];
+extern u16 MapAsset02_TsaConf[];
+extern u16 MapAsset01_TsaConf[];
+extern u16 MapAsset4d_ImgAnims[];
+extern u16 MapAsset10b_Pal[];
+extern u16 MapAsset12b_Pal[];
+extern u16 MapAsset04c_Pal[];
+extern u16 MapAsset8b_Pal[];
+extern u16 MapAsset7b_Pal[];
+extern u16 MapAsset14_Pal[];
+extern u16 MapAsset13b_Pal[];
+extern u16 MapAsset13_Pal[];
+extern u16 MapAsset01_NightPal[];
+extern u16 MapAsset12_Pal[];
+extern u16 MapAsset11_Pal[];
+extern u16 MapAsset1c_Pal[];
+extern u16 MapAsset10_Pal[];
+extern u16 MapAsset09_Pal[];
+extern u16 MapAsset04b_Pal[];
+extern u16 MapAsset08_Pal[];
+extern u16 MapAsset01B_Pal[];
+extern u16 MapAsset07_Pal[];
+extern u16 MapAsset06_Pal[];
+extern u16 MapAsset05_Pal[];
+extern u16 MapAsset04_Pal[];
+extern u16 MapAsset03_Pal[];
+extern u16 MapAsset02_Pal[];
+extern u16 MapAsset01_Pal[];
+extern u16 MapTsa_Xmap5[];
+extern u16 MapTsa_Xmap4[];
+extern u16 MapTsa_Xmap3[];
+extern u16 MapTsa_Xmap2[];
+extern u16 MapTsa_Xmap1[];
+extern u16 MapTsa_MultiArena[];
+extern u16 MapTsa_Ch21x[];
+extern u16 MapTsa_Ch20dx[];
+extern u16 MapTsa_Ch20cx[];
+extern u16 MapTsa_Ch16x[];
+extern u16 MapTsa_Ch14x[];
+extern u16 MapTsa_Ch12x[];
+extern u16 MapTsa_Ch8x[];
+extern u16 MapTsa_Ch20d[];
+extern u16 MapTsa_Ch19d[];
+extern u16 MapTsa_Ch18d[];
+extern u16 MapTsa_Ch17d[];
+extern u16 MapTsa_Ch11b[];
+extern u16 MapTsa_Ch10b[];
+extern u16 MapTsa_Ch25[];
+extern u16 MapTsa_Ch24[];
+extern u16 MapTsa_Ch23[];
+extern u16 MapTsa_Ch22[];
+extern u16 MapTsa_Ch21[];
+extern u16 MapTsa_Ch20c[];
+extern u16 MapTsa_Ch19c[];
+extern u16 MapTsa_Ch18c[];
+extern u16 MapTsa_Ch17c[];
+extern u16 MapTsa_Ch16[];
+extern u16 MapTsa_Ch15[];
+extern u16 MapTsa_Ch14[];
+extern u16 MapTsa_Ch13[];
+extern u16 MapTsa_Ch12[];
+extern u16 MapTsa_Ch11a[];
+extern u16 MapTsa_Ch10a[];
+extern u16 MapTsa_Ch9[];
+extern u16 MapTsa_Ch8[];
+extern u16 MapTsa_Ch7[];
+extern u16 MapTsa_Ch6[];
+extern u16 MapTsa_Ch5[];
+extern u16 MapTsa_Ch4[];
+extern u16 MapTsa_Ch3[];
+extern u16 MapTsa_Ch2[];
+extern u16 MapTsa_Ch1[];
+extern u16 MapTsa_Chapter0[];
+extern u16 MapAsset01_Img1[];
+extern u16 MapAsset01B_Img2[];
+extern u16 MapAsset01_Img2[];
+
+/* 2 */
+extern const struct MapChangeInfo MapChange_Ch0[];
+extern const struct MapChangeInfo MapChange_Ch1[];
+extern const struct MapChangeInfo MapChange_Ch2[];
+extern const struct MapChangeInfo MapChange_Ch3[];
+extern const struct MapChangeInfo MapChange_Ch4[];
+extern const struct MapChangeInfo MapChange_Ch5[];
+extern const struct MapChangeInfo MapChange_Ch6[];
+extern const struct MapChangeInfo MapChange_Ch7[];
+extern const struct MapChangeInfo MapChange_Ch8[];
+extern const struct MapChangeInfo MapChange_Ch9[];
+extern const struct MapChangeInfo MapChange_Ch10a[];
+extern const struct MapChangeInfo MapChange_Ch11a[];
+extern const struct MapChangeInfo MapChange_Ch10b[];
+extern const struct MapChangeInfo MapChange_Ch11b[];
+extern const struct MapChangeInfo MapChange_Ch12[];
+extern const struct MapChangeInfo MapChange_Ch13[];
+extern const struct MapChangeInfo MapChange_Ch15[];
+extern const struct MapChangeInfo MapChange_Ch16[];
+extern const struct MapChangeInfo MapChange_Ch17c[];
+extern const struct MapChangeInfo MapChange_Ch17d[];
+extern const struct MapChangeInfo MapChange_Ch18c[];
+extern const struct MapChangeInfo MapChange_Ch19c[];
+extern const struct MapChangeInfo MapChange_Ch20c[];
+extern const struct MapChangeInfo MapChange_Ch21[];
+extern const struct MapChangeInfo MapChange_Ch22[];
+extern const struct MapChangeInfo MapChange_08688E64[];
+extern const struct MapChangeInfo MapChange_Ch23[];
+extern const struct MapChangeInfo MapChange_Ch24[];
+extern const struct MapChangeInfo MapChange_Ch19d[];
+extern const struct MapChangeInfo MapChange_Ch20d[];
+extern const struct MapChangeInfo MapChange_Ch12x[];
+extern const struct MapChangeInfo MapChange_Ch14x[];
+extern const struct MapChangeInfo MapChange_Ch20cx[];
+extern const struct MapChangeInfo MapChange_Ch21x[];

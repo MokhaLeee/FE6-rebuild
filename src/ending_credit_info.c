@@ -1,0 +1,283 @@
+#include "prelude.h"
+#include "ending.h"
+
+CONST_DATA struct CreditInfo gCreditInfo[] = {
+	{
+		.job   = "EXECUTIVE PRODUCER\n",
+		.staff = "Hiroshi Yamauchi",
+		.x = 0x3,
+		.y = 0x8,
+	},
+	{
+		.job   = "PRODUCER\n",
+		.staff = "Takehiro Izushi",
+		.x = 0x4,
+		.y = 0x8,
+	},
+	{
+		.job   = "DIRECTOR\n",
+		.staff = "Tohru Narihiro",
+		.x = 0x4,
+		.y = 0x8,
+	},
+	{
+		.job   = "SUPER VISOR\n",
+		.staff = "Kentaro Nishimura",
+		.x = 0x3,
+		.y = 0x8,
+	},
+	{
+		.job   = (void *)0x1,
+		.x = 0x0,
+		.y = 0x0,
+	},
+	{
+		.job   = (void *)0x2,
+		.x = 0x0,
+		.y = 0x0,
+	},
+	{
+		.job   = "GAME DIRECTOR\nSCENARIO",
+		.staff = "\nMasayuki Horikawa",
+		.x = 0x3,
+		.y = 0x6,
+	},
+	{
+		.job   = "SYSTEM DIRECTOR\nMAIN PROGRAM",
+		.staff = "\nTakafumi Kaneko",
+		.x = 0x3,
+		.y = 0x6,
+	},
+	{
+		.job   = (void *)0x2,
+		.x = 0x0,
+		.y = 0x0,
+	},
+	{
+		.job   = "ART DIRECTOR\n",
+		.staff = "Taeko Kaneda",
+		.x = 0x4,
+		.y = 0x8,
+	},
+	{
+		.job   = "MAIN DESIGN\nFACE DESIGN",
+		.staff = "\nSachiko Wada",
+		.x = 0x4,
+		.y = 0x6,
+	},
+	{
+		.job   = "GRAPHIC CHIEF\n",
+		.staff = "Masahiro Higuchi",
+		.x = 0x3,
+		.y = 0x8,
+	},
+	{
+		.job   = (void *)0x2,
+		.x = 0x0,
+		.y = 0x0,
+	},
+	{
+		.job   = "EVENT PROGRAM\n",
+		.staff = "Takanori Hino",
+		.x = 0x4,
+		.y = 0x8,
+	},
+	{
+		.job   = "EVENT & SUPPORT\n",
+		.staff = "Makoto Katayama",
+		.x = 0x3,
+		.y = 0x8,
+	},
+	{
+		.job   = "A.I. PROGRAM\n",
+		.staff = "Chikara Yamamoto",
+		.x = 0x3,
+		.y = 0x8,
+	},
+	{
+		.job   = (void *)0x2,
+		.x = 0x0,
+		.y = 0x0,
+	},
+	{
+		.job   = "BATTLE DESIGN\n",
+		.staff = "Naotaka Ohnishi",
+		.x = 0x4,
+		.y = 0x8,
+	},
+	{
+		.job   = "BATTLE PROGRAM\n",
+		.staff = "Motomu Chikaraishi",
+		.x = 0x3,
+		.y = 0x8,
+	},
+	{
+		.job   = "BATTLE ANIMATION\n",
+		.staff = "Maki Takemori\nYoko Nakai",
+		.x = 0x4,
+		.y = 0x7,
+	},
+	{
+		.job   = (void *)0x2,
+		.x = 0x0,
+		.y = 0x0,
+	},
+	{
+		.job   = "MAP DESIGN\n",
+		.staff = "Sumiko Miki",
+		.x = 0x4,
+		.y = 0x8,
+	},
+	{
+		.job   = "LAYOUT\n",
+		.staff = "Makoto Shimojo",
+		.x = 0x4,
+		.y = 0x8,
+	},
+	{
+		.job   = (void *)0x2,
+		.x = 0x0,
+		.y = 0x0,
+	},
+	{
+		.job   = "SOUND COMPOSITION\n",
+		.staff = "Yuka Tsujiyoko",
+		.x = 0x4,
+		.y = 0x8,
+	},
+	{
+		.job   = "SOUND EFFECT \n",
+		.staff = "Kenichi Nishimaki\nNoritaka Misawa",
+		.x = 0x3,
+		.y = 0x7,
+	},
+	{
+		.job   = (void *)0x2,
+		.x = 0x0,
+		.y = 0x0,
+	},
+	{
+		.job   = "GRAPHIC SUPPORT\n",
+		.staff = "Minoru Noda\nRyo Hirata\nTuyoshi Nakatuka\nMasaru Nishimura",
+		.x = 0x3,
+		.y = 0x5,
+	},
+	{
+		.job   = "SCENARIO SUPPORT\n",
+		.staff = "Kouhei Maeda",
+		.x = 0x4,
+		.y = 0x8,
+	},
+	{
+		.job   = "PROGRAM SUPPORT\n",
+		.staff = "Susumu Ishihara\nYusuke Murakami",
+		.x = 0x3,
+		.y = 0x7,
+	},
+	{
+		.job   = (void *)0x2,
+		.x = 0x0,
+		.y = 0x0,
+	},
+	{
+		.job   = "IMAGE ILLUSTRATION\n",
+		.staff = " Eiji Kaneda",
+		.x = 0x4,
+		.y = 0x8,
+	},
+	{
+		.job   = "ART WORK\n",
+		.staff = "Yasuo Inoue\nTakashi Itou",
+		.x = 0x4,
+		.y = 0x7,
+	},
+	{
+		.job   = "PUBLISHMENT\n",
+		.staff = "Yusuke Kitanishi\nTetsuro Oe",
+		.x = 0x3,
+		.y = 0x7,
+	},
+	{
+		.job   = (void *)0x2,
+		.x = 0x0,
+		.y = 0x0,
+	},
+	{
+		.job   = "TECHNICAL SUPPORT\n",
+		.staff = "Kenji Nakajima",
+		.x = 0x3,
+		.y = 0x8,
+	},
+	{
+		.job   = "PROCESS MANAGER\n",
+		.staff = " Kenji Imai",
+		.x = 0x4,
+		.y = 0x8,
+	},
+	{
+		.job   = (void *)0x2,
+		.x = 0x0,
+		.y = 0x0,
+	},
+	{
+		.job   = "SPECIAL THANKS\n",
+		.staff = "Ryoichi Kitanishi\nKozo Ikuno\nToshiyuki Nakamura\nMasahiro Nakamori\nToshio Sengoku",
+		.x = 0x3,
+		.y = 0x4,
+	},
+	{
+		.staff = "Masanobu Matsunaga\nRyuichiro Koguchi\nYuka Hongou\nKatsuyoshi Koya",
+		.x = 0x3,
+		.y = 0x4,
+	},
+	{
+		.job   = (void *)0x2,
+		.x = 0x0,
+		.y = 0x0,
+	},
+	{
+		.staff = "Masao Yamamoto\nKyoko Watanabe\nYutaka Takehisa\nToshihiro Toza",
+		.x = 0x3,
+		.y = 0x4,
+	},
+	{
+		.staff = "Masahiro Sakurai\n         &\nSmash Brothers DX\n       Team         ",
+		.x = 0x3,
+		.y = 0x4,
+	},
+	{
+		.staff = "Tomonori Sumiya\nHiroshi Izawa\nKotaro Yamada",
+		.x = 0x3,
+		.y = 0x5,
+	},
+	{
+		.job   = (void *)0x2,
+		.x = 0x0,
+		.y = 0x0,
+	},
+	{
+		.staff = "SUPER MARIO CLUB",
+		.x = 0x1,
+		.y = 0x7,
+	},
+	{
+		.staff = "Masaru Ikeshita\nHaruka Kato\nMasami Kato\nJunko Komaki\nNobuaki Maeda\nKatsunori Masutani\nAkiko Matsumoto\nNaotaka Matsumoto",
+		.x = 0x3,
+		.y = 0x0,
+	},
+	{
+		.staff = "Hiroyuki Murata\nKei Nadabe\nTomohiro Nishigaki\nKeiichiro Nishimoto\nRyuichiro Sakima\nMasaharu Shima\nSyogo Tachibana\nShigeo Takada",
+		.x = 0x3,
+		.y = 0x0,
+	},
+	{
+		.staff = "Atsushi Takeda\nHiroya Takeda\nHisashi Takizaki\nYoshikazu Tanaka\nMari Ueda\nSatoru Uno\nYuichiro Ushijima\nHiroyuki Yamaoka",
+		.x = 0x3,
+		.y = 0x0,
+	},
+	{
+		.job   = (void *)0x2,
+		.x = 0x0,
+		.y = 0x0,
+	},
+};
