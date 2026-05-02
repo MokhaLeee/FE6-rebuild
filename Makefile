@@ -21,6 +21,8 @@ SYM := $(ROM:%.gba=%.sym)
 
 all: $(ROM) $(SYM)
 
+BANIM_LINK_ADDR:=0x080A0000
+
 # ====================
 # = TOOL DEFINITIONS =
 # ====================
@@ -166,7 +168,7 @@ STRIPER        := $(BANIM_TOOLS)/strip.sh
 BANIM_OBJECT := src/banimdata.o
 
 $(BUILD_DIR)/$(BANIM_OBJECT): linker_script_banim.txt $(shell ./tools/banimtools/banim_compressing_linker.py -t linker_script_banim.txt -m)
-	@./tools/banimtools/banim_compressing_linker.py -o $@ -t linker_script_banim.txt -b 0x086A1000 -l $(LD) --objcopy $(OBJCOPY) -c ./tools/banimtools/compressor.py
+	@./tools/banimtools/banim_compressing_linker.py -o $@ -t linker_script_banim.txt -b $(BANIM_LINK_ADDR) -l $(LD) --objcopy $(OBJCOPY) -c ./tools/banimtools/compressor.py
 
 BANIM_LINK_SCR := ./linker_script_banim.txt
 

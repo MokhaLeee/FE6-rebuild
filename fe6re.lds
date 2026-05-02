@@ -462,8 +462,11 @@ SECTIONS
         *libc.a:strcpy.o(.text);
 
         src/sio.o(.text);
-
         asm/code_linker_stubs.o(.text);
+
+        /* here could expand to 0x400000 */
+        . = 0x000A0000;
+        . = ALIGN(4); src/banimdata.o(.data);
 
         /* .rodata */
         . = ALIGN(4); src/msg_data.o(.rodata);
@@ -505,7 +508,6 @@ SECTIONS
         . = ALIGN(4); src/arena.o(.rodata);
         . = ALIGN(4); src/unitpanel.o(.rodata);
         . = ALIGN(4); src/battlepreview.o(.rodata);
-        . = ALIGN(4); data/rodata_105DD0.o(.rodata);
         . = ALIGN(4); src/ai_order.o(.rodata);
         . = ALIGN(4); src/ai_perform.o(.rodata);
         . = ALIGN(4); src/ai_utility.o(.rodata);
@@ -843,7 +845,6 @@ SECTIONS
         . = ALIGN(4); src/ending_handler.o(.data);
         . = ALIGN(4); src/ending_pinfo.o(.data);
         . = ALIGN(4); src/ending_pinfo_data.o(.data);
-        . = ALIGN(4); data/data_68C1DC.o(.data);
         . = ALIGN(4); src/worldmap.o(.data);
         . = ALIGN(4); src/worldmapfx.o(.data);
         . = ALIGN(4); src/worldmap_eventscr.o(.data);
@@ -862,16 +863,12 @@ SECTIONS
         . = ALIGN(4); src/sio_rodata.o(.rodata);
 
         . = ALIGN(4); src/banimdata_table.o(.data);
-
-        . = 0x6A1000;
-        . = ALIGN(4); src/banimdata.o(.data);
         . = ALIGN(4); src/banimdata_terraininfo.o(.rodata);
         . = ALIGN(4); src/banimdata_terraininfo_data.o(.data);
         . = ALIGN(4); src/banimdata_charpal.o(.rodata);
         . = ALIGN(4); src/banimdata_charpal_data.o(.data);
         . = ALIGN(4); FILL(0xFF);
-
-        . = 0x800000; /* end */
+        . = ALIGN(32);
     } = 0
 
     /* DWARF 2 sections */
