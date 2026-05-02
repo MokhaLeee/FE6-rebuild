@@ -1136,6 +1136,7 @@ void func_fe6_0808A524(struct SaveMenuProc * proc)
         proc->max_index++;
     }
 
+#if 0
     if (IsNotFirstPlaythrough_2())
     {
         proc->unk_32 |= 8;
@@ -1147,6 +1148,7 @@ void func_fe6_0808A524(struct SaveMenuProc * proc)
         proc->unk_32 |= 1;
         proc->max_index++;
     }
+#endif
 
     if (proc->unk_32 != 0)
     {

@@ -1107,12 +1107,12 @@ void SaveMenu_StartXmapSoundRoom(struct SaveMenuProc * proc)
     switch (proc->sel_index)
     {
         case 1:
-            SaveMenu_ExecXmap(0, proc);
+            // SaveMenu_ExecXmap(0, proc);
             break;
 
         case 8:
             StartBgmVolumeChange(0x80, 0, 0x20, NULL);
-            SaveMenu_ExecSoundroom(proc);
+            // SaveMenu_ExecSoundroom(proc);
             break;
     }
 }
