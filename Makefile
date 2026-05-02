@@ -5,7 +5,7 @@
 # = PROJECT CONFIG =
 # ==================
 
-BUILD_NAME := fe6
+BUILD_NAME := fe6re
 
 SRC_DIR = src
 ASM_DIR = asm
@@ -14,7 +14,12 @@ BUILD_DIR = build
 CLEAN_FILES :=
 CLEAN_DIRS  :=
 
-all: compare
+ROM := $(BUILD_NAME).gba
+ELF := $(ROM:%.gba=%.elf)
+MAP := $(ROM:%.gba=%.map)
+SYM := $(ROM:%.gba=%.sym)
+
+all: $(ROM) $(SYM)
 
 # ====================
 # = TOOL DEFINITIONS =
@@ -213,10 +218,6 @@ clean_banim:
 # = Targets =
 # ===========
 
-ROM := $(BUILD_NAME).gba
-ELF := $(ROM:%.gba=%.elf)
-MAP := $(ROM:%.gba=%.map)
-
 ifeq (,$(findstring $(C_GENERATED),$(C_SRCS)))
 C_SRCS += $(C_GENERATED)
 endif
@@ -235,14 +236,13 @@ $(shell mkdir -p $(SUBDIRS))
 # = RECIPES =
 # ===========
 
-compare: $(ROM)
-	$(SHASUM) -c fe6.sha1
-
-.PHONY: compare
-
 %.gba: %.elf
 	@echo "[OPY]	$@"
-	$(OBJCOPY) --strip-debug -O binary $< $@
+	@$(OBJCOPY) --strip-debug -O binary $< $@
+
+%.sym: %.elf
+	@echo "[SYM]	$@"
+	@python3 tools/scripts/elf2sym.py $< | python3 tools/scripts/sym_modify.py > $@
 
 $(ELF): $(ALL_OBJS) $(LDS)
 	@echo "[LD ]	$@"

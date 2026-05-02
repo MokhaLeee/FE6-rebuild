@@ -565,7 +565,7 @@ data/banims/notm_sw1/notm_sw1_0.4bpp.lz
 data/banims/notm_sw1/notm_sw1_1.4bpp.lz
 data/banims/notm_sw1/notm_sw1_2.4bpp.lz
 data/banims/notm_sw1/notm_sw1_3.4bpp.lz
-data/banims/notm_sw1/notm_sw1.agbpal.lz.stripped
+data/banims/notm_sw1/notm_sw1.agbpal.lz
 data/banims/notm_sw1/notm_sw1.oaml.bin.lz
 data/banims/notm_sw1/notm_sw1.oamr.bin.lz
 data/banims/notm_sw1/notm_sw1.o|.data.script>lz
@@ -574,7 +574,7 @@ data/banims/notf_sw1/notf_sw1_0.4bpp.lz
 data/banims/notf_sw1/notf_sw1_1.4bpp.lz
 data/banims/notf_sw1/notf_sw1_2.4bpp.lz
 data/banims/notf_sw1/notf_sw1_3.4bpp.lz
-data/banims/notf_sw1/notf_sw1.agbpal.lz.stripped
+data/banims/notf_sw1/notf_sw1.agbpal.lz
 data/banims/notf_sw1/notf_sw1.oaml.bin.lz
 data/banims/notf_sw1/notf_sw1.oamr.bin.lz
 data/banims/notf_sw1/notf_sw1.o|.data.script>lz
@@ -582,7 +582,7 @@ data/banims/notf_sw1/notf_sw1.mode.bin
 data/banims/notm_ar1/notm_ar1_0.4bpp.lz
 data/banims/notm_ar1/notm_ar1_1.4bpp.lz
 data/banims/notm_ar1/notm_ar1_2.4bpp.lz
-data/banims/notm_ar1/notm_ar1.agbpal.lz.stripped
+data/banims/notm_ar1/notm_ar1.agbpal.lz
 data/banims/notm_ar1/notm_ar1.oaml.bin.lz
 data/banims/notm_ar1/notm_ar1.oamr.bin.lz
 data/banims/notm_ar1/notm_ar1.o|.data.script>lz
@@ -590,17 +590,17 @@ data/banims/notm_ar1/notm_ar1.mode.bin
 data/banims/notf_ar1/notf_ar1_0.4bpp.lz
 data/banims/notf_ar1/notf_ar1_1.4bpp.lz
 data/banims/notf_ar1/notf_ar1_2.4bpp.lz
-data/banims/notf_ar1/notf_ar1.agbpal.lz.stripped
+data/banims/notf_ar1/notf_ar1.agbpal.lz
 data/banims/notf_ar1/notf_ar1.oaml.bin.lz
 data/banims/notf_ar1/notf_ar1.oamr.bin.lz
 data/banims/notf_ar1/notf_ar1.o|.data.script>lz
 data/banims/notf_ar1/notf_ar1.mode.bin
-data/banims/notf_ar1/notf_ar1_2.agbpal.lz.stripped
+data/banims/notf_ar1/notf_ar1_2.agbpal.lz
 data/banims/notm_ar1/notm_ar1_2.oaml.bin.lz
 data/banims/notm_ar1/notm_ar1_2.oamr.bin.lz
 data/banims/notm_ar1/notm_ar1_2.o|.data.script>lz
 data/banims/notm_ar1/notm_ar1_2.mode.bin
-data/banims/notm_ar1/notm_ar1_2.agbpal.lz.stripped
+data/banims/notm_ar1/notm_ar1_2.agbpal.lz
 data/banims/notf_ar1/notf_ar1_2.oaml.bin.lz
 data/banims/notf_ar1/notf_ar1_2.oamr.bin.lz
 data/banims/notf_ar1/notf_ar1_2.o|.data.script>lz
