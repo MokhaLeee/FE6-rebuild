@@ -1,19 +1,6 @@
 	.include "asm_proc.inc"
 	.data
 
-
-	.global ProcScr_OpAnim_Nintendo
-ProcScr_OpAnim_Nintendo: @ 086920D0
-	PROC_MARK 9
-	PROC_CALL func_fe6_0809B280
-	PROC_CALL FadeInBlackSpeed10
-	PROC_SLEEP 0
-	PROC_SLEEP 220
-	PROC_CALL FadeInBlackWithCallBack_Speed10
-	PROC_SLEEP 0
-	PROC_CALL func_fe6_08098C94
-	PROC_END
-
 	.global gTitleDuration
 gTitleDuration: @ 08692118
 	.4byte 0x348

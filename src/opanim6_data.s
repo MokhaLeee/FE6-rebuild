@@ -15,7 +15,6 @@ ProcScr_OpAnim6: @ 08691E48
 	PROC_SLEEP 0
 	PROC_CALL func_fe6_0809AD64
 	PROC_SLEEP 30
-	PROC_CALL func_fe6_08098C94
 	PROC_END
 
 	.global ProcScr_OpAnimThunderStorm

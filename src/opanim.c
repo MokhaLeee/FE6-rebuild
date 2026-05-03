@@ -67,12 +67,9 @@ void OpAnimfxTerminator_Loop(ProcPtr proc)
 }
 
 struct ProcScr CONST_DATA ProcScr_OpAnim[] = {
-	PROC_ONEND(OpAnim_OnEnd),
 	PROC_CALL(OpAnim_Init),
 	PROC_SLEEP(0),
 	PROC_START_CHILD(ProcScr_OpAnimfxTerminator),
-	PROC_SLEEP(0),
-	PROC_START_CHILD_LOCKING(ProcScr_OpAnim_Nintendo),
 	PROC_SLEEP(0),
 	PROC_START_CHILD_LOCKING(ProcScr_OpAnim6),
 	PROC_SLEEP(0),
@@ -91,9 +88,6 @@ void OpAnim_ResetDispIO(void)
 	SetBlendNone();
 }
 
-void OpAnim_OnEnd(void)
-{}
-
 u16 CONST_DATA BgConf_OpAnim_08691604[12] = {
 	// tile offset  map offset  screen size
 	0x0000,         0xA000,     0,          // BG 0
@@ -111,9 +105,6 @@ void OpAnim_Init(void)
 	EnablePalSync();
 	bool_opanim_03005284 = false;
 }
-
-void func_fe6_080988BC(void)
-{}
 
 u16 CONST_DATA BgConf_OpAnim_0869161C[12] = {
 	// tile offset  map offset  screen size
@@ -145,66 +136,4 @@ void OpAnim_SetWin0Layers(int bg0, int bg1, int bg2, int bg3, int obj)
 	gDispIo.win_ct.wout_enable_blend = 0;
 
 	EnablePalSync();
-}
-
-void PutOpAnimSubtitle6(void)
-{
-	OpAnim_PutSubtitle(6);
-}
-
-void OpAnim_SetupGlyph(int pal_id)
-{
-	ApplyPalette(Pal_OpAnimGlyphs + PAL_OFFSET(pal_id), 0x10 + OBPAL_OPANIM_0F);
-	func_fe6_0809937C();
-	PutImg_OpAnimGlyphs();
-}
-
-void OpAnim_PutSubtitle(int idx)
-{
-	char *str = DecodeMsg(Msgs_OpAnim_08691738[idx]);
-	u16 *unk_08 = gOpAnimSubtitleConf[idx].unk_08;
-	int unk_00 = gOpAnimSubtitleConf[idx].unk_00;
-	int unk_r8 = 0;
-
-	while (str != NULL) {
-		NewOpAnimSubtitleDisp(idx, unk_00, unk_r8, str);
-
-		str = OpAnimSubtitleStringAdvance(str);
-		unk_00 += 20;
-
-		if (gOpAnimSubtitleConf[idx].unk_02 != 0) {
-			unk_r8 += gUnk_08691498 + *unk_08;
-			unk_08++;
-		}
-	}
-}
-
-void NewOpAnimSubtitleDisp(int idx, int a, int delay, char *str)
-{
-	struct ProcOpAnimSubtitleDisp *proc;
-
-	proc = SpawnProc(ProcScr_OpAnimSubtitleDisp, PROC_TREE_3);
-	proc->delay_timer = delay;
-	proc->str = str;
-	proc->unk_30 = a;
-	proc->index = idx;
-}
-
-void OpAnimSubtitleDisp_Init(struct ProcOpAnimSubtitleDisp *proc)
-{
-	proc->delay_timer = 0;
-}
-
-void OpAnimSubtitleDisp_Wait(struct ProcOpAnimSubtitleDisp *proc)
-{
-	proc->delay_timer--;
-
-	if (proc->delay_timer <= 0)
-		Proc_Break(proc);
-}
-
-void OpAnimSubtitleDisp_Setup(struct ProcOpAnimSubtitleDisp *proc)
-{
-	proc->x_center = (0xF0 - func_fe6_08099328(proc->str)) / 2;
-	proc->unk_64 = 0;
 }

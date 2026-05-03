@@ -374,9 +374,7 @@ SECTIONS
         src/arena_ui.o(.text);
         src/suspend_ui.o(.text);
         src/opanim.o(.text);
-        asm/opanim.o(.text);
         src/opanim6.o(.text);
-        asm/opanim5.o(.text);
         src/titlescreen.o(.text);
         src/m4a_1.o(.text);
         src/m4a.o(.text);
@@ -791,7 +789,6 @@ SECTIONS
         . = ALIGN(4); src/arena_ui.o(.data);
         . = ALIGN(4); src/suspend_ui.o(.data);
         . = ALIGN(4); src/opanim.o(.data);
-        . = ALIGN(4); data/opanim.o(.data);
         . = ALIGN(4); src/opanim6.o(.data);
         . = ALIGN(4); src/opanim6_data.o(.data);
         . = ALIGN(4); data/opanim6.o(.data);

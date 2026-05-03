@@ -40,8 +40,7 @@ void func_fe6_0809AA20(int a, int b)
 
 void OpAnim6_StartBGM(struct ProcOpAnim6 *proc)
 {
-	if (bool_opanim_03005284 == false)
-		StartBgmCore(SONG_44, 0);
+	StartBgmCore(SONG_44, 0);
 }
 
 void OpAnim6_PutThunderStormGfx(struct ProcOpAnim6 *proc)
