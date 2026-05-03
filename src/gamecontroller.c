@@ -52,10 +52,6 @@ PROC_LABEL(L_GAMECTRL_OPENINGSEQ),
     PROC_GOTO(L_GAMECTRL_TITLE),
 
 PROC_LABEL(L_GAMECTRL_CLASSDEMO),
-    PROC_CALL(GC_InitDemo),
-
-    PROC_CALL_2(GC_StartClassDemo),
-
     PROC_CALL(GC_PostDemo),
     PROC_YIELD,
 
@@ -64,10 +60,9 @@ PROC_LABEL(L_GAMECTRL_CLASSDEMO),
 PROC_LABEL(L_GAMECTRL_SCENEDEMO),
     PROC_CALL(GC_InitDemo),
 
-    PROC_CALL_ARG(StartDemoSceneEvent, 0),
-    PROC_YIELD,
-
-    PROC_CALL(CleanupGame),
+    // PROC_CALL_ARG(StartDemoSceneEvent, 0),
+    // PROC_YIELD,
+    // PROC_CALL(CleanupGame),
 
     PROC_CALL(GC_PostDemo),
     PROC_YIELD,
@@ -222,30 +217,6 @@ int GetFurthestSaveChapter(void)
     }
 
     return chapter;
-}
-
-bool GC_StartClassDemo(struct GameController * proc)
-{
-    int class_set, chapter;
-
-    chapter = GetFurthestSaveChapter();
-    class_set = GetChapterInfo(chapter)->class_roll_set;
-
-    if (class_set == 6)
-    {
-        if (proc->previous_demo_class_set == 6)
-            class_set = 7;
-        else
-            class_set = 6;
-    }
-
-    if (chapter == 0)
-        class_set = 0;
-
-    proc->previous_demo_class_set = class_set;
-    StartClassDemo(class_set, proc);
-
-    return FALSE;
 }
 
 void GC_CheckSramResetKeyCombo(struct GameController * proc)

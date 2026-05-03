@@ -62,14 +62,6 @@ SECTIONS
     __ewram_overlay_end = MAX(., __ewram_overlay_end);
 
     . = __ewram_overlay_beg;
-    ewram_overlay_opinfo (NOLOAD) : ALIGN(4)
-    {
-        . = ALIGN(4); src/opinfo.o(ewram_overlay_opinfo);
-        . = ALIGN(4); src/opinfo_classdemo.o(ewram_overlay_opinfo);
-    }
-    __ewram_overlay_end = MAX(., __ewram_overlay_end);
-
-    . = __ewram_overlay_beg;
     ewram_overlay_banim (NOLOAD) : ALIGN(4)
     {
         . = ALIGN(4); src/banim_ekrbattle.o(ewram_overlay_banim);
@@ -365,11 +357,6 @@ SECTIONS
         src/worldmap.o(.text);
         src/worldmapfx.o(.text);
         src/monologue.o(.text);
-        src/opinfo.o(.text);
-        asm/opinfo.o(.text);
-        src/opinfo_classdemo.o(.text);
-        asm/opinfo_classdemo.o(.text);
-        src/opinfo_classdemo2.o(.text);
         src/shop.o(.text);
         src/arena_ui.o(.text);
         src/suspend_ui.o(.text);
@@ -517,8 +504,6 @@ SECTIONS
         . = ALIGN(4); src/ending_monologue_img.o(.rodata);
         . = ALIGN(4); src/trig_high_accuracy.o(.rodata);
         . = ALIGN(4); src/worldmapfx.o(.rodata);
-        . = ALIGN(4); src/opinfo_img.o(.rodata);
-        . = ALIGN(4); src/opinfo_classdemo.o(.rodata);
         . = ALIGN(4); src/shop.o(.rodata);
         . = ALIGN(4); src/arena_ui.o(.rodata);
         . = ALIGN(4); src/suspend_ui.o(.rodata);
@@ -782,9 +767,6 @@ SECTIONS
         . = ALIGN(4); src/worldmapfx.o(.data);
         . = ALIGN(4); src/worldmap_eventscr.o(.data);
         . = ALIGN(4); src/monologue.o(.data);
-        . = ALIGN(4); src/opinfo.o(.data);
-        . = ALIGN(4); data/opinfo.o(.data);
-        . = ALIGN(4); src/opinfo_classdemo.o(.data);
         . = ALIGN(4); src/shop.o(.data);
         . = ALIGN(4); src/arena_ui.o(.data);
         . = ALIGN(4); src/suspend_ui.o(.data);
