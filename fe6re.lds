@@ -43,7 +43,6 @@ SECTIONS
         . = ALIGN(4); src/unitlistscreen.o(ewram_overlay_0);
         . = ALIGN(4); src/prepmenu.o(ewram_overlay_0);
         . = ALIGN(4); src/prep_sallycir.o(ewram_overlay_0);
-        . = ALIGN(4); src/secretscreen.o(ewram_overlay_0);
         . = ALIGN(4); src/augury.o(ewram_overlay_0);
     }
     __ewram_overlay_end = MAX(., __ewram_overlay_end);
@@ -53,22 +52,6 @@ SECTIONS
     {
         . = ALIGN(4); src/savemenu.o(ewram_overlay_savemenu);
         . = ALIGN(4); src/savemenu_2.o(ewram_overlay_savemenu);
-    }
-    __ewram_overlay_end = MAX(., __ewram_overlay_end);
-
-    . = __ewram_overlay_beg;
-    ewram_overlay_sio (NOLOAD) : ALIGN(4)
-    {
-        . = 0x000000; gUnk_Sio_02000000 = .;
-        . = 0x001000; gFont_Unk_Sio_02001000 = .;
-        . = 0x001018; gText_Unk_Sio_02001018 = .;
-        /* gap? */
-        . = 0x0012A0; gUnk_Sio_020012A0 = .;
-        /* gap? */
-        . = 0x001520; gUnk_Sio_02001520 = .;
-        . = 0x001524; gUnk_Sio_02001524 = .;
-        . = 0x001528; gUnk_Sio_02001528 = .;
-        . = 0x00152C; gSioImgBuf = .;
     }
     __ewram_overlay_end = MAX(., __ewram_overlay_end);
 
@@ -138,27 +121,6 @@ SECTIONS
         . = ALIGN(4); src/ai_phase.o(ewram_data);
         . = ALIGN(4); src/ai_decide.o(ewram_data);
         . = ALIGN(4); src/ai_080326C4.o(ewram_data);
-
-        /* SIO */
-        . = 0x0203B218 - __ewram_overlay_end; gSioOutgoing = .;
-        . = 0x0203B618 - __ewram_overlay_end; gSioIncoming = .;
-        . = 0x0203C618 - __ewram_overlay_end; gLinkArenaSt = .;
-        . = 0x0203C67C - __ewram_overlay_end; gSioText_0203C67C = .;
-        . = 0x0203C6A4 - __ewram_overlay_end; gSioText_0203C6A4 = .;
-        . = 0x0203C704 - __ewram_overlay_end; gSioSaveConfig = .;
-        . = 0x0203C708 - __ewram_overlay_end; gSioText_0203C708 = .;
-        . = 0x0203C758 - __ewram_overlay_end; gSioFont_0203C758 = .;
-        . = 0x0203C770 - __ewram_overlay_end; gLinkArenaTeamList = .;
-        . = 0x0203C83C - __ewram_overlay_end; gSioResultRankings = .;
-        . = 0x0203C900 - __ewram_overlay_end; gSioTexts = .;
-        . = 0x0203C920 - __ewram_overlay_end; gKeyInputSequenceBuffer = .;
-        . = 0x0203C940 - __ewram_overlay_end; gKeyInputSequenceTimer = .;
-        . = 0x0203C980 - __ewram_overlay_end; gSioXmapOption = .;
-        . = 0x0203C984 - __ewram_overlay_end; gSioBmSt = .;
-        . = 0x0203C993 - __ewram_overlay_end; Sio_Unk_0203C993 = .;
-        . = 0x0203C9D0 - __ewram_overlay_end; Unk_Sio_0203C9D0 = .;
-
-        . = 0x0203C9D4 - __ewram_overlay_end;
         . = ALIGN(4); src/ui.o(ewram_data);
         . = ALIGN(4); src/mapselect.o(ewram_data);
         . = ALIGN(4); src/banim_ekrbattle.o(ewram_data);
@@ -168,6 +130,7 @@ SECTIONS
         . = ALIGN(4); src/banim_efxopmagic.o(ewram_data);
         . = ALIGN(4); src/banim_dragon.o(ewram_data);
         . = ALIGN(4); src/manim.o(ewram_data);
+        . = ALIGN(4); src/prepmenu.o(ewram_data);
         . = ALIGN(4); gUnk_0203D354 = .; . = . + 4;
         . = ALIGN(4); gUnk_0203D358 = .; . = . + 4;
         . = ALIGN(1); gUnk_0203D35C = .; . = . + 1;
@@ -186,7 +149,6 @@ SECTIONS
         . = ALIGN(4); src/helpbox.o(ewram_data);
         . = ALIGN(4); src/chapter_title.o(ewram_data);
         . = ALIGN(4); src/helpbox_2.o(ewram_data);
-        . = ALIGN(4); src/secretscreen.o(ewram_data);
         . = ALIGN(4); src/save_core.o(ewram_data);
         . = ALIGN(4); src/save_stats.o(ewram_data);
         . = ALIGN(4); src/save_game.o(ewram_data);
@@ -216,27 +178,6 @@ SECTIONS
         . = ALIGN(4); src/map.o(.bss);
         . = ALIGN(4); src/ai_script.o(.bss);
         . = ALIGN(4); src/ai_battle.o(.bss);
-
-        . = 0x0013B8; sSioCnt = .;
-        . = 0x0013BC; sSioId = .;
-        . = 0x0013C0; gUnk_030013C0 = .;
-        . = 0x0013C4; gUnk_030013C4 = .;
-        . = 0x0013C8; gUnk_030013C8 = .;
-        . = 0x0013CA; gUnk_030013CA = .;
-        . = 0x0013D0; sReadCursor = .;
-        . = 0x0013D8; sRecvCursor = .;
-        . = 0x0013E0; gCurrentKeyInSeqIndex = .;
-        . = 0x0013E4; gTargetKeyInSeqIndex = .;
-        . = 0x0013E8; gUnk_030013E8 = .;
-        . = 0x0013F0; gUnk_030013F0 = .;
-        . = 0x001404; gUnk_03001404 = .;
-        . = 0x001408; gUnk_03001408 = .;
-        . = 0x00140C; gUnk_0300140C = .;
-        . = 0x001410; gUnk_03001410 = .;
-        . = 0x001418; gUnk_03001418 = .;
-        . = 0x001428; gUnk_03001428 = .;
-        . = 0x001438; gUnk_03001438 = .; . = . + 8;
-
         . = ALIGN(4); src/mu.o(.bss);
         . = ALIGN(4); src/shop.o(.bss);
         . = ALIGN(4); data/sounds/music_player_table.o(.bss);
@@ -403,8 +344,6 @@ SECTIONS
         src/prep_bgscroll.o(.text);
         src/prep_sallycir.o(.text);
         src/prep_utils.o(.text);
-        asm/secretscreen.o(.text);
-        src/secretscreen.o(.text);
         src/save_core.o(.text);
         src/save_stats.o(.text);
         src/save_game.o(.text);
@@ -413,7 +352,6 @@ SECTIONS
         src/minimap.o(.text);
         src/savemenu.o(.text);
         src/savemenu_2.o(.text);
-        asm/savemenufx.o(.text);
         src/config.o(.text);
         src/augury.o(.text);
         src/playrank.o(.text);
@@ -440,7 +378,6 @@ SECTIONS
         src/opanim6.o(.text);
         asm/opanim5.o(.text);
         src/titlescreen.o(.text);
-
         src/m4a_1.o(.text);
         src/m4a.o(.text);
         asm/gbasyscall.o(.text);
@@ -460,7 +397,6 @@ SECTIONS
         *libc.a:memcpy.o(.text);
         *libc.a:memset.o(.text);
         *libc.a:strcpy.o(.text);
-
         src/sio.o(.text);
         asm/code_linker_stubs.o(.text);
 
@@ -825,7 +761,6 @@ SECTIONS
         . = ALIGN(4); src/prep_bgscroll.o(.data);
         . = ALIGN(4); src/prep_sallycir.o(.data);
         . = ALIGN(4); src/prep_utils.o(.data);
-        . = ALIGN(4); asm/secretscreen.o(.data);
         . = ALIGN(4); src/chapterunits.o(.data);
         . = ALIGN(4); src/chapterinfo/map_changes.o(.rodata);
         . = ALIGN(4); src/save_core.o(.data);

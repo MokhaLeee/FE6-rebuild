@@ -58,6 +58,8 @@ EWRAM_OVERLAY(0) struct PrepItemListEnt gPrepItemListData[400] = {};
 EWRAM_OVERLAY(0) u16 gPrepAllItemsCount = 0;
 EWRAM_OVERLAY(0) u16 gPrepMenuScrollPos = 0;
 
+EWRAM_DATA u8 SioPidPool[SID_PID_POOL_SIZE] = {};
+
 void ResetSioPidPool(void)
 {
 	int i;
