@@ -793,6 +793,7 @@ SECTIONS
         . = ALIGN(4); src/opanim.o(.data);
         . = ALIGN(4); data/opanim.o(.data);
         . = ALIGN(4); src/opanim6.o(.data);
+        . = ALIGN(4); src/opanim6_data.o(.data);
         . = ALIGN(4); data/opanim6.o(.data);
         . = ALIGN(4); src/titlescreen.o(.data);
         . = ALIGN(4); src/sio_rodata.o(.rodata);

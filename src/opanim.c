@@ -74,26 +74,8 @@ struct ProcScr CONST_DATA ProcScr_OpAnim[] = {
 	PROC_SLEEP(0),
 	PROC_START_CHILD_LOCKING(ProcScr_OpAnim_Nintendo),
 	PROC_SLEEP(0),
-	PROC_CALL(OpAnim_StartBGM),
-	PROC_CALL(OpAnim_StartTimer),
-	PROC_START_CHILD_LOCKING(ProcScr_OpAnim1),
-	PROC_SLEEP(0),
-	PROC_CALL(OpAnimAdvance),
-	PROC_START_CHILD_LOCKING(ProcScr_OpAnim2),
-	PROC_SLEEP(0),
-	PROC_CALL(OpAnimAdvance),
-	PROC_START_CHILD_LOCKING(ProcScr_OpAnim3),
-	PROC_SLEEP(0),
-	PROC_CALL(OpAnimAdvance),
-	PROC_START_CHILD_LOCKING(ProcScr_OpAnim4),
-	PROC_SLEEP(0),
-	PROC_CALL(OpAnimAdvance),
-	PROC_START_CHILD_LOCKING(ProcScr_OpAnim5),
-	PROC_SLEEP(0),
-	PROC_CALL(OpAnimAdvance),
 	PROC_START_CHILD_LOCKING(ProcScr_OpAnim6),
 	PROC_SLEEP(0),
-	PROC_CALL(OpAnimAdvance),
 	PROC_END_EACH(ProcScr_OpAnimfxTerminator),
 	PROC_START_CHILD_LOCKING(ProcScr_TitleScreenFromOp),
 	PROC_SLEEP(0),
@@ -127,7 +109,6 @@ void OpAnim_Init(void)
 	SetWinEnable(0, 0, 0);
 	SetAllBlackPals();
 	EnablePalSync();
-	OpAnim_SetupGlyph(0);
 	bool_opanim_03005284 = false;
 }
 
@@ -166,117 +147,9 @@ void OpAnim_SetWin0Layers(int bg0, int bg1, int bg2, int bg3, int obj)
 	EnablePalSync();
 }
 
-void OpAnim_StartBGM(void)
-{
-	if (!bool_opanim_03005284)
-		StartBgmCore(SONG_42, NULL);
-}
-
-struct ProcScr CONST_DATA ProcScr_OpAnimTimer[] = {
-	PROC_CALL(OpAnimTimer_Init),
-	PROC_REPEAT(OpAnimTimer_Loop),
-};
-
-#if NONMATCHING
-void OpAnim_StartTimer(ProcPtr proc)
-{
-	const struct ProcScr *scr = ProcScr_OpAnimTimer;
-	int i = 0;
-
-	while (i < ARRAY_COUNT(gOpAnimStep))
-		gOpAnimStep[i++] = 0;
-
-	SpawnProc(scr, proc);
-}
-#else
-NAKEDFUNC
-void OpAnim_StartTimer(ProcPtr proc)
-{
-asm("\
-	.syntax unified\n\
-	push {r4, lr}\n\
-	adds r1, r0, #0\n\
-	ldr r4, .L08098A3C @ =ProcScr_OpAnimTimer\n\
-	ldr r3, .L08098A40 @ =gOpAnimStep\n\
-	movs r0, #0\n\
-	adds r2, r3, #0\n\
-	adds r2, #0x1c\n\
-.L08098A26:\n\
-	str r0, [r2]\n\
-	subs r2, #4\n\
-	cmp r2, r3\n\
-	bge .L08098A26\n\
-	adds r0, r4, #0\n\
-	bl SpawnProc\n\
-	pop {r4}\n\
-	pop {r0}\n\
-	bx r0\n\
-	.align 2, 0\n\
-.L08098A3C: .4byte ProcScr_OpAnimTimer\n\
-.L08098A40: .4byte gOpAnimStep\n\
-	.syntax divided\n\
-");
-}
-#endif
-
-void OpAnimTimer_Init(struct ProcOpAnimTimer *proc)
-{
-	proc->timer = 0;
-}
-
-void OpAnimTimer_Loop(struct ProcOpAnimTimer *proc)
-{
-	proc->timer++;
-}
-
-void OpAnimAdvance(void)
-{
-	struct ProcOpAnimTimer *timer;
-
-	timer = FindProc(ProcScr_OpAnimTimer);
-
-	gOpAnimStep[0]++;
-	gOpAnimStep[gOpAnimStep[0]] = timer->timer;
-}
-
-void PutOpAnimSubtitle0(void)
-{
-	OpAnim_PutSubtitle(0);
-}
-
-void PutOpAnimSubtitle1(void)
-{
-	OpAnim_PutSubtitle(1);
-}
-
-void PutOpAnimSubtitle2(void)
-{
-	OpAnim_PutSubtitle(2);
-}
-
-void PutOpAnimSubtitle3(void)
-{
-	OpAnim_PutSubtitle(3);
-}
-
-void PutOpAnimSubtitle4(void)
-{
-	OpAnim_PutSubtitle(4);
-}
-
-void PutOpAnimSubtitle5(void)
-{
-	OpAnim_PutSubtitle(5);
-}
-
 void PutOpAnimSubtitle6(void)
 {
 	OpAnim_PutSubtitle(6);
-}
-
-void PutOpAnimSubtitle7(void)
-{
-	OpAnim_PutSubtitle(7);
 }
 
 void OpAnim_SetupGlyph(int pal_id)

@@ -308,32 +308,3 @@ clean:
 # ======================
 
 %/main.o:           CFLAGS += -mtpcs-frame
-
-%/irq.o:            CFLAG_OPT := -O0
-%/random.o:         CFLAG_OPT := -O0
-%/hardware.o:       CFLAG_OPT := -O0
-%/move.o:           CFLAG_OPT := -O0
-%/oam.o:            CFLAG_OPT := -O0
-%/sound.o:          CFLAG_OPT := -O0
-%/ramfunc.o:        CFLAG_OPT := -O0
-%/proc.o:           CFLAG_OPT := -O0
-%/icon.o:           CFLAG_OPT := -O0
-%/debugtext.o:      CFLAG_OPT := -O0
-%/text.o:           CFLAG_OPT := -O0
-%/banim_sprite.o:   CFLAG_OPT := -O0
-%/sprite.o:         CFLAG_OPT := -O0
-%/face.o:           CFLAG_OPT := -O0
-%/talk.o:           CFLAG_OPT := -O0
-%/event.o:          CFLAG_OPT := -O0
-%/spriteanim.o:     CFLAG_OPT := -O0
-%/gamecontroller.o: CFLAG_OPT := -O0
-%/msg.o:            CFLAG_OPT := -O0
-
-%/mu.o:             CFLAG_OPT := -O0
-%/manim.o:          CFLAG_OPT := -O0
-%/scanline.o:          CFLAG_OPT := -O0
-
-%/gbasram.o:        CFLAG_OPT := -O1
-%/shop.o:           CFLAG_OPT := -O0
-%/arena_ui.o:       CFLAG_OPT := -O0
-%/suspend_ui.o:     CFLAG_OPT := -O0
