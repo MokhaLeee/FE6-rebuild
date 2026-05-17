@@ -514,8 +514,6 @@ bool _SetupBanim(void)
 	return true;
 }
 
-/* https://decomp.me/scratch/eHa2J */
-#if NONMATCHING
 u16 GetBattleAnimationId(const struct BanimInfoEnt * animdef, u16 item)
 {
 	int i, found;
@@ -558,116 +556,6 @@ u16 GetBattleAnimationId(const struct BanimInfoEnt * animdef, u16 item)
 
 	return (ret - 1);
 }
-#else
-
-NAKEDFUNC
-u16 GetBattleAnimationId(const struct BanimInfoEnt * animdef, u16 item)
-{
-asm("\
-	.syntax unified\n\
-	push {r4, r5, r6, r7, lr}\n\
-	mov r7, sl\n\
-	mov r6, sb\n\
-	mov r5, r8\n\
-	push {r5, r6, r7}\n\
-	sub sp, #4\n\
-	mov sl, r0\n\
-	lsls r1, r1, #0x10\n\
-	lsrs r1, r1, #0x10\n\
-	mov r8, r1\n\
-	movs r0, #0\n\
-	mov sb, r0\n\
-	mov r2, sl\n\
-	cmp r2, #0\n\
-	beq .L08049BD4\n\
-	mov r0, r8\n\
-	bl GetItemKind\n\
-	cmp r0, #9\n\
-	bne .L08049BDC\n\
-.L08049BD4:\n\
-	ldr r0, .L08049BD8 @ =0x0000FFFF\n\
-	b .L08049C4A\n\
-	.align 2, 0\n\
-.L08049BD8: .4byte 0x0000FFFF\n\
-.L08049BDC:\n\
-	mov r3, r8\n\
-	cmp r3, #0\n\
-	bne .L08049BE6\n\
-	movs r1, #9\n\
-	b .L08049BF0\n\
-.L08049BE6:\n\
-	mov r0, r8\n\
-	bl GetItemKind\n\
-	lsls r0, r0, #0x10\n\
-	lsrs r1, r0, #0x10\n\
-.L08049BF0:\n\
-	movs r6, #0\n\
-	movs r7, #0\n\
-.L08049BF4:\n\
-	mov r5, sl\n\
-	b .L08049C32\n\
-.L08049BF8:\n\
-	cmp r6, #0\n\
-	bne .L08049C00\n\
-	cmp r0, #0xff\n\
-	bhi .L08049C30\n\
-.L08049C00:\n\
-	cmp r6, #1\n\
-	bne .L08049C0A\n\
-	ldrh r0, [r5]\n\
-	cmp r0, #0xff\n\
-	bls .L08049C30\n\
-.L08049C0A:\n\
-	ldrh r4, [r5]\n\
-	mov r0, r8\n\
-	str r1, [sp]\n\
-	bl GetItemIid\n\
-	ldr r1, [sp]\n\
-	cmp r4, r0\n\
-	beq .L08049C24\n\
-	ldrh r2, [r5]\n\
-	ldr r3, .L08049C2C @ =0xFFFFFF00\n\
-	adds r0, r2, r3\n\
-	cmp r0, r1\n\
-	bne .L08049C30\n\
-.L08049C24:\n\
-	ldrh r5, [r5, #2]\n\
-	mov sb, r5\n\
-	movs r7, #1\n\
-	b .L08049C38\n\
-	.align 2, 0\n\
-.L08049C2C: .4byte 0xFFFFFF00\n\
-.L08049C30:\n\
-	adds r5, #4\n\
-.L08049C32:\n\
-	ldrh r0, [r5]\n\
-	cmp r0, #0\n\
-	bne .L08049BF8\n\
-.L08049C38:\n\
-	cmp r7, #1\n\
-	beq .L08049C42\n\
-	adds r6, #1\n\
-	cmp r6, #1\n\
-	ble .L08049BF4\n\
-.L08049C42:\n\
-	mov r0, sb\n\
-	subs r0, #1\n\
-	lsls r0, r0, #0x10\n\
-	lsrs r0, r0, #0x10\n\
-.L08049C4A:\n\
-	add sp, #4\n\
-	pop {r3, r4, r5}\n\
-	mov r8, r3\n\
-	mov sb, r4\n\
-	mov sl, r5\n\
-	pop {r4, r5, r6, r7}\n\
-	pop {r1}\n\
-	bx r1\n\
-	.align 2, 0\n\
-	.syntax divided\n\
-");
-}
-#endif
 
 int GetBanimTerrainGround(u16 terrain, u16 tileset)
 {

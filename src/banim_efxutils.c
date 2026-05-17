@@ -153,7 +153,6 @@ CONST_DATA u16 gEfxTmyPalRefs[] = {
 	0xB000, 0xC000, 0xD000, 0xE000, 0xF000,
 };
 
-#if NONMATCHING
 void EfxTmModifyPal(u16 * tm, u16 width, u16 height)
 {
 	int i, j;
@@ -177,75 +176,6 @@ void EfxTmModifyPal(u16 * tm, u16 width, u16 height)
 		_tm += len;
 	}
 }
-#else
-NAKEDFUNC
-void EfxTmModifyPal(u16 * tm, u16 width, u16 height)
-{
-asm("\
-	.syntax unified\n\
-	push {r4, r5, r6, r7, lr}\n\
-	mov r7, sb\n\
-	mov r6, r8\n\
-	push {r6, r7}\n\
-	lsls r1, r1, #0x10\n\
-	lsrs r1, r1, #0x10\n\
-	mov ip, r1\n\
-	lsls r2, r2, #0x10\n\
-	adds r3, r0, #0\n\
-	lsrs r2, r2, #0x10\n\
-	cmp r2, #0\n\
-	beq .L0805B198\n\
-	movs r0, #0x20\n\
-	subs r0, r0, r1\n\
-	lsls r0, r0, #0x10\n\
-	mov r8, r0\n\
-	ldr r0, .L0805B1A4 @ =gEfxTmyPalRefs\n\
-	mov sb, r0\n\
-.L0805B160:\n\
-	mov r4, ip\n\
-	subs r2, #1\n\
-	cmp r4, #0\n\
-	beq .L0805B18E\n\
-	ldr r7, .L0805B1A8 @ =0x00000FFF\n\
-	mov r6, sb\n\
-	movs r5, #0xf\n\
-.L0805B16E:\n\
-	ldrh r0, [r3]\n\
-	adds r1, r0, #0\n\
-	lsrs r0, r0, #0xc\n\
-	ands r0, r5\n\
-	subs r0, #6\n\
-	lsls r0, r0, #0x10\n\
-	ands r1, r7\n\
-	lsrs r0, r0, #0xf\n\
-	adds r0, r0, r6\n\
-	ldrh r0, [r0]\n\
-	adds r1, r0, r1\n\
-	strh r1, [r3]\n\
-	adds r3, #2\n\
-	subs r4, #1\n\
-	cmp r4, #0\n\
-	bne .L0805B16E\n\
-.L0805B18E:\n\
-	mov r1, r8\n\
-	lsrs r0, r1, #0xf\n\
-	adds r3, r3, r0\n\
-	cmp r2, #0\n\
-	bne .L0805B160\n\
-.L0805B198:\n\
-	pop {r3, r4}\n\
-	mov r8, r3\n\
-	mov sb, r4\n\
-	pop {r4, r5, r6, r7}\n\
-	pop {r0}\n\
-	bx r0\n\
-	.align 2, 0\n\
-.L0805B1A4: .4byte gEfxTmyPalRefs\n\
-.L0805B1A8: .4byte 0x00000FFF\n\
-	.syntax divided\n\
-");
-}
-#endif
 
 void EfxTmCpyBG(const void *ptr1, void *ptr2, u16 width, u16 height, int pal, int chr)
 {
@@ -763,17 +693,7 @@ int GetAnimSpriteRotScaleX(u32 header)
 	u32 a = header >> 30;
 	u32 b = header & 0xC000;
 
-#if !NONMATCHING
-	const s16 * src = gAnimSpriteRotScalePosX;
-
-	a = a << 1;
-	b = b >> 11;
-	a = a + b;
-
-	return *(s16 *)((void *)src + a);
-#else
 	return gAnimSpriteRotScalePosX[a + (b >> 12)];
-#endif
 }
 
 int GetAnimSpriteRotScaleY(u32 header)
@@ -781,17 +701,7 @@ int GetAnimSpriteRotScaleY(u32 header)
 	u32 a = header >> 30;
 	u32 b = header & 0xC000;
 
-#if !NONMATCHING
-	const s16 * src = gAnimSpriteRotScalePosY;
-
-	a = a << 1;
-	b = b >> 11;
-	a = a + b;
-
-	return *(s16 *)((void *)src + a);
-#else
 	return gAnimSpriteRotScalePosY[a + (b >> 12)];
-#endif
 }
 
 void BanimUpdateSpriteRotScale(void *src, struct BaSpriteData *out, s16 x, s16 y, int unused)

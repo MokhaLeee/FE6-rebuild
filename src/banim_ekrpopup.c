@@ -41,7 +41,6 @@ void EfxPlaySound5CVol100(void)
     EfxPlaySE(SONG_5C, 0x100);
 }
 
-#if NONMATCHING
 void MakeBattlePopupTileMap(u16 * tm, u16 width)
 {
     u32 i;
@@ -65,131 +64,6 @@ void MakeBattlePopupTileMap(u16 * tm, u16 width)
     tm[0x41 + i] = buf[0x47] + 0x1100;
     tm[0x61 + i] = buf[0x5F] + 0x1100;
 }
-#else
-NAKEDFUNC
-void MakeBattlePopupTileMap(u16 * tm, u16 width)
-{
-asm("\
-    .syntax unified\n\
-    push {r4, r5, r6, r7, lr}\n\
-    mov r7, sl\n\
-    mov r6, sb\n\
-    mov r5, r8\n\
-    push {r5, r6, r7}\n\
-    sub sp, #4\n\
-    mov ip, r0\n\
-    lsls r1, r1, #0x10\n\
-    lsrs r1, r1, #0x10\n\
-    mov sb, r1\n\
-    ldr r6, .L0805F278 @ =gEkrTsaBuffer\n\
-    ldrh r1, [r6]\n\
-    movs r2, #0x88\n\
-    lsls r2, r2, #5\n\
-    adds r0, r1, r2\n\
-    mov r3, ip\n\
-    strh r0, [r3]\n\
-    mov r1, ip\n\
-    adds r1, #0x40\n\
-    ldrh r7, [r6, #0x30]\n\
-    adds r0, r7, r2\n\
-    strh r0, [r1]\n\
-    adds r1, #0x40\n\
-    adds r0, r6, #0\n\
-    adds r0, #0x60\n\
-    ldrh r0, [r0]\n\
-    adds r0, r0, r2\n\
-    strh r0, [r1]\n\
-    adds r1, #0x40\n\
-    adds r0, r6, #0\n\
-    adds r0, #0x90\n\
-    ldrh r0, [r0]\n\
-    adds r0, r0, r2\n\
-    strh r0, [r1]\n\
-    movs r0, #0\n\
-    mov r8, r0\n\
-    cmp r8, sb\n\
-    bhs .L0805F22C\n\
-    adds r3, #0xc2\n\
-    str r3, [sp]\n\
-    mov r5, ip\n\
-    adds r5, #0x82\n\
-    adds r4, r6, #0\n\
-    adds r4, #0x62\n\
-    subs r3, #0x80\n\
-    mov r2, ip\n\
-    adds r2, #2\n\
-    adds r1, r6, #2\n\
-.L0805F1F8:\n\
-    ldrh r7, [r1]\n\
-    movs r0, #0x88\n\
-    lsls r0, r0, #5\n\
-    adds r7, r7, r0\n\
-    strh r7, [r2]\n\
-    ldrh r7, [r1, #0x30]\n\
-    adds r7, r7, r0\n\
-    strh r7, [r3]\n\
-    ldrh r7, [r4]\n\
-    adds r7, r7, r0\n\
-    strh r7, [r5]\n\
-    ldrh r7, [r4, #0x30]\n\
-    adds r7, r7, r0\n\
-    ldr r0, [sp]\n\
-    strh r7, [r0]\n\
-    adds r0, #2\n\
-    str r0, [sp]\n\
-    adds r5, #2\n\
-    adds r4, #2\n\
-    adds r3, #2\n\
-    adds r2, #2\n\
-    adds r1, #2\n\
-    movs r7, #1\n\
-    add r8, r7\n\
-    cmp r8, sb\n\
-    blo .L0805F1F8\n\
-.L0805F22C:\n\
-    mov r1, r8\n\
-    lsls r0, r1, #1\n\
-    mov r2, ip\n\
-    adds r1, r0, r2\n\
-    ldrh r3, [r6, #0x2e]\n\
-    movs r7, #0x88\n\
-    lsls r7, r7, #5\n\
-    adds r0, r3, r7\n\
-    strh r0, [r1, #2]\n\
-    adds r2, r1, #0\n\
-    adds r2, #0x42\n\
-    adds r0, r6, #0\n\
-    adds r0, #0x5e\n\
-    ldrh r0, [r0]\n\
-    adds r3, r7, #0\n\
-    adds r0, r0, r3\n\
-    strh r0, [r2]\n\
-    adds r2, #0x40\n\
-    adds r0, r6, #0\n\
-    adds r0, #0x8e\n\
-    ldrh r0, [r0]\n\
-    adds r0, r0, r3\n\
-    strh r0, [r2]\n\
-    adds r1, #0xc2\n\
-    adds r0, r6, #0\n\
-    adds r0, #0xbe\n\
-    ldrh r0, [r0]\n\
-    adds r0, r0, r3\n\
-    strh r0, [r1]\n\
-    add sp, #4\n\
-    pop {r3, r4, r5}\n\
-    mov r8, r3\n\
-    mov sb, r4\n\
-    mov sl, r5\n\
-    pop {r4, r5, r6, r7}\n\
-    pop {r0}\n\
-    bx r0\n\
-    .align 2, 0\n\
-.L0805F278: .4byte gEkrTsaBuffer\n\
-    .syntax divided\n\
-");
-}
-#endif
 
 void DrawBattlePopup(struct ProcEkrPopup * proc, int type, u32 item)
 {

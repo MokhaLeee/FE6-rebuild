@@ -19,7 +19,6 @@
 #include "constants/videoalloc_global.h"
 #include "constants/worldmap.h"
 
-#if NONMATCHING
 void DrawWmArrowCore(u8 id, i16 b, i16 c, int d)
 {
     PutSpriteAffine(
@@ -30,72 +29,6 @@ void DrawWmArrowCore(u8 id, i16 b, i16 c, int d)
         (gSinLut_u32[(d + 0x100) & 0x3FF] * c) >> 0xF
     );
 }
-#else
-
-NAKEDFUNC
-void DrawWmArrowCore(u8 id, i16 b, i16 c, int d)
-{
-asm("\
-    .syntax unified\n\
-    push {r4, r5, r6, lr}\n\
-    mov r6, r8\n\
-    push {r6}\n\
-    sub sp, #4\n\
-    adds r4, r1, #0\n\
-    adds r5, r2, #0\n\
-    lsls r0, r0, #0x18\n\
-    lsrs r0, r0, #0x18\n\
-    lsls r4, r4, #0x10\n\
-    asrs r4, r4, #0x10\n\
-    ldr r6, .L080930CC @ =gSinLut_u32\n\
-    movs r2, #0x80\n\
-    lsls r2, r2, #1\n\
-    adds r1, r3, r2\n\
-    ldr r2, .L080930D0 @ =0x000003FF\n\
-    ands r1, r2\n\
-    lsls r1, r1, #2\n\
-    adds r1, r1, r6\n\
-    ldr r1, [r1]\n\
-    mov r8, r1\n\
-    mov r1, r8\n\
-    muls r1, r4, r1\n\
-    lsls r1, r1, #1\n\
-    asrs r1, r1, #0x10\n\
-    lsls r5, r5, #0x10\n\
-    asrs r5, r5, #0x10\n\
-    ands r3, r2\n\
-    lsls r3, r3, #2\n\
-    adds r3, r3, r6\n\
-    ldr r3, [r3]\n\
-    adds r2, r5, #0\n\
-    muls r2, r3, r2\n\
-    lsls r2, r2, #1\n\
-    asrs r2, r2, #0x10\n\
-    muls r3, r4, r3\n\
-    asrs r3, r3, #0xf\n\
-    rsbs r3, r3, #0\n\
-    lsls r3, r3, #0x10\n\
-    asrs r3, r3, #0x10\n\
-    mov r4, r8\n\
-    muls r4, r5, r4\n\
-    lsls r4, r4, #1\n\
-    asrs r4, r4, #0x10\n\
-    str r4, [sp]\n\
-    bl PutSpriteAffine\n\
-    add sp, #4\n\
-    pop {r3}\n\
-    mov r8, r3\n\
-    pop {r4, r5, r6}\n\
-    pop {r0}\n\
-    bx r0\n\
-    .align 2, 0\n\
-.L080930CC: .4byte gSinLut_u32\n\
-.L080930D0: .4byte 0x000003FF\n\
-    .syntax divided\n\
-");
-}
-
-#endif
 
 void StartWmEvent(void)
 {

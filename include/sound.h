@@ -46,3 +46,4 @@ extern struct Song const song_026;
 extern struct Song const song_028;
 extern struct Song const song_02A;
 extern struct Song const song_02B;
+extern struct Song const dummy_song;
