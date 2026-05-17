@@ -79,6 +79,83 @@ def text_to_shiftjis_u16_array(text, control_chars, encoding_method):
 
     return u16_array
 
+def text_to_utf8_u16_array(text, control_chars):
+    pattern = re.compile(r'\[(.*?)\]')
+
+    text = text_preprocess(text)
+
+    # step1: generate byte array
+    byte_array = bytearray()
+    pos = 0
+    while pos < len(text):
+        match = pattern.search(text, pos)
+        if match:
+            preceding_text = text[pos:match.start()]
+            if preceding_text:
+                byte_array.extend(bytearray(preceding_text, 'utf-8'))
+
+            control_char = match.group(1)
+            if control_char in control_chars:
+                for ctrl_ch in control_chars[control_char]:
+                    byte_array.append(ctrl_ch)
+
+            pos = match.end()
+        else:
+            remaining_text = text[pos:]
+            if remaining_text:
+                byte_array.extend(bytearray(preceding_text, 'utf-8'))
+            break
+
+    # step2: generate u16 array
+    u16_array = []
+    pos = 0
+    while pos < len(byte_array):
+        # same as textencode::compress_string()
+        _ch = byte_array[pos]
+
+        if _ch == 0x80:
+            ch1 = byte_array[pos]
+            ch2 = byte_array[pos + 1]
+            pos = pos + 2
+
+            u16_array.append(ch1)
+            u16_array.append(ch2)
+        elif _ch == 0x10:
+            ch1 = byte_array[pos]
+            ch2 = byte_array[pos + 1]
+            ch3 = byte_array[pos + 2]
+            pos = pos + 3
+
+            u16_array.append(ch1)
+            u16_array.append(ch2 | (ch3 << 8))
+        elif _ch == 0x23 or _ch == 0x7F or _ch == 0xE9:
+            ch1 = byte_array[pos]
+            pos = pos + 1
+
+            u16_array.append(ch1)
+        elif _ch >= 0x20:
+            ch1 = byte_array[pos]
+            ch2 = byte_array[pos + 1]
+            pos = pos + 2
+
+            u16_array.append(ch1 | (ch2 << 8))
+        else:
+            ch1 = byte_array[pos]
+            pos = pos + 1
+
+            u16_array.append(ch1)
+
+    if u16_array[-1] != 0:
+        u16_array.append(0)
+
+    return u16_array
+
+def text_to_u16_array(text, control_chars, encoding_method):
+    if encoding_method == 'cp932':
+        return text_to_shiftjis_u16_array(text, control_chars)
+    else:
+        return text_to_utf8_u16_array(text, control_chars)
+
 def process_file(file_path, control_chars, encoding_method, index=0):
     messages = []
     current_index = index
@@ -112,7 +189,7 @@ def process_file(file_path, control_chars, encoding_method, index=0):
                 text.append(lines[i].strip())
                 i += 1
             text = ''.join(text)
-            data = text_to_shiftjis_u16_array(text, control_chars, encoding_method)
+            data = text_to_u16_array(text, control_chars, encoding_method)
             messages.append(Msg(current_index, data))
             all_data.extend(data)
             current_index += 1
@@ -126,7 +203,7 @@ def process_file(file_path, control_chars, encoding_method, index=0):
                     text.append(lines[i].strip())
                     i += 1
                 text = ''.join(text)
-                data = text_to_shiftjis_u16_array(text, control_chars, encoding_method)
+                data = text_to_u16_array(text, control_chars, encoding_method)
                 all_data.extend(data)
                 messages.append(Msg(current_index, data, macro))
                 current_index += 1

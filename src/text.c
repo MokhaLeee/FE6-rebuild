@@ -84,7 +84,7 @@ struct ProcScr ProcScr_GreenTextColor[] =
 
 int GetLang(void)
 {
-    return LANG_JAPANESE;
+    return LANG_ENGLISH;
 }
 
 void ResetText(void)
@@ -254,68 +254,6 @@ void PutBlankText(struct Text * text, u16 * tm)
     }
 }
 
-int GetStringTextLen(char const * str)
-{
-    struct Glyph const * glyph;
-    char byte2, byte1;
-
-    int result = 0;
-
-    if (gActiveFont->lang != LANG_JAPANESE)
-        return GetStringTextLenAscii(str);
-
-    while (*str > 1)
-    {
-        byte1 = *str++;
-
-        if (byte1 < 0x20)
-            continue;
-
-        byte2 = *str++;
-
-        glyph = gActiveFont->glyphs[byte2 - 0x40];
-
-        while (glyph)
-        {
-            if (glyph->sjis_byte_1 == byte1)
-            {
-                result += glyph->width;
-                break;
-            }
-
-            glyph = glyph->next;
-        }
-    }
-
-    return result;
-}
-
-char const * GetCharTextLen(char const * str, i32 * out_width)
-{
-    struct Glyph const * glyph;
-    char byte2, byte1;
-
-    if (gActiveFont->lang != LANG_JAPANESE) { }
-
-    byte1 = *str++;
-    byte2 = *str++;
-
-    glyph = gActiveFont->glyphs[byte2 - 0x40];
-
-    while (glyph)
-    {
-        if (glyph->sjis_byte_1 == byte1)
-        {
-            *out_width = glyph->width;
-            break;
-        }
-
-        glyph = glyph->next;
-    }
-
-    return str;
-}
-
 int GetStringTextCenteredPos(int area_length, char const * str)
 {
     return (area_length - GetStringTextLen(str)) / 2;
@@ -360,66 +298,21 @@ char const * GetStringLineEnd(char const * str)
     return str;
 }
 
-void Text_DrawString(struct Text * text, char const * str)
-{
-    struct Glyph const * glyph;
-    char byte2, byte1;
-
-    if (gActiveFont->lang != LANG_JAPANESE)
-    {
-        Text_DrawStringAscii(text, str);
-        return;
-    }
-
-    while (*str > 1)
-    {
-        byte1 = *str++;
-
-        if (byte1 < 0x20)
-            continue;
-
-        byte2 = *str++;
-
-    retry_draw:
-        glyph = gActiveFont->glyphs[byte2 - 0x40];
-
-        while (glyph)
-        {
-            if (glyph->sjis_byte_1 == byte1)
-            {
-                gActiveFont->draw_glyph(text, glyph);
-                break;
-            }
-
-            glyph = glyph->next;
-
-            if (glyph == NULL)
-            {
-                byte1 = 0x81;
-                byte2 = 0xA7;
-
-                goto retry_draw;
-            }
-        }
-    }
-}
-
 void Text_DrawNumber(struct Text * text, int number)
 {
     if (number == 0)
     {
-        Text_DrawCharacter(text, JTEXT("０"));
+        Text_DrawCharacter(text, JTEXT("0"));
         return;
     }
 
     while (number != 0)
     {
-        u16 chr = 0x4F82 + ((number % 10) << 8);
+        u16 c = '0' + number % 10;
         number /= 10;
 
-        Text_DrawCharacter(text, (char const *) &chr);
-
-        text->x -= 16;
+        Text_DrawCharacter(text, (char *)&c);
+        text->x -= 15;
     }
 }
 
@@ -428,48 +321,12 @@ void Text_DrawNumberOrBlank(struct Text * text, int number)
     if (number == 0xFF || number == -1)
     {
         Text_Skip(text, -8);
-        Text_DrawString(text, JTEXT("ーー"));
+        Text_DrawString(text, JTEXT("--"));
 
         return;
     }
 
     Text_DrawNumber(text, number);
-}
-
-char const * Text_DrawCharacter(struct Text * text, char const * str)
-{
-    struct Glyph const * glyph;
-    char byte2, byte1;
-
-    if (gActiveFont->lang != LANG_JAPANESE)
-        return Text_DrawCharacterAscii(text, str);
-
-    byte1 = *str++;
-    byte2 = *str++;
-
-retry_draw:
-    glyph = gActiveFont->glyphs[byte2 - 0x40];
-
-    while (glyph)
-    {
-        if (glyph->sjis_byte_1 == byte1)
-        {
-            gActiveFont->draw_glyph(text, glyph);
-            break;
-        }
-
-        glyph = glyph->next;
-    }
-
-    if (glyph == NULL)
-    {
-        byte1 = 0x81;
-        byte2 = 0xA7;
-
-        goto retry_draw;
-    }
-
-    return str;
 }
 
 static u8 * GetTextDrawDest(struct Text * text)

@@ -79,7 +79,7 @@ void EndEkrLevelUp(void)
 	Proc_End(gpProcEkrLevelup);
 }
 
-const char EkrLvupMsgsStr[8][5] = {
+const char *EkrLvupMsgsStr[8] = {
 	TEXT("ＨＰ", "hp"),
 	TEXT("力",   "str"),
 	TEXT("技",   "skl"),
@@ -90,7 +90,7 @@ const char EkrLvupMsgsStr[8][5] = {
 	TEXT("体格", "con")
 };
 
-const char EkrLvupMsgsMag[8][5] = {
+const char *EkrLvupMsgsMag[8] = {
 	TEXT("ＨＰ", "hp"),
 	TEXT("魔力",  "str"),
 	TEXT("技",   "skl"),

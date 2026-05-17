@@ -218,7 +218,7 @@ struct TextInitInfo CONST_DATA gStatScreenTextList[] =
 
 struct StatScreenTextInfo const gStatScreenPersonalInfoLabelsInfo[] =
 {
-    { gStatScreenSt.text + STATSCREEN_TEXT_SKL,      gUiTmScratchA + TM_OFFSET(1, 3),  TEXT_COLOR_SYSTEM_GOLD, 4, SystemLabel_Skill },
+    { gStatScreenSt.text + STATSCREEN_TEXT_SKL,      gUiTmScratchA + TM_OFFSET(1, 3),  TEXT_COLOR_SYSTEM_GOLD, 0, SystemLabel_Skill },
     { gStatScreenSt.text + STATSCREEN_TEXT_SPD,      gUiTmScratchA + TM_OFFSET(1, 5),  TEXT_COLOR_SYSTEM_GOLD, 0, SystemLabel_Speed },
     { gStatScreenSt.text + STATSCREEN_TEXT_LCK,      gUiTmScratchA + TM_OFFSET(1, 7),  TEXT_COLOR_SYSTEM_GOLD, 0, SystemLabel_Luck },
     { gStatScreenSt.text + STATSCREEN_TEXT_DEF,      gUiTmScratchA + TM_OFFSET(1, 9),  TEXT_COLOR_SYSTEM_GOLD, 0, SystemLabel_Defense },
@@ -353,15 +353,15 @@ void PutStatScreenPersonalInfoPage(void)
         PutDrawText(gStatScreenSt.text + STATSCREEN_TEXT_POW,
             gUiTmScratchA + TM_OFFSET(1, 1),
             TEXT_COLOR_SYSTEM_GOLD, 0, 0,
-            TEXT("魔力", "Mag"));
+            TEXT("Mag", "Mag"));
     }
     else
     {
         // strength
         PutDrawText(gStatScreenSt.text + STATSCREEN_TEXT_POW,
             gUiTmScratchA + TM_OFFSET(1, 1),
-            TEXT_COLOR_SYSTEM_GOLD, 4, 0,
-            TEXT("力", "Str"));
+            TEXT_COLOR_SYSTEM_GOLD, 0, 0,
+            TEXT("Str", "Str"));
     }
 
     // display strength/magic stat value
@@ -457,6 +457,7 @@ void PutStatScreenPersonalInfoPage(void)
 void PutStatScreenItemsPage(void)
 {
     int i, item;
+    const char *str;
 
     Decompress(Tsa_Statscreen_08307DD4, gBuf);
     TmApplyTsa(gUiTmScratchB, gBuf, TILEREF(BGCHR_WINDOWFRAME, BGPAL_WINDOWFRAME));
@@ -501,8 +502,9 @@ void PutStatScreenItemsPage(void)
     PutNumberOrBlank(gUiTmScratchA + TM_OFFSET(15, 15),
         TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_avoid);
 
+    str = GetItemRangeString(item);
     Text_InsertDrawString(gStatScreenSt.text + STATSCREEN_TEXT_EQUIPRANGE,
-        16, TEXT_COLOR_SYSTEM_BLUE, GetItemRangeString(item));
+        47 - GetStringTextLen(str), TEXT_COLOR_SYSTEM_BLUE, str);
 
     for (i = 0; i < 8; ++i)
     {

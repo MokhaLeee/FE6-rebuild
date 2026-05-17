@@ -63,6 +63,8 @@
 
 #define _UNUSED __attribute__((unused))
 
+#define _VANILLA __attribute__((weak))
+
 #define LIMIT_AREA(num, min, max)   \
     if (num > max)                  \
         num = max;                  \

@@ -478,58 +478,6 @@ bool IsItemEffectiveAgainst(u16 item, struct Unit * unit)
     }
 }
 
-char const * GetItemRangeString(int item)
-{
-    char const * strings[] =
-    {
-        JTEXT("１～魔力"), // 1 - mag
-        JTEXT("　　　１"), // 1
-        JTEXT("　１～２"), // 1 - 2
-        JTEXT("　１～３"), // 1 - 3
-        JTEXT("　　　２"), // 2
-        JTEXT("　２～３"), // 2 - 3
-        JTEXT("３～１０"), // 3 - 10
-        JTEXT("３～１５"), // 3 - 15
-        JTEXT("　　全体"), // all
-        JTEXT("　　ーー"), // none
-    };
-
-    switch (GetItemEncodedRange(item))
-    {
-
-    case 0x10: // 1-mag
-        return strings[0];
-
-    case 0x11: // 1-1
-        return strings[1];
-
-    case 0x12: // 1-2
-        return strings[2];
-
-    case 0x13: // 1-3
-        return strings[3];
-
-    case 0x22: // 2-2
-        return strings[4];
-
-    case 0x23: // 2-3
-        return strings[5];
-
-    case 0x3A: // 3-10
-        return strings[6];
-
-    case 0x3F: // 3-15
-        return strings[7];
-
-    case 0xFF: // all
-        return strings[8];
-
-    default: // bad
-        return strings[9];
-
-    }
-}
-
 int GetWeaponLevelFromExp(int wexp)
 {
     if (wexp < WEXP_E)
@@ -557,13 +505,13 @@ char const * GetWeaponLevelStringFromExp(int wexp)
 {
     char const * strings[] =
     {
-        [WPN_LEVEL_0] = JTEXT("ー"),
-        [WPN_LEVEL_E] = JTEXT("Ｅ"),
-        [WPN_LEVEL_D] = JTEXT("Ｄ"),
-        [WPN_LEVEL_C] = JTEXT("Ｃ"),
-        [WPN_LEVEL_B] = JTEXT("Ｂ"),
-        [WPN_LEVEL_A] = JTEXT("Ａ"),
-        [WPN_LEVEL_S] = JTEXT("Ｓ"),
+        [WPN_LEVEL_0] = JTEXT("-"),
+        [WPN_LEVEL_E] = JTEXT("E"),
+        [WPN_LEVEL_D] = JTEXT("D"),
+        [WPN_LEVEL_C] = JTEXT("C"),
+        [WPN_LEVEL_B] = JTEXT("B"),
+        [WPN_LEVEL_A] = JTEXT("A"),
+        [WPN_LEVEL_S] = JTEXT("S"),
     };
 
     return strings[GetWeaponLevelFromExp(wexp)];

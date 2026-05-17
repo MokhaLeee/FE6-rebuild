@@ -36,14 +36,14 @@ struct MultiArenaRankingEnt const gInitialMultiArenaRankings[MULTIARENA_MAX_RANK
         .player_count = 2,
         .mode = 1,
         .points = 70,
-        .name = JTEXT("\x83\x5Cシアルナイト"), // NOTE: \x83\x5C = ソ. \x5C happens to be ascii for '\' which breaks agbcc
+        .name = JTEXT("--"),
     },
     {
         .ranking = 0,
         .player_count = 2,
         .mode = 0,
         .points = 60,
-        .name = JTEXT("\x83\x5Cードマスター"), // NOTE: \x83\x5C = ソ. \x5C happens to be ascii for '\' which breaks agbcc
+        .name = JTEXT("--"),
     },
     {
         .ranking = 1,
@@ -57,7 +57,7 @@ struct MultiArenaRankingEnt const gInitialMultiArenaRankings[MULTIARENA_MAX_RANK
         .player_count = 3,
         .mode = 0,
         .points = 40,
-        .name = JTEXT("アーマーナイト"),
+        .name = JTEXT("--"),
     },
     {
         .ranking = 1,

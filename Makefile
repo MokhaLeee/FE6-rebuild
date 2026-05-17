@@ -1,6 +1,20 @@
 .SUFFIXES:
 .SECONDARY:
 
+MAKEFLAGS += --no-print-directory
+
+ifeq ($(OS),Windows_NT)
+	$(error "need linux environment, abort)
+endif
+
+ifeq ($(strip $(DEVKITPRO)),)
+	$(error "Please set DEVKITPRO in your environment. export DEVKITPRO=<path to>devkitpro)
+endif
+
+ifeq ($(strip $(DEVKITARM)),)
+	$(error "Please set DEVKITARM in your environment. export DEVKITARM=<path to>devkitARM)
+endif
+
 # ==================
 # = PROJECT CONFIG =
 # ==================
@@ -9,6 +23,7 @@ BUILD_NAME := fe6re
 
 SRC_DIR = src
 ASM_DIR = asm
+SRC_HACKS = src-hacks
 BUILD_DIR = build
 
 CLEAN_FILES :=
@@ -18,6 +33,8 @@ ROM := $(BUILD_NAME).gba
 ELF := $(ROM:%.gba=%.elf)
 MAP := $(ROM:%.gba=%.map)
 SYM := $(ROM:%.gba=%.sym)
+
+DEPENDS :=
 
 all: $(ROM) $(SYM)
 
@@ -60,13 +77,22 @@ export STRIP := $(PREFIX)strip
 CC1     := $(AGBCC_HOME)/bin/old_agbcc$(EXE)
 CC1_NEW := $(AGBCC_HOME)/bin/agbcc$(EXE)
 
+GRIT := $(DEVKITPRO)/tools/bin/grit
+LZSS := $(DEVKITPRO)/tools/bin/gbalzss
+GRITLZ77ARGS      := -gu 16 -gzl -gB 4 -p! -m! -ft bin -fh!
+GRIT4BPPARGS      := -gu 16 -gB 4 -p! -m! -ft bin -fh!
+GRIT2BPPARGS      := -gu 16 -gb -gB 2 -p! -m! -ft bin -fh!
+GRITPALETTEARGS	  := -g! -m! -p -ft bin -fh!
+MAPPALETTEARGS    := -pn 160
+BTLPALETTEARGS    := -pn 80
+
 SHASUM ?= sha1sum
 
 # ================
 # = BUILD CONFIG =
 # ================
 
-INC_DIRS := include asm/include $(AGBCC_HOME)/include .
+INC_DIRS := include include/vanilla include/hacks asm/include $(AGBCC_HOME)/include .
 INC_FLAG := $(foreach dir, $(INC_DIRS), -I $(dir))
 
 CPPFLAGS := $(INC_FLAG) -nostdinc -undef
@@ -74,10 +100,13 @@ CFLAGS := -g -mthumb-interwork -Wimplicit -Wparentheses -Werror -fhex-asm -ffix-
 CFLAG_OPT := -O2
 ASFLAGS := -mcpu=arm7tdmi $(INC_FLAG)
 
-LDS := $(BUILD_NAME).lds
+LDS := src/lds/gba_cart.lds
 C_SRCS := $(shell find $(SRC_DIR) -name *.c)
 ASM_SRCS := $(shell find $(SRC_DIR) -name *.s) $(shell find $(ASM_DIR) -name *.s)
 DATA_SRCS := $(shell find data/ -name *.s)
+
+C_SRCS   += $(shell find $(SRC_HACKS) -name *.c)
+ASM_SRCS += $(shell find $(SRC_HACKS) -name *.s)
 
 C_GENERATED :=
 
@@ -89,7 +118,7 @@ TEXT_TOOLS := tools/texttools
 
 TEXT_DECODER := $(PYTHON)  $(TEXT_TOOLS)/textdecoder.py
 TEXT_DPARSER := $(PYTHON) $(TEXT_TOOLS)/textdeparser.py
-TEXT_PROCESS := $(PYTHON) $(TEXT_TOOLS)/textprocess.py
+TEXT_PROCESS := $(PYTHON) $(TEXT_TOOLS)/textprocess-chax.py
 TEXT_ENCODE := tools/textencode/textencode
 
 TEXT_MAIN := $(TEXT_DIR)/texts.txt
@@ -106,10 +135,12 @@ $(TEXT_MAIN):
 
 $(MSG_LIST) $(TEXT_HEADER): $(TEXT_SRC) $(TEXT_DEFS)
 	@echo "[GEN]	$@"
-	@$(TEXT_PROCESS) $(TEXT_MAIN) $(TEXT_DEFS) $(MSG_LIST) $(TEXT_HEADER) cp932
+	@$(TEXT_PROCESS) $(TEXT_MAIN) $(TEXT_DEFS) $(MSG_LIST) $(TEXT_HEADER) utf8
 
 C_GENERATED += $(MSG_LIST)
 CLEAN_FILES += $(MSG_LIST) # $(TEXT_HEADER)
+
+msg : $(MSG_LIST)
 
 # ============
 # = Spritans =
@@ -155,6 +186,8 @@ CLEAN_FILES += $(TSA_FILES:%.tsa=%.tsa.lz)
 # = Banim data =
 # ==============
 
+BANIM_LINKER := src/lds/linker_script_banim.txt
+
 ALL_BANIM_SCRS := $(shell find ./data/banims/ -type f -name "*.s")
 ALL_BANIM_PALS := $(shell find ./data/banims/ -type f -name "*.agbpal")
 
@@ -167,10 +200,10 @@ STRIPER        := $(BANIM_TOOLS)/strip.sh
 
 BANIM_OBJECT := src/banimdata.o
 
-$(BUILD_DIR)/$(BANIM_OBJECT): linker_script_banim.txt $(shell ./tools/banimtools/banim_compressing_linker.py -t linker_script_banim.txt -m)
-	@./tools/banimtools/banim_compressing_linker.py -o $@ -t linker_script_banim.txt -b $(BANIM_LINK_ADDR) -l $(LD) --objcopy $(OBJCOPY) -c ./tools/banimtools/compressor.py
+$(BUILD_DIR)/$(BANIM_OBJECT): $(BANIM_LINKER) $(shell ./tools/banimtools/banim_compressing_linker.py -t $(BANIM_LINKER) -m)
+	@./tools/banimtools/banim_compressing_linker.py -o $@ -t $(BANIM_LINKER) -b $(BANIM_LINK_ADDR) -l $(LD) --objcopy $(OBJCOPY) -c ./tools/banimtools/compressor.py
 
-BANIM_LINK_SCR := ./linker_script_banim.txt
+BANIM_LINK_SCR := ./$(BANIM_LINKER)
 
 %.stripped: %
 	@echo "[STP]	$@"
@@ -213,8 +246,30 @@ BANIM_GENERATED += $(ALL_BANIM_PALS:%=%.lz.stripped) $(ALL_BANIM_PALS:%=%.lz.str
 
 banim: $(BUILD_DIR)/$(BANIM_OBJECT)
 
-clean_banim:
-	rm -rf $(BUILD_DIR)/$(BANIM_OBJECT) $(BANIM_GENERATED)
+# =========
+# = Glyph =
+# =========
+FONT_DIR := fonts
+GLYPH_LIST := $(FONT_DIR)/FontList.txt
+FONT_BUILD := $(FONT_DIR)/build
+
+GLYPH_GENERATOR := python3 tools/scripts/glyphtools/glyph-installer-generator.py
+GLYPH_INSTALLER := $(FONT_BUILD)/glyph_installer.s
+
+$(GLYPH_INSTALLER): $(GLYPH_LIST)
+	@echo "[GEN]	$@"
+	@mkdir -p $(dir $@)
+	@$(GLYPH_GENERATOR) -i $(GLYPH_LIST) > $(GLYPH_INSTALLER)
+
+%_font.2bpp.bin: %_font.png
+	@echo "[GEN]	$@"
+	@$(GRIT) $< -gB2 -p! -tw16 -th16 -ftb -fh! -o $@
+	@mv $(basename $<).img.bin $@
+
+ASM_SRCS += $(GLYPH_INSTALLER)
+CLEAN_DIRS += $(FONT_BUILD)
+
+glyph: $(GLYPH_INSTALLER)
 
 # ===========
 # = Targets =
@@ -246,7 +301,7 @@ $(shell mkdir -p $(SUBDIRS))
 	@echo "[SYM]	$@"
 	@python3 tools/scripts/elf2sym.py $< | python3 tools/scripts/sym_modify.py > $@
 
-$(ELF): $(ALL_OBJS) $(LDS)
+$(ELF): $(ALL_OBJS) src/lds/*.lds
 	@echo "[LD ]	$@"
 	@cd $(BUILD_DIR) && $(LD) -T ../$(LDS) -Map ../$(MAP) -R $(BANIM_OBJECT).sym.o -L../tools/agbcc/lib $(ALL_OBJS:$(BUILD_DIR)/%=%) -lc -lgcc -o ../$@
 
@@ -266,7 +321,7 @@ $(BUILD_DIR)/%.d: %.s
 
 $(BUILD_DIR)/%.o: %.c $(BUILD_DIR)/%.d
 	@echo "[CC ]	$<"
-	@$(CPP) $(CPPFLAGS) $< | iconv -f UTF-8 -t CP932 | $(CC1) $(CFLAGS) $(CFLAG_OPT) -o $(BUILD_DIR)/$*.s
+	@$(CPP) $(CPPFLAGS) $< | $(CC1) $(CFLAGS) $(CFLAG_OPT) -o $(BUILD_DIR)/$*.s
 	@echo ".text\n\t.align\t2, 0\n" >> $(BUILD_DIR)/$*.s
 	@$(AS) $(ASFLAGS) $(BUILD_DIR)/$*.s -o $@
 	@$(STRIP) -N .gcc2_compiled. $@
@@ -297,9 +352,12 @@ CLEAN_DIRS += $(shell find . -type d -name "__pycache__")
 
 clean:
 	@rm -f $(CLEAN_FILES)
-	@rm -f $(BANIM_GENERATED)
+#	@rm -f $(BANIM_GENERATED)
 	@rm -rf $(CLEAN_DIRS)
 	@echo "all cleaned..."
+
+clean_banim:
+	@rm -rf $(BANIM_GENERATED)
 
 .PHONY: clean
 

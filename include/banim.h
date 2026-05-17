@@ -2027,8 +2027,6 @@ extern u16 gEkrLvupScrollPos2;
 extern int gEkrLvupApfxUnexist;
 
 extern const u16 sEfxLvupPartsPos[];
-extern const char EkrLvupMsgsStr[][5];
-extern const char EkrLvupMsgsMag[][5];
 
 bool CheckEkrLvupDone(void);
 void EndEkrLevelUp(void);

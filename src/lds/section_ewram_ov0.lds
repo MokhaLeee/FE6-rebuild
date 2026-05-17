@@ -1,0 +1,15 @@
+. = ALIGN(4); src/minimap.o(ewram_overlay_0);
+. = ALIGN(0x1000); src/map.o(ewram_overlay_0);
+. = ALIGN(4); src/bmfx.o(ewram_overlay_0);
+. = ALIGN(4); src/mapmenu.o(ewram_overlay_0);
+. = ALIGN(4); src/trademenu.o(ewram_overlay_0);
+. = ALIGN(4); src/bmio.o(ewram_overlay_0);
+. = . + 0x100;
+. = ALIGN(4); src/battlepreview.o(ewram_overlay_0);
+. = ALIGN(4); src/statscreen.o(ewram_overlay_0);
+. = ALIGN(4); src/statusscreen.o(ewram_overlay_0);
+. = ALIGN(4); src/mu.o(ewram_overlay_0);
+. = ALIGN(4); src/unitlistscreen.o(ewram_overlay_0);
+. = ALIGN(4); src/prepmenu.o(ewram_overlay_0);
+. = ALIGN(4); src/prep_sallycir.o(ewram_overlay_0);
+. = ALIGN(4); src/augury.o(ewram_overlay_0);

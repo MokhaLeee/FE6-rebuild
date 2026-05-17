@@ -1209,61 +1209,6 @@ static void TemporaryLock_OnLoop(struct Proc * proc)
     proc->unk58--;
 }
 
-static char CONST_DATA sStrZero[] = JTEXT("０");
-static char CONST_DATA sStrDash[] = JTEXT("ー");
-
-int NumberToString(int number, char * buf)
-{
-    int numOff, numStart;
-
-    numOff = 0;
-
-    if (number == 0)
-    {
-        *buf++ = sStrZero[0];
-        *buf++ = sStrZero[1];
-        *buf++ = '\0';
-
-        return 1;
-    }
-
-    if (number < 0)
-    {
-        buf[0] = sStrDash[0];
-        buf[1] = sStrDash[1];
-
-        number = -number;
-        numOff = 2;
-    }
-
-    if (number > 99999)
-        numOff += 10;
-    else if (number > 9999)
-        numOff += 8;
-    else if (number > 999)
-        numOff += 6;
-    else if (number > 99)
-        numOff += 4;
-    else if (number > 9)
-        numOff += 2;
-
-    numStart = numOff;
-
-    while (number > 0)
-    {
-        int rem = DivRem(number, 10);
-
-        buf[numOff]   = sStrZero[0];
-        buf[numOff+1] = sStrZero[1] + rem;
-
-        number = Div(number, 10);
-        numOff -= 2;
-    }
-
-    *(buf + numStart + 2) = '\0';
-    return (numStart >> 1) + 1;
-}
-
 static struct Text sText_03000420;
 
 struct Text * PutStringCentered(u16 * tm, int color, int width, char const * str)
