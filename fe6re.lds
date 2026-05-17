@@ -273,7 +273,6 @@ SECTIONS
         src/banim_ekrcmd.o(.text);
         src/banim_main.o(.text);
         src/banim_ekrmain.o(.text);
-        asm/banim_ekrmain.o(.text);
         src/banim_info.o(.text);
         src/banim_ekrmainmini.o(.text);
         src/banim_ekrterrainfx.o(.text);
@@ -585,7 +584,6 @@ SECTIONS
         . = ALIGN(4); src/banim_ekrbattleintro.o(.data);
         . = ALIGN(4); src/banim_ekrbattleintrofx.o(.data);
         . = ALIGN(4); asm/banim_ekrbattleintrofx.o(.data);
-        . = ALIGN(4); asm/banim_ekrmain.o(.data);
         . = ALIGN(4); src/banim_ekrmain.o(.data);
         . = ALIGN(4); src/banim_ekrmainmini.o(.data);
         . = ALIGN(4); src/banim_ekrarena.o(.data);
