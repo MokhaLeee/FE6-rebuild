@@ -305,7 +305,7 @@ $(ELF): $(ALL_OBJS) src/lds/*.lds
 	@echo "[LD ]	$@"
 	@cd $(BUILD_DIR) && $(LD) -T ../$(LDS) -Map ../$(MAP) -R $(BANIM_OBJECT).sym.o -L../tools/agbcc/lib $(ALL_OBJS:$(BUILD_DIR)/%=%) -lc -lgcc -o ../$@
 
-CLEAN_FILES += $(ROM) $(ELF) $(MAP)
+CLEAN_FILES += $(ROM) $(ELF) $(MAP) $(SYM)
 
 # ============
 # = Wizardry =
