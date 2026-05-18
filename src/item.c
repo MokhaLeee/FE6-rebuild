@@ -18,7 +18,7 @@
 
 inline struct IInfo const * GetIInfo(int iid)
 {
-    return IInfoTable + iid;
+    return pr_IInfoTable + iid;
 }
 
 inline int GetItemIid(int item)

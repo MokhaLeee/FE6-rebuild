@@ -39,7 +39,7 @@ inline struct JInfo const * GetJInfo(int jid)
     if (jid < 1)
         return NULL;
 
-    return JInfoTable + (jid - 1);
+    return pr_JInfoTable + (jid - 1);
 }
 
 inline struct PInfo const * GetPInfo(int pid)
@@ -47,7 +47,7 @@ inline struct PInfo const * GetPInfo(int pid)
     if (pid < 1)
         return NULL;
 
-    return PInfoTable + (pid - 1);
+    return pr_PInfoTable + (pid - 1);
 }
 
 void InitUnits(void)

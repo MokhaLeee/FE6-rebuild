@@ -38,7 +38,7 @@ DEPENDS :=
 
 all: $(ROM) $(SYM)
 
-BANIM_LINK_ADDR:=0x080A0000
+BANIM_LINK_ADDR:=0x080E0000
 
 # ====================
 # = TOOL DEFINITIONS =

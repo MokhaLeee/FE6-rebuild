@@ -85,8 +85,11 @@ SECTIONS
 		. = ALIGN(4); src-hacks/*.o(.text)
 		. = ALIGN(4); asm/code_linker_stubs.o(.text);
 
-		/* here could expand to 0x400000 */
 		. = 0x000A0000;
+		INCLUDE "./lds/prlist.lds"
+
+		/* here could expand to 0x400000 */
+		. = 0x000E0000;
 		banims/banimdata_gen.o(.data);
 
 		/* .rodata */

@@ -14,9 +14,13 @@ struct DebugPInfo {
     const char * jname;
 };
 
-extern struct PInfo CONST_DATA PInfoTable[];
-extern struct JInfo CONST_DATA JInfoTable[];
-extern struct IInfo CONST_DATA IInfoTable[];
+// extern struct PInfo CONST_DATA PInfoTable[];
+// extern struct JInfo CONST_DATA JInfoTable[];
+// extern struct IInfo CONST_DATA IInfoTable[];
+
+extern struct PInfo CONST_DATA *pr_PInfoTable;;
+extern struct JInfo CONST_DATA *pr_JInfoTable;
+extern struct IInfo CONST_DATA *pr_IInfoTable;
 
 extern i8 CONST_DATA MoveTable_BigFootie[];
 extern i8 CONST_DATA MoveTable_Footie[];
