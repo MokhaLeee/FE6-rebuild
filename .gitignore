@@ -58,7 +58,7 @@ Temporary Items
 *.map
 *.sym
 *.o
-src/*.asm
+*.asm
 *.dump
 tools/agbcc
 *.exe

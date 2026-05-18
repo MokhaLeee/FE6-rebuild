@@ -29,7 +29,7 @@ SECTIONS
 	. = __ewram_overlay_beg;
 	ewram_overlay_0 (NOLOAD) : ALIGN(4)
 	{
-		. = ALIGN(4); INCLUDE "../lds/section_ewram_ov0.lds"
+		. = ALIGN(4); INCLUDE "./lds/section_ewram_ov0.lds"
 		. = ALIGN(4); src-hacks/*.o(.ewram_overlay_0)
 	}
 	__ewram_overlay_end = MAX(., __ewram_overlay_end);
@@ -37,7 +37,7 @@ SECTIONS
 	. = __ewram_overlay_beg;
 	ewram_overlay_banim (NOLOAD) : ALIGN(4)
 	{
-		. = ALIGN(4); INCLUDE "../lds/section_ewram_ov1.lds"
+		. = ALIGN(4); INCLUDE "./lds/section_ewram_ov1.lds"
 		. = ALIGN(4); src-hacks/*.o(.ewram_overlay_banim)
 	}
 	__ewram_overlay_end = MAX(., __ewram_overlay_end);
@@ -59,7 +59,7 @@ SECTIONS
 	. = __ewram_overlay_end;
 	ewram_data (NOLOAD) : ALIGN(4)
 	{
-		. = ALIGN(4); INCLUDE "../lds/section_ewram.lds"
+		. = ALIGN(4); INCLUDE "./lds/section_ewram.lds"
 		. = ALIGN(4); src-hacks/*.o(.ewram_data)
 		. = 0x02040000 - __ewram_overlay_end; /* end */
 	}
@@ -68,7 +68,7 @@ SECTIONS
 	IWRAM (NOLOAD) : ALIGN(4)
 	{
 		/* .bss */
-		. = ALIGN(4); INCLUDE "../lds/section_iwram.lds"
+		. = ALIGN(4); INCLUDE "./lds/section_iwram.lds"
 		. = ALIGN(4); src-hacks/*.o(.bss)
 		. = ALIGN(4); src-hacks/*.o(.iwram_data)
 		. = 0x008000; /* end */
@@ -78,19 +78,19 @@ SECTIONS
 	ROM : ALIGN(4)
 	{
 		asm/crt0.o(.text);
-		. = ALIGN(4); INCLUDE "../lds/section_text.lds"
+		. = ALIGN(4); INCLUDE "./lds/section_text.lds"
 		. = ALIGN(4); src-hacks/*.o(.text)
 		. = ALIGN(4); asm/code_linker_stubs.o(.text);
 
 		/* here could expand to 0x400000 */
 		. = 0x000A0000;
-		src/banimdata.o(.data);
+		banims/banimdata_gen.o(.data);
 
 		/* .rodata */
-		. = ALIGN(4); INCLUDE "../lds/section_rodata.lds"
+		. = ALIGN(4); INCLUDE "./lds/section_rodata.lds"
 
 		/* .data */
-		. = ALIGN(4); INCLUDE "../lds/section_data.lds"
+		. = ALIGN(4); INCLUDE "./lds/section_data.lds"
 
 		/* CHAX */
 		. = ALIGN(4); src-hacks/*.o(.data)
