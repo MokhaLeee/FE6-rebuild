@@ -155,6 +155,7 @@ struct ItemBonuses
     /* 06 */ i8 lck;
     /* 07 */ i8 mov;
     /* 08 */ i8 con;
+    /* 09 */ i8 mag;
 };
 
 struct IInfo
@@ -207,6 +208,7 @@ int GetItemCostPerUse(int item);
 int GetItemMaxValue(int item);
 int GetItemHpBonus(int item);
 int GetItemPowBonus(int item);
+int GetItemMagBonus(int item);
 int GetItemSklBonus(int item);
 int GetItemSpdBonus(int item);
 int GetItemDefBonus(int item);

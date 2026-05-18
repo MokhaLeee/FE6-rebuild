@@ -179,6 +179,19 @@ int GetItemPowBonus(int item)
     return 0;
 }
 
+int GetItemMagBonus(int item)
+{
+    struct ItemBonuses const * bonuses;
+
+    if (!item)
+        return 0;
+
+    if ((bonuses = GetItemBonuses(item)))
+        return bonuses->mag;
+
+    return 0;
+}
+
 int GetItemSklBonus(int item)
 {
     struct ItemBonuses const * bonuses;

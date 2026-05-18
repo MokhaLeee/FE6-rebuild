@@ -102,58 +102,7 @@ struct Unit * GetFreeUnit(int faction)
     return NULL;
 }
 
-inline int GetUnitMaxHp(struct Unit * unit)
-{
-    return unit->max_hp + GetItemHpBonus(GetUnitEquippedWeapon(unit));
-}
 
-inline int GetUnitCurrentHp(struct Unit * unit)
-{
-    if (unit->hp > GetUnitMaxHp(unit))
-        unit->hp = GetUnitMaxHp(unit);
-
-    return unit->hp;
-}
-
-inline int GetUnitPower(struct Unit * unit)
-{
-    return unit->pow + GetItemPowBonus(GetUnitEquippedWeapon(unit));
-}
-
-inline int GetUnitSkill(struct Unit * unit)
-{
-    int weapon = GetUnitEquippedWeapon(unit);
-
-    if (unit->flags & UNIT_FLAG_RESCUING)
-        return unit->skl / 2 + GetItemSklBonus(weapon);
-
-    return unit->skl + GetItemSklBonus(weapon);
-}
-
-inline int GetUnitSpeed(struct Unit * unit)
-{
-    int weapon = GetUnitEquippedWeapon(unit);
-
-    if (unit->flags & UNIT_FLAG_RESCUING)
-        return unit->spd / 2 + GetItemSpdBonus(weapon);
-
-    return unit->spd + GetItemSpdBonus(weapon);
-}
-
-inline int GetUnitDefense(struct Unit * unit)
-{
-    return unit->def + GetItemDefBonus(GetUnitEquippedWeapon(unit));
-}
-
-inline int GetUnitResistance(struct Unit * unit)
-{
-    return unit->res + GetItemResBonus(GetUnitEquippedWeapon(unit)) + unit->barrier;
-}
-
-inline int GetUnitLuck(struct Unit * unit)
-{
-    return unit->lck + GetItemLckBonus(GetUnitEquippedWeapon(unit));
-}
 
 inline int GetUnitFid(struct Unit * unit)
 {
