@@ -4,7 +4,6 @@
 . = ALIGN(4); src/mapmenu.o(ewram_overlay_0);
 . = ALIGN(4); src/trademenu.o(ewram_overlay_0);
 . = ALIGN(4); src/bmio.o(ewram_overlay_0);
-. = . + 0x100;
 . = ALIGN(4); src/battlepreview.o(ewram_overlay_0);
 . = ALIGN(4); src/statscreen.o(ewram_overlay_0);
 . = ALIGN(4); src/statusscreen.o(ewram_overlay_0);

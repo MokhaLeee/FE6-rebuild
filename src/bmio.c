@@ -41,6 +41,7 @@ static void BmVSync_End(struct BmVSyncProc * proc);
 
 EWRAM_OVERLAY(0) union WeatherEffect gWeatherEffect = {};
 EWRAM_OVERLAY(0) union WeatherGradient gWeatherGradient = {};
+EWRAM_OVERLAY(0) u8 bmio_buf[0x100] = {};
 
 struct ProcScr CONST_DATA ProcScr_BmVSync[] =
 {

@@ -96,11 +96,10 @@ INC_DIRS := include include/vanilla include/hacks asm/include $(AGBCC_HOME)/incl
 INC_FLAG := $(foreach dir, $(INC_DIRS), -I $(dir))
 
 CPPFLAGS := $(INC_FLAG) -nostdinc -undef
-CFLAGS := -g -mthumb-interwork -Wimplicit -Wparentheses -Werror -fhex-asm -ffix-debug-line
-CFLAG_OPT := -O2
+AGB_CFLAGS := -g -mthumb-interwork -O2 -Wimplicit -Wparentheses -Werror -fhex-asm -ffix-debug-line
 ASFLAGS := -mcpu=arm7tdmi $(INC_FLAG)
 
-LDS := src/lds/gba_cart.lds
+LDS := lds/gba_cart.lds
 C_SRCS := $(shell find $(SRC_DIR) -name *.c)
 ASM_SRCS := $(shell find $(SRC_DIR) -name *.s) $(shell find $(ASM_DIR) -name *.s)
 DATA_SRCS := $(shell find data/ -name *.s)
@@ -186,7 +185,7 @@ CLEAN_FILES += $(TSA_FILES:%.tsa=%.tsa.lz)
 # = Banim data =
 # ==============
 
-BANIM_LINKER := src/lds/linker_script_banim.txt
+BANIM_LINKER := lds/linker_script_banim.txt
 
 ALL_BANIM_SCRS := $(shell find ./data/banims/ -type f -name "*.s")
 ALL_BANIM_PALS := $(shell find ./data/banims/ -type f -name "*.agbpal")
@@ -301,7 +300,7 @@ $(shell mkdir -p $(SUBDIRS))
 	@echo "[SYM]	$@"
 	@python3 tools/scripts/elf2sym.py $< | python3 tools/scripts/sym_modify.py > $@
 
-$(ELF): $(ALL_OBJS) src/lds/*.lds
+$(ELF): $(ALL_OBJS) lds/*.lds
 	@echo "[LD ]	$@"
 	@cd $(BUILD_DIR) && $(LD) -T ../$(LDS) -Map ../$(MAP) -R $(BANIM_OBJECT).sym.o -L../tools/agbcc/lib $(ALL_OBJS:$(BUILD_DIR)/%=%) -lc -lgcc -o ../$@
 
@@ -321,7 +320,7 @@ $(BUILD_DIR)/%.d: %.s
 
 $(BUILD_DIR)/%.o: %.c $(BUILD_DIR)/%.d
 	@echo "[CC ]	$<"
-	@$(CPP) $(CPPFLAGS) $< | $(CC1) $(CFLAGS) $(CFLAG_OPT) -o $(BUILD_DIR)/$*.s
+	@$(CPP) $(CPPFLAGS) $< | $(CC1) $(AGB_CFLAGS) -o $(BUILD_DIR)/$*.s
 	@echo ".text\n\t.align\t2, 0\n" >> $(BUILD_DIR)/$*.s
 	@$(AS) $(ASFLAGS) $(BUILD_DIR)/$*.s -o $@
 	@$(STRIP) -N .gcc2_compiled. $@
@@ -362,7 +361,7 @@ clean_banim:
 .PHONY: clean
 
 # ======================
-# = CFLAGS overrides =
+# = AGB_CFLAGS overrides =
 # ======================
 
-%/main.o:           CFLAGS += -mtpcs-frame
+%/main.o:           AGB_CFLAGS += -mtpcs-frame
