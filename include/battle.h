@@ -108,7 +108,9 @@ struct BattleUnit
     /* 78 */ bool8 dealt_damage;
     /* 79 */ bool8 weapon_broke;
     /* 7A */ bool8 has_item_effect_target;
-    /* 7B */ /* pad */
+
+    /* CHAX */
+    /* 7B */ i8 change_mag;
 };
 
 struct BattleHit

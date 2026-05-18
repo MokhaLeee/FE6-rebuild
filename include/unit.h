@@ -272,7 +272,9 @@ struct Unit
     /* 44 */ u8 ai_b;
     /* 45 */ u8 ai_b_pc;
     /* 46 */ u8 ai_counter;
-    /* 47 */ // pad?
+
+    /* CHAX */
+    /* 47 */ i8 mag;
     /* 48 */ // end
 };
 
