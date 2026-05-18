@@ -60,9 +60,5 @@
 . = ALIGN(4); src/save_game.o(ewram_data);
 . = ALIGN(4); src/save_multiarena.o(ewram_data);
 . = ALIGN(4); src/save_xmap.o(ewram_data);
-
-. = 0x0203DC70 - __ewram_overlay_end;
 . = ALIGN(4); src/ending_pinfo.o(ewram_data);
-
-. = 0x0203DCB8 - __ewram_overlay_end;
 . = ALIGN(4); src/shop.o(ewram_data);

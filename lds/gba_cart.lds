@@ -60,6 +60,10 @@ SECTIONS
 	ewram_data (NOLOAD) : ALIGN(4)
 	{
 		. = ALIGN(4); INCLUDE "./lds/section_ewram.lds"
+
+		/* bss for CHAX is put in ewram */
+		. = ALIGN(4); src-hacks/*.o(.bss)
+
 		. = ALIGN(4); src-hacks/*.o(.ewram_data)
 		. = 0x02040000 - __ewram_overlay_end; /* end */
 	}
@@ -69,7 +73,6 @@ SECTIONS
 	{
 		/* .bss */
 		. = ALIGN(4); INCLUDE "./lds/section_iwram.lds"
-		. = ALIGN(4); src-hacks/*.o(.bss)
 		. = ALIGN(4); src-hacks/*.o(.iwram_data)
 		. = 0x008000; /* end */
 	}
