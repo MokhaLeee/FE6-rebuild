@@ -85,12 +85,9 @@ SECTIONS
 		. = ALIGN(4); src-hacks/*.o(.text)
 		. = ALIGN(4); asm/code_linker_stubs.o(.text);
 
+		/* here could expand to 0x400000 */
 		. = 0x000A0000;
 		INCLUDE "./lds/prlist.lds"
-
-		/* here could expand to 0x400000 */
-		. = 0x000E0000;
-		banims/banimdata_gen.o(.data);
 
 		/* CHAX */
 		. = ALIGN(4); src-hacks/*.o(.data)
@@ -100,7 +97,11 @@ SECTIONS
 		. = ALIGN(4); INCLUDE "./lds/section_rodata.lds"
 		. = ALIGN(4); INCLUDE "./lds/section_data.lds"
 
+		. = 0x00800000;
+		banims/banimdata_gen.o(.data);
+
 		/* gamedata */
+		. = ALIGN(4); fonts/build/*.o(.rodata);
 		. = ALIGN(4); gamedata/*.o(.data)
 		. = ALIGN(4); gamedata/*.o(.rodata)
 	} = 0
