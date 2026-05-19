@@ -21,11 +21,6 @@ endif
 
 BUILD_NAME := fe6re
 
-SRC_DIR = src
-ASM_DIR = asm
-SRC_HACKS = src-hacks
-BUILD_DIR = build
-
 CLEAN_FILES :=
 CLEAN_DIRS  :=
 
@@ -92,6 +87,8 @@ SHASUM ?= sha1sum
 # = BUILD CONFIG =
 # ================
 
+C_GENERATED :=
+
 INC_DIRS := include include/vanilla include/hacks asm/include $(AGBCC_HOME)/include .
 INC_FLAG := $(foreach dir, $(INC_DIRS), -I $(dir))
 
@@ -100,14 +97,10 @@ AGB_CFLAGS := -g -mthumb-interwork -O2 -Wimplicit -Wparentheses -Werror -fhex-as
 ASFLAGS := -mcpu=arm7tdmi $(INC_FLAG)
 
 LDS := lds/gba_cart.lds
-C_SRCS := $(shell find $(SRC_DIR) -name *.c)
-ASM_SRCS := $(shell find $(SRC_DIR) -name *.s) $(shell find $(ASM_DIR) -name *.s)
-DATA_SRCS := $(shell find data/ -name *.s)
 
-C_SRCS   += $(shell find $(SRC_HACKS) -name *.c)
-ASM_SRCS += $(shell find $(SRC_HACKS) -name *.s)
-
-C_GENERATED :=
+SRC_DIRS := src asm src-hacks gamedata data
+C_SRCS   := $(foreach dir, $(SRC_DIRS),$(shell find $(dir) -name *.c))
+ASM_SRCS := $(foreach dir, $(SRC_DIRS),$(shell find $(dir) -name *.s))
 
 # =========
 # = Texts =

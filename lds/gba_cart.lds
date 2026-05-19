@@ -92,15 +92,17 @@ SECTIONS
 		. = 0x000E0000;
 		banims/banimdata_gen.o(.data);
 
-		/* .rodata */
-		. = ALIGN(4); INCLUDE "./lds/section_rodata.lds"
-
-		/* .data */
-		. = ALIGN(4); INCLUDE "./lds/section_data.lds"
-
 		/* CHAX */
 		. = ALIGN(4); src-hacks/*.o(.data)
 		. = ALIGN(4); src-hacks/*.o(.rodata)
+
+		/* .rodata */
+		. = ALIGN(4); INCLUDE "./lds/section_rodata.lds"
+		. = ALIGN(4); INCLUDE "./lds/section_data.lds"
+
+		/* gamedata */
+		. = ALIGN(4); gamedata/*.o(.data)
+		. = ALIGN(4); gamedata/*.o(.rodata)
 	} = 0
 
 	/* DWARF 2 sections */
