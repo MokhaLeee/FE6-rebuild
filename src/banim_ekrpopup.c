@@ -142,7 +142,7 @@ void DrawBattlePopup(struct ProcEkrPopup * proc, int type, u32 item)
     if (type == 0)
     {
         ApplyIconPalette(1, 0x12);
-        PutIconObjImg(GetItemKind(item) + 0x70, 0x40);
+        PutIconObjImg(WTYPE_ICON(GetItemKind(item)), 0x40);
     }
     else
     {

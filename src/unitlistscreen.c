@@ -106,7 +106,7 @@ void func_fe6_080742D0(fu8 sort_key)
             {
                 if (i == 5 && j != 0)
                 {
-                    PutIcon(gBg2Tm + 0x34, ICON_ITEM_KIND_BASE + j - 1, 0xA0 << 7);
+                    PutIcon(gBg2Tm + 0x34, WTYPE_ICON(j - 1), 0xA0 << 7);
                 }
                 else
                 {
@@ -1994,7 +1994,7 @@ void func_fe6_08076314(u16 * tm, fu8 page)
     {
         for (i = 0; i < 8; i++)
         {
-            PutIcon(tm + 9 + 2 * i, ICON_ITEM_KIND_BASE + i, TILEREF(0, BGPAL_ICONS + 1));
+            PutIcon(tm + 9 + 2 * i, WTYPE_ICON(i), TILEREF(0, BGPAL_ICONS + 1));
         }
     }
     else

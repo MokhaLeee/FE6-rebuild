@@ -346,8 +346,8 @@ void func_fe6_0807D358(struct PrepSubItemProc *proc)
 	}
 
 	if (gPrepMenuScrollPos != 0) {
-		icons[j] = ICON_ITEM_KIND_BASE + GetItemKind(gPrepItemListData[
-			proc->menu_scroll_bar_disp_idx / 0x10 + proc->hand_disp_y].u.info.item);
+		icons[j] = WTYPE_ICON(GetItemKind(gPrepItemListData[
+			proc->menu_scroll_bar_disp_idx / 0x10 + proc->hand_disp_y].u.info.item));
 
 		j++;
 	}
@@ -446,8 +446,8 @@ void PrepItem_PutItemDesc(u8 x, u8 y, int item, struct ProcPrepSubItemfx *proc)
 			PutNumber(gBg0Tm + TM_OFFSET(x + 5,  y + 5), TEXT_COLOR_SYSTEM_BLUE, GetItemHit(item));
 			PutNumber(gBg0Tm + TM_OFFSET(x + 11, y + 3), TEXT_COLOR_SYSTEM_BLUE, GetItemCrit(item));
 			PutNumber(gBg0Tm + TM_OFFSET(x + 11, y + 5), TEXT_COLOR_SYSTEM_BLUE, GetItemWeight(item));
-			PutIcon(gBg0Tm + TM_OFFSET(x + 7, y + 1), GetItemKind(item) + ICON_ITEM_KIND_BASE, OAM2_PAL(BGPAL_PREPMENU_AFFIN_ICON));
-			PrepSubItem_InsertIcon(GetItemKind(item) + ICON_ITEM_KIND_BASE);
+			PutIcon(gBg0Tm + TM_OFFSET(x + 7, y + 1), WTYPE_ICON(GetItemKind(item)), OAM2_PAL(BGPAL_PREPMENU_AFFIN_ICON));
+			PrepSubItem_InsertIcon(WTYPE_ICON(GetItemKind(item)));
 			break;
 		}
 	}

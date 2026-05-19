@@ -1051,7 +1051,7 @@ void UpdateEquipInfoWindow(int item_slot)
         PutText(proc->text + 2, gBg0Tm + TM_OFFSET(proc->x+1, proc->y+5));
 
         PutIcon(gBg0Tm + TM_OFFSET(proc->x+7, proc->y+1),
-            ICON_ITEM_KIND_BASE + GetItemKind(gBattleUnitA.weapon), TILEREF(0, BGPAL_EQUIP_INFO_ICON));
+            WTYPE_ICON(GetItemKind(gBattleUnitA.weapon)), TILEREF(0, BGPAL_EQUIP_INFO_ICON));
 
         break;
     }

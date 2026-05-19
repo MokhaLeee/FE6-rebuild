@@ -948,20 +948,6 @@ int GetUnitKeyItemSlotForTerrain(struct Unit * unit, int terrain)
     return FindUnitItemSlot(unit, item);
 }
 
-int GetAidIconFromAttributes(int attributes)
-{
-    if (attributes & UNIT_ATTR_MOUNT_ICON)
-        return ICON_AID_MOUNT;
-
-    if (attributes & UNIT_ATTR_PEGASUS_ICON)
-        return ICON_AID_PEGASUS;
-
-    if (attributes & UNIT_ATTR_WYVERN_ICON)
-        return ICON_AID_WYVERN;
-
-    return ICON_NONE;
-}
-
 int GetUnitUseBits(struct Unit * unit)
 {
     int i, item, result = 0;

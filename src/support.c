@@ -330,26 +330,6 @@ int GetUnitSupportBonuses(struct Unit * unit, struct SupportBonuses * bonuses)
     return result;
 }
 
-int GetUnitAffinityIcon(struct Unit * unit)
-{
-    int affinity = unit->pinfo->affinity;
-
-    if (affinity == 0)
-        return -1;
-
-    return ICON_AFFINITY_BASE + affinity - 1;
-}
-
-int GetAffinityIconByPid(int pid)
-{
-    int affinity = GetPInfo(pid)->affinity;
-
-    if (affinity == 0)
-        return -1;
-
-    return ICON_AFFINITY_BASE + affinity - 1;
-}
-
 int GetSupportLevelSpecialChar(int level)
 {
     SHOULD_BE_STATIC u8 SHOULD_BE_CONST chars[4] =
