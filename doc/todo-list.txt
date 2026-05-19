@@ -1,0 +1,2 @@
+1. Remove unused wave and voicegroups
+2. Add AllInstrument
