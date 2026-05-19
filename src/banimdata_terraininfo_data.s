@@ -1,5 +1,6 @@
 
     .data
+	.align 2,0
 
 	.global Img_BanimTerrain1
 Img_BanimTerrain1:	@ 0x7EAC00

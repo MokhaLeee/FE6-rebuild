@@ -3,18 +3,21 @@
 
     .section .data
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_1
 AnimSprite_EkrlvupfxUnk_1:  @ 0x5CBE9C
     ANIM_SPRITE_AFFIN 1, 0x100, 0x0, 0x0, 0x505
     ANIM_SPRITE ATTR0_SQUARE + OBJ_ROT_SCALE_ON, ATTR1_SIZE_16, 0x0000, -48, -4
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_2
 AnimSprite_EkrlvupfxUnk_2:  @ 0x5CBEC0
     ANIM_SPRITE_AFFIN 1, 0x100, 0x0, 0x0, 0x35e
     ANIM_SPRITE ATTR0_SQUARE + OBJ_ROT_SCALE_ON, ATTR1_SIZE_16, 0x0000, -48, -4
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_3
 AnimSprite_EkrlvupfxUnk_3:  @ 0x5CBEE4
     ANIM_SPRITE_AFFIN 2, 0x100, 0x0, 0x0, 0x282
@@ -23,6 +26,7 @@ AnimSprite_EkrlvupfxUnk_3:  @ 0x5CBEE4
     ANIM_SPRITE ATTR0_SQUARE + OBJ_ROT_SCALE_ON, 0x4200, 0x0002, -32, -4
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_4
 AnimSprite_EkrlvupfxUnk_4:  @ 0x5CBF20
     ANIM_SPRITE_AFFIN 2, 0x100, 0x0, 0x0, 0x200
@@ -31,6 +35,7 @@ AnimSprite_EkrlvupfxUnk_4:  @ 0x5CBF20
     ANIM_SPRITE ATTR0_SQUARE + OBJ_ROT_SCALE_ON, 0x4200, 0x0002, -32, -4
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_5
 AnimSprite_EkrlvupfxUnk_5:  @ 0x5CBF5C
     ANIM_SPRITE_AFFIN 3, 0x100, 0x0, 0x0, 0x1ac
@@ -41,6 +46,7 @@ AnimSprite_EkrlvupfxUnk_5:  @ 0x5CBF5C
     ANIM_SPRITE ATTR0_SQUARE + OBJ_ROT_SCALE_ON, 0x4400, 0x0004, -16, -4
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_6
 AnimSprite_EkrlvupfxUnk_6:  @ 0x5CBFB0
     ANIM_SPRITE_AFFIN 3, 0x100, 0x0, 0x0, 0x16e
@@ -51,6 +57,7 @@ AnimSprite_EkrlvupfxUnk_6:  @ 0x5CBFB0
     ANIM_SPRITE ATTR0_SQUARE + OBJ_ROT_SCALE_ON, 0x4400, 0x0004, -16, -4
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_7
 AnimSprite_EkrlvupfxUnk_7:  @ 0x5CC004
     ANIM_SPRITE_AFFIN 3, 0x100, 0x0, 0x0, 0x141
@@ -61,6 +68,7 @@ AnimSprite_EkrlvupfxUnk_7:  @ 0x5CC004
     ANIM_SPRITE ATTR0_SQUARE + OBJ_ROT_SCALE_ON, 0x4400, 0x0004, -16, -5
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_8
 AnimSprite_EkrlvupfxUnk_8:  @ 0x5CC058
     ANIM_SPRITE_AFFIN 3, 0x100, 0x0, 0x0, 0x11c
@@ -71,6 +79,7 @@ AnimSprite_EkrlvupfxUnk_8:  @ 0x5CC058
     ANIM_SPRITE ATTR0_SQUARE + OBJ_ROT_SCALE_ON, 0x4400, 0x0004, -16, -6
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_9
 AnimSprite_EkrlvupfxUnk_9:  @ 0x5CC0AC
     ANIM_SPRITE_AFFIN 2, 0x100, 0x0, 0x0, 0x141
@@ -80,6 +89,7 @@ AnimSprite_EkrlvupfxUnk_9:  @ 0x5CC0AC
     ANIM_SPRITE ATTR0_SQUARE + OBJ_ROT_SCALE_ON, 0x4200, 0x0004, -16, -6
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_10
 AnimSprite_EkrlvupfxUnk_10:  @ 0x5CC0F4
     ANIM_SPRITE_AFFIN 3, 0x100, 0x0, 0x0, 0xd5
@@ -90,6 +100,7 @@ AnimSprite_EkrlvupfxUnk_10:  @ 0x5CC0F4
     ANIM_SPRITE ATTR0_SQUARE + OBJ_ROT_SCALE_ON, 0x4400, 0x0004, -16, -7
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_11
 AnimSprite_EkrlvupfxUnk_11:  @ 0x5CC148
     ANIM_SPRITE_AFFIN 2, 0x100, 0x0, 0x0, 0xe9
@@ -99,6 +110,7 @@ AnimSprite_EkrlvupfxUnk_11:  @ 0x5CC148
     ANIM_SPRITE ATTR0_SQUARE + OBJ_ROT_SCALE_ON, 0x4200, 0x0004, -16, -7
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_12
 AnimSprite_EkrlvupfxUnk_12:  @ 0x5CC190
     ANIM_SPRITE_AFFIN 2, 0x100, 0x0, 0x0, 0xd5
@@ -108,6 +120,7 @@ AnimSprite_EkrlvupfxUnk_12:  @ 0x5CC190
     ANIM_SPRITE ATTR0_SQUARE + OBJ_ROT_SCALE_ON, 0x4200, 0x0004, -16, -8
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_13
 AnimSprite_EkrlvupfxUnk_13:  @ 0x5CC1D8
     ANIM_SPRITE_AFFIN 1, 0x100, 0x0, 0x0, 0xe9
@@ -116,6 +129,7 @@ AnimSprite_EkrlvupfxUnk_13:  @ 0x5CC1D8
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0004, -16, -8
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_14
 AnimSprite_EkrlvupfxUnk_14:  @ 0x5CC214
     ANIM_SPRITE_AFFIN 1, 0x100, 0x0, 0x0, 0xd5
@@ -124,6 +138,7 @@ AnimSprite_EkrlvupfxUnk_14:  @ 0x5CC214
     ANIM_SPRITE ATTR0_SQUARE + OBJ_ROT_SCALE_ON, ATTR1_SIZE_16, 0x0004, -16, -10
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_15
 AnimSprite_EkrlvupfxUnk_15:  @ 0x5CC250
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -48, -8
@@ -131,6 +146,7 @@ AnimSprite_EkrlvupfxUnk_15:  @ 0x5CC250
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0004, -16, -8
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_16
 AnimSprite_EkrlvupfxUnk_16:  @ 0x5CC280
     ANIM_SPRITE_AFFIN 1, 0xa3d, 0x0, 0x0, 0xa3d
@@ -140,6 +156,7 @@ AnimSprite_EkrlvupfxUnk_16:  @ 0x5CC280
     ANIM_SPRITE ATTR0_WIDE + OBJ_ROT_SCALE_ON, ATTR1_SIZE_32, 0x0006, 0, -3
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_17
 AnimSprite_EkrlvupfxUnk_17:  @ 0x5CC2C8
     ANIM_SPRITE_AFFIN 1, 0x505, 0x0, 0x0, 0x505
@@ -149,6 +166,7 @@ AnimSprite_EkrlvupfxUnk_17:  @ 0x5CC2C8
     ANIM_SPRITE ATTR0_WIDE + OBJ_ROT_SCALE_ON, ATTR1_SIZE_32, 0x0006, 0, -4
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_18
 AnimSprite_EkrlvupfxUnk_18:  @ 0x5CC310
     ANIM_SPRITE_AFFIN 1, 0x35e, 0x0, 0x0, 0x35e
@@ -158,6 +176,7 @@ AnimSprite_EkrlvupfxUnk_18:  @ 0x5CC310
     ANIM_SPRITE ATTR0_WIDE + OBJ_ROT_SCALE_ON, ATTR1_SIZE_32, 0x0006, 0, -5
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_19
 AnimSprite_EkrlvupfxUnk_19:  @ 0x5CC358
     ANIM_SPRITE_AFFIN 1, 0x282, 0x0, 0x0, 0x282
@@ -167,6 +186,7 @@ AnimSprite_EkrlvupfxUnk_19:  @ 0x5CC358
     ANIM_SPRITE ATTR0_WIDE + OBJ_ROT_SCALE_ON, ATTR1_SIZE_32, 0x0006, 0, -5
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_20
 AnimSprite_EkrlvupfxUnk_20:  @ 0x5CC3A0
     ANIM_SPRITE_AFFIN 1, 0x200, 0x0, 0x0, 0x200
@@ -176,6 +196,7 @@ AnimSprite_EkrlvupfxUnk_20:  @ 0x5CC3A0
     ANIM_SPRITE ATTR0_WIDE + OBJ_ROT_SCALE_ON, ATTR1_SIZE_32, 0x0006, 0, -6
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_21
 AnimSprite_EkrlvupfxUnk_21:  @ 0x5CC3E8
     ANIM_SPRITE_AFFIN 1, 0x1ac, 0x0, 0x0, 0x1ac
@@ -185,6 +206,7 @@ AnimSprite_EkrlvupfxUnk_21:  @ 0x5CC3E8
     ANIM_SPRITE ATTR0_WIDE + OBJ_ROT_SCALE_ON, ATTR1_SIZE_32, 0x0006, 0, -6
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_22
 AnimSprite_EkrlvupfxUnk_22:  @ 0x5CC430
     ANIM_SPRITE_AFFIN 1, 0x16e, 0x0, 0x0, 0x16e
@@ -194,6 +216,7 @@ AnimSprite_EkrlvupfxUnk_22:  @ 0x5CC430
     ANIM_SPRITE ATTR0_WIDE + OBJ_ROT_SCALE_ON, ATTR1_SIZE_32, 0x0006, 0, -7
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_23
 AnimSprite_EkrlvupfxUnk_23:  @ 0x5CC478
     ANIM_SPRITE_AFFIN 1, 0x141, 0x0, 0x0, 0x141
@@ -203,6 +226,7 @@ AnimSprite_EkrlvupfxUnk_23:  @ 0x5CC478
     ANIM_SPRITE ATTR0_WIDE + OBJ_ROT_SCALE_ON, ATTR1_SIZE_32, 0x0006, 0, -7
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_24
 AnimSprite_EkrlvupfxUnk_24:  @ 0x5CC4C0
     ANIM_SPRITE_AFFIN 1, 0x11c, 0x0, 0x0, 0x11c
@@ -212,6 +236,7 @@ AnimSprite_EkrlvupfxUnk_24:  @ 0x5CC4C0
     ANIM_SPRITE ATTR0_WIDE + OBJ_ROT_SCALE_ON, ATTR1_SIZE_32, 0x0006, 0, -8
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_25
 AnimSprite_EkrlvupfxUnk_25:  @ 0x5CC508
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -48, -8
@@ -220,30 +245,35 @@ AnimSprite_EkrlvupfxUnk_25:  @ 0x5CC508
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_32, 0x0006, 0, -8
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_26
 AnimSprite_EkrlvupfxUnk_26:  @ 0x5CC544
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x000D, -7, 0
     ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x000A, -3, -5
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_27
 AnimSprite_EkrlvupfxUnk_27:  @ 0x5CC568
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x002B, -7, 0
     ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x000A, -3, -6
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_28
 AnimSprite_EkrlvupfxUnk_28:  @ 0x5CC58C
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x000B, -7, 0
     ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x000A, -3, -7
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_29
 AnimSprite_EkrlvupfxUnk_29:  @ 0x5CC5B0
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x000B, -7, 0
     ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x000A, -3, -8
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_30
 AnimSprite_EkrlvupfxUnk_30:  @ 0x5CC5D4
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0000, -4, -8
@@ -256,6 +286,7 @@ AnimSprite_EkrlvupfxUnk_30:  @ 0x5CC5D4
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0000, -8, -4
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_31
 AnimSprite_EkrlvupfxUnk_31:  @ 0x5CC640
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0000, -2, -9
@@ -268,6 +299,7 @@ AnimSprite_EkrlvupfxUnk_31:  @ 0x5CC640
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0000, -9, -5
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_32
 AnimSprite_EkrlvupfxUnk_32:  @ 0x5CC6AC
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0000, 3, -5
@@ -280,6 +312,7 @@ AnimSprite_EkrlvupfxUnk_32:  @ 0x5CC6AC
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0000, -5, -10
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_33
 AnimSprite_EkrlvupfxUnk_33:  @ 0x5CC718
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0000, 5, -3
@@ -292,6 +325,7 @@ AnimSprite_EkrlvupfxUnk_33:  @ 0x5CC718
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0000, -2, -12
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_34
 AnimSprite_EkrlvupfxUnk_34:  @ 0x5CC784
     ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0000, -13, 0
@@ -304,6 +338,7 @@ AnimSprite_EkrlvupfxUnk_34:  @ 0x5CC784
     ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0000, -8, -12
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_35
 AnimSprite_EkrlvupfxUnk_35:  @ 0x5CC7F0
     ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0000, -14, -3
@@ -316,6 +351,7 @@ AnimSprite_EkrlvupfxUnk_35:  @ 0x5CC7F0
     ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0000, -6, -14
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_36
 AnimSprite_EkrlvupfxUnk_36:  @ 0x5CC85C
     ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0000, -15, -4
@@ -328,6 +364,7 @@ AnimSprite_EkrlvupfxUnk_36:  @ 0x5CC85C
     ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0000, -4, -15
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_37
 AnimSprite_EkrlvupfxUnk_37:  @ 0x5CC8C8
     ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0000, -16, -7
@@ -340,6 +377,7 @@ AnimSprite_EkrlvupfxUnk_37:  @ 0x5CC8C8
     ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0000, -1, -15
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_38
 AnimSprite_EkrlvupfxUnk_38:  @ 0x5CC934
     ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0000, -15, -10
@@ -352,6 +390,7 @@ AnimSprite_EkrlvupfxUnk_38:  @ 0x5CC934
     ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0000, 3, -14
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_39
 AnimSprite_EkrlvupfxUnk_39:  @ 0x5CC9A0
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0001, -2, -16
@@ -364,6 +403,7 @@ AnimSprite_EkrlvupfxUnk_39:  @ 0x5CC9A0
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0001, -12, -13
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_40
 AnimSprite_EkrlvupfxUnk_40:  @ 0x5CCA0C
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0002, 0, -16
@@ -376,18 +416,21 @@ AnimSprite_EkrlvupfxUnk_40:  @ 0x5CCA0C
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0002, -10, -15
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_41
 AnimSprite_EkrlvupfxUnk_41:  @ 0x5CCA78
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x0003, -8, -8
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x0040, 18, -8
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_42
 AnimSprite_EkrlvupfxUnk_42:  @ 0x5CCA9C
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_16, 0x0005, -16, -8
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0022, 18, -16
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_43
 AnimSprite_EkrlvupfxUnk_43:  @ 0x5CCAC0
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_16, 0x0009, -24, -8
@@ -395,6 +438,7 @@ AnimSprite_EkrlvupfxUnk_43:  @ 0x5CCAC0
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0024, 18, -16
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_44
 AnimSprite_EkrlvupfxUnk_44:  @ 0x5CCAF0
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0024, 18, -19
@@ -402,6 +446,7 @@ AnimSprite_EkrlvupfxUnk_44:  @ 0x5CCAF0
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_16, 0x0013, 0, -8
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_45
 AnimSprite_EkrlvupfxUnk_45:  @ 0x5CCB20
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0022, 18, -26
@@ -409,6 +454,7 @@ AnimSprite_EkrlvupfxUnk_45:  @ 0x5CCB20
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_16, 0x0013, 0, -8
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_46
 AnimSprite_EkrlvupfxUnk_46:  @ 0x5CCB50
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x0040, 18, -21
@@ -416,6 +462,7 @@ AnimSprite_EkrlvupfxUnk_46:  @ 0x5CCB50
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_16, 0x0013, 0, -8
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_47
 AnimSprite_EkrlvupfxUnk_47:  @ 0x5CCB80
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0022, 18, -24
@@ -423,6 +470,7 @@ AnimSprite_EkrlvupfxUnk_47:  @ 0x5CCB80
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_16, 0x0013, 0, -8
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_48
 AnimSprite_EkrlvupfxUnk_48:  @ 0x5CCBB0
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0026, 18, -16
@@ -430,6 +478,7 @@ AnimSprite_EkrlvupfxUnk_48:  @ 0x5CCBB0
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_16, 0x0013, 0, -8
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_49
 AnimSprite_EkrlvupfxUnk_49:  @ 0x5CCBE0
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0028, 18, -16
@@ -437,6 +486,7 @@ AnimSprite_EkrlvupfxUnk_49:  @ 0x5CCBE0
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_16, 0x0013, 0, -8
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrlvupfxUnk_50
 AnimSprite_EkrlvupfxUnk_50:  @ 0x5CCC10
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x002A, 18, -16
@@ -444,6 +494,7 @@ AnimSprite_EkrlvupfxUnk_50:  @ 0x5CCC10
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_16, 0x0013, 0, -8
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimScr_EkrlvupfxUnk_085CCC40
 AnimScr_EkrlvupfxUnk_085CCC40: @ 0x5CCC40
     ANIMSCR_FORCE_SPRITE AnimSprite_EkrlvupfxUnk_1, 1

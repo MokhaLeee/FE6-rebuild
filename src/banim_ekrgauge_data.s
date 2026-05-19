@@ -2,6 +2,7 @@
 	.include "gba_sprites.inc"
 	.section .data
 
+.align 2,0
 .global AnimSprite_EkrGauge_1
 AnimSprite_EkrGauge_1:  @ 0x5CB580
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_16, 0x0180, 0, 0
@@ -9,11 +10,13 @@ AnimSprite_EkrGauge_1:  @ 0x5CB580
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_16, 0x0188, 64, 0
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrGauge_2
 AnimSprite_EkrGauge_2:  @ 0x5CB5B0
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x0000, 0, 0
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrGauge_3
 AnimSprite_EkrGauge_3:  @ 0x5CB5C8
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_16, 0x0000, 0, 0
@@ -21,6 +24,7 @@ AnimSprite_EkrGauge_3:  @ 0x5CB5C8
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_16, 0x0008, 0, 16
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrGauge_4
 AnimSprite_EkrGauge_4:  @ 0x5CB5F8
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_32, 0x0000, -107, -8
@@ -29,6 +33,7 @@ AnimSprite_EkrGauge_4:  @ 0x5CB5F8
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x0008, -75, 8
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrGauge_5
 AnimSprite_EkrGauge_5:  @ 0x5CB634
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_32, 0x0000, 59, -8
@@ -37,36 +42,43 @@ AnimSprite_EkrGauge_5:  @ 0x5CB634
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x0008, 91, 8
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrGauge_6
 AnimSprite_EkrGauge_6:  @ 0x5CB670
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, 0, 0
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrGauge_7
 AnimSprite_EkrGauge_7:  @ 0x5CB688
     ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, 0, 0
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrGauge_8
 AnimSprite_EkrGauge_8:  @ 0x5CB6A0
     ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0001, 0, 0
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrGauge_9
 AnimSprite_EkrGauge_9:  @ 0x5CB6B8
     ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0001, 0, -1
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrGauge_10
 AnimSprite_EkrGauge_10:  @ 0x5CB6D0
     ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0002, 0, 0
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrGauge_11
 AnimSprite_EkrGauge_11:  @ 0x5CB6E8
     ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0003, 0, 0
     ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrGauge_12
 AnimSprite_EkrGauge_12:  @ 0x5CB700
     ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0003, 0, 1

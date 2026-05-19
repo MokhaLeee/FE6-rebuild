@@ -2,6 +2,7 @@
 	.include "animscr.inc"
 	.include "gba_sprites.inc"
 
+.align 2,0
 AnimSprite_Manaketefx1_1:  @ 0x604AE4
     ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -8, -8
     ANIM_SPRITE_END
@@ -38,7 +39,8 @@ AnimSprite_Manaketefx1_4:  @ 0x604B68
     ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0053, -24, 32
     ANIM_SPRITE_END
 
-	.global AnimScr_ManaketeEnter1
+.align 2,0
+.global AnimScr_ManaketeEnter1
 AnimScr_ManaketeEnter1: @ 08604C34
     ANIMSCR_FORCE_SPRITE AnimSprite_Manaketefx1_1, 4
     ANIMSCR_FORCE_SPRITE AnimSprite_Manaketefx1_2, 6
@@ -46,7 +48,8 @@ AnimScr_ManaketeEnter1: @ 08604C34
     ANIMSCR_FORCE_SPRITE AnimSprite_Manaketefx1_4, 5
     ANIMSCR_BLOCKED
 
-	.global AnimScr_ManaketeExit3
+.align 2,0
+.global AnimScr_ManaketeExit3
 AnimScr_ManaketeExit3: @ 08604C48
     ANIMSCR_FORCE_SPRITE AnimSprite_Manaketefx1_4, 5
     ANIMSCR_FORCE_SPRITE AnimSprite_Manaketefx1_3, 6
@@ -99,7 +102,8 @@ AnimSprite_Manaketefx2_3:  @ 0x604DA0
     ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x00D8, -8, 48
     ANIM_SPRITE_END
 
-	.global AnimScr_ManaketeEnter2
+.align 2,0
+.global AnimScr_ManaketeEnter2
 AnimScr_ManaketeEnter2: @ 08604E30
     ANIMSCR_FORCE_SPRITE AnimSprite_Manaketefx2_1, 5
     ANIMSCR_FORCE_SPRITE AnimSprite_Manaketefx2_2, 4
@@ -109,7 +113,8 @@ AnimScr_ManaketeEnter2: @ 08604E30
     ANIMSCR_FORCE_SPRITE AnimSprite_Manaketefx2_3, 4
     ANIMSCR_BLOCKED
 
-	.global AnimScr_ManaketeExit2
+.align 2,0
+.global AnimScr_ManaketeExit2
 AnimScr_ManaketeExit2: @ 08604E4C
     ANIMSCR_FORCE_SPRITE AnimSprite_Manaketefx2_3, 4
     ANIMSCR_FORCE_SPRITE AnimSprite_Manaketefx2_2, 5
@@ -148,13 +153,15 @@ AnimSprite_Manaketefx3_2:  @ 0x604F34
     ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_16, 0x00B0, -40, 24
     ANIM_SPRITE_END
 
-	.global AnimScr_ManaketeEnter3
+.align 2,0
+.global AnimScr_ManaketeEnter3
 AnimScr_ManaketeEnter3: @ 08604F94
     ANIMSCR_FORCE_SPRITE AnimSprite_Manaketefx3_1, 5
     ANIMSCR_FORCE_SPRITE AnimSprite_Manaketefx3_2, 5
     ANIMSCR_BLOCKED
 
-	.global AnimScr_ManaketeExit1
+.align 2,0
+.global AnimScr_ManaketeExit1
 AnimScr_ManaketeExit1: @ 08604FA0
     ANIMSCR_FORCE_SPRITE AnimSprite_Manaketefx3_2, 5
     ANIMSCR_FORCE_SPRITE AnimSprite_Manaketefx3_1, 5
@@ -417,7 +424,8 @@ AnimSprite_Idunnfx_15:  @ 0x605978
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x0094, -72, 4
     ANIM_SPRITE_END
 
-	.global AnimScr_EkrIdunnDeamon1
+.align 2,0
+.global AnimScr_EkrIdunnDeamon1
 AnimScr_EkrIdunnDeamon1: @ 08605A50
     ANIMSCR_FORCE_SPRITE AnimSprite_Idunnfx_1, 2
     ANIMSCR_FORCE_SPRITE AnimSprite_Idunnfx_2, 2
@@ -428,7 +436,8 @@ AnimScr_EkrIdunnDeamon1: @ 08605A50
     ANIMSCR_FORCE_SPRITE AnimSprite_Idunnfx_7, 1
     ANIMSCR_BLOCKED
 
-	.global AnimScr_EkrIdunnDeamon2
+.align 2,0
+.global AnimScr_EkrIdunnDeamon2
 AnimScr_EkrIdunnDeamon2: @ 08605A70
     ANIMSCR_FORCE_SPRITE AnimSprite_Idunnfx_9, 2
     ANIMSCR_FORCE_SPRITE AnimSprite_Idunnfx_10, 2

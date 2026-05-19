@@ -1,4 +1,5 @@
 	.section .rodata
+	.align 2,0
 
 	.global gSinLut_u32
 gSinLut_u32: @ 08353328

@@ -1,6 +1,7 @@
 	.data
 
-	.global MuInfoTable
+.align 2,0
+.global MuInfoTable
 MuInfoTable: @ 086649B4
 	.4byte MuInfo_0827B188, MuInfo_0827BBD8
 	.4byte MuInfo_0827BD40, MuInfo_0827C4E4

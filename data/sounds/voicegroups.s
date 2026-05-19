@@ -4,6 +4,7 @@
 
 .section .rodata
 
+.align 2,0
 .global voicegroup_08381254
 voicegroup_08381254: @ 08381254
     voice_square_1 0, 2, 0, 0, 15, 0

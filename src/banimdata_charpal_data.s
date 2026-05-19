@@ -1,4 +1,5 @@
 	.data
+	.align 2,0
 
 	.global Pal_BanimChar_087FC800
 Pal_BanimChar_087FC800:	@ 0x7FC800

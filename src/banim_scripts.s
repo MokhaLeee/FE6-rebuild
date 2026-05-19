@@ -1,6 +1,7 @@
 	.include "animscr.inc"
 	.include "gba_sprites.inc"
 	.section .data
+    .align 2,0
 
 AnimSprite_TeonoObj_R_1:  @ 0x5D3AC8
     ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_32, 0x0008, -18, -4

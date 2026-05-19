@@ -2,6 +2,7 @@
 	.include "gba_sprites.inc"
 	.section .data
 
+.align 2,0
 .global AnimSprite_EkrTerrainfx_R_Far
 AnimSprite_EkrTerrainfx_R_Far:  @ 0x5CCD28
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_32, 0x0000, -48, 8
@@ -16,11 +17,13 @@ AnimSprite_EkrTerrainfx_R_Far:  @ 0x5CCD28
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_16, 0x0039, 0, -16
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimScr_EkrTerrainfx_R_Far
 AnimScr_EkrTerrainfx_R_Far: @ 0x5CCDAC
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrTerrainfx_R_Far, 4
 	ANIMSCR_BLOCKED
 
+.align 2,0
 .global AnimSprite_EkrTerrainfx_L_Far
 AnimSprite_EkrTerrainfx_L_Far:  @ 0x5CCDB4
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_32, 0x0000, 16, 8
@@ -35,11 +38,13 @@ AnimSprite_EkrTerrainfx_L_Far:  @ 0x5CCDB4
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_16, 0x0039, -32, -16
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimScr_EkrTerrainfx_L_Far
 AnimScr_EkrTerrainfx_L_Far: @ 0x5CCE38
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrTerrainfx_L_Far, 4
 	ANIMSCR_BLOCKED
 
+.align 2,0
 .global AnimSprite_EkrTerrainfx_R_Close
 AnimSprite_EkrTerrainfx_R_Close:  @ 0x5CCE40
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_32, 0x0000, -48, 8
@@ -53,11 +58,13 @@ AnimSprite_EkrTerrainfx_R_Close:  @ 0x5CCE40
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_16, 0x0019, -16, -16
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimScr_EkrTerrainfx_R_Close
 AnimScr_EkrTerrainfx_R_Close: @ 0x5CCEB8
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrTerrainfx_R_Close, 4
 	ANIMSCR_BLOCKED
 
+.align 2,0
 .global AnimSprite_EkrTerrainfx_L_Close
 AnimSprite_EkrTerrainfx_L_Close:  @ 0x5CCEC0
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_32, 0x0000, 16, 8
@@ -71,11 +78,13 @@ AnimSprite_EkrTerrainfx_L_Close:  @ 0x5CCEC0
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_16, 0x0019, -16, -16
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimScr_EkrTerrainfx_L_Close
 AnimScr_EkrTerrainfx_L_Close: @ 0x5CCF38
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrTerrainfx_L_Close, 4
 	ANIMSCR_BLOCKED
 
+.align 2,0
 .global AnimSprite_085CCF40
 AnimSprite_085CCF40:  @ 0x5CCF40
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_32, 0x1000, -107, -8
@@ -88,6 +97,7 @@ AnimSprite_085CCF40:  @ 0x5CCF40
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0008, 91, -8
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimScr_085CCFAC
 AnimScr_085CCFAC: @ 0x5CCFAC
 	ANIMSCR_FORCE_SPRITE AnimSprite_085CCF40, 4

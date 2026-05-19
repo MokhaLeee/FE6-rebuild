@@ -2,24 +2,28 @@
 	.include "gba_sprites.inc"
 	.section .data
 
+.align 2,0
 .global AnimSprite_NoDamage_1
 AnimSprite_NoDamage_1:  @ 0x5CCFB4
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -32
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0002, -16, -24
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_2
 AnimSprite_NoDamage_2:  @ 0x5CCFD8
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -31
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0002, -16, -23
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_3
 AnimSprite_NoDamage_3:  @ 0x5CCFFC
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -30
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0002, -16, -21
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_4
 AnimSprite_NoDamage_4:  @ 0x5CD020
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -27
@@ -28,6 +32,7 @@ AnimSprite_NoDamage_4:  @ 0x5CD020
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0003, -8, -24
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_5
 AnimSprite_NoDamage_5:  @ 0x5CD05C
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -23
@@ -36,6 +41,7 @@ AnimSprite_NoDamage_5:  @ 0x5CD05C
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0003, -8, -23
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_6
 AnimSprite_NoDamage_6:  @ 0x5CD098
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -18
@@ -44,6 +50,7 @@ AnimSprite_NoDamage_6:  @ 0x5CD098
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0003, -8, -21
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_7
 AnimSprite_NoDamage_7:  @ 0x5CD0D4
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -16
@@ -53,6 +60,7 @@ AnimSprite_NoDamage_7:  @ 0x5CD0D4
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0004, 0, -20
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_8
 AnimSprite_NoDamage_8:  @ 0x5CD11C
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -17
@@ -62,6 +70,7 @@ AnimSprite_NoDamage_8:  @ 0x5CD11C
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0004, 0, -19
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_9
 AnimSprite_NoDamage_9:  @ 0x5CD164
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -19
@@ -71,6 +80,7 @@ AnimSprite_NoDamage_9:  @ 0x5CD164
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0004, 0, -17
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_10
 AnimSprite_NoDamage_10:  @ 0x5CD1AC
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -21
@@ -81,6 +91,7 @@ AnimSprite_NoDamage_10:  @ 0x5CD1AC
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0003, 8, -20
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_11
 AnimSprite_NoDamage_11:  @ 0x5CD200
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -22
@@ -91,6 +102,7 @@ AnimSprite_NoDamage_11:  @ 0x5CD200
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0003, 8, -19
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_12
 AnimSprite_NoDamage_12:  @ 0x5CD254
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -22
@@ -101,6 +113,7 @@ AnimSprite_NoDamage_12:  @ 0x5CD254
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0003, 8, -17
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_13
 AnimSprite_NoDamage_13:  @ 0x5CD2A8
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -21
@@ -112,6 +125,7 @@ AnimSprite_NoDamage_13:  @ 0x5CD2A8
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0005, 16, -18
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_14
 AnimSprite_NoDamage_14:  @ 0x5CD308
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -19
@@ -123,6 +137,7 @@ AnimSprite_NoDamage_14:  @ 0x5CD308
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0005, 16, -17
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_15
 AnimSprite_NoDamage_15:  @ 0x5CD368
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -17
@@ -134,6 +149,7 @@ AnimSprite_NoDamage_15:  @ 0x5CD368
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0005, 16, -16
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_16
 AnimSprite_NoDamage_16:  @ 0x5CD3C8
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -16
@@ -146,6 +162,7 @@ AnimSprite_NoDamage_16:  @ 0x5CD3C8
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0006, 24, -18
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_17
 AnimSprite_NoDamage_17:  @ 0x5CD434
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -16
@@ -158,6 +175,7 @@ AnimSprite_NoDamage_17:  @ 0x5CD434
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0006, 24, -17
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_18
 AnimSprite_NoDamage_18:  @ 0x5CD4A0
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -16
@@ -170,6 +188,7 @@ AnimSprite_NoDamage_18:  @ 0x5CD4A0
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0006, 24, -16
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_19
 AnimSprite_NoDamage_19:  @ 0x5CD50C
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -16
@@ -183,6 +202,7 @@ AnimSprite_NoDamage_19:  @ 0x5CD50C
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0007, 32, -18
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_20
 AnimSprite_NoDamage_20:  @ 0x5CD584
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -16
@@ -196,6 +216,7 @@ AnimSprite_NoDamage_20:  @ 0x5CD584
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0007, 32, -17
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_21
 AnimSprite_NoDamage_21:  @ 0x5CD5FC
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -16
@@ -209,6 +230,7 @@ AnimSprite_NoDamage_21:  @ 0x5CD5FC
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0007, 32, -16
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_22
 AnimSprite_NoDamage_22:  @ 0x5CD674
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -16
@@ -222,6 +244,7 @@ AnimSprite_NoDamage_22:  @ 0x5CD674
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0007, 32, -17
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_23
 AnimSprite_NoDamage_23:  @ 0x5CD6EC
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -16
@@ -235,6 +258,7 @@ AnimSprite_NoDamage_23:  @ 0x5CD6EC
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0007, 32, -18
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_24
 AnimSprite_NoDamage_24:  @ 0x5CD764
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -16
@@ -248,6 +272,7 @@ AnimSprite_NoDamage_24:  @ 0x5CD764
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0007, 32, -17
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_25
 AnimSprite_NoDamage_25:  @ 0x5CD7DC
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0000, -40, -16
@@ -261,44 +286,52 @@ AnimSprite_NoDamage_25:  @ 0x5CD7DC
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0007, 32, -16
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_NoDamage_26
 AnimSprite_NoDamage_26:  @ 0x5CD854
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x000C, 0, -8
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_Miss_1
 AnimSprite_Miss_1:  @ 0x5CD86C
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0008, -20, -32
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_Miss_2
 AnimSprite_Miss_2:  @ 0x5CD884
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0008, -20, -31
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_Miss_3
 AnimSprite_Miss_3:  @ 0x5CD89C
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0008, -20, -29
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_Miss_4
 AnimSprite_Miss_4:  @ 0x5CD8B4
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0008, -20, -26
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0009, -12, -24
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_Miss_5
 AnimSprite_Miss_5:  @ 0x5CD8D8
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0008, -20, -22
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0009, -12, -23
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_Miss_6
 AnimSprite_Miss_6:  @ 0x5CD8FC
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0008, -20, -17
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0009, -12, -21
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_Miss_7
 AnimSprite_Miss_7:  @ 0x5CD920
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0008, -20, -16
@@ -306,6 +339,7 @@ AnimSprite_Miss_7:  @ 0x5CD920
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x000A, -4, -20
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_Miss_8
 AnimSprite_Miss_8:  @ 0x5CD950
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0008, -20, -17
@@ -313,6 +347,7 @@ AnimSprite_Miss_8:  @ 0x5CD950
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x000A, -4, -19
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_Miss_9
 AnimSprite_Miss_9:  @ 0x5CD980
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0008, -20, -19
@@ -320,6 +355,7 @@ AnimSprite_Miss_9:  @ 0x5CD980
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x000A, -4, -17
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_Miss_10
 AnimSprite_Miss_10:  @ 0x5CD9B0
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0008, -20, -21
@@ -328,6 +364,7 @@ AnimSprite_Miss_10:  @ 0x5CD9B0
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x000A, 4, -20
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_Miss_11
 AnimSprite_Miss_11:  @ 0x5CD9EC
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0008, -20, -22
@@ -336,6 +373,7 @@ AnimSprite_Miss_11:  @ 0x5CD9EC
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x000A, 4, -19
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_Miss_12
 AnimSprite_Miss_12:  @ 0x5CDA28
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0008, -20, -22
@@ -344,6 +382,7 @@ AnimSprite_Miss_12:  @ 0x5CDA28
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x000A, 4, -17
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_Miss_13
 AnimSprite_Miss_13:  @ 0x5CDA64
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0008, -20, -21
@@ -353,6 +392,7 @@ AnimSprite_Miss_13:  @ 0x5CDA64
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0007, 12, -20
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_Miss_14
 AnimSprite_Miss_14:  @ 0x5CDAAC
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0008, -20, -19
@@ -362,6 +402,7 @@ AnimSprite_Miss_14:  @ 0x5CDAAC
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0007, 12, -19
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_Miss_15
 AnimSprite_Miss_15:  @ 0x5CDAF4
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0008, -20, -17
@@ -371,6 +412,7 @@ AnimSprite_Miss_15:  @ 0x5CDAF4
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0007, 12, -17
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_Miss_16
 AnimSprite_Miss_16:  @ 0x5CDB3C
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0008, -20, -16
@@ -380,6 +422,7 @@ AnimSprite_Miss_16:  @ 0x5CDB3C
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0007, 12, -16
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_Miss_17
 AnimSprite_Miss_17:  @ 0x5CDB84
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0008, -20, -16
@@ -389,6 +432,7 @@ AnimSprite_Miss_17:  @ 0x5CDB84
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0007, 12, -17
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_Miss_18
 AnimSprite_Miss_18:  @ 0x5CDBCC
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0008, -20, -16
@@ -398,6 +442,7 @@ AnimSprite_Miss_18:  @ 0x5CDBCC
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0007, 12, -18
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_Miss_19
 AnimSprite_Miss_19:  @ 0x5CDC14
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0008, -20, -16
@@ -407,6 +452,7 @@ AnimSprite_Miss_19:  @ 0x5CDC14
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0007, 12, -17
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_Miss_20
 AnimSprite_Miss_20:  @ 0x5CDC5C
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0008, -20, -16
@@ -416,7 +462,8 @@ AnimSprite_Miss_20:  @ 0x5CDC5C
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0007, 12, -16
 	ANIM_SPRITE_END
 
-	.global AnimScr_NoDamage
+	.align 2,0
+.global AnimScr_NoDamage
 AnimScr_NoDamage: @ 085CDCA4
 	ANIMSCR_FORCE_SPRITE AnimSprite_NoDamage_1, 1
 	ANIMSCR_FORCE_SPRITE AnimSprite_NoDamage_2, 1
@@ -448,7 +495,8 @@ AnimScr_NoDamage: @ 085CDCA4
 	ANIMSCR_WAIT 19
 	ANIMSCR_BLOCKED
 
-	.global AnimScr_Miss
+	.align 2,0
+.global AnimScr_Miss
 AnimScr_Miss: @ 085CDD18
 	ANIMSCR_FORCE_SPRITE AnimSprite_Miss_1, 1
 	ANIMSCR_FORCE_SPRITE AnimSprite_Miss_2, 1

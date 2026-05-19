@@ -1,7 +1,8 @@
 	.include "asm_proc.inc"
 	.data
 
-	.global ProcScr_OpAnim6
+.align 2,0
+.global ProcScr_OpAnim6
 ProcScr_OpAnim6: @ 08691E48
 	PROC_MARK 9
 	PROC_CALL OpAnim6_StartBGM
@@ -17,7 +18,8 @@ ProcScr_OpAnim6: @ 08691E48
 	PROC_SLEEP 30
 	PROC_END
 
-	.global ProcScr_OpAnimThunderStorm
+.align 2,0
+.global ProcScr_OpAnimThunderStorm
 ProcScr_OpAnimThunderStorm: @ 08691EB8
 	PROC_CALL OpAnimThunderStorm_Init
 	PROC_SLEEP 1

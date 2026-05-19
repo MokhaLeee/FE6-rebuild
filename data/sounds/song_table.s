@@ -1,6 +1,7 @@
     .include "asm_m4a.inc"
     .section .rodata
 
+.align 2,0
 .global gSongTable
 gSongTable:
     song dummy_song, 0, 0

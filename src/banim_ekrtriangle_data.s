@@ -2,6 +2,8 @@
 	.include "gba_sprites.inc"
 	.section .data
 
+.align 2,0
+
 AnimSprite_TriAtk_L_1:  @ 0x6063F4
     ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0051, 38, -55
     ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0053, 54, -55

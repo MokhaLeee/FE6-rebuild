@@ -1,31 +1,38 @@
 	.include "asm_proc.inc"
 	.data
 
-	.global gTitleDuration
+.align 2,0
+.global gTitleDuration
 gTitleDuration: @ 08692118
 	.4byte 0x348
 
-	.global gUnk_0869211C
+.align 2,0
+.global gUnk_0869211C
 gUnk_0869211C: @ 0869211C
 	.4byte 0x1E
 
-	.global gUnk_08692120
+.align 2,0
+.global gUnk_08692120
 gUnk_08692120: @ 08692120
 	.4byte 0x1E
 
-	.global gUnk_08692124
+.align 2,0
+.global gUnk_08692124
 gUnk_08692124: @ 08692124
 	.4byte 0x20
 
-	.global gUnk_08692128
+.align 2,0
+.global gUnk_08692128
 gUnk_08692128: @ 08692128
 	.4byte 0x30
 
-	.global gUnk_0869212C
+.align 2,0
+.global gUnk_0869212C
 gUnk_0869212C: @ 0869212C
 	.4byte 0x10
 
-	.global ProcScr_TitleScreenFromOp
+.align 2,0
+.global ProcScr_TitleScreenFromOp
 ProcScr_TitleScreenFromOp: @ 08692130
 	PROC_MARK 9
 	PROC_ONEND Title_End

@@ -1,7 +1,8 @@
 	.include "animscr.inc"
 	.section .data
 
-	.global gEkrSpellAnimLut
+.align 2,0
+.global gEkrSpellAnimLut
 gEkrSpellAnimLut: @ 0x005D0DA0
 	.4byte NewEfxDummyMagic
 	.4byte NewEfxTeono
@@ -63,7 +64,8 @@ gEkrSpellAnimLut: @ 0x005D0DA0
 AnimSprite_ManaketeFlame:
     ANIM_SPRITE_END
 
-	.global AnimScr_Common
+.align 2,0
+.global AnimScr_Common
 AnimScr_Common: @ 085D0E8C
     ANIMSCR_FORCE_SPRITE AnimSprite_ManaketeFlame, 1
     ANIMSCR_BLOCKED

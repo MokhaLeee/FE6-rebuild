@@ -63,7 +63,7 @@ SECTIONS
 
 		/* bss for CHAX is put in ewram */
 		. = ALIGN(4); src-hacks/*.o(.bss)
-
+		. = ALIGN(4); src-hacks/*.o(COMMON)
 		. = ALIGN(4); src-hacks/*.o(.ewram_data)
 		. = 0x02040000 - __ewram_overlay_end; /* end */
 	}
@@ -72,54 +72,36 @@ SECTIONS
 	IWRAM (NOLOAD) : ALIGN(4)
 	{
 		/* .bss */
-		. = ALIGN(4); INCLUDE "./lds/section_iwram.lds"
-		. = ALIGN(4); src-hacks/*.o(.iwram_data)
+		*(.bss)
+		*(iwram_data)
 		. = 0x008000; /* end */
 	}
 
 	. = 0x08000000;
 	ROM : ALIGN(4)
 	{
-		asm/crt0.o(.text);
-		. = ALIGN(4); INCLUDE "./lds/section_text.lds"
-		. = ALIGN(4); src-hacks/*.o(.text)
-		. = ALIGN(4); asm/code_linker_stubs.o(.text);
+		asm/crt0.o(.text)
+		src/armfunc.o(.text)
+		asm/arm.o(.text)
+		*(.text*)
+		asm/code_linker_stubs.o(.text)
 
 		/* here could expand to 0x400000 */
 		. = 0x000A0000;
+		EXCLUDE_FILE(gamedata/*.o fonts/*.o banims/*.o) *(.data)
+		EXCLUDE_FILE(gamedata/*.o fonts/*.o banims/*.o) *(.data*)
+		EXCLUDE_FILE(gamedata/*.o fonts/*.o banims/*.o) *(.rodata)
+		EXCLUDE_FILE(gamedata/*.o fonts/*.o banims/*.o) *(.rodata*)
+
+		. = 0x007FE000;
 		INCLUDE "./lds/prlist.lds"
-
-		/* CHAX */
-		. = ALIGN(4); src-hacks/*.o(.data)
-		. = ALIGN(4); src-hacks/*.o(.rodata)
-
-		/* .rodata */
-		. = ALIGN(4); INCLUDE "./lds/section_rodata.lds"
-		. = ALIGN(4); INCLUDE "./lds/section_data.lds"
 
 		. = 0x00800000;
 		banims/banimdata_gen.o(.data);
 
 		/* gamedata */
-		. = ALIGN(4); fonts/build/*.o(.rodata);
+		. = ALIGN(4); fonts/build/*.o(.rodata)
 		. = ALIGN(4); gamedata/*.o(.data)
 		. = ALIGN(4); gamedata/*.o(.rodata)
-	} = 0
-
-	/* DWARF 2 sections */
-	.debug_aranges  0 : { *(.debug_aranges) }
-	.debug_pubnames 0 : { *(.debug_pubnames) }
-	.debug_info     0 : { *(.debug_info) }
-	.debug_abbrev   0 : { *(.debug_abbrev) }
-	.debug_line     0 : { *(.debug_line) }
-	.debug_frame    0 : { *(.debug_frame) }
-	.debug_str      0 : { *(.debug_str) }
-	.debug_loc      0 : { *(.debug_loc) }
-	.debug_macinfo  0 : { *(.debug_macinfo) }
-
-	/* Discard everything not specifically mentioned above. */
-	/DISCARD/ :
-	{
-		*(*);
 	}
 }

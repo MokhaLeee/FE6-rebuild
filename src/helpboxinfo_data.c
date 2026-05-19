@@ -1,5 +1,4 @@
-#pragma once
-
+#include "prelude.h"
 #include "helpbox.h"
 #include "battlepreview.h"
 #include "statscreen.h"

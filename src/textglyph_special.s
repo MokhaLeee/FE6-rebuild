@@ -1,4 +1,5 @@
 .data
+.align 2,0
 
 .global TextGlyph_0859327C
 TextGlyph_0859327C: @ 0x59327C

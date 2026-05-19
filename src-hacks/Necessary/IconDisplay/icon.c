@@ -7,7 +7,7 @@
 #include "constants/videoalloc_global.h"
 
 #define MAX_SIMULTANEOUS_ICONS 32
-static EWRAM_DATA u16 IconReSts[MAX_SIMULTANEOUS_ICONS];
+static u16 IconReSts[MAX_SIMULTANEOUS_ICONS];
 
 /**
  * icon-getter

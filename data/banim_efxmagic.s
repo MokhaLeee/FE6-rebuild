@@ -5,13 +5,15 @@
 
 	.section .data
 
-	.global ProcScr_EfxFimbulvetrBGTR
+.align 2,0
+.global ProcScr_EfxFimbulvetrBGTR
 ProcScr_EfxFimbulvetrBGTR: @ 085D14EC
 	PROC_19
 	PROC_REPEAT EfxFimbulvetrBGTR_Loop
 	PROC_END
 
-	.global TsaArray_EfxFimbulvetrBGTR
+.align 2,0
+.global TsaArray_EfxFimbulvetrBGTR
 TsaArray_EfxFimbulvetrBGTR: @ 085D1504
 	.4byte Tsa_EfxFimbulvetrBGTR_081521E0
 	.4byte Tsa_EfxFimbulvetrBGTR_081523CC
@@ -20,7 +22,8 @@ TsaArray_EfxFimbulvetrBGTR: @ 085D1504
 	.4byte Tsa_EfxFimbulvetrBGTR_081529A0
 	.4byte Tsa_EfxFimbulvetrBGTR_08152BE8
 
-	.global ImgArray_EfxFimbulvetrBGTR
+.align 2,0
+.global ImgArray_EfxFimbulvetrBGTR
 ImgArray_EfxFimbulvetrBGTR: @ 085D151C
 	.4byte Img_EfxFimbulvetrBGTR_0814B39C
 	.4byte Img_EfxFimbulvetrBGTR_0814C5A4
@@ -29,13 +32,15 @@ ImgArray_EfxFimbulvetrBGTR: @ 085D151C
 	.4byte Img_EfxFimbulvetrBGTR_0814FBC4
 	.4byte Img_EfxFimbulvetrBGTR_08150F7C
 
-	.global ProcScr_EfxFimbulvetrBG
+.align 2,0
+.global ProcScr_EfxFimbulvetrBG
 ProcScr_EfxFimbulvetrBG: @ 085D1534
 	PROC_19
 	PROC_REPEAT EfxFimbulvetrBG_Loop
 	PROC_END
 
-	.global TsaArray_EfxFimbulvetrBG
+.align 2,0
+.global TsaArray_EfxFimbulvetrBG
 TsaArray_EfxFimbulvetrBG: @ 085D154C
 	.4byte Tsa_EfxFimbulvetrBG_0814A4B8
 	.4byte Tsa_EfxFimbulvetrBG_0814A55C
@@ -49,7 +54,8 @@ TsaArray_EfxFimbulvetrBG: @ 085D154C
 	.4byte Tsa_EfxFimbulvetrBG_0814AF4C
 	.4byte Tsa_EfxFimbulvetrBG_0814B16C
 
-	.global ImgArray_EfxFimbulvetrBG
+.align 2,0
+.global ImgArray_EfxFimbulvetrBG
 ImgArray_EfxFimbulvetrBG: @ 085D1578
 	.4byte Img_EfxFimbulvetrBG_08144A20
 	.4byte Img_EfxFimbulvetrBG_08144A20
@@ -63,37 +69,43 @@ ImgArray_EfxFimbulvetrBG: @ 085D1578
 	.4byte Img_EfxFimbulvetrBG_081489E4
 	.4byte Img_EfxFimbulvetrBG_081489E4
 
-	.global ProcScr_EfxFimbulvetrOBJ
+.align 2,0
+.global ProcScr_EfxFimbulvetrOBJ
 ProcScr_EfxFimbulvetrOBJ: @ 085D15A4
 	PROC_19
 	PROC_REPEAT EfxFimbulvetrOBJ_Loop
 	PROC_END
 
-	.global ProcScr_EfxFimbulvetrOBJ2
+.align 2,0
+.global ProcScr_EfxFimbulvetrOBJ2
 ProcScr_EfxFimbulvetrOBJ2: @ 085D15BC
 	PROC_19
 	PROC_REPEAT EfxFimbulvetrOBJ2_Loop
 	PROC_END
 
-	.global ProcScr_EfxFimbulvetrOBJ2Fall
+.align 2,0
+.global ProcScr_EfxFimbulvetrOBJ2Fall
 ProcScr_EfxFimbulvetrOBJ2Fall: @ 085D15D4
 	PROC_19
 	PROC_REPEAT EfxFimbulvetrOBJ2Fall_Loop
 	PROC_END
 
-	.global ProcScr_EfxThunderstorm
+.align 2,0
+.global ProcScr_EfxThunderstorm
 ProcScr_EfxThunderstorm: @ 085D15EC
 	PROC_19
 	PROC_REPEAT EfxThunderstorm_Loop
 	PROC_END
 
-	.global ProcScr_EfxThunderstormBG
+.align 2,0
+.global ProcScr_EfxThunderstormBG
 ProcScr_EfxThunderstormBG: @ 085D1604
 	PROC_19
 	PROC_REPEAT EfxThunderstormBG_Loop
 	PROC_END
 
-	.global ImgArray_EfxThunderstormBG
+.align 2,0
+.global ImgArray_EfxThunderstormBG
 ImgArray_EfxThunderstormBG: @ 085D161C
 	.4byte Img_EfxThunderstormBG_0813BD94
 	.4byte Img_EfxThunderstormBG_0813BD94
@@ -107,7 +119,8 @@ ImgArray_EfxThunderstormBG: @ 085D161C
 	.4byte Img_EfxThunderstormBG_0813C964
 	.4byte Img_EfxThunderstormBG_0813D9D0
 
-	.global TsaArray_EfxThunderstormBG
+.align 2,0
+.global TsaArray_EfxThunderstormBG
 TsaArray_EfxThunderstormBG: @ 085D1648
 	.4byte Tsa_EfxThunderstormBG_0813E7BC
 	.4byte Tsa_EfxThunderstormBG_0813E950
@@ -121,7 +134,8 @@ TsaArray_EfxThunderstormBG: @ 085D1648
 	.4byte Tsa_EfxThunderstormBG_0813F354
 	.4byte Tsa_EfxThunderstormBG_0813F3EC
 
-	.global ProcScr_EfxThunderstormOBJ
+.align 2,0
+.global ProcScr_EfxThunderstormOBJ
 ProcScr_EfxThunderstormOBJ: @ 085D1674
 	PROC_19
 	PROC_REPEAT EfxThunderstormOBJ_Loop
@@ -129,7 +143,8 @@ ProcScr_EfxThunderstormOBJ: @ 085D1674
 	PROC_REPEAT EfxThunderstormOBJ_End
 	PROC_END
 
-	.global ProcScr_EfxThunderstormCOLOR
+.align 2,0
+.global ProcScr_EfxThunderstormCOLOR
 ProcScr_EfxThunderstormCOLOR: @ 085D169C
 	PROC_19
 	PROC_SLEEP 94
@@ -140,56 +155,65 @@ ProcScr_EfxThunderstormCOLOR: @ 085D169C
 	PROC_REPEAT EfxThunderstormCOLOR_LoopC
 	PROC_END
 
-	.global ProcScr_EfxThunderstormDARK
+.align 2,0
+.global ProcScr_EfxThunderstormDARK
 ProcScr_EfxThunderstormDARK: @ 085D16DC
 	PROC_19
 	PROC_REPEAT EfxThunderstormDARK_LoopA
 	PROC_REPEAT EfxThunderstormDARK_LoopB
 	PROC_END
 
-	.global ProcScr_EfxAlacalibur
+.align 2,0
+.global ProcScr_EfxAlacalibur
 ProcScr_EfxAlacalibur: @ 085D16FC
 	PROC_19
 	PROC_REPEAT EfxAlacalibur_Loop
 	PROC_END
 
-	.global ProcScr_EfxAlacaliburBG
+.align 2,0
+.global ProcScr_EfxAlacaliburBG
 ProcScr_EfxAlacaliburBG: @ 085D1714
 	PROC_19
 	PROC_REPEAT EfxAlacaliburBG_Loop
 	PROC_END
 
-	.global TsaArray_EfxAlacaliburBG
+.align 2,0
+.global TsaArray_EfxAlacaliburBG
 TsaArray_EfxAlacaliburBG: @ 085D172C
 	.4byte Tsa_EfxAlacaliburBG_0815B424
 	.4byte Tsa_EfxAlacaliburBG_0815B5AC
 
-	.global ProcScr_EfxAlacaliburBGCOL
+.align 2,0
+.global ProcScr_EfxAlacaliburBGCOL
 ProcScr_EfxAlacaliburBGCOL: @ 085D1734
 	PROC_19
 	PROC_MARK 10
 	PROC_REPEAT EfxAlacaliburBGCOL_Loop
 	PROC_END
 
-	.global ProcScr_EfxAlacaliburOBJ
+.align 2,0
+.global ProcScr_EfxAlacaliburOBJ
 ProcScr_EfxAlacaliburOBJ: @ 085D1754
 	PROC_19
 	PROC_REPEAT EfxAlacaliburOBJ_Loop
 	PROC_END
 
-	.global ProcScr_EfxMistyrain
+.align 2,0
+.global ProcScr_EfxMistyrain
 ProcScr_EfxMistyrain: @ 085D176C
 	PROC_19
 	PROC_REPEAT EfxMistyrain_Loop
 	PROC_END
 
-	.global ProcScr_EfxMistyrainBG
+.align 2,0
+.global ProcScr_EfxMistyrainBG
 ProcScr_EfxMistyrainBG: @ 085D1784
 	PROC_19
 	PROC_REPEAT NewEfxMistyrainBG_Loop
 	PROC_END
 
-	.global TsaArray_EfxMistyrainBG
+.align 2,0
+.global TsaArray_EfxMistyrainBG
 TsaArray_EfxMistyrainBG: @ 085D179C
 	.4byte Tsa_EfxMistyrainBG_0815F8C0
 	.4byte Tsa_EfxMistyrainBG_0815F9BC
@@ -233,7 +257,8 @@ TsaArray_EfxMistyrainBG: @ 085D179C
 	.4byte Tsa_EfxMistyrainBG_08161BE4
 	.4byte Tsa_EfxMistyrainBG_08161CE0
 
-	.global ImgArray_EfxMistyrainBG
+.align 2,0
+.global ImgArray_EfxMistyrainBG
 ImgArray_EfxMistyrainBG: @ 085D1840
 	.4byte Img_EfxMistyrainBG_0815BEF4
 	.4byte Img_EfxMistyrainBG_0815BEF4
@@ -277,7 +302,8 @@ ImgArray_EfxMistyrainBG: @ 085D1840
 	.4byte Img_EfxMistyrainBG_0815BEF4
 	.4byte Img_EfxMistyrainBG_0815BEF4
 
-	.global ProcScr_EfxMistyrainOBJ
+.align 2,0
+.global ProcScr_EfxMistyrainOBJ
 ProcScr_EfxMistyrainOBJ: @ 085D18E4
 	PROC_19
 	PROC_ONEND EfxMistyrainOBJ_OnEnd
@@ -289,7 +315,8 @@ ProcScr_EfxMistyrainOBJ: @ 085D18E4
 	PROC_SLEEP 22
 	PROC_END
 
-	.global ProcScr_EfxMistyrainOBJ2
+.align 2,0
+.global ProcScr_EfxMistyrainOBJ2
 ProcScr_EfxMistyrainOBJ2: @ 085D192C
 	PROC_19
 	PROC_ONEND EfxMistyrainOBJ_OnEnd
@@ -298,13 +325,15 @@ ProcScr_EfxMistyrainOBJ2: @ 085D192C
 	PROC_REPEAT EfxMistyrainOBJ2_Loop2
 	PROC_END
 
-	.global ProcScr_EfxResire
+.align 2,0
+.global ProcScr_EfxResire
 ProcScr_EfxResire: @ 085D195C
 	PROC_19
 	PROC_REPEAT EfxResire_Loop
 	PROC_END
 
-	.global ProcScr_EfxResireBG
+.align 2,0
+.global ProcScr_EfxResireBG
 ProcScr_EfxResireBG: @ 085D1974
 	PROC_19
 	PROC_REPEAT EfxResireBG_Loop1
@@ -313,13 +342,15 @@ ProcScr_EfxResireBG: @ 085D1974
 	PROC_REPEAT EfxResireBG_Loop4
 	PROC_END
 
-	.global ProcScr_EfxResireBG2
+.align 2,0
+.global ProcScr_EfxResireBG2
 ProcScr_EfxResireBG2: @ 085D19A4
 	PROC_19
 	PROC_REPEAT EfxResireBG2_Loop
 	PROC_END
 
-	.global ImgArray_EfxResireBG
+.align 2,0
+.global ImgArray_EfxResireBG
 ImgArray_EfxResireBG: @ 085D19BC
 	.4byte Img_EfxResireBG_081629F4
 	.4byte Img_EfxResireBG_081629F4
@@ -373,7 +404,8 @@ ImgArray_EfxResireBG: @ 085D19BC
 	.4byte Img_EfxResireBG_0816AA48
 	.4byte Img_EfxResireBG_0816AA48
 
-	.global TsaArray_EfxResireBG
+.align 2,0
+.global TsaArray_EfxResireBG
 TsaArray_EfxResireBG: @ 085D1A88
 	.4byte Tsa_EfxResireBG_0816B348
 	.4byte Tsa_EfxResireBG_0816B478
@@ -427,25 +459,29 @@ TsaArray_EfxResireBG: @ 085D1A88
 	.4byte Tsa_EfxResireBG_0816E268
 	.4byte Tsa_EfxResireBG_0816E320
 
-	.global ProcScr_EfxResireRST
+.align 2,0
+.global ProcScr_EfxResireRST
 ProcScr_EfxResireRST: @ 085D1B54
 	PROC_19
 	PROC_REPEAT EfxResireRST_Loop
 	PROC_END
 
-	.global ProcScr_EfxLightning
+.align 2,0
+.global ProcScr_EfxLightning
 ProcScr_EfxLightning: @ 085D1B6C
 	PROC_19
 	PROC_REPEAT EfxLightning_Loop
 	PROC_END
 
-	.global ProcScr_EfxLightningBG
+.align 2,0
+.global ProcScr_EfxLightningBG
 ProcScr_EfxLightningBG: @ 085D1B84
 	PROC_19
 	PROC_REPEAT EfxLightningBG_Loop
 	PROC_END
 
-	.global ImgArray_EfxLightningBG
+.align 2,0
+.global ImgArray_EfxLightningBG
 ImgArray_EfxLightningBG: @ 085D1B9C
 	.4byte Img_EfxLightningBG_081531C8
 	.4byte Img_EfxLightningBG_081531C8
@@ -481,7 +517,8 @@ ImgArray_EfxLightningBG: @ 085D1B9C
 	.4byte Img_EfxLightningBG_081571C8
 	.4byte Img_EfxLightningBG_081571C8
 
-	.global PalArray_EfxLightningBG
+.align 2,0
+.global PalArray_EfxLightningBG
 PalArray_EfxLightningBG: @ 085D1C20
 	.4byte Pal_EfxLightningBG_08157BE8
 	.4byte Pal_EfxLightningBG_08157BE8
@@ -517,7 +554,8 @@ PalArray_EfxLightningBG: @ 085D1C20
 	.4byte Pal_EfxLightningBG_08157C08
 	.4byte Pal_EfxLightningBG_08157C08
 
-	.global TsaArray_EfxLightningBG
+.align 2,0
+.global TsaArray_EfxLightningBG
 TsaArray_EfxLightningBG: @ 085D1CA4
 	.4byte Tsa_EfxLightningBG_08157C28
 	.4byte Tsa_EfxLightningBG_08157D4C
@@ -553,19 +591,22 @@ TsaArray_EfxLightningBG: @ 085D1CA4
 	.4byte Tsa_EfxLightningBG_08159C1C
 	.4byte Tsa_EfxLightningBG_08159CE0
 
-	.global ProcScr_EfxPurge
+.align 2,0
+.global ProcScr_EfxPurge
 ProcScr_EfxPurge: @ 085D1D28
 	PROC_19
 	PROC_REPEAT EfxPurge_Loop
 	PROC_END
 
-	.global ProcScr_EfxPurgeBG
+.align 2,0
+.global ProcScr_EfxPurgeBG
 ProcScr_EfxPurgeBG: @ 085D1D40
 	PROC_19
 	PROC_REPEAT EfxPurgeBG_Loop
 	PROC_END
 
-	.global ImgArray_EfxPurgeBG
+.align 2,0
+.global ImgArray_EfxPurgeBG
 ImgArray_EfxPurgeBG: @ 085D1D58
 	.4byte Img_EfxLightningBG_081531C8
 	.4byte Img_EfxLightningBG_081531C8
@@ -646,7 +687,8 @@ ImgArray_EfxPurgeBG: @ 085D1D58
 	.4byte Img_EfxPurgeBG_081A1ED0
 	.4byte Img_EfxPurgeBG_081A2948
 
-	.global PalArray_EfxPurgeBG
+.align 2,0
+.global PalArray_EfxPurgeBG
 PalArray_EfxPurgeBG: @ 085D1E90
 	.4byte Pal_EfxLightningBG_08157BE8
 	.4byte Pal_EfxLightningBG_08157BE8
@@ -727,7 +769,8 @@ PalArray_EfxPurgeBG: @ 085D1E90
 	.4byte Pal_EfxPurgeBG_081A3C6C
 	.4byte Pal_EfxPurgeBG_081A3C6C
 
-	.global TsaArray_EfxPurgeBG
+.align 2,0
+.global TsaArray_EfxPurgeBG
 TsaArray_EfxPurgeBG: @ 085D1FC8
 	.4byte Tsa_EfxPurgeBG_081A3C8C
 	.4byte Tsa_EfxPurgeBG_081A3DB0
@@ -808,14 +851,16 @@ TsaArray_EfxPurgeBG: @ 085D1FC8
 	.4byte Tsa_EfxPurgeBG_081AA7D4
 	.4byte Tsa_EfxPurgeBG_081AAB5C
 
-	.global ProcScr_EfxPurgeOBJRND
+.align 2,0
+.global ProcScr_EfxPurgeOBJRND
 ProcScr_EfxPurgeOBJRND: @ 085D2100
 	PROC_19
 	PROC_REPEAT EfxPurgeOBJRND_Loop
 	PROC_SLEEP 69
 	PROC_END
 
-	.global Vecs_EfxPurgeOBJRND
+.align 2,0
+.global Vecs_EfxPurgeOBJRND
 Vecs_EfxPurgeOBJRND: @ 085D2120
 	.4byte 0xD0, 0x30
 	.4byte 0xA0, 0x90
@@ -825,27 +870,31 @@ Vecs_EfxPurgeOBJRND: @ 085D2120
 	.4byte 0x20, 0x60
 	.4byte 0x50, 0x80
 
-	.global ProcScr_EfxPurgeOBJ
+.align 2,0
+.global ProcScr_EfxPurgeOBJ
 ProcScr_EfxPurgeOBJ: @ 085D2158
 	PROC_19
 	PROC_ONEND EfxPurgeOBJ_OnEnd
 	PROC_SLEEP 69
 	PROC_END
 
-	.global ProcScr_EfxForblaze
+.align 2,0
+.global ProcScr_EfxForblaze
 ProcScr_EfxForblaze: @ 085D2178
 	PROC_19
 	PROC_REPEAT EfxForblaze_Loop
 	PROC_END
 
-	.global ProcScr_EfxForblazeBG1
+.align 2,0
+.global ProcScr_EfxForblazeBG1
 ProcScr_EfxForblazeBG1: @ 085D2190
 	PROC_19
 	PROC_REPEAT EfxForblazeBG1_Loop
 	PROC_END
 
 
-	.global TsaArray_EfxForblazeBG1
+.align 2,0
+.global TsaArray_EfxForblazeBG1
 TsaArray_EfxForblazeBG1: @ 085D21A8
 	.4byte Tsa_EfxForblazeBG1_0814092C
 	.4byte Tsa_EfxForblazeBG1_081409DC
@@ -861,7 +910,8 @@ TsaArray_EfxForblazeBG1: @ 085D21A8
 	.4byte Tsa_EfxForblazeBG1_081411D4
 	.4byte Tsa_EfxForblazeBG1_08141288
 
-	.global ImgArray_EfxForblazeBG1
+.align 2,0
+.global ImgArray_EfxForblazeBG1
 ImgArray_EfxForblazeBG1: @ 085D21DC
 	.4byte Img_EfxForblazeBG1_0813F5E0
 	.4byte Img_EfxForblazeBG1_0813F5E0
@@ -877,14 +927,16 @@ ImgArray_EfxForblazeBG1: @ 085D21DC
 	.4byte Img_EfxForblazeBG1_0813FF7C
 	.4byte Img_EfxForblazeBG1_0813FF7C
 
-	.global ProcScr_EfxForblazeBGCOL1
+.align 2,0
+.global ProcScr_EfxForblazeBGCOL1
 ProcScr_EfxForblazeBGCOL1: @ 085D2210
 	PROC_19
 	PROC_MARK 10
 	PROC_REPEAT EfxForblazeBGCOL1_Loop
 	PROC_END
 
-	.global ProcScr_EfxForblazeBGCtrl1
+.align 2,0
+.global ProcScr_EfxForblazeBGCtrl1
 ProcScr_EfxForblazeBGCtrl1: @ 085D2230
 	PROC_19
 	PROC_SLEEP 35
@@ -895,13 +947,15 @@ ProcScr_EfxForblazeBGCtrl1: @ 085D2230
 	PROC_REPEAT EfxForblazeBGCtrl1_Loop3
 	PROC_END
 
-	.global ProcScr_EfxForblazeObjHandle
+.align 2,0
+.global ProcScr_EfxForblazeObjHandle
 ProcScr_EfxForblazeObjHandle: @ 085D2270
 	PROC_19
 	PROC_REPEAT EfxForblazeObjHandle_Loop
 	PROC_END
 
-	.global XposArray_EfxForblazeOBJ
+.align 2,0
+.global XposArray_EfxForblazeOBJ
 XposArray_EfxForblazeOBJ: @ 085D2288
 	.4byte 0x14
 	.4byte 0x6B
@@ -926,49 +980,57 @@ XposArray_EfxForblazeOBJ: @ 085D2288
 	.4byte 0xAC
 	.4byte -1
 
-	.global ProcScr_EfxForblazeOBJ
+.align 2,0
+.global ProcScr_EfxForblazeOBJ
 ProcScr_EfxForblazeOBJ: @ 085D22E0
 	PROC_19
 	PROC_REPEAT EfxForblazeOBJ_Loop
 	PROC_END
 
-	.global ProcScr_EfxForblazeBG2
+.align 2,0
+.global ProcScr_EfxForblazeBG2
 ProcScr_EfxForblazeBG2: @ 085D22F8
 	PROC_19
 	PROC_REPEAT EfxForblazeBG2_Loop
 	PROC_END
 
-	.global ProcScr_EfxForblazeOBJCtrl
+.align 2,0
+.global ProcScr_EfxForblazeOBJCtrl
 ProcScr_EfxForblazeOBJCtrl: @ 085D2310
 	PROC_19
 	PROC_REPEAT EfxForblazeOBJCtrl_Loop
 	PROC_END
 
-	.global ProcScr_EfxForblazeOBJFall
+.align 2,0
+.global ProcScr_EfxForblazeOBJFall
 ProcScr_EfxForblazeOBJFall: @ 085D2328
 	PROC_19
 	PROC_REPEAT EfxForblazeOBJFall_Loop
 	PROC_END
 
-	.global ProcScr_EfxForblazeRST
+.align 2,0
+.global ProcScr_EfxForblazeRST
 ProcScr_EfxForblazeRST: @ 085D2340
 	PROC_19
 	PROC_REPEAT EfxForblazeRST_Loop
 	PROC_END
 
-	.global ProcScr_EfxDivine
+.align 2,0
+.global ProcScr_EfxDivine
 ProcScr_EfxDivine: @ 085D2358
 	PROC_19
 	PROC_REPEAT EfxDivine_Loop
 	PROC_END
 
-	.global ProcScr_EfxDivineBG
+.align 2,0
+.global ProcScr_EfxDivineBG
 ProcScr_EfxDivineBG: @ 085D2370
 	PROC_19
 	PROC_REPEAT EfxDivineBG_Loop
 	PROC_END
 
-	.global ImgArray_EfxDivineBG
+.align 2,0
+.global ImgArray_EfxDivineBG
 ImgArray_EfxDivineBG: @ 085D2388
 	.4byte Img_EfxDivineBG1_081762DC
 	.4byte Img_EfxDivineBG1_081762DC
@@ -991,7 +1053,8 @@ ImgArray_EfxDivineBG: @ 085D2388
 	.4byte Img_EfxDivineBG1_081762DC
 	.4byte Img_EfxDivineBG1_081762DC
 
-	.global TsaArray_EfxDivineBG
+.align 2,0
+.global TsaArray_EfxDivineBG
 TsaArray_EfxDivineBG: @ 085D23D8
 	.4byte Tsa_EfxDivineBG1_08179AB8
 	.4byte Tsa_EfxDivineBG1_08179B58
@@ -1014,19 +1077,22 @@ TsaArray_EfxDivineBG: @ 085D23D8
 	.4byte Tsa_EfxDivineBG1_0817A7B0
 	.4byte Tsa_EfxDivineBG1_0817A84C
 
-	.global ImgArray_EfxDivineBG2
+.align 2,0
+.global ImgArray_EfxDivineBG2
 ImgArray_EfxDivineBG2: @ 085D2428
 	.4byte Img_EfxDivineBG1_081762DC
 	.4byte Img_EfxDivineBG1_081762DC
 	.4byte Img_EfxDivineBG1_081762DC
 
-	.global TsaArray_EfxDivineBG2
+.align 2,0
+.global TsaArray_EfxDivineBG2
 TsaArray_EfxDivineBG2: @ 085D2434
 	.4byte Tsa_EfxDivineBG2_0817A8E8
 	.4byte Tsa_EfxDivineBG2_0817A984
 	.4byte Tsa_EfxDivineBG2_0817AA20
 
-	.global ImgArray_EfxDivineBG3
+.align 2,0
+.global ImgArray_EfxDivineBG3
 ImgArray_EfxDivineBG3: @ 085D2440
 	.4byte Img_EfxDivineBG3_0816E3CC
 	.4byte Img_EfxDivineBG3_0816E3CC
@@ -1050,7 +1116,8 @@ ImgArray_EfxDivineBG3: @ 085D2440
 	.4byte Img_EfxDivineBG3_08175D7C
 	.4byte Img_EfxDivineBG3_08175D7C
 
-	.global TsaArray_EfxDivineBG3
+.align 2,0
+.global TsaArray_EfxDivineBG3
 TsaArray_EfxDivineBG3: @ 085D2494
 	.4byte Tsa_EfxDivineBG3_08176A8C
 	.4byte Tsa_EfxDivineBG3_08176C20
@@ -1074,25 +1141,29 @@ TsaArray_EfxDivineBG3: @ 085D2494
 	.4byte Tsa_EfxDivineBG3_081797F4
 	.4byte Tsa_EfxDivineBG3_08179990
 
-	.global ProcScr_EfxDivineOBJ
+.align 2,0
+.global ProcScr_EfxDivineOBJ
 ProcScr_EfxDivineOBJ: @ 085D24E8
 	PROC_19
 	PROC_REPEAT EfxDivineOBJ_Loop
 	PROC_END
 
-	.global ProcScr_EfxAureola
+.align 2,0
+.global ProcScr_EfxAureola
 ProcScr_EfxAureola: @ 085D2500
 	PROC_19
 	PROC_REPEAT EfxAureola_Loop
 	PROC_END
 
-	.global ProcScr_EfxAureolaBG
+.align 2,0
+.global ProcScr_EfxAureolaBG
 ProcScr_EfxAureolaBG: @ 085D2518
 	PROC_19
 	PROC_REPEAT EfxAureolaBG_Loop
 	PROC_END
 
-	.global ImgArray_EfxAureolaBG
+.align 2,0
+.global ImgArray_EfxAureolaBG
 ImgArray_EfxAureolaBG: @ 085D2530
 	.4byte Img_EfxAureolaBG2
 	.4byte Img_EfxAureolaBG_081BA374
@@ -1100,7 +1171,8 @@ ImgArray_EfxAureolaBG: @ 085D2530
 	.4byte Img_EfxAureolaBG_081BA374
 	.4byte Img_EfxAureolaBG_081BA374
 
-	.global TsaArray_EfxAureolaBG
+.align 2,0
+.global TsaArray_EfxAureolaBG
 TsaArray_EfxAureolaBG: @ 085D2544
 	.4byte Tsa_EfxAureolaBG_081BB3DC
 	.4byte Tsa_EfxAureolaBG_081BB75C
@@ -1108,76 +1180,88 @@ TsaArray_EfxAureolaBG: @ 085D2544
 	.4byte Tsa_EfxAureolaBG_081BBA04
 	.4byte Tsa_EfxAureolaBG_081BBB00
 
-	.global ProcScr_EfxAureolaBG2
+.align 2,0
+.global ProcScr_EfxAureolaBG2
 ProcScr_EfxAureolaBG2: @ 085D2558
 	PROC_19
 	PROC_REPEAT EfxAureolaBG2_Loop
 	PROC_END
 
-	.global ProcScr_EfxAureolaBG2COL
+.align 2,0
+.global ProcScr_EfxAureolaBG2COL
 ProcScr_EfxAureolaBG2COL: @ 085D2570
 	PROC_19
 	PROC_MARK 10
 	PROC_REPEAT EfxAureolaBG2COL_Loop
 	PROC_END
 
-	.global ProcScr_EfxAureolaOBJ
+.align 2,0
+.global ProcScr_EfxAureolaOBJ
 ProcScr_EfxAureolaOBJ: @ 085D2590
 	PROC_19
 	PROC_REPEAT EfxAureolaOBJ_Loop
 	PROC_END
 
-	.global ProcScr_EfxAureolaOBJCtrl
+.align 2,0
+.global ProcScr_EfxAureolaOBJCtrl
 ProcScr_EfxAureolaOBJCtrl: @ 085D25A8
 	PROC_19
 	PROC_REPEAT EfxAureolaOBJCtrl_Loop
 	PROC_END
 
-	.global ProcScr_EfxAureolaOBJ2
+.align 2,0
+.global ProcScr_EfxAureolaOBJ2
 ProcScr_EfxAureolaOBJ2: @ 085D25C0
 	PROC_19
 	PROC_REPEAT EfxAureolaOBJ2_Loop
 	PROC_END
 
-	.global ProcScr_EfxAureolaOBJ3
+.align 2,0
+.global ProcScr_EfxAureolaOBJ3
 ProcScr_EfxAureolaOBJ3: @ 085D25D8
 	PROC_19
 	PROC_REPEAT EfxAureolaOBJ3_Loop
 	PROC_END
 
-	.global ProcScr_EfxAureolaOBJ3Ctrl
+.align 2,0
+.global ProcScr_EfxAureolaOBJ3Ctrl
 ProcScr_EfxAureolaOBJ3Ctrl: @ 085D25F0
 	PROC_19
 	PROC_REPEAT EfxAureolaOBJ3Ctrl_Loop
 	PROC_END
 
-	.global ProcScr_EfxApocalypse
+.align 2,0
+.global ProcScr_EfxApocalypse
 ProcScr_EfxApocalypse: @ 085D2608
 	PROC_19
 	PROC_REPEAT EfxApocalypse_Loop
 	PROC_END
 
-	.global ProcScr_EfxApocalypseBG
+.align 2,0
+.global ProcScr_EfxApocalypseBG
 ProcScr_EfxApocalypseBG: @ 085D2620
 	PROC_19
 	PROC_REPEAT EfxApocalypseBG_Loop
 	PROC_END
 
-	.global ProcScr_EfxApocalypseBGCtrl
+.align 2,0
+.global ProcScr_EfxApocalypseBGCtrl
 ProcScr_EfxApocalypseBGCtrl: @ 085D2638
 	PROC_19
 	PROC_SLEEP 145
 	PROC_REPEAT EfxApocalypseBGCtrl_Loop
 	PROC_END
 
-	.global ProcScr_EfxApocalypseBGCOL
+.align 2,0
+.global ProcScr_EfxApocalypseBGCOL
 ProcScr_EfxApocalypseBGCOL: @ 085D2658
 	PROC_19
 	PROC_MARK 10
 	PROC_REPEAT EfxApocalypseBGCOL_Loop
 	PROC_END
 
-	.global ProcScr_EfxApocalypseOBJ
+.align 2,0
+.global ProcScr_EfxApocalypseOBJ
 ProcScr_EfxApocalypseOBJ: @ 085D2678
 	PROC_19
 	PROC_SLEEP 195
@@ -1187,7 +1271,8 @@ ProcScr_EfxApocalypseOBJ: @ 085D2678
 	PROC_REPEAT EfxApocalypseOBJ_Loop4
 	PROC_END
 
-	.global AnimArray_EfxApocalypseOBJ
+.align 2,0
+.global AnimArray_EfxApocalypseOBJ
 AnimArray_EfxApocalypseOBJ: @ 085D26B0
 	.4byte AnimScr_085EB93C
 	.4byte AnimScr_085EB944
@@ -1198,66 +1283,76 @@ AnimArray_EfxApocalypseOBJ: @ 085D26B0
 	.4byte AnimScr_085EB96C
 	.4byte AnimScr_085EB974
 
-	.global ProcScr_EfxApocalypseBGCOL2
+.align 2,0
+.global ProcScr_EfxApocalypseBGCOL2
 ProcScr_EfxApocalypseBGCOL2: @ 085D26D0
 	PROC_19
 	PROC_MARK 10
 	PROC_REPEAT EfxApocalypseBGCOL2_Loop
 	PROC_END
 
-	.global ProcScr_EfxApocalypseDummy
+.align 2,0
+.global ProcScr_EfxApocalypseDummy
 ProcScr_EfxApocalypseDummy: @ 085D26F0
 	PROC_19
 	PROC_REPEAT EfxApocalypseDummy_Loop
 	PROC_END
 
-	.global ProcScr_EfxApocalypseBgFlash1
+.align 2,0
+.global ProcScr_EfxApocalypseBgFlash1
 ProcScr_EfxApocalypseBgFlash1: @ 085D2708
 	PROC_19
 	PROC_REPEAT EfxApocalypseBgFlash1_Loop
 	PROC_END
 
-	.global ProcScr_EfxApocalypseBgFlash2
+.align 2,0
+.global ProcScr_EfxApocalypseBgFlash2
 ProcScr_EfxApocalypseBgFlash2: @ 085D2720
 	PROC_19
 	PROC_REPEAT EfxApocalypseBgFlash2_Loop1
 	PROC_REPEAT EfxApocalypseBgFlash2_Loop2
 	PROC_END
 
-	.global ProcScr_EfxApocalypseBG2
+.align 2,0
+.global ProcScr_EfxApocalypseBG2
 ProcScr_EfxApocalypseBG2: @ 085D2740
 	PROC_19
 	PROC_REPEAT EfxApocalypseBG2_Loop
 	PROC_END
 
-	.global ImgArray_EfxApocalypseBG2
+.align 2,0
+.global ImgArray_EfxApocalypseBG2
 ImgArray_EfxApocalypseBG2: @ 085D2758
 	.4byte Img_EfxApocalypseBG2_0817BBD4
 	.4byte Img_EfxApocalypseBG2_0817D4E0
 	.4byte Img_EfxApocalypseBG2_0817ED8C
 	.4byte Img_EfxApocalypseBG2_081804F4
 
-	.global TsaArray_EfxApocalypseBG2
+.align 2,0
+.global TsaArray_EfxApocalypseBG2
 TsaArray_EfxApocalypseBG2: @ 085D2768
 	.4byte Tsa_EfxApocalypseBG2_08181E80
 	.4byte Tsa_EfxApocalypseBG2_08182320
 	.4byte Tsa_EfxApocalypseBG2_081827B0
 	.4byte Tsa_EfxApocalypseBG2_08182C4C
 
-	.global ProcScr_EfxApocalypseOBJ2
+.align 2,0
+.global ProcScr_EfxApocalypseOBJ2
 ProcScr_EfxApocalypseOBJ2: @ 085D2778
 	PROC_19
 	PROC_REPEAT EfxApocalypseOBJ2_Loop1
 	PROC_REPEAT EfxApocalypseOBJ2_Loop2
 	PROC_END
 
-	.global ProcScr_EfxApocalypseOBJ3
+.align 2,0
+.global ProcScr_EfxApocalypseOBJ3
 ProcScr_EfxApocalypseOBJ3: @ 085D2798
 	PROC_19
 	PROC_REPEAT EfxApocalypseOBJ3_Loop
 	PROC_END
 
-	.global DuraArray_EfxApocalypseOBJ3RND
+.align 2,0
+.global DuraArray_EfxApocalypseOBJ3RND
 DuraArray_EfxApocalypseOBJ3RND: @ 085D27B0
 	.4byte 43, 38, 44, 36
 	.4byte 43, 41, 50, 44
@@ -1274,7 +1369,8 @@ DuraArray_EfxApocalypseOBJ3RND: @ 085D27B0
 	.4byte 42, 49
 	.4byte -1
 
-	.global LoArray_EfxApocalypseOBJ3RND
+.align 2,0
+.global LoArray_EfxApocalypseOBJ3RND
 LoArray_EfxApocalypseOBJ3RND: @ 085D287C
 	.4byte 0x7C34, 0x85C7, 0x3FB2, 0x7C4D
 	.4byte 0x8810, 0xFF13, 0xDB8E, 0xA559
@@ -1290,7 +1386,8 @@ LoArray_EfxApocalypseOBJ3RND: @ 085D287C
 	.4byte 0x5628, 0xB60B, 0xD0A6, 0x9CD1
 	.4byte 0xEF84, 0x4D57
 
-	.global StateArray_EfxApocalypseOBJ3RND
+.align 2,0
+.global StateArray_EfxApocalypseOBJ3RND
 StateArray_EfxApocalypseOBJ3RND: @ 085D2944
 	.4byte 1, 0, 6, 0
 	.4byte 2, 3, 4, 4
@@ -1306,25 +1403,29 @@ StateArray_EfxApocalypseOBJ3RND: @ 085D2944
 	.4byte 0, 5, 2, 2
 	.4byte 3, 2
 
-	.global ProcScr_EfxApocalypseOBJ3RND
+.align 2,0
+.global ProcScr_EfxApocalypseOBJ3RND
 ProcScr_EfxApocalypseOBJ3RND: @ 085D2A0C
 	PROC_19
 	PROC_REPEAT EfxApocalypseOBJ3RND_Loop
 	PROC_END
 
-	.global ProcScr_EfxHazymoon
+.align 2,0
+.global ProcScr_EfxHazymoon
 ProcScr_EfxHazymoon: @ 085D2A24
 	PROC_19
 	PROC_REPEAT EfxHazymoon_Loop
 	PROC_END
 
-	.global ProcScr_EfxHazymoonBG
+.align 2,0
+.global ProcScr_EfxHazymoonBG
 ProcScr_EfxHazymoonBG: @ 085D2A3C
 	PROC_19
 	PROC_REPEAT EfxHazymoonBG_Loop
 	PROC_END
 
-	.global TsaArray_EfxHazymoonBG
+.align 2,0
+.global TsaArray_EfxHazymoonBG
 TsaArray_EfxHazymoonBG: @ 085D2A54
 	.4byte Tsa_EfxHazymoonBG_0818BC0C
 	.4byte Tsa_EfxHazymoonBG_0818BDB0
@@ -1354,7 +1455,8 @@ TsaArray_EfxHazymoonBG: @ 085D2A54
 	.4byte Tsa_EfxHazymoonBG_0818DA14
 	.4byte Tsa_EfxHazymoonBG_0818DBA4
 
-	.global ImgArray_EfxHazymoonBG
+.align 2,0
+.global ImgArray_EfxHazymoonBG
 ImgArray_EfxHazymoonBG: @ 085D2AC0
 	.4byte Img_EfxHazymoonBG_0818398C
 	.4byte Img_EfxHazymoonBG_08183CD4
@@ -1384,7 +1486,8 @@ ImgArray_EfxHazymoonBG: @ 085D2AC0
 	.4byte Img_EfxHazymoonBG_0818ABB8
 	.4byte Img_EfxHazymoonBG_0818B438
 
-	.global ProcScr_EfxHazymoonOBJ2
+.align 2,0
+.global ProcScr_EfxHazymoonOBJ2
 ProcScr_EfxHazymoonOBJ2: @ 085D2B2C
 	PROC_19
 	PROC_ONEND EfxHazymoonOBJ2_OnEnd
@@ -1396,13 +1499,15 @@ ProcScr_EfxHazymoonOBJ2: @ 085D2B2C
 	PROC_REPEAT EfxHazymoonOBJ2_Loop3
 	PROC_END
 
-	.global ProcScr_EfxHazymoonOBJ3
+.align 2,0
+.global ProcScr_EfxHazymoonOBJ3
 ProcScr_EfxHazymoonOBJ3: @ 085D2B74
 	PROC_19
 	PROC_REPEAT EfxHazymoonOBJ3_Loop
 	PROC_END
 
-	.global gEclipseAnimSpriteCoordinates
+.align 2,0
+.global gEclipseAnimSpriteCoordinates
 gEclipseAnimSpriteCoordinates: @ 085D2B8C
 	.short 0x60, 0x38
 	.short 0x30, 0x68
@@ -1411,27 +1516,31 @@ gEclipseAnimSpriteCoordinates: @ 085D2B8C
 	.short 0xA0, 0x88
 	.short 0xC0, 0x60
 
-	.global ProcScr_EfxHazymoonOBJ3RND
+.align 2,0
+.global ProcScr_EfxHazymoonOBJ3RND
 ProcScr_EfxHazymoonOBJ3RND: @ 085D2BA4
 	PROC_19
 	PROC_ONEND EfxHazymoonOBJ3RND_Loop
 	PROC_SLEEP 100
 	PROC_END
 
-	.global ProcScr_EfxFenrir
+.align 2,0
+.global ProcScr_EfxFenrir
 ProcScr_EfxFenrir: @ 085D2BC4
 	PROC_19
 	PROC_REPEAT EfxFenrir_Loop
 	PROC_END
 
-	.global ProcScr_EfxFenrirBG
+.align 2,0
+.global ProcScr_EfxFenrirBG
 ProcScr_EfxFenrirBG: @ 085D2BDC
 	PROC_19
 	PROC_ONEND EfxFenrirBG_OnEnd
 	PROC_REPEAT EfxFenrirBG_Loop
 	PROC_END
 
-	.global ProcScr_EfxFenrirBGCOL
+.align 2,0
+.global ProcScr_EfxFenrirBGCOL
 ProcScr_EfxFenrirBGCOL: @ 085D2BFC
 	PROC_19
 	PROC_MARK 10
@@ -1439,19 +1548,22 @@ ProcScr_EfxFenrirBGCOL: @ 085D2BFC
 	PROC_REPEAT EfxFenrirBGCOL_Loop
 	PROC_END
 
-	.global ProcScr_EfxFenrirOBJ
+.align 2,0
+.global ProcScr_EfxFenrirOBJ
 ProcScr_EfxFenrirOBJ: @ 085D2C24
 	PROC_19
 	PROC_REPEAT EfxFenrirOBJ_Loop
 	PROC_END
 
-	.global ProcScr_EfxFenrirBG2
+.align 2,0
+.global ProcScr_EfxFenrirBG2
 ProcScr_EfxFenrirBG2: @ 085D2C3C
 	PROC_19
 	PROC_REPEAT EfxFenrirBG2_Loop
 	PROC_END
 
-	.global ImgArray_EfxFenrirBG2_A
+.align 2,0
+.global ImgArray_EfxFenrirBG2_A
 ImgArray_EfxFenrirBG2_A: @ 085D2C54
 	.4byte Img_EfxFenrirBG2_A_0818F5EC
 	.4byte Img_EfxFenrirBG2_A_0818F5EC
@@ -1505,7 +1617,8 @@ ImgArray_EfxFenrirBG2_A: @ 085D2C54
 	.4byte Img_EfxFenrirBG2_A_08191B54
 	.4byte Img_EfxFenrirBG2_A_081929D0
 
-	.global TsaArray_EfxFenrirBG2_A
+.align 2,0
+.global TsaArray_EfxFenrirBG2_A
 TsaArray_EfxFenrirBG2_A: @ 085D2D20
 	.4byte Tsa_EfxFenrirBG2_A_081935D8
 	.4byte Tsa_EfxFenrirBG2_A_08193694
@@ -1559,142 +1672,165 @@ TsaArray_EfxFenrirBG2_A: @ 085D2D20
 	.4byte Tsa_EfxFenrirBG2_A_08197860
 	.4byte Tsa_EfxFenrirBG2_A_08197A68
 
-	.global ProcScr_EfxFenrirOBJ2
+.align 2,0
+.global ProcScr_EfxFenrirOBJ2
 ProcScr_EfxFenrirOBJ2: @ 085D2DEC
 	PROC_19
 	PROC_REPEAT EfxFenrirOBJ2_Loop
 	PROC_END
 
-	.global ProcScr_EfxFenrirOBJ2Chiri
+.align 2,0
+.global ProcScr_EfxFenrirOBJ2Chiri
 ProcScr_EfxFenrirOBJ2Chiri: @ 085D2E04
 	PROC_19
 	PROC_REPEAT EfxFenrirOBJ2Chiri_Loop
 	PROC_END
 
-	.global gFenrirSpriteAngles
+.align 2,0
+.global gFenrirSpriteAngles
 gFenrirSpriteAngles: @ 085D2E1C
 	.4byte 184, 85, 66, 119, 158, 39, 135, 210
 
-	.global ProcScr_EfxLive
+.align 2,0
+.global ProcScr_EfxLive
 ProcScr_EfxLive: @ 085D2E3C
 	PROC_19
 	PROC_REPEAT EfxLive_Loop
 	PROC_END
 
-	.global ProcScr_EfxRelive
+.align 2,0
+.global ProcScr_EfxRelive
 ProcScr_EfxRelive: @ 085D2E54
 	PROC_19
 	PROC_REPEAT EfxRelive_Loop
 	PROC_END
 
-	.global ProcScr_EfxRecover
+.align 2,0
+.global ProcScr_EfxRecover
 ProcScr_EfxRecover: @ 085D2E6C
 	PROC_19
 	PROC_REPEAT EfxRecover_Loop
 	PROC_END
 
-	.global ProcScr_EfxReblow
+.align 2,0
+.global ProcScr_EfxReblow
 ProcScr_EfxReblow: @ 085D2E84
 	PROC_19
 	PROC_REPEAT EfxReblow_Loop
 	PROC_END
 
-	.global ProcScr_EfxLiveBG
+.align 2,0
+.global ProcScr_EfxLiveBG
 ProcScr_EfxLiveBG: @ 085D2E9C
 	PROC_19
 	PROC_REPEAT EfxLiveBG_Loop
 	PROC_END
 
-	.global ProcScr_EfxLiveBGCOL
+.align 2,0
+.global ProcScr_EfxLiveBGCOL
 ProcScr_EfxLiveBGCOL: @ 085D2EB4
 	PROC_19
 	PROC_MARK 10
 	PROC_REPEAT EfxLiveBGCOL_Loop
 	PROC_END
 
-	.global ProcScr_EfxLiveALPHA
+.align 2,0
+.global ProcScr_EfxLiveALPHA
 ProcScr_EfxLiveALPHA: @ 085D2ED4
 	PROC_19
 	PROC_REPEAT EfxLiveALPHA_Delay
 	PROC_REPEAT EfxLiveALPHA_Loop
 	PROC_END
 
-	.global ProcScr_EfxLiveOBJ
+.align 2,0
+.global ProcScr_EfxLiveOBJ
 ProcScr_EfxLiveOBJ: @ 085D2EF4
 	PROC_19
 	PROC_REPEAT EfxLiveOBJ_Loop
 	PROC_END
 
-	.global ProcScr_EfxReserveOBJ
+.align 2,0
+.global ProcScr_EfxReserveOBJ
 ProcScr_EfxReserveOBJ: @ 085D2F0C
 	PROC_19
 	PROC_REPEAT EfxReserveOBJ_Loop1
 	PROC_REPEAT EfxReserveOBJ_Loop2
 	PROC_END
 
-	.global ProcScr_EfxReblowOBJ
+.align 2,0
+.global ProcScr_EfxReblowOBJ
 ProcScr_EfxReblowOBJ: @ 085D2F2C
 	PROC_19
 	PROC_REPEAT EfxReblowOBJ_Loop1
 	PROC_REPEAT EfxReblowOBJ_Loop2
 	PROC_END
 
-	.global ProcScr_EfxReserve
+.align 2,0
+.global ProcScr_EfxReserve
 ProcScr_EfxReserve: @ 085D2F4C
 	PROC_19
 	PROC_REPEAT EfxReserve_Loop
 	PROC_END
 
-	.global ProcScr_EfxReserveBG
+.align 2,0
+.global ProcScr_EfxReserveBG
 ProcScr_EfxReserveBG: @ 085D2F64
 	PROC_19
 	PROC_REPEAT EfxReserveBG_Loop
 	PROC_END
 
-	.global TsaArray_EfxReserveBG
+.align 2,0
+.global TsaArray_EfxReserveBG
 TsaArray_EfxReserveBG: @ 085D2F7C
 	.4byte Tsa_EfxReserveBG_081ADFEC
 	.4byte Tsa_EfxReserveBG_081AE0F8
 	.4byte Tsa_EfxReserveBG_081AE1F8
 	.4byte Tsa_EfxReserveBG_081AE304
 
-	.global ProcScr_EfxReserveBGCOL
+.align 2,0
+.global ProcScr_EfxReserveBGCOL
 ProcScr_EfxReserveBGCOL: @ 085D2F8C
 	PROC_19
 	PROC_MARK 10
 	PROC_REPEAT EfxReserveBGCOL_Loop
 	PROC_END
 
-	.global ProcScr_EfxReserveBG2
+.align 2,0
+.global ProcScr_EfxReserveBG2
 ProcScr_EfxReserveBG2: @ 085D2FAC
 	PROC_19
 	PROC_REPEAT EfxReserveBG2_Loop
 	PROC_END
 
-	.global TsaArray_EfxReserveBG2
+.align 2,0
+.global TsaArray_EfxReserveBG2
 TsaArray_EfxReserveBG2: @ 085D2FC4
 	.4byte Tsa_EfxReserveBG2_081AE410
 
-	.global ProcScr_EfxReserveBGCOL2
+.align 2,0
+.global ProcScr_EfxReserveBGCOL2
 ProcScr_EfxReserveBGCOL2: @ 085D2FC8
 	PROC_19
 	PROC_MARK 10
 	PROC_REPEAT EfxReserveBGCOL2_Loop
 	PROC_END
 
-	.global ProcScr_EfxRest
+.align 2,0
+.global ProcScr_EfxRest
 ProcScr_EfxRest: @ 085D2FE8
 	PROC_19
 	PROC_REPEAT EfxRest_Loop
 	PROC_END
 
-	.global ProcScr_EfxRestBG
+.align 2,0
+.global ProcScr_EfxRestBG
 ProcScr_EfxRestBG: @ 085D3000
 	PROC_19
 	PROC_REPEAT EfxRestBG_Loop
 	PROC_END
 
-	.global TsaArray_EfxRestBG
+.align 2,0
+.global TsaArray_EfxRestBG
 TsaArray_EfxRestBG: @ 085D3018
 	.4byte Tsa_EfxRestBG_081B1730
 	.4byte Tsa_EfxRestBG_081B17DC
@@ -1710,7 +1846,8 @@ TsaArray_EfxRestBG: @ 085D3018
 	.4byte Tsa_EfxRestBG_081B20D8
 	.4byte Tsa_EfxRestBG_081B2208
 
-	.global ImgArray_EfxRestBG
+.align 2,0
+.global ImgArray_EfxRestBG
 ImgArray_EfxRestBG: @ 085D304C
 	.4byte Img_EfxRestBG_081AFC70
 	.4byte Img_EfxRestBG_081AFC70
@@ -1726,26 +1863,30 @@ ImgArray_EfxRestBG: @ 085D304C
 	.4byte Img_EfxRestBG_081B0FB4
 	.4byte Img_EfxRestBG_081B0FB4
 
-	.global ProcScr_EfxRestOBJ
+.align 2,0
+.global ProcScr_EfxRestOBJ
 ProcScr_EfxRestOBJ: @ 085D3080
 	PROC_19
 	PROC_ONEND EfxRestOBJ_Loop
 	PROC_SLEEP 80
 	PROC_END
 
-	.global ProcScr_EfxSilence
+.align 2,0
+.global ProcScr_EfxSilence
 ProcScr_EfxSilence: @ 085D30A0
 	PROC_19
 	PROC_REPEAT EfxSilence_Loop
 	PROC_END
 
-	.global ProcScr_EfxSilenceBG
+.align 2,0
+.global ProcScr_EfxSilenceBG
 ProcScr_EfxSilenceBG: @ 085D30B8
 	PROC_19
 	PROC_REPEAT EfxSilenceBG_Loop
 	PROC_END
 
-	.global TsaArray_EfxSilenceBG
+.align 2,0
+.global TsaArray_EfxSilenceBG
 TsaArray_EfxSilenceBG: @ 085D30D0
 	.4byte Tsa_EfxSilenceBG_081B2E10
 	.4byte Tsa_EfxSilenceBG_081B2F0C
@@ -1766,26 +1907,30 @@ TsaArray_EfxSilenceBG: @ 085D30D0
 	.4byte Tsa_EfxSilenceBG_081B3B50
 	.4byte Tsa_EfxSilenceBG_081B3C60
 
-	.global ProcScr_EfxSilenceOBJ
+.align 2,0
+.global ProcScr_EfxSilenceOBJ
 ProcScr_EfxSilenceOBJ: @ 085D3118
 	PROC_19
 	PROC_ONEND EfxSilenceOBJ_OnEnd
 	PROC_SLEEP 40
 	PROC_END
 
-	.global ProcScr_EfxSleep
+.align 2,0
+.global ProcScr_EfxSleep
 ProcScr_EfxSleep: @ 085D3138
 	PROC_19
 	PROC_REPEAT EfxSleep_Loop
 	PROC_END
 
-	.global ProcScr_EfxSleepBG
+.align 2,0
+.global ProcScr_EfxSleepBG
 ProcScr_EfxSleepBG: @ 085D3150
 	PROC_19
 	PROC_REPEAT EfxSleepBG_Loop
 	PROC_END
 
-	.global TsaArray_EfxSleepBG
+.align 2,0
+.global TsaArray_EfxSleepBG
 TsaArray_EfxSleepBG: @ 085D3168
 	.4byte Tsa_EfxSleepBG_081B66A8
 	.4byte Tsa_EfxSleepBG_081B6784
@@ -1804,21 +1949,24 @@ TsaArray_EfxSleepBG: @ 085D3168
 	.4byte Tsa_EfxSleepBG_081B72B0
 	.4byte Tsa_EfxSleepBG_081B738C
 
-	.global ProcScr_EfxSleepOBJ
+.align 2,0
+.global ProcScr_EfxSleepOBJ
 ProcScr_EfxSleepOBJ: @ 085D31A8
 	PROC_19
 	PROC_ONEND EfxSleepOBJ_OnEnd
 	PROC_SLEEP 80
 	PROC_END
 
-	.global ProcScr_EfxSleepOBJ2
+.align 2,0
+.global ProcScr_EfxSleepOBJ2
 ProcScr_EfxSleepOBJ2: @ 085D31C8
 	PROC_19
 	PROC_ONEND EfxSleepOBJ_OnEnd
 	PROC_SLEEP 200
 	PROC_END
 
-	.global ProcScr_EfxSleepSE
+.align 2,0
+.global ProcScr_EfxSleepSE
 ProcScr_EfxSleepSE: @ 085D31E8
 	PROC_19
 	PROC_ONEND EfxSleepSE_OnEnd
@@ -1830,19 +1978,22 @@ ProcScr_EfxSleepSE: @ 085D31E8
 	PROC_CALL EfxSleepSE_PlaySE
 	PROC_END
 
-	.global ProcScr_EfxHammarne
+.align 2,0
+.global ProcScr_EfxHammarne
 ProcScr_EfxHammarne: @ 085D3230
 	PROC_19
 	PROC_REPEAT EfxHammarne_Loop
 	PROC_END
 
-	.global ProcScr_EfxHammarneBG
+.align 2,0
+.global ProcScr_EfxHammarneBG
 ProcScr_EfxHammarneBG: @ 085D3248
 	PROC_19
 	PROC_REPEAT EfxHammarneBG_Loop
 	PROC_END
 
-	.global TsaArray_EfxHammarneBG
+.align 2,0
+.global TsaArray_EfxHammarneBG
 TsaArray_EfxHammarneBG: @ 085D3260
 	.4byte Tsa_EfxHammarneBG_081B4294
 	.4byte Tsa_EfxHammarneBG_081B4340
@@ -1858,7 +2009,8 @@ TsaArray_EfxHammarneBG: @ 085D3260
 	.4byte Tsa_EfxHammarneBG_081B4C30
 	.4byte Tsa_EfxHammarneBG_081B4D60
 
-	.global ImgArray_EfxHammarneBG
+.align 2,0
+.global ImgArray_EfxHammarneBG
 ImgArray_EfxHammarneBG: @ 085D3294
 	.4byte Img_EfxRestBG_081AFC70
 	.4byte Img_EfxRestBG_081AFC70
@@ -1874,33 +2026,38 @@ ImgArray_EfxHammarneBG: @ 085D3294
 	.4byte Img_EfxRestBG_081B0FB4
 	.4byte Img_EfxRestBG_081B0FB4
 
-	.global ProcScr_EfxHammarneOBJ
+.align 2,0
+.global ProcScr_EfxHammarneOBJ
 ProcScr_EfxHammarneOBJ: @ 085D32C8
 	PROC_19
 	PROC_ONEND EfxHammarneOBJ_OnEnd
 	PROC_SLEEP 80
 	PROC_END
 
-	.global ProcScr_EfxBerserk
+.align 2,0
+.global ProcScr_EfxBerserk
 ProcScr_EfxBerserk: @ 085D32E8
 	PROC_19
 	PROC_REPEAT EfxBerserk_Loop
 	PROC_END
 
-	.global ProcScr_EfxBerserkBG
+.align 2,0
+.global ProcScr_EfxBerserkBG
 ProcScr_EfxBerserkBG: @ 085D3300
 	PROC_19
 	PROC_REPEAT EfxBerserkBG_Loop
 	PROC_END
 
-	.global ProcScr_EfxBerserkCLONE
+.align 2,0
+.global ProcScr_EfxBerserkCLONE
 ProcScr_EfxBerserkCLONE: @ 085D3318
 	PROC_19
 	PROC_ONEND EfxBerserkCLONE_OnEnd
 	PROC_REPEAT EfxBerserkCLONE_Loop
 	PROC_END
 
-	.global ProcScr_EfxBerserkOBJ
+.align 2,0
+.global ProcScr_EfxBerserkOBJ
 ProcScr_EfxBerserkOBJ: @ 085D3338
 	PROC_19
 	PROC_ONEND EfxBerserkOBJ_OnEnd
@@ -1926,19 +2083,22 @@ ProcScr_EfxBerserkOBJ: @ 085D3338
 	PROC_SLEEP 17
 	PROC_END
 
-	.global ProcScr_EfxMshield
+.align 2,0
+.global ProcScr_EfxMshield
 ProcScr_EfxMshield: @ 085D33F0
 	PROC_19
 	PROC_REPEAT EfxMshield_Loop
 	PROC_END
 
-	.global ProcScr_EfxMshieldBG
+.align 2,0
+.global ProcScr_EfxMshieldBG
 ProcScr_EfxMshieldBG: @ 085D3408
 	PROC_19
 	PROC_REPEAT EfxMshieldBG_Loop
 	PROC_END
 
-	.global TsaArray_EfxMshieldBG
+.align 2,0
+.global TsaArray_EfxMshieldBG
 TsaArray_EfxMshieldBG: @ 085D3420
 	.4byte Tsa_EfxMshieldBG_081B8974
 	.4byte Tsa_EfxMshieldBG_081B8A2C
@@ -1946,14 +2106,16 @@ TsaArray_EfxMshieldBG: @ 085D3420
 	.4byte Tsa_EfxMshieldBG_081B8BE0
 	.4byte Tsa_EfxMshieldBG_081B8D10
 
-	.global ProcScr_EfxMshieldOBJ
+.align 2,0
+.global ProcScr_EfxMshieldOBJ
 ProcScr_EfxMshieldOBJ: @ 085D3434
 	PROC_19
 	PROC_ONEND EfxMshieldOBJ_OnEnd
 	PROC_SLEEP 220
 	PROC_END
 
-	.global ProcScr_EfxMshieldOBJ2
+.align 2,0
+.global ProcScr_EfxMshieldOBJ2
 ProcScr_EfxMshieldOBJ2: @ 085D3454
 	PROC_19
 	PROC_ONEND EfxMshieldOBJ_OnEnd

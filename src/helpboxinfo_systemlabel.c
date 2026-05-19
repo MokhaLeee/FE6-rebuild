@@ -1,9 +1,4 @@
-/*
- * Label strings used by the stat screen, helpbox and some more
- */
-
-#pragma once
-
+#include "prelude.h"
 #include "systemlabels.h"
 
 #include "text.h"

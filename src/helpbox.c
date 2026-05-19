@@ -467,6 +467,3 @@ struct HelpBoxInfo const * GetLastHelpBoxInfo(void)
 {
     return gLastHelpBoxInfo;
 }
-
-#include "data/helpboxinfo_data.h"
-#include "data/systemlabels_data.h"

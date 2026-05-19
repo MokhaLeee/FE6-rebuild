@@ -2,12 +2,14 @@
 	.include "gba_sprites.inc"
 	.section .data
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten1_1
 AnimSprite_EkrBaseKaiten1_1:  @ 0x5CDD78
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -16, -8
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, 0, -8
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten1_2
 AnimSprite_EkrBaseKaiten1_2:  @ 0x5CDD9C
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_32, 0x0009, -26, 1
@@ -17,6 +19,7 @@ AnimSprite_EkrBaseKaiten1_2:  @ 0x5CDD9C
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0008, 22, -15
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten1_3
 AnimSprite_EkrBaseKaiten1_3:  @ 0x5CDDE4
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_32, 0x0010, 1, -16
@@ -29,6 +32,7 @@ AnimSprite_EkrBaseKaiten1_3:  @ 0x5CDDE4
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, 0x6000, 0x0012, -31, 0
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten1_4
 AnimSprite_EkrBaseKaiten1_4:  @ 0x5CDE50
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_32, 0x0014, -8, -37
@@ -39,6 +43,7 @@ AnimSprite_EkrBaseKaiten1_4:  @ 0x5CDE50
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_32, 0x001C, -16, -5
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten1_5
 AnimSprite_EkrBaseKaiten1_5:  @ 0x5CDEA4
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -11, -8
@@ -57,6 +62,7 @@ AnimSprite_EkrBaseKaiten1_5:  @ 0x5CDEA4
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x002D, 5, -48
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten1_6
 AnimSprite_EkrBaseKaiten1_6:  @ 0x5CDF58
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_32, 0x008A, -33, -48
@@ -68,6 +74,7 @@ AnimSprite_EkrBaseKaiten1_6:  @ 0x5CDF58
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0096, 11, 48
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten1_7
 AnimSprite_EkrBaseKaiten1_7:  @ 0x5CDFB8
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_32, 0x0045, -48, -32
@@ -86,6 +93,7 @@ AnimSprite_EkrBaseKaiten1_7:  @ 0x5CDFB8
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x0069, 32, 32
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten1_8
 AnimSprite_EkrBaseKaiten1_8:  @ 0x5CE06C
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_32, 0x004F, -56, -17
@@ -108,12 +116,14 @@ AnimSprite_EkrBaseKaiten1_8:  @ 0x5CE06C
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0079, 24, -9
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten1_9
 AnimSprite_EkrBaseKaiten1_9:  @ 0x5CE150
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x005F, 0, 3
 	ANIM_SPRITE_END
 
-	.global AnimScr_EkrBaseKaiten_085CE168
+	.align 2,0
+.global AnimScr_EkrBaseKaiten_085CE168
 AnimScr_EkrBaseKaiten_085CE168:	@ 0x5CE168
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten1_1, 1
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten1_2, 1
@@ -125,7 +135,8 @@ AnimScr_EkrBaseKaiten_085CE168:	@ 0x5CE168
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten1_8, 1
 	ANIMSCR_BLOCKED
 
-	.global AnimScr_EkrBaseKaiten_085CE18C
+	.align 2,0
+.global AnimScr_EkrBaseKaiten_085CE18C
 AnimScr_EkrBaseKaiten_085CE18C:	@ 0x5CE18C
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten1_8, 1
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten1_7, 1
@@ -137,12 +148,14 @@ AnimScr_EkrBaseKaiten_085CE18C:	@ 0x5CE18C
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten1_1, 1
 	ANIMSCR_BLOCKED
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_1
 AnimSprite_EkrBaseKaiten2_1:  @ 0x5CE1B0
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -16, -8
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, 0, -8
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_2
 AnimSprite_EkrBaseKaiten2_2:  @ 0x5CE1D4
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -24, -9
@@ -153,6 +166,7 @@ AnimSprite_EkrBaseKaiten2_2:  @ 0x5CE1D4
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x0022, 8, 7
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_3
 AnimSprite_EkrBaseKaiten2_3:  @ 0x5CE228
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -24, -9
@@ -167,6 +181,7 @@ AnimSprite_EkrBaseKaiten2_3:  @ 0x5CE228
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_8, 0x0006, 24, 7
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_4
 AnimSprite_EkrBaseKaiten2_4:  @ 0x5CE2AC
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -16, -10
@@ -183,6 +198,7 @@ AnimSprite_EkrBaseKaiten2_4:  @ 0x5CE2AC
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x0026, 16, 6
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_5
 AnimSprite_EkrBaseKaiten2_5:  @ 0x5CE348
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -24, -10
@@ -201,6 +217,7 @@ AnimSprite_EkrBaseKaiten2_5:  @ 0x5CE348
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x0026, 24, 6
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_6
 AnimSprite_EkrBaseKaiten2_6:  @ 0x5CE3FC
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -24, -10
@@ -222,6 +239,7 @@ AnimSprite_EkrBaseKaiten2_6:  @ 0x5CE3FC
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_8, 0x000C, 48, 6
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_7
 AnimSprite_EkrBaseKaiten2_7:  @ 0x5CE4D4
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -16, -11
@@ -245,17 +263,20 @@ AnimSprite_EkrBaseKaiten2_7:  @ 0x5CE4D4
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x0015, 40, 5
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_8
 AnimSprite_EkrBaseKaiten2_8:  @ 0x5CE5C4
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0011, 0, -8
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_9
 AnimSprite_EkrBaseKaiten2_9:  @ 0x5CE5DC
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -8, -16
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -8, 0
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_10
 AnimSprite_EkrBaseKaiten2_10:  @ 0x5CE600
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x0034, -8, -4
@@ -263,6 +284,7 @@ AnimSprite_EkrBaseKaiten2_10:  @ 0x5CE600
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, 0x6000, 0x0017, -7, -20
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_11
 AnimSprite_EkrBaseKaiten2_11:  @ 0x5CE630
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0040, -15, -16
@@ -275,6 +297,7 @@ AnimSprite_EkrBaseKaiten2_11:  @ 0x5CE630
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0045, 6, 16
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_12
 AnimSprite_EkrBaseKaiten2_12:  @ 0x5CE69C
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0049, -14, -12
@@ -287,6 +310,7 @@ AnimSprite_EkrBaseKaiten2_12:  @ 0x5CE69C
 	ANIM_SPRITE_XFLIP ATTR0_TALL, 0x2000, 0x004B, -10, -4
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_13
 AnimSprite_EkrBaseKaiten2_13:  @ 0x5CE708
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x004D, -16, -16
@@ -307,6 +331,7 @@ AnimSprite_EkrBaseKaiten2_13:  @ 0x5CE708
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x006F, 0, 16
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_14
 AnimSprite_EkrBaseKaiten2_14:  @ 0x5CE7D4
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_32, 0x0087, -56, -24
@@ -326,6 +351,7 @@ AnimSprite_EkrBaseKaiten2_14:  @ 0x5CE7D4
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x00A2, 24, -1
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_15
 AnimSprite_EkrBaseKaiten2_15:  @ 0x5CE894
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_32, 0x0094, -60, -22
@@ -343,6 +369,7 @@ AnimSprite_EkrBaseKaiten2_15:  @ 0x5CE894
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x00BF, 36, -3
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_16
 AnimSprite_EkrBaseKaiten2_16:  @ 0x5CE93C
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_32, 0x0055, -68, -18
@@ -362,6 +389,7 @@ AnimSprite_EkrBaseKaiten2_16:  @ 0x5CE93C
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x00A1, 52, -3
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_17
 AnimSprite_EkrBaseKaiten2_17:  @ 0x5CE9FC
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_8, 0x0034, -7, -4
@@ -369,6 +397,7 @@ AnimSprite_EkrBaseKaiten2_17:  @ 0x5CE9FC
 	ANIM_SPRITE ATTR0_SQUARE, 0x6000, 0x0017, -8, -20
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_18
 AnimSprite_EkrBaseKaiten2_18:  @ 0x5CEA2C
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_16, 0x0040, -1, -16
@@ -381,6 +410,7 @@ AnimSprite_EkrBaseKaiten2_18:  @ 0x5CEA2C
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0045, -14, 16
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_19
 AnimSprite_EkrBaseKaiten2_19:  @ 0x5CEA98
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_16, 0x0049, -1, -12
@@ -393,6 +423,7 @@ AnimSprite_EkrBaseKaiten2_19:  @ 0x5CEA98
 	ANIM_SPRITE ATTR0_TALL, 0x2000, 0x004B, 3, -4
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_20
 AnimSprite_EkrBaseKaiten2_20:  @ 0x5CEB04
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_16, 0x004D, -1, -16
@@ -413,6 +444,7 @@ AnimSprite_EkrBaseKaiten2_20:  @ 0x5CEB04
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x006F, -9, 16
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_21
 AnimSprite_EkrBaseKaiten2_21:  @ 0x5CEBD0
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_32, 0x0087, 22, -24
@@ -432,6 +464,7 @@ AnimSprite_EkrBaseKaiten2_21:  @ 0x5CEBD0
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_8, 0x00A2, -42, -1
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_22
 AnimSprite_EkrBaseKaiten2_22:  @ 0x5CEC90
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_32, 0x0094, 29, -22
@@ -449,6 +482,7 @@ AnimSprite_EkrBaseKaiten2_22:  @ 0x5CEC90
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x00BF, -43, -3
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten2_23
 AnimSprite_EkrBaseKaiten2_23:  @ 0x5CED38
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_32, 0x0055, 36, -18
@@ -468,7 +502,8 @@ AnimSprite_EkrBaseKaiten2_23:  @ 0x5CED38
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x00A1, -60, -3
 	ANIM_SPRITE_END
 
-	.global AnimScr_EkrBaseKaiten_085CEDF8
+	.align 2,0
+.global AnimScr_EkrBaseKaiten_085CEDF8
 AnimScr_EkrBaseKaiten_085CEDF8:	@ 0x5CEDF8
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten2_1, 1
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten2_2, 1
@@ -479,7 +514,8 @@ AnimScr_EkrBaseKaiten_085CEDF8:	@ 0x5CEDF8
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten2_7, 1
 	ANIMSCR_BLOCKED
 
-	.global AnimScr_EkrBaseKaiten_085CEE18
+	.align 2,0
+.global AnimScr_EkrBaseKaiten_085CEE18
 AnimScr_EkrBaseKaiten_085CEE18:	@ 0x5CEE18
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten2_9, 1
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten2_10, 1
@@ -491,7 +527,8 @@ AnimScr_EkrBaseKaiten_085CEE18:	@ 0x5CEE18
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten2_16, 1
 	ANIMSCR_BLOCKED
 
-	.global AnimScr_EkrBaseKaiten_085CEE3C
+	.align 2,0
+.global AnimScr_EkrBaseKaiten_085CEE3C
 AnimScr_EkrBaseKaiten_085CEE3C:	@ 0x5CEE3C
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten2_9, 1
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten2_17, 1
@@ -503,7 +540,8 @@ AnimScr_EkrBaseKaiten_085CEE3C:	@ 0x5CEE3C
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten2_23, 1
 	ANIMSCR_BLOCKED
 
-	.global AnimScr_EkrBaseKaiten_085CEE60
+	.align 2,0
+.global AnimScr_EkrBaseKaiten_085CEE60
 AnimScr_EkrBaseKaiten_085CEE60:	@ 0x5CEE60
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten2_7, 1
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten2_6, 1
@@ -514,7 +552,8 @@ AnimScr_EkrBaseKaiten_085CEE60:	@ 0x5CEE60
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten2_1, 1
 	ANIMSCR_BLOCKED
 
-	.global AnimScr_EkrBaseKaiten_085CEE80
+	.align 2,0
+.global AnimScr_EkrBaseKaiten_085CEE80
 AnimScr_EkrBaseKaiten_085CEE80:	@ 0x5CEE80
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten2_16, 1
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten2_15, 1
@@ -526,7 +565,8 @@ AnimScr_EkrBaseKaiten_085CEE80:	@ 0x5CEE80
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten2_9, 1
 	ANIMSCR_BLOCKED
 
-	.global AnimScr_EkrBaseKaiten_085CEEA4
+	.align 2,0
+.global AnimScr_EkrBaseKaiten_085CEEA4
 AnimScr_EkrBaseKaiten_085CEEA4:	@ 0x5CEEA4
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten2_23, 1
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten2_22, 1
@@ -538,11 +578,13 @@ AnimScr_EkrBaseKaiten_085CEEA4:	@ 0x5CEEA4
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten2_9, 1
 	ANIMSCR_BLOCKED
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten3_1
 AnimSprite_EkrBaseKaiten3_1:  @ 0x5CEEC8
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -8, -8
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten3_2
 AnimSprite_EkrBaseKaiten3_2:  @ 0x5CEEE0
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -11, -9
@@ -552,6 +594,7 @@ AnimSprite_EkrBaseKaiten3_2:  @ 0x5CEEE0
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x0004, -3, 7
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten3_3
 AnimSprite_EkrBaseKaiten3_3:  @ 0x5CEF28
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_16, 0x000B, 23, -9
@@ -566,6 +609,7 @@ AnimSprite_EkrBaseKaiten3_3:  @ 0x5CEF28
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x002E, -17, 7
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten3_4
 AnimSprite_EkrBaseKaiten3_4:  @ 0x5CEFAC
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, 4, -10
@@ -582,6 +626,7 @@ AnimSprite_EkrBaseKaiten3_4:  @ 0x5CEFAC
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0020, -3, 1
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten3_5
 AnimSprite_EkrBaseKaiten3_5:  @ 0x5CF048
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_16, 0x0013, 18, -10
@@ -598,6 +643,7 @@ AnimSprite_EkrBaseKaiten3_5:  @ 0x5CF048
 	ANIM_SPRITE_XFLIP ATTR0_TALL, ATTR1_SIZE_8, 0x0001, -22, -10
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten3_6
 AnimSprite_EkrBaseKaiten3_6:  @ 0x5CF0E4
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_16, 0x0042, 24, -12
@@ -614,6 +660,7 @@ AnimSprite_EkrBaseKaiten3_6:  @ 0x5CF0E4
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0064, -32, 4
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten3_7
 AnimSprite_EkrBaseKaiten3_7:  @ 0x5CF180
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_16, 0x0019, 39, -2
@@ -634,6 +681,7 @@ AnimSprite_EkrBaseKaiten3_7:  @ 0x5CF180
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0048, 15, -18
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten3_8
 AnimSprite_EkrBaseKaiten3_8:  @ 0x5CF24C
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -5, -9
@@ -643,6 +691,7 @@ AnimSprite_EkrBaseKaiten3_8:  @ 0x5CF24C
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_8, 0x0004, -13, 7
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten3_9
 AnimSprite_EkrBaseKaiten3_9:  @ 0x5CF294
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x000B, -39, -9
@@ -657,6 +706,7 @@ AnimSprite_EkrBaseKaiten3_9:  @ 0x5CF294
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x002E, 9, 7
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten3_10
 AnimSprite_EkrBaseKaiten3_10:  @ 0x5CF318
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -17, -10
@@ -671,6 +721,7 @@ AnimSprite_EkrBaseKaiten3_10:  @ 0x5CF318
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x000A, 15, 6
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten3_11
 AnimSprite_EkrBaseKaiten3_11:  @ 0x5CF39C
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0013, -34, -10
@@ -687,6 +738,7 @@ AnimSprite_EkrBaseKaiten3_11:  @ 0x5CF39C
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0001, 14, -10
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten3_12
 AnimSprite_EkrBaseKaiten3_12:  @ 0x5CF438
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0042, -40, -12
@@ -703,6 +755,7 @@ AnimSprite_EkrBaseKaiten3_12:  @ 0x5CF438
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0064, 24, 4
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten3_13
 AnimSprite_EkrBaseKaiten3_13:  @ 0x5CF4D4
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0019, -55, -2
@@ -723,6 +776,7 @@ AnimSprite_EkrBaseKaiten3_13:  @ 0x5CF4D4
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0047, -23, -18
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten3_14
 AnimSprite_EkrBaseKaiten3_14:  @ 0x5CF5A0
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -14, -9
@@ -737,6 +791,7 @@ AnimSprite_EkrBaseKaiten3_14:  @ 0x5CF5A0
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0067, 10, -15
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten3_15
 AnimSprite_EkrBaseKaiten3_15:  @ 0x5CF624
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -4, -9
@@ -751,6 +806,7 @@ AnimSprite_EkrBaseKaiten3_15:  @ 0x5CF624
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0067, -20, -15
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimScr_EkrBaseKaiten_085CF6A8
 AnimScr_EkrBaseKaiten_085CF6A8: @ 0x5CF6A8
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten3_1, 2
@@ -763,6 +819,7 @@ AnimScr_EkrBaseKaiten_085CF6A8: @ 0x5CF6A8
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten3_6, 1
 	ANIMSCR_BLOCKED
 
+.align 2,0
 .global AnimScr_EkrBaseKaiten_085CF6CC
 AnimScr_EkrBaseKaiten_085CF6CC: @ 0x5CF6CC
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten3_1, 2
@@ -775,6 +832,7 @@ AnimScr_EkrBaseKaiten_085CF6CC: @ 0x5CF6CC
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten3_12, 1
 	ANIMSCR_BLOCKED
 
+.align 2,0
 .global AnimScr_EkrBaseKaiten_085CF6F0
 AnimScr_EkrBaseKaiten_085CF6F0: @ 0x5CF6F0
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten3_6, 1
@@ -787,6 +845,7 @@ AnimScr_EkrBaseKaiten_085CF6F0: @ 0x5CF6F0
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten3_1, 2
 	ANIMSCR_BLOCKED
 
+.align 2,0
 .global AnimScr_EkrBaseKaiten_085CF714
 AnimScr_EkrBaseKaiten_085CF714: @ 0x5CF714
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten3_12, 1
@@ -799,17 +858,20 @@ AnimScr_EkrBaseKaiten_085CF714: @ 0x5CF714
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten3_1, 2
 	ANIMSCR_BLOCKED
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_1
 AnimSprite_EkrBaseKaiten4_1:  @ 0x5CF738
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -8, -8
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_2
 AnimSprite_EkrBaseKaiten4_2:  @ 0x5CF750
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -7, -12
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x0000, -7, 4
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_3
 AnimSprite_EkrBaseKaiten4_3:  @ 0x5CF774
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0008, -9, -20
@@ -817,6 +879,7 @@ AnimSprite_EkrBaseKaiten4_3:  @ 0x5CF774
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x000C, -1, 12
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_4
 AnimSprite_EkrBaseKaiten4_4:  @ 0x5CF7A4
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0015, -16, -21
@@ -828,6 +891,7 @@ AnimSprite_EkrBaseKaiten4_4:  @ 0x5CF7A4
 	ANIM_SPRITE ATTR0_SQUARE, 0x2000, 0x003F, -11, -24
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_5
 AnimSprite_EkrBaseKaiten4_5:  @ 0x5CF804
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0068, 13, -3
@@ -843,6 +907,7 @@ AnimSprite_EkrBaseKaiten4_5:  @ 0x5CF804
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0043, 5, 21
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_6
 AnimSprite_EkrBaseKaiten4_6:  @ 0x5CF894
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x005E, 8, -11
@@ -860,6 +925,7 @@ AnimSprite_EkrBaseKaiten4_6:  @ 0x5CF894
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x0058, -32, -20
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_7
 AnimSprite_EkrBaseKaiten4_7:  @ 0x5CF93C
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x0091, -24, -15
@@ -879,12 +945,14 @@ AnimSprite_EkrBaseKaiten4_7:  @ 0x5CF93C
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0099, -32, -15
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_8
 AnimSprite_EkrBaseKaiten4_8:  @ 0x5CF9FC
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -7, -4
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_8, 0x0000, -7, -12
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_9
 AnimSprite_EkrBaseKaiten4_9:  @ 0x5CFA20
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_16, 0x0004, -5, -12
@@ -893,6 +961,7 @@ AnimSprite_EkrBaseKaiten4_9:  @ 0x5CFA20
 	ANIM_SPRITE ATTR0_SQUARE, 0x2000, 0x0004, -8, -1
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_10
 AnimSprite_EkrBaseKaiten4_10:  @ 0x5CFA5C
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_16, 0x000D, 5, -21
@@ -904,6 +973,7 @@ AnimSprite_EkrBaseKaiten4_10:  @ 0x5CFA5C
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x00AE, -5, 19
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_11
 AnimSprite_EkrBaseKaiten4_11:  @ 0x5CFABC
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_32, 0x0043, 0, -16
@@ -921,6 +991,7 @@ AnimSprite_EkrBaseKaiten4_11:  @ 0x5CFABC
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0018, 32, -24
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_12
 AnimSprite_EkrBaseKaiten4_12:  @ 0x5CFB64
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_8, 0x0051, 9, -18
@@ -939,6 +1010,7 @@ AnimSprite_EkrBaseKaiten4_12:  @ 0x5CFB64
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x007D, 25, -15
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_13
 AnimSprite_EkrBaseKaiten4_13:  @ 0x5CFC18
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_8, 0x0086, 12, -14
@@ -959,12 +1031,14 @@ AnimSprite_EkrBaseKaiten4_13:  @ 0x5CFC18
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x00AF, -28, 10
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_14
 AnimSprite_EkrBaseKaiten4_14:  @ 0x5CFCE4
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -9, -5
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x0000, -9, -13
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_15
 AnimSprite_EkrBaseKaiten4_15:  @ 0x5CFD08
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0004, -10, -12
@@ -972,6 +1046,7 @@ AnimSprite_EkrBaseKaiten4_15:  @ 0x5CFD08
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x0022, -11, -20
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_16
 AnimSprite_EkrBaseKaiten4_16:  @ 0x5CFD38
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x000D, -19, -21
@@ -983,6 +1058,7 @@ AnimSprite_EkrBaseKaiten4_16:  @ 0x5CFD38
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x00AE, -1, 19
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_17
 AnimSprite_EkrBaseKaiten4_17:  @ 0x5CFD98
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_32, 0x0043, -32, -17
@@ -1000,6 +1076,7 @@ AnimSprite_EkrBaseKaiten4_17:  @ 0x5CFD98
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0018, -40, -25
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_18
 AnimSprite_EkrBaseKaiten4_18:  @ 0x5CFE40
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x0051, -21, -18
@@ -1018,6 +1095,7 @@ AnimSprite_EkrBaseKaiten4_18:  @ 0x5CFE40
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x007D, -29, -15
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_19
 AnimSprite_EkrBaseKaiten4_19:  @ 0x5CFEF4
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x0086, -24, -16
@@ -1038,12 +1116,14 @@ AnimSprite_EkrBaseKaiten4_19:  @ 0x5CFEF4
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x00AF, 24, 8
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_20
 AnimSprite_EkrBaseKaiten4_20:  @ 0x5CFFC0
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -9, -12
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_8, 0x0000, -9, 4
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_21
 AnimSprite_EkrBaseKaiten4_21:  @ 0x5CFFE4
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_16, 0x0008, -6, -20
@@ -1051,6 +1131,7 @@ AnimSprite_EkrBaseKaiten4_21:  @ 0x5CFFE4
 	ANIM_SPRITE_XFLIP ATTR0_TALL, ATTR1_SIZE_8, 0x000C, -6, 12
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_22
 AnimSprite_EkrBaseKaiten4_22:  @ 0x5D0014
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_16, 0x0015, 1, -22
@@ -1061,6 +1142,7 @@ AnimSprite_EkrBaseKaiten4_22:  @ 0x5D0014
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0038, -9, 26
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_23
 AnimSprite_EkrBaseKaiten4_23:  @ 0x5D0068
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0068, -20, -4
@@ -1076,6 +1158,7 @@ AnimSprite_EkrBaseKaiten4_23:  @ 0x5D0068
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0043, -12, 20
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_24
 AnimSprite_EkrBaseKaiten4_24:  @ 0x5D00F8
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_8, 0x005E, -21, -11
@@ -1093,6 +1176,7 @@ AnimSprite_EkrBaseKaiten4_24:  @ 0x5D00F8
 	ANIM_SPRITE_XFLIP ATTR0_TALL, ATTR1_SIZE_8, 0x0058, 27, -20
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_25
 AnimSprite_EkrBaseKaiten4_25:  @ 0x5D01A0
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_8, 0x0091, 12, -16
@@ -1112,6 +1196,7 @@ AnimSprite_EkrBaseKaiten4_25:  @ 0x5D01A0
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0099, 28, -16
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_26
 AnimSprite_EkrBaseKaiten4_26:  @ 0x5D0260
 	ANIM_SPRITE ATTR0_TALL, ATTR1_SIZE_8, 0x009C, -13, -12
@@ -1128,6 +1213,7 @@ AnimSprite_EkrBaseKaiten4_26:  @ 0x5D0260
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x0060, -5, 12
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_27
 AnimSprite_EkrBaseKaiten4_27:  @ 0x5D02FC
 	ANIM_SPRITE ATTR0_TALL, 0x2000, 0x009C, -13, -2
@@ -1145,6 +1231,7 @@ AnimSprite_EkrBaseKaiten4_27:  @ 0x5D02FC
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x005C, -5, -18
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_28
 AnimSprite_EkrBaseKaiten4_28:  @ 0x5D03A4
 	ANIM_SPRITE_XFLIP ATTR0_TALL, 0x2000, 0x009C, 5, -2
@@ -1162,6 +1249,7 @@ AnimSprite_EkrBaseKaiten4_28:  @ 0x5D03A4
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x005C, -3, -18
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten4_29
 AnimSprite_EkrBaseKaiten4_29:  @ 0x5D044C
 	ANIM_SPRITE_XFLIP ATTR0_TALL, ATTR1_SIZE_8, 0x009C, 6, -13
@@ -1178,6 +1266,7 @@ AnimSprite_EkrBaseKaiten4_29:  @ 0x5D044C
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_8, 0x0060, -10, 11
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimScr_EkrBaseKaiten_085D04E8
 AnimScr_EkrBaseKaiten_085D04E8: @ 0x5D04E8
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten4_1, 2
@@ -1190,6 +1279,7 @@ AnimScr_EkrBaseKaiten_085D04E8: @ 0x5D04E8
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten4_7, 1
 	ANIMSCR_BLOCKED
 
+.align 2,0
 .global AnimScr_EkrBaseKaiten_085D050C
 AnimScr_EkrBaseKaiten_085D050C: @ 0x5D050C
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten4_1, 2
@@ -1202,6 +1292,7 @@ AnimScr_EkrBaseKaiten_085D050C: @ 0x5D050C
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten4_13, 1
 	ANIMSCR_BLOCKED
 
+.align 2,0
 .global AnimScr_EkrBaseKaiten_085D0530
 AnimScr_EkrBaseKaiten_085D0530: @ 0x5D0530
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten4_1, 2
@@ -1214,6 +1305,7 @@ AnimScr_EkrBaseKaiten_085D0530: @ 0x5D0530
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten4_19, 1
 	ANIMSCR_BLOCKED
 
+.align 2,0
 .global AnimScr_EkrBaseKaiten_085D0554
 AnimScr_EkrBaseKaiten_085D0554: @ 0x5D0554
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten4_1, 2
@@ -1226,6 +1318,7 @@ AnimScr_EkrBaseKaiten_085D0554: @ 0x5D0554
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten4_25, 1
 	ANIMSCR_BLOCKED
 
+.align 2,0
 .global AnimScr_EkrBaseKaiten_085D0578
 AnimScr_EkrBaseKaiten_085D0578: @ 0x5D0578
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten4_7, 1
@@ -1238,6 +1331,7 @@ AnimScr_EkrBaseKaiten_085D0578: @ 0x5D0578
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten4_1, 2
 	ANIMSCR_BLOCKED
 
+.align 2,0
 .global AnimScr_EkrBaseKaiten_085D059C
 AnimScr_EkrBaseKaiten_085D059C: @ 0x5D059C
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten4_13, 1
@@ -1250,6 +1344,7 @@ AnimScr_EkrBaseKaiten_085D059C: @ 0x5D059C
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten4_1, 2
 	ANIMSCR_BLOCKED
 
+.align 2,0
 .global AnimScr_EkrBaseKaiten_085D05C0
 AnimScr_EkrBaseKaiten_085D05C0: @ 0x5D05C0
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten4_19, 1
@@ -1262,6 +1357,7 @@ AnimScr_EkrBaseKaiten_085D05C0: @ 0x5D05C0
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten4_1, 2
 	ANIMSCR_BLOCKED
 
+.align 2,0
 .global AnimScr_EkrBaseKaiten_085D05E4
 AnimScr_EkrBaseKaiten_085D05E4: @ 0x5D05E4
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten4_25, 1
@@ -1274,11 +1370,13 @@ AnimScr_EkrBaseKaiten_085D05E4: @ 0x5D05E4
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten4_1, 2
 	ANIMSCR_BLOCKED
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten5_1
 AnimSprite_EkrBaseKaiten5_1:  @ 0x5D0608
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -8, -8
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten5_2
 AnimSprite_EkrBaseKaiten5_2:  @ 0x5D0620
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, 0x6000, 0x0002, 0, 0
@@ -1287,6 +1385,7 @@ AnimSprite_EkrBaseKaiten5_2:  @ 0x5D0620
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, 0x6000, 0x0008, -16, 0
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten5_3
 AnimSprite_EkrBaseKaiten5_3:  @ 0x5D065C
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -8, 4
@@ -1300,6 +1399,7 @@ AnimSprite_EkrBaseKaiten5_3:  @ 0x5D065C
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x002A, -16, -20
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten5_4
 AnimSprite_EkrBaseKaiten5_4:  @ 0x5D06D4
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_32, 0x0043, 0, -16
@@ -1317,6 +1417,7 @@ AnimSprite_EkrBaseKaiten5_4:  @ 0x5D06D4
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0018, 32, -24
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten5_5
 AnimSprite_EkrBaseKaiten5_5:  @ 0x5D077C
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_8, 0x0051, 8, -18
@@ -1335,6 +1436,7 @@ AnimSprite_EkrBaseKaiten5_5:  @ 0x5D077C
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x007D, 24, -15
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten5_6
 AnimSprite_EkrBaseKaiten5_6:  @ 0x5D0830
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_8, 0x0086, 10, -16
@@ -1355,6 +1457,7 @@ AnimSprite_EkrBaseKaiten5_6:  @ 0x5D0830
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x00AF, -30, 8
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten5_7
 AnimSprite_EkrBaseKaiten5_7:  @ 0x5D08FC
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0002, -16, -16
@@ -1363,6 +1466,7 @@ AnimSprite_EkrBaseKaiten5_7:  @ 0x5D08FC
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0008, 0, -16
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten5_8
 AnimSprite_EkrBaseKaiten5_8:  @ 0x5D0938
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -8, 4
@@ -1376,6 +1480,7 @@ AnimSprite_EkrBaseKaiten5_8:  @ 0x5D0938
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x002A, -16, -20
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten5_9
 AnimSprite_EkrBaseKaiten5_9:  @ 0x5D09B0
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0068, -20, -4
@@ -1391,6 +1496,7 @@ AnimSprite_EkrBaseKaiten5_9:  @ 0x5D09B0
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0043, -12, 20
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten5_10
 AnimSprite_EkrBaseKaiten5_10:  @ 0x5D0A40
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_8, 0x005E, -20, -11
@@ -1408,6 +1514,7 @@ AnimSprite_EkrBaseKaiten5_10:  @ 0x5D0A40
 	ANIM_SPRITE_XFLIP ATTR0_TALL, ATTR1_SIZE_8, 0x0058, 28, -20
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten5_11
 AnimSprite_EkrBaseKaiten5_11:  @ 0x5D0AE8
 	ANIM_SPRITE_XFLIP ATTR0_WIDE, ATTR1_SIZE_8, 0x0091, 12, -16
@@ -1427,6 +1534,7 @@ AnimSprite_EkrBaseKaiten5_11:  @ 0x5D0AE8
 	ANIM_SPRITE_XFLIP ATTR0_SQUARE, ATTR1_SIZE_8, 0x0099, 28, -16
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten5_12
 AnimSprite_EkrBaseKaiten5_12:  @ 0x5D0BA8
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x000B, -12, -12
@@ -1435,6 +1543,7 @@ AnimSprite_EkrBaseKaiten5_12:  @ 0x5D0BA8
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0010, 4, 4
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten5_13
 AnimSprite_EkrBaseKaiten5_13:  @ 0x5D0BE4
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -7, -18
@@ -1450,6 +1559,7 @@ AnimSprite_EkrBaseKaiten5_13:  @ 0x5D0BE4
 	ANIM_SPRITE ATTR0_WIDE, ATTR1_SIZE_8, 0x0000, -7, 10
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimSprite_EkrBaseKaiten5_14
 AnimSprite_EkrBaseKaiten5_14:  @ 0x5D0C74
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_16, 0x0000, -7, -18
@@ -1466,6 +1576,7 @@ AnimSprite_EkrBaseKaiten5_14:  @ 0x5D0C74
 	ANIM_SPRITE ATTR0_SQUARE, ATTR1_SIZE_8, 0x0016, 2, 26
 	ANIM_SPRITE_END
 
+.align 2,0
 .global AnimScr_EkrBaseKaiten_085D0D10
 AnimScr_EkrBaseKaiten_085D0D10: @ 0x5D0D10
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten5_1, 2
@@ -1478,6 +1589,7 @@ AnimScr_EkrBaseKaiten_085D0D10: @ 0x5D0D10
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten5_6, 1
 	ANIMSCR_BLOCKED
 
+.align 2,0
 .global AnimScr_EkrBaseKaiten_085D0D34
 AnimScr_EkrBaseKaiten_085D0D34: @ 0x5D0D34
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten5_1, 2
@@ -1490,6 +1602,7 @@ AnimScr_EkrBaseKaiten_085D0D34: @ 0x5D0D34
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten5_11, 1
 	ANIMSCR_BLOCKED
 
+.align 2,0
 .global AnimScr_EkrBaseKaiten_085D0D58
 AnimScr_EkrBaseKaiten_085D0D58: @ 0x5D0D58
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten5_6, 1
@@ -1502,6 +1615,7 @@ AnimScr_EkrBaseKaiten_085D0D58: @ 0x5D0D58
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten5_1, 2
 	ANIMSCR_BLOCKED
 
+.align 2,0
 .global AnimScr_EkrBaseKaiten_085D0D7C
 AnimScr_EkrBaseKaiten_085D0D7C: @ 0x5D0D7C
 	ANIMSCR_FORCE_SPRITE AnimSprite_EkrBaseKaiten5_11, 1
