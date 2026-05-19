@@ -45,8 +45,7 @@ SECTIONS
 	. = __ewram_overlay_beg;
 	ewram_overlay_savemenu (NOLOAD) : ALIGN(4)
 	{
-		. = ALIGN(4); src/savemenu.o(ewram_overlay_savemenu);
-		. = ALIGN(4); src/savemenu_2.o(ewram_overlay_savemenu);
+		*(ewram_overlay_savemenu);
 	}
 	__ewram_overlay_end = MAX(., __ewram_overlay_end);
 
@@ -57,19 +56,22 @@ SECTIONS
 	__ewram_overlay_end = MAX(., __ewram_overlay_end);
 
 	. = __ewram_overlay_end;
-	ewram_data (NOLOAD) : ALIGN(4)
+	. = ALIGN(0x100);
+
+	ewram_data (NOLOAD) : SUBALIGN(0x10)
 	{
-		. = ALIGN(4); INCLUDE "./lds/section_ewram.lds"
-		*(.ewram_data)
-		. = ALIGN(4);
+		/* INCLUDE "./lds/section_ewram.lds" */
+
+		src/hardware.o(ewram_data);
+
+		*(ewram_data)
 
 		/* bss for CHAX is put in ewram */
 		src-hacks/*.o(.bss)
-		. = ALIGN(4);
 		src-hacks/*.o(COMMON)
-		. = ALIGN(4);
 
-		. = 0x02040000 - __ewram_overlay_end; /* end */
+		__ewram_end = .;
+		. = 0x02040000 - __ewram_end; /* end */
 	}
 
 	. = 0x03000000;
@@ -77,10 +79,7 @@ SECTIONS
 	{
 		/* .bss */
 		*(.bss)
-		. = ALIGN(4);
-
 		*(iwram_data)
-		. = ALIGN(4);
 
 		. = 0x008000; /* end */
 	}
