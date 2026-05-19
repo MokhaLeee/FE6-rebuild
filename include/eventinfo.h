@@ -203,7 +203,6 @@ extern struct ProcScr CONST_DATA ProcScr_DemoMonologueDisp[];
 extern u32 EWRAM_DATA gUnk_0203D368;
 extern u32 EWRAM_DATA gDemoMonologueId;
 extern struct Text EWRAM_DATA Texts_DemoMonologue[];
-extern struct Text EWRAM_DATA Text_EndingTimeFlowMonologue;
 extern struct ProcScr CONST_DATA ProcScr_EndingTimeFlowMonologue[];
 extern struct ProcScr CONST_DATA ProcScr_TrueEnding_SortAllies[];
 extern u8 EWRAM_DATA gUnk_0203D3D8; // ending related value

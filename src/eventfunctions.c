@@ -50,6 +50,21 @@
 #include "constants/songs.h"
 #include "constants/videoalloc_global.h"
 
+u32 EWRAM_DATA gUnk_0203D354 = 0;
+u32 EWRAM_DATA gUnk_0203D358 = 0;
+u8 EWRAM_DATA gUnk_0203D35C = 0;
+u8 EWRAM_DATA gUnk_0203D35D = 0;
+u8 EWRAM_DATA gUnk_0203D360 = 0;
+u8 EWRAM_DATA gUnk_0203D361 = 0;
+u8 EWRAM_DATA gUnk_0203D362 = 0;
+u16 EWRAM_DATA gUnk_0203D364 = 0;
+u32 EWRAM_DATA gUnk_0203D368 = 0;
+u32 EWRAM_DATA gDemoMonologueId = 0;
+struct Text EWRAM_DATA Texts_DemoMonologue[6] = {};
+struct Text EWRAM_DATA Text_EndingTimeFlowMonologue[7] = {};
+u8 EWRAM_DATA gUnk_0203D3D8 = 0;
+u8 EWRAM_DATA gEndingId = 0;
+
 bool IsHard(void)
 {
     if (gPlaySt.flags & PLAY_FLAG_HARD)
@@ -2665,8 +2680,8 @@ void EndingTimeFlowMonologue_Init(void)
     ResetText();
     InitTalkTextFont();
 
-    InitText(&Text_EndingTimeFlowMonologue, 14);
-    PutDrawText(&Text_EndingTimeFlowMonologue, gBg0Tm + TM_OFFSET(8, 9),
+    InitText(Text_EndingTimeFlowMonologue, 14);
+    PutDrawText(Text_EndingTimeFlowMonologue, gBg0Tm + TM_OFFSET(8, 9),
         TEXT_COLOR_0123, 0, 0, DecodeMsg(MSG_24A));
 }
 
