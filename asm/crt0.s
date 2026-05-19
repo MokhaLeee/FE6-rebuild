@@ -1,12 +1,13 @@
 
-	.text
+	.section ".crt0","ax"
 	.include "asm_gbaio.inc"
 
 	.syntax unified
 	.arm
 
-_entry:
-	b crt0
+.global _start
+_start:
+	b reset
 
 .L08000004:
 	@ TODO: make header data look nicer
@@ -24,8 +25,8 @@ _entry:
 	.byte 0x46, 0x49, 0x52, 0x45, 0x45, 0x4D, 0x42, 0x4C, 0x45, 0x4D, 0x36, 0x00, 0x41, 0x46, 0x45, 0x4A
 	.byte 0x30, 0x31, 0x96, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xCC, 0x00, 0x00
 
-.global crt0
-crt0:
+.global reset
+reset:
 	@ Switch to IRQ Mode
 	mov r0, #0x12
 	msr cpsr_fc, r0
@@ -45,7 +46,7 @@ crt0:
 	ldr r1, =AgbMain
 	mov lr, pc
 	bx r1
-	b crt0
+	b reset
 
 ___sp_usr:	.word __sp_usr
 ___sp_irq:	.word __sp_irq

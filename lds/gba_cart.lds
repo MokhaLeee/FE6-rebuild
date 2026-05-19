@@ -1,5 +1,3 @@
-OUTPUT_ARCH(arm)
-
 MEMORY
 {
 	rom   : ORIGIN = 0x08000000, LENGTH = 32M
@@ -7,7 +5,9 @@ MEMORY
 	ewram : ORIGIN = 0x02000000, LENGTH = 256K
 }
 
-__text_start            =       ORIGIN(rom);
+ENTRY(_start)
+
+__rom_start             =       ORIGIN(rom);
 __ewram_start           =       ORIGIN(ewram);
 __iwram_start           =       ORIGIN(iwram);
 __iwram_top             =       ORIGIN(iwram) + LENGTH(iwram);;
@@ -15,116 +15,166 @@ __sp_irq                =       __iwram_top - 0x060;
 __sp_usr                =       __sp_irq - 0x1A0;
 __irq_flags             =       0x03007ff8;
 
-gNumMusicPlayers = 9;
-gMaxLines = 0;
-
 SECTIONS
 {
-	__ewram_overlay_beg = 0x02000000;
-	__ewram_overlay_end = __ewram_overlay_beg;
+    /DISCARD/ : {
+        *(.got)
+        *(.got.plt)
+        *(.igot)
+        *(.igot.plt)
+        *(.plt)
+        *(.iplt)
+        *(.rel.dyn)
+        *(.rel.plt)
+        *(.rela.dyn)
+        *(.rela.plt)
+    }
 
-	/* I wonder if there's not two distinct overlays here */
-	/* or one with one instance split in two? */
+	. = __rom_start;
 
-	. = __ewram_overlay_beg;
-	ewram_overlay_0 (NOLOAD) : ALIGN(4)
+	.crt0 :
 	{
-		. = ALIGN(4); INCLUDE "./lds/section_ewram_ov0.lds"
-		. = ALIGN(4); src-hacks/*.o(.ewram_overlay_0)
-	}
-	__ewram_overlay_end = MAX(., __ewram_overlay_end);
+		KEEP (*(.crt0))
+		*(.text.irq)
+		. = ALIGN(4);
+	} >rom =0xff
 
-	. = __ewram_overlay_beg;
-	ewram_overlay_banim (NOLOAD) : ALIGN(4)
+	.text  :
 	{
-		. = ALIGN(4); INCLUDE "./lds/section_ewram_ov1.lds"
-		. = ALIGN(4); src-hacks/*.o(.ewram_overlay_banim)
-	}
-	__ewram_overlay_end = MAX(., __ewram_overlay_end);
-
-	. = __ewram_overlay_beg;
-	ewram_overlay_savemenu (NOLOAD) : ALIGN(4)
-	{
-		*(ewram_overlay_savemenu);
-	}
-	__ewram_overlay_end = MAX(., __ewram_overlay_end);
-
-	. = __ewram_overlay_beg;
-	ewram_overlay_opanim (NOLOAD) : ALIGN(4)
-	{
-	}
-	__ewram_overlay_end = MAX(., __ewram_overlay_end);
-
-	. = __ewram_overlay_end;
-	. = ALIGN(0x100);
-
-	ewram_data (NOLOAD) : SUBALIGN(0x10)
-	{
-		/* INCLUDE "./lds/section_ewram.lds" */
-
-		src/hardware.o(ewram_data);
-
-		*(ewram_data)
-
-		/* bss for CHAX is put in ewram */
-		src-hacks/*.o(.bss)
-		src-hacks/*.o(COMMON)
-
-		__ewram_end = .;
-		. = 0x02040000 - __ewram_end; /* end */
-	}
-
-	. = 0x03000000;
-	IWRAM (NOLOAD) : ALIGN(4)
-	{
-		/* .bss */
-		*(.bss)
-		*(iwram_data)
-
-		. = 0x008000; /* end */
-	}
-
-	. = 0x08000000;
-	ROM : ALIGN(4)
-	{
-		asm/crt0.o(.text)
 		src/armfunc.o(.text)
 		asm/arm.o(.text)
-		. = ALIGN(4);
 
+		*(.text)
 		*(.text*)
 		. = ALIGN(4);
+	} >rom = 0xff
 
-		asm/code_linker_stubs.o(.text)
+	__text_end = .;
 
-		/* here could expand to 0x400000 */
-		. = 0x000A0000;
+	__reloc_map_start = __rom_start + 0x100000;
+	. = __reloc_map_start;
+
+	.reloc ALIGN(4) : AT (__reloc_map_start)
+	{
+		*(.rodata.reloc_list)
+		. = ALIGN(4);
+	} >rom = 0xff
+
+	__reloc_map_end = .;
+
+	__rodata_start = __reloc_map_start + 0x10000;
+	. = __rodata_start;
+
+	.rodata ALIGN(4) : AT (__rodata_start)
+	{
 		EXCLUDE_FILE(gamedata/*.o fonts/*.o banims/*.o) *(.data)
-		. = ALIGN(4);
-
 		EXCLUDE_FILE(gamedata/*.o fonts/*.o banims/*.o) *(.data*)
-		. = ALIGN(4);
-
 		EXCLUDE_FILE(gamedata/*.o fonts/*.o banims/*.o) *(.rodata)
-		. = ALIGN(4);
-
 		EXCLUDE_FILE(gamedata/*.o fonts/*.o banims/*.o) *(.rodata*)
-		. = ALIGN(4);
 
-		. = 0x007FE000;
+		/* todo */
+		. = 0x087FE000 - __rodata_start;
 		INCLUDE "./lds/prlist.lds"
 
-		. = 0x00800000;
+		. = 0x08800000 - __rodata_start;
 		banims/banimdata_gen.o(.data);
 
 		/* gamedata */
 		fonts/build/*.o(.rodata)
-		. = ALIGN(4);
-
 		gamedata/*.o(.data)
-		. = ALIGN(4);
-
 		gamedata/*.o(.rodata)
+	} >rom = 0xff
+
+	__rodata_end = .;
+
+	/**
+	 * EWRAM
+	 */
+	. = __ewram_start;
+
+	/**
+	 * EWRAM overlays
+	 */
+	__ewram_overlay_start = __ewram_start;
+	__ewram_overlay_end   = __ewram_overlay_start;
+
+	. = __ewram_overlay_start;
+	.ov0 ALIGN(4) (NOLOAD) : AT (__ewram_overlay_start)
+	{
+		INCLUDE "./lds/section_ewram_ov0.lds"
 		. = ALIGN(4);
-	}
+		*(.ewram_overlay_0)
+		. = ALIGN(4);
+		__ewram_ov0_end = .;
+	} >ewram
+	__ewram_overlay_end = MAX(__ewram_ov0_end, __ewram_overlay_end);
+
+	. = __ewram_overlay_start;
+	.ov1 ALIGN(4) (NOLOAD) : AT (__ewram_overlay_start)
+	{
+		. = ALIGN(4); INCLUDE "./lds/section_ewram_ov1.lds"
+		*(ewram_overlay_banim)
+		. = ALIGN(4);
+		__ewram_ov1_end = .;
+	} >ewram
+	__ewram_overlay_end = MAX(__ewram_ov1_end, __ewram_overlay_end);
+
+	. = __ewram_overlay_start;
+	.ov2 ALIGN(4) (NOLOAD) : AT (__ewram_overlay_start)
+	{
+		*(ewram_overlay_savemenu)
+		. = ALIGN(4);
+		__ewram_ov2_end = .;
+	} >ewram
+	__ewram_overlay_end = MAX(__ewram_ov2_end, __ewram_overlay_end);
+
+	. = __ewram_overlay_start;
+	.ov3 ALIGN(4) (NOLOAD) : AT (__ewram_overlay_start)
+	{
+		*(.ewram_overlay_3)
+		. = ALIGN(4);
+		__ewram_ov3_end = .;
+	} >ewram
+	__ewram_overlay_end = MAX(__ewram_ov3_end, __ewram_overlay_end);
+
+	. = __ewram_overlay_end;
+	__ewram_lma = __ewram_overlay_end;
+	.ewdata ALIGN(0x100) (NOLOAD) : AT (__ewram_lma)
+	{
+		src/hardware.o(ewram_data);
+		*(ewram_data)
+
+		. = ALIGN(4);
+		__ewram_end = ABSOLUTE(.);
+	} >ewram
+
+	/* IWRAM */
+	. = __iwram_start;
+
+	.iwram_code ALIGN(4) :
+	{
+		. = ALIGN(4);
+		*(.iwram_code)
+		. = ALIGN(4);
+	} >iwram AT>rom
+
+	__iwram_code_lma     = LOADADDR(.iwram_code);
+	__iwram_code_lma_end = LOADADDR(.iwram_code) + SIZEOF(.iwram_code);
+	__iwram_code_vma     = ADDR(.iwram_code);
+
+	.bss ALIGN(4) (NOLOAD) :
+	{
+		__bss_start = ABSOLUTE(.);
+		__bss_start__ = ABSOLUTE(.);
+
+		*(.bss)
+		*(.bss*)
+		*(iwram_data)
+		*(.iwram_data*)
+		*(.iwram*)
+		*(COMMON)
+		. = ALIGN(4);
+		__bss_end__ = ABSOLUTE(.);
+		__end__ = ABSOLUTE(.);
+	} >iwram
 }

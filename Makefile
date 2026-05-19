@@ -96,8 +96,6 @@ CPPFLAGS := $(INC_FLAG) -nostdinc -undef
 AGB_CFLAGS := -g -mthumb-interwork -O2 -Wimplicit -Wparentheses -Werror -fhex-asm -ffix-debug-line
 ASFLAGS := -mcpu=arm7tdmi $(INC_FLAG)
 
-LDS := lds/gba_cart.lds
-
 SRC_DIRS := src asm src-hacks gamedata data
 C_SRCS   := $(foreach dir, $(SRC_DIRS),$(shell find $(dir) -name *.c))
 ASM_SRCS := $(foreach dir, $(SRC_DIRS),$(shell find $(dir) -name *.s))
@@ -327,6 +325,10 @@ CLEAN_FILES += $(C_SRCS:%.c=%.asm)
 # = RECIPES =
 # ===========
 
+LDS := lds/gba_cart.lds
+LIBS := -L./tools/agbcc/lib
+LDFLAGS = -T $(LDS) -Map $(MAP) $(LIBS) -R $(BANIM_OBJECT).sym.o
+
 %.gba: %.elf
 	@echo "[OPY]	$@"
 	@$(OBJCOPY) --strip-debug -O binary $< $@
@@ -337,7 +339,7 @@ CLEAN_FILES += $(C_SRCS:%.c=%.asm)
 
 $(ELF): $(ALL_OBJS) $(BANIM_OBJECT) lds/*.lds
 	@echo "[LD ]	$@"
-	@$(LD) -T $(LDS) -Map $(MAP) -R $(BANIM_OBJECT).sym.o -L./tools/agbcc/lib $(ALL_OBJS) -lc -lgcc -o $@
+	@$(LD) $(LDFLAGS) $(ALL_OBJS) -lc -lgcc -o $@
 
 CLEAN_FILES += $(ROM) $(ELF) $(MAP) $(SYM)
 

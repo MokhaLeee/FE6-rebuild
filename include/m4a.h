@@ -401,8 +401,8 @@ enum
 extern char gNumMusicPlayers[];
 extern char gMaxLines[];
 
-#define NUM_MUSIC_PLAYERS ((u16) (uptr) gNumMusicPlayers)
-#define MAX_LINES ((u32) (uptr) gMaxLines)
+#define NUM_MUSIC_PLAYERS ((u16) (uptr) 9)
+#define MAX_LINES ((u32) (uptr) 0)
 
 extern IWRAM_DATA struct SoundInfo gSoundInfo;
 extern IWRAM_DATA struct MusicPlayer gMPlayInfo_SE4_BMP2;
