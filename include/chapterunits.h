@@ -24,25 +24,6 @@ extern EventScr CONST_DATA EventScr_LoadUnits_Unk_08679A54[];
 extern EventScr CONST_DATA EventScr_LoadUnits_Unk_08679A64[];
 extern EventScr CONST_DATA EventScr_LoadUnits_Unk_08679A74[];
 
-extern struct UnitInfo CONST_DATA UnitInfo_Chapter1_BlueA[];
-extern struct UnitInfo CONST_DATA UnitInfo_Chapter1_BlueB[];
-extern struct UnitInfo CONST_DATA UnitInfo_Chapter1_Lance[];
-extern struct UnitInfo CONST_DATA UnitInfo_Chapter1_RedDummy[];
-extern struct UnitInfo CONST_DATA UnitInfo_Chapter1_RedA[];
-extern struct UnitInfo CONST_DATA UnitInfo_Chapter1_RedB[];
-extern struct UnitInfo CONST_DATA UnitInfo_Chapter1_RedC[];
-extern struct UnitInfo CONST_DATA UnitInfo_Chapter1_Pillager[];
-extern struct UnitInfo CONST_DATA UnitInfo_Chapter1_BlueUnused[];
-extern EventScr CONST_DATA EventScr_LoadUnits_Chapter1_BlueA[];
-extern EventScr CONST_DATA EventScr_LoadUnits_Chapter1_BlueB[];
-extern EventScr CONST_DATA EventScr_LoadUnits_Chapter1_Lance[];
-extern EventScr CONST_DATA EventScr_LoadUnits_Chapter1_RedDummy[];
-extern EventScr CONST_DATA EventScr_LoadUnits_Chapter1_RedA[];
-extern EventScr CONST_DATA EventScr_LoadUnits_Chapter1_RedB[];
-extern EventScr CONST_DATA EventScr_LoadUnits_Chapter1_RedC[];
-extern EventScr CONST_DATA EventScr_LoadUnits_Chapter1_Pillager[];
-extern EventScr CONST_DATA EventScr_LoadUnits_Chapter1_BlueUnused[];
-
 extern struct UnitInfo CONST_DATA UnitInfo_Chapter2_Blue[];
 extern struct UnitInfo CONST_DATA UnitInfo_Chapter2_Merlinus[];
 extern struct UnitInfo CONST_DATA UnitInfo_Chapter2_RedDummy[];

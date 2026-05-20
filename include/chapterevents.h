@@ -79,17 +79,6 @@ extern EventScr CONST_DATA EventScr_Unk_0866B2FC[];
 extern EventScr CONST_DATA EventScr_Unk_0866B350[];
 extern EventScr CONST_DATA EventScr_Unk_0866B5A0[];
 
-extern EventScr CONST_DATA EventScr_Chapter1_Opening[];
-extern EventScr CONST_DATA EventScr_Chapter1_FirstRedTurn[];
-extern EventScr CONST_DATA EventScr_Chapter1_UnusedTalk[];
-extern EventScr CONST_DATA EventScr_Chapter1_Village[];
-extern EventScr CONST_DATA EventScr_Chapter1_TopVillageDummy[];
-extern EventScr CONST_DATA EventScr_Chapter1_HouseA[];
-extern EventScr CONST_DATA EventScr_Chapter1_HouseB[];
-extern EventScr CONST_DATA EventScr_Chapter1_HouseC[];
-extern EventScr CONST_DATA EventScr_Chapter1_HouseUnused[];
-extern EventScr CONST_DATA EventScr_Chapter1_Victory[];
-
 extern u8 CONST_DATA MoveScr_Chapter2_ElenA[];
 extern u8 CONST_DATA MoveScr_Chapter2_ElenB[];
 extern EventScr CONST_DATA EventScr_Chapter2_Opening[];

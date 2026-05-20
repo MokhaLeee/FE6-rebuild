@@ -66,7 +66,7 @@
 
 #define _UNUSED __attribute__((unused))
 
-#define _VANILLA __attribute__((weak))
+#define _WEAK __attribute__((weak))
 
 // #define EWRAM_OVERLAY(id) SECTION(".ewram_overlay_" # id)
 #define EWRAM_OVERLAY_BMAP EWRAM_OVERLAY(0)

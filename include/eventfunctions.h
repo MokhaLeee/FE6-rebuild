@@ -51,7 +51,6 @@ bool IsGuinivereAround(void);
 // func_fe6_0806BF98
 // func_fe6_0806BFA4
 void RemoveFog(void);
-void AddFiveThousandGold(void);
 // RemoveGold
 // WeakenUnitStats
 // WeakenUnitStatsByPid

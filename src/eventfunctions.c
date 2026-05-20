@@ -431,11 +431,6 @@ void RemoveFog(void)
     SetFogVision(0);
 }
 
-void AddFiveThousandGold(void)
-{
-    SetGold(GetGold() + 5000);
-}
-
 void RemoveGold(int gold_amount)
 {
     if (GetGold() >= gold_amount)
@@ -2078,6 +2073,13 @@ void DemoSceneIntro_StartExt(void)
     EndDemoSceneIntro();
     KillTalkAndEvent();
 }
+
+static struct UnitInfo CONST_DATA UnitInfo_Chapter1_BlueUnused[] =
+{
+    { PID_ROY, 0, 0, FALSE, FACTION_ID_BLUE, 1, 9, 7, 9, 7, { IID_RAPIER, IID_VULNERARY }, { 0 } },
+    { PID_MARCUS, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 6, 7, 6, 7, { IID_IRONLANCE }, { 0 } },
+    { 0 }, // end
+};
 
 EventScr CONST_DATA EventScr_DemoScene[] =
 {
