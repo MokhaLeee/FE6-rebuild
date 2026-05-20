@@ -20,4 +20,6 @@ void PutOamLo(int x, int y, u16 const * oam_list, int oam2);
 void MapFloodCoreStep(int connect, int x, int y);
 void MapFloodCore(void);
 
+void InitRamFuncs(void);
+
 #endif // ARMFUNC_H
