@@ -59,3 +59,14 @@ int GetUnitLuck(struct Unit *unit)
 {
 	return unit->lck + GetItemLckBonus(GetUnitEquippedWeapon(unit));
 }
+
+/* CHAX */
+int GetUnitMovement(struct Unit *unit)
+{
+	return UNIT_MOV(unit);
+}
+
+int GetUnitCon(struct Unit *unit)
+{
+	return UNIT_CON(unit);
+}

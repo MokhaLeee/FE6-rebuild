@@ -473,22 +473,6 @@ void UnitAutolevelWeaponExp(struct Unit * unit, struct UnitInfo const * info)
     }
 }
 
-void UnitAutolevelCore(struct Unit * unit, u8 jid, int levelCount)
-{
-    // BUG: jid is unused here
-
-    if (levelCount)
-    {
-        unit->max_hp += GetAutoleveledStatIncrease(unit->jinfo->growth_hp,  levelCount);
-        unit->pow   += GetAutoleveledStatIncrease(unit->jinfo->growth_pow, levelCount);
-        unit->skl   += GetAutoleveledStatIncrease(unit->jinfo->growth_skl, levelCount);
-        unit->spd   += GetAutoleveledStatIncrease(unit->jinfo->growth_spd, levelCount);
-        unit->def   += GetAutoleveledStatIncrease(unit->jinfo->growth_def, levelCount);
-        unit->res   += GetAutoleveledStatIncrease(unit->jinfo->growth_res, levelCount);
-        unit->lck   += GetAutoleveledStatIncrease(unit->jinfo->growth_lck, levelCount);
-    }
-}
-
 void UnitApplyBonusLevels(struct Unit * unit, int levelCount)
 {
     UnitAutolevelCore(unit, unit->jinfo->id, levelCount);
@@ -503,22 +487,6 @@ void UnitAutolevel(struct Unit * unit)
         UnitAutolevelCore(unit, unit->jinfo->jid_promote, UNIT_LEVEL_MAX - 1);
 
     UnitAutolevelCore(unit, unit->jinfo->id, unit->level - 1);
-}
-
-void UnitAutolevelPlayer(struct Unit * unit)
-{
-    int i, levelCount = unit->level - unit->pinfo->base_level;
-
-    for (i = 0; i < levelCount; ++i)
-    {
-        unit->max_hp += GetStatIncrease(unit->pinfo->growth_hp);
-        unit->pow += GetStatIncrease(unit->pinfo->growth_pow);
-        unit->skl += GetStatIncrease(unit->pinfo->growth_skl);
-        unit->spd += GetStatIncrease(unit->pinfo->growth_spd);
-        unit->def += GetStatIncrease(unit->pinfo->growth_def);
-        unit->res += GetStatIncrease(unit->pinfo->growth_res);
-        unit->lck += GetStatIncrease(unit->pinfo->growth_lck);
-    }
 }
 
 void UnitCheckStatOverflow(struct Unit * unit)

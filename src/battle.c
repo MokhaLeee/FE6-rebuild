@@ -239,67 +239,6 @@ bool BattleRandRoll2Rn(u16 threshold, bool simulationResult)
     return RandRoll2Rn(threshold);
 }
 
-void InitBattleUnit(struct BattleUnit * bu, struct Unit * unit)
-{
-    if (!unit)
-        return;
-
-    bu->unit = *unit;
-
-    bu->unit.max_hp = GetUnitMaxHp(unit);
-    bu->unit.pow = GetUnitPower(unit);
-    bu->unit.skl = GetUnitSkill(unit);
-    bu->unit.spd = GetUnitSpeed(unit);
-    bu->unit.def = GetUnitDefense(unit);
-    bu->unit.lck = GetUnitLuck(unit);
-    bu->unit.res = GetUnitResistance(unit);
-    bu->unit.bonus_con = UNIT_CON(unit);
-    bu->unit.bonus_mov = UNIT_MOV(unit);
-
-    bu->previous_level = bu->unit.level;
-    bu->previous_exp = bu->unit.exp;
-    bu->previous_hp = bu->unit.hp;
-
-    bu->output_status = 0xFF;
-
-    bu->change_hp = 0;
-    bu->change_pow = 0;
-    bu->change_skl = 0;
-    bu->change_spd = 0;
-    bu->change_def = 0;
-    bu->change_res = 0;
-    bu->change_lck = 0;
-    bu->change_con = 0;
-
-    gBattleUnitA.wexp_gain = 0;
-    gBattleUnitB.wexp_gain = 0;
-
-    bu->advantage_bonus_hit = 0;
-    bu->advantage_bonus_damage = 0;
-
-    bu->dealt_damage = FALSE;
-
-    gBattleUnitA.weapon_broke = FALSE;
-    gBattleUnitB.weapon_broke = FALSE;
-
-    gBattleUnitA.exp_gain = 0;
-    gBattleUnitB.exp_gain = 0;
-}
-
-void InitBattleUnitWithoutBonuses(struct BattleUnit * bu, struct Unit * unit)
-{
-    InitBattleUnit(bu, unit);
-
-    bu->unit.max_hp = unit->max_hp;
-    bu->unit.pow = unit->pow;
-    bu->unit.skl = unit->skl;
-    bu->unit.spd = unit->spd;
-    bu->unit.def = unit->def;
-    bu->unit.lck = unit->lck;
-    bu->unit.res = unit->res;
-    bu->unit.bonus_con = UNIT_CON_BASE(unit);
-}
-
 void SetBattleUnitTerrainBonuses(struct BattleUnit * bu, int terrain)
 {
     bu->terrain = terrain;
@@ -923,92 +862,6 @@ int GetAutoleveledStatIncrease(int growth, int levels)
     return GetStatIncrease(growth*levels + (RandNext(growth*levels/4) - growth*levels/8));
 }
 
-void CheckBattleUnitLevelUp(struct BattleUnit * bu)
-{
-    if (!CanBattleUnitGainExp(bu))
-        return;
-
-    if (bu->unit.exp >= 100)
-    {
-        int statGainTotal;
-
-        bu->unit.exp -= 100;
-        bu->unit.level++;
-
-        if (bu->unit.level == UNIT_LEVEL_MAX)
-        {
-            bu->exp_gain -= bu->unit.exp;
-            bu->unit.exp = 0xFF;
-        }
-
-        statGainTotal = 0;
-
-        bu->change_hp  = GetStatIncrease(bu->unit.pinfo->growth_hp);
-        statGainTotal += bu->change_hp;
-
-        bu->change_pow = GetStatIncrease(bu->unit.pinfo->growth_pow);
-        statGainTotal += bu->change_pow;
-
-        bu->change_skl = GetStatIncrease(bu->unit.pinfo->growth_skl);
-        statGainTotal += bu->change_skl;
-
-        bu->change_spd = GetStatIncrease(bu->unit.pinfo->growth_spd);
-        statGainTotal += bu->change_spd;
-
-        bu->change_def = GetStatIncrease(bu->unit.pinfo->growth_def);
-        statGainTotal += bu->change_def;
-
-        bu->change_res = GetStatIncrease(bu->unit.pinfo->growth_res);
-        statGainTotal += bu->change_res;
-
-        bu->change_lck = GetStatIncrease(bu->unit.pinfo->growth_lck);
-        statGainTotal += bu->change_lck;
-
-        if (statGainTotal == 0)
-        {
-            for (statGainTotal = 0; statGainTotal < 2; ++statGainTotal)
-            {
-                bu->change_hp = GetStatIncrease(bu->unit.pinfo->growth_hp);
-
-                if (bu->change_hp)
-                    break;
-
-                bu->change_pow = GetStatIncrease(bu->unit.pinfo->growth_pow);
-
-                if (bu->change_pow)
-                    break;
-
-                bu->change_skl = GetStatIncrease(bu->unit.pinfo->growth_skl);
-
-                if (bu->change_skl)
-                    break;
-
-                bu->change_spd = GetStatIncrease(bu->unit.pinfo->growth_spd);
-
-                if (bu->change_spd)
-                    break;
-
-                bu->change_def = GetStatIncrease(bu->unit.pinfo->growth_def);
-
-                if (bu->change_def)
-                    break;
-
-                bu->change_res = GetStatIncrease(bu->unit.pinfo->growth_res);
-
-                if (bu->change_res)
-                    break;
-
-                bu->change_lck = GetStatIncrease(bu->unit.pinfo->growth_lck);
-
-                if (bu->change_lck)
-                    break;
-            }
-        }
-
-        CheckBattleUnitStatCaps(GetUnit(bu->unit.id), bu);
-    }
-}
-
 void UnitPromote(struct Unit * unit)
 {
     int i;
@@ -1164,42 +1017,6 @@ bool HasBattleUnitGainedWeaponLevel(struct BattleUnit * bu)
         return FALSE;
 
     return GetWeaponLevelFromExp(oldExp) != GetWeaponLevelFromExp(newExp);
-}
-
-void UpdateUnitFromBattle(struct Unit * unit, struct BattleUnit * bu)
-{
-    int tmp;
-
-    unit->level = bu->unit.level;
-    unit->exp   = bu->unit.exp;
-    unit->hp = bu->unit.hp;
-    unit->flags = bu->unit.flags;
-
-    if (bu->output_status >= 0)
-        SetUnitStatus(unit, bu->output_status);
-
-    unit->max_hp += bu->change_hp;
-    unit->pow += bu->change_pow;
-    unit->skl += bu->change_skl;
-    unit->spd += bu->change_spd;
-    unit->def += bu->change_def;
-    unit->res += bu->change_res;
-    unit->lck += bu->change_lck;
-
-    UnitCheckStatOverflow(unit);
-
-    tmp = GetBattleUnitUpdatedWeaponExp(bu);
-
-    if (tmp > 0)
-        unit->wexp[bu->weapon_kind] = tmp;
-
-    for (tmp = 0; tmp < ITEMSLOT_INV_COUNT; ++tmp)
-        unit->items[tmp] = bu->unit.items[tmp];
-
-    UnitRemoveInvalidItems(unit);
-
-    if (bu->exp_gain)
-        PidStatsAddExpGained(unit->pinfo->id, bu->exp_gain);
 }
 
 void UpdateUnitDuringBattle(struct Unit * unit, struct BattleUnit * bu)

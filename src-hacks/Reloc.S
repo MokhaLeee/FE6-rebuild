@@ -25,3 +25,6 @@ gpMountIcons: .word gMountIcons
 
 .global gpWTypeIcons
 gpWTypeIcons: .word gWTypeIcons
+
+.global gpJobGrowthList
+gpJobGrowthList: .word gJobGrowthList

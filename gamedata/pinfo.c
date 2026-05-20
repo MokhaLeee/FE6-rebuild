@@ -1105,6 +1105,11 @@ struct PInfo CONST_DATA PInfoTable[] = {
 		.growth_def = 15,
 		.growth_res = 30,
 		.growth_lck = 35,
+
+#if CONFIG_USE_DEBUG
+		.growth_mag = 100,
+#endif
+
 		.banim_pal = { BANIM_PAL_1E, BANIM_PAL_65 },
 		.attributes = 0,
 		.support_info = &SupportInfo_Lugh,

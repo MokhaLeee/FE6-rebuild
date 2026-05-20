@@ -1975,10 +1975,10 @@ enum ekr_lvup_status_index {
     EKRLVUP_STAT_POW,
     EKRLVUP_STAT_SKL,
     EKRLVUP_STAT_SPD,
+    EKRLVUP_STAT_MAG,
     EKRLVUP_STAT_LCK,
     EKRLVUP_STAT_DEF,
     EKRLVUP_STAT_RES,
-    EKRLVUP_STAT_CON,
     EKRLVUP_STAT_MAX,
 
     EKRLVUP_STAT_CLASS = EKRLVUP_STAT_MAX,
@@ -2025,8 +2025,6 @@ extern u16 gEkrLvupPostStatus[EKRLVUP_STAT_MAX];
 extern u16 gEkrLvupScrollPos1;
 extern u16 gEkrLvupScrollPos2;
 extern int gEkrLvupApfxUnexist;
-
-extern const u16 sEfxLvupPartsPos[];
 
 bool CheckEkrLvupDone(void);
 void EndEkrLevelUp(void);
@@ -3798,9 +3796,6 @@ extern u16 const Tsa_EkrFaefx11[];
 extern u16 const Tsa_EkrFaefx12[];
 extern const s16 gAnimSpriteRotScalePosX[];
 extern const s16 gAnimSpriteRotScalePosY[];
-// extern ??? EkrLvupMsgsStr
-// extern ??? EkrLvupMsgsMag
-// extern ??? sEfxLvupPartsPos
 extern const char gMsg_Lv[];
 extern const i16 FrameArray_EkrTriPegagusBGLeft[];
 extern const i16 FrameArray_EkrTriPegagusBGRight[];

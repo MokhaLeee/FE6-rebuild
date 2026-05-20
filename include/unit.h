@@ -174,7 +174,11 @@ struct PInfo
     /* 22 */ u8 growth_lck;
 
     /* 23 */ u8 banim_pal[2];
-    /* 25 */ // pad
+
+    /* msg */
+    /* 25 */ i8 base_mag;
+    /* 26 */ i8 growth_mag;
+    /* 27 */ // pad
 
     /* 28 */ u32 attributes;
 
@@ -218,7 +222,9 @@ struct JInfo
     /* 1F */ i8 growth_def;
     /* 20 */ i8 growth_res;
     /* 21 */ i8 growth_lck;
-    /* 22 */ // pad
+
+    /* msg */
+    /* 22 */ i8 growth_mag;
 
     /* 24 */ u32 attributes;
 
@@ -422,5 +428,7 @@ int GetUnitSpeed(struct Unit *unit);
 int GetUnitDefense(struct Unit *unit);
 int GetUnitResistance(struct Unit *unit);
 int GetUnitLuck(struct Unit *unit);
+int GetUnitMovement(struct Unit *unit);
+int GetUnitCon(struct Unit *unit);
 
 #endif // UNIT_H

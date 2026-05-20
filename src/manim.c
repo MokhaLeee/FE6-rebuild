@@ -3186,7 +3186,7 @@ struct ManimLevelUpLabelInfo CONST_DATA gManimLevelUpLabelInfoList[] =
 
     {
         .x = 1, .y = 6,
-        .labels = { SystemLabel_Strength, SystemLabel_Magic },
+        .labels = { SystemLabel_Strength, SystemLabel_Strength },
     },
 
     {
@@ -3201,22 +3201,22 @@ struct ManimLevelUpLabelInfo CONST_DATA gManimLevelUpLabelInfoList[] =
 
     {
         .x = 9, .y = 4,
-        .labels = { SystemLabel_Luck, SystemLabel_Luck },
+        .labels = { SystemLabel_Magic, SystemLabel_Magic },
     },
 
     {
         .x = 9, .y = 6,
-        .labels = { SystemLabel_Defense, SystemLabel_Defense },
+        .labels = { SystemLabel_Luck, SystemLabel_Luck },
     },
 
     {
         .x = 9, .y = 8,
-        .labels = { SystemLabel_Resistance, SystemLabel_Resistance },
+        .labels = { SystemLabel_Defense, SystemLabel_Defense },
     },
 
     {
         .x = 9, .y = 10,
-        .labels = { SystemLabel_Constitution, SystemLabel_Constitution },
+        .labels = { SystemLabel_Resistance, SystemLabel_Resistance },
     },
 
     // end
@@ -3244,7 +3244,7 @@ void PutManimLevelUpFrame(int actor_id, int x, int y)
         PutStringCentered(
             gBg0Tm + TM_OFFSET(x + gManimLevelUpLabelInfoList[i].x, y + gManimLevelUpLabelInfoList[i].y),
             TEXT_COLOR_SYSTEM_GOLD, 3,
-            gManimLevelUpLabelInfoList[i].labels[UnitKnowsMagic(gManimSt.actor[actor_id].unit) == TRUE][GetLang()]);
+            gManimLevelUpLabelInfoList[i].labels[0][GetLang()]);
     }
 
     EnableBgSync(BG0_SYNC_BIT + BG1_SYNC_BIT);
@@ -3256,81 +3256,6 @@ void PutManimLevelUpStat(int actor_id, int x, int y, int stat_num, bool after_ga
         gBg0Tm + TM_OFFSET(x + gManimLevelUpLabelInfoList[stat_num].x + 4, y + gManimLevelUpLabelInfoList[stat_num].y),
         TEXT_COLOR_SYSTEM_BLUE,
         GetManimLevelUpBaseStat(actor_id, stat_num) + (after_gain ? GetManimLevelUpStatGain(actor_id, stat_num) : 0));
-}
-
-int GetManimLevelUpStatGain(int actor_id, int stat_num)
-{
-    switch (stat_num)
-    {
-        case 0:
-            return 1;
-
-        case 1:
-            return gManimSt.actor[actor_id].bu->change_hp;
-
-        case 2:
-            return gManimSt.actor[actor_id].bu->change_pow;
-
-        case 3:
-            return gManimSt.actor[actor_id].bu->change_skl;
-
-        case 4:
-            return gManimSt.actor[actor_id].bu->change_spd;
-
-        case 5:
-            return gManimSt.actor[actor_id].bu->change_lck;
-
-        case 6:
-            return gManimSt.actor[actor_id].bu->change_def;
-
-        case 7:
-            return gManimSt.actor[actor_id].bu->change_res;
-
-        case 8:
-            return gManimSt.actor[actor_id].bu->change_con;
-
-        default:
-            return 0;
-    }
-}
-
-int GetManimLevelUpBaseStat(int actor_id, int stat_num)
-{
-    // getting the original unit to ensure we get the base stats
-    struct Unit * unit = GetUnit(gManimSt.actor[actor_id].unit->id);
-
-    switch (stat_num)
-    {
-        case 0:
-            return gManimSt.actor[actor_id].bu->previous_level;
-
-        case 1:
-            return unit->max_hp;
-
-        case 2:
-            return unit->pow;
-
-        case 3:
-            return unit->skl;
-
-        case 4:
-            return unit->spd;
-
-        case 5:
-            return unit->lck;
-
-        case 6:
-            return unit->def;
-
-        case 7:
-            return unit->res;
-
-        case 8:
-            return UNIT_CON_BASE(unit);
-
-        default:
-            return 0;
-    }
 }
 
 struct ProcScr CONST_DATA ProcScr_ManimLevelUpStatGainLabel[] =
