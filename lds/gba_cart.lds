@@ -17,19 +17,6 @@ __irq_flags             =       0x03007ff8;
 
 SECTIONS
 {
-    /DISCARD/ : {
-        *(.got)
-        *(.got.plt)
-        *(.igot)
-        *(.igot.plt)
-        *(.plt)
-        *(.iplt)
-        *(.rel.dyn)
-        *(.rel.plt)
-        *(.rela.dyn)
-        *(.rela.plt)
-    }
-
 	. = __rom_start;
 
 	.crt0 :
@@ -48,9 +35,9 @@ SECTIONS
 		*(.text*)
 		. = ALIGN(4);
 	} >rom = 0xff
-
 	__text_end = .;
 
+	/* max: 0x400000 */
 	__reloc_map_start = __rom_start + 0x100000;
 	. = __reloc_map_start;
 
@@ -62,21 +49,24 @@ SECTIONS
 
 	__reloc_map_end = .;
 
-	__rodata_start = __reloc_map_start + 0x10000;
-	. = __rodata_start;
+	__krodata_start = .;
+	. = __krodata_start;
 
-	.rodata ALIGN(4) : AT (__rodata_start)
+	.rodata ALIGN(4) : AT (__krodata_start)
 	{
 		EXCLUDE_FILE(gamedata/*.o fonts/*.o banims/*.o) *(.data)
 		EXCLUDE_FILE(gamedata/*.o fonts/*.o banims/*.o) *(.data*)
 		EXCLUDE_FILE(gamedata/*.o fonts/*.o banims/*.o) *(.rodata)
 		EXCLUDE_FILE(gamedata/*.o fonts/*.o banims/*.o) *(.rodata*)
+	} >rom = 0xff
 
-		/* todo */
-		. = 0x087FE000 - __rodata_start;
-		INCLUDE "./lds/prlist.lds"
+	__krodata_end = .;
 
-		. = 0x08800000 - __rodata_start;
+	__rodata_start = __rom_start + 0x00500000;
+	. = __rodata_start;
+
+	.rodata ALIGN(4) : AT (__rodata_start)
+	{
 		banims/banimdata_gen.o(.data);
 
 		/* gamedata */

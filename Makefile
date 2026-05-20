@@ -15,7 +15,7 @@ ifeq ($(strip $(DEVKITARM)),)
 	$(error "Please set DEVKITARM in your environment. export DEVKITARM=<path to>devkitARM)
 endif
 
-BANIM_LINK_ADDR:=0x08800000
+BANIM_LINK_ADDR:=0x08500000
 
 # ==================
 # = PROJECT CONFIG =
