@@ -1,8 +1,5 @@
 	.include "macro.inc"
 
-	@ modern ld doesn't generate the same sequences
-	@ so we can't use it to replace this file in matching builds
-
 	thumb_func_start ClearOam_thm
 ClearOam_thm: @ 0x0809FA90
 	bx pc
