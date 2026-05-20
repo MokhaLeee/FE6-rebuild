@@ -42,7 +42,7 @@ const char *GetCharTextLen(const char *str, i32 *width)
 
 int GetStringTextLen(const char *str)
 {
-	u32 _wid;
+	i32 _wid;
 	int width = 0;
 
 	while (*str != 0 && *str != 1) {
