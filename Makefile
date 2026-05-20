@@ -393,6 +393,7 @@ CC_LDFLAGS = -T $(LDS) -Wl,-Map $(MAP) $(LIBS) -Wl,-R $(BANIM_OBJECT).sym.o
 %.gba: %.elf
 	@echo "[OPY]	$@"
 	@$(OBJCOPY) --strip-debug -O binary $< $@
+	@gbafix $@ -t$(BUILD_NAME) -c0000 -m00
 
 %.sym: %.elf
 	@echo "[SYM]	$@"

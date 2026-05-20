@@ -3,8 +3,8 @@
 #include "types.h"
 
 void SetSramFastFunc(void);
-void WriteSramFast(u8 const * src, u8 * dest, u32 size);
-u32 WriteAndVerifySramFast(void const * src, void * dest, u32 size);
+void WriteSramFast(u8 const * src, u8 * dest, int size);
+u32 WriteAndVerifySramFast(void const * src, void * dest, int size);
 void ReadSramFast(void const *_src, void *_dest, int size);
 u32 VerifySramFast(void const *_src, void *_dest, int size);
 
