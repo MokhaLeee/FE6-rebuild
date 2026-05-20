@@ -182,5 +182,3 @@ IWRAM_DATA struct MusicPlayer gMPlayInfo_SE2_SYS2 = {};
 /**
  * Save
  */
-IWRAM_DATA void (* ReadSramFast)(void const * src, void * dest, u32 size) = NULL;
-IWRAM_DATA u32 (* VerifySramFast)(void const * src, void * dest, u32 size) = NULL;
