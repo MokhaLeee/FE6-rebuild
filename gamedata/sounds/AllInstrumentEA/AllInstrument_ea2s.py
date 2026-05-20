@@ -39,8 +39,6 @@ def convert_to_asm(input_file, output_file, skip_incbin=False):
             label = line.split(':')[0].strip()
             labels.add(label)
     
-
-    
     i = 0
     while i < len(lines):
         line = lines[i].rstrip()
@@ -79,11 +77,7 @@ def convert_to_asm(input_file, output_file, skip_incbin=False):
         
         # Handle ALIGN
         if line.startswith('ALIGN'):
-            match = re.search(r'ALIGN\s+(\d+)', line)
-            if match:
-                out.append(f'    .balign {match.group(1)}')
-            else:
-                out.append('    .balign 4')
+            out.append('    .align 2,0')
             i += 1
             continue
         
@@ -99,7 +93,7 @@ def convert_to_asm(input_file, output_file, skip_incbin=False):
             # Parse POIN labels
             poins = parse_poins(line)
             for poin in poins:
-                out.append(f'    .word {poin}')
+                out.append(f'    .word _{poin}')
             
             i += 1
             continue
@@ -108,10 +102,10 @@ def convert_to_asm(input_file, output_file, skip_incbin=False):
         if line.startswith('POIN'):
             poins = parse_poins(line)
             for poin in poins:
-                out.append(f'    .word {poin}')
+                out.append(f'    .word _{poin}')
             i += 1
             continue
-        
+
         # Other lines -> comment
         if line and not line.startswith('_'):
             out.append(f'    @ {line}')
@@ -125,7 +119,7 @@ def convert_to_asm(input_file, output_file, skip_incbin=False):
     print(f'Warning: .incbin files may not exist - use skip_incbin=True to comment them out')
 
 if __name__ == '__main__':
-    input_file = sys.argv[1] if len(sys.argv) > 1 else 'AllInstrument.txt'
+    input_file = sys.argv[1] if len(sys.argv) > 1 else 'AllInstrument.event'
     output_file = sys.argv[2] if len(sys.argv) > 2 else 'AllInstrument.s'
     skip = '--skip-incbin' in sys.argv
     
