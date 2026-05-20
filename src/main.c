@@ -19,10 +19,6 @@ void InitGlobalSaveInfo(void);
 
 void AgbMain(void)
 {
-    // clear RAM
-    DmaFill32(3, 0, (void *) IWRAM_START, 0x7F80);
-    CpuFastFill(0, (void *) EWRAM_START, 0x40000);
-
     REG_WAITCNT = WAITCNT_SRAM_4
         | WAITCNT_WS0_N_3 | WAITCNT_WS0_S_1
         | WAITCNT_WS1_N_3 | WAITCNT_WS1_S_1

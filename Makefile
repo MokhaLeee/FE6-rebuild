@@ -93,7 +93,7 @@ ASM_SRCS := $(foreach dir, $(SRC_DIRS),$(shell find $(dir) -name *.s))
 HACK_SRC  := src-hacks
 HACK_DIRS := $(HACK_SRC)
 HACK_C_SRCS := $(foreach dir, $(HACK_DIRS),$(shell find $(dir) -name *.c))
-HACK_S_SRCS += $(foreach dir, $(HACK_DIRS),$(shell find $(dir) -name *.s))
+HACK_S_SRCS += $(foreach dir, $(HACK_DIRS),$(shell find $(dir) -name *.S))
 
 LIB_DIRS := $(DEVKITPRO)/libgba $(AGBCC_HOME)
 
@@ -310,7 +310,7 @@ $(CACHE_DIR)/%.d: %.s
 
 SDEPFLAGS := -MD "$(CACHE_DIR)/$*.d"
 
-$(HACK_SRC)/%.o: $(HACK_SRC)/%.s
+$(HACK_SRC)/%.o: $(HACK_SRC)/%.S
 	@echo "[AS ]	$@"
 #	@$(CC) $(CFLAGS) $(EXT_FLAGS) $(CDEPFLAGS) -g -c $< -o $@
 	@$(CC) $(CFLAGS) $(EXT_FLAGS) -g -c $< -o $@
@@ -369,7 +369,7 @@ DATA_OBJS := $(DATA_SRCS:%.s=%.o)
 ALL_OBJS += $(C_OBJS) $(ASM_OBJS) $(DATA_OBJS)
 ALL_DEPS += $(ALL_OBJS:%.o=%.d)
 
-HACK_OBJS := $(HACK_C_SRCS:%.c=%.o) $(HACK_S_SRCS:%.s=%.o)
+HACK_OBJS := $(HACK_C_SRCS:%.c=%.o) $(HACK_S_SRCS:%.S=%.o)
 ALL_OBJS += $(HACK_OBJS)
 ALL_DEPS += $(HACK_OBJS:%.o=$(CACHE_DIR)/%.d)
 

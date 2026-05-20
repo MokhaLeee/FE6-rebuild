@@ -15,8 +15,6 @@ gSongTable:
     song dummy_song, 1, 1
     song dummy_song, 1, 1
     song Song_Fe6PlayerPhase1, 1, 1
-    @ song Song_FodlanWinds, 1, 1
-
     song dummy_song, 1, 1
     song dummy_song, 1, 1
     song dummy_song, 1, 1

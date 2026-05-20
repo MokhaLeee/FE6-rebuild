@@ -42,7 +42,6 @@ SECTIONS
 	.text  :
 	{
 		src/armfunc.o(.text)
-		asm/arm.o(.text)
 
 		*(.text)
 		*(.text*)
@@ -51,32 +50,35 @@ SECTIONS
 
 	__text_end = .;
 
-	__reloc_map_start = __rom_start + 0x100000;
-	. = __reloc_map_start;
+	__krodata_start = .;
+	. = __krodata_start;
 
-	.reloc ALIGN(4) : AT (__reloc_map_start)
-	{
-		*(.rodata.reloc_list)
-		. = ALIGN(4);
-	} >rom = 0xff
-
-	__reloc_map_end = .;
-
-	__rodata_start = __reloc_map_start + 0x10000;
-	. = __rodata_start;
-
-	.rodata ALIGN(4) : AT (__rodata_start)
+	.rodata ALIGN(4) : AT (__krodata_start)
 	{
 		EXCLUDE_FILE(gamedata/*.o fonts/*.o banims/*.o) *(.data)
 		EXCLUDE_FILE(gamedata/*.o fonts/*.o banims/*.o) *(.data*)
 		EXCLUDE_FILE(gamedata/*.o fonts/*.o banims/*.o) *(.rodata)
 		EXCLUDE_FILE(gamedata/*.o fonts/*.o banims/*.o) *(.rodata*)
+	} >rom = 0xff
 
-		/* todo */
-		. = 0x087FE000 - __rodata_start;
-		INCLUDE "./lds/prlist.lds"
+	__krodata_end = .;
 
-		. = 0x08800000 - __rodata_start;
+	__reloc_map_start = __rom_start + 0x007FE000;
+	. = __reloc_map_start;
+
+	.reloc ALIGN(4) : AT (__reloc_map_start)
+	{
+		*(.reloc_list)
+		. = ALIGN(4);
+	} >rom = 0xff
+
+	__reloc_map_end = .;
+
+	__rodata_start = __rom_start + 0x00800000;
+	. = __rodata_start;
+
+	.rodata ALIGN(4) : AT (__rodata_start)
+	{
 		banims/banimdata_gen.o(.data);
 
 		/* gamedata */
