@@ -1,14 +1,10 @@
 	.include "macro.inc"
-
-	.text
-	@.section .iwram_code
-
-	.global ArmCodeStart
-	.type ArmCodeStart, object
-ArmCodeStart:
-
 	.syntax unified
 	.arm
+
+	@ .text
+	.section .iwram_code
+
 
 .LPal: .4byte gPal
 .LFadeComponents: .4byte gFadeComponents
@@ -634,7 +630,3 @@ _080008AC:
 .LMapFloodCoreRet:
 	pop {r4, r5, r6, lr}
 	bx lr
-
-	.global ArmCodeEnd
-	.type   ArmCodeEnd, object
-ArmCodeEnd:

@@ -1214,7 +1214,7 @@ PrepSubItem_ViewAll_Loop: @ 0x0807EDBC
 	movs r1, #0xf
 	movs r2, #1
 	movs r3, #0
-	bl TmFillRect_thm
+	bl TmFillRect
 	movs r0, #4
 	bl EnableBgSync
 	movs r0, #0
@@ -1249,7 +1249,7 @@ PrepSubItem_ViewAll_Loop: @ 0x0807EDBC
 	movs r1, #0xf
 	movs r2, #1
 	movs r3, #0
-	bl TmFillRect_thm
+	bl TmFillRect
 	movs r0, #4
 	bl EnableBgSync
 	movs r0, #0

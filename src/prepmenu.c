@@ -1429,12 +1429,12 @@ asm("\
 	movs r1, #0xc\n\
 	movs r2, #0x13\n\
 	movs r3, #0\n\
-	bl TmFillRect_thm\n\
+	bl TmFillRect\n\
 	ldr r0, .L0807B598 @ =gBg1Tm\n\
 	movs r1, #0xc\n\
 	movs r2, #0x13\n\
 	movs r3, #0\n\
-	bl TmFillRect_thm\n\
+	bl TmFillRect\n\
 	mov r0, r8\n\
 	bl func_fe6_08079D84\n\
 .L0807B50C:\n\

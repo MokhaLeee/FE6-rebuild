@@ -273,17 +273,17 @@ PrepSubItem_SelLoop1: @ 0x0807FF98
 	movs r1, #0xf
 	movs r2, #0x13
 	movs r3, #0
-	bl TmFillRect_thm
+	bl TmFillRect
 	ldr r0, .L08080214 @ =gBg1Tm
 	movs r1, #0xf
 	movs r2, #0x13
 	movs r3, #0
-	bl TmFillRect_thm
+	bl TmFillRect
 	ldr r0, .L08080218 @ =gBg2Tm
 	movs r1, #0xf
 	movs r2, #0x1f
 	movs r3, #0
-	bl TmFillRect_thm
+	bl TmFillRect
 	ldr r1, .L0808021C @ =gPrepItemListData
 	adds r0, r5, #0
 	adds r0, #0x50
@@ -566,17 +566,17 @@ PrepSubItem_SelLoop2: @ 0x08080284
 	movs r1, #0xf
 	movs r2, #0x13
 	movs r3, #0
-	bl TmFillRect_thm
+	bl TmFillRect
 	ldr r0, .L080804AC @ =gBg1Tm
 	movs r1, #0xf
 	movs r2, #0x13
 	movs r3, #0
-	bl TmFillRect_thm
+	bl TmFillRect
 	ldr r0, .L080804B0 @ =gBg2Tm
 	movs r1, #0xf
 	movs r2, #0x1f
 	movs r3, #0
-	bl TmFillRect_thm
+	bl TmFillRect
 	movs r0, #0
 	str r0, [sp]
 	movs r0, #1
@@ -835,12 +835,12 @@ PrepSubItem_SelLoop2: @ 0x08080284
 	movs r1, #0xe
 	movs r2, #0x13
 	movs r3, #0
-	bl TmFillRect_thm
+	bl TmFillRect
 	ldr r0, .L080806A4 @ =gBg1Tm
 	movs r1, #0xe
 	movs r2, #0x13
 	movs r3, #0
-	bl TmFillRect_thm
+	bl TmFillRect
 	ldr r1, .L080806A8 @ =gPrepItemListData
 	mov r4, r8
 	ldrh r4, [r4]
@@ -2134,7 +2134,7 @@ PrepSubItem_SelLoop2: @ 0x08080284
 	movs r1, #0xf
 	movs r2, #1
 	movs r3, #0
-	bl TmFillRect_thm
+	bl TmFillRect
 	movs r0, #4
 	bl EnableBgSync
 	movs r0, #0
@@ -2178,7 +2178,7 @@ PrepSubItem_SelLoop2: @ 0x08080284
 	movs r1, #0xf
 	movs r2, #1
 	movs r3, #0
-	bl TmFillRect_thm
+	bl TmFillRect
 	movs r0, #4
 	bl EnableBgSync
 	movs r0, #0
