@@ -29,7 +29,6 @@ SECTIONS
 	.text  :
 	{
 		src/armfunc.o(.text)
-		asm/arm.o(.text)
 
 		*(.text)
 		*(.text*)

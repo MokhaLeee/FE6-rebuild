@@ -164,7 +164,7 @@ func_fe6_0808FFE0: @ 0x0808FFE0
 	movs r4, #0x80
 	lsls r4, r4, #7
 	orrs r3, r4
-	bl PutOamHiRam
+	bl PutOamHi_thm
 	adds r2, r5, #1
 	ldr r1, .L08090178 @ =gEndingCredit_FontObjConf
 	adds r0, r1, #0
@@ -244,7 +244,7 @@ func_fe6_0808FFE0: @ 0x0808FFE0
 	movs r4, #0x80
 	lsls r4, r4, #7
 	orrs r3, r4
-	bl PutOamHiRam
+	bl PutOamHi_thm
 	adds r1, r5, #1
 	ldr r0, .L0809020C @ =gEndingCredit_FontObjConf
 	adds r0, r6, r0
@@ -318,7 +318,7 @@ func_fe6_0808FFE0: @ 0x0808FFE0
 	movs r4, #0x80
 	lsls r4, r4, #7
 	orrs r3, r4
-	bl PutOamHiRam
+	bl PutOamHi_thm
 	adds r1, r5, #1
 	ldr r0, .L080902E0 @ =gEndingCredit_FontObjConf
 	adds r0, r6, r0

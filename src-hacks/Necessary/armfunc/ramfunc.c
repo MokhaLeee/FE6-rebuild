@@ -29,33 +29,3 @@ void InitRamFuncs(void)
     MapFloodCoreStepRamFunc = (void *) RamFuncArea + (((u8 *) (void *) MapFloodCoreStep) - ArmCodeStart);
     MapFloodCoreRamFunc     = (void *) RamFuncArea + (((u8 *) (void *) MapFloodCore)     - ArmCodeStart);
 }
-
-void DrawGlyphRam(u16 const * cvtLut, void * chr, u32 const * glyph, int offset)
-{
-    DrawGlyphRamFunc(cvtLut, chr, glyph, offset);
-}
-
-void DecodeStringRam(char const * src, char * dst)
-{
-    DecodeStringRamFunc(src, dst);
-}
-
-void PutOamHiRam(int x, int y, u16 const * oam_list, int oam2)
-{
-    PutOamHiRamFunc(x, y, oam_list, oam2);
-}
-
-void PutOamLoRam(int x, int y, u16 const * oam_list, int oam2)
-{
-    PutOamLoRamFunc(x, y, oam_list, oam2);
-}
-
-void MapFloodCoreStepRam(int connect, int x, int y)
-{
-    MapFloodCoreStepRamFunc(connect, x, y);
-}
-
-void MapFloodCoreRam(void)
-{
-    MapFloodCoreRamFunc();
-}
