@@ -13,7 +13,6 @@
 	.global	Song_FodlanWinds
 	.align	2
 
-
 @**************** Track 1 (Midi-Chn.0) ****************@
 
 song07_001:

@@ -941,3 +941,4 @@ MigrationBackup/
 *.rep
 
 .vscode
+.cache_dir

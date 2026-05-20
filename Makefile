@@ -15,14 +15,13 @@ ifeq ($(strip $(DEVKITARM)),)
 	$(error "Please set DEVKITARM in your environment. export DEVKITARM=<path to>devkitARM)
 endif
 
+BANIM_LINK_ADDR:=0x08800000
+
 # ==================
 # = PROJECT CONFIG =
 # ==================
 
 BUILD_NAME := fe6re
-
-CLEAN_FILES :=
-CLEAN_DIRS  :=
 
 ROM := $(BUILD_NAME).gba
 ELF := $(ROM:%.gba=%.elf)
@@ -33,7 +32,11 @@ DEPENDS :=
 
 all: $(ROM) $(SYM)
 
-BANIM_LINK_ADDR:=0x08800000
+CACHE_DIR := .cache_dir
+$(shell mkdir -p $(CACHE_DIR) > /dev/null)
+
+CLEAN_FILES :=
+CLEAN_DIRS  := $(CACHE_DIR) .release_dir $(shell find -name __pycache__)
 
 # ====================
 # = TOOL DEFINITIONS =
@@ -56,15 +59,9 @@ endif
 
 PREFIX := arm-none-eabi-
 
-ifeq ($(UNAME_S),Darwin)
-  ifneq (,$(TOOLCHAIN))
-    PREFIX := $(TOOLCHAIN)/bin/$(PREFIX)
-  endif
-  SHASUM ?= shasum
-endif
-
 export OBJCOPY := $(PREFIX)objcopy
 export AS := $(PREFIX)as
+export CC := $(PREFIX)gcc
 export CPP := $(PREFIX)cpp
 export LD := $(PREFIX)ld
 export STRIP := $(PREFIX)strip
@@ -89,16 +86,16 @@ SHASUM ?= sha1sum
 
 C_GENERATED :=
 
-INC_DIRS := include include/vanilla include/hacks asm/include $(AGBCC_HOME)/include .
-INC_FLAG := $(foreach dir, $(INC_DIRS), -I $(dir))
-
-CPPFLAGS := $(INC_FLAG) -nostdinc -undef
-AGB_CFLAGS := -g -mthumb-interwork -O2 -Wimplicit -Wparentheses -Werror -fhex-asm -ffix-debug-line
-ASFLAGS := -mcpu=arm7tdmi $(INC_FLAG)
-
-SRC_DIRS := src asm src-hacks gamedata data
+SRC_DIRS := src asm gamedata data
 C_SRCS   := $(foreach dir, $(SRC_DIRS),$(shell find $(dir) -name *.c))
 ASM_SRCS := $(foreach dir, $(SRC_DIRS),$(shell find $(dir) -name *.s))
+
+HACK_SRC  := src-hacks
+HACK_DIRS := $(HACK_SRC)
+HACK_C_SRCS := $(foreach dir, $(HACK_DIRS),$(shell find $(dir) -name *.c))
+HACK_S_SRCS += $(foreach dir, $(HACK_DIRS),$(shell find $(dir) -name *.s))
+
+LIB_DIRS := $(DEVKITPRO)/libgba $(AGBCC_HOME)
 
 # =========
 # = Texts =
@@ -193,7 +190,8 @@ STRIPER        := $(BANIM_TOOLS)/strip.sh
 BANIM_OBJECT := banims/banimdata_gen.o
 
 $(BANIM_OBJECT): $(BANIM_LDS) $(shell $(BANIM_LINKER) -t $(BANIM_LDS) -m)
-	@$(BANIM_LINKER) -o $@ -t $(BANIM_LDS) -b $(BANIM_LINK_ADDR) -l $(LD) --objcopy $(OBJCOPY) -c ./tools/banimtools/compressor.py
+	@echo "[LYN]	$@"
+	@$(BANIM_LINKER) -o $@ -t $(BANIM_LDS) -b $(BANIM_LINK_ADDR) -l $(LD) --objcopy $(OBJCOPY) -c ./tools/banimtools/compressor.py > /dev/null
 
 %.stripped: %
 	@echo "[STP]	$@"
@@ -266,6 +264,65 @@ glyph: $(GLYPH_INSTALLER)
 # ============
 # = Wizardry =
 # ============
+INC_DIRS := include include/hacks asm/include .
+INC_FLAG := $(foreach dir, $(INC_DIRS), -I$(dir)) \
+			$(foreach dir, $(LIB_DIRS), -I$(dir)/include)
+
+ARCH := -mcpu=arm7tdmi
+CFLAGS := -g $(ARCH) -mtune=arm7tdmi \
+		  $(INC_FLAG) \
+		  -std=gnu99 -O2 -fno-builtin \
+		  -Wall -Wextra -Werror -Wno-unused-parameter
+
+CFLAGS += -fno-jump-tables
+# CFLAGS += -fno-inline
+
+ASFLAGS := -g $(ARCH) $(INC_FLAG)
+LDFLAGS = -g $(ARCH) -Wl,-Map,$(notdir $*.map)
+
+CDEPFLAGS = -MMD -MQ "$*.o" -MQ "$*.asm" -MF "$(CACHE_DIR)/$*.d" -MP
+SDEPFLAGS = --MD "$(CACHE_DIR)/$(notdir $*).d"
+
+%.o:   EXT_FLAGS := -mthumb -mthumb-interwork
+%.asm: EXT_FLAGS := -mthumb -mthumb-interwork
+
+%.arm.o   : EXT_FLAGS := -marm
+%.arm.asm : EXT_FLAGS := -marm
+
+%iwram.o   : EXT_FLAGS := -marm -mlong-calls
+%iwram.asm : EXT_FLAGS := -marm -mlong-calls
+
+$(HACK_SRC)/%.o: $(HACK_SRC)/%.c
+	@echo "[CC ]	$@"
+	@mkdir -p $(dir $@) $(dir $(CACHE_DIR)/$*.d)
+	@$(CC) $(CFLAGS) $(EXT_FLAGS) $(CDEPFLAGS) -g -c $< -o $@
+
+$(HACK_SRC)/%.asm: $(HACK_SRC)/%.c
+	@echo "[CC ]	$@"
+	@mkdir -p $(dir $@) $(dir $(CACHE_DIR)/$*.d)
+	@$(CC) $(CFLAGS) $(EXT_FLAGS) $(CDEPFLAGS) -S $< -o $@ -fverbose-asm
+
+ASM_DEP := python3 Tools/asmtools/asmdep.py
+$(CACHE_DIR)/%.d: %.s
+	@mkdir -p $(dir $@)
+	@echo "$*.o: \\" > $@
+	@$(ASM_DEP) $(INC_FLAG) $< >> $@
+
+SDEPFLAGS := -MD "$(CACHE_DIR)/$*.d"
+
+$(HACK_SRC)/%.o: $(HACK_SRC)/%.s
+	@echo "[AS ]	$@"
+#	@$(CC) $(CFLAGS) $(EXT_FLAGS) $(CDEPFLAGS) -g -c $< -o $@
+	@$(CC) $(CFLAGS) $(EXT_FLAGS) -g -c $< -o $@
+#	@$(AS) $(ASFLAGS) $(SDEPFLAGS) -I $(dir $<) $< -o $@
+
+# ===========
+# = Vanilla =
+# ===========
+CPPFLAGS := $(INC_FLAG) -nostdinc -undef
+AGB_CFLAGS := -g -mthumb-interwork -O2 -Wimplicit -Wparentheses -Werror -fhex-asm -ffix-debug-line
+ASFLAGS := -mcpu=arm7tdmi $(INC_FLAG)
+
 ASM_DEP := $(PYTHON)  tools/asmtools/asmdep.py
 
 %.d: %.c
@@ -299,6 +356,9 @@ ASM_DEP := $(PYTHON)  tools/asmtools/asmdep.py
 # = Targets =
 # ===========
 
+ALL_DEPS :=
+ALL_OBJS :=
+
 ifeq (,$(findstring $(C_GENERATED),$(C_SRCS)))
 C_SRCS += $(C_GENERATED)
 endif
@@ -306,12 +366,12 @@ endif
 C_OBJS := $(C_SRCS:%.c=%.o)
 ASM_OBJS := $(ASM_SRCS:%.s=%.o)
 DATA_OBJS := $(DATA_SRCS:%.s=%.o)
+ALL_OBJS += $(C_OBJS) $(ASM_OBJS) $(DATA_OBJS)
+ALL_DEPS += $(ALL_OBJS:%.o=%.d)
 
-ALL_OBJS := $(C_OBJS) $(ASM_OBJS) $(DATA_OBJS)
-ALL_DEPS := $(ALL_OBJS:%.o=%.d)
-
-SUBDIRS := $(sort $(dir $(ALL_OBJS)))
-$(shell mkdir -p $(SUBDIRS))
+HACK_OBJS := $(HACK_C_SRCS:%.c=%.o) $(HACK_S_SRCS:%.s=%.o)
+ALL_OBJS += $(HACK_OBJS)
+ALL_DEPS += $(HACK_OBJS:%.o=$(CACHE_DIR)/%.d)
 
 ifneq (clean,$(MAKECMDGOALS))
   -include $(ALL_DEPS)
@@ -326,8 +386,9 @@ CLEAN_FILES += $(C_SRCS:%.c=%.asm)
 # ===========
 
 LDS := lds/gba_cart.lds
-LIBS := -L./tools/agbcc/lib
-LDFLAGS = -T $(LDS) -Map $(MAP) $(LIBS) -R $(BANIM_OBJECT).sym.o
+LIBS := $(foreach dir,$(LIB_DIRS),-L$(dir)/lib)
+LD_LDFLAGS = -T $(LDS) -Map $(MAP) $(LIBS) -R $(BANIM_OBJECT).sym.o
+CC_LDFLAGS = -T $(LDS) -Wl,-Map $(MAP) $(LIBS) -Wl,-R $(BANIM_OBJECT).sym.o
 
 %.gba: %.elf
 	@echo "[OPY]	$@"
@@ -339,7 +400,8 @@ LDFLAGS = -T $(LDS) -Map $(MAP) $(LIBS) -R $(BANIM_OBJECT).sym.o
 
 $(ELF): $(ALL_OBJS) $(BANIM_OBJECT) lds/*.lds
 	@echo "[LD ]	$@"
-	@$(LD) $(LDFLAGS) $(ALL_OBJS) -lc -lgcc -o $@
+	@$(LD) $(LD_LDFLAGS) $(ALL_OBJS) -lmm -lgba -lc -lgcc -o $@
+#	@$(CC) $(CC_LDFLAGS) $(ALL_OBJS) -lmm -lgba -lc -lgcc -o $@
 
 CLEAN_FILES += $(ROM) $(ELF) $(MAP) $(SYM)
 
