@@ -28,6 +28,8 @@
 #include <stddef.h>
 #include <string.h>
 
+#include "configs/configs.h"
+
 #include "gba/gba.h"
 
 #include "attributes.h"
