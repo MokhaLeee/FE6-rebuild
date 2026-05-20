@@ -139,7 +139,7 @@ void StartBattleAnimHitEffects(struct Anim * anim, int type, int quake_normal, i
 
 void StartBattleAnimResireHitEffects(struct Anim * anim, int type)
 {
-    int val1, val2, off;
+    int val1, val2;
     struct Anim * anim_other_f, * anim_this_f, * anim_this_b;
 
     if (GetAnimPosition(anim) == POS_L)

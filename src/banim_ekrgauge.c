@@ -193,7 +193,7 @@ void func_fe6_08043980(struct Anim * anim, int a, int b)
     {
         if (b != 1)
         {
-            unsigned int temp = 1;
+            int temp = 1;
 
             if (b < temp)
             {
@@ -213,7 +213,7 @@ void func_fe6_08043980(struct Anim * anim, int a, int b)
     {
         if (b != 1)
         {
-            unsigned int temp = 1;
+            int temp = 1;
 
             if (b < temp)
             {

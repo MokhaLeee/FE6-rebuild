@@ -1,14 +1,1 @@
-. = ALIGN(4); src/banim_ekrbattle.o(ewram_overlay_banim);
-. = ALIGN(4); src/banim_ekrgauge.o(ewram_overlay_banim);
-. = ALIGN(4); src/banim_ekrdispup.o(ewram_overlay_banim);
-. = ALIGN(32); src/banim_ekrmain.o(ewram_overlay_banim);
-. = ALIGN(4); src/banim_ekrarena.o(ewram_overlay_banim);
-. = ALIGN(4); Banim_unused_0201E148 = .; . = . + 4;
-. = ALIGN(4); src/banim_efxmagic.o(ewram_overlay_banim);
-. = ALIGN(4); src/banim_dragon.o(ewram_overlay_banim);
-. = ALIGN(4); src/banim_dragonfx_idunn.o(ewram_overlay_banim);
-. = ALIGN(4); src/banim_efxsound.o(ewram_overlay_banim);
-. = ALIGN(4); src/banim_ekrclasschg.o(ewram_overlay_banim);
-. = ALIGN(4); src/banim_ekrlvup.o(ewram_overlay_banim);
-. = ALIGN(4); src/banim_ekrtriangle.o(ewram_overlay_banim);
-. = ALIGN(4); src/banim_ekrpopup.o(ewram_overlay_banim);
+*(ewram_overlay_banim)

@@ -6172,7 +6172,6 @@ void NewEfxAureolaOBJ2(struct Anim *anim, int duration)
 
 void EfxAureolaOBJ2_Loop(struct ProcEfxAureolaOBJ *proc)
 {
-	int x, y;
 	struct Anim *anim2 = proc->anim2;
 	struct Anim *anim3 = proc->anim3;
 

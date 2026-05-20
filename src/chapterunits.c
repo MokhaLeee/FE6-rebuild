@@ -182,6 +182,7 @@ struct UnitInfo CONST_DATA UnitInfo_Chapter1_BlueB[] =
     { PID_ALEN, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 0, 20, 3, 17, { IID_IRONSWORD, IID_IRONLANCE }, { 0 } },
     { PID_BORS, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 1, 20, 3, 19, { IID_IRONLANCE, IID_VULNERARY }, { 0 } },
     { PID_WOLT, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 2, 20, 2, 16, { IID_IRONBOW, IID_VULNERARY }, { 0 } },
+    { PID_LUGH, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 3, 20, 2, 16, { IID_FIRE }, { 0 } },
     { 0 }, // end
 };
 

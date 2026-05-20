@@ -519,7 +519,7 @@ void EfxMagfcastBG_Loop(struct ProcEfxBG *proc)
 	i16 ret = EfxAdvanceFrameLut(
 		(void *)&proc->timer,
 		(void *)&proc->frame,
-		proc->frame_config
+		(const i16 *)proc->frame_config
 	);
 
 	if (ret >= 0) {
@@ -1083,7 +1083,7 @@ void NewEfxSRankWeaponEffectSCR(void)
 
 void EfxSRankWeaponEffectSCR_Loop(struct ProcEfx *proc)
 {
-	u32 i;
+	int i;
 	u16 *dst1, *dst2;
 
 	dst1 = !gEkrBg1ScrollFlip
@@ -1096,7 +1096,7 @@ void EfxSRankWeaponEffectSCR_Loop(struct ProcEfx *proc)
 
 	for (i = 0; i < 160;  i++) {
 		if (i < 120) {
-			i16 ref = EfxSRankWeaponEffectSCR_Ref[i] *proc->unk44 >> 0xC;
+			int ref = EfxSRankWeaponEffectSCR_Ref[i] *proc->unk44 >> 0xC;
 
 			if (ref) {
 				if (i < 60) {
@@ -1226,7 +1226,7 @@ void EfxMagdhisEffectBG_Loop(struct ProcEfxBG *proc)
 	i16 ret = EfxAdvanceFrameLut(
 		(void *)&proc->timer,
 		(void *)&proc->frame,
-		proc->frame_config
+		(const i16 *)proc->frame_config
 	);
 
 	if (ret >= 0) {

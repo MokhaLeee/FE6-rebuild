@@ -376,7 +376,7 @@ void EkrBattleWaitDragonIntro(struct ProcEkrBattle * proc)
 
 void EkrBattlePostDragonIntro(struct ProcEkrBattle * proc)
 {
-    if (gEkrInitialHitSide != gEkrInitPosReal)
+    if (gEkrInitialHitSide != (int)gEkrInitPosReal)
     {
         NewEfxFarAttackWithDistance(MAIN_ANIM_FRONT(gEkrInitPosReal), -1);
         proc->timer = 0;
@@ -570,7 +570,7 @@ void EkrBattleTriggerEnding(struct ProcEkrBattle * proc)
 
 void EkrBattleWaitNamewinAppear(struct ProcEkrBattle * proc)
 {
-    int pos;
+    u32 pos;
 
     if (gEkrHpBarCount != 0)
         return;
@@ -868,8 +868,6 @@ void EkrBattlePrepareEnding(struct ProcEkrBattle * proc)
 
 void EkrBattleStartDragonEnding(struct ProcEkrBattle * proc)
 {
-    int val;
-
     u32 conf = GetEkrDragonStateTypeGeneric();
 
     /* If both side is not the ekrdragon, get here */

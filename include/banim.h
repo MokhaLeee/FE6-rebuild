@@ -116,13 +116,13 @@ enum banim_sprites_size {
     BAS_OAM_REF_MAX_SIZE = BAS_OAM_MAX_SIZE - 0x10,
 };
 
-extern EWRAM_OVERLAY(banim) u8 gBanimScrs[2 * BAS_SCR_MAX_SIZE];
-extern EWRAM_OVERLAY(banim) u8 gBanimOamBufs[2 * BAS_OAM_MAX_SIZE];
-extern EWRAM_OVERLAY(banim) u8 gBanimImgSheetBuf_Left[BAS_IMG_MAX_SIZE];
-extern EWRAM_OVERLAY(banim) u8 gBanimKakudaiBuf_Left[BAS_IMG_MAX_SIZE];
-extern EWRAM_OVERLAY(banim) u8 gBanimImgSheetBuf_Right[BAS_IMG_MAX_SIZE];
-extern EWRAM_OVERLAY(banim) u8 gBanimKakudaiBuf_Right[BAS_IMG_MAX_SIZE];
-extern EWRAM_OVERLAY(banim) u8 gBanimTerrainfxBufObj[0x2000];
+extern u8 gBanimScrs[2 * BAS_SCR_MAX_SIZE];
+extern u8 gBanimOamBufs[2 * BAS_OAM_MAX_SIZE];
+extern u8 gBanimImgSheetBuf_Left[BAS_IMG_MAX_SIZE];
+extern u8 gBanimKakudaiBuf_Left[BAS_IMG_MAX_SIZE];
+extern u8 gBanimImgSheetBuf_Right[BAS_IMG_MAX_SIZE];
+extern u8 gBanimKakudaiBuf_Right[BAS_IMG_MAX_SIZE];
+extern u8 gBanimTerrainfxBufObj[0x2000];
 
 struct ProcEfx {
     PROC_HEADER;
@@ -242,29 +242,29 @@ struct ProcEfxOBJ {
     /* 68 */ struct  BaSprite *anim4;
 };
 
-extern EWRAM_OVERLAY(banim) void *gpBanimTerrainfxBufs[2];
-extern EWRAM_OVERLAY(banim) void *gpBanimTerrainTsaBufs[2];
-extern EWRAM_OVERLAY(banim) u16 *gpBanimTerrainPalBufs[2];
-extern EWRAM_OVERLAY(banim) int *gpBanimModesLeft;
-extern EWRAM_OVERLAY(banim) int *gpBanimModesRight;
+extern void *gpBanimTerrainfxBufs[2];
+extern void *gpBanimTerrainTsaBufs[2];
+extern u16 *gpBanimTerrainPalBufs[2];
+extern int *gpBanimModesLeft;
+extern int *gpBanimModesRight;
 
-extern EWRAM_OVERLAY(banim) int gEkrDebugTimer;
-extern EWRAM_OVERLAY(banim) int gEkrDebugFlag1;
-extern EWRAM_OVERLAY(banim) int gEkrDebugFlag2;
-extern EWRAM_OVERLAY(banim) int gAnimC01Blocking;
-extern EWRAM_OVERLAY(banim) i16 gEkrXPosReal[2];
-extern EWRAM_OVERLAY(banim) i16 gEkrYPosReal[2];
-extern EWRAM_OVERLAY(banim) u16 gEkrXPosBase[2];
-extern EWRAM_OVERLAY(banim) u16 gEkrYPosBase[2];
-extern EWRAM_OVERLAY(banim) struct Vec2i gEkrBg0QuakeVec;
-extern EWRAM_OVERLAY(banim) u16 *gpEfxUnitPaletteBackup[2];
+extern int gEkrDebugTimer;
+extern int gEkrDebugFlag1;
+extern int gEkrDebugFlag2;
+extern int gAnimC01Blocking;
+extern i16 gEkrXPosReal[2];
+extern i16 gEkrYPosReal[2];
+extern u16 gEkrXPosBase[2];
+extern u16 gEkrYPosBase[2];
+extern struct Vec2i gEkrBg0QuakeVec;
+extern u16 *gpEfxUnitPaletteBackup[2];
 extern i16 gEkrDebugModeMaybe;
-extern EWRAM_OVERLAY(banim) u16 gBanimPaletteLeft[0x50];
-extern EWRAM_OVERLAY(banim) u16 gBanimPaletteRight[0x50];
-extern EWRAM_OVERLAY(banim) u16 gEfxPal[0x200];
-extern EWRAM_OVERLAY(banim) struct Font gBanimFont;
-extern EWRAM_OVERLAY(banim) struct Text gBanimText[20];
-extern EWRAM_OVERLAY(banim) u32 gEkrBattleEndFlag;
+extern u16 gBanimPaletteLeft[0x50];
+extern u16 gBanimPaletteRight[0x50];
+extern u16 gEfxPal[0x200];
+extern struct Font gBanimFont;
+extern struct Text gBanimText[20];
+extern u32 gEkrBattleEndFlag;
 extern i8 gEfxSplitedColorBufA[2][0x30];
 extern i8 gEfxSplitedColorBufB[2][0x30];
 extern i16 gEfxSplitedColorBufC[2][0x30];
@@ -291,9 +291,9 @@ extern u8 gEkrPids[2];
 extern struct Unit * gpEkrTriangleUnits[2];
 extern const u16 * gpBanimTriAtkPalettes[2];
 extern const u8 * gBanimUnitChgForceImg[2];
-extern EWRAM_OVERLAY(banim) i16 gBanimBG;
-extern EWRAM_OVERLAY(banim) i16 gEkrInitialHitSide;
-extern EWRAM_OVERLAY(banim) i16 gEkrSnowWeather;
+extern i16 gBanimBG;
+extern i16 gEkrInitialHitSide;
+extern i16 gEkrSnowWeather;
 extern u32 gEkrInitPosReal;
 extern u32 gEfxFarAttackExist;
 extern u32 gEfxBgSemaphore;
@@ -369,13 +369,13 @@ struct ProcEkrGauge {
 };
 
 extern struct ProcEkrGauge * gpProcEkrGauge;
-extern EWRAM_OVERLAY(banim) u16 Buf_EkrGaugeNumImg[0x200];
-extern EWRAM_OVERLAY(banim) u16 gUnk_Banim_02016DC0[0x40];
-extern EWRAM_OVERLAY(banim) u8 gUnk_Banim_02016E40[0x200];
-extern EWRAM_OVERLAY(banim) u8 gUnk_Banim_02017040[0x200];
-extern EWRAM_OVERLAY(banim) u8 gUnk_Banim_02017240[0x200];
-extern EWRAM_OVERLAY(banim) u8 gUnk_Banim_02017440[0x200];
-extern EWRAM_OVERLAY(banim) u16 gEkrGaugeDecoder[18];
+extern u16 Buf_EkrGaugeNumImg[0x200];
+extern u16 gUnk_Banim_02016DC0[0x40];
+extern u8 gUnk_Banim_02016E40[0x200];
+extern u8 gUnk_Banim_02017040[0x200];
+extern u8 gUnk_Banim_02017240[0x200];
+extern u8 gUnk_Banim_02017440[0x200];
+extern u16 gEkrGaugeDecoder[18];
 
 void EkrGaugeModDec(i16 val, u16 buf[]);
 void NewEkrGauge(void);
@@ -1675,7 +1675,7 @@ struct ProcEfxSRankSCR2 {
 
     /* 5C */ struct ProcEfx *seff_scr1;
 };
-extern EWRAM_OVERLAY(banim) i16 gEfxSpecalEffectExist[2];
+extern i16 gEfxSpecalEffectExist[2];
 
 void NewEfxSpecalEffect(struct Anim *anim);
 void EfxSpecalEffect_Null(ProcPtr proc);
@@ -1857,8 +1857,8 @@ struct ProcEfxSoundSE {
     /* 48 */ int index;
 };
 
-extern EWRAM_OVERLAY(banim) int gEkrMainBgmPlaying;
-extern EWRAM_OVERLAY(banim) int gEfxSoundSeExist;
+extern int gEkrMainBgmPlaying;
+extern int gEfxSoundSeExist;
 
 extern CONST_DATA u16 *gBanimBossBGMs[];
 extern CONST_DATA u16 *gBanimSongTable1[];

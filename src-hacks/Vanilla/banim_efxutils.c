@@ -89,7 +89,7 @@ CONST_DATA short PosArray_EfxApocalypseBGCtrl[0x140] = {
 void FillBGSafelyRect(u16 *tm, u16 width, u16 height, int pal, int chr)
 {
 	int i, j;
-	u16 tileref, len;
+	u16 tileref;
 	u16 *_tm = tm;
 
 	for (i = height; i != 0; i--) {
@@ -707,7 +707,7 @@ int GetAnimSpriteRotScaleY(u32 header)
 void BanimUpdateSpriteRotScale(void *src, struct BaSpriteData *out, s16 x, s16 y, int unused)
 {
 	struct ObjAffineSetSrc affin_src;
-	struct BaSpriteData *anim_sprite, *it;
+	struct BaSpriteData *anim_sprite;
 	struct BaSpriteData *scr = src;
 
 	affin_src.rotation = 0;
@@ -741,7 +741,7 @@ void BanimUpdateSpriteRotScale(void *src, struct BaSpriteData *out, s16 x, s16 y
 
 	for (; scr->header != 1; out++, scr++) {
 		s16 r8, r5;
-		int val1, val2, val, _val, header;
+		int val1, val, _val, header;
 	
 		r8 = x;
 		r5 = y;

@@ -325,6 +325,7 @@ void EfxHpBarResire_SetAnotherSide(struct ProcEfxHpBar * proc)
 
 void EfxHpBarResire_DeclineToDeath(struct ProcEfxHpBar * proc)
 {
+    _UNUSED
     struct BaSprite * anim_main_other_f, * anim_main_other_b, * anim_main_this_f, * anim_main_this_b;
 
     anim_main_other_f = gAnims[GetAnimPosition(proc->anim_main_other) * 2];
@@ -389,10 +390,9 @@ struct ProcScr CONST_DATA ProcScr_EfxAvoid[] =
 
 void NewEfxAvoid(struct BaSprite * anim)
 {
-    i16 off_this, off_next;
     struct ProcEfxHpBar * proc;
 
-    u32 ref, dragon_type = GetEkrDragonStateTypeGeneric();
+    u32 dragon_type = GetEkrDragonStateTypeGeneric();
 
     if (gEkrHpBarCount != 0)
         return;

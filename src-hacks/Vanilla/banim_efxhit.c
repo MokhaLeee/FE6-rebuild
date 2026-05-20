@@ -6,9 +6,9 @@
 
 struct ProcScr CONST_DATA ProcScr_EfxDamageMojiEffect[] =
 {
-    PROC_NAME_DEBUG("efxDamageMojiEffect"),
-    PROC_REPEAT(EfxDamageMojiEffect_Loop),
-    PROC_END,
+	PROC_NAME_DEBUG("efxDamageMojiEffect"),
+	PROC_REPEAT(EfxDamageMojiEffect_Loop),
+	PROC_END,
 };
 
 void NewEfxDamageMojiEffect(struct Anim *anim, int hitted)
@@ -39,37 +39,37 @@ void EfxDamageMojiEffect_Loop(struct ProcEfx *proc)
 
 struct ProcScr CONST_DATA ProcScr_EfxDamageMojiEffectOBJ[] =
 {
-    PROC_NAME_DEBUG("efxDamageMojiEffectOBJ"),
-    PROC_REPEAT(EfxDamageMojiEffectOBJ_Loop),
-    PROC_END,
+	PROC_NAME_DEBUG("efxDamageMojiEffectOBJ"),
+	PROC_REPEAT(EfxDamageMojiEffectOBJ_Loop),
+	PROC_END,
 };
 
 void NewEfxDamageMojiEffectOBJ(struct Anim *anim, int hitted)
 {
-    u16 val1;
-    u32 *anim_scr;
-    struct ProcEfxDamageMojiEffectOBJ *proc;
+	u16 val1;
+	u32 *anim_scr;
+	struct ProcEfxDamageMojiEffectOBJ *proc;
 
-    proc = SpawnProc(ProcScr_EfxDamageMojiEffectOBJ, PROC_TREE_3);
-    proc->anim = anim;
-    proc->timer = 0;
+	proc = SpawnProc(ProcScr_EfxDamageMojiEffectOBJ, PROC_TREE_3);
+	proc->anim = anim;
+	proc->timer = 0;
 
-    if (hitted == 0) {
-        proc->terminator = 0x32;
-        anim_scr = AnimScr_NoDamage;
-    } else {
-        proc->terminator = 0x32;
-        anim_scr = AnimScr_Miss;
-    }
+	if (hitted == 0) {
+		proc->terminator = 0x32;
+		anim_scr = AnimScr_NoDamage;
+	} else {
+		proc->terminator = 0x32;
+		anim_scr = AnimScr_Miss;
+	}
 
-    val1 = GetAnimPosition(anim) == POS_L ? 0x6100 : 0x5100;
+	val1 = GetAnimPosition(anim) == POS_L ? 0x6100 : 0x5100;
 
-    proc->sub_proc = NewEkrsubAnimeEmulator(
-        anim->xPosition,
-        anim->yPosition - 0x28,
-        anim_scr,
-        2, val1, 0, PROC_TREE_3
-    );
+	proc->sub_proc = NewEkrsubAnimeEmulator(
+		anim->xPosition,
+		anim->yPosition - 0x28,
+		anim_scr,
+		2, val1, 0, PROC_TREE_3
+	);
 }
 
 void EfxDamageMojiEffectOBJ_Loop(struct ProcEfxDamageMojiEffectOBJ *proc)
@@ -83,9 +83,9 @@ void EfxDamageMojiEffectOBJ_Loop(struct ProcEfxDamageMojiEffectOBJ *proc)
 }
 
 struct ProcScr CONST_DATA ProcScr_EfxCriricalEffect[] = {
-    PROC_NAME_DEBUG("efxCriticalEffect"),
-    PROC_REPEAT(EfxCriricalEffect_Loop),
-    PROC_END
+	PROC_NAME_DEBUG("efxCriticalEffect"),
+	PROC_REPEAT(EfxCriricalEffect_Loop),
+	PROC_END
 };
 
 void NewEfxCriricalEffect(struct Anim *anim)
@@ -154,10 +154,10 @@ void EfxCriricalEffectBG_Loop(struct ProcEfxBG *proc)
 }
 
 CONST_DATA struct ProcScr ProcScr_EfxCriricalEffectBGCOL[] = {
-    PROC_NAME_DEBUG("efxCriticalEffectBGCOL"),
-    PROC_MARK(PROC_MARK_PAL_CHG),
-    PROC_REPEAT(EfxCriricalEffectBGCOL_Loop),
-    PROC_END
+	PROC_NAME_DEBUG("efxCriticalEffectBGCOL"),
+	PROC_MARK(PROC_MARK_PAL_CHG),
+	PROC_REPEAT(EfxCriricalEffectBGCOL_Loop),
+	PROC_END
 };
 
 void NewEfxCriricalEffectBGCOL(struct Anim *anim)
@@ -194,7 +194,7 @@ void NewEfxCriricalEffectBGCOL(struct Anim *anim)
 
 void EfxCriricalEffectBGCOL_Loop(struct ProcEfxBGCOL *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, (const i16 *)proc->frame_config);
 
 	if (ret >= 0) {
 		const u16 *pal = proc->pal;
@@ -320,7 +320,7 @@ void NewEfxNormalEffectBG(struct Anim *anim)
 
 void EfxNormalEffectBG_Loop(struct ProcEfxBG *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, (const i16 *)proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **buf1 = proc->tsal;
