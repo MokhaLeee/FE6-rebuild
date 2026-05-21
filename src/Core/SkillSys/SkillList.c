@@ -54,11 +54,11 @@ static void setup_skill_list(struct SkillList *list, struct Unit *unit)
 	write_sign(list, unit);
 	list->amt = 0;
 
-	if (!UNIT_IS_VALID(unit)) {
+	if (UNIT_IS_VALID(unit)) {
 		int pid = UNIT_PID(unit);
 		int jid = UNIT_JID(unit);
 
-		memset(ref_buf, 0, MAX_SKILL_NUM + 1);
+		memset(ref_buf, 0, MAX_SKILL_NUM);
 
 		/* person */
 		ADD_LIST(gpSkillPTable[pid].sid[0]);
@@ -75,7 +75,7 @@ static struct SkillList *spawn_list_buffer(const struct Unit *unit)
 	if (likely(unit == &gBattleUnitA.unit))
 		return BattleSkillListA;
 
-	if (likely(unit == &gBattleUnitA.unit))
+	if (likely(unit == &gBattleUnitB.unit))
 		return BattleSkillListB;
 
 	return GenericSkillList;
@@ -151,7 +151,6 @@ void UnitToBattle_SetupSkillList(const struct BattleUnit *bu)
 /* runtime API */
 void AppendSkillListInBattle(struct BattleUnit *bu, int sid)
 {
-	u32 i;
 	struct SkillList *list;
 
 	if (BattleSkillTester(bu, sid))

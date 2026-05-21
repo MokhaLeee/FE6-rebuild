@@ -4,8 +4,17 @@
 enum skills {
 	SID_NONE = 0,
 
-	SID_PowBonus,
+	// Blow skills
+	SID_BlowDarting,
 	SID_BlowDeath,
+	SID_BlowArmored,
+	SID_BlowFiendish,
+	SID_BlowWarding,
+	SID_BlowDuelist,
+	SID_BlowUncanny,
+	SID_BlowKilling,
+
+	SID_PowBonus,
 	SID_Nihil,
 }; 
 

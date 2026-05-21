@@ -3,7 +3,7 @@
 #include "prelude.h"
 #include "unit.h"
 
-#define MAX_SKILL_NUM 0x3FF
+#define MAX_SKILL_NUM 0x400
 #define SKILL_IS_VALID(sid) (sid != 0)
 
 struct SkillList {
@@ -23,11 +23,20 @@ struct SkillList *GetSkillList(struct Unit *unit);
 void UnitToBattle_SetupSkillList(const struct BattleUnit *bu);
 void AppendSkillListInBattle(struct BattleUnit *bu, int sid);
 
+/* skill table */
 struct SkillTable { u16 sid[2]; };
-// extern struct SkillTable const gSkillPTable[0x100];
-// extern struct SkillTable const gSkillJTable[0x100];
 extern struct SkillTable const *const gpSkillPTable;
 extern struct SkillTable const *const gpSkillJTable;
+
+/* skill eff */
+struct SkillExtraInfo {
+	i8 priv[4];
+};
+extern struct SkillExtraInfo const *const gpSkillExtraInfo;
+#define SKILL_EFF0(sid) (gpSkillExtraInfo[sid].priv[0])
+#define SKILL_EFF1(sid) (gpSkillExtraInfo[sid].priv[1])
+#define SKILL_EFF2(sid) (gpSkillExtraInfo[sid].priv[2])
+#define SKILL_EFF3(sid) (gpSkillExtraInfo[sid].priv[3])
 
 /* skill-testers */
 bool JudgeSkillViaList(struct Unit *unit, int sid);
