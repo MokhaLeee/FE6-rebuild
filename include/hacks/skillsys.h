@@ -21,6 +21,7 @@ struct SkillList {
 
 struct SkillList *GetSkillList(struct Unit *unit);
 void UnitToBattle_SetupSkillList(const struct BattleUnit *bu);
+void AppendSkillListInBattle(struct BattleUnit *bu, int sid);
 
 struct SkillTable { u16 sid[2]; };
 // extern struct SkillTable const gSkillPTable[0x100];

@@ -15,21 +15,21 @@ u32 k_umod10(u32 n);       // n % 10
 #define GENMASK_32(h, l) \
 	(((0xffffffff) << (l)) & (0xffffffff >> (32 - 1 - (h))))
 
-static inline void set_bit(void *bits, int idx)
+static inline void set_bit(void *bits, u32 idx)
 {
 	u8 *_bits = bits;
 
 	_bits[idx >> 3] |= 1 << (idx & 0x7);
 }
 
-static inline void clear_bit(void *bits, int idx)
+static inline void clear_bit(void *bits, u32 idx)
 {
 	u8 *_bits = bits;
 
 	_bits[idx >> 3] &= ~(1 << (idx & 0x7));
 }
 
-static inline bool check_bit(void *bits, int idx)
+static inline bool check_bit(void *bits, u32 idx)
 {
 	u8 *_bits = bits;
 

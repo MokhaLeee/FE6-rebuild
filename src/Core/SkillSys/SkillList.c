@@ -147,3 +147,18 @@ void UnitToBattle_SetupSkillList(const struct BattleUnit *bu)
 	if (bu == &gBattleUnitB)
 		setup_battle_skill_list();
 }
+
+/* runtime API */
+void AppendSkillListInBattle(struct BattleUnit *bu, int sid)
+{
+	u32 i;
+	struct SkillList *list;
+
+	if (BattleSkillTester(bu, sid))
+		return;
+
+	list = GetSkillList(&bu->unit);
+	list->sid[list->amt++] = sid;
+
+	set_bit(bu->skills_bitfile, sid);
+}
