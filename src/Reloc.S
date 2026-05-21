@@ -37,3 +37,6 @@ gpChapterAssets: .word ChapterAssets
 
 .global gpSongTable
 gpSongTable: .word gSongTable
+
+.global gpUnitMaxStatusConfigTable
+gpUnitMaxStatusConfigTable: .word gUnitMaxStatusConfigTable

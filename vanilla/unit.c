@@ -66,24 +66,6 @@ void InitUnits(void)
     }
 }
 
-void ClearUnit(struct Unit * unit)
-{
-    u8 id = unit->id;
-
-    CpuFill16(0, unit, sizeof(struct Unit));
-
-    unit->id = id;
-}
-
-void CopyUnit(struct Unit * src, struct Unit * dst)
-{
-    u8 id = dst->id;
-
-    *dst = *src;
-
-    dst->id = id;
-}
-
 struct Unit * GetFreeUnit(int faction)
 {
     int i;
@@ -400,34 +382,6 @@ void UnitInitFromInfo(struct Unit * unit, struct UnitInfo const * info)
     UnitInitAiFromInfo(unit, info);
 }
 
-void UnitInitStats(struct Unit * unit, struct PInfo const * pinfo)
-{
-    int i;
-
-    unit->max_hp = pinfo->base_hp + unit->jinfo->base_hp;
-    unit->pow = pinfo->base_pow + unit->jinfo->base_pow;
-    unit->skl = pinfo->base_skl + unit->jinfo->base_skl;
-    unit->spd = pinfo->base_spd + unit->jinfo->base_spd;
-    unit->def = pinfo->base_def + unit->jinfo->base_def;
-    unit->res = pinfo->base_res + unit->jinfo->base_res;
-    unit->lck = pinfo->base_lck;
-
-    unit->bonus_con = 0;
-
-    for (i = 0; i < UNIT_WEAPON_EXP_COUNT; ++i)
-    {
-        unit->wexp[i] = unit->jinfo->wexp[i];
-
-        if (unit->pinfo->wexp[i] != 0)
-            unit->wexp[i] = unit->pinfo->wexp[i];
-    }
-
-    if (UNIT_FACTION(unit) == FACTION_BLUE && (unit->level != UNIT_LEVEL_MAX))
-        unit->exp = 0;
-    else
-        unit->exp = 0xFF;
-}
-
 void func_fe6_08017764(struct Unit * unit)
 {
     if (UNIT_ATTRIBUTES(unit) & UNIT_ATTR_ALT_PINFO)
@@ -487,36 +441,6 @@ void UnitAutolevel(struct Unit * unit)
         UnitAutolevelCore(unit, unit->jinfo->jid_promote, UNIT_LEVEL_MAX - 1);
 
     UnitAutolevelCore(unit, unit->jinfo->id, unit->level - 1);
-}
-
-void UnitCheckStatOverflow(struct Unit * unit)
-{
-    if (unit->max_hp > UNIT_HP_CAP(unit))
-        unit->max_hp = UNIT_HP_CAP(unit);
-
-    if (unit->pow > UNIT_POW_CAP(unit))
-        unit->pow = UNIT_POW_CAP(unit);
-
-    if (unit->skl > UNIT_SKL_CAP(unit))
-        unit->skl = UNIT_SKL_CAP(unit);
-
-    if (unit->spd > UNIT_SPD_CAP(unit))
-        unit->spd = UNIT_SPD_CAP(unit);
-
-    if (unit->def > UNIT_DEF_CAP(unit))
-        unit->def = UNIT_DEF_CAP(unit);
-
-    if (unit->res > UNIT_RES_CAP(unit))
-        unit->res = UNIT_RES_CAP(unit);
-
-    if (unit->lck > UNIT_LCK_CAP(unit))
-        unit->lck = UNIT_LCK_CAP(unit);
-
-    if (unit->bonus_con > (UNIT_CON_CAP(unit) - UNIT_CON_BASE(unit)))
-        unit->bonus_con = (UNIT_CON_CAP(unit) - UNIT_CON_BASE(unit));
-
-    if (unit->bonus_mov > (UNIT_MOV_CAP(unit) - UNIT_MOV_BASE(unit)))
-        unit->bonus_mov = (UNIT_MOV_CAP(unit) - UNIT_MOV_BASE(unit));
 }
 
 struct Unit * GetUnitByPid(int pid)
@@ -597,20 +521,6 @@ inline char const * GetUnitRescueName(struct Unit * unit)
         return sStatusNameStringLut[UNIT_STATUS_NONE];
 
     return DecodeMsg(GetUnit(unit->rescue)->pinfo->msg_name);
-}
-
-void KillUnit(struct Unit * unit)
-{
-    if (UNIT_FACTION(unit) == FACTION_BLUE)
-    {
-        unit->flags |= UNIT_FLAG_DEAD | UNIT_FLAG_HIDDEN;
-        ClearUnitSupports(unit);
-    }
-    else
-    {
-        // mark as free
-        unit->pinfo = NULL;
-    }
 }
 
 void UnitChangeFaction(struct Unit * unit, int faction)

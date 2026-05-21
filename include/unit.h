@@ -211,7 +211,7 @@ struct JInfo
     /* 16 */ i8 max_spd;
     /* 17 */ i8 max_def;
     /* 18 */ i8 max_res;
-    /* 19 */ i8 max_con;
+    /* 19 */ i8 max_mag;
 
     /* 1A */ i8 power_level;
 
@@ -225,6 +225,7 @@ struct JInfo
 
     /* msg */
     /* 22 */ i8 growth_mag;
+    /* 23 */ i8 base_mag;
 
     /* 24 */ u32 attributes;
 
@@ -380,12 +381,13 @@ extern struct Unit EWRAM_DATA gUnitArrayPurple[UNIT_AMOUNT_PURPLE];
 
 #define UNIT_HP_CAP(unit)  (UNIT_FACTION(unit) == FACTION_RED ? 80 : 60)
 #define UNIT_POW_CAP(unit) ((unit)->jinfo->max_pow)
+#define UNIT_MAG_CAP(unit) ((unit)->jinfo->max_mag)
 #define UNIT_SKL_CAP(unit) ((unit)->jinfo->max_skl)
 #define UNIT_SPD_CAP(unit) ((unit)->jinfo->max_spd)
 #define UNIT_DEF_CAP(unit) ((unit)->jinfo->max_def)
 #define UNIT_RES_CAP(unit) ((unit)->jinfo->max_res)
 #define UNIT_LCK_CAP(unit) (30)
-#define UNIT_CON_CAP(unit) ((unit)->jinfo->max_con)
+#define UNIT_CON_CAP(unit) (!!(UNIT_ATTRIBUTES(unit) & UNIT_ATTR_PROMOTED) ? 25 : 20) // ((unit)->jinfo->max_con)
 #define UNIT_MOV_CAP(unit) (15)
 
 #define UNIT_CON_BASE(unit) ((unit)->jinfo->base_con + (unit)->pinfo->bonus_con)

@@ -1093,6 +1093,7 @@ GAMEINFO_DATA struct PInfo const PInfoTable[] = {
 		.sort_order_key = 14,
 		.base_level = 1,
 		.base_pow = 3,
+		.base_mag = 3,
 		.base_skl = 3,
 		.base_spd = 3,
 		.base_res = 2,
@@ -1108,6 +1109,8 @@ GAMEINFO_DATA struct PInfo const PInfoTable[] = {
 
 #if CONFIG_USE_DEBUG
 		.growth_mag = 100,
+#else
+		.growth_mag = 40,
 #endif
 
 		.banim_pal = { BANIM_PAL_1E, BANIM_PAL_65 },

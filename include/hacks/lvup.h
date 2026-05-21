@@ -36,3 +36,23 @@ int GetUnitSpdGrowthJobBonus(int status, struct Unit *unit);
 int GetUnitLckGrowthJobBonus(int status, struct Unit *unit);
 int GetUnitDefGrowthJobBonus(int status, struct Unit *unit);
 int GetUnitResGrowthJobBonus(int status, struct Unit *unit);
+
+/* max status */
+struct UnitMaxStatusConfig {
+	i8 hp, mag, pow, skl, spd, def, res, lck, con, mov;
+	u8 _pad_[2];
+};
+
+extern const struct UnitMaxStatusConfig gUnitMaxStatusConfigTable[0x100];
+extern struct UnitMaxStatusConfig const * const gpUnitMaxStatusConfigTable;
+
+int GetUnitMaxStatusHp(struct Unit *unit);
+int GetUnitMaxStatusPow(struct Unit *unit);
+int GetUnitMaxStatusMag(struct Unit *unit);
+int GetUnitMaxStatusSkl(struct Unit *unit);
+int GetUnitMaxStatusSpd(struct Unit *unit);
+int GetUnitMaxStatusLck(struct Unit *unit);
+int GetUnitMaxStatusDef(struct Unit *unit);
+int GetUnitMaxStatusRes(struct Unit *unit);
+int GetUnitMaxStatusMov(struct Unit *unit);
+int GetUnitMaxStatusCon(struct Unit *unit);
