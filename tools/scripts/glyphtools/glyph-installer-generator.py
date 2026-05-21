@@ -102,7 +102,7 @@ def main(args):
 
     # print(f"fdir_in={fdir_in}")
     
-    print(".section .rodata")
+    print(".section .content_data")
     print("")
 
     with open(fpath_in, 'r') as f:

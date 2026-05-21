@@ -156,9 +156,11 @@ extern struct ProcScr CONST_DATA ProcScr_Config[];
 extern u16 CONST_DATA Pal_ManimFireDragonMu[];
 extern u16 CONST_DATA Pal_ManimDivineDragonMu[];
 
-extern struct ChapterInfo CONST_DATA ChapterInfoTable[];
+// extern struct ChapterInfo const ChapterInfoTable[];
+extern struct ChapterInfo const *const gpChapterInfoTable;
 
-extern void const * CONST_DATA ChapterAssets[];
+// extern void const *const ChapterAssets[];
+extern void const *const *const gpChapterAssets;
 
 extern u16 const Pal_LinkArenaMuralBackground[];
 extern u16 const Pal_StatscreenPageNameFlashing[][0x20];

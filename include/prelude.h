@@ -64,19 +64,6 @@
 #  define STATIC_ASSERT(expr)
 #endif
 
-#define _UNUSED __attribute__((unused))
-
-#define _WEAK __attribute__((weak))
-
-// #define EWRAM_OVERLAY(id) SECTION(".ewram_overlay_" # id)
-#define EWRAM_OVERLAY_BMAP EWRAM_OVERLAY(0)
-#define EWRAM_OVERLAY_ANIM EWRAM_OVERLAY(1)
-#define EWRAM_OVERLAY_ENTR EWRAM_OVERLAY(2)
-#define EWRAM_OVERLAY_TEST EWRAM_OVERLAY(3)
-
-#define IWRAM_FUNC      SECTION(".iwram_code")
-#define IWRAM_FUNC_STUB __attribute__((section(".text.iwram_code.stub"), long_call, noinline))
-
 #define LIMIT_AREA(num, min, max)   \
     if (num > max)                  \
         num = max;                  \

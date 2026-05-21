@@ -86,11 +86,11 @@ SHASUM ?= sha1sum
 
 C_GENERATED :=
 
-SRC_DIRS := src asm gamedata data
+SRC_DIRS := vanilla content gameinfo
 C_SRCS   := $(foreach dir, $(SRC_DIRS),$(shell find $(dir) -name *.c))
 ASM_SRCS := $(foreach dir, $(SRC_DIRS),$(shell find $(dir) -name *.s))
 
-HACK_SRC  := src-hacks
+HACK_SRC  := src
 HACK_DIRS := $(HACK_SRC)
 HACK_C_SRCS := $(foreach dir, $(HACK_DIRS),$(shell find $(dir) -name *.c))
 HACK_S_SRCS += $(foreach dir, $(HACK_DIRS),$(shell find $(dir) -name *.S))
@@ -113,7 +113,7 @@ TEXT_DEFS := $(TEXT_DIR)/textdefs.txt
 TEXT_SRC  := $(TEXT_MAIN) $(shell find $(TEXT_DIR) -type f -name "*.txt")
 
 TEXT_HEADER := include/constants/msg.h
-MSG_LIST    := src/msg_data.c
+MSG_LIST    := vanilla/msg_data.c
 
 # this should just be used for testing
 $(TEXT_MAIN):
@@ -133,8 +133,8 @@ msg : $(MSG_LIST)
 # = Spritans =
 # ============
 
-PNG_FILES := $(shell find ./data -type f -name '*.png')
-TSA_FILES := $(shell find ./data -type f -name '*.tsa')
+PNG_FILES := $(shell find $(SRC_DIRS) -type f -name '*.png')
+TSA_FILES := $(shell find $(SRC_DIRS) -type f -name '*.tsa')
 GBAGFX := tools/gbagfx/gbagfx$(EXE)
 
 %.1bpp: %.png
@@ -264,7 +264,7 @@ glyph: $(GLYPH_INSTALLER)
 # ============
 # = Wizardry =
 # ============
-INC_DIRS := include include/hacks asm/include .
+INC_DIRS := include include/hacks .
 INC_FLAG := $(foreach dir, $(INC_DIRS), -I$(dir)) \
 			$(foreach dir, $(LIB_DIRS), -I$(dir)/include)
 

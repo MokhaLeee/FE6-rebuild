@@ -28,7 +28,7 @@ SECTIONS
 
 	.text  :
 	{
-		src/armfunc.o(.text)
+		vanilla/armfunc.o(.text)
 
 		*(.text)
 		*(.text*)
@@ -48,15 +48,15 @@ SECTIONS
 
 	__reloc_map_end = .;
 
-	__krodata_start = .;
+	__krodata_start = __rom_start + 0x120000;
 	. = __krodata_start;
 
 	.rodata ALIGN(4) : AT (__krodata_start)
 	{
-		EXCLUDE_FILE(gamedata/*.o fonts/*.o banims/*.o) *(.data)
-		EXCLUDE_FILE(gamedata/*.o fonts/*.o banims/*.o) *(.data*)
-		EXCLUDE_FILE(gamedata/*.o fonts/*.o banims/*.o) *(.rodata)
-		EXCLUDE_FILE(gamedata/*.o fonts/*.o banims/*.o) *(.rodata*)
+		EXCLUDE_FILE(banims/*.o) *(.data)
+		EXCLUDE_FILE(banims/*.o) *(.data*)
+		EXCLUDE_FILE(banims/*.o) *(.rodata)
+		EXCLUDE_FILE(banims/*.o) *(.rodata*)
 	} >rom = 0xff
 
 	__krodata_end = .;
@@ -67,11 +67,8 @@ SECTIONS
 	.rodata ALIGN(4) : AT (__rodata_start)
 	{
 		banims/banimdata_gen.o(.data);
-
-		/* gamedata */
-		fonts/build/*.o(.rodata)
-		gamedata/*.o(.data)
-		gamedata/*.o(.rodata)
+		*(.gameinfo_data)
+		*(.content_data)
 	} >rom = 0xff
 
 	__rodata_end = .;
@@ -130,7 +127,7 @@ SECTIONS
 	__ewram_lma = __ewram_overlay_end;
 	.ewdata ALIGN(0x100) (NOLOAD) : AT (__ewram_lma)
 	{
-		src/hardware.o(ewram_data);
+		vanilla/hardware.o(ewram_data);
 		*(ewram_data)
 
 		. = ALIGN(4);
