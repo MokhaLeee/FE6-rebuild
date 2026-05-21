@@ -68,7 +68,7 @@ struct TextInitInfo CONST_DATA gStatScreenTextList[] = {
 	{ gStatScreenSt.text + STATSCREEN_TEXT_MOV, 5 },
 	{ gStatScreenSt.text + STATSCREEN_TEXT_CON, 5 },
 	{ gStatScreenSt.text + STATSCREEN_TEXT_AID, 5 },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_TALK, 5 },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_TALK, 9 },
 	{ gStatScreenSt.text + STATSCREEN_TEXT_AFFIN, 7 },
 	{ gStatScreenSt.text + STATSCREEN_TEXT_TOTAL, 5 },
 	{ gStatScreenSt.text + STATSCREEN_TEXT_STAT, 9 },
@@ -397,14 +397,12 @@ void StatScreenSprites_Init(struct StatScreenSpritesProc *proc)
 
 void StatScreenSprites_BumpCheck(struct StatScreenSpritesProc *proc)
 {
-	if (gStatScreenSt.page_slide_key_bit & KEY_DPAD_LEFT)
-	{
+	if (gStatScreenSt.page_slide_key_bit & KEY_DPAD_LEFT) {
 		proc->anim_speed_left = 31;
 		proc->x_left = 101 - 6;
 	}
 
-	if (gStatScreenSt.page_slide_key_bit & KEY_DPAD_RIGHT)
-	{
+	if (gStatScreenSt.page_slide_key_bit & KEY_DPAD_RIGHT) {
 		proc->anim_speed_right = 31;
 		proc->x_right = 198 + 6;
 	}
@@ -504,39 +502,6 @@ void StatScreenSprites_PutMuAreaSprites(struct StatScreenSpritesProc *proc)
 		gStatScreenSt.y_disp_off + 131,
 		Sprite_32x16,
 		OAM2_CHR(OBCHR_STATSCREEN_240 + 0x50) + OAM2_PAL(OBPAL_STATSCREEN_SPRITES) + OAM2_LAYER(3));
-}
-
-void StatScreenSprites_PutRescueMarkers(struct StatScreenSpritesProc *proc)
-{
-	bool display_icon = (GetGameTime() % 32) < 20;
-
-	static u16 const pal_lut[3] = {
-		OBPAL_UNITSPRITE_BLUE,
-		OBPAL_UNITSPRITE_GREEN,
-		OBPAL_UNITSPRITE_RED,
-	};
-
-	if (!gStatScreenSt.is_transitioning) {
-		if ((gStatScreenSt.page == STATSCREEN_PAGE_PERSONALINFO) && (gStatScreenSt.unit->flags & UNIT_FLAG_RESCUING)) {
-			PutSysArrow(120, 40, TRUE);
-			PutSysArrow(120, 56, TRUE);
-
-			if (display_icon)
-			{
-				PutSprite(4,
-					184, 78, Sprite_8x8,
-					OAM2_CHR(3) + OAM2_PAL(pal_lut[gStatScreenSt.unit->rescue >> 6]) + OAM2_LAYER(2));
-			}
-		}
-
-		if (gStatScreenSt.unit->flags & UNIT_FLAG_RESCUED) {
-			if (display_icon) {
-				PutSprite(4,
-					32, 86, Sprite_8x8,
-					OAM2_CHR(3) + OAM2_PAL(pal_lut[gStatScreenSt.unit->rescue >> 6]) + OAM2_LAYER(2));
-			}
-		}
-	}
 }
 
 struct ProcScr CONST_DATA ProcScr_StatScreenSprites[] =

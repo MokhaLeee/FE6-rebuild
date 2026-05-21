@@ -9,6 +9,8 @@
 #include "armfunc.h"
 #include "systemlabels.h"
 #include "util.h"
+#include "oam.h"
+#include "sprite.h"
 #include "constants/videoalloc_global.h"
 
 #include "klib.h"
@@ -31,7 +33,7 @@ static struct StatScreenTextInfo const gStatScreenPersonalInfoLabelsInfo[] = {
 	{ gStatScreenSt.text + STATSCREEN_TEXT_CON,	  gUiTmScratchA + TM_OFFSET(9, 3),  TEXT_COLOR_SYSTEM_GOLD, 0, "Con" },
 	{ gStatScreenSt.text + STATSCREEN_TEXT_AID,	  gUiTmScratchA + TM_OFFSET(9, 5),  TEXT_COLOR_SYSTEM_GOLD, 0, "Aid" },
 	{ gStatScreenSt.text + STATSCREEN_TEXT_AFFIN, gUiTmScratchA + TM_OFFSET(9, 9),  TEXT_COLOR_SYSTEM_GOLD, 0, "Affin" },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_TALK,  gUiTmScratchA + TM_OFFSET(9, 7),  TEXT_COLOR_SYSTEM_GOLD, 0, "Trv" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_TALK,  gUiTmScratchA + TM_OFFSET(9, 7),  TEXT_COLOR_SYSTEM_GOLD, 0, "Talk" },
 	{ gStatScreenSt.text + STATSCREEN_TEXT_STAT,  gUiTmScratchA + TM_OFFSET(9, 11), TEXT_COLOR_SYSTEM_GOLD, 0, "Cond" },
 	{ gStatScreenSt.text + STATSCREEN_TEXT_TOTAL, gUiTmScratchA + TM_OFFSET(9, 13), TEXT_COLOR_SYSTEM_GOLD, 0, "Total" },
 	{ 0 }, // end
@@ -158,5 +160,40 @@ void PutStatScreenPersonalInfoPage(void)
 		PutNumberSmall(gUiTmScratchA + TM_OFFSET(16, 11),
 			TEXT_COLOR_SYSTEM_WHITE,
 			gStatScreenSt.unit->status_duration);
+	}
+}
+
+/**
+ * rescue
+ */
+void StatScreenSprites_PutRescueMarkers(struct StatScreenSpritesProc *proc)
+{
+	bool display_icon = (GetGameTime() % 32) < 20;
+
+	static u16 const pal_lut[3] = {
+		OBPAL_UNITSPRITE_BLUE,
+		OBPAL_UNITSPRITE_GREEN,
+		OBPAL_UNITSPRITE_RED,
+	};
+
+	if (!gStatScreenSt.is_transitioning) {
+		if ((gStatScreenSt.page == STATSCREEN_PAGE_PERSONALINFO) && (gStatScreenSt.unit->flags & UNIT_FLAG_RESCUING)) {
+			PutSysArrow(120, 56, TRUE);
+			PutSysArrow(120, 72, TRUE);
+
+			if (display_icon) {
+				PutSprite(4,
+					32, 86, Sprite_8x8,
+					OAM2_CHR(3) + OAM2_PAL(pal_lut[gStatScreenSt.unit->rescue >> 6]) + OAM2_LAYER(2));
+			}
+		}
+
+		if (gStatScreenSt.unit->flags & UNIT_FLAG_RESCUED) {
+			if (display_icon) {
+				PutSprite(4,
+					32, 86, Sprite_8x8,
+					OAM2_CHR(3) + OAM2_PAL(pal_lut[gStatScreenSt.unit->rescue >> 6]) + OAM2_LAYER(2));
+			}
+		}
 	}
 }
