@@ -6,6 +6,7 @@ enum skills {
 
 	SID_PowBonus,
 	SID_BlowDeath,
+	SID_Nihil,
 }; 
 
 #endif

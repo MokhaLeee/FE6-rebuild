@@ -350,7 +350,7 @@ ifneq (clean,$(MAKECMDGOALS))
   .PRECIOUS: %.d
 endif
 
-CLEAN_FILES += $(ALL_OBJS) $(ALL_DEPS)
+CLEAN_FILES += $(ALL_OBJS) $(ALL_OBJS:%.o=%.asm) $(ALL_DEPS)
 CLEAN_FILES += $(VANILLA_SRCS:%.c=%.asm)
 
 # ===========

@@ -2,19 +2,39 @@
 
 #include "prelude.h"
 
-// a / b
-u32 k_udiv(u32 a, u32 b);
+/* math */
+u32 k_udiv(u32 a, u32 b);   // a / b
 u64 k_u64div(u64 a, u64 b);
-
-// a % b
-u32 k_umod(u32 a, u32 b);
+u32 k_umod(u32 a, u32 b);   // a % b
 u64 k_u64mod(u64 a, u64 b);
+u32 k_udiv10(u32 n);       // n / 10
+u32 k_umod10(u32 n);       // n % 10
 
-// n / 10
-u32 k_udiv10(u32 n);
+/* bit */
+#define BIT(k) (1UL << (k))
+#define GENMASK_32(h, l) \
+	(((0xffffffff) << (l)) & (0xffffffff >> (32 - 1 - (h))))
 
-// n % 10
-u32 k_umod10(u32 n);
+static inline void set_bit(void *bits, int idx)
+{
+	u8 *_bits = bits;
+
+	_bits[idx >> 3] |= 1 << (idx & 0x7);
+}
+
+static inline void clear_bit(void *bits, int idx)
+{
+	u8 *_bits = bits;
+
+	_bits[idx >> 3] &= ~(1 << (idx & 0x7));
+}
+
+static inline bool check_bit(void *bits, int idx)
+{
+	u8 *_bits = bits;
+
+	return !!(_bits[idx >> 3] & (1 << (idx & 0x7)));
+}
 
 /* misc */
 enum UnitStatusIdxRef {

@@ -111,6 +111,8 @@ struct BattleUnit
 
     /* CHAX */
     /* 7B */ i8 change_mag;
+
+    u32 skills_bitfile[0x400 / 32];
 };
 
 struct BattleHit

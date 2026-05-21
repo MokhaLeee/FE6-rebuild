@@ -1,5 +1,6 @@
 #include "prelude.h"
 #include "unit.h"
+#include "battle.h"
 #include "skillsys.h"
 
 IWRAM_FUNC
@@ -27,4 +28,13 @@ bool JudgeSkillFast(struct Unit *unit, int sid)
 		return true;
 
 	return false;
+}
+
+IWRAM_FUNC
+bool JudgeSkillInBattle(struct BattleUnit *bu, int sid)
+{
+	int lo = sid & 0x1F;
+	int hi = sid >> 6;
+
+	return !!(bu->skills_bitfile[hi] & (1 << lo));
 }

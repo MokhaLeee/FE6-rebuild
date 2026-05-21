@@ -2,6 +2,7 @@
 #include "unit.h"
 #include "battle.h"
 #include "save_stats.h"
+#include "skillsys.h"
 
 /**
  * U 2 B
@@ -57,8 +58,12 @@ void InitBattleUnit(struct BattleUnit * bu, struct Unit * unit)
 
 	InitBattleUnitVanilla(bu, unit);
 
+	/* str-mag */
 	bu->unit.mag = GetUnitMagic(unit);
 	bu->change_mag = 0;
+
+	/* skill */
+	UnitToBattle_SetupSkillList(bu);
 }
 
 void InitBattleUnitWithoutBonuses(struct BattleUnit * bu, struct Unit * unit)
