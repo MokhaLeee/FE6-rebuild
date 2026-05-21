@@ -87,15 +87,16 @@ SHASUM ?= sha1sum
 C_GENERATED :=
 
 VANILLA_DIR := vanilla
-SRC_DIRS := $(VANILLA_DIR) content gameinfo
-C_SRCS   := $(foreach dir, $(SRC_DIRS),$(shell find $(dir) -name *.c))
-ASM_SRCS := $(foreach dir, $(SRC_DIRS),$(shell find $(dir) -name *.s))
-
 HACK_SRC  := src
-HACK_DIRS := $(HACK_SRC)
-HACK_C_SRCS := $(foreach dir, $(HACK_DIRS),$(shell find $(dir) -name *.c))
-HACK_S_SRCS += $(foreach dir, $(HACK_DIRS),$(shell find $(dir) -name *.S))
+HACK_DIRS := $(HACK_SRC) content gameinfo
 
+VANILLA_SRCS := $(foreach dir, $(VANILLA_DIR),$(shell find $(dir) -name *.c))
+C_SRCS := $(foreach dir, $(HACK_DIRS),$(shell find $(dir) -name *.c))
+S_SRCS := $(foreach dir, $(HACK_DIRS),$(shell find $(dir) -name *.S))
+ASM_SRCS := $(foreach dir, $(VANILLA_DIR),$(shell find $(dir) -name *.s)) \
+            $(foreach dir, $(HACK_DIRS),  $(shell find $(dir) -name *.s))
+
+SRC_DIRS := $(VANILLA_DIR) $(HACK_DIRS)
 LIB_DIRS := $(DEVKITPRO)/libgba $(AGBCC_HOME)
 
 # =========
@@ -265,6 +266,8 @@ glyph: $(GLYPH_INSTALLER)
 # ============
 # = Wizardry =
 # ============
+
+# == configs ==
 INC_DIRS := include include/hacks .
 INC_FLAG := $(foreach dir, $(INC_DIRS), -I$(dir)) \
 			$(foreach dir, $(LIB_DIRS), -I$(dir)/include)
@@ -274,77 +277,70 @@ CFLAGS := -g $(ARCH) -mtune=arm7tdmi \
 		  $(INC_FLAG) \
 		  -std=gnu99 -O2 -fno-builtin \
 		  -Wall -Wextra -Werror -Wno-unused-parameter
-
 CFLAGS += -fno-jump-tables
 # CFLAGS += -fno-inline
-
-ASFLAGS := -g $(ARCH) $(INC_FLAG)
-LDFLAGS := -g $(ARCH) -Wl,-Map,$(notdir $*.map)
-
 CDEPFLAGS := # -MMD -MQ "$*.o" -MQ "$*.asm" -MF "$(CACHE_DIR)/$*.d" -MP
 
-%.o:   EXT_FLAGS := -mthumb -mthumb-interwork
-%.asm: EXT_FLAGS := -mthumb -mthumb-interwork
+CPPFLAGS := $(INC_FLAG) -nostdinc -undef
+AGB_CFLAGS := -g -mthumb-interwork -O2 -Wimplicit -Wparentheses -Werror -fhex-asm -ffix-debug-line
+ASFLAGS := -g $(ARCH) $(INC_FLAG)
 
-%.arm.o   : EXT_FLAGS := -marm
-%.arm.asm : EXT_FLAGS := -marm
+ASM_DEP := $(PYTHON) tools/asmtools/asmdep.py
 
-%iwram.o   : EXT_FLAGS := -marm -mlong-calls
-%iwram.asm : EXT_FLAGS := -marm -mlong-calls
+# == vanilla ==
+$(VANILLA_DIR)/%.o: $(VANILLA_DIR)/%.c
+	@echo "[CC1]	$<"
+	@$(CPP) $(CPPFLAGS) $< | $(CC1) $(AGB_CFLAGS) -o $(VANILLA_DIR)/$*.asm
+	@echo ".text\n\t.align\t2, 0\n" >> $(VANILLA_DIR)/$*.asm
+	@$(AS) $(ASFLAGS) $(VANILLA_DIR)/$*.asm -o $@
+	@$(STRIP) -N .gcc2_compiled. $@
+	@rm -f $(VANILLA_DIR)/$*.asm
 
-$(HACK_SRC)/%.o: $(HACK_SRC)/%.c
+# == hacks ==
+%.o:        EXT_FLAGS := -mthumb -mthumb-interwork
+%.asm:      EXT_FLAGS := -mthumb -mthumb-interwork
+%.arm.o:    EXT_FLAGS := -marm
+%.arm.asm:  EXT_FLAGS := -marm
+%iwram.o:   EXT_FLAGS := -marm -mlong-calls
+%iwram.asm: EXT_FLAGS := -marm -mlong-calls
+
+%.o: %.c
 	@echo "[CC ]	$@"
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) $(EXT_FLAGS) $(CDEPFLAGS) -g -c $< -o $@
 
-$(HACK_SRC)/%.asm: $(HACK_SRC)/%.c
+%.asm: %.c
 	@echo "[CC ]	$@"
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) $(EXT_FLAGS) $(CDEPFLAGS) -S $< -o $@ -fverbose-asm
 
-%.o: %.S
-	@echo "[AS ]	$@"
-	@$(CC) $(CFLAGS) $(EXT_FLAGS) -g -c $< -o $@
+$(CACHE_DIR)/%.d: %.c
+	@mkdir -p $(dir $@)
+	@$(CC) $(CFLAGS) $< -o $@ -MM -MG -MT $@ -MT $*.o
 
 $(CACHE_DIR)/%.d: %.s
 	@mkdir -p $(dir $@)
 	@echo "$*.o: \\" > $@
 	@$(ASM_DEP) $(INC_FLAG) $< >> $@
 
+%.o: %.S
+	@echo "[AS ]	$@"
+	@$(CC) $(CFLAGS) $(EXT_FLAGS) -g -c $< -o $@
+
 %.o: %.s
 	@echo "[AS ]	$<"
 	@$(AS) $(ASFLAGS) $< -o $@
 
 # ===========
-# = Vanilla =
-# ===========
-CPPFLAGS := $(INC_FLAG) -nostdinc -undef
-AGB_CFLAGS := -g -mthumb-interwork -O2 -Wimplicit -Wparentheses -Werror -fhex-asm -ffix-debug-line
-ASFLAGS := -mcpu=arm7tdmi $(INC_FLAG)
-
-ASM_DEP := $(PYTHON)  tools/asmtools/asmdep.py
-
-$(CACHE_DIR)/%.d: %.c
-	@mkdir -p $(dir $@)
-	@$(CPP) $(CPPFLAGS) $< -o $@ -MM -MG -MT $@ -MT $*.o
-
-%.o: %.c
-	@echo "[CC ]	$<"
-	@$(CPP) $(CPPFLAGS) $< | $(CC1) $(AGB_CFLAGS) -o $*.asm
-	@echo ".text\n\t.align\t2, 0\n" >> $*.asm
-	@$(AS) $(ASFLAGS) $*.asm -o $@
-	@$(STRIP) -N .gcc2_compiled. $@
-
-# ===========
 # = Targets =
 # ===========
 
-ifeq (,$(findstring $(C_GENERATED),$(C_SRCS)))
-C_SRCS += $(C_GENERATED)
+ifeq (,$(findstring $(C_GENERATED),$(VANILLA_SRCS)))
+VANILLA_SRCS += $(C_GENERATED)
 endif
 
-C_OBJS := $(C_SRCS:%.c=%.o) $(HACK_C_SRCS:%.c=%.o)
-ASM_OBJS := $(ASM_SRCS:%.s=%.o) $(HACK_S_SRCS:%.S=%.o)
+C_OBJS := $(VANILLA_SRCS:%.c=%.o) $(C_SRCS:%.c=%.o)
+ASM_OBJS := $(ASM_SRCS:%.s=%.o) $(S_SRCS:%.S=%.o)
 
 ALL_OBJS := $(C_OBJS) $(ASM_OBJS)
 ALL_DEPS := $(ALL_OBJS:%.o=$(CACHE_DIR)/%.d)
@@ -355,7 +351,7 @@ ifneq (clean,$(MAKECMDGOALS))
 endif
 
 CLEAN_FILES += $(ALL_OBJS) $(ALL_DEPS)
-CLEAN_FILES += $(C_SRCS:%.c=%.asm)
+CLEAN_FILES += $(VANILLA_SRCS:%.c=%.asm)
 
 # ===========
 # = RECIPES =
