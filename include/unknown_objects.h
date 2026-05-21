@@ -163,9 +163,9 @@ extern struct ChapterInfo const *const gpChapterInfoTable;
 extern void const *const *const gpChapterAssets;
 
 extern u16 const Pal_LinkArenaMuralBackground[];
-extern u16 const Pal_StatscreenPageNameFlashing[][0x20];
+extern u16 const *const gpPal_StatscreenPageNameFlashing;
 
-extern u8 const Img_Statscreen_083080D0[]; // compressed img (statscreen misc sprite sheet)
+extern u8 const *const gpImg_StatScreenSprites; // compressed img (statscreen misc sprite sheet)
 extern u8 const Tsa_Statscreen_08307CEC[]; // compressed tsa (statscreen main window frame)
 extern u16 const Pal_Statscreen_08308050[]; // pal (statscreen equip stats frame)
 extern u8 const Img_Statscreen_08307ED4[]; // compressed img (statscreen equip stats frame)

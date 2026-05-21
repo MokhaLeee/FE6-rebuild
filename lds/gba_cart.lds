@@ -90,6 +90,7 @@ SECTIONS
 		INCLUDE "./lds/section_ewram_ov0.lds"
 		. = ALIGN(4);
 		*(.ewram_overlay_0)
+		*(ewram_overlay_0)
 		. = ALIGN(4);
 		__ewram_ov0_end = .;
 	} >ewram

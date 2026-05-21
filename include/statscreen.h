@@ -54,6 +54,15 @@ enum
     STATSCREEN_PAGE_PERSONALINFO,
     STATSCREEN_PAGE_ITEMS,
     STATSCREEN_PAGE_WEXPANDSUPPORTS,
+    STATSCREEN_PAGE_SKILLS,
+
+    STATSCREEN_PAGE_MAX
+};
+
+enum
+{
+    PAGE_FRAME_SCREEN_X = 12,
+    PAGE_FRAME_SCREEN_Y = 2,
 };
 
 // TODO: rename (the use of "Info" in this name doesn't fit convention used elsewhere in the source)
@@ -157,8 +166,6 @@ void PutStatScreenLeftPanelInfo(void);
 void PutStatScreenStatWithBar(int num, int x, int y, int base, int total, int max);
 void PutStatScreenPersonalInfoPage(void);
 void PutStatScreenItemsPage(void);
-void PutStatScreenSupportList(void);
-void PutStatScreenWeaponExpBar(int num, int x, int y, int item_kind);
 void PutStatScreenWeaponExpAndSupportsPage(void);
 void PutStatScreenPage(int page_id);
 struct Unit * FindNextStatScreenUnit(struct Unit * current_unit, int iter_step);

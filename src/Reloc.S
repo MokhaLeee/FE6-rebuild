@@ -46,3 +46,9 @@ gpSkillPTable: .word gSkillPTable
 
 .global gpSkillJTable
 gpSkillJTable: .word gSkillJTable
+
+.global gpImg_StatScreenSprites
+gpImg_StatScreenSprites: .word Img_StatScreenSprites
+
+.global gpPal_StatscreenPageNameFlashing
+gpPal_StatscreenPageNameFlashing: .word Pal_StatscreenPageNameFlashing

@@ -367,7 +367,7 @@ void StatusScreen_Init(struct StatusScreenProc * proc)
 
     Decompress(Img_PlayRankTimeOBJ, (void *) VRAM + CHR_SIZE * (0x400 + BGCHR_B_STATUSSCREEN_380));
     Decompress(Img_Unk_0833C378, (void *) VRAM + CHR_SIZE * 0);
-    Decompress(Img_Statscreen_083080D0, (void *) OBJ_VRAM0 + CHR_SIZE * 0x240);
+    Decompress(gpImg_StatScreenSprites, (void *) OBJ_VRAM0 + CHR_SIZE * 0x240);
 
     func_fe6_080736C8();
 
