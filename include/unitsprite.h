@@ -66,7 +66,7 @@ u8 GetUnitSpriteHiddenFlag(struct Unit * unit);
 
 struct UnitSprite * AddUnitSprite(int y);
 
-extern struct UnitSpriteInfo CONST_DATA UnitSpriteTable[];
+extern struct UnitSpriteInfo const UnitSpriteTable[];
 
 extern u8 EWRAM_DATA gUnitSpriteSlots[UNITSPRITE_MAX];
 

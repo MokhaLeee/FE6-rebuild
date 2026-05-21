@@ -2,7 +2,7 @@
 #include "unitsprite.h"
 #include "constants/unitsprites.h"
 
-CONTENT_DATA struct UnitSpriteInfo UnitSpriteTable[] = {
+CONTENT_DATA struct UnitSpriteInfo const UnitSpriteTable[] = {
 	[UNITSPRITE_ROY] = {
 		.unk_00 = 2,
 		.size = UNITSPRITE_16x16,
