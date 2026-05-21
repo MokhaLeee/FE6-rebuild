@@ -40,3 +40,9 @@ gpSongTable: .word gSongTable
 
 .global gpUnitMaxStatusConfigTable
 gpUnitMaxStatusConfigTable: .word gUnitMaxStatusConfigTable
+
+.global gpSkillPTable
+gpSkillPTable: .word gSkillPTable
+
+.global gpSkillJTable
+gpSkillJTable: .word gSkillJTable

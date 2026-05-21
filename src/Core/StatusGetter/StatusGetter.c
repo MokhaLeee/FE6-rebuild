@@ -2,6 +2,9 @@
 #include "unit.h"
 #include "item.h"
 
+#include "skillsys.h"
+#include "constants/skills.h"
+
 int GetUnitMaxHp(struct Unit *unit)
 {
 	return unit->max_hp + GetItemHpBonus(GetUnitEquippedWeapon(unit));
@@ -22,7 +25,14 @@ int GetUnitMagic(struct Unit *unit)
 
 int GetUnitPower(struct Unit *unit)
 {
-	return unit->pow + GetItemPowBonus(GetUnitEquippedWeapon(unit));
+	int status = unit->pow;
+	
+	status += GetItemPowBonus(GetUnitEquippedWeapon(unit));
+
+	if (SkillTester(unit, SID_PowBonus))
+		status += 5;
+
+	return status;
 }
 
 int GetUnitSkill(struct Unit *unit)
