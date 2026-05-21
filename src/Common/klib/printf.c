@@ -115,7 +115,7 @@ static char *longlong_to_string(char *buf, unsigned long long u, size_t len, uin
 	else
 		*sign_char = '\0';
 
-    return &buf[pos];
+	return &buf[pos];
 }
 
 static const char hextable[16]      = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
