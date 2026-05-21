@@ -51,7 +51,6 @@ static void setup_skill_list(struct SkillList *list, struct Unit *unit)
 
 	u8 *ref_buf = (u8 *)gBuf;
 
-	write_sign(list, unit);
 	list->amt = 0;
 
 	if (UNIT_IS_VALID(unit)) {
@@ -85,8 +84,10 @@ struct SkillList *GetSkillList(struct Unit *unit)
 {
 	struct SkillList *list = spawn_list_buffer(unit);
 
-	if (unlikely(check_sign(list, unit)))
+	if (unlikely(!check_sign(list, unit))) {
+		write_sign(list, unit);
 		setup_skill_list(list, unit);
+	}
 
 	return list;
 }
