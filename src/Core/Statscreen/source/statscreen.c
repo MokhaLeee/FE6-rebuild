@@ -58,18 +58,20 @@ struct TextInitInfo CONST_DATA gStatScreenTextList[] = {
 	{ gStatScreenSt.text + STATSCREEN_TEXT_PNAME, 7 },
 	{ gStatScreenSt.text + STATSCREEN_TEXT_JNAME, 7 },
 	{ gStatScreenSt.text + STATSCREEN_TEXT_UNUSED, 3 },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_POW, 3 },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_SKL, 3 },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_SPD, 3 },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_LCK, 3 },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_DEF, 3 },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_RES, 3 },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_MOV, 3 },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_CON, 3 },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_AID, 3 },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_RESCUE, 9 },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_AFFINITY, 7 },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_STATUS, 9 },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_POW, 5 },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_MAG, 5 },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_SKL, 5 },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_SPD, 5 },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_LCK, 5 },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_DEF, 5 },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_RES, 5 },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_MOV, 5 },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_CON, 5 },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_AID, 5 },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_TALK, 5 },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_AFFIN, 7 },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_TOTAL, 5 },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_STAT, 9 },
 	{ gStatScreenSt.text + STATSCREEN_TEXT_ITEM_A, 7 },
 	{ gStatScreenSt.text + STATSCREEN_TEXT_ITEM_B, 7 },
 	{ gStatScreenSt.text + STATSCREEN_TEXT_ITEM_C, 7 },
@@ -102,8 +104,8 @@ void InitStatScreenText(void)
 void PutStatScreenText(struct StatScreenTextInfo const * list)
 {
 	while (list->text != NULL) {
-		if (list->str_list != NULL)
-			PutDrawText(list->text, list->tm, list->color, list->x_offset, 0, list->str_list[GetLang()]);
+		if (list->str != NULL)
+			PutDrawText(list->text, list->tm, list->color, list->x_offset, 0, list->str);
 		else
 			PutText(list->text, list->tm);
 

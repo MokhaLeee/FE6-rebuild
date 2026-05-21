@@ -15,11 +15,11 @@
 #include "klib.h"
 
 static struct StatScreenTextInfo const gStatScreenEquipmentLabelsInfo[] = {
-	{ gStatScreenSt.text + STATSCREEN_TEXT_EQUIPATTACK, gUiTmScratchA + TM_OFFSET(3,  13), TEXT_COLOR_SYSTEM_GOLD, 0, SystemLabel_EquipAttack },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_EQUIPHIT,	gUiTmScratchA + TM_OFFSET(3,  15), TEXT_COLOR_SYSTEM_GOLD, 0, SystemLabel_EquipHit },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_EQUIPRANGE,  gUiTmScratchA + TM_OFFSET(10, 11), TEXT_COLOR_SYSTEM_GOLD, 0, SystemLabel_EquipRange },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_EQUIPCRIT,   gUiTmScratchA + TM_OFFSET(10, 13), TEXT_COLOR_SYSTEM_GOLD, 0, SystemLabel_EquipCrit },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_EQUIPAVOID,  gUiTmScratchA + TM_OFFSET(10, 15), TEXT_COLOR_SYSTEM_GOLD, 0, SystemLabel_EquipAvoid },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_EQUIPATTACK, gUiTmScratchA + TM_OFFSET(3,  13), TEXT_COLOR_SYSTEM_GOLD, 0, "Atk" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_EQUIPHIT,	gUiTmScratchA + TM_OFFSET(3,  15), TEXT_COLOR_SYSTEM_GOLD, 0, "Hit" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_EQUIPRANGE,  gUiTmScratchA + TM_OFFSET(10, 11), TEXT_COLOR_SYSTEM_GOLD, 0, "Rng" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_EQUIPCRIT,   gUiTmScratchA + TM_OFFSET(10, 13), TEXT_COLOR_SYSTEM_GOLD, 0, "Crit" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_EQUIPAVOID,  gUiTmScratchA + TM_OFFSET(10, 15), TEXT_COLOR_SYSTEM_GOLD, 0, "Avoid" },
 
 	{ 0 }, // end
 };

@@ -9,140 +9,142 @@
 
 enum
 {
-    STATSCREEN_TEXT_PNAME,
-    STATSCREEN_TEXT_JNAME,
-    STATSCREEN_TEXT_UNUSED,
-    STATSCREEN_TEXT_POW,
-    STATSCREEN_TEXT_SKL,
-    STATSCREEN_TEXT_SPD,
-    STATSCREEN_TEXT_LCK,
-    STATSCREEN_TEXT_DEF,
-    STATSCREEN_TEXT_RES,
-    STATSCREEN_TEXT_MOV,
-    STATSCREEN_TEXT_CON,
-    STATSCREEN_TEXT_AID,
-    STATSCREEN_TEXT_RESCUE,
-    STATSCREEN_TEXT_AFFINITY,
-    STATSCREEN_TEXT_STATUS,
-    // TODO: assert that there are as many items here than in inv
-    STATSCREEN_TEXT_ITEM_A,
-    STATSCREEN_TEXT_ITEM_B,
-    STATSCREEN_TEXT_ITEM_C,
-    STATSCREEN_TEXT_ITEM_D,
-    STATSCREEN_TEXT_ITEM_E,
-    STATSCREEN_TEXT_EQUIPRANGE,
-    STATSCREEN_TEXT_EQUIPATTACK,
-    STATSCREEN_TEXT_EQUIPHIT,
-    STATSCREEN_TEXT_EQUIPCRIT,
-    STATSCREEN_TEXT_EQUIPAVOID,
-    STATSCREEN_TEXT_WEXP_A,
-    STATSCREEN_TEXT_WEXP_B,
-    STATSCREEN_TEXT_WEXP_C,
-    STATSCREEN_TEXT_WEXP_D,
-    STATSCREEN_TEXT_SUPPORT_A,
-    STATSCREEN_TEXT_SUPPORT_B,
-    STATSCREEN_TEXT_SUPPORT_C,
-    STATSCREEN_TEXT_SUPPORT_D,
-    STATSCREEN_TEXT_SUPPORT_E,
-    STATSCREEN_TEXT_BWL,
+	STATSCREEN_TEXT_PNAME,
+	STATSCREEN_TEXT_JNAME,
+	STATSCREEN_TEXT_UNUSED,
+	STATSCREEN_TEXT_POW,
+	STATSCREEN_TEXT_MAG,
+	STATSCREEN_TEXT_SKL,
+	STATSCREEN_TEXT_SPD,
+	STATSCREEN_TEXT_LCK,
+	STATSCREEN_TEXT_DEF,
+	STATSCREEN_TEXT_RES,
+	STATSCREEN_TEXT_MOV,
+	STATSCREEN_TEXT_CON,
+	STATSCREEN_TEXT_AID,
+	STATSCREEN_TEXT_AFFIN,
+	STATSCREEN_TEXT_TALK,
+	STATSCREEN_TEXT_STAT,
+	STATSCREEN_TEXT_TOTAL,
+	// TODO: assert that there are as many items here than in inv
+	STATSCREEN_TEXT_ITEM_A,
+	STATSCREEN_TEXT_ITEM_B,
+	STATSCREEN_TEXT_ITEM_C,
+	STATSCREEN_TEXT_ITEM_D,
+	STATSCREEN_TEXT_ITEM_E,
+	STATSCREEN_TEXT_EQUIPRANGE,
+	STATSCREEN_TEXT_EQUIPATTACK,
+	STATSCREEN_TEXT_EQUIPHIT,
+	STATSCREEN_TEXT_EQUIPCRIT,
+	STATSCREEN_TEXT_EQUIPAVOID,
+	STATSCREEN_TEXT_WEXP_A,
+	STATSCREEN_TEXT_WEXP_B,
+	STATSCREEN_TEXT_WEXP_C,
+	STATSCREEN_TEXT_WEXP_D,
+	STATSCREEN_TEXT_SUPPORT_A,
+	STATSCREEN_TEXT_SUPPORT_B,
+	STATSCREEN_TEXT_SUPPORT_C,
+	STATSCREEN_TEXT_SUPPORT_D,
+	STATSCREEN_TEXT_SUPPORT_E,
+	STATSCREEN_TEXT_BWL,
 
-    MAX_STATSCREEN_TEXT,
+	MAX_STATSCREEN_TEXT,
 };
 
 enum
 {
-    STATSCREEN_PAGE_PERSONALINFO,
-    STATSCREEN_PAGE_ITEMS,
-    STATSCREEN_PAGE_WEXPANDSUPPORTS,
-    STATSCREEN_PAGE_SKILLS,
+	STATSCREEN_PAGE_PERSONALINFO,
+	STATSCREEN_PAGE_ITEMS,
+	STATSCREEN_PAGE_WEXPANDSUPPORTS,
+	STATSCREEN_PAGE_SKILLS,
 
-    STATSCREEN_PAGE_MAX
+	STATSCREEN_PAGE_MAX
 };
 
 enum
 {
-    PAGE_FRAME_SCREEN_X = 12,
-    PAGE_FRAME_SCREEN_Y = 2,
+	PAGE_FRAME_SCREEN_X = 12,
+	PAGE_FRAME_SCREEN_Y = 2,
 };
 
 // TODO: rename (the use of "Info" in this name doesn't fit convention used elsewhere in the source)
 // (tl;dr "Info" should imply const)
 struct StatScreenInfo
 {
-    /* 00 */ u8 unk_00;
-    /* 01 */ u8 unit_id;
-    /* 02 */ u16 excluded_unit_flags;
+	/* 00 */ u8 unk_00;
+	/* 01 */ u8 unit_id;
+	/* 02 */ u16 excluded_unit_flags;
 };
 
 struct StatScreenSt
 {
-    /* 00 */ u8 page;
-    /* 01 */ u8 page_count;
-    /* 02 */ u16 page_slide_key_bit;
-    /* 04 */ i16 x_disp_off; // Note: Always 0, not properly taked into account by most things
-    /* 06 */ i16 y_disp_off;
-    /* 08 */ bool8 is_transitioning;
-    /* 0C */ struct Unit * unit;
-    /* 10 */ struct MuProc * mu;
-    /* 14 */ struct HelpBoxInfo const * help;
-    /* 18 */ struct Text text[MAX_STATSCREEN_TEXT];
+	/* 00 */ u8 page;
+	/* 01 */ u8 page_count;
+	/* 02 */ u16 page_slide_key_bit;
+	/* 04 */ i16 x_disp_off; // Note: Always 0, not properly taked into account by most things
+	/* 06 */ i16 y_disp_off;
+	/* 08 */ bool8 is_transitioning;
+	/* 0C */ struct Unit * unit;
+	/* 10 */ struct MuProc * mu;
+	/* 14 */ struct HelpBoxInfo const * help;
+	/* 18 */ struct Text text[MAX_STATSCREEN_TEXT];
 };
 
 struct StatScreenTextInfo
 {
-    /* 00 */ struct Text * text;
-    /* 04 */ u16 * tm;
-    /* 08 */ u8 color;
-    /* 09 */ u8 x_offset;
-    /* 0C */ char const * const * str_list;
+	/* 00 */ struct Text * text;
+	/* 04 */ u16 * tm;
+	/* 08 */ u8 color;
+	/* 09 */ u8 x_offset;
+	/* 0C */ char const *str;
 };
 
 struct MuralBackgroundProc
 {
-    /* 00 */ PROC_HEADER;
-    /* 29 */ u8 pad_29[0x4C - 0x29];
-    /* 4C */ i16 offset;
+	/* 00 */ PROC_HEADER;
+	/* 29 */ u8 pad_29[0x4C - 0x29];
+	/* 4C */ i16 offset;
 };
 
 struct StatScreenPageSlideProc
 {
-    /* 00 */ PROC_HEADER;
+	/* 00 */ PROC_HEADER;
 
-    /* 29 */ u8 pad_29[0x4A - 0x29];
-    /* 4A */ i16 new_page;
-    /* 4C */ i16 clock;
-    /* 4E */ u8 pad_4E[0x52 - 0x4E];
-    /* 52 */ u16 key_bit;
+	/* 29 */ u8 pad_29[0x4A - 0x29];
+	/* 4A */ i16 new_page;
+	/* 4C */ i16 clock;
+	/* 4E */ u8 pad_4E[0x52 - 0x4E];
+	/* 52 */ u16 key_bit;
 };
 
 struct StatScreenUnitSlideProc
 {
-    /* 00 */ PROC_HEADER;
+	/* 00 */ PROC_HEADER;
 
-    /* 29 */ u8 pad_29[0x38 - 0x29];
-    /* 38 */ i32 direction;
-    /* 3C */ i32 y_disp_init;
-    /* 40 */ i32 y_disp_fini;
-    /* 44 */ u8 pad_44[0x4A - 0x44];
-    /* 4A */ i16 new_unit_id;
-    /* 4C */ i16 clock;
+	/* 29 */ u8 pad_29[0x38 - 0x29];
+	/* 38 */ i32 direction;
+	/* 3C */ i32 y_disp_init;
+	/* 40 */ i32 y_disp_fini;
+	/* 44 */ u8 pad_44[0x4A - 0x44];
+	/* 4A */ i16 new_unit_id;
+	/* 4C */ i16 clock;
 };
 
 struct StatScreenSpritesProc
 {
-    /* 00 */ PROC_HEADER;
+	/* 00 */ PROC_HEADER;
 
-    // sprites proc only
-    /* 2A */ i16 x_left;
-    /* 2C */ i16 x_right;
-    /* 2E */ u16 clock_left;
-    /* 30 */ u16 clock_right;
-    /* 32 */ i16 anim_speed_left;
-    /* 34 */ i16 anim_speed_right;
+	// sprites proc only
+	/* 2A */ i16 x_left;
+	/* 2C */ i16 x_right;
+	/* 2E */ u16 clock_left;
+	/* 30 */ u16 clock_right;
+	/* 32 */ i16 anim_speed_left;
+	/* 34 */ i16 anim_speed_right;
 
-    // name sprite proc only
-    /* 36 */ u8 page_id;
-    /* 38 */ i16 vertical_scale; // int 6 == 1:1 (1.0) scale
+	// name sprite proc only
+	/* 36 */ u8 page_id;
+	/* 38 */ i16 vertical_scale; // int 6 == 1:1 (1.0) scale
 };
 
 void DrawUiGaugeBitmapEdgeColumn(u8 * bitmap, int pixels_per_line, int column);
@@ -220,3 +222,22 @@ extern struct ProcScr CONST_DATA ProcScr_StatScreen[];
 
 extern struct StatScreenInfo gStatScreenInfo;
 extern struct StatScreenSt gStatScreenSt;
+
+/**
+ * statscreenfx
+ */
+enum {
+	STATSCREEN_BG1_WIDTH  = 19,
+	STATSCREEN_BG1_HEIGHT = 19,
+
+	STATSCREEN_LEFT_WIDTH  = 12,
+	STATSCREEN_LEFT_HEIGHT = 13,
+};
+
+struct StatScreenBg1Tsa {
+	u8 width, height;
+	u16 data[STATSCREEN_BG1_WIDTH * STATSCREEN_BG1_HEIGHT + 1];
+};
+
+extern struct StatScreenBg1Tsa const *const TsaLut_StatScreenBgPlayer[5];
+extern struct StatScreenBg1Tsa const *const TsaLut_StatScreenBgNonePlayer[5];

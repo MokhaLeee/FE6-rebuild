@@ -171,7 +171,6 @@ extern u16 const Pal_Statscreen_08308050[]; // pal (statscreen equip stats frame
 extern u8 const Img_Statscreen_08307ED4[]; // compressed img (statscreen equip stats frame)
 extern u8 const Img_Statscreen_08308920[]; // compressed img (equipment label)
 
-extern u8 const Tsa_Statscreen_08307D58[]; // tsa (compressed): statscreen page A frame
 extern u8 const Tsa_Statscreen_08307DD4[]; // tsa (compressed): statscreen page B frame
 extern u8 const Tsa_Statscreen_08307E50[]; // tsa (compressed): statscreen page C frame
 extern u8 const Tsa_Statscreen_08308070[]; // tsa (compressed): statscreen page B battle stat box

@@ -6,11 +6,6 @@ Tsa_Statscreen_08307CEC: @ 08307CEC
 	.incbin "fe6-base.gba", 0x307CEC, (0x307D58 - 0x307CEC) @ length: 006C
 
 .align 2,0
-.global Tsa_Statscreen_08307D58
-Tsa_Statscreen_08307D58: @ 08307D58
-	.incbin "fe6-base.gba", 0x307D58, (0x307DD4 - 0x307D58) @ length: 007C
-
-.align 2,0
 .global Tsa_Statscreen_08307DD4
 Tsa_Statscreen_08307DD4: @ 08307DD4
 	.incbin "fe6-base.gba", 0x307DD4, (0x307E50 - 0x307DD4) @ length: 007C

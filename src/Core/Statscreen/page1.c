@@ -2,6 +2,7 @@
 #include "statscreen.h"
 #include "unit.h"
 #include "text.h"
+#include "faction.h"
 #include "hardware.h"
 #include "support.h"
 #include "icon.h"
@@ -11,20 +12,28 @@
 #include "constants/videoalloc_global.h"
 
 #include "klib.h"
+#include "lvup.h"
+
+char const * CONST_DATA SystemLabel_Total[] = {
+	[LANG_JAPANESE] = JTEXT("Total"),
+	[LANG_ENGLISH] = TEXT("Total", "Total"),
+};
 
 static struct StatScreenTextInfo const gStatScreenPersonalInfoLabelsInfo[] = {
-	{ gStatScreenSt.text + STATSCREEN_TEXT_SKL,	  gUiTmScratchA + TM_OFFSET(1, 3),  TEXT_COLOR_SYSTEM_GOLD, 0, SystemLabel_Skill },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_SPD,	  gUiTmScratchA + TM_OFFSET(1, 5),  TEXT_COLOR_SYSTEM_GOLD, 0, SystemLabel_Speed },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_LCK,	  gUiTmScratchA + TM_OFFSET(1, 7),  TEXT_COLOR_SYSTEM_GOLD, 0, SystemLabel_Luck },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_DEF,	  gUiTmScratchA + TM_OFFSET(1, 9),  TEXT_COLOR_SYSTEM_GOLD, 0, SystemLabel_Defense },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_RES,	  gUiTmScratchA + TM_OFFSET(1, 11), TEXT_COLOR_SYSTEM_GOLD, 0, SystemLabel_Resistance },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_MOV,	  gUiTmScratchA + TM_OFFSET(9, 1),  TEXT_COLOR_SYSTEM_GOLD, 0, SystemLabel_Movement },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_CON,	  gUiTmScratchA + TM_OFFSET(9, 3),  TEXT_COLOR_SYSTEM_GOLD, 0, SystemLabel_Constitution },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_AID,	  gUiTmScratchA + TM_OFFSET(9, 5),  TEXT_COLOR_SYSTEM_GOLD, 0, SystemLabel_Aid },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_RESCUE,   gUiTmScratchA + TM_OFFSET(9, 7),  TEXT_COLOR_SYSTEM_GOLD, 0, SystemLabel_Rescue },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_AFFINITY, gUiTmScratchA + TM_OFFSET(9, 9),  TEXT_COLOR_SYSTEM_GOLD, 0, SystemLabel_Affinity },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_STATUS,   gUiTmScratchA + TM_OFFSET(9, 11), TEXT_COLOR_SYSTEM_GOLD, 0, SystemLabel_Status },
-
+	{ gStatScreenSt.text + STATSCREEN_TEXT_POW,	  gUiTmScratchA + TM_OFFSET(1, 1),  TEXT_COLOR_SYSTEM_GOLD, 0, "Str" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_MAG,	  gUiTmScratchA + TM_OFFSET(1, 3),  TEXT_COLOR_SYSTEM_GOLD, 0, "Mag" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_SKL,	  gUiTmScratchA + TM_OFFSET(1, 5),  TEXT_COLOR_SYSTEM_GOLD, 0, "Skl" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_SPD,	  gUiTmScratchA + TM_OFFSET(1, 7),  TEXT_COLOR_SYSTEM_GOLD, 0, "Spd" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_LCK,	  gUiTmScratchA + TM_OFFSET(1, 9),  TEXT_COLOR_SYSTEM_GOLD, 0, "Luck" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_DEF,	  gUiTmScratchA + TM_OFFSET(1, 11),  TEXT_COLOR_SYSTEM_GOLD, 0, "Def" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_RES,	  gUiTmScratchA + TM_OFFSET(1, 13), TEXT_COLOR_SYSTEM_GOLD, 0, "Res" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_MOV,	  gUiTmScratchA + TM_OFFSET(9, 1),  TEXT_COLOR_SYSTEM_GOLD, 0, "Move" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_CON,	  gUiTmScratchA + TM_OFFSET(9, 3),  TEXT_COLOR_SYSTEM_GOLD, 0, "Con" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_AID,	  gUiTmScratchA + TM_OFFSET(9, 5),  TEXT_COLOR_SYSTEM_GOLD, 0, "Aid" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_AFFIN, gUiTmScratchA + TM_OFFSET(9, 9),  TEXT_COLOR_SYSTEM_GOLD, 0, "Affin" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_TALK,  gUiTmScratchA + TM_OFFSET(9, 7),  TEXT_COLOR_SYSTEM_GOLD, 0, "Trv" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_STAT,  gUiTmScratchA + TM_OFFSET(9, 11), TEXT_COLOR_SYSTEM_GOLD, 0, "Cond" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_TOTAL, gUiTmScratchA + TM_OFFSET(9, 13), TEXT_COLOR_SYSTEM_GOLD, 0, "Total" },
 	{ 0 }, // end
 };
 
@@ -52,81 +61,73 @@ void PutStatScreenStatWithBar(int num, int x, int y, int base, int total, int ma
 
 void PutStatScreenPersonalInfoPage(void)
 {
-	Decompress(Tsa_Statscreen_08307D58, gBuf);
-	TmApplyTsa(gUiTmScratchB, gBuf, TILEREF(BGCHR_WINDOWFRAME, BGPAL_WINDOWFRAME));
+	const void *tsa;
+
+	if (UNIT_FACTION(gStatScreenSt.unit) == FACTION_BLUE)
+		tsa = TsaLut_StatScreenBgPlayer[0];
+	else
+		tsa = TsaLut_StatScreenBgNonePlayer[0];
+
+	TmApplyTsa(gUiTmScratchB, tsa, TILEREF(BGCHR_WINDOWFRAME, BGPAL_WINDOWFRAME));
 
 	PutStatScreenText(gStatScreenPersonalInfoLabelsInfo);
-
-	// display strength/magic labels
-
-	if (UnitKnowsMagic(gStatScreenSt.unit))
-	{
-		// magic
-		PutDrawText(gStatScreenSt.text + STATSCREEN_TEXT_POW,
-			gUiTmScratchA + TM_OFFSET(1, 1),
-			TEXT_COLOR_SYSTEM_GOLD, 0, 0,
-			TEXT("Mag", "Mag"));
-	}
-	else
-	{
-		// strength
-		PutDrawText(gStatScreenSt.text + STATSCREEN_TEXT_POW,
-			gUiTmScratchA + TM_OFFSET(1, 1),
-			TEXT_COLOR_SYSTEM_GOLD, 0, 0,
-			TEXT("Str", "Str"));
-	}
 
 	// display strength/magic stat value
 	PutStatScreenStatWithBar(0, 5, 1,
 		gStatScreenSt.unit->pow,
 		GetUnitPower(gStatScreenSt.unit),
-		UNIT_POW_CAP(gStatScreenSt.unit));
+		GetUnitMaxStatusPow(gStatScreenSt.unit));
+
+	PutStatScreenStatWithBar(1, 5, 3,
+		gStatScreenSt.unit->mag,
+		GetUnitMagic(gStatScreenSt.unit),
+		GetUnitMaxStatusMag(gStatScreenSt.unit));
 
 	// display skill stat value
-	PutStatScreenStatWithBar(1, 5, 3,
+	PutStatScreenStatWithBar(2, 5, 5,
 		gStatScreenSt.unit->flags & UNIT_FLAG_RESCUING
 			? gStatScreenSt.unit->skl / 2 : gStatScreenSt.unit->skl,
 		GetUnitSkill(gStatScreenSt.unit),
 		gStatScreenSt.unit->flags & UNIT_FLAG_RESCUING
-			? UNIT_SKL_CAP(gStatScreenSt.unit) / 2 : UNIT_SKL_CAP(gStatScreenSt.unit));
+			? GetUnitMaxStatusSkl(gStatScreenSt.unit) / 2 : GetUnitMaxStatusSkl(gStatScreenSt.unit));
 
 	// display speed stat value
-	PutStatScreenStatWithBar(2, 5, 5,
+	PutStatScreenStatWithBar(3, 5, 7,
 		gStatScreenSt.unit->flags & UNIT_FLAG_RESCUING
 			? gStatScreenSt.unit->spd/2 : gStatScreenSt.unit->spd,
 		GetUnitSpeed(gStatScreenSt.unit),
 		gStatScreenSt.unit->flags & UNIT_FLAG_RESCUING
-			? UNIT_SPD_CAP(gStatScreenSt.unit) / 2 : UNIT_SPD_CAP(gStatScreenSt.unit));
+			? GetUnitMaxStatusSpd(gStatScreenSt.unit) / 2 : GetUnitMaxStatusSpd(gStatScreenSt.unit));
 
 	// display luck stat value
-	PutStatScreenStatWithBar(3, 5, 7,
+	PutStatScreenStatWithBar(4, 5, 9,
 		gStatScreenSt.unit->lck,
 		GetUnitLuck(gStatScreenSt.unit),
-		UNIT_LCK_CAP(gStatScreenSt.unit));
+		GetUnitMaxStatusLck(gStatScreenSt.unit));
 
 	// display defense stat value
-	PutStatScreenStatWithBar(4, 5, 9,
+	PutStatScreenStatWithBar(5, 5, 11,
 		gStatScreenSt.unit->def,
 		GetUnitDefense(gStatScreenSt.unit),
-		UNIT_DEF_CAP(gStatScreenSt.unit));
+		GetUnitMaxStatusDef(gStatScreenSt.unit));
 
 	// display resistance stat value
-	PutStatScreenStatWithBar(5, 5, 11,
+	PutStatScreenStatWithBar(6, 5, 13,
 		gStatScreenSt.unit->res,
 		GetUnitResistance(gStatScreenSt.unit),
-		UNIT_RES_CAP(gStatScreenSt.unit));
+		GetUnitMaxStatusRes(gStatScreenSt.unit));
 
 	// display movement stat value
-	PutStatScreenStatWithBar(6, 13, 1,
+	PutStatScreenStatWithBar(7, 13, 1,
 		UNIT_MOV_BASE(gStatScreenSt.unit),
-		UNIT_MOV(gStatScreenSt.unit),
-		UNIT_MOV_CAP(gStatScreenSt.unit));
+		GetUnitMovement(gStatScreenSt.unit),
+		GetUnitMaxStatusMov(gStatScreenSt.unit));
 
 	// display constitution stat value
-	PutStatScreenStatWithBar(7, 13, 3,
+	PutStatScreenStatWithBar(8, 13, 3,
 		UNIT_CON_BASE(gStatScreenSt.unit),
-		UNIT_CON(gStatScreenSt.unit),
-		UNIT_CON_CAP(gStatScreenSt.unit));
+		GetUnitCon(gStatScreenSt.unit),
+		GetUnitMaxStatusCon(gStatScreenSt.unit));
 
 	// display unit aid
 	PutNumber(gUiTmScratchA + TM_OFFSET(13, 5), TEXT_COLOR_SYSTEM_BLUE,
@@ -137,31 +138,25 @@ void PutStatScreenPersonalInfoPage(void)
 		GetAidIconFromAttributes(UNIT_ATTRIBUTES(gStatScreenSt.unit)),
 		TILEREF(0, BGPAL_ICONS + 1));
 
-	// display unit rescue name
-	Text_InsertDrawString(gStatScreenSt.text + STATSCREEN_TEXT_RESCUE,
-		24, TEXT_COLOR_SYSTEM_BLUE,
-		GetUnitRescueName(gStatScreenSt.unit));
+	// display affininity icon and name
+	if (gStatScreenSt.unit->pinfo->affinity) {
+		PutIcon(gUiTmScratchA + TM_OFFSET(12, 9),
+			GetUnitAffinityIcon(gStatScreenSt.unit),
+			TILEREF(0, BGPAL_ICONS + 1));
+
+		Text_InsertDrawString(gStatScreenSt.text + STATSCREEN_TEXT_AFFIN,
+			40, TEXT_COLOR_SYSTEM_BLUE, GetAffinityName(gStatScreenSt.unit->pinfo->affinity));
+	}
 
 	// display status name
-	Text_InsertDrawString(gStatScreenSt.text + STATSCREEN_TEXT_STATUS,
+	Text_InsertDrawString(gStatScreenSt.text + STATSCREEN_TEXT_STAT,
 		24, TEXT_COLOR_SYSTEM_BLUE,
 		GetUnitStatusName(gStatScreenSt.unit));
 
 	// display status turns
-
-	if (gStatScreenSt.unit->status != UNIT_STATUS_NONE)
-	{
+	if (gStatScreenSt.unit->status != UNIT_STATUS_NONE) {
 		PutNumberSmall(gUiTmScratchA + TM_OFFSET(16, 11),
 			TEXT_COLOR_SYSTEM_WHITE,
 			gStatScreenSt.unit->status_duration);
 	}
-
-	// display affininity icon and name
-
-	PutIcon(gUiTmScratchA + TM_OFFSET(12, 9),
-		GetUnitAffinityIcon(gStatScreenSt.unit),
-		TILEREF(0, BGPAL_ICONS + 1));
-
-	Text_InsertDrawString(gStatScreenSt.text + STATSCREEN_TEXT_AFFINITY,
-		40, TEXT_COLOR_SYSTEM_BLUE, GetAffinityName(gStatScreenSt.unit->pinfo->affinity));
 }

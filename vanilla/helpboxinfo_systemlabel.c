@@ -23,73 +23,73 @@ char const * CONST_DATA SystemLabel_Hp[] =
 
 char const * CONST_DATA SystemLabel_Strength[] =
 {
-    [LANG_JAPANESE] = JTEXT("力"),
+    [LANG_JAPANESE] = "Str", // JTEXT("力"),
     [LANG_ENGLISH] = TEXT("Str", "Str"),
 };
 
 char const * CONST_DATA SystemLabel_Magic[] =
 {
-    [LANG_JAPANESE] = JTEXT("魔力"),
+    [LANG_JAPANESE] = "Mag", // JTEXT("魔力"),
     [LANG_ENGLISH] = TEXT("Mag", "Mag"),
 };
 
 char const * CONST_DATA SystemLabel_Skill[] =
 {
-    [LANG_JAPANESE] = JTEXT("技"),
+    [LANG_JAPANESE] = "Skill", // JTEXT("技"),
     [LANG_ENGLISH] = TEXT("Skill", "Skill"),
 };
 
 char const * CONST_DATA SystemLabel_Speed[] =
 {
-    [LANG_JAPANESE] = JTEXT("速さ"),
+    [LANG_JAPANESE] = "Spd", // JTEXT("速さ"),
     [LANG_ENGLISH] = TEXT("Spd", "Spd"),
 };
 
 char const * CONST_DATA SystemLabel_Defense[] =
 {
-    [LANG_JAPANESE] = JTEXT("守備"),
+    [LANG_JAPANESE] = "Def", // JTEXT("守備"),
     [LANG_ENGLISH] = TEXT("Def", "Def"),
 };
 
 char const * CONST_DATA SystemLabel_Resistance[] =
 {
-    [LANG_JAPANESE] = JTEXT("魔防"),
+    [LANG_JAPANESE] = "Res", // JTEXT("魔防"),
     [LANG_ENGLISH] = TEXT("Res", "Res"),
 };
 
 char const * CONST_DATA SystemLabel_Luck[] =
 {
-    [LANG_JAPANESE] = JTEXT("幸運"),
+    [LANG_JAPANESE] = "Luck", // JTEXT("幸運"),
     [LANG_ENGLISH] = TEXT("Luck", "Luck"),
 };
 
 char const * CONST_DATA SystemLabel_Constitution[] =
 {
-    [LANG_JAPANESE] = JTEXT("体格"),
+    [LANG_JAPANESE] = "Con", // JTEXT("体格"),
     [LANG_ENGLISH] = TEXT("Con", "Con"),
 };
 
 char const * CONST_DATA SystemLabel_Aid[] =
 {
-    [LANG_JAPANESE] = JTEXT("救出"),
+    [LANG_JAPANESE] = "Aid", // JTEXT("救出"),
     [LANG_ENGLISH] = TEXT("Aid", "Aid"),
 };
 
 char const * CONST_DATA SystemLabel_Movement[] =
 {
-    [LANG_JAPANESE] = JTEXT("移動"),
+    [LANG_JAPANESE] = "Move", // JTEXT("移動"),
     [LANG_ENGLISH] = TEXT("Move", "Move"),
 };
 
 char const * CONST_DATA SystemLabel_Rescue[] =
 {
-    [LANG_JAPANESE] = JTEXT("同行"),
+    [LANG_JAPANESE] = "Trv", // JTEXT("同行"),
     [LANG_ENGLISH] = TEXT("Trv", "Trv"),
 };
 
 char const * CONST_DATA SystemLabel_Affinity[] =
 {
-    [LANG_JAPANESE] = JTEXT("属性"),
+    [LANG_JAPANESE] = "Affin", // JTEXT("属性"),
     [LANG_ENGLISH] = TEXT("Affin", "Affin"),
 };
 

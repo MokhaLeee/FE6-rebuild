@@ -16,19 +16,19 @@
 #include "klib.h"
 
 struct StatScreenTextInfo const gStatScreenWeaponExpLabelsPhysicalInfo[] = {
-	{ gStatScreenSt.text + STATSCREEN_TEXT_WEXP_A, gUiTmScratchA + TM_OFFSET(3,  1), TEXT_COLOR_SYSTEM_WHITE, 0, SystemLabel_WeaponKindSword },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_WEXP_B, gUiTmScratchA + TM_OFFSET(3,  3), TEXT_COLOR_SYSTEM_WHITE, 0, SystemLabel_WeaponKindLance },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_WEXP_C, gUiTmScratchA + TM_OFFSET(11, 1), TEXT_COLOR_SYSTEM_WHITE, 0, SystemLabel_WeaponKindAxe },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_WEXP_D, gUiTmScratchA + TM_OFFSET(11, 3), TEXT_COLOR_SYSTEM_WHITE, 0, SystemLabel_WeaponKindBow },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_WEXP_A, gUiTmScratchA + TM_OFFSET(3,  1), TEXT_COLOR_SYSTEM_WHITE, 0, "剣" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_WEXP_B, gUiTmScratchA + TM_OFFSET(3,  3), TEXT_COLOR_SYSTEM_WHITE, 0, "槍" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_WEXP_C, gUiTmScratchA + TM_OFFSET(11, 1), TEXT_COLOR_SYSTEM_WHITE, 0, "斧" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_WEXP_D, gUiTmScratchA + TM_OFFSET(11, 3), TEXT_COLOR_SYSTEM_WHITE, 0, "弓" },
 
 	{ 0 }, // end
 };
 
 struct StatScreenTextInfo const gStatScreenWeaponExpLabelsMagicalInfo[] = {
-	{ gStatScreenSt.text + STATSCREEN_TEXT_WEXP_A, gUiTmScratchA + TM_OFFSET(3,  1), TEXT_COLOR_SYSTEM_WHITE, 0, SystemLabel_WeaponKindAnima },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_WEXP_B, gUiTmScratchA + TM_OFFSET(3,  3), TEXT_COLOR_SYSTEM_WHITE, 0, SystemLabel_WeaponKindLight },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_WEXP_C, gUiTmScratchA + TM_OFFSET(11, 1), TEXT_COLOR_SYSTEM_WHITE, 0, SystemLabel_WeaponKindElder },
-	{ gStatScreenSt.text + STATSCREEN_TEXT_WEXP_D, gUiTmScratchA + TM_OFFSET(11, 3), TEXT_COLOR_SYSTEM_WHITE, 0, SystemLabel_WeaponKindStaff },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_WEXP_A, gUiTmScratchA + TM_OFFSET(3,  1), TEXT_COLOR_SYSTEM_WHITE, 0, "理" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_WEXP_B, gUiTmScratchA + TM_OFFSET(3,  3), TEXT_COLOR_SYSTEM_WHITE, 0, "光" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_WEXP_C, gUiTmScratchA + TM_OFFSET(11, 1), TEXT_COLOR_SYSTEM_WHITE, 0, "闇" },
+	{ gStatScreenSt.text + STATSCREEN_TEXT_WEXP_D, gUiTmScratchA + TM_OFFSET(11, 3), TEXT_COLOR_SYSTEM_WHITE, 0, "杖" },
 
 	{ 0 }, // end
 };
