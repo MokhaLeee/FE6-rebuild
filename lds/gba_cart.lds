@@ -130,6 +130,8 @@ SECTIONS
 	{
 		vanilla/hardware.o(ewram_data);
 		*(ewram_data)
+		*(.ewram_data)
+		*(.ewram*)
 
 		. = ALIGN(4);
 		__ewram_end = ABSOLUTE(.);
