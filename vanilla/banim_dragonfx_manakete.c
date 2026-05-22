@@ -13,6 +13,8 @@
 #include "banim_ekrbattle.h"
 #include "banim_ekrdragon.h"
 
+#include "debuff.h"
+
 /**
  * Manakete
  */

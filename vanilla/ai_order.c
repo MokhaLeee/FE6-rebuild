@@ -6,6 +6,8 @@
 #include "bm.h"
 #include "ai_decide.h"
 
+#include "debuff.h"
+
 static u32 * CONST_DATA sUnitScores = (u32 *) gBuf;
 
 static void AiOrder_Main(ProcPtr proc);
@@ -59,7 +61,7 @@ void AiOrder_Berserk_Init(ProcPtr proc)
         if (!unit->pinfo)
             continue;
 
-        if (unit->status != UNIT_STATUS_BERSERK)
+        if (!CheckDebuff(unit, UNIT_STATUS_BERSERK))
             continue;
 
         if (unit->flags & (UNIT_FLAG_HIDDEN | UNIT_FLAG_TURN_ENDED | UNIT_FLAG_DEAD | UNIT_FLAG_RESCUED | UNIT_FLAG_AI_PROCESSED))
@@ -172,10 +174,10 @@ int BuildAiUnitList(void)
         if (!unit->pinfo)
             continue;
 
-        if (unit->status == UNIT_STATUS_SLEEP)
+        if (CheckDebuff(unit, UNIT_STATUS_SLEEP))
             continue;
 
-        if (unit->status == UNIT_STATUS_BERSERK)
+        if (CheckDebuff(unit, UNIT_STATUS_BERSERK))
             continue;
 
         if (unit->flags & (UNIT_FLAG_HIDDEN | UNIT_FLAG_TURN_ENDED | UNIT_FLAG_DEAD | UNIT_FLAG_RESCUED | UNIT_FLAG_AI_PROCESSED))

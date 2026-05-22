@@ -32,6 +32,7 @@
 #include "constants/msg.h"
 
 #include "klib.h"
+#include "debuff.h"
 
 EWRAM_DATA struct StatScreenInfo gStatScreenInfo;
 EWRAM_OVERLAY(0) struct StatScreenSt gStatScreenSt;
@@ -743,7 +744,7 @@ void HelpBoxPopulateStatScreenItem(struct HelpBoxProc *proc)
 
 void HelpBoxPopulateStatScreenStatus(struct HelpBoxProc *proc)
 {
-	switch (gStatScreenSt.unit->status) {
+	switch (GetDispDebuff(gStatScreenSt.unit)) {
 	case UNIT_STATUS_NONE:
 		proc->msg = MSG_5A8;
 		break;

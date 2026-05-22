@@ -7,6 +7,8 @@
 #include "banim.h"
 #include "banim_ekrdragon.h"
 
+#include "debuff.h"
+
 struct ProcScr CONST_DATA ProcScr_EfxFlashBG[] =
 {
     PROC_NAME_DEBUG("efxFlashBG"),
@@ -422,7 +424,7 @@ void NewEfxStatusUnit(struct Anim * anim)
     proc->timer = 0;
     proc->frame = 0;
     proc->frame_lut = frame_config;
-    proc->debuff = unit->status;
+    proc->debuff = GetDispDebuff(unit);
 
     if (gEkrDebugModeMaybe == 1)
         proc->debuff = UNIT_STATUS_NONE;

@@ -95,16 +95,6 @@ enum {
 	UNIT_FLAG_SOLOANIM = UNIT_FLAG_SOLOANIM_1 | UNIT_FLAG_SOLOANIM_2,
 };
 
-// valid values for Unit::status
-enum {
-	UNIT_STATUS_NONE,
-
-	UNIT_STATUS_POISON,
-	UNIT_STATUS_SLEEP,
-	UNIT_STATUS_SILENCED,
-	UNIT_STATUS_BERSERK,
-};
-
 // bits of the result of GetUnitUseBits
 enum {
 	UNIT_USEBIT_WEAPON = 1 << 0,
@@ -253,15 +243,20 @@ struct Unit {
 	/* 18 */ i8 bonus_con;
 	/* 19 */ u8 rescue;
 	/* 1A */ i8 bonus_mov;
-	/* 1B */ // pad?
+	/* 1B */ i8 mag;
 	/* 1C */ u16 items[ITEMSLOT_INV_COUNT];
 	/* 26 */ u8 wexp[UNIT_WEAPON_EXP_COUNT];
+#if 0
 	/* 2E */ u8 status : 4;
 	/* 2E */ u8 status_duration : 4;
+#else
+	/* 2E */ u8 _unused_2E;
+#endif
+
 	/* 2F */ u8 torch : 4;
 	/* 2F */ u8 barrier : 4;
 	/* 30 */ u8 supports[UNIT_SUPPORT_COUNT];
-	/* 3A */ // pad?
+	/* 3A */ u8 _pad_3A[2];
 	/* 3C */ struct UnitSprite *map_sprite;
 	/* 40 */ u16 ai_config;
 	/* 42 */ u8 ai_a;
@@ -271,11 +266,14 @@ struct Unit {
 	/* 46 */ u8 ai_counter;
 
 	/* CHAX */
-	/* 47 */ i8 mag;
+	/* 47 */ u8 disp_status;
 
-    /* struct DuraStatus */
-    /* 48 */ u32 dura_status[4];
-    /* 58 */ // end
+	/* struct DuraStatus */
+	/* 48 */ u32 dura_status[4];
+
+	/* status: 2bit * 48 */
+	/* 58 */ u32 misc_status[3];
+	/* 64 */ // end
 };
 
 // UnitInfo is used for constructing new units
