@@ -183,7 +183,7 @@ int flash_read(u32 addr, u8 *data, size_t size)
 	if (addr > MEM_FLASH)
 		addr -= MEM_FLASH;
 
-	if (gFlashInfo.size == FLASH_SIZE_128KB) {
+	if (likely(gFlashInfo.size == FLASH_SIZE_128KB)) {
 		int bank = 0;
 
 		if (addr + size > FLASH_SIZE * 2)
@@ -197,11 +197,10 @@ int flash_read(u32 addr, u8 *data, size_t size)
 		flash_switch_bank(bank);
 	}
 
-	if (addr + size > FLASH_SIZE)
+	if (unlikely(addr + size > FLASH_SIZE))
 		return -1;
 
 	flash_memcpy(data, &flash_mem[addr], size);
-	
 	return 0;
 }
 
@@ -218,7 +217,7 @@ int flash_write_byte(u32 addr, u8 data) {
 }
 
 // Erase-and-Write 128 Bytes Sector (only Atmel devices)
-int flash_erase_and_write_atmel(u32 addr, u8 *data) {
+int flash_erase_and_write_atmel(u32 addr, const u8 *data) {
 	// disable interrupts
 	u32 i;
 	u16 REG_IME_old = REG_IME;
@@ -239,7 +238,7 @@ int flash_erase_and_write_atmel(u32 addr, u8 *data) {
 	return wait_until(addr | (FLASH_SECTOR_SIZE_128B - 1), &data[(FLASH_SECTOR_SIZE_128B - 1) - (addr & (FLASH_SECTOR_SIZE_128B - 1))], 20);
 }
 
-int flash_write_common(u32 addr, u8 *data, size_t size) {
+int flash_write_common(u32 addr, const u8 *data, size_t size) {
 	int err;
 	int sectors;
 
@@ -267,7 +266,7 @@ int flash_write_common(u32 addr, u8 *data, size_t size) {
 	return 0;
 }
 
-int flash_write_atmel(u32 addr, u8 *data, size_t size) {
+int flash_write_atmel(u32 addr, const u8 *data, size_t size) {
 	int err;
 	int sectors;
 
@@ -299,19 +298,19 @@ int flash_write_atmel(u32 addr, u8 *data, size_t size) {
 	return 0;
 }
 
-int flash_write(u32 addr, u8 *data, size_t size) {
+int flash_write(u32 addr, const u8 *data, size_t size) {
 	int err;
 
-	if (data == NULL)
+	if (unlikely(data == NULL))
 		return -1;
 
-	if (addr > MEM_FLASH)
+	if (likely(addr > MEM_FLASH))
 		addr -= MEM_FLASH;
 
-	if (gFlashInfo.size == FLASH_SIZE_128KB) {
+	if (likely(gFlashInfo.size == FLASH_SIZE_128KB)) {
 		int bank = 0;
 
-		if (addr + size > FLASH_SIZE * 2)
+		if (unlikely(addr + size > FLASH_SIZE * 2))
 			return -1;
 
 		if (addr >= FLASH_SIZE) {
@@ -322,7 +321,7 @@ int flash_write(u32 addr, u8 *data, size_t size) {
 		flash_switch_bank(bank);
 	}
 
-	if (addr + size > FLASH_SIZE)
+	if (unlikely(addr + size > FLASH_SIZE))
 		return -1;
 
 	if (gFlashInfo.manufacturer == FLASH_MFR_ATMEL)

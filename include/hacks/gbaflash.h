@@ -76,4 +76,4 @@ int flash_read(u32 addr, u8 *data, size_t size);
  *
  * @return \c 0 for success, \c non-zero for error.
  */
-int flash_write(u32 addr, u8 *data, size_t size);
+int flash_write(u32 addr, const u8 *data, size_t size);
