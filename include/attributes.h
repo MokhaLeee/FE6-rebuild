@@ -20,6 +20,7 @@
 #define EWRAM_OVERLAY_TEST EWRAM_OVERLAY(3)
 
 #define ALIGNED(n) __attribute__((aligned(n)))
+#define BITPACKED __attribute__((aligned(4), packed))
 #define NAKEDFUNC __attribute__((naked))
 
 #define _UNUSED __attribute__((unused))
