@@ -8,4 +8,5 @@ GAMEINFO_DATA
 struct SkillTable const gSkillJTable[0x100] = {
 	[JID_ARCHER] = {{ SID_PowBonus, 0 }},
 	[JID_CAVALIER] = {{ SID_BlowDeath, 0 }},
+	[JID_PALADIN] = {{ SID_AlertStance, 0 }},
 };

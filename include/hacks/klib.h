@@ -36,6 +36,11 @@ static inline bool check_bit(void *bits, u32 idx)
 	return !!(_bits[idx >> 3] & (1 << (idx & 0x7)));
 }
 
+/* unit-check */
+bool UnitAvailable(struct Unit *unit);
+bool UnitAvailableOnMap(struct Unit *unit);
+static inline bool UNIT_STONED(struct Unit *unit) { return false; } // todo
+
 /* hook-proc */
 typedef bool (*HookProcFunc_t)(ProcPtr proc);
 void SpawnHookProc(HookProcFunc_t const *hook_list, ProcPtr parent);

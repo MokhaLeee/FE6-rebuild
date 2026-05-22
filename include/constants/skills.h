@@ -4,6 +4,9 @@
 enum skills {
 	SID_NONE = 0,
 
+	// Status-getter skills
+	SID_PowBonus,
+
 	// Blow skills
 	SID_BlowDarting,
 	SID_BlowDeath,
@@ -14,8 +17,11 @@ enum skills {
 	SID_BlowUncanny,
 	SID_BlowKilling,
 
-	SID_PowBonus,
+	// Misc battle skills
 	SID_Nihil,
+
+	// Post-action skills
+	SID_AlertStance,
 }; 
 
 #endif

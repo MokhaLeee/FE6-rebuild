@@ -36,9 +36,13 @@ void EndEachSpriteAnimProc(void);
 bool SpriteAnimProcExists(void);
 
 #define ResetSpriteAnimClock(anim) \
+do { \
     (anim)->clock = 0; \
-    (anim)->clock_interval_q8 = 0x100
+    (anim)->clock_interval_q8 = 0x100; \
+ } while (0)
 
 #define FreezeSpriteAnim(anim) \
+do { \
     (anim)->clock = 0; \
-    (anim)->clock_interval_q8 = 0
+    (anim)->clock_interval_q8 = 0; \
+} while (0)
