@@ -16,6 +16,8 @@
 #include "constants/iids.h"
 #include "constants/icons.h"
 
+#include "debuff.h"
+
 inline struct IInfo const * GetIInfo(int iid)
 {
     return pr_IInfoTable + iid;
@@ -297,7 +299,7 @@ bool CanUnitUseWeapon(struct Unit * unit, int item)
             return FALSE;
     }
 
-    if ((unit->status == UNIT_STATUS_SILENCED) && (GetItemAttributes(item) & ITEM_ATTR_MAGIC))
+    if ((CheckDebuff(unit, UNIT_STATUS_SILENCED)) && (GetItemAttributes(item) & ITEM_ATTR_MAGIC))
         return FALSE;
 
     required_wexp = GetItemRequiredExp(item);
@@ -316,13 +318,13 @@ bool CanUnitUseStaff(struct Unit * unit, int item)
     if (!(GetItemAttributes(item) & ITEM_ATTR_STAFF))
         return FALSE;
 
-    if (unit->status == UNIT_STATUS_SILENCED)
+    if (CheckDebuff(unit, UNIT_STATUS_SILENCED))
         return FALSE;
 
-    if (unit->status == UNIT_STATUS_SLEEP)
+    if (CheckDebuff(unit, UNIT_STATUS_SLEEP))
         return FALSE;
 
-    if (unit->status == UNIT_STATUS_BERSERK)
+    if (CheckDebuff(unit, UNIT_STATUS_BERSERK))
         return FALSE;
 
     required_wexp = GetItemRequiredExp(item);
@@ -576,10 +578,10 @@ bool IsItemDisplayUsable(struct Unit * unit, int item)
 
     if (GetItemEffect(item) != 0)
     {
-        if (unit->status == UNIT_STATUS_SLEEP)
+        if (CheckDebuff(unit, UNIT_STATUS_SLEEP))
             return FALSE;
 
-        if (unit->status == UNIT_STATUS_BERSERK)
+        if (CheckDebuff(unit, UNIT_STATUS_BERSERK))
             return FALSE;
 
         if (!(UNIT_ATTRIBUTES(unit) & UNIT_ATTR_STEAL) && GetItemIid(item) == IID_LOCKPICK)

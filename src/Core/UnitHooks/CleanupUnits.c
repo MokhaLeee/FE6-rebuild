@@ -4,6 +4,8 @@
 #include "faction.h"
 #include "constants/chapters.h"
 
+#include "debuff.h"
+
 void CleanupUnitsBeforeChapter(void)
 {
 	// Clear non-blue units
@@ -39,7 +41,7 @@ void CleanupUnitsBeforeChapter(void)
 			unit->y = +1;
 
 			SetUnitHp(unit, GetUnitMaxHp(unit));
-			SetUnitStatus(unit, UNIT_STATUS_NONE);
+			// SetUnitStatus(unit, UNIT_STATUS_NONE);
 
 			unit->torch = 0;
 			unit->barrier = 0;

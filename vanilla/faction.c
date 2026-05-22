@@ -3,6 +3,8 @@
 #include "bm.h"
 #include "unit.h"
 
+#include "debuff.h"
+
 int CountFactionMoveableUnits(int faction)
 {
     int i, count = 0;
@@ -20,7 +22,7 @@ int CountFactionMoveableUnits(int faction)
         if (unit->flags & (UNIT_FLAG_TURN_ENDED | UNIT_FLAG_DEAD | UNIT_FLAG_NOT_DEPLOYED | UNIT_FLAG_RESCUED | UNIT_FLAG_UNDER_ROOF))
             continue;
 
-        if (unit->status == UNIT_STATUS_SLEEP || unit->status == UNIT_STATUS_BERSERK)
+        if (CheckDebuff(unit, UNIT_STATUS_SLEEP) || CheckDebuff(unit, UNIT_STATUS_BERSERK))
             continue;
 
         count++;

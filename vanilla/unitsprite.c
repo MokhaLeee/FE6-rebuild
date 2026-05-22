@@ -13,6 +13,8 @@
 #include "unit.h"
 #include "util.h"
 
+#include "debuff.h"
+
 #include "constants/terrains.h"
 #include "constants/unitsprites.h"
 #include "constants/videoalloc_global.h"
@@ -720,8 +722,7 @@ void PutUnitSpriteIconsOam(void)
 
         // Display status icon
 
-        switch (unit->status)
-        {
+        switch (GetDispDebuff(unit)) {
             case UNIT_STATUS_POISON:
                 x = unit->x * 16 - gBmSt.camera.x;
                 y = unit->y * 16 - gBmSt.camera.y;
@@ -816,7 +817,7 @@ void UnitSpriteHoverUpdate(void)
     if (unit != NULL)
     {
         if (!(unit->flags & UNIT_FLAG_TURN_ENDED) && UNIT_FACTION(unit) == FACTION_BLUE &&
-            unit->status != UNIT_STATUS_BERSERK && unit->status != UNIT_STATUS_SLEEP)
+            !CheckDebuff(unit, UNIT_STATUS_BERSERK) && !CheckDebuff(unit, UNIT_STATUS_SLEEP))
         {
             if ((UNIT_ATTRIBUTES(unit) & UNIT_ATTR_BALLISTA) != 0)
             {
@@ -870,7 +871,7 @@ bool IsUnitSpriteHoverEnabledAt(int x, int y)
     if (UNIT_FACTION(unit) != FACTION_BLUE)
         return FALSE;
 
-    if (unit->status != UNIT_STATUS_BERSERK && unit->status != UNIT_STATUS_SLEEP)
+    if (!CheckDebuff(unit, UNIT_STATUS_BERSERK) && !CheckDebuff(unit, UNIT_STATUS_SLEEP))
         return TRUE;
 
     return FALSE;

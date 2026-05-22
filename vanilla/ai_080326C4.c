@@ -16,6 +16,8 @@
 #include "constants/iids.h"
 #include "constants/terrains.h"
 
+#include "debuff.h"
+
 struct AiStaffAttemptEnt
 {
     u16 iid;
@@ -370,7 +372,7 @@ bool AiCanEquip(void)
     if (gAiDecision.action_id == AI_ACTION_COMBAT)
         return FALSE;
 
-    if (gActiveUnit->status == UNIT_STATUS_BERSERK)
+    if (CheckDebuff(gActiveUnit, UNIT_STATUS_BERSERK))
         return FALSE;
 
     return TRUE;
@@ -1569,7 +1571,7 @@ void AiAttemptRestoreStaff(int slot, bool (* is_enemy)(struct Unit * unit))
                     continue;
             }
 
-            if (unit->status == UNIT_STATUS_NONE)
+            if (GetDispDebuff(unit) == UNIT_STATUS_NONE)
                 continue;
 
             if (unit->level >= max_level && AiGetReachableAdjacentPosition(ix, iy, &pos))
@@ -1657,7 +1659,7 @@ void AiAttemptSilenceStaff(int slot, bool (* is_enemy)(struct Unit * unit))
                 continue;
         }
 
-        if (unit->status == UNIT_STATUS_SILENCED)
+        if (CheckDebuff(unit, UNIT_STATUS_SILENCED))
             continue;
 
         if (!AiUnitHasAnyStaff(unit))
@@ -1724,7 +1726,7 @@ void AiAttemptOffensiveStaff(int slot, bool (* is_enemy)(struct Unit * unit))
                 continue;
         }
 
-        if (unit->status != UNIT_STATUS_NONE)
+        if (GetDispDebuff(unit) != UNIT_STATUS_NONE)
             continue;
 
         if (!AiIsWithinRectDistance(
@@ -2008,7 +2010,7 @@ void AiAttemptAntitoxin(int slot)
     if ((gAiSt.special_item_flags & (4)) == 0)
         return;
 
-    if (gActiveUnit->status != UNIT_STATUS_POISON)
+    if (!CheckDebuff(gActiveUnit, UNIT_STATUS_POISON))
         return;
 
     if (AiFindSafestReachableLocation(gActiveUnit, &pos) != TRUE)

@@ -14,6 +14,8 @@
 #include "constants/pids.h"
 #include "constants/iids.h"
 
+#include "debuff.h"
+
 struct ArenaSt EWRAM_DATA gArenaSt = {};
 struct Unit EWRAM_DATA gArenaOpponent = {};
 
@@ -528,7 +530,7 @@ void ArenaContinueBattle(void)
 
 bool ArenaIsUnitAllowed(struct Unit * unit)
 {
-    if (unit->status == UNIT_STATUS_SILENCED)
+    if (CheckDebuff(unit, UNIT_STATUS_SILENCED))
         return FALSE;
 
     if (ArenaGetUnitWeaponKind(unit) < 0)

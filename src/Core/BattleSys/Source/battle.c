@@ -21,6 +21,7 @@
 #include "save_game.h"
 
 #include "klib.h"
+#include "debuff.h"
 
 #include "constants/pids.h"
 #include "constants/jids.h"
@@ -316,24 +317,20 @@ void SetBattleUnitWeapon(struct BattleUnit *bu, int item_slot)
 	bu->weapon_attributes = GetItemAttributes(bu->weapon);
 	bu->weapon_kind = GetItemKind(bu->weapon);
 
-	if (!(gBattleSt.flags & BATTLE_FLAG_STATSONLY))
-	{
-		if (bu->weapon_attributes & ITEM_ATTR_LIGHTBRAND)
-		{
+	if (!(gBattleSt.flags & BATTLE_FLAG_STATSONLY)) {
+		if (bu->weapon_attributes & ITEM_ATTR_LIGHTBRAND) {
 			if (gBattleSt.range == 2)
 				bu->weapon_kind = ITEM_KIND_LIGHT;
 			else
 				bu->weapon_attributes = bu->weapon_attributes &~ ITEM_ATTR_LIGHTBRAND;
 		}
 
-		if (!CanItemReachDistance(bu->weapon, gBattleSt.range) || bu->weapon_inventory_slot == 0xFF)
-		{
+		if (!CanItemReachDistance(bu->weapon, gBattleSt.range) || bu->weapon_inventory_slot == 0xFF) {
 			bu->weapon = 0;
 			bu->has_inventory_weapon = FALSE;
 		}
 
-		if (bu->unit.status == UNIT_STATUS_SLEEP)
-		{
+		if (CheckDebuff(&bu->unit, UNIT_STATUS_SLEEP)) {
 			bu->weapon = 0;
 			bu->has_inventory_weapon = FALSE;
 		}
@@ -581,7 +578,7 @@ bool BattleCheckTriangleAttack(struct BattleUnit *attacker, struct BattleUnit *d
 		if ((uid & 0xC0) != faction)
 			continue;
 
-		if (unit->status == UNIT_STATUS_SLEEP)
+		if (CheckDebuff(unit, UNIT_STATUS_SLEEP))
 			continue;
 
 		if (UNIT_ATTRIBUTES(unit) & triangleAttackAttr)
@@ -645,7 +642,7 @@ void BattleGenerateHitTriangleAttack(struct BattleUnit *attacker, struct BattleU
 	if (!(gBattleHitIt->info & BATTLE_HIT_INFO_BEGIN))
 		return;
 
-	if (attacker->unit.status == UNIT_STATUS_BERSERK)
+	if (CheckDebuff(&attacker->unit, UNIT_STATUS_BERSERK))
 		return;
 
 	if (gBattleSt.flags & BATTLE_FLAG_ARENA)
@@ -1114,10 +1111,8 @@ void BattleInitTargetCanCounter(void)
 
 	// Target cannot counter if a berserked player unit is attacking another player unit
 
-	if (gBattleUnitA.unit.status == UNIT_STATUS_BERSERK)
-	{
-		if ((UNIT_FACTION(&gBattleUnitA.unit) == FACTION_BLUE) && (UNIT_FACTION(&gBattleUnitB.unit) == FACTION_BLUE))
-		{
+	if (CheckDebuff(&gBattleUnitA.unit, UNIT_STATUS_BERSERK)) {
+		if ((UNIT_FACTION(&gBattleUnitA.unit) == FACTION_BLUE) && (UNIT_FACTION(&gBattleUnitB.unit) == FACTION_BLUE)) {
 			gBattleUnitB.weapon = 0;
 			gBattleUnitB.has_inventory_weapon = FALSE;
 		}

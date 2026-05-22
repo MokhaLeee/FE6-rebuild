@@ -17,6 +17,8 @@
 #include "constants/jids.h"
 #include "constants/terrains.h"
 
+#include "debuff.h"
+
 EWRAM_DATA i16 gBanimExpPrevious[2] = {};
 EWRAM_DATA i16 gBanimExpGain[2] = {};
 EWRAM_DATA i16 gBanimTerrain[2] = {};
@@ -478,7 +480,7 @@ bool _SetupBanim(void)
 		return false;
 
 	if (gBanimValid[POS_L] == true) {
-		if (unit_bu1->status == UNIT_STATUS_BERSERK)
+		if (CheckDebuff(unit_bu1, UNIT_STATUS_BERSERK))
 			return false;
 
 		if (gBanimIdx[POS_L] == -1)
@@ -495,7 +497,7 @@ bool _SetupBanim(void)
 	}
 
 	if (gBanimValid[POS_R] == true) {
-		if (unit_bu2->status == UNIT_STATUS_BERSERK)
+		if (CheckDebuff(unit_bu2, UNIT_STATUS_BERSERK))
 			return false;
 
 		if (gBanimIdx[POS_R] == -1)

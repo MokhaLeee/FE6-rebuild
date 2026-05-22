@@ -18,6 +18,8 @@
 #include "ui.h"
 #include "gamedata.h"
 
+#include "debuff.h"
+
 #include "constants/terrains.h"
 #include "constants/videoalloc_global.h"
 
@@ -450,7 +452,7 @@ void PutUnitMapUiStatus(u16 * tm, struct Unit * unit)
     if (unit == NULL)
         return;
 
-    switch (unit->status)
+    switch (GetDispDebuff(unit))
     {
         case UNIT_STATUS_SLEEP:
             tile = tile + 0x60;
@@ -477,7 +479,7 @@ void PutUnitMapUiStatus(u16 * tm, struct Unit * unit)
     tm[2] = tile++;
     tm[3] = tile++;
     tm[4] = 0;
-    tm[5] = TILEREF(BGCHR_MAPUI_128 + unit->status_duration, BGPAL_MAPUI_0);
+    tm[5] = TILEREF(BGCHR_MAPUI_128 + 1 /* unit->status_duration */, BGPAL_MAPUI_0);
 }
 
 void UnitMapUiUpdate(struct MapUiProc * proc, struct Unit * unit)
@@ -509,7 +511,7 @@ void UnitMapUiUpdate(struct MapUiProc * proc, struct Unit * unit)
     if (proc->hide_contents)
         return;
 
-    if ((proc->unit_clock & 0x40) != 0 && unit->status != UNIT_STATUS_NONE)
+    if ((proc->unit_clock & 0x40) != 0 && GetDispDebuff(unit) != UNIT_STATUS_NONE)
         return;
 
     x_digits = proc->hp_x * 8;

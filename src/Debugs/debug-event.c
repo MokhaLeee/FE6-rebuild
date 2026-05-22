@@ -21,6 +21,8 @@
 #include "constants/iids.h"
 #include "constants/chapters.h"
 
+#include "debuff.h"
+
 #if CONFIG_USE_DEBUG
 
 static void setup_status(void)
@@ -31,8 +33,10 @@ static void setup_status(void)
 	SetGold(GetGold() + 5000);
 
 	unit = GetUnitByPid(PID_LUGH);
-	if (unit)
+	if (unit) {
 		unit->exp = 99;
+		SetDebuff(unit, UNIT_STATUS_POISON);
+	}
 }
 
 static struct UnitInfo const UnitInfo_Chapter1_BlueA[] =

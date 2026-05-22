@@ -8,6 +8,8 @@
 #include "banim.h"
 #include "banim_ekrbattle.h"
 
+#include "debuff.h"
+
 void SpellFx_Begin(void)
 {
     gEfxSpellAnimExists = true;
