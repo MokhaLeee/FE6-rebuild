@@ -15,10 +15,10 @@
 #include "trap.h"
 #include "save_core.h"
 #include "save_game.h"
-
 #include "constants/chapters.h"
 
 #include "klib.h"
+#include "save-hw.h"
 
 struct PidStats *EWRAM_DATA gPidStatsSram = NULL;
 
@@ -33,12 +33,12 @@ void WriteGameSaveFreshStats(struct GameSaveBlock *gamesave_sram)
 	CpuFill16(0, gChapterStats, sizeof(gChapterStats));
 
 	for (i = 0; i < PID_STATS_COUNT; i++) {
-		WriteAndVerifySramFast(
+		WriteSave(
 			gPidStats, &gamesave_sram->pid_stats[i], sizeof(struct PidStats));
 	}
 
 	for (i = 0; i < CHAPTER_STATS_COUNT; i++) {
-		WriteAndVerifySramFast(
+		WriteSave(
 			gChapterStats, &gamesave_sram->chapter_stats[i], sizeof(struct ChapterStats));
 	}
 
@@ -52,24 +52,24 @@ void ClearPidStats(void)
 
 void ReadPidStats(void const *sram_src)
 {
-	ReadSramFast(sram_src, gPidStats, sizeof(gPidStats));
+	ReadSave(sram_src, gPidStats, sizeof(gPidStats));
 	gPidStatsSram = (void *) sram_src;
 }
 
 void ReadChapterStats(void const *sram_src)
 {
-	ReadSramFast(sram_src, gChapterStats, sizeof(gChapterStats));
+	ReadSave(sram_src, gChapterStats, sizeof(gChapterStats));
 }
 
 void WritePidStats(void *sram_dst)
 {
-	WriteAndVerifySramFast(gPidStats, sram_dst, sizeof(gPidStats));
+	WriteSave(gPidStats, sram_dst, sizeof(gPidStats));
 	gPidStatsSram = sram_dst;
 }
 
 void WriteChapterStats(void *sram_dst)
 {
-	WriteAndVerifySramFast(gChapterStats, sram_dst, sizeof(gChapterStats));
+	WriteSave(gChapterStats, sram_dst, sizeof(gChapterStats));
 }
 
 struct ChapterStats *GetChapterStats(int num)

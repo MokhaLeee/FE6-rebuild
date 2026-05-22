@@ -26,6 +26,8 @@
 #include "constants/chapters.h"
 #include "constants/faces.h"
 
+#include "save-hw.h"
+
 enum
 {
     DEBUG_WEATHER_NONE,
@@ -403,7 +405,7 @@ void StartDebugMenu_LoadGame(void)
 
     DebugInitBg(2, 0);
 
-    if (!IsSramWorking())
+    if (!IsSaveWorking())
         PutDrawText(NULL, gBg0Tm + TM_OFFSET(0, 18), 0, 0, 30, JTEXT("ＳＲＡＭが装着されていません"));
 
     StartMuralBackground(StartMenu(&MenuInfo_Debug_LoadGame), (u8 *) BG_VRAM + CHR_SIZE * 0x580, -1);

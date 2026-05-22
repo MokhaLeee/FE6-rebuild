@@ -14,58 +14,11 @@
 #include "unit.h"
 #include "action.h"
 #include "trap.h"
+#include "save-hw.h"
 
 static char const sSaveMarker[] = "AGB-FE6";
 
 struct SramMain *CONST_DATA gSramMain = CART_SRAM;
-
-u8 EWRAM_DATA gUnk_0203D524[0xA] = { 0 };
-bool EWRAM_DATA gIsSramWorking = FALSE;
-
-u8 *func_fe6_080841EC(void)
-{
-	gUnk_0203D524[0] = 0;
-
-	return gUnk_0203D524;
-}
-
-void func_fe6_080841F8(void) {}
-
-void SramInit(void)
-{
-	u32 buf[2];
-
-	buf[0] = 0x12345678;
-	buf[1] = 0x87654321;
-
-	SetSramFastFunc();
-
-	REG_IE |= INTR_FLAG_GAMEPAK;
-
-	WriteSramFast((u8 const *) &buf[0], ((void *) gSramMain) + sizeof(*gSramMain), sizeof(u32));
-	ReadSramFast(((void *) gSramMain) + sizeof(*gSramMain), &buf[1], sizeof(u32));
-
-	gIsSramWorking = (buf[1] == buf[0]) ? TRUE : FALSE;
-}
-
-bool IsSramWorking(void)
-{
-	return gIsSramWorking;
-}
-
-void WipeSram(void)
-{
-	u32 buf[0x10];
-	int i;
-
-	for (i = 0; i < (int) ARRAY_COUNT(buf); i++)
-		buf[i] = 0xFFFFFFFF;
-
-	for (i = 0; i < CART_SRAM_SIZE / (int) sizeof(buf); i++)
-		WriteAndVerifySramFast(buf, ((void *) gSramMain) + i *sizeof(buf), sizeof(buf));
-
-	STATIC_ASSERT(CART_SRAM_SIZE % sizeof(buf) == 0);
-}
 
 u16 Checksum16(void const *data, int size)
 {
@@ -89,13 +42,13 @@ bool ReadGlobalSaveInfo(struct GlobalSaveInfo *info)
 {
 	struct GlobalSaveInfo local_info;
 
-	if (!IsSramWorking())
+	if (!IsSaveWorking())
 		return FALSE;
 
 	if (info == NULL)
 		info = &local_info;
 
-	ReadSramFast(&gSramMain->head, info, sizeof(struct GlobalSaveInfo));
+	ReadSave(&gSramMain->head, info, sizeof(struct GlobalSaveInfo));
 
 	if (!StringEquals(info->name, sSaveMarker))
 		return FALSE;
@@ -109,12 +62,12 @@ bool ReadGlobalSaveInfo(struct GlobalSaveInfo *info)
 void WriteGlobalSaveInfo(struct GlobalSaveInfo *info)
 {
 	info->checksum = Checksum16(info, GLOBALSIZEINFO_SIZE_FOR_CHECKSUM);
-	WriteAndVerifySramFast(info, &gSramMain->head, sizeof(struct GlobalSaveInfo));
+	WriteSave(info, &gSramMain->head, sizeof(struct GlobalSaveInfo));
 }
 
 void WriteGlobalSaveInfoNoChecksum(struct GlobalSaveInfo *info)
 {
-	WriteAndVerifySramFast(info, &gSramMain->head, sizeof(struct GlobalSaveInfo));
+	WriteSave(info, &gSramMain->head, sizeof(struct GlobalSaveInfo));
 }
 
 void InitGlobalSaveInfo(void)
@@ -123,7 +76,7 @@ void InitGlobalSaveInfo(void)
 
 	int i;
 
-	WipeSram();
+	WipeSave();
 
 	StringCopy(info.name, sSaveMarker);
 	info.magic32 = SAVE_MAGIC32;
@@ -160,7 +113,7 @@ bool ReadSaveBlockInfo(struct SaveBlockInfo *block_info, int save_id)
 	if (block_info == NULL)
 		block_info = &local_block_info;
 
-	ReadSramFast(&gSramMain->block_info[save_id], block_info, sizeof(struct SaveBlockInfo));
+	ReadSave(&gSramMain->block_info[save_id], block_info, sizeof(struct SaveBlockInfo));
 
 	if (block_info->magic16 != SAVE_MAGIC16)
 		return FALSE;
@@ -231,7 +184,7 @@ void WriteSaveBlockInfo(struct SaveBlockInfo *block_info, int save_id)
 	}
 
 	PopulateSaveBlockChecksum(block_info);
-	WriteAndVerifySramFast(block_info, &gSramMain->block_info[save_id], sizeof(struct SaveBlockInfo));
+	WriteSave(block_info, &gSramMain->block_info[save_id], sizeof(struct SaveBlockInfo));
 }
 
 void *GetSaveWriteAddr(int save_id)
@@ -272,32 +225,32 @@ void *GetSaveReadAddr(int save_id)
 
 void WriteChapterFlags(void *sram_dst)
 {
-	WriteAndVerifySramFast(GetChapterFlagBits(), sram_dst, GetChapterFlagBitsSize());
+	WriteSave(GetChapterFlagBits(), sram_dst, GetChapterFlagBitsSize());
 }
 
 void WritePermanentFlags(void *sram_dst)
 {
-	WriteAndVerifySramFast(GetPermanentFlagBits(), sram_dst, GetPermanentFlagBitsSize());
+	WriteSave(GetPermanentFlagBits(), sram_dst, GetPermanentFlagBitsSize());
 }
 
 void ReadChapterFlags(void const *sram_src)
 {
-	ReadSramFast(sram_src, GetChapterFlagBits(), GetChapterFlagBitsSize());
+	ReadSave(sram_src, GetChapterFlagBits(), GetChapterFlagBitsSize());
 }
 
 void ReadPermanentFlags(void const *sram_src)
 {
-	ReadSramFast(sram_src, GetPermanentFlagBits(), GetPermanentFlagBitsSize());
+	ReadSave(sram_src, GetPermanentFlagBits(), GetPermanentFlagBitsSize());
 }
 
 void WriteSupplyItems(void *sram_dst)
 {
-	WriteAndVerifySramFast(GetSupplyItems(), sram_dst, SUPPLY_ITEM_COUNT *sizeof(u16));
+	WriteSave(GetSupplyItems(), sram_dst, SUPPLY_ITEM_COUNT *sizeof(u16));
 }
 
 void ReadSupplyItems(void const *sram_src)
 {
-	ReadSramFast(sram_src, GetSupplyItems(), SUPPLY_ITEM_COUNT *sizeof(u16));
+	ReadSave(sram_src, GetSupplyItems(), SUPPLY_ITEM_COUNT *sizeof(u16));
 }
 
 bool IsNotFirstPlaythrough(void)
@@ -317,7 +270,7 @@ bool func_fe6_08084714(void)
 
 bool IsMultiArenaAvailable(void)
 {
-	if (IsSramWorking()) {
+	if (IsSaveWorking()) {
 		int i;
 
 		for (i = 0; i < 3; i++) {

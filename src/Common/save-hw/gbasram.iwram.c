@@ -2,6 +2,8 @@
 #include "gbasram.h"
 #include "gbaio.h"
 
+#if CONFIG_SAVE_USE_SRAM
+
 IWRAM_FUNC
 void ReadSramFast(void const *_src, void *_dest, int size)
 {
@@ -28,3 +30,5 @@ u32 VerifySramFast(void const *_src, void *_dest, int size)
 	}
 	return 0;
 }
+
+#endif

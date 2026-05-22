@@ -12,8 +12,9 @@
 #include "battle.h"
 #include "chapter.h"
 #include "save_core.h"
-
 #include "constants/chapters.h"
+
+#include "save-hw.h"
 
 u8 EWRAM_DATA gSuspendSaveIdOffset = 0;
 
@@ -70,8 +71,8 @@ void CopyGameSave(int src_save_id, int dst_save_id)
 
 	STATIC_ASSERT(sizeof(struct GameSaveBlock) <= sizeof(gBuf));
 
-	ReadSramFast(src, gBuf, sizeof(struct GameSaveBlock));
-	WriteAndVerifySramFast(gBuf, dst, sizeof(struct GameSaveBlock));
+	ReadSave(src, gBuf, sizeof(struct GameSaveBlock));
+	WriteSave(gBuf, dst, sizeof(struct GameSaveBlock));
 
 	block_info.magic32 = SAVE_MAGIC32;
 	block_info.kind = SAVE_KIND_GAME;
@@ -95,12 +96,12 @@ void WriteNewGameSave(int save_id, int is_hard)
 	gPlaySt.playthrough_id = GetNewPlaythroughId();
 	gPlaySt.save_id = save_id;
 
-	WriteAndVerifySramFast(&gPlaySt, &dst->play_st, sizeof(gPlaySt));
+	WriteSave(&gPlaySt, &dst->play_st, sizeof(gPlaySt));
 
 	CpuFill16(0, &save_unit, sizeof(save_unit));
 
 	for (i = 0; i < UNIT_SAVE_AMOUNT_BLUE; i++)
-		WriteAndVerifySramFast(&save_unit, &dst->units[i], sizeof(save_unit));
+		WriteSave(&save_unit, &dst->units[i], sizeof(save_unit));
 
 	WriteSupplyItems(dst->supply_items);
 	WriteGameSaveFreshStats(dst);
@@ -124,7 +125,7 @@ void WriteGameSave(int save_id)
 
 	gPlaySt.save_id = save_id;
 	gPlaySt.time_saved = GetGameTime();
-	WriteAndVerifySramFast(&gPlaySt, &dst->play_st, sizeof(gPlaySt));
+	WriteSave(&gPlaySt, &dst->play_st, sizeof(gPlaySt));
 
 	for (i = 0; i < UNIT_SAVE_AMOUNT_BLUE; i++)
 		WriteGameSavePackedUnit(&gUnitArrayBlue[i], &dst->units[i]);
@@ -150,7 +151,7 @@ void ReadGameSave(int save_id)
 	if (!(gBmSt.flags & BM_FLAG_LINKARENA))
 		InvalidateSuspendSave(SAVE_SUSPEND);
 
-	ReadSramFast(&src->play_st, &gPlaySt, sizeof(gPlaySt));
+	ReadSave(&src->play_st, &gPlaySt, sizeof(gPlaySt));
 	SetGameTime(gPlaySt.time_saved);
 	gPlaySt.save_id = save_id;
 
@@ -175,7 +176,7 @@ bool IsSaveValid(int save_id)
 void ReadGameSavePlaySt(int save_id, struct PlaySt *play_st)
 {
 	struct GameSaveBlock const *src = GetSaveReadAddr(save_id);
-	ReadSramFast(&src->play_st, play_st, sizeof(struct PlaySt));
+	ReadSave(&src->play_st, play_st, sizeof(struct PlaySt));
 }
 
 bool IsGameSavePastFirstChapter(int save_id)
@@ -249,7 +250,7 @@ void WriteGameSavePackedUnit(struct Unit *unit, void *sram_dst)
 	for (i = 0; i < UNIT_SUPPORT_COUNT; i++)
 		save_unit.supports[i] = unit->supports[i];
 
-	WriteAndVerifySramFast(&save_unit, sram_dst, sizeof(struct GameSavePackedUnit));
+	WriteSave(&save_unit, sram_dst, sizeof(struct GameSavePackedUnit));
 }
 
 void ReadGameSavePackedUnit(void const *sram_src, struct Unit *unit)
@@ -257,7 +258,7 @@ void ReadGameSavePackedUnit(void const *sram_src, struct Unit *unit)
 	int i;
 	struct GameSavePackedUnit save_unit;
 
-	ReadSramFast(sram_src, &save_unit, sizeof(struct GameSavePackedUnit));
+	ReadSave(sram_src, &save_unit, sizeof(struct GameSavePackedUnit));
 
 	unit->pinfo = GetPInfo(save_unit.pid);
 	unit->jinfo = GetJInfo(save_unit.jid);
@@ -338,17 +339,17 @@ void WriteSuspendSave(int save_id)
 	if (gPlaySt.flags & PLAY_FLAG_TUTORIAL)
 		return;
 
-	if (!IsSramWorking())
+	if (!IsSaveWorking())
 		return;
 
 	save_id += GetNextSuspendSaveId();
 	dst = GetSaveWriteAddr(save_id);
 
 	gPlaySt.time_saved = GetGameTime();
-	WriteAndVerifySramFast(&gPlaySt, &dst->play_st, sizeof(struct PlaySt));
+	WriteSave(&gPlaySt, &dst->play_st, sizeof(struct PlaySt));
 
 	SaveActionRand();
-	WriteAndVerifySramFast(&gAction, &dst->action, sizeof(struct Action));
+	WriteSave(&gAction, &dst->action, sizeof(struct Action));
 
 	buf = (struct SuspendSavePackedUnit *)gBuf;
 
@@ -361,7 +362,7 @@ void WriteSuspendSave(int save_id)
 	for (i = 0; i < UNIT_SAVE_AMOUNT_GREEN; i++)
 		EncodeSuspendSavePackedUnit(&gUnitArrayGreen[i], buf++);
 
-	WriteSramFast(gBuf, (void *) dst->units, sizeof(dst->units));
+	WriteSave(gBuf, (void *) dst->units, sizeof(dst->units));
 
 	WritePermanentFlags(dst->permanent_flags);
 	WriteChapterFlags(dst->chapter_flags);
@@ -384,10 +385,10 @@ void ReadSuspendSave(int save_id)
 
 	struct SuspendSaveBlock const *src = GetSaveReadAddr(save_id + gSuspendSaveIdOffset);
 
-	ReadSramFast(&src->play_st, &gPlaySt, sizeof(struct PlaySt));
+	ReadSave(&src->play_st, &gPlaySt, sizeof(struct PlaySt));
 	SetGameTime(gPlaySt.time_saved);
 
-	ReadSramFast(&src->action, &gAction, sizeof(struct Action));
+	ReadSave(&src->action, &gAction, sizeof(struct Action));
 	RestoreActionRand();
 
 	InitUnits();
@@ -411,7 +412,7 @@ void ReadSuspendSave(int save_id)
 
 bool IsValidSuspendSave(int save_id)
 {
-	if (!IsSramWorking())
+	if (!IsSaveWorking())
 		return FALSE;
 
 	if (save_id != SAVE_SUSPEND)
@@ -497,7 +498,7 @@ void ReadSuspendSavePackedUnit(void const *sram_src, struct Unit *unit)
 	struct SuspendSavePackedUnit suspend_unit;
 	int i;
 
-	ReadSramFast(sram_src, &suspend_unit, sizeof(struct SuspendSavePackedUnit));
+	ReadSave(sram_src, &suspend_unit, sizeof(struct SuspendSavePackedUnit));
 
 	unit->pinfo = GetPInfo(suspend_unit.pid);
 	unit->jinfo = GetJInfo(suspend_unit.jid);
@@ -554,12 +555,12 @@ void ReadSuspendSavePackedUnit(void const *sram_src, struct Unit *unit)
 
 void WriteTraps(void *sram_dst)
 {
-	WriteAndVerifySramFast(GetTrap(0), sram_dst, TRAP_MAX_COUNT *sizeof(struct Trap));
+	WriteSave(GetTrap(0), sram_dst, TRAP_MAX_COUNT *sizeof(struct Trap));
 }
 
 void ReadTraps(void const *sram_src)
 {
-	ReadSramFast(sram_src, GetTrap(0), TRAP_MAX_COUNT *sizeof(struct Trap));
+	ReadSave(sram_src, GetTrap(0), TRAP_MAX_COUNT *sizeof(struct Trap));
 }
 
 int GetLastSuspendSaveId(void)
@@ -588,7 +589,7 @@ void WriteSwappedSuspendSaveId(void)
 
 int SramChecksum32(void const *sram_src, int size)
 {
-	ReadSramFast(sram_src, gBuf, size);
+	ReadSave(sram_src, gBuf, size);
 	return Checksum32(gBuf, size);
 }
 

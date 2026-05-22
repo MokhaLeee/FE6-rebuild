@@ -35,9 +35,6 @@ struct SaveBlockInfo
 
 u8 *func_fe6_080841EC(void);
 void func_fe6_080841F8(void);
-void SramInit(void);
-bool IsSramWorking(void);
-void WipeSram(void);
 u16 Checksum16(void const * data, int size);
 bool ReadGlobalSaveInfo(struct GlobalSaveInfo * info);
 void WriteGlobalSaveInfo(struct GlobalSaveInfo * info);

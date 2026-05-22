@@ -11,9 +11,9 @@
 #include "bm.h"
 #include "mu.h"
 #include "save_core.h"
-
 #include "m4a.h"
 
+#include "save-hw.h"
 #include "debug.h"
 
 void SramInit(void);
@@ -41,7 +41,7 @@ void AgbMain(void)
 	RefreshKeySt(gKeySt);
 
 	InitRamFuncs();
-	SramInit();
+	SaveHwInit();
 	InitProcs();
 	InitSpriteAnims();
 	InitMus();
