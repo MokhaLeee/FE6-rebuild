@@ -149,6 +149,14 @@ void UnitToBattle_SetupSkillList(const struct BattleUnit *bu)
 		setup_battle_skill_list();
 }
 
+bool PostAction_ResetSkillList(ProcPtr proc)
+{
+	memset(sSkillLists, 0, sizeof(sSkillLists));
+	memset(gBattleUnitA.skills_bitfile, 0, sizeof(gBattleUnitA.skills_bitfile));
+	memset(gBattleUnitB.skills_bitfile, 0, sizeof(gBattleUnitB.skills_bitfile));
+	return false;
+}
+
 /* runtime API */
 void AppendSkillListInBattle(struct BattleUnit *bu, int sid)
 {

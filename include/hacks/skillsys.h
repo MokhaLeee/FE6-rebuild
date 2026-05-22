@@ -22,6 +22,7 @@ struct SkillList {
 struct SkillList *GetSkillList(struct Unit *unit);
 void UnitToBattle_SetupSkillList(const struct BattleUnit *bu);
 void AppendSkillListInBattle(struct BattleUnit *bu, int sid);
+bool PostAction_ResetSkillList(ProcPtr proc);
 
 /* skill table */
 struct SkillTable { u16 sid[2]; };
@@ -43,9 +44,9 @@ bool JudgeSkillViaList(struct Unit *unit, int sid);
 bool JudgeSkillFast(struct Unit *unit, int sid);
 bool JudgeSkillInBattle(struct BattleUnit *bu, int sid);
 
-#define SkillTester(unit, sid) \
-	unlikely(JudgeSkillViaList(unit, sid))
-#define SkillFastTester(unit, sid) \
-	unlikely(JudgeSkillFast(unit, sid))
-#define BattleSkillTester(bu, sid) \
-	unlikely(JudgeSkillInBattle(bu, sid))
+// Always able to use, generate skill-list when check on new unit
+#define SkillTester(unit, sid)     unlikely(JudgeSkillViaList(unit, sid))
+// Quite but can only check on plist/jlist/dynamic-skills
+#define SkillFastTester(unit, sid) unlikely(JudgeSkillFast(unit, sid))
+// Only able in battle-calc
+#define BattleSkillTester(bu, sid) unlikely(JudgeSkillInBattle(bu, sid))
