@@ -353,7 +353,7 @@ void ResumeMapMainDuringPhaseChange(ProcPtr mapmain)
     Proc_Goto(mapmain, L_BMMAIN_6);
 }
 
-void func_fe6_08029654(void)
+void GC_SaveDataPostChapter(void)
 {
     SetNextGameAction(GAME_ACTION_2);
 

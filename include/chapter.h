@@ -21,6 +21,6 @@ void ResumeMapMainDuringAction(ProcPtr mapmain);
 void ResumeMapMainDuringBerserk(ProcPtr mapmain);
 void ResumeMapMainDuringArena(ProcPtr mapmain);
 void ResumeMapMainDuringPhaseChange(ProcPtr mapmain);
-void func_fe6_08029654(void);
+void GC_SaveDataPostChapter(void);
 
 #endif // CHAPTER_H
