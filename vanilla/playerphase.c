@@ -184,7 +184,7 @@ struct ProcScr CONST_DATA ProcScr_LimitView[] =
 void PlayerPhase_Suspend(ProcPtr proc)
 {
     gAction.suspend_point = SUSPEND_POINT_PLAYER_PHASE;
-    WriteSuspendSave(SAVE_SUSPEND);
+    // WriteSuspendSave(SAVE_SUSPEND);
 }
 
 void HandlePlayerMapCursor(void)
@@ -636,7 +636,7 @@ bool PlayerPhase_BeginAction(ProcPtr proc)
     if ((gAction.id != ACTION_WAIT) && !gBmSt.just_resumed)
     {
         gAction.suspend_point = SUSPEND_POINT_DURING_ACTION;
-        WriteSuspendSave(SAVE_SUSPEND);
+        // WriteSuspendSave(SAVE_SUSPEND);
     }
 
     return camret;

@@ -56,7 +56,7 @@ void AiDecide_Suspend(ProcPtr proc)
     else
         gAction.suspend_point = SUSPEND_POINT_AI_PHASE;
 
-    WriteSuspendSave(SAVE_SUSPEND);
+    // WriteSuspendSave(SAVE_SUSPEND);
 }
 
 void AiDecide_NextUnit(ProcPtr proc)

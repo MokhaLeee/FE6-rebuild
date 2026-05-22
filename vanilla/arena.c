@@ -513,7 +513,7 @@ void ArenaContinueBattle(void)
     gAction.extra = gBattleUnitB.unit.hp;
 
     gAction.suspend_point = SUSPEND_POINT_DURING_ARENA;
-    WriteSuspendSave(SAVE_SUSPEND);
+    // WriteSuspendSave(SAVE_SUSPEND);
 
     BattleUnwind();
 
