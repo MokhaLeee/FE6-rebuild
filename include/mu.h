@@ -178,6 +178,8 @@ void SetMuMaxWalkSpeed(void);
 void MuMaxWalkSpeedFunc(ProcPtr mu);
 void SetMuSpecialSprite(struct MuProc * mu, int jid, u16 const * pal);
 void SetMuPal(struct MuProc * mu, int pal);
+struct MuProc *GetMu(int slot);
+struct MuProc *GetUnitMu(struct Unit *unit);
 
 extern u16 const * const gMuFlashPalLut[];
 extern struct ProcScr const ProcScr_MuStepSe[];

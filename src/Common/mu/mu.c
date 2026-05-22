@@ -53,8 +53,8 @@ struct ProcScr const ProcScr_MuFogBump[] = {
 short const sMoveOffsetLut[4 * 2] = {
 	-1,  0, // left
 	+1,  0, // right
-	 0, +1, // up
-	 0, -1, // down
+	0, +1, // up
+	0, -1, // down
 };
 
 // TODO: move mu sound scripts to own data file?
@@ -1104,4 +1104,25 @@ void SetMuPal(struct MuProc *mu, int pal)
 {
 	mu->config->pal = pal;
 	mu->sprite_anim->oam2 = mu->config->chr + OAM2_PAL(pal) + OAM2_LAYER(2);
+}
+
+struct MuProc *GetMu(int slot)
+{
+	if (!sMuConfig[slot].id)
+		return NULL;
+
+	return sMuConfig[slot].mu;
+}
+
+struct MuProc *GetUnitMu(struct Unit *unit)
+{
+	int i;
+
+	for (i = 0; i < MU_COUNT; i++) {
+		struct MuProc *proc = sMuConfig[i].mu;
+
+		if (proc && proc->unit == unit)
+			return proc;
+	}
+	return NULL;
 }

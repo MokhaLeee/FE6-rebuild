@@ -45,6 +45,10 @@ static inline bool UNIT_STONED(struct Unit *unit) { return false; } // todo
 typedef bool (*HookProcFunc_t)(ProcPtr proc);
 void SpawnHookProc(HookProcFunc_t const *hook_list, ProcPtr parent);
 
+/* manim-common */
+void MapAnim_CommonInit(void);
+void MapAnim_CommonEnd(void);
+
 /* misc */
 enum UnitStatusIdxRef {
 	UNIT_STATUS_POW,

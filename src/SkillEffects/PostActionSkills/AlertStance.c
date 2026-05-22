@@ -2,6 +2,8 @@
 #include "unit.h"
 #include "action.h"
 #include "mu.h"
+#include "unitsprite.h"
+#include "util.h"
 #include "masseffect.h"
 
 #include "klib.h"
@@ -11,33 +13,40 @@
 
 static void callback_anim(ProcPtr proc)
 {
-#if 0
-	EndMu(getmu(gActiveUnit));
+	struct MuProc *mu;
+
+	mu = GetUnitMu(gActiveUnit);
+	if (mu)
+		EndMu(mu);
+
 	StartStatusHealEffect(gActiveUnit, proc);
-#endif
 }
 
 static void callback_refrain(ProcPtr proc)
 {
-#if 0
 	struct MuProc *mu;
 
 	HideUnitSprite(gActiveUnit);
 
 	mu = GetUnitMu(gActiveUnit);
-	if (!mu)
-		mu = StartMu(gActiveUnit);
+	if (mu)
+		EndMu(mu);
 
+	mu = StartMu(gActiveUnit);
 	SetMuDefaultFacing(mu);
 	StartTemporaryLock(proc, 15);
-#endif
 }
 
 static const struct ProcScr proc_alert_stance[] = {
 	PROC_YIELD,
+	PROC_CALL(MapAnim_CommonInit),
+	PROC_YIELD,
 	PROC_CALL(callback_anim),
 	PROC_YIELD,
 	PROC_CALL(callback_refrain),
+	PROC_YIELD,
+	PROC_CALL(MapAnim_CommonEnd),
+	PROC_YIELD,
 	PROC_END
 };
 
