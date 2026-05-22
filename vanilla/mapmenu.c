@@ -45,6 +45,7 @@
 #include "constants/msg.h"
 
 #include "eventscript.h"
+#include "debuff.h"
 
 EWRAM_OVERLAY(0) struct Font gFont_Unk_02002770 = {};
 
@@ -743,7 +744,7 @@ fu8 UnitActionMenu_Visit_Available(struct MenuEntInfo const * info, int id)
     if (GetAvailableTileEventCommand(gActiveUnit->x, gActiveUnit->y) != TILE_COMMAND_VISIT)
         return MENU_ENTRY_HIDDEN;
 
-    if (gActiveUnit->status == UNIT_STATUS_SILENCED)
+    if (CheckDebuff(gActiveUnit, UNIT_STATUS_SILENCED))
         return MENU_ENTRY_DISABLED;
 
     return MENU_ENTRY_ENABLED;
@@ -1147,7 +1148,7 @@ fu8 UnitActionMenu_Staff_Available(struct MenuEntInfo const * info, int id)
     {
         if (GetItemKind(item) == ITEM_KIND_STAFF && CanUnitUseItem(gActiveUnit, item))
         {
-            if (gActiveUnit->status == UNIT_STATUS_SILENCED)
+            if (CheckDebuff(gActiveUnit, UNIT_STATUS_SILENCED))
                 return MENU_ENTRY_DISABLED;
 
             return MENU_ENTRY_ENABLED;
@@ -1260,7 +1261,7 @@ fu8 UnitActionMenu_Talk_Available(struct MenuEntInfo const * info, int id)
     if (CountTargets() == 0)
         return MENU_ENTRY_HIDDEN;
 
-    if (gActiveUnit->status == UNIT_STATUS_SILENCED)
+    if (CheckDebuff(gActiveUnit, UNIT_STATUS_SILENCED))
         return MENU_ENTRY_DISABLED;
 
     return MENU_ENTRY_ENABLED;
@@ -1303,7 +1304,7 @@ fu8 UnitActionMenu_Support_Available(struct MenuEntInfo const * info, int id)
     if (CountTargets() != 0)
         return MENU_ENTRY_HIDDEN;
 
-    if (gActiveUnit->status == UNIT_STATUS_SILENCED)
+    if (CheckDebuff(gActiveUnit, UNIT_STATUS_SILENCED))
         return MENU_ENTRY_DISABLED;
 
     return MENU_ENTRY_ENABLED;
@@ -1474,7 +1475,7 @@ fu8 UnitActionMenu_Arena_Select(struct MenuProc * menu, struct MenuEntProc * ent
 {
     if (ent->availability == MENU_ENTRY_DISABLED)
     {
-        if (gActiveUnit->status == UNIT_STATUS_SILENCED)
+        if (CheckDebuff(gActiveUnit, UNIT_STATUS_SILENCED))
             MenuFrozenHelpBox(menu, MSG_C36);
         else
             MenuFrozenHelpBox(menu, MSG_C37);

@@ -2323,7 +2323,9 @@ bool SortUnitList(fu8 key, fu8 order)
             break;
 
         case UNITLIST_SORTKEY_21:
+#if 0
             SORT_BY_UNIT_FIELD(status)
+#endif
             break;
 
         case UNITLIST_SORTKEY_22:

@@ -27,6 +27,8 @@
 #include "constants/songs.h"
 #include "constants/msg.h"
 
+#include "debuff.h"
+
 extern IWRAM_DATA struct Unit gStatGainSimUnit;
 
 // TODO: map-menu.h
@@ -346,7 +348,7 @@ bool CanUnitUseTorchItem(struct Unit * unit)
 
 bool CanUnitUseAntitoxinItem(struct Unit * unit)
 {
-    if (unit->status != UNIT_STATUS_POISON)
+    if (CheckDebuff(unit, UNIT_STATUS_POISON))
         return FALSE;
 
     return TRUE;

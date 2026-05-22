@@ -15,6 +15,7 @@
 
 #include "klib.h"
 #include "lvup.h"
+#include "debuff.h"
 
 char const * CONST_DATA SystemLabel_Total[] = {
 	[LANG_JAPANESE] = JTEXT("Total"),
@@ -63,6 +64,7 @@ void PutStatScreenStatWithBar(int num, int x, int y, int base, int total, int ma
 
 void PutStatScreenPersonalInfoPage(void)
 {
+	int debuff;
 	const void *tsa;
 
 	if (UNIT_FACTION(gStatScreenSt.unit) == FACTION_BLUE)
@@ -156,10 +158,11 @@ void PutStatScreenPersonalInfoPage(void)
 		GetUnitStatusName(gStatScreenSt.unit));
 
 	// display status turns
-	if (gStatScreenSt.unit->status != UNIT_STATUS_NONE) {
+	debuff = GetDispDebuff(gStatScreenSt.unit);
+	if (debuff != UNIT_STATUS_NONE) {
 		PutNumberSmall(gUiTmScratchA + TM_OFFSET(16, 11),
 			TEXT_COLOR_SYSTEM_WHITE,
-			gStatScreenSt.unit->status_duration);
+			GetDebuffDuration(gStatScreenSt.unit, debuff));
 	}
 }
 

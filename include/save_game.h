@@ -87,8 +87,7 @@ struct SuspendSavePackedUnit
     /*    */ u32 res             : 5;
     /*    */ u32 lck             : 5;
     /*    */ u32 bonus_con       : 5;
-    /*    */ u32 status          : 3;
-    /*    */ u32 status_duration : 3;
+    /*    */ u32 _unused         : 6;
     /*    */ u32 torch           : 3;
     /*    */ u32 barrier         : 3;
     /* 30 */ u32 bonus_mov       : 4;

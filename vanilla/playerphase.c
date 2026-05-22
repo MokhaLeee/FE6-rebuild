@@ -31,6 +31,7 @@
 #include "constants/songs.h"
 
 #include "post-action.h"
+#include "debuff.h"
 
 struct ProcScr CONST_DATA ProcScr_PlayerPhase[] =
 {
@@ -378,7 +379,7 @@ void PlayerPhase_BeginMoveSelect(ProcPtr proc)
 {
     if (!MuExists() && UNIT_FACTION(gActiveUnit) == gPlaySt.faction)
     {
-        if (gActiveUnit->status != UNIT_STATUS_SLEEP && gActiveUnit->status != UNIT_STATUS_BERSERK)
+        if (CheckDebuff(gActiveUnit, UNIT_STATUS_SLEEP) && CheckDebuff(gActiveUnit, UNIT_STATUS_BERSERK))
         {
             StartMu(gActiveUnit);
             HideUnitSprite(gActiveUnit);
@@ -797,7 +798,7 @@ int GetPlayerSelectKind(struct Unit * unit)
     if (unit->flags & UNIT_FLAG_TURN_ENDED)
         return PLAYER_SELECT_TURNENDED;
 
-    if (unit->status != UNIT_STATUS_SLEEP && unit->status != UNIT_STATUS_BERSERK)
+    if (CheckDebuff(unit, UNIT_STATUS_SLEEP) && CheckDebuff(unit, UNIT_STATUS_BERSERK))
         return PLAYER_SELECT_CONTROL;
 
     return PLAYER_SELECT_NOCONTROL;
@@ -984,7 +985,7 @@ bool TrySetCursorOn(int uid)
     if (unit->flags & (UNIT_FLAG_HIDDEN | UNIT_FLAG_TURN_ENDED | UNIT_FLAG_DEAD))
         return FALSE;
 
-    if (unit->status == UNIT_STATUS_BERSERK || unit->status == UNIT_STATUS_SLEEP)
+    if (CheckDebuff(unit, UNIT_STATUS_BERSERK) || CheckDebuff(unit, UNIT_STATUS_SLEEP))
         return FALSE;
 
     CameraMoveWatchPosition(FindProc(ProcScr_PlayerPhase) ?: FindProc(ProcScr_PrepPhase), unit->x, unit->y);

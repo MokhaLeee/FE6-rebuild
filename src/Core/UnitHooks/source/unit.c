@@ -21,6 +21,8 @@
 #include "constants/icons.h"
 #include "constants/faces.h"
 
+#include "debuff.h"
+
 const int sizeof_unit = sizeof(struct Unit);
 
 u8 EWRAM_DATA gActiveUnitId;
@@ -291,31 +293,6 @@ int GetUnitVision(struct Unit *unit)
 		result = result + 5;
 
 	return result + unit->torch;
-}
-
-void SetUnitStatus(struct Unit *unit, int status)
-{
-	if (status == UNIT_STATUS_NONE) {
-		unit->status = UNIT_STATUS_NONE;
-		unit->status_duration = 0;
-	} else {
-		unit->status = status;
-		unit->status_duration = 5;
-	}
-}
-
-static char const *CONST_DATA sStatusNameStringLut[] =
-{
-	[UNIT_STATUS_BERSERK]  = TEXT("バサーク", "Berserk"),
-	[UNIT_STATUS_SILENCED] = TEXT("サイレス", "Silence"),
-	[UNIT_STATUS_SLEEP]	= TEXT("スリープ", "Sleep"),
-	[UNIT_STATUS_POISON]   = TEXT("ポイズン", "Poison"),
-	[UNIT_STATUS_NONE]	 = JTEXT("ーーー"),
-};
-
-char const *GetUnitStatusName(struct Unit *unit)
-{
-	return sStatusNameStringLut[unit->status];
 }
 
 int GetUnitMapSprite(struct Unit *unit)
@@ -627,10 +604,10 @@ bool UnitGiveRescue(struct Unit *unit, struct Unit *other)
 	return couldGive;
 }
 
-inline char const *GetUnitRescueName(struct Unit *unit)
+char const *GetUnitRescueName(struct Unit *unit)
 {
 	if (unit->rescue == 0)
-		return sStatusNameStringLut[UNIT_STATUS_NONE];
+		return "---";
 
 	return DecodeMsg(GetUnit(unit->rescue)->pinfo->msg_name);
 }
@@ -784,51 +761,6 @@ void ClearActiveFactionTurnEndedState(void)
 			continue;
 
 		unit->flags &= ~(UNIT_FLAG_TURN_ENDED | UNIT_FLAG_HAD_ACTION | UNIT_FLAG_AI_PROCESSED);
-	}
-}
-
-void TickActiveFactionTurnAndListStatusHeals(void)
-{
-	int i;
-
-	bool visionChanged = FALSE;
-
-	BeginTargetList(0, 0);
-
-	for (i = gPlaySt.faction + 1; i < gPlaySt.faction + 0x40; ++i) {
-		struct Unit *unit = GetUnit(i);
-
-		if (!unit)
-			continue;
-
-		if (!unit->pinfo)
-			continue;
-
-		if (unit->flags & (UNIT_FLAG_UNAVAILABLE | UNIT_FLAG_RESCUED))
-			continue;
-
-		if (unit->barrier != 0)
-			unit->barrier--;
-
-		if (unit->torch != 0) {
-			unit->torch--;
-			visionChanged = TRUE;
-		}
-
-		if (unit->status_duration != 0) {
-			unit->status_duration--;
-
-			if (unit->status_duration == 0)
-				EnlistTarget(unit->x, unit->y, unit->id, 0);
-		}
-	}
-
-	if (visionChanged) {
-		RenderMapForFade();
-		RefreshEntityMaps();
-		RenderMap();
-		StartMapFade(TRUE);
-		RefreshUnitSprites();
 	}
 }
 

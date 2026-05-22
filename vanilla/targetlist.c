@@ -14,6 +14,8 @@
 
 #include "constants/terrains.h"
 
+#include "debuff.h"
+
 struct Unit * EWRAM_DATA gSubjectUnit = NULL;
 
 void ForEachUnitInMovement(void (* func)(struct Unit * unit))
@@ -157,7 +159,7 @@ void TryEnlistTradeUnitTarget(struct Unit * unit)
     if (!AreUnitIdsSameFaction(gSubjectUnit->id, unit->id))
         return;
 
-    if (unit->status == UNIT_STATUS_BERSERK)
+    if (CheckDebuff(unit, UNIT_STATUS_BERSERK))
         return;
 
     if (gSubjectUnit->items[0] == 0 && unit->items[0] == 0)
@@ -203,7 +205,7 @@ void TryEnlistRescueUnitTarget(struct Unit * unit)
     if (!AreUnitIdsAllied(gSubjectUnit->id, unit->id))
         return;
 
-    if (unit->status == UNIT_STATUS_BERSERK)
+    if (CheckDebuff(unit, UNIT_STATUS_BERSERK))
         return;
 
     if (unit->flags & (UNIT_FLAG_RESCUING | UNIT_FLAG_RESCUED))
@@ -281,7 +283,7 @@ void TryEnlistRescueGiveUnitTarget(struct Unit * unit)
     if (unit->flags & UNIT_FLAG_RESCUING)
         return;
 
-    if (unit->status == UNIT_STATUS_BERSERK || unit->status == UNIT_STATUS_SLEEP)
+    if (CheckDebuff(unit, UNIT_STATUS_BERSERK) || CheckDebuff(unit, UNIT_STATUS_SLEEP))
         return;
 
     if (!CanUnitCarry(unit, GetUnit(gSubjectUnit->rescue)))
@@ -303,7 +305,7 @@ void ListRescueGiveTargets(struct Unit * unit)
 
 void TryEnlistTalkUnitTarget(struct Unit * unit)
 {
-    if (unit->status == UNIT_STATUS_BERSERK || unit->status == UNIT_STATUS_SLEEP)
+    if (CheckDebuff(unit, UNIT_STATUS_BERSERK) || CheckDebuff(unit, UNIT_STATUS_SLEEP))
         return;
 
     if (!CheckAvailableTalkEvent(gSubjectUnit->pinfo->id, unit->pinfo->id))
@@ -349,7 +351,7 @@ void ListSupportTargets(struct Unit * unit)
         if (other->flags & (UNIT_FLAG_UNAVAILABLE | UNIT_FLAG_RESCUED))
             continue;
 
-        if (other->status == UNIT_STATUS_BERSERK || other->status == UNIT_STATUS_SLEEP)
+        if (CheckDebuff(other, UNIT_STATUS_BERSERK) || CheckDebuff(other, UNIT_STATUS_SLEEP))
             continue;
 
         EnlistTarget(other->x, other->y, other->id, i);
@@ -460,7 +462,7 @@ void ListTerrainHealingTargets(int faction)
             EnlistTarget(unit->x, unit->y, unit->id, heal);
         }
 
-        if (DoesTerrainHealStatus(terrain) && unit->status != UNIT_STATUS_NONE)
+        if (DoesTerrainHealStatus(terrain) && GetDispDebuff(unit) != UNIT_STATUS_NONE)
             EnlistTarget(unit->x, unit->y, unit->id, -1);
     }
 }
@@ -486,7 +488,7 @@ void ListPoisonDamageTargets(int faction)
         if (unit->flags & (UNIT_FLAG_UNAVAILABLE | UNIT_FLAG_RESCUED))
             continue;
 
-        if (unit->status != UNIT_STATUS_POISON)
+        if (!CheckDebuff(unit, UNIT_STATUS_POISON))
             continue;
 
         EnlistTarget(unit->x, unit->y, unit->id, 1 + RandNext(3));
@@ -591,7 +593,7 @@ void TryEnlistRestoreUnitTarget(struct Unit * unit)
     if (unit->flags & UNIT_FLAG_RESCUED)
         return;
 
-    if (unit->status == UNIT_STATUS_NONE)
+    if (GetDispDebuff(unit) == UNIT_STATUS_NONE)
         return;
 
     EnlistTarget(unit->x, unit->y, unit->id, 0);
@@ -654,7 +656,7 @@ void TryEnlistSilenceUnitTarget(struct Unit * unit)
     if (AreUnitIdsAllied(gSubjectUnit->id, unit->id))
         return;
 
-    if (unit->status != UNIT_STATUS_NONE && unit->status != UNIT_STATUS_SILENCED)
+    if (!CheckDebuff(unit, UNIT_STATUS_SILENCED))
         return;
 
     EnlistTarget(unit->x, unit->y, unit->id, 0);
@@ -665,7 +667,7 @@ void TryEnlistSleepUnitTarget(struct Unit * unit)
     if (AreUnitIdsAllied(gSubjectUnit->id, unit->id))
         return;
 
-    if (unit->status != UNIT_STATUS_NONE && unit->status != UNIT_STATUS_SLEEP)
+    if (!CheckDebuff(unit, UNIT_STATUS_SLEEP))
         return;
 
     EnlistTarget(unit->x, unit->y, unit->id, 0);
@@ -676,7 +678,7 @@ void TryEnlistBerserkUnitTarget(struct Unit * unit)
     if (AreUnitIdsAllied(gSubjectUnit->id, unit->id))
         return;
 
-    if (unit->status != UNIT_STATUS_NONE && unit->status != UNIT_STATUS_BERSERK)
+    if (!CheckDebuff(unit, UNIT_STATUS_BERSERK))
         return;
 
     EnlistTarget(unit->x, unit->y, unit->id, 0);
@@ -785,7 +787,7 @@ void ListSaintsStaffTargets(struct Unit * unit)
         if (other->flags & UNIT_FLAG_UNAVAILABLE)
             continue;
 
-        if (GetUnitCurrentHp(other) != GetUnitMaxHp(other) || other->status != UNIT_STATUS_NONE)
+        if (GetUnitCurrentHp(other) != GetUnitMaxHp(other) || GetDispDebuff(other) != UNIT_STATUS_NONE)
         {
             if (other == unit)
                 continue;

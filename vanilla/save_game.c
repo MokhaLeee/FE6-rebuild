@@ -481,8 +481,6 @@ void EncodeSuspendSavePackedUnit(struct Unit * unit, void * buf)
     suspend_unit->res = unit->res;
     suspend_unit->lck = unit->lck;
     suspend_unit->bonus_con = unit->bonus_con;
-    suspend_unit->status = unit->status;
-    suspend_unit->status_duration = unit->status_duration;
     suspend_unit->torch = unit->torch;
     suspend_unit->barrier = unit->barrier;
     suspend_unit->rescue = unit->rescue;
@@ -532,8 +530,6 @@ void ReadSuspendSavePackedUnit(void const * sram_src, struct Unit * unit)
     unit->res = suspend_unit.res;
     unit->lck = suspend_unit.lck;
     unit->bonus_con = suspend_unit.bonus_con;
-    unit->status = suspend_unit.status;
-    unit->status_duration = suspend_unit.status_duration;
     unit->torch = suspend_unit.torch;
     unit->barrier = suspend_unit.barrier;
     unit->rescue = suspend_unit.rescue;

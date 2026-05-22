@@ -25,6 +25,8 @@
 #include "constants/videoalloc_global.h"
 #include "constants/songs.h"
 
+#include "debuff.h"
+
 void ApplyHazardHealing(ProcPtr proc, struct Unit * unit, int hp, int status)
 {
     if (status >= 0)
