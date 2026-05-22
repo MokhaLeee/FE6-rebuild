@@ -1,7 +1,7 @@
 #include "prelude.h"
 #include "battle.h"
 
-#include "skillsys.h"
+#include "skill-sys.h"
 #include "constants/skills.h"
 
 void PreBattleCalc_DefenderSkills(struct BattleUnit *attacker, struct BattleUnit *defender)

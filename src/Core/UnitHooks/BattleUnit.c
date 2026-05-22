@@ -2,7 +2,7 @@
 #include "unit.h"
 #include "battle.h"
 #include "save_stats.h"
-#include "skillsys.h"
+#include "skill-sys.h"
 
 /**
  * U 2 B

@@ -2,7 +2,7 @@
 #include "constants/pids.h"
 #include "constants/skills.h"
 
-#include "skillsys.h"
+#include "skill-sys.h"
 
 GAMEINFO_DATA
 struct SkillTable const gSkillPTable[0x100] = {

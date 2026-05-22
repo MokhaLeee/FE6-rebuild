@@ -1,5 +1,5 @@
 #include "prelude.h"
-#include "skillsys.h"
+#include "skill-sys.h"
 #include "klib.h"
 
 static bool PostActionPadFunc(ProcPtr proc)
@@ -9,19 +9,19 @@ static bool PostActionPadFunc(ProcPtr proc)
 
 static bool PostAction_OnEnd(ProcPtr proc)
 {
-    return false;
+	return false;
 }
 
 const HookProcFunc_t gPostActionFuncs[] = {
-    PostActionPadFunc,
+	PostActionPadFunc,
 
-    /* end */
-    PostAction_ResetSkillList,
-    PostAction_OnEnd,
-    NULL
+	/* end */
+	PostAction_ResetSkillList,
+	PostAction_OnEnd,
+	NULL
 };
 
 void CallPostActionHook(ProcPtr proc)
 {
-    SpawnHookProc(gPostActionFuncs, proc);
+	SpawnHookProc(gPostActionFuncs, proc);
 }

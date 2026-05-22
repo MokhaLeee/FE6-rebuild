@@ -1,7 +1,7 @@
 #include "prelude.h"
 #include "unit.h"
 #include "battle.h"
-#include "skillsys.h"
+#include "skill-sys.h"
 #include "klib.h"
 
 IWRAM_FUNC

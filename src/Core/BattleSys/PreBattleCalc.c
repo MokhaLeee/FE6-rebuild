@@ -4,8 +4,8 @@
 #include "item.h"
 
 #include "klib.h"
-#include "strmag.h"
-#include "skillsys.h"
+#include "str-mag.h"
+#include "skill-sys.h"
 
 static void ComputeBattleUnitDefense(struct BattleUnit *attacker, struct BattleUnit *defender)
 {

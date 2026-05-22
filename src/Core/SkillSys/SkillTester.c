@@ -1,6 +1,6 @@
 #include "prelude.h"
 #include "unit.h"
-#include "skillsys.h"
+#include "skill-sys.h"
 
 bool JudgeSkillViaList(struct Unit *unit, int sid)
 {
