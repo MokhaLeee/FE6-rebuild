@@ -7,41 +7,40 @@
 
 struct ChapterInfo const * GetChapterInfo(int chapter)
 {
-    if (chapter < 0)
-        return gExtraMapInfo->chapter_info;
+	if (chapter < 0)
+		return NULL;
 
-    return gpChapterInfoTable + chapter;
+	return gpChapterInfoTable + chapter;
 }
 
 u8 const * GetChapterMap(int chapter)
 {
-    if (chapter >= 0)
-        return gpChapterAssets[GetChapterInfo(chapter)->asset_map];
+	if (chapter >= 0)
+		return gpChapterAssets[GetChapterInfo(chapter)->asset_map];
 
-    ReadSramFast(GetExtraMapMapReadAddr(), gBuf, GetExtraMapMapSize());
-    return gBuf;
+	return NULL;
 }
 
 struct MapChangeInfo const * GetChapterMapChanges(int chapter)
 {
-    if (chapter >= 0)
-        return gpChapterAssets[GetChapterInfo(chapter)->asset_map_changes];
+	if (chapter >= 0)
+		return gpChapterAssets[GetChapterInfo(chapter)->asset_map_changes];
 
-    return gExtraMapInfo->map_change_info;
+	return NULL;
 }
 
 struct ChapterEventInfo const * GetChapterEventInfo(int chapter)
 {
-    if (chapter >= 0)
-        return gpChapterAssets[GetChapterInfo(chapter)->asset_event_info];
+	if (chapter >= 0)
+		return gpChapterAssets[GetChapterInfo(chapter)->asset_event_info];
 
-    return gExtraMapInfo->event_info;
+	return NULL;
 }
 
 char const * GetChapterUnk_0802BBD0(int chapter)
 {
-    if (chapter >= 0)
-        return DecodeMsg(GetChapterInfo(chapter)->msg_chapter_title);
+	if (chapter >= 0)
+		return DecodeMsg(GetChapterInfo(chapter)->msg_chapter_title);
 
-    return gExtraMapInfo->msg_0C;
+	return NULL;
 }

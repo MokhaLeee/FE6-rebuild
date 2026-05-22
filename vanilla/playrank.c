@@ -1407,30 +1407,7 @@ u8 PlayRankGetter_Tactics(void)
 
 u8 PlayRankGetter_XmapTactics(void)
 {
-	int total_turn;
-	int i, ranks[PALYRANK_MAX];
-	struct ChapterStats *chapter_stat = GetXmapChapterStats();
-
-	ranks[PALYRANK_D] = gpChapterInfoTable[chapter_stat->chapter_id].tactics_ranks[REFRANK_D];
-	ranks[PALYRANK_C] = gpChapterInfoTable[chapter_stat->chapter_id].tactics_ranks[REFRANK_C];
-	ranks[PALYRANK_B] = gpChapterInfoTable[chapter_stat->chapter_id].tactics_ranks[REFRANK_B];
-	ranks[PALYRANK_A] = gpChapterInfoTable[chapter_stat->chapter_id].tactics_ranks[REFRANK_A];
-
-	total_turn = chapter_stat->chapter_turn;
-
-	if (gPlayRankMissionCompleted == 0)
-		return PALYRANK_D;
-
-	i = 0;
-	for (;;) {
-		if (total_turn > ranks[i])
-			break;
-
-		if (++i > 3)
-			break;
-	}
-
-	return i;
+	return 0;
 }
 
 CONST_DATA u8 gPlayRank_CombatRef[4] = { 15, 25, 35, 40 };
@@ -1874,127 +1851,7 @@ PROC_LABEL(1),
 	PROC_END,
 };
 
-struct ProcScr CONST_DATA ProcScr_PlayRankTrail[] =
-{
-	PROC_19,
-	PROC_CALL_ARG(_StartBgm, 53),
-	PROC_CALL(LockGame),
-	PROC_CALL(PlayRank_InitBgConf),
-	PROC_CALL(PlayRankTrail_Init),
-	PROC_CALL(FadeInBlackSpeed08),
-	PROC_SLEEP(1),
-	PROC_CALL(StartGreenText),
-	PROC_REPEAT(PlayRankTrail_Loop),
-	PROC_CALL(PlayRank_End1),
-	PROC_CALL(FadeInBlackWithCallBack_Speed08),
-	PROC_SLEEP(1),
-	PROC_CALL(PlayRank_PrepareEnd),
-	PROC_CALL(StartFastFadeFromBlack),
-	PROC_REPEAT(WhileFadeExists),
-	PROC_CALL(UnlockGame),
-	PROC_END,
-};
-
-void PlayRankTrail_Init(ProcPtr proc)
-{
-	int i;
-	struct ChapterStats *chapter_states;
-
-	gPlayRankMissionCompleted = HasNextChapter();
-
-	ResetText();
-	UnpackUiWindowFrameGraphics();
-	ResetTextFont();
-	PlayRank_InitTexts();
-
-	SetDispEnable(1, 1, 1, 1, 1);
-
-	SetBgOffset(BG_0, 0, 0);
-	SetBgOffset(BG_1, 0, 0);
-	SetBgOffset(BG_2, 0, 0);
-	SetBgOffset(BG_3, 0, 0);
-
-	SetWinEnable(1, 0, 0);
-	SetWin0Box(0, 0x18, -0x10, -0x78);
-	SetWin0Layers(1, 1, 1, 1, 1);
-	SetWOutLayers(0, 1, 1, 1, 1);
-
-	gDispIo.win_ct.win0_enable_blend = true;
-	gDispIo.win_ct.wout_enable_blend = true;
-
-	TmFill(gBg0Tm, 0);
-	TmFill(gBg1Tm, 0);
-	TmFill(gBg2Tm, 0);
-	TmFill(gBg3Tm, 0);
-
-	SetBlendAlpha(6, 0x10);
-	SetBlendTargetA(0, 0, 1, 0, 0);
-	SetBlendTargetB(0, 0, 0, 1, 0);
-
-	SetupXmapPlayRanks();
-
-	ApplyBgPalettes(Pal_PlayRankWmBG, BGPAL_PLAYRANK_WM, 2);
-	ApplyBgPalette(Pal_PlayRankFogBG, BGPAL_PLAYRANK_FOG);
-	ApplyObPalette(Pal_PlayRankTimeOBJ, BGPAL_PLAYRANK_TIME);
-	ApplyObPalette(
-		gPlayRankMissionCompleted == false
-			? Pal_PlayRankMissionCompletesOBJ + 0x10
-			: Pal_PlayRankMissionCompletesOBJ,
-		OBPAL_PLAYRANK_MISSION);
-	ApplyObPalette(Pal_08342A98, OBPAL_PLAYRANK_B);
-
-	Decompress(Img_PlayRankTimeOBJ, OBJ_VRAM0 + OBCHR_PLAYRANK_TIME * CHR_SIZE);
-	Decompress(Img_PlayRankCharacters, OBJ_VRAM0 + BGCHR_PLAYRANK_C0 * CHR_SIZE);
-	Decompress(Img_PlayRankMissionCompletesOBJ, OBJ_VRAM0 + BGCHR_PLAYRANK_180 * CHR_SIZE);
-	Decompress(Img_PlayRankFogBG, (u8 *)BG_VRAM + BGCHR_PLAYRANK_680 * CHR_SIZE);
-	Decompress(Img_WorldMap_PlayRank, (u8 *)BG_VRAM + GetBgChrOffset(BG_3));
-	FillPlayRankFogsToBG(gBg2Tm, 0x280, BGPAL_PLAYRANK_FOG);
-	TmApplyTsa(gBg3Tm, Tsa_08340ED8, OAM2_PAL(BGPAL_PLAYRANK_WM));
-
-	for (i = 0; i < PLAYRANK_TRAIL_TEXT_MAX; i++)
-		InitText(&gpPlayRankSt->texts_rank_name[i], 6);
-
-	chapter_states = GetXmapChapterStats();
-
-	PutNumber(gBg0Tm + TM_OFFSET(5, 7), TEXT_COLOR_SYSTEM_BLUE, chapter_states->chapter_turn);
-	PutDrawText(NULL, gBg0Tm + TM_OFFSET(6, 7), TEXT_COLOR_SYSTEM_WHITE, 0, 6, DecodeMsg(MSG_Turn));
-	PutTime(gBg0Tm + TM_OFFSET(18, 7), TEXT_COLOR_SYSTEM_BLUE, chapter_states->chapter_time * 180, true);
-
-	for (i = 0; i < PLAYRANK_TRAIL_TEXT_MAX; i++) {
-		PutDrawText(
-			&gpPlayRankSt->texts_rank_name[i],
-			gBg0Tm + TM_OFFSET(gTotalPlayRankConf2[i].x - 1, gTotalPlayRankConf2[i].y),
-			gTotalPlayRankConf2[i].color,
-			0, 6,
-			DecodeMsg(gTotalPlayRankConf2[i].msg)
-		);
-	}
-
-	SpawnProc(ProcScr_PlayRankFogHandler, PROC_TREE_3);
-	SpawnProc(ProcScr_PlayRankTrialOBJ, PROC_TREE_3);
-	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT | BG3_SYNC_BIT);
-}
-
-void PlayRankTrail_Loop(ProcPtr proc)
-{
-	if (gKeySt->pressed & (KEY_BUTTON_A | KEY_BUTTON_B))
-		if (gpPlayRankSt->step == 3)
-			Proc_Break(proc);
-}
-
-void NewPlayRank_unused(ProcPtr proc)
-{
-	if (!proc)
-		SpawnProc(ProcScr_PlayRank, PROC_TREE_3);
-	else
-		SpawnProcLocking(ProcScr_PlayRank, proc);
-}
-
 void NewPlayRankTrail(ProcPtr proc)
 {
-	if (!proc)
-		SpawnProc(ProcScr_PlayRankTrail, PROC_TREE_3);
-	else
-		SpawnProcLocking(ProcScr_PlayRankTrail, proc);
 }
 

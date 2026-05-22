@@ -229,9 +229,7 @@ void func_fe6_0808F844(struct Proc_0868B88C *proc);
 
 void PlayRankTrialOBJ_Init(ProcPtr proc);
 void PlayRankTrialOBJ_Loop(ProcPtr proc);
-void PlayRankTrail_Init(ProcPtr proc);
-void PlayRankTrail_Loop(ProcPtr proc);
-// NewPlayRank_unused
+
 void NewPlayRankTrail(ProcPtr parent);
 
 extern CONST_DATA struct HelpBoxInfo HelpInfo_0868B1B0;

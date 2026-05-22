@@ -51,9 +51,6 @@ char const * func_fe6_080867F0(int chapter);
 char const * DecodeExtraMapGoalMsg(int chapter);
 char const * DecodeExtraMapInfoMsg(int chapter);
 void CreateTrialChapterBonusUnits(void);
-struct ChapterStats * GetXmapChapterStats(void);
-
-extern struct ExtraMapInfo * CONST_DATA gExtraMapInfo;
 
 #define XMAP_MAGIC 0x50414D58 // 'XMAP'
 
