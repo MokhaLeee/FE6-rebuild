@@ -19,7 +19,7 @@
 EWRAM_OVERLAY(0) u8 gMuImgBuf[4 * 0x110 * CHR_SIZE] = {};
 static struct MuConfig sMuConfig[MU_COUNT];
 
-u16 const *CONST_DATA gMuFlashPalLut[] = {
+u16 const *const gMuFlashPalLut[] = {
 	[MU_FLASH_WHITE] = Pal_AllWhite,
 	[MU_FLASH_BLACK] = Pal_AllBlack,
 	[MU_FLASH_RED]   = Pal_AllRed,
@@ -28,7 +28,7 @@ u16 const *CONST_DATA gMuFlashPalLut[] = {
 	[MU_FLASH_5]	 = Pal_085C4F2C,
 };
 
-struct ProcScr CONST_DATA ProcScr_MuStepSe[] =
+struct ProcScr const ProcScr_MuStepSe[] =
 {
 	PROC_CALL(MuStepSe_Init),
 	PROC_YIELD,
@@ -41,7 +41,7 @@ struct ProcScr CONST_DATA ProcScr_MuStepSe[] =
 	PROC_END,
 };
 
-struct ProcScr CONST_DATA ProcScr_MuFogBump[] = {
+struct ProcScr const ProcScr_MuFogBump[] = {
 	PROC_CALL(MuFogBump_Init),
 
 	PROC_REPEAT(MuFogBump_ScaleLoop),
@@ -50,7 +50,7 @@ struct ProcScr CONST_DATA ProcScr_MuFogBump[] = {
 	PROC_END,
 };
 
-short CONST_DATA sMoveOffsetLut[4 * 2] = {
+short const sMoveOffsetLut[4 * 2] = {
 	-1,  0, // left
 	+1,  0, // right
 	 0, +1, // up
@@ -59,36 +59,36 @@ short CONST_DATA sMoveOffsetLut[4 * 2] = {
 
 // TODO: move mu sound scripts to own data file?
 
-u16 CONST_DATA MuSoundScr_Foot[] = {
+u16 const MuSoundScr_Foot[] = {
 	0x10, 2,
 	SONG_96, 0, 0, 0, 0, 0, 0, 0,
 	SONG_97, 0, 0, 0, 0, 0, 0, 0,
 };
 
-u16 CONST_DATA MuSoundScr_FootHeavy[] = {
+u16 const MuSoundScr_FootHeavy[] = {
 	0x20, 2,
 	SONG_A4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	SONG_A5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
-u16 CONST_DATA MuSoundScr_Mounted[] = {
+u16 const MuSoundScr_Mounted[] = {
 	0x15, 3,
 	SONG_9A, 0, 0,
 	SONG_9B, 0, 0, 0, 0, 0, 0,
 	SONG_9C, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
-u16 CONST_DATA MuSoundScr_Wyvern[] = {
+u16 const MuSoundScr_Wyvern[] = {
 	0x14, 1,
 	SONG_A0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
-u16 CONST_DATA MuSoundScr_Pegasus[] = {
+u16 const MuSoundScr_Pegasus[] = {
 	0x14, 1,
 	SONG_A6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
-MuStateFunc CONST_DATA sMuStateFuncs[] = {
+MuStateFunc const sMuStateFuncs[] = {
 	[MU_STATE_NONE]	   = Mu_OnStateNone,
 	[MU_STATE_INACTIVE]   = Mu_OnStateDoNothing,
 	[MU_STATE_MOVEMENT]   = Mu_OnStateMovement,
@@ -99,7 +99,7 @@ MuStateFunc CONST_DATA sMuStateFuncs[] = {
 	[MU_STATE_DEATHFADE]  = Mu_OnStateDoNothing,
 };
 
-struct ProcScr CONST_DATA ProcScr_Mu[] = {
+struct ProcScr const ProcScr_Mu[] = {
 	PROC_19,
 	PROC_MARK(PROC_MARK_MU),
 	PROC_ONEND(Mu_OnEnd),
@@ -107,33 +107,33 @@ struct ProcScr CONST_DATA ProcScr_Mu[] = {
 	PROC_REPEAT(Mu_OnLoop),
 };
 
-u16 CONST_DATA sMuChrOffLut[MU_COUNT] = {
+u16 const sMuChrOffLut[MU_COUNT] = {
 	0x00, 0x10, 0x08, 0x18,
 };
 
-u8 CONST_DATA sMuWalkSpeedLut[] = {
+u8 const sMuWalkSpeedLut[] = {
 	[UNIT_WALKSPEED_FAST] = 2,
 	[UNIT_WALKSPEED_SLOW] = 1,
 };
 
-u8 CONST_DATA sMuImgBufOffLut[] = {
+u8 const sMuImgBufOffLut[] = {
 	0, // dummy because active ids start at 1
 	0, 2, 1, 3,
 };
 
-struct ProcScr CONST_DATA ProcScr_MuDeathFade[] = {
+struct ProcScr const ProcScr_MuDeathFade[] = {
 	PROC_REPEAT(MuDeathFade_OnLoop),
 	PROC_SLEEP(15),
 	PROC_END,
 };
 
-struct ProcScr CONST_DATA ProcScr_MuRestorePalInfo[] = {
+struct ProcScr const ProcScr_MuRestorePalInfo[] = {
 	PROC_SLEEP(8),
 	PROC_CALL(MuRestorePalInfo_Apply),
 	PROC_END,
 };
 
-struct ProcScr CONST_DATA ProcScr_Unk_08664914[] = {
+struct ProcScr const ProcScr_Unk_08664914[] = {
 	PROC_CALL(func_fe6_08061474),
 	PROC_SLEEP(1),
 
@@ -162,7 +162,7 @@ struct ProcScr CONST_DATA ProcScr_Unk_08664914[] = {
 	PROC_END,
 };
 
-struct ProcScr CONST_DATA ProcScr_MuFlashFadeFrom[] = {
+struct ProcScr const ProcScr_MuFlashFadeFrom[] = {
 	PROC_SLEEP(17),
 	PROC_CALL(MuFlashFadeFrom_RestorePal),
 

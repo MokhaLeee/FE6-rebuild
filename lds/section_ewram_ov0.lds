@@ -6,7 +6,6 @@
 . = ALIGN(4); vanilla/bmio.o(ewram_overlay_0);
 . = ALIGN(4); vanilla/battlepreview.o(ewram_overlay_0);
 . = ALIGN(4); vanilla/statusscreen.o(ewram_overlay_0);
-. = ALIGN(4); vanilla/mu.o(ewram_overlay_0);
 . = ALIGN(4); vanilla/unitlistscreen.o(ewram_overlay_0);
 . = ALIGN(4); vanilla/prepmenu.o(ewram_overlay_0);
 . = ALIGN(4); vanilla/prep_sallycir.o(ewram_overlay_0);

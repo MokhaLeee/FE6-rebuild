@@ -74,7 +74,7 @@ enum { MU_COUNT = 4 };
 extern u8 gMuImgBuf[4 * 0x110 * CHR_SIZE]; // OVERLAY
 
 typedef void (* MuStateFunc)(struct MuProc * mu);
-extern MuStateFunc CONST_DATA sMuStateFuncs[];
+extern MuStateFunc const sMuStateFuncs[];
 
 void InitMus(void);
 struct MuProc * StartMuExt(int x, int y, int jid, int arg_3);
@@ -179,21 +179,21 @@ void MuMaxWalkSpeedFunc(ProcPtr mu);
 void SetMuSpecialSprite(struct MuProc * mu, int jid, u16 const * pal);
 void SetMuPal(struct MuProc * mu, int pal);
 
-extern u16 const * CONST_DATA gMuFlashPalLut[];
-extern struct ProcScr CONST_DATA ProcScr_MuStepSe[];
-extern short CONST_DATA sMoveOffsetLut[4 * 2];
-extern u16 CONST_DATA MuSoundScr_Foot[];
-extern u16 CONST_DATA MuSoundScr_FootHeavy[];
-extern u16 CONST_DATA MuSoundScr_Mounted[];
-extern u16 CONST_DATA MuSoundScr_Wyvern[];
-extern u16 CONST_DATA MuSoundScr_Pegasus[];
-extern struct ProcScr CONST_DATA ProcScr_MuFogBump[];
-extern struct ProcScr CONST_DATA ProcScr_Mu[];
-extern u16 CONST_DATA sMuChrOffLut[MU_COUNT];
-extern u8 CONST_DATA sMuWalkSpeedLut[];
-extern u8 CONST_DATA sMuImgBufOffLut[];
-extern struct ProcScr CONST_DATA ProcScr_MuDeathFade[];
-extern struct ProcScr CONST_DATA ProcScr_MuRestorePalInfo[];
-extern struct ProcScr CONST_DATA ProcScr_Unk_08664914[];
-extern struct ProcScr CONST_DATA ProcScr_MuFlashFadeFrom[];
-extern struct MuInfo CONST_DATA MuInfoTable[];
+extern u16 const * const gMuFlashPalLut[];
+extern struct ProcScr const ProcScr_MuStepSe[];
+extern short const sMoveOffsetLut[4 * 2];
+extern u16 const MuSoundScr_Foot[];
+extern u16 const MuSoundScr_FootHeavy[];
+extern u16 const MuSoundScr_Mounted[];
+extern u16 const MuSoundScr_Wyvern[];
+extern u16 const MuSoundScr_Pegasus[];
+extern struct ProcScr const ProcScr_MuFogBump[];
+extern struct ProcScr const ProcScr_Mu[];
+extern u16 const sMuChrOffLut[MU_COUNT];
+extern u8 const sMuWalkSpeedLut[];
+extern u8 const sMuImgBufOffLut[];
+extern struct ProcScr const ProcScr_MuDeathFade[];
+extern struct ProcScr const ProcScr_MuRestorePalInfo[];
+extern struct ProcScr const ProcScr_Unk_08664914[];
+extern struct ProcScr const ProcScr_MuFlashFadeFrom[];
+extern struct MuInfo const MuInfoTable[];
