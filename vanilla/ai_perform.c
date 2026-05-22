@@ -20,6 +20,8 @@
 #include "mu.h"
 #include "eventinfo.h"
 
+#include "post-action.h"
+
 #include "constants/chapters.h"
 #include "constants/terrains.h"
 #include "constants/songs.h"
@@ -81,6 +83,11 @@ struct ProcScr CONST_DATA ProcScr_AiPerform[] =
 
     PROC_CALL(AiPerform_StartAction),
     PROC_REPEAT(AiPerform_WaitAction),
+
+    /* post-action */
+    PROC_YIELD,
+    PROC_CALL(CallPostActionHook),
+    PROC_YIELD,
 
     PROC_CALL_2(StartAvailableMoveEvents),
 

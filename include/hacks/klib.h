@@ -36,6 +36,10 @@ static inline bool check_bit(void *bits, u32 idx)
 	return !!(_bits[idx >> 3] & (1 << (idx & 0x7)));
 }
 
+/* hook-proc */
+typedef bool (*HookProcFunc_t)(ProcPtr proc);
+void SpawnHookProc(HookProcFunc_t const *hook_list, ProcPtr parent);
+
 /* misc */
 enum UnitStatusIdxRef {
 	UNIT_STATUS_POW,

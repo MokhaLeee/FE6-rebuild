@@ -30,6 +30,8 @@
 #include "constants/pids.h"
 #include "constants/songs.h"
 
+#include "post-action.h"
+
 struct ProcScr CONST_DATA ProcScr_PlayerPhase[] =
 {
     PROC_19,
@@ -85,6 +87,11 @@ PROC_LABEL(L_PLAYERPHASE_ACTION),
 
     PROC_CALL_2(DoAction),
     PROC_CALL_2(DoHandleStepTraps),
+
+    /* post-action */
+    PROC_YIELD,
+    PROC_CALL(CallPostActionHook),
+    PROC_YIELD,
 
     PROC_CALL_2(StartAvailableMoveEvents),
     PROC_CALL_2(PlayerPhase_WatchActiveUnit),
