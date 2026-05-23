@@ -37,3 +37,9 @@ void io_init(void)
 
 	mgba_open();
 }
+
+void hang(void)
+{
+	while (1)
+		;
+}

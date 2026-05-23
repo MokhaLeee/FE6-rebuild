@@ -822,9 +822,6 @@ int GetBattleUnitUpdatedWeaponExp(struct BattleUnit *bu)
 	if (gPlaySt.flags & PLAY_FLAG_COMPLETE)
 		return -1;
 
-	if (gBmSt.flags & BM_FLAG_LINKARENA)
-		return -1;
-
 	if (!(gBattleSt.flags & BATTLE_FLAG_ARENA))
 	{
 		if (!bu->has_inventory_weapon)

@@ -6,7 +6,7 @@
 #include "save-hw.h"
 #include "debug.h"
 
-#define LOCAL_TRACE 0
+#define LOCAL_TRACE 1
 
 #if CONFIG_SAVE_USE_SRAM
 extern void SramInit(void);
@@ -70,10 +70,31 @@ goto_ret:
 	}
 }
 
-void SaveHwInit(void) { save_hw_flash_init(); }
-void WipeSave(void) { flash_reset(); }
-void WriteSave(void const *src, void *dest, int size) { flash_write((u32)dest, src, size); }
-void ReadSave(void const *src, void *dest, int size) { flash_read((u32)src, dest, size); }
+void SaveHwInit(void)
+{
+	save_hw_flash_init();
+}
+
+void WipeSave(void)
+{
+	flash_reset();
+}
+
+void WriteSave(void const *src, void *dest, int size)
+{
+	if (size > 0x1000)
+		size = 0x1000;
+
+	flash_write((u32)dest, src, size);
+}
+
+void ReadSave(void const *src, void *dest, int size)
+{
+	if (size > 0x1000)
+		size = 0x1000;
+
+	flash_read((u32)src, dest, size);
+}
 
 #endif
 

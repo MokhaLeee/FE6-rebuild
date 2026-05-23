@@ -180,7 +180,7 @@ int flash_read(u32 addr, u8 *data, size_t size)
 	if (data == NULL)
 		return -1;
 
-	if (addr > MEM_FLASH)
+	if (addr >= MEM_FLASH)
 		addr -= MEM_FLASH;
 
 	if (likely(gFlashInfo.size == FLASH_SIZE_128KB)) {
@@ -304,7 +304,7 @@ int flash_write(u32 addr, const u8 *data, size_t size) {
 	if (unlikely(data == NULL))
 		return -1;
 
-	if (likely(addr > MEM_FLASH))
+	if (likely(addr >= MEM_FLASH))
 		addr -= MEM_FLASH;
 
 	if (likely(gFlashInfo.size == FLASH_SIZE_128KB)) {
