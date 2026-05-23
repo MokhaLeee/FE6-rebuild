@@ -128,7 +128,6 @@ void WriteGameSave(int save_id);
 void ReadGameSave(int save_id);
 bool IsSaveValid(int save_id);
 void ReadGameSavePlaySt(int save_id, struct PlaySt * play_st);
-bool IsGameSavePastFirstChapter(int save_id);
 void WriteGameSavePackedUnit(struct Unit * unit, void * sram_dst);
 void ReadGameSavePackedUnit(void const * sram_src, struct Unit * unit);
 void InvalidateSuspendSave(int save_id);

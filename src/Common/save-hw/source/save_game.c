@@ -179,21 +179,6 @@ void ReadGameSavePlaySt(int save_id, struct PlaySt *play_st)
 	ReadSave(&src->play_st, play_st, sizeof(struct PlaySt));
 }
 
-bool IsGameSavePastFirstChapter(int save_id)
-{
-	struct PlaySt play_st;
-
-	if (!IsSaveValid(save_id))
-		return FALSE;
-
-	ReadGameSavePlaySt(save_id, &play_st);
-
-	if (play_st.chapter <= CHAPTER_1)
-		return FALSE;
-
-	return TRUE;
-}
-
 void WriteGameSavePackedUnit(struct Unit *unit, void *sram_dst)
 {
 	struct GameSavePackedUnit save_unit;
