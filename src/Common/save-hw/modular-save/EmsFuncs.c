@@ -216,12 +216,14 @@ static void EMS_LoadPermanentFlags(u8 *buf, int size)
 }
 
 const struct EmsChunk gMsaChunk[] = {
+	/* fixed: ReadGameSavePlaySt */
 	{
 		.size = sizeof(struct PlaySt),
 		.save = EMS_SavePlaySt,
 		.load = EMS_LoadPlaySt,
 		.chunk_idx = EMS_CHUNK_PLAYST,
 	},
+
 	{
 		.size = SUPPLY_ITEM_COUNT *sizeof(u16),
 		.save = EMS_SaveSupplyItem,
@@ -526,16 +528,18 @@ static void Msa_LoadTrap(u8 *buf, int size)
 }
 
 const struct EmsChunk gMsuChunk[] = {
-	{
-		.size = UNIT_AMOUNT_BLUE * sizeof(struct MsuPackedUnit),
-		.save = Msu_SaveUnit_Ally,
-		.load = Msu_LoadUnit_Ally,
-	},
+	/* fixed: ReadGameSavePlaySt */
 	{
 		.size = sizeof(struct PlaySt),
 		.save = EMS_SavePlaySt,
 		.load = EMS_LoadPlaySt,
 		.chunk_idx = EMS_CHUNK_PLAYST,
+	},
+
+	{
+		.size = UNIT_AMOUNT_BLUE * sizeof(struct MsuPackedUnit),
+		.save = Msu_SaveUnit_Ally,
+		.load = Msu_LoadUnit_Ally,
 	},
 	{
 		.size = SUPPLY_ITEM_COUNT *sizeof(u16),

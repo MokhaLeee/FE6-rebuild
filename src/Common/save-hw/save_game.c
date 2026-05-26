@@ -25,9 +25,7 @@ static void ems_write_loop(const struct EmsChunk *chunk_array, int save_id)
 	int i;
 	int sector = 0;
 	int offset = 0;
-	void *dst = GetSaveWriteAddr(save_id);
-
-	LTRACEF("[LOOP1]");
+	u8 *dst = GetSaveWriteAddr(save_id);
 
 	for (i = 0; ; i++) {
 		const struct EmsChunk *chunk = &chunk_array[i];
@@ -41,8 +39,9 @@ static void ems_write_loop(const struct EmsChunk *chunk_array, int save_id)
 			sector++;
 		}
 
-		LTRACEF("[LOOP1 %d] sec=%d, off=0x%04X, save=0x%08X, load=0x%08X",
-						i, sector, offset, (uintptr_t)chunk->save, (uintptr_t)chunk->load);
+		LTRACEF("addr=0x%06X, sec=%d, off=0x%04X, size=0x%05X, save=0x%08X, load=0x%08X",
+					SramAddrToOffset(dst), sector, offset, chunk->size,
+					(uintptr_t)chunk->save, (uintptr_t)chunk->load);
 
 		if (chunk->save)
 			chunk->save(gBuf + offset, chunk->size);
@@ -59,9 +58,9 @@ static void ems_read_loop(const struct EmsChunk *chunk_array, int save_id)
 	int i;
 	int sector = 0;
 	int offset = 0;
-	const void *src = GetSaveReadAddr(save_id);
+	const u8 *src = GetSaveReadAddr(save_id);
 
-	LTRACEF("[LOOP2]");
+	LTRACEF("CHUNK: %s", chunk_array == gMsaChunk ? "SAV" : "SUS");
 
 	ReadSave(src + sector * SIZE_4K, gBuf, SIZE_4K);
 
@@ -77,77 +76,21 @@ static void ems_read_loop(const struct EmsChunk *chunk_array, int save_id)
 			ReadSave(src + sector * SIZE_4K, gBuf, SIZE_4K);
 		}
 
-		LTRACEF("[LOOP2 %d] sec=%d, off=0x%04X, save=0x%08X, load=0x%08X",
-						i, sector, offset, (uintptr_t)chunk->save, (uintptr_t)chunk->load);
+		LTRACEF("addr=0x%06X, sec=%d, off=0x%04X, size=0x%05X, save=0x%08X, load=0x%08X",
+					SramAddrToOffset(src), sector, offset, chunk->size,
+					(uintptr_t)chunk->save, (uintptr_t)chunk->load);
 
-		if (chunk->save)
-			chunk->save(gBuf + offset, chunk->size);
-
-		offset = offset + chunk->size;
-	}
-}
-
-static int ems_calc_addr(const struct EmsChunk *chunk_array, int chunk_idx, int *out_sector, int *out_offset)
-{
-	int i;
-	int sector = 0;
-	int offset = 0;
-
-	LTRACEF("[LOOP3]");
-
-	for (i = 0; ; i++) {
-		const struct EmsChunk *chunk = &chunk_array[i];
-
-		if (chunk->size == 0)
-			break;
-
-		if ((offset + chunk->size) > SIZE_4K) {
-			offset = 0;
-			sector++;
-		}
-
-		LTRACEF("[LOOP3 %d] sec=%d, off=0x%04X, save=0x%08X, load=0x%08X",
-						i, sector, offset, (uintptr_t)chunk->save, (uintptr_t)chunk->load);
-
-		if (chunk->chunk_idx == chunk_idx) {
-			*out_sector = sector;
-			*out_offset = offset;
-			return 0;
-		}
+		if (chunk->load)
+			chunk->load(gBuf + offset, chunk->size);
 
 		offset = offset + chunk->size;
 	}
-
-	return -1;
 }
 
 void ReadGameSavePlaySt(int save_id, struct PlaySt *play_st)
 {
-	int ret, sector, offset;
-	const struct EmsChunk *chunk;
-
-	switch (save_id) {
-	case SAVE_GAME0:
-	case SAVE_GAME1:
-	case SAVE_GAME2:
-		chunk = gMsaChunk;
-		break;
-
-	case SAVE_SUSPEND:
-	case SAVE_SUSPEND_ALT:
-		chunk = gMsaChunk;
-		break;
-
-	default:
-		return;
-	}
-
-	ret = ems_calc_addr(chunk, EMS_CHUNK_PLAYST, &sector, &offset);
-	if (ret)
-		return;
-
-	ReadSave(GetSaveReadAddr(save_id) + sector * SIZE_4K, gBuf, SIZE_4K);
-	memcpy(play_st, gBuf + offset, sizeof(struct PlaySt));
+	ReadSave(GetSaveReadAddr(save_id), gBuf, SIZE_4K);
+	memcpy(play_st, gBuf, sizeof(struct PlaySt));
 }
 
 void WriteLastGameSaveId(int save_id)

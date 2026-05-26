@@ -21,7 +21,7 @@ void *SramOffsetToAddr(u16 off)
 	return CART_SRAM + off;
 }
 
-u16 SramAddrToOffset(void *addr)
+u16 SramAddrToOffset(const void *addr)
 {
 	return CART_SRAM - addr;
 }
