@@ -7,6 +7,9 @@
 #define CONFIG_SAVE_USE_SRAM 1
 #define CONFIG_SAVE_USE_FLASH 1
 
+/* read/write save in 4K sector */
+#define CONFIG_SECTOR_OPERATION_IN_4K 1
+
 #include "configs/config-debug.h"
 
 #endif

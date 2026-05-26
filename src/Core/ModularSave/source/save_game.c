@@ -2,7 +2,6 @@
 
 #include "gbasram.h"
 #include "gbaio.h"
-#include "armfunc.h"
 #include "util.h"
 #include "eventinfo.h"
 #include "supply.h"
@@ -13,10 +12,149 @@
 #include "chapter.h"
 #include "save_core.h"
 #include "constants/chapters.h"
-
+#include "savelayout.h"
 #include "save-hw.h"
+#include "debug.h"
 
-u8 EWRAM_DATA gSuspendSaveIdOffset = 0;
+#define LOCAL_TRACE 1
+
+_UNUSED
+static void ems_write_loop(const struct EmsChunk *chunk_array, int save_id)
+{
+	int i;
+	int sector = 0;
+	int offset = 0;
+	void *dst = GetSaveWriteAddr(save_id);
+
+	LTRACEF("[LOOP1]");
+
+	for (i = 0; ; i++) {
+		const struct EmsChunk *chunk = &chunk_array[i];
+
+		if (chunk->size == 0)
+			break;
+
+		if ((offset + chunk->size) > SIZE_4K) {
+			WriteSave(gBuf, dst + sector * SIZE_4K, offset);
+			offset = 0;
+			sector++;
+		}
+
+		LTRACEF("[LOOP1 %d] sec=%d, off=0x%04X, save=0x%08X, load=0x%08X",
+						i, sector, offset, (uintptr_t)chunk->save, (uintptr_t)chunk->load);
+
+		if (chunk->save)
+			chunk->save(gBuf + offset, chunk->size);
+
+		offset = offset + chunk->size;
+	}
+
+	if (offset != 0)
+		WriteSave(gBuf, dst + sector * SIZE_4K, offset);
+}
+
+_UNUSED
+static void ems_read_loop(const struct EmsChunk *chunk_array, int save_id)
+{
+	int i;
+	int sector = 0;
+	int offset = 0;
+	const void *src = GetSaveReadAddr(save_id);
+
+	LTRACEF("[LOOP2]");
+
+	ReadSave(src + sector * SIZE_4K, gBuf, SIZE_4K);
+
+	for (i = 0; ; i++) {
+		const struct EmsChunk *chunk = &chunk_array[i];
+
+		if (chunk->size == 0)
+			break;
+
+		if ((offset + chunk->size) > SIZE_4K) {
+			offset = 0;
+			sector++;
+			ReadSave(src + sector * SIZE_4K, gBuf, SIZE_4K);
+		}
+
+		LTRACEF("[LOOP2 %d] sec=%d, off=0x%04X, save=0x%08X, load=0x%08X",
+						i, sector, offset, (uintptr_t)chunk->save, (uintptr_t)chunk->load);
+
+		if (chunk->save)
+			chunk->save(gBuf + offset, chunk->size);
+
+		offset = offset + chunk->size;
+	}
+}
+
+static int ems_calc_addr(const struct EmsChunk *chunk_array, int chunk_idx, int *out_sector, int *out_offset)
+{
+	int i;
+	int sector = 0;
+	int offset = 0;
+
+	LTRACEF("[LOOP3]");
+
+	for (i = 0; ; i++) {
+		const struct EmsChunk *chunk = &chunk_array[i];
+
+		if (chunk->size == 0)
+			break;
+
+		if ((offset + chunk->size) > SIZE_4K) {
+			offset = 0;
+			sector++;
+		}
+
+		LTRACEF("[LOOP3 %d] sec=%d, off=0x%04X, save=0x%08X, load=0x%08X",
+						i, sector, offset, (uintptr_t)chunk->save, (uintptr_t)chunk->load);
+
+		if (chunk->chunk_idx == chunk_idx) {
+			*out_sector = sector;
+			*out_offset = offset;
+			return 0;
+		}
+
+		offset = offset + chunk->size;
+	}
+
+	return -1;
+}
+
+void ReadGameSavePlaySt(int save_id, struct PlaySt *play_st)
+{
+	int ret, sector, offset;
+	const struct EmsChunk *chunk;
+
+#if 1
+	struct GameSaveBlock const *src = GetSaveReadAddr(save_id);
+	ReadSave(&src->play_st, play_st, sizeof(struct PlaySt));
+	return;
+#endif
+
+	switch (save_id) {
+	case SAVE_GAME0:
+	case SAVE_GAME1:
+	case SAVE_GAME2:
+		chunk = gMsaChunk;
+		break;
+
+	case SAVE_SUSPEND:
+	case SAVE_SUSPEND_ALT:
+		chunk = gMsaChunk;
+		break;
+
+	default:
+		return;
+	}
+
+	ret = ems_calc_addr(chunk, EMS_CHUNK_PLAYST, &sector, &offset);
+	if (ret)
+		return;
+
+	ReadSave(GetSaveReadAddr(save_id) + sector * SIZE_4K, gBuf, SIZE_4K);
+	memcpy(play_st, gBuf + offset, sizeof(struct PlaySt));
+}
 
 void WriteLastGameSaveId(int save_id)
 {
@@ -166,17 +304,6 @@ void ReadGameSave(int save_id)
 	ReadChapterStats(src->chapter_stats);
 
 	WriteLastGameSaveId(save_id);
-}
-
-bool IsSaveValid(int save_id)
-{
-	return ReadSaveBlockInfo(NULL, save_id);
-}
-
-void ReadGameSavePlaySt(int save_id, struct PlaySt *play_st)
-{
-	struct GameSaveBlock const *src = GetSaveReadAddr(save_id);
-	ReadSave(&src->play_st, play_st, sizeof(struct PlaySt));
 }
 
 bool IsGameSavePastFirstChapter(int save_id)
@@ -342,7 +469,6 @@ void WriteSuspendSave(int save_id)
 	if (!IsSaveWorking())
 		return;
 
-	save_id += GetNextSuspendSaveId();
 	dst = GetSaveWriteAddr(save_id);
 
 	gPlaySt.time_saved = GetGameTime();
@@ -376,14 +502,13 @@ void WriteSuspendSave(int save_id)
 	WriteSaveBlockInfo(&block_info, save_id);
 
 	gBmSt.just_resumed = FALSE;
-	WriteSwappedSuspendSaveId();
 }
 
 void ReadSuspendSave(int save_id)
 {
 	int i;
 
-	struct SuspendSaveBlock const *src = GetSaveReadAddr(save_id + gSuspendSaveIdOffset);
+	struct SuspendSaveBlock const *src = GetSaveReadAddr(save_id);
 
 	ReadSave(&src->play_st, &gPlaySt, sizeof(struct PlaySt));
 	SetGameTime(gPlaySt.time_saved);
@@ -418,17 +543,10 @@ bool IsValidSuspendSave(int save_id)
 	if (save_id != SAVE_SUSPEND)
 		return FALSE;
 
-	gSuspendSaveIdOffset = GetLastSuspendSaveId();
 
-	if (ReadSaveBlockInfo(NULL, SAVE_SUSPEND + gSuspendSaveIdOffset))
+	if (ReadSaveBlockInfo(NULL, SAVE_SUSPEND))
 		return TRUE;
 
-	gSuspendSaveIdOffset = GetNextSuspendSaveId();
-
-	if (ReadSaveBlockInfo(NULL, SAVE_SUSPEND + gSuspendSaveIdOffset))
-		return TRUE;
-
-	gSuspendSaveIdOffset = 0x7F;
 	return FALSE;
 }
 
@@ -437,7 +555,7 @@ void ReadSuspendSavePlaySt(int save_id, struct PlaySt *buf)
 	// because of this function, ReadGameSavePlaySt is used for both game saves and suspend saves, despite them potentially having different layouts
 	STATIC_ASSERT(offsetof(struct GameSaveBlock, play_st) == offsetof(struct SuspendSaveBlock, play_st));
 
-	ReadGameSavePlaySt(save_id + gSuspendSaveIdOffset, buf);
+	ReadGameSavePlaySt(save_id, buf);
 }
 
 void EncodeSuspendSavePackedUnit(struct Unit *unit, void *buf)
@@ -561,36 +679,6 @@ void WriteTraps(void *sram_dst)
 void ReadTraps(void const *sram_src)
 {
 	ReadSave(sram_src, GetTrap(0), TRAP_MAX_COUNT *sizeof(struct Trap));
-}
-
-int GetLastSuspendSaveId(void)
-{
-	struct GlobalSaveInfo info;
-	ReadGlobalSaveInfo(&info);
-
-	if (info.last_suspend_slot == 1)
-		return 1;
-	else
-		return 0;
-}
-
-int GetNextSuspendSaveId(void)
-{
-	return 1 - GetLastSuspendSaveId();
-}
-
-void WriteSwappedSuspendSaveId(void)
-{
-	struct GlobalSaveInfo info;
-	ReadGlobalSaveInfo(&info);
-	info.last_suspend_slot = !info.last_suspend_slot;
-	WriteGlobalSaveInfoNoChecksum(&info);
-}
-
-int SramChecksum32(void const *sram_src, int size)
-{
-	ReadSave(sram_src, gBuf, size);
-	return Checksum32(gBuf, size);
 }
 
 bool VerifySaveBlockChecksum(struct SaveBlockInfo *block_info)

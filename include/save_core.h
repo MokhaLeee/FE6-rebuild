@@ -41,7 +41,7 @@ void WriteGlobalSaveInfo(struct GlobalSaveInfo * info);
 void WriteGlobalSaveInfoNoChecksum(struct GlobalSaveInfo * info);
 void InitGlobalSaveInfo(void);
 void * SramOffsetToAddr(u16 off);
-u16 SramAddrToOffset(void * addr);
+u16 SramAddrToOffset(const void * addr);
 bool ReadSaveBlockInfo(struct SaveBlockInfo * block_info, int save_id);
 void WriteSaveBlockInfo(struct SaveBlockInfo * block_info, int save_id);
 void * GetSaveWriteAddr(int save_id);

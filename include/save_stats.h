@@ -46,6 +46,9 @@ struct ChapterStats
 #define PID_STATS_COUNT 70
 #define CHAPTER_STATS_COUNT 32
 
+extern struct PidStats EWRAM_DATA gPidStats[PID_STATS_COUNT];
+extern struct ChapterStats EWRAM_DATA gChapterStats[CHAPTER_STATS_COUNT];
+
 void WriteGameSaveFreshStats(struct GameSaveBlock * gamesave_sram);
 void ClearPidStats(void);
 void ReadPidStats(void const * sram_src);

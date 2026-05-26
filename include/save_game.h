@@ -140,8 +140,6 @@ void EncodeSuspendSavePackedUnit(struct Unit * unit, void * buf);
 void ReadSuspendSavePackedUnit(void const * sram_src, struct Unit * unit);
 void WriteTraps(void * sram_dst);
 void ReadTraps(void const * sram_src);
-int GetLastSuspendSaveId(void);
-int GetNextSuspendSaveId(void);
 void WriteSwappedSuspendSaveId(void);
 int SramChecksum32(void const * sram_src, int size);
 bool VerifySaveBlockChecksum(struct SaveBlockInfo * block_info);

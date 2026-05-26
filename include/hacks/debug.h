@@ -43,6 +43,7 @@ void nocashgba_print(const char *buf);
  * stdio
  */
 void io_init(void);
+void hang(void);
 
 struct io_handle {
 	size_t (*write)(FILE *fp, const char *buf, size_t len);

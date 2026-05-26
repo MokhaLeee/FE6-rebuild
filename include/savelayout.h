@@ -15,6 +15,7 @@ struct SramMain
 {
     struct GlobalSaveInfo head;
     struct SaveBlockInfo block_info[SAVE_COUNT];
+
     struct SuspendSaveBlock suspend;
     struct SuspendSaveBlock suspend_alt;
     struct GameSaveBlock game_0;
@@ -24,6 +25,8 @@ struct SramMain
 };
 
 STATIC_ASSERT(CART_SRAM_SIZE - SRAM_XMAP_SIZE >= sizeof(struct SramMain));
+
+#define SIZE_4K 4096
 
 /**
  * new plan
@@ -50,6 +53,10 @@ enum EMS_format_size {
 	EMS_SIZE_GLOBALINFO = 0x94,
 	EMS_SIZE_SUS = 0x2F30,
 	EMS_SIZE_SAV = 0x17A8,
+};
+
+enum ems_chunk_index {
+	EMS_CHUNK_PLAYST = 1,
 };
 
 struct EmsChunk {
