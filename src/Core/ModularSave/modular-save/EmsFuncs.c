@@ -574,12 +574,14 @@ static void Msa_LoadTrap(u8 *buf, int size)
 }
 
 const struct EmsChunk gMsaChunk[] = {
+	/* fixed: ReadGameSavePlaySt */
 	{
 		.size = sizeof(struct PlaySt),
 		.save = EMS_SavePlaySt,
 		.load = EMS_LoadPlaySt,
 		.chunk_idx = EMS_CHUNK_PLAYST,
 	},
+
 	{
 		.size = SUPPLY_ITEM_COUNT *sizeof(u16),
 		.save = EMS_SaveSupplyItem,
@@ -609,16 +611,17 @@ const struct EmsChunk gMsaChunk[] = {
 };
 
 const struct EmsChunk gMsuChunk[] = {
-	{
-		.size = UNIT_SAVE_AMOUNT_BLUE * sizeof(struct MsuPackedUnitAlly),
-		.save = Msu_SaveUnit_Ally,
-		.load = Msu_LoadUnit_Ally,
-	},
+	/* fixed: ReadGameSavePlaySt */
 	{
 		.size = sizeof(struct PlaySt),
 		.save = EMS_SavePlaySt,
 		.load = EMS_LoadPlaySt,
 		.chunk_idx = EMS_CHUNK_PLAYST,
+	},
+	{
+		.size = UNIT_SAVE_AMOUNT_BLUE * sizeof(struct MsuPackedUnitAlly),
+		.save = Msu_SaveUnit_Ally,
+		.load = Msu_LoadUnit_Ally,
 	},
 	{
 		.size = SUPPLY_ITEM_COUNT *sizeof(u16),
@@ -661,14 +664,14 @@ const struct EmsChunk gMsuChunk[] = {
 		.load = Msa_LoadTrap,
 	},
 	{
-		.size = UNIT_SAVE_AMOUNT_RED * sizeof(struct MsuPackedUnitAI),
-		.save = Msu_SaveUnit_Enemy,
-		.load = Msu_LoadUnit_Enemy,
-	},
-	{
 		.size = UNIT_SAVE_AMOUNT_GREEN * sizeof(struct MsuPackedUnitAI),
 		.save = Msu_SaveUnit_Npc,
 		.load = Msu_LoadUnit_Npc,
+	},
+	{
+		.size = UNIT_SAVE_AMOUNT_RED * sizeof(struct MsuPackedUnitAI),
+		.save = Msu_SaveUnit_Enemy,
+		.load = Msu_LoadUnit_Enemy,
 	},
 	{ .size = 0 }
 };

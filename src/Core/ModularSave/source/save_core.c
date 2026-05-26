@@ -100,17 +100,6 @@ bool func_fe6_08084714(void)
 
 bool IsMultiArenaAvailable(void)
 {
-	if (IsSaveWorking()) {
-		int i;
-
-		for (i = 0; i < 3; i++) {
-			if (IsGameSavePastFirstChapter(i))
-				return TRUE;
-		}
-
-		return IsMultiArenaSaveReady();
-	}
-
 	return FALSE;
 }
 

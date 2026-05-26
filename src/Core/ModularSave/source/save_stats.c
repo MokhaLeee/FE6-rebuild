@@ -25,29 +25,14 @@ struct PidStats *EWRAM_DATA gPidStatsSram = NULL;
 struct PidStats EWRAM_DATA gPidStats[PID_STATS_COUNT] = { { 0 } };
 struct ChapterStats EWRAM_DATA gChapterStats[CHAPTER_STATS_COUNT] = { { 0 } };
 
-void WriteGameSaveFreshStats(struct GameSaveBlock *gamesave_sram)
-{
-	int i;
-
-	CpuFill16(0, gPidStats, sizeof(gPidStats));
-	CpuFill16(0, gChapterStats, sizeof(gChapterStats));
-
-	for (i = 0; i < PID_STATS_COUNT; i++) {
-		WriteSave(
-			gPidStats, &gamesave_sram->pid_stats[i], sizeof(struct PidStats));
-	}
-
-	for (i = 0; i < CHAPTER_STATS_COUNT; i++) {
-		WriteSave(
-			gChapterStats, &gamesave_sram->chapter_stats[i], sizeof(struct ChapterStats));
-	}
-
-	gPidStatsSram = gamesave_sram->pid_stats;
-}
-
 void ClearPidStats(void)
 {
 	CpuFill16(0, gPidStats, sizeof(gPidStats));
+}
+
+void ClearChapterStats(void)
+{
+	CpuFill16(0, gChapterStats, sizeof(gChapterStats));
 }
 
 void ReadPidStats(void const *sram_src)
@@ -88,8 +73,7 @@ int GetNextChapterStatsSlot(void)
 
 	int result = 0;
 
-	while (cur->chapter_turn != 0)
-	{
+	while (cur->chapter_turn != 0) {
 		result++;
 		cur++;
 	}

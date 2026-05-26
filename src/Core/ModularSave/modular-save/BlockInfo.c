@@ -12,7 +12,7 @@ void WriteSaveBlockInfo(struct SaveBlockInfo *block_info, int save_id)
 	block_info->magic16 = SAVE_MAGIC16;
 	block_info->offset = SramAddrToOffset(GetSaveWriteAddr(save_id));
 
-	if (save_id >= SAVE_COUNT)
+	if (unlikely(save_id >= SAVE_COUNT))
 		return;
 
 	switch (block_info->kind) {
@@ -62,7 +62,6 @@ bool ReadSaveBlockInfo(struct SaveBlockInfo *block_info, int save_id)
 	src = gBuf + sizeof(struct GlobalSaveInfo) + save_id * sizeof(struct SaveBlockInfo);
 	ReadSave(CART_SRAM, gBuf, SIZE_4K);
 	memcpy(block_info, src, sizeof(struct SaveBlockInfo));
-
 #else
 	src = CART_SRAM + sizeof(struct GlobalSaveInfo) + save_id * sizeof(struct SaveBlockInfo);
 	ReadSave(src, block_info, sizeof(struct SaveBlockInfo));
