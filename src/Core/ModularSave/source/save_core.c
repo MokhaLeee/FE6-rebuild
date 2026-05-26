@@ -23,19 +23,26 @@ struct SramMain *CONST_DATA gSramMain = CART_SRAM;
 u16 Checksum16(void const *data, int size)
 {
 	u16 const *data_u16 = data;
-
 	int i;
-
 	u32 add_acc = 0;
 	u32 xor_acc = 0;
 
-	for (i = 0; i < size / 2; ++i)
-	{
+	for (i = 0; i < size / 2; ++i) {
 		add_acc += data_u16[i];
 		xor_acc ^= data_u16[i];
 	}
 
 	return add_acc + xor_acc;
+}
+
+void *SramOffsetToAddr(u16 off)
+{
+	return CART_SRAM + off;
+}
+
+u16 SramAddrToOffset(void *addr)
+{
+	return addr - CART_SRAM;
 }
 
 bool ReadGlobalSaveInfo(struct GlobalSaveInfo *info)
@@ -95,16 +102,6 @@ void InitGlobalSaveInfo(void)
 	WriteGlobalSaveInfo(&info);
 }
 
-void *SramOffsetToAddr(u16 off)
-{
-	return ((void *) gSramMain) + off;
-}
-
-u16 SramAddrToOffset(void *addr)
-{
-	return ((u8 *) addr) - ((u8 *) (void *) gSramMain);
-}
-
 bool ReadSaveBlockInfo(struct SaveBlockInfo *block_info, int save_id)
 {
 	struct SaveBlockInfo local_block_info;
@@ -146,81 +143,6 @@ bool ReadSaveBlockInfo(struct SaveBlockInfo *block_info, int save_id)
 		return FALSE;
 
 	return VerifySaveBlockChecksum(block_info);
-}
-
-void WriteSaveBlockInfo(struct SaveBlockInfo *block_info, int save_id)
-{
-	block_info->magic16 = SAVE_MAGIC16;
-	block_info->offset = SramAddrToOffset(GetSaveWriteAddr(save_id));
-
-	if (save_id >= SAVE_COUNT)
-		return;
-
-	switch (block_info->kind) {
-	case SAVE_KIND_GAME:
-		block_info->size = sizeof(struct GameSaveBlock);
-		break;
-
-	case SAVE_KIND_SUSPEND:
-		block_info->size = sizeof(struct SuspendSaveBlock);
-		break;
-
-	case SAVE_KIND_MULTIARENA:
-		block_info->size = sizeof(struct MultiArenaSaveBlock);
-		break;
-
-	case SAVE_KIND_XMAP:
-		block_info->size = SRAM_XMAP_SIZE;
-		break;
-
-	case SAVE_KIND_INVALID:
-		block_info->size = 0;
-		block_info->offset = 0;
-		block_info->magic16 = 0;
-		break;
-
-	default:
-		return;
-	}
-
-	PopulateSaveBlockChecksum(block_info);
-	WriteSave(block_info, &gSramMain->block_info[save_id], sizeof(struct SaveBlockInfo));
-}
-
-void *GetSaveWriteAddr(int save_id)
-{
-	switch (save_id) {
-	case SAVE_GAME0:
-		return &gSramMain->game_0;
-
-	case SAVE_GAME1:
-		return &gSramMain->game_1;
-
-	case SAVE_GAME2:
-		return &gSramMain->game_2;
-
-	case SAVE_SUSPEND:
-		return &gSramMain->suspend;
-
-	case SAVE_SUSPEND_ALT:
-		return &gSramMain->suspend_alt;
-
-	case SAVE_MULTIARENA:
-		return &gSramMain->multi_arena;
-
-	case SAVE_XMAP:
-		return SRAM_XMAP_ADDR;
-
-	default:
-		return NULL;
-	}
-}
-
-void *GetSaveReadAddr(int save_id)
-{
-	struct SaveBlockInfo block_info;
-	ReadSaveBlockInfo(&block_info, save_id);
-	return SramOffsetToAddr(block_info.offset);
 }
 
 void WriteChapterFlags(void *sram_dst)
