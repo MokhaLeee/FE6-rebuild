@@ -46,6 +46,8 @@ static void setup_skill_list(struct SkillList *list, struct Unit *unit)
 		if (SKILL_IS_VALID(_tmp_sid) && ref_buf[_tmp_sid] == 0) { \
 			ref_buf[_tmp_sid] = 1; \
 			list->sid[list->amt++] = _tmp_sid; \
+			if (list->amt >= ARRAY_COUNT(list->sid)) \
+				return; \
 		} \
 	}
 
@@ -66,6 +68,12 @@ static void setup_skill_list(struct SkillList *list, struct Unit *unit)
 		/* job */
 		ADD_LIST(gpSkillJTable[jid].sid[0]);
 		ADD_LIST(gpSkillJTable[jid].sid[1]);
+
+		/* dynamic */
+		ADD_LIST(unit->skills[0]);
+		ADD_LIST(unit->skills[1]);
+		ADD_LIST(unit->skills[2]);
+		ADD_LIST(unit->skills[3]);
 	}
 }
 
