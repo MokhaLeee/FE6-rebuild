@@ -484,7 +484,7 @@ GAMEINFO_DATA struct PInfo const PInfoTable[] = {
 		.id = PID_ELEN,
 		.msg_name = MSG_7FC,
 		.msg_desc = MSG_4C7,
-		.jid_default = JID_CLERIC,
+		.jid_default = JID_BISHOP_F,
 		.fid = FID_0F,
 		.affinity = AFFINITY_3,
 		.sort_order_key = 8,
@@ -494,7 +494,7 @@ GAMEINFO_DATA struct PInfo const PInfoTable[] = {
 		.base_lck = 8,
 		.wexp =
 		{
-			[ITEM_KIND_STAFF] = WEXP_D,
+			[ITEM_KIND_STAFF] = WEXP_A,
 		},
 		.growth_hp = 45,
 		.growth_pow = 50,
