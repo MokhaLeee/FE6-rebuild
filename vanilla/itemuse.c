@@ -330,7 +330,7 @@ bool CanUnitUseBindingBladeToHeal(struct Unit * unit)
 
 bool CanUnitUsePureWaterItem(struct Unit * unit)
 {
-    if (unit->barrier == 7)
+    if (GetDuraStatusVal(unit, DURA_STATUS_RES) == 7)
         return FALSE;
 
     return TRUE;

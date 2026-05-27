@@ -1,70 +1,44 @@
 #include "prelude.h"
 #include "unit.h"
 
-struct DuraStatus {
-	u32 pow_sign : 1;
-	u32 pow      : 3;
-	u32 mag_sign : 1;
-	u32 mag      : 3;
-
-	u32 skl_sign : 1;
-	u32 skl      : 3;
-	u32 spd_sign : 1;
-	u32 spd      : 3;
-
-	u32 lck_sign : 1;
-	u32 lck      : 3;
-	u32 def_sign : 1;
-	u32 def      : 3;
-
-	u32 res_sign : 1;
-	u32 res      : 3;
-};
-
-static struct DuraStatus *get_dura_status(struct Unit *unit)
-{
-	return (struct DuraStatus *)(&unit->dura_status);
-}
-
 int GetDuraStatusVal(struct Unit *unit, enum dura_status_type type)
 {
 	int val, sig;
-	struct DuraStatus *dstat = get_dura_status(unit);
 
 	switch (type) {
 	case DURA_STATUS_POW:
-		val = dstat->pow;
-		sig = dstat->pow_sign;
+		val = unit->debuff_pow;
+		sig = unit->debuff_pow_sign;
 		break;
 
 	case DURA_STATUS_MAG:
-		val = dstat->mag;
-		sig = dstat->mag_sign;
+		val = unit->debuff_mag;
+		sig = unit->debuff_mag_sign;
 		break;
 
 	case DURA_STATUS_SKL:
-		val = dstat->skl;
-		sig = dstat->skl_sign;
+		val = unit->debuff_skl;
+		sig = unit->debuff_skl_sign;
 		break;
 
 	case DURA_STATUS_SPD:
-		val = dstat->spd;
-		sig = dstat->spd_sign;
+		val = unit->debuff_spd;
+		sig = unit->debuff_spd_sign;
 		break;
 
 	case DURA_STATUS_LCK:
-		val = dstat->lck;
-		sig = dstat->lck_sign;
+		val = unit->debuff_lck;
+		sig = unit->debuff_lck_sign;
 		break;
 
 	case DURA_STATUS_DEF:
-		val = dstat->def;
-		sig = dstat->def_sign;
+		val = unit->debuff_def;
+		sig = unit->debuff_def_sign;
 		break;
 
 	case DURA_STATUS_RES:
-		val = dstat->res;
-		sig = dstat->res_sign;
+		val = unit->debuff_res;
+		sig = unit->debuff_res_sign;
 		break;
 
 	default:
@@ -80,7 +54,6 @@ int GetDuraStatusVal(struct Unit *unit, enum dura_status_type type)
 void SetDuraStatusVal(struct Unit *unit, enum dura_status_type type, int val)
 {
 	int sig;
-	struct DuraStatus *dstat = get_dura_status(unit);
 
 	if (val < 0) {
 		sig = 1;
@@ -93,38 +66,38 @@ void SetDuraStatusVal(struct Unit *unit, enum dura_status_type type, int val)
 
 	switch (type) {
 	case DURA_STATUS_POW:
-		dstat->pow = val;
-		dstat->pow_sign = sig;
+		unit->debuff_pow = val;
+		unit->debuff_pow_sign = sig;
 		break;
 
 	case DURA_STATUS_MAG:
-		dstat->mag = val;
-		dstat->mag_sign = sig;
+		unit->debuff_mag = val;
+		unit->debuff_mag_sign = sig;
 		break;
 
 	case DURA_STATUS_SKL:
-		dstat->skl = val;
-		dstat->skl_sign = sig;
+		unit->debuff_skl = val;
+		unit->debuff_skl_sign = sig;
 		break;
 
 	case DURA_STATUS_SPD:
-		dstat->spd = val;
-		dstat->spd_sign = sig;
+		unit->debuff_spd = val;
+		unit->debuff_spd_sign = sig;
 		break;
 
 	case DURA_STATUS_LCK:
-		dstat->lck = val;
-		dstat->lck_sign = sig;
+		unit->debuff_lck = val;
+		unit->debuff_lck_sign = sig;
 		break;
 
 	case DURA_STATUS_DEF:
-		dstat->def = val;
-		dstat->res_sign = sig;
+		unit->debuff_def = val;
+		unit->debuff_res_sign = sig;
 		break;
 
 	case DURA_STATUS_RES:
-		dstat->res = val;
-		dstat->res_sign = sig;
+		unit->debuff_res = val;
+		unit->debuff_res_sign = sig;
 		break;
 
 	default:
@@ -134,55 +107,108 @@ void SetDuraStatusVal(struct Unit *unit, enum dura_status_type type, int val)
 
 void TickDuraStatus(struct Unit *unit)
 {
-	struct DuraStatus *dstat = get_dura_status(unit);
+	if (unit->debuff_pow) {
+		unit->debuff_pow--;
 
-	if (dstat->pow) {
-		dstat->pow--;
-
-		if (dstat->pow == 0)
-			dstat->pow_sign = 0;
+		if (unit->debuff_pow == 0)
+			unit->debuff_pow_sign = 0;
 	}
 	
-	if (dstat->mag) {
-		dstat->mag--;
+	if (unit->debuff_mag) {
+		unit->debuff_mag--;
 
-		if (dstat->mag == 0)
-			dstat->mag_sign = 0;
+		if (unit->debuff_mag == 0)
+			unit->debuff_mag_sign = 0;
 	}
 
-	if (dstat->skl) {
-		dstat->skl--;
+	if (unit->debuff_skl) {
+		unit->debuff_skl--;
 
-		if (dstat->skl == 0)
-			dstat->skl_sign = 0;
+		if (unit->debuff_skl == 0)
+			unit->debuff_skl_sign = 0;
 	}
 
-	if (dstat->spd) {
-		dstat->spd--;
+	if (unit->debuff_spd) {
+		unit->debuff_spd--;
 
-		if (dstat->spd == 0)
-			dstat->spd_sign = 0;
+		if (unit->debuff_spd == 0)
+			unit->debuff_spd_sign = 0;
 	}
 
-	if (dstat->lck) {
-		dstat->lck--;
+	if (unit->debuff_lck) {
+		unit->debuff_lck--;
 
-		if (dstat->lck == 0)
-			dstat->lck_sign = 0;
+		if (unit->debuff_lck == 0)
+			unit->debuff_lck_sign = 0;
 	}
 
-	if (dstat->def) {
-		dstat->def--;
+	if (unit->debuff_def) {
+		unit->debuff_def--;
 
-		if (dstat->def == 0)
-			dstat->def_sign = 0;
+		if (unit->debuff_def == 0)
+			unit->debuff_def_sign = 0;
 	}
 
-	if (dstat->res) {
-		dstat->res--;
+	if (unit->debuff_res) {
+		unit->debuff_res--;
 
-		if (dstat->res == 0)
-			dstat->res_sign = 0;
+		if (unit->debuff_res == 0)
+			unit->debuff_res_sign = 0;
 	}
 }
 
+void CleanupDuraStatus(struct Unit *unit)
+{
+	unit->debuff_pow = 0;
+	unit->debuff_mag = 0;
+	unit->debuff_skl = 0;
+	unit->debuff_spd = 0;
+	unit->debuff_lck = 0;
+	unit->debuff_def = 0;
+	unit->debuff_res = 0;
+	unit->debuff_mov = 0;
+
+	unit->debuff_pow_sign = 0;
+	unit->debuff_mag_sign = 0;
+	unit->debuff_skl_sign = 0;
+	unit->debuff_spd_sign = 0;
+	unit->debuff_lck_sign = 0;
+	unit->debuff_def_sign = 0;
+	unit->debuff_res_sign = 0;
+	unit->debuff_mov_sign = 0;
+}
+
+int MSG_DuraStatusPow(int status, struct Unit *unit)
+{
+	return status + GetDuraStatusVal(unit, DURA_STATUS_POW);
+}
+
+int MSG_DuraStatusMag(int status, struct Unit *unit)
+{
+	return status + GetDuraStatusVal(unit, DURA_STATUS_MAG);
+}
+
+int MSG_DuraStatusSkl(int status, struct Unit *unit)
+{
+	return status + GetDuraStatusVal(unit, DURA_STATUS_SKL);
+}
+
+int MSG_DuraStatusSpd(int status, struct Unit *unit)
+{
+	return status + GetDuraStatusVal(unit, DURA_STATUS_SPD);
+}
+
+int MSG_DuraStatusLck(int status, struct Unit *unit)
+{
+	return status + GetDuraStatusVal(unit, DURA_STATUS_LCK);
+}
+
+int MSG_DuraStatusDef(int status, struct Unit *unit)
+{
+	return status + GetDuraStatusVal(unit, DURA_STATUS_DEF);
+}
+
+int MSG_DuraStatusRes(int status, struct Unit *unit)
+{
+	return status + GetDuraStatusVal(unit, DURA_STATUS_RES);
+}

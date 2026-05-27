@@ -6,6 +6,7 @@
 
 #define UNIT_WEAPON_EXP_COUNT 8
 #define UNIT_SUPPORT_COUNT 10
+#define UNIT_DYNAMIC_SKILLS_COUNT 4
 #define UNIT_LEVEL_MAX 20
 
 enum {
@@ -254,18 +255,41 @@ struct Unit {
 	/* 19 */ u8 rescue;
 	/* 1A */ i8 bonus_mov;
 
-	/* PAD */
-	/* 1B */ u8 _pad_1B;
+	/* CHAX */
+	/* 1B */ u8 debuff_pow_sign : 1;
+			 u8 debuff_pow : 3;
+			 u8 debuff_mag_sign : 1;
+			 u8 debuff_mag : 3;
 
 	/* 1C */ u16 items[ITEMSLOT_INV_COUNT];
 	/* 26 */ u8 wexp[UNIT_WEAPON_EXP_COUNT];
 	/* 2E */ u8 status : 4;
 	/* 2E */ u8 status_duration : 4;
-	/* 2F */ u8 torch : 4;
-	/* 2F */ u8 barrier : 4;
+
+	/* CHAX */
+	/* 2F */ u8 debuff_skl_sign : 1;
+			 u8 debuff_skl : 3;
+			 u8 debuff_spd_sign : 1;
+			 u8 debuff_spd : 3;
+
+	/* 30 */ u8 debuff_lck_sign : 1;
+			 u8 debuff_lck : 3;
+			 u8 debuff_def_sign : 1;
+			 u8 debuff_def : 3;
+
+	/* 31 */ u8 debuff_res_sign : 1;
+			 u8 debuff_res : 3;
+			 u8 debuff_mov_sign : 1;
+			 u8 debuff_mov : 3;
+
+	/* 32 */ u8 torch : 4;
+			 u8 _unused_32 : 4;
 
 	/* PAD */
-	/* 30 */ u8 _pad_30[0xC];
+	/* 33 */ u8 _pad_33;
+
+	/* CHAX */
+	/* 34 */ u16 skills[UNIT_DYNAMIC_SKILLS_COUNT];
 
 	/* 3C */ struct UnitSprite *map_sprite;
 	/* 40 */ u16 ai_config;
@@ -277,10 +301,7 @@ struct Unit {
 
 	/* CHAX */
 	/* 47 */ i8 mag;
-
-    /* struct DuraStatus */
-    /* 48 */ u32 dura_status[4];
-    /* 58 */ // end
+	/* 48 */ // end
 };
 
 // UnitInfo is used for constructing new units
@@ -473,5 +494,14 @@ enum dura_status_type {
 int GetDuraStatusVal(struct Unit *unit, enum dura_status_type type);
 void SetDuraStatusVal(struct Unit *unit, enum dura_status_type type, int val);
 void TickDuraStatus(struct Unit *unit);
+void CleanupDuraStatus(struct Unit *unit);
+
+int MSG_DuraStatusPow(int status, struct Unit *unit);
+int MSG_DuraStatusMag(int status, struct Unit *unit);
+int MSG_DuraStatusSkl(int status, struct Unit *unit);
+int MSG_DuraStatusSpd(int status, struct Unit *unit);
+int MSG_DuraStatusLck(int status, struct Unit *unit);
+int MSG_DuraStatusDef(int status, struct Unit *unit);
+int MSG_DuraStatusRes(int status, struct Unit *unit);
 
 #endif // UNIT_H

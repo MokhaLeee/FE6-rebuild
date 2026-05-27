@@ -7,7 +7,10 @@
 
 int GetUnitMaxHp(struct Unit *unit)
 {
-	return unit->max_hp + GetItemHpBonus(GetUnitEquippedWeapon(unit));
+	int status = unit->max_hp;
+
+	status += GetItemHpBonus(GetUnitEquippedWeapon(unit));
+	return status;
 }
 
 int GetUnitCurrentHp(struct Unit *unit)
@@ -20,7 +23,11 @@ int GetUnitCurrentHp(struct Unit *unit)
 
 int GetUnitMagic(struct Unit *unit)
 {
-	return unit->mag + GetItemMagBonus(GetUnitEquippedWeapon(unit));
+	int status = unit->mag;
+
+	status += GetItemMagBonus(GetUnitEquippedWeapon(unit));
+	status = MSG_DuraStatusMag(status, unit);
+	return status;
 }
 
 int GetUnitPower(struct Unit *unit)
@@ -32,51 +39,75 @@ int GetUnitPower(struct Unit *unit)
 	if (SkillTester(unit, SID_PowBonus))
 		status += 5;
 
+	status = MSG_DuraStatusPow(status, unit);
 	return status;
 }
 
 int GetUnitSkill(struct Unit *unit)
 {
-	int weapon = GetUnitEquippedWeapon(unit);
+	int status;
 
+	status = unit->skl;
 	if (unit->flags & UNIT_FLAG_RESCUING)
-		return unit->skl / 2 + GetItemSklBonus(weapon);
+		return unit->skl / 2;
 
-	return unit->skl + GetItemSklBonus(weapon);
+	status += GetItemSklBonus(GetUnitEquippedWeapon(unit));
+	status = MSG_DuraStatusSkl(status, unit);
+	return status;
 }
 
 int GetUnitSpeed(struct Unit *unit)
 {
-	int weapon = GetUnitEquippedWeapon(unit);
+	int status;
 
+	status = unit->spd;
 	if (unit->flags & UNIT_FLAG_RESCUING)
-		return unit->spd / 2 + GetItemSpdBonus(weapon);
+		return unit->spd / 2;
 
-	return unit->spd + GetItemSpdBonus(weapon);
+	status += GetItemSpdBonus(GetUnitEquippedWeapon(unit));
+
+	status = MSG_DuraStatusSpd(status, unit);
+	return status;
 }
 
 int GetUnitDefense(struct Unit *unit)
 {
-	return unit->def + GetItemDefBonus(GetUnitEquippedWeapon(unit));
+	int status = unit->def;
+
+	status += GetItemDefBonus(GetUnitEquippedWeapon(unit));
+	status = MSG_DuraStatusDef(status, unit);
+	return status;
 }
 
 int GetUnitResistance(struct Unit *unit)
 {
-	return unit->res + GetItemResBonus(GetUnitEquippedWeapon(unit)) + unit->barrier;
+	int status = unit->res;
+
+	status += GetItemResBonus(GetUnitEquippedWeapon(unit));
+	status = MSG_DuraStatusRes(status, unit);
+	return status;
 }
 
 int GetUnitLuck(struct Unit *unit)
 {
-	return unit->lck + GetItemLckBonus(GetUnitEquippedWeapon(unit));
+	int status = unit->lck;
+
+	status += GetItemLckBonus(GetUnitEquippedWeapon(unit));
+	status = MSG_DuraStatusLck(status, unit);
+	return status;
 }
 
 /* CHAX */
 int GetUnitMovement(struct Unit *unit)
 {
-	return UNIT_MOV(unit);
+	int status = UNIT_MOV(unit);
+
+	return status;
 }
 
 int GetUnitCon(struct Unit *unit)
 {
-	return UNIT_CON(unit);
+	int status = UNIT_CON(unit);
+
+	return status;
 }

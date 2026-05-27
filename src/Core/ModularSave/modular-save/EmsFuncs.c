@@ -30,8 +30,12 @@ struct MsaPackedUnit {
 	/* 1D */ u8 save_flags;
 	/* 1E */ u8 wexp[UNIT_WEAPON_EXP_COUNT];
 	/* 26 */ u8 _pad_[2];
-	/* 28 */
+	/* 28 */ u16 skills[4];
+	/* 30 */
 };
+
+_Static_assert(sizeof(struct MsaPackedUnit) == 0x30, "size not match: MsaPackedUnit");
+const int sizeof_MsaPackedUnit = sizeof(struct MsaPackedUnit);
 
 /**
  * 62 * 0x30 = 0xBA0 < 0x1000
@@ -84,6 +88,9 @@ static void pack_msa_unit(const struct Unit *unit, struct MsaPackedUnit *pack)
 
 	for (i = 0; i < UNIT_WEAPON_EXP_COUNT; i++)
 		pack->wexp[i] = unit->wexp[i];
+
+	for (i = 0; i < UNIT_DYNAMIC_SKILLS_COUNT; i++)
+		pack->skills[i] = unit->skills[i];
 }
 
 static void unpack_msa_unit(const struct MsaPackedUnit *pack, struct Unit *unit)
@@ -127,6 +134,9 @@ static void unpack_msa_unit(const struct MsaPackedUnit *pack, struct Unit *unit)
 
 	for (i = 0; i < UNIT_WEAPON_EXP_COUNT; i++)
 		unit->wexp[i] = pack->wexp[i];
+
+	for (i = 0; i < UNIT_DYNAMIC_SKILLS_COUNT; i++)
+		unit->skills[i] = pack->skills[i];
 }
 
 static void Msa_SaveUnit_Ally(u8 *buf, int size)
@@ -225,10 +235,32 @@ struct MsuPackedUnitAlly {
 	/* 1C */ u8 wexp[UNIT_WEAPON_EXP_COUNT];
 	/* 24 */ u16 flags;
 	/* 26 */ u8 rescue;
-	/* 27 */ u8 torch : 4;
-	/* 27 */ u8 barrier : 4;
-	/* 28 */
+
+	/* 27 */ u8 debuff_pow_sign : 1;
+			 u8 debuff_pow      : 3;
+			 u8 debuff_mag_sign : 1;
+			 u8 debuff_mag      : 3;
+	/* 28 */ u8 debuff_skl_sign : 1;
+			 u8 debuff_skl : 3;
+			 u8 debuff_spd_sign : 1;
+			 u8 debuff_spd : 3;
+	/* 29 */ u8 debuff_lck_sign : 1;
+			 u8 debuff_lck : 3;
+			 u8 debuff_def_sign : 1;
+			 u8 debuff_def : 3;
+	/* 2A */ u8 debuff_res_sign : 1;
+			 u8 debuff_res : 3;
+			 u8 debuff_mov_sign : 1;
+			 u8 debuff_mov : 3;
+
+	/* 2B */ u8 torch : 4;
+	/* 2B */ u8 unused_27 : 4;
+	/* 2C */ u16 skills[4];
+	/* 34 */
 };
+
+_Static_assert(sizeof(struct MsuPackedUnitAlly) == 0x34, "size not match: MsuPackedUnitAlly");
+const int sizeof_MsuPackedUnitAlly = sizeof(struct MsuPackedUnitAlly);
 
 struct MsuPackedUnitAI {
 	/* 00 */ u8 pid, jid;
@@ -249,8 +281,30 @@ struct MsuPackedUnitAI {
 	/* 2A */ u8 ai_counter;
 	/* 2B */ u8 ai_flags;
 	/* 2C */ u16 ai_config;
-	/* 2E */ u8 _pad_[2];
+
+	/* 2E */ u8 debuff_pow_sign : 1;
+			 u8 debuff_pow      : 3;
+			 u8 debuff_mag_sign : 1;
+			 u8 debuff_mag      : 3;
+	/* 2F */ u8 debuff_skl_sign : 1;
+			 u8 debuff_skl : 3;
+			 u8 debuff_spd_sign : 1;
+			 u8 debuff_spd : 3;
+	/* 30 */ u8 debuff_lck_sign : 1;
+			 u8 debuff_lck : 3;
+			 u8 debuff_def_sign : 1;
+			 u8 debuff_def : 3;
+	/* 31 */ u8 debuff_res_sign : 1;
+			 u8 debuff_res : 3;
+			 u8 debuff_mov_sign : 1;
+			 u8 debuff_mov : 3;
+
+	/* 32 */ u16 skills[4];
+	/* 3A */ u8 _pad_3A[2];
 };
+
+_Static_assert(sizeof(struct MsuPackedUnitAI) == 0x3C, "size not match: MsuPackedUnitAI");
+const int sizeof_MsuPackedUnitAI = sizeof(struct MsuPackedUnitAI);
 
 /**
  * 62 * 0x34 = 0xC98 < 0x1000
@@ -298,8 +352,27 @@ static void pack_msu_unit_ally(const struct Unit *unit, struct MsuPackedUnitAlly
 		pack->wexp[i] = unit->wexp[i];
 
 	pack->rescue = unit->rescue;
+
+	pack->debuff_pow = unit->debuff_pow;
+	pack->debuff_mag = unit->debuff_mag;
+	pack->debuff_skl = unit->debuff_skl;
+	pack->debuff_spd = unit->debuff_spd;
+	pack->debuff_lck = unit->debuff_lck;
+	pack->debuff_def = unit->debuff_def;
+	pack->debuff_res = unit->debuff_res;
+	pack->debuff_mov = unit->debuff_mov;
+	pack->debuff_pow_sign = unit->debuff_pow_sign;
+	pack->debuff_mag_sign = unit->debuff_mag_sign;
+	pack->debuff_skl_sign = unit->debuff_skl_sign;
+	pack->debuff_spd_sign = unit->debuff_spd_sign;
+	pack->debuff_lck_sign = unit->debuff_lck_sign;
+	pack->debuff_def_sign = unit->debuff_def_sign;
+	pack->debuff_res_sign = unit->debuff_res_sign;
+	pack->debuff_mov_sign = unit->debuff_mov_sign;
 	pack->torch = unit->torch;
-	pack->barrier = unit->barrier;
+
+	for (i = 0; i < UNIT_DYNAMIC_SKILLS_COUNT; i++)
+		pack->skills[i] = unit->skills[i];
 }
 
 static void unpack_msu_unit_ally(const struct MsuPackedUnitAlly *pack, struct Unit *unit)
@@ -338,8 +411,27 @@ static void unpack_msu_unit_ally(const struct MsuPackedUnitAlly *pack, struct Un
 		unit->wexp[i] = pack->wexp[i];
 
 	unit->rescue = pack->rescue;
+
+	unit->debuff_pow = pack->debuff_pow;
+	unit->debuff_mag = pack->debuff_mag;
+	unit->debuff_skl = pack->debuff_skl;
+	unit->debuff_spd = pack->debuff_spd;
+	unit->debuff_lck = pack->debuff_lck;
+	unit->debuff_def = pack->debuff_def;
+	unit->debuff_res = pack->debuff_res;
+	unit->debuff_mov = pack->debuff_mov;
+	unit->debuff_pow_sign = pack->debuff_pow_sign;
+	unit->debuff_mag_sign = pack->debuff_mag_sign;
+	unit->debuff_skl_sign = pack->debuff_skl_sign;
+	unit->debuff_spd_sign = pack->debuff_spd_sign;
+	unit->debuff_lck_sign = pack->debuff_lck_sign;
+	unit->debuff_def_sign = pack->debuff_def_sign;
+	unit->debuff_res_sign = pack->debuff_res_sign;
+	unit->debuff_mov_sign = pack->debuff_mov_sign;
 	unit->torch = pack->torch;
-	unit->barrier = pack->barrier;
+
+	for (i = 0; i < UNIT_DYNAMIC_SKILLS_COUNT; i++)
+		unit->skills[i] = pack->skills[i];
 }
 
 static void pack_msu_unit_ai(const struct Unit *unit, struct MsuPackedUnitAI *pack)
@@ -389,6 +481,26 @@ static void pack_msu_unit_ai(const struct Unit *unit, struct MsuPackedUnitAI *pa
 	pack->ai_config = unit->ai_config;
 	pack->ai_counter = unit->ai_counter;
 	pack->ai_flags = unit->ai_flags;
+
+	pack->debuff_pow = unit->debuff_pow;
+	pack->debuff_mag = unit->debuff_mag;
+	pack->debuff_skl = unit->debuff_skl;
+	pack->debuff_spd = unit->debuff_spd;
+	pack->debuff_lck = unit->debuff_lck;
+	pack->debuff_def = unit->debuff_def;
+	pack->debuff_res = unit->debuff_res;
+	pack->debuff_mov = unit->debuff_mov;
+	pack->debuff_pow_sign = unit->debuff_pow_sign;
+	pack->debuff_mag_sign = unit->debuff_mag_sign;
+	pack->debuff_skl_sign = unit->debuff_skl_sign;
+	pack->debuff_spd_sign = unit->debuff_spd_sign;
+	pack->debuff_lck_sign = unit->debuff_lck_sign;
+	pack->debuff_def_sign = unit->debuff_def_sign;
+	pack->debuff_res_sign = unit->debuff_res_sign;
+	pack->debuff_mov_sign = unit->debuff_mov_sign;
+
+	for (i = 0; i < UNIT_DYNAMIC_SKILLS_COUNT; i++)
+		pack->skills[i] = unit->skills[i];
 }
 
 static void unpack_msu_unit_ai(const struct MsuPackedUnitAI *pack, struct Unit *unit)
@@ -433,6 +545,26 @@ static void unpack_msu_unit_ai(const struct MsuPackedUnitAI *pack, struct Unit *
 	unit->ai_config = pack->ai_config;
 	unit->ai_counter = pack->ai_counter;
 	unit->ai_flags = pack->ai_flags;
+
+	unit->debuff_pow = pack->debuff_pow;
+	unit->debuff_mag = pack->debuff_mag;
+	unit->debuff_skl = pack->debuff_skl;
+	unit->debuff_spd = pack->debuff_spd;
+	unit->debuff_lck = pack->debuff_lck;
+	unit->debuff_def = pack->debuff_def;
+	unit->debuff_res = pack->debuff_res;
+	unit->debuff_mov = pack->debuff_mov;
+	unit->debuff_pow_sign = pack->debuff_pow_sign;
+	unit->debuff_mag_sign = pack->debuff_mag_sign;
+	unit->debuff_skl_sign = pack->debuff_skl_sign;
+	unit->debuff_spd_sign = pack->debuff_spd_sign;
+	unit->debuff_lck_sign = pack->debuff_lck_sign;
+	unit->debuff_def_sign = pack->debuff_def_sign;
+	unit->debuff_res_sign = pack->debuff_res_sign;
+	unit->debuff_mov_sign = pack->debuff_mov_sign;
+
+	for (i = 0; i < UNIT_DYNAMIC_SKILLS_COUNT; i++)
+		unit->skills[i] = pack->skills[i];
 }
 
 static void Msu_SaveUnit_Ally(u8 *buf, int size)

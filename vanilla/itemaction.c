@@ -58,10 +58,12 @@ void DoItemRestoreStaffAction(ProcPtr proc)
 
 void DoItemBarrierStaffAction(ProcPtr proc)
 {
-    BattleInitItemEffect(GetUnit(gAction.instigator), gAction.item_slot);
-    BattleInitItemEffectTarget(GetUnit(gAction.target));
+    struct Unit *unit = GetUnit(gAction.target);
 
-    GetUnit(gAction.target)->barrier = 7;
+    BattleInitItemEffect(GetUnit(gAction.instigator), gAction.item_slot);
+    BattleInitItemEffectTarget(unit);
+
+    SetDuraStatusVal(unit, DURA_STATUS_RES, 7);
 
     BattleApplyItemEffect(proc);
     BeginBattleAnimations();
@@ -319,9 +321,11 @@ void DoItemElixirAction(ProcPtr proc)
 
 void DoItemPureWaterAction(ProcPtr proc)
 {
-    BattleInitItemEffect(GetUnit(gAction.instigator), gAction.item_slot);
+    struct Unit *unit = GetUnit(gAction.instigator);
 
-    GetUnit(gAction.instigator)->barrier = 7;
+    BattleInitItemEffect(unit, gAction.item_slot);
+
+    SetDuraStatusVal(unit, DURA_STATUS_RES, 7);
 
     BattleApplyItemEffect(proc);
     BeginBattleAnimations();
