@@ -20,6 +20,7 @@ void PutStatScreenLeftPanelInfo(void)
 	char const * pname_str = DecodeMsg(gStatScreenSt.unit->pinfo->msg_name);
 	int pname_text_x = GetStringTextCenteredPos(8 * 7, pname_str);
 
+	InstallExpandedTextPal();
 	TmFill(gBg0Tm, 0);
 
 	BattleGenerateDisplayStats(gStatScreenSt.unit, GetUnitEquippedWeaponSlot(gStatScreenSt.unit));

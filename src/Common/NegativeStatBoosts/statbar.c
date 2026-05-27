@@ -3,14 +3,14 @@
 #include "hardware.h"
 #include "util.h"
 
-void DrawUiGaugeBitmapEdgeColumn(u8 *bitmap, int pixels_per_line, int column)
+static void DrawUiGaugeBitmapEdgeColumn(u8 *bitmap, int pixels_per_line, int column)
 {
 	bitmap[1 * pixels_per_line + column] = 4;
 	bitmap[2 * pixels_per_line + column] = 14;
 	bitmap[3 * pixels_per_line + column] = 3;
 }
 
-void DrawUiGaugeBitmapBaseColumn(u8 *bitmap, int pixels_per_line, int column)
+static void DrawUiGaugeBitmapBaseColumn(u8 *bitmap, int pixels_per_line, int column)
 {
 	bitmap[0 * pixels_per_line + column] = 4;
 	bitmap[1 * pixels_per_line + column] = 14;
@@ -19,19 +19,19 @@ void DrawUiGaugeBitmapBaseColumn(u8 *bitmap, int pixels_per_line, int column)
 	bitmap[4 * pixels_per_line + column] = 3;
 }
 
-void DrawUiGaugeBitmapFilledColumn(u8 *bitmap, int pixels_per_line, int column)
+static void DrawUiGaugeBitmapFilledColumn(u8 *bitmap, int pixels_per_line, int column)
 {
 	bitmap[1 * pixels_per_line + column] = 1;
 	bitmap[2 * pixels_per_line + column] = 5;
 }
 
-void DrawUiGaugeBitmapBonusColumn(u8 *bitmap, int pixels_per_line, int column)
+static void DrawUiGaugeBitmapBonusColumn(u8 *bitmap, int pixels_per_line, int column)
 {
 	bitmap[1 * pixels_per_line + column] = 13;
 	bitmap[2 * pixels_per_line + column] = 12;
 }
 
-void DrawUiGauge(int chr, int dot_x, int chr_count, int dot_width, int dot_plain, int dot_bonus)
+static void DrawUiGauge(int chr, int dot_x, int chr_count, int dot_width, int dot_plain, int dot_bonus)
 {
 	int i;
 
@@ -48,10 +48,26 @@ void DrawUiGauge(int chr, int dot_x, int chr_count, int dot_width, int dot_plain
 	for (i = 0; i < dot_plain; i++)
 		DrawUiGaugeBitmapFilledColumn(bitmap, chr_count * 8, i + 2 + dot_x);
 
-	for (i = 0; i < dot_bonus; i++)
-		DrawUiGaugeBitmapBonusColumn(bitmap, chr_count * 8, dot_plain + i + 2 + dot_x);
+	if (dot_bonus > 0) {
+		for (i = 0; i < dot_bonus; i++)
+			DrawUiGaugeBitmapBonusColumn(bitmap, chr_count * 8, dot_plain + i + 2 + dot_x);
+	} else {
+		/**
+		 * !
+		 * negativestatbar
+		 */
+		dot_bonus = -dot_bonus;
 
-	ApplyBitmap(bitmap, ((void *) VRAM) + chr * CHR_SIZE, chr_count, 1);
+		for (i = 0; i < dot_bonus; i++) {
+			int pixels_per_line = chr_count * 8;
+			int column = dot_plain - i + 2 + dot_x;
+
+			bitmap[1 * pixels_per_line + column] = 8;
+			bitmap[2 * pixels_per_line + column] = 7;
+		}
+	}
+
+	ApplyBitmap(bitmap, ((u8 *) VRAM) + chr * CHR_SIZE, chr_count, 1);
 }
 
 void PutDrawUiGauge(int chr, int width, u16 * tm, int tileref, int dot_width, int dot_plain, int dot_bonus)

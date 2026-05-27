@@ -58,12 +58,14 @@ void PutStatScreenStatWithBar(int num, int x, int y, int base, int total, int ma
 		TILEREF(0, BGPAL_STATSCREEN_STATBAR),
 		k_udiv(max * 41, 30),
 		k_udiv(base * 41, 30),
-		k_udiv(bonus * 41, 30));
+		bonus > 0 ? k_udiv(bonus * 41, 30) : -k_udiv(-bonus * 41, 30));
 }
 
 void PutStatScreenPersonalInfoPage(void)
 {
 	const void *tsa;
+
+	InstallExpandedTextPal();
 
 	if (UNIT_FACTION(gStatScreenSt.unit) == FACTION_BLUE)
 		tsa = TsaLut_StatScreenBgPlayer[0];

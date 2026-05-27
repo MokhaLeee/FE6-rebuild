@@ -14,8 +14,6 @@
 
 #include "klib.h"
 
-
-
 /* more page */
 
 void PutStatScreenPage(int page_id)
@@ -61,3 +59,57 @@ void StartStatScreenHelp(int page_id, ProcPtr proc)
 	}
 	StartMovingHelpBox(gStatScreenSt.help, proc);
 }
+
+/* more text palette */
+#define RGB2HEX(red, green, blue) RGB(red >> 3, green >> 3, blue >> 3)
+
+static const u16 ExpandedTextPals[] = {
+	RGB2HEX(0, 0, 0),
+
+	RGB2HEX(86, 156, 73),
+	RGB2HEX(56, 201, 20),
+	RGB2HEX(24, 88, 24),
+
+	RGB2HEX(86, 156, 73),
+	RGB2HEX(133, 197, 105),
+	RGB2HEX(24, 88, 24),
+
+	RGB2HEX(86, 156, 73),
+	RGB2HEX(172, 213, 98),
+	RGB2HEX(24, 88, 24),
+
+	RGB2HEX(86, 156, 73),
+	RGB2HEX(201, 232, 136),
+	RGB2HEX(24, 88, 24),
+
+	RGB2HEX(86, 156, 73),
+	RGB2HEX(235, 252, 116),
+	RGB2HEX(71, 56, 27),
+
+	RGB2HEX(0, 0, 0),
+
+	RGB2HEX(177, 99, 129),
+	RGB2HEX(255, 231, 145),
+	RGB2HEX(85, 28, 33),
+
+	RGB2HEX(155, 74, 97),
+	RGB2HEX(255, 173, 91),
+	RGB2HEX(85, 28, 33),
+
+	RGB2HEX(155, 74, 97),
+	RGB2HEX(254, 132, 101),
+	RGB2HEX(85, 28, 33),
+
+	RGB2HEX(155, 74, 97),
+	RGB2HEX(255, 91, 96),
+	RGB2HEX(85, 28, 33),
+
+	RGB2HEX(155, 74, 97),
+	RGB2HEX(255, 64, 69),
+	RGB2HEX(85, 28, 33),
+};
+
+void InstallExpandedTextPal(void)
+{
+	ApplyPalettes(ExpandedTextPals, 0x8, 2);
+};

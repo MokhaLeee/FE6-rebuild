@@ -27,6 +27,8 @@ int GetUnitMagic(struct Unit *unit)
 
 	status += GetItemMagBonus(GetUnitEquippedWeapon(unit));
 	status = MSG_DuraStatusMag(status, unit);
+
+	LIMIT_AREA(status, 0, 256);
 	return status;
 }
 
@@ -40,6 +42,8 @@ int GetUnitPower(struct Unit *unit)
 		status += 5;
 
 	status = MSG_DuraStatusPow(status, unit);
+
+	LIMIT_AREA(status, 0, 256);
 	return status;
 }
 
@@ -53,6 +57,8 @@ int GetUnitSkill(struct Unit *unit)
 
 	status += GetItemSklBonus(GetUnitEquippedWeapon(unit));
 	status = MSG_DuraStatusSkl(status, unit);
+
+	LIMIT_AREA(status, 0, 256);
 	return status;
 }
 
@@ -65,8 +71,11 @@ int GetUnitSpeed(struct Unit *unit)
 		return unit->spd / 2;
 
 	status += GetItemSpdBonus(GetUnitEquippedWeapon(unit));
-
 	status = MSG_DuraStatusSpd(status, unit);
+
+	status -= 5;
+
+	LIMIT_AREA(status, 0, 256);
 	return status;
 }
 
@@ -76,6 +85,8 @@ int GetUnitDefense(struct Unit *unit)
 
 	status += GetItemDefBonus(GetUnitEquippedWeapon(unit));
 	status = MSG_DuraStatusDef(status, unit);
+
+	LIMIT_AREA(status, 0, 256);
 	return status;
 }
 
@@ -85,6 +96,8 @@ int GetUnitResistance(struct Unit *unit)
 
 	status += GetItemResBonus(GetUnitEquippedWeapon(unit));
 	status = MSG_DuraStatusRes(status, unit);
+
+	LIMIT_AREA(status, 0, 256);
 	return status;
 }
 
@@ -94,6 +107,8 @@ int GetUnitLuck(struct Unit *unit)
 
 	status += GetItemLckBonus(GetUnitEquippedWeapon(unit));
 	status = MSG_DuraStatusLck(status, unit);
+
+	LIMIT_AREA(status, 0, 256);
 	return status;
 }
 
@@ -102,6 +117,7 @@ int GetUnitMovement(struct Unit *unit)
 {
 	int status = UNIT_MOV(unit);
 
+	LIMIT_AREA(status, 0, 256);
 	return status;
 }
 
@@ -109,5 +125,6 @@ int GetUnitCon(struct Unit *unit)
 {
 	int status = UNIT_CON(unit);
 
+	LIMIT_AREA(status, 0, 256);
 	return status;
 }

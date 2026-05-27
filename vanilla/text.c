@@ -789,15 +789,6 @@ void PutNumberSmall(u16 * tm, int color, int number)
     PutNumberExt(tm, color, number, TEXT_SPECIAL_SMALLNUM_0);
 }
 
-void PutNumberBonus(int number, u16 * tm)
-{
-    if (number == 0)
-        return;
-
-    PutSpecialChar(tm, TEXT_COLOR_SYSTEM_GREEN, TEXT_SPECIAL_PLUS);
-    PutNumberSmall(tm + ((number >= 10) ? 2 : 1), TEXT_COLOR_SYSTEM_GREEN, number);
-}
-
 void SpecialCharTest(void)
 {
     int ix, iy;

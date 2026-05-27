@@ -147,11 +147,6 @@ struct StatScreenSpritesProc
 	/* 38 */ i16 vertical_scale; // int 6 == 1:1 (1.0) scale
 };
 
-void DrawUiGaugeBitmapEdgeColumn(u8 * bitmap, int pixels_per_line, int column);
-void DrawUiGaugeBitmapBaseColumn(u8 * bitmap, int pixels_per_line, int column);
-void DrawUiGaugeBitmapFilledColumn(u8 * bitmap, int pixels_per_line, int column);
-void DrawUiGaugeBitmapBonusColumn(u8 * bitmap, int pixels_per_line, int column);
-void DrawUiGauge(int chr, int dot_x, int chr_count, int dot_width, int dot_plain, int dot_bonus);
 void PutDrawUiGauge(int chr, int width, u16 * tm, int tileref, int dot_width, int dot_plain, int dot_bonus);
 
 void BackgroundSlide_Init(struct MuralBackgroundProc * proc);
@@ -241,3 +236,5 @@ struct StatScreenBg1Tsa {
 
 extern struct StatScreenBg1Tsa const *const TsaLut_StatScreenBgPlayer[5];
 extern struct StatScreenBg1Tsa const *const TsaLut_StatScreenBgNonePlayer[5];
+
+void InstallExpandedTextPal(void);
