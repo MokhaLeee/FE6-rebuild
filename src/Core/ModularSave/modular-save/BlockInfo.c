@@ -39,10 +39,10 @@ void WriteSaveBlockInfo(struct SaveBlockInfo *block_info, int save_id)
 	PopulateSaveBlockChecksum(block_info);
 
 #if CONFIG_SECTOR_OPERATION_IN_4K
-	ReadSave(CART_SRAM, gBuf, 0x100);
+	ReadSave(CART_SRAM, gBuf, SIZE_4K);
 	dst = gBuf + sizeof(struct GlobalSaveInfo) + save_id * sizeof(struct SaveBlockInfo);
 	memcpy(dst, block_info, sizeof(struct SaveBlockInfo));
-	WriteSave(gBuf, CART_SRAM, 0x100);
+	WriteSave(gBuf, CART_SRAM, SIZE_4K);
 #else
 	dst = CART_SRAM + sizeof(struct GlobalSaveInfo) + save_id * sizeof(struct SaveBlockInfo);
 	WriteSave(block_info, dst, sizeof(struct SaveBlockInfo));

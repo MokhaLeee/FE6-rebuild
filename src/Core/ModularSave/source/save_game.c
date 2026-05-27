@@ -18,6 +18,8 @@
 
 #define LOCAL_TRACE 1
 
+#if CONFIG_SECTOR_OPERATION_IN_4K
+
 static void ems_write_loop(const struct EmsChunk *chunk_array, int save_id)
 {
 	int i;
@@ -84,6 +86,60 @@ static void ems_read_loop(const struct EmsChunk *chunk_array, int save_id)
 		offset = offset + chunk->size;
 	}
 }
+
+#else
+
+static void ems_write_loop(const struct EmsChunk *chunk_array, int save_id)
+{
+	int i;
+	int offset = 0;
+	u8 *dst = GetSaveWriteAddr(save_id);
+
+	for (i = 0; ; i++) {
+		const struct EmsChunk *chunk = &chunk_array[i];
+
+		if (chunk->size == 0)
+			break;
+
+		LTRACEF("addr=0x%06X, off=0x%04X, size=0x%05X, save=0x%08X, load=0x%08X",
+					SramAddrToOffset(dst), offset, chunk->size,
+					(uintptr_t)chunk->save, (uintptr_t)chunk->load);
+
+		if (chunk->save) {
+			chunk->save(gBuf, chunk->size);
+			WriteSave(gBuf, dst + offset, offset);
+			offset = offset + chunk->size;
+		}
+	}
+}
+
+static void ems_read_loop(const struct EmsChunk *chunk_array, int save_id)
+{
+	int i;
+	int offset = 0;
+	const u8 *src = GetSaveReadAddr(save_id);
+
+	LTRACEF("CHUNK: %s", chunk_array == gMsaChunk ? "SAV" : "SUS");
+
+	for (i = 0; ; i++) {
+		const struct EmsChunk *chunk = &chunk_array[i];
+
+		if (chunk->size == 0)
+			break;
+
+		LTRACEF("addr=0x%06X, off=0x%04X, size=0x%05X, save=0x%08X, load=0x%08X",
+					SramAddrToOffset(src), offset, chunk->size,
+					(uintptr_t)chunk->save, (uintptr_t)chunk->load);
+
+		if (chunk->load) {
+			ReadSave(src + offset, gBuf, chunk->size);
+			chunk->load(gBuf, chunk->size);
+			offset = offset + chunk->size;
+		}
+	}
+}
+
+#endif
 
 void ReadGameSavePlaySt(int save_id, struct PlaySt *play_st)
 {
