@@ -163,9 +163,6 @@ void ResumeChapterFromSuspend(struct Proc * parent)
 {
     ProcPtr mapmain;
 
-    if (gPlaySt.chapter < 0)
-        ReadExtraMapInfo();
-
     InitBgs(NULL);
 
     SetMainFunc(OnMain);

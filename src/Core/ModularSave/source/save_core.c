@@ -53,36 +53,6 @@ u16 SramAddrToOffset(const void *addr)
 	return addr - CART_SRAM;
 }
 
-void WriteChapterFlags(void *sram_dst)
-{
-	WriteSave(GetChapterFlagBits(), sram_dst, GetChapterFlagBitsSize());
-}
-
-void WritePermanentFlags(void *sram_dst)
-{
-	WriteSave(GetPermanentFlagBits(), sram_dst, GetPermanentFlagBitsSize());
-}
-
-void ReadChapterFlags(void const *sram_src)
-{
-	ReadSave(sram_src, GetChapterFlagBits(), GetChapterFlagBitsSize());
-}
-
-void ReadPermanentFlags(void const *sram_src)
-{
-	ReadSave(sram_src, GetPermanentFlagBits(), GetPermanentFlagBitsSize());
-}
-
-void WriteSupplyItems(void *sram_dst)
-{
-	WriteSave(GetSupplyItems(), sram_dst, SUPPLY_ITEM_COUNT *sizeof(u16));
-}
-
-void ReadSupplyItems(void const *sram_src)
-{
-	ReadSave(sram_src, GetSupplyItems(), SUPPLY_ITEM_COUNT *sizeof(u16));
-}
-
 bool IsNotFirstPlaythrough(void)
 {
 	struct GlobalSaveInfo info;

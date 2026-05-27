@@ -15,10 +15,6 @@
 #include "constants/msg.h"
 #include "constants/chapters.h"
 
-void ReadExtraMapInfo(void)
-{
-}
-
 char const *func_fe6_080867F0(int chapter)
 {
 	return GetChapterUnk_0802BBD0(chapter);
@@ -32,8 +28,4 @@ char const *DecodeExtraMapGoalMsg(int chapter)
 char const *DecodeExtraMapInfoMsg(int chapter)
 {
 	return DecodeMsg(MSG_EXTRAMAP_1_INFO);
-}
-
-void CreateTrialChapterBonusUnits(void)
-{
 }

@@ -35,28 +35,6 @@ void ClearChapterStats(void)
 	CpuFill16(0, gChapterStats, sizeof(gChapterStats));
 }
 
-void ReadPidStats(void const *sram_src)
-{
-	ReadSave(sram_src, gPidStats, sizeof(gPidStats));
-	gPidStatsSram = (void *) sram_src;
-}
-
-void ReadChapterStats(void const *sram_src)
-{
-	ReadSave(sram_src, gChapterStats, sizeof(gChapterStats));
-}
-
-void WritePidStats(void *sram_dst)
-{
-	WriteSave(gPidStats, sram_dst, sizeof(gPidStats));
-	gPidStatsSram = sram_dst;
-}
-
-void WriteChapterStats(void *sram_dst)
-{
-	WriteSave(gChapterStats, sram_dst, sizeof(gChapterStats));
-}
-
 struct ChapterStats *GetChapterStats(int num)
 {
 	return gChapterStats + num;

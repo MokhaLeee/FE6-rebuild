@@ -51,10 +51,6 @@ extern struct ChapterStats EWRAM_DATA gChapterStats[CHAPTER_STATS_COUNT];
 
 void ClearPidStats(void);
 void ClearChapterStats(void);
-void ReadPidStats(void const * sram_src);
-void ReadChapterStats(void const * sram_src);
-void WritePidStats(void * sram_dst);
-void WriteChapterStats(void * sram_dst);
 struct ChapterStats * GetChapterStats(int num);
 bool IsValidChapterStats(struct ChapterStats * chapter_stats);
 int GetNextChapterStatsSlot(void);

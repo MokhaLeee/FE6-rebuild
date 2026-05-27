@@ -364,7 +364,6 @@ void GC_InitTutorial(struct GameController * proc)
 
 void GC_InitTrialChapter(struct GameController * proc)
 {
-    CreateTrialChapterBonusUnits();
     ClearPidStats();
     CleanupUnitsBeforeChapter();
 }

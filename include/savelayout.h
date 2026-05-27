@@ -11,13 +11,6 @@
 
 #include "gbasram.h"
 
-struct SramMain {
-	struct GlobalSaveInfo head;
-	struct SaveBlockInfo block_info[SAVE_COUNT];
-};
-
-STATIC_ASSERT(CART_SRAM_SIZE - SRAM_XMAP_SIZE >= sizeof(struct SramMain));
-
 #define SIZE_4K 4096
 
 /**
