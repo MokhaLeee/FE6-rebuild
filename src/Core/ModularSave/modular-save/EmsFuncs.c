@@ -29,8 +29,8 @@ struct MsaPackedUnit {
 	/* 1C */ u8 barrier : 4;
 	/* 1D */ u8 save_flags;
 	/* 1E */ u8 wexp[UNIT_WEAPON_EXP_COUNT];
-	/* 26 */ u8 supports[UNIT_SUPPORT_COUNT];
-	/* 30 */
+	/* 26 */ u8 _pad_[2];
+	/* 28 */
 };
 
 /**
@@ -82,9 +82,6 @@ static void pack_msa_unit(const struct Unit *unit, struct MsaPackedUnit *pack)
 	for (i = 0; i < ITEMSLOT_INV_COUNT; i++)
 		pack->items[i] = unit->items[i];
 
-	for (i = 0; i < UNIT_SUPPORT_COUNT; i++)
-		pack->supports[i] = unit->supports[i];
-
 	for (i = 0; i < UNIT_WEAPON_EXP_COUNT; i++)
 		pack->wexp[i] = unit->wexp[i];
 }
@@ -127,9 +124,6 @@ static void unpack_msa_unit(const struct MsaPackedUnit *pack, struct Unit *unit)
 
 	for (i = 0; i < ITEMSLOT_INV_COUNT; i++)
 		unit->items[i] = pack->items[i];
-
-	for (i = 0; i < UNIT_SUPPORT_COUNT; i++)
-		unit->supports[i] = pack->supports[i];
 
 	for (i = 0; i < UNIT_WEAPON_EXP_COUNT; i++)
 		unit->wexp[i] = pack->wexp[i];
@@ -303,11 +297,6 @@ static void pack_msu_unit_ally(const struct Unit *unit, struct MsuPackedUnitAlly
 	for (i = 0; i < UNIT_WEAPON_EXP_COUNT; i++)
 		pack->wexp[i] = unit->wexp[i];
 
-#if 0
-	for (i = 0; i < UNIT_SUPPORT_COUNT; i++)
-		pack->supports[i] = unit->supports[i];
-#endif
-
 	pack->rescue = unit->rescue;
 	pack->torch = unit->torch;
 	pack->barrier = unit->barrier;
@@ -347,11 +336,6 @@ static void unpack_msu_unit_ally(const struct MsuPackedUnitAlly *pack, struct Un
 
 	for (i = 0; i < UNIT_WEAPON_EXP_COUNT; i++)
 		unit->wexp[i] = pack->wexp[i];
-
-#if 0
-	for (i = 0; i < UNIT_SUPPORT_COUNT; i++)
-		unit->supports[i] = pack->supports[i];
-#endif
 
 	unit->rescue = pack->rescue;
 	unit->torch = pack->torch;

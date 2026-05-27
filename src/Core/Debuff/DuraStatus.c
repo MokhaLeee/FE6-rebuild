@@ -19,7 +19,6 @@ struct DuraStatus {
 
 	u32 res_sign : 1;
 	u32 res      : 3;
-	u32 _unused_ : 4;
 };
 
 static struct DuraStatus *get_dura_status(struct Unit *unit)

@@ -2,9 +2,7 @@
 #define SAVE_STATS_H
 
 #include "prelude.h"
-
 #include "save.h"
-
 #include "unit.h"
 #include "bm.h"
 
@@ -21,19 +19,12 @@ enum
 
 struct PidStats
 {
-    u32 loss_count      : 8;
-    u32 act_count       : 8;
-    u32 stat_view_count : 8;
-    u32 defeat_chapter  : 6;
-    u32 defeat_turn     : 10;
-    u32 deploy_count    : 6;
-    u32 move_count      : 10;
-    u32 defeat_cause    : 4;
-    u32 exp_gained      : 12;
-    u32 win_count       : 10;
-    u32 battle_count    : 12;
-    u32 killer_pid      : 9;
-    u32 : 0; // unused/padding (15 bits)
+    u32 win_count : 9;
+    u32 battle_count : 11;
+    u32 exp_gained : 12;
+    u8 defeat_chapter;
+    u8 loss_count;
+    u8 supports[UNIT_SUPPORT_COUNT];
 };
 
 struct ChapterStats

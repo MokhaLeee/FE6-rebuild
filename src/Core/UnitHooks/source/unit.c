@@ -247,19 +247,6 @@ inline int GetUnitChibiId(struct Unit *unit)
 	return GetUnitFid(unit);
 }
 
-inline int GetUnitLeaderPid(struct Unit *unit)
-{
-	if (UNIT_FACTION(unit) == FACTION_BLUE)
-		return 0;
-
-	return unit->supports[UNIT_SUPPORT_COUNT-1];
-}
-
-inline void SetUnitLeaderPid(struct Unit *unit, int pid)
-{
-	unit->supports[UNIT_SUPPORT_COUNT-1] = pid;
-}
-
 inline void SetUnitHp(struct Unit *unit, int hp)
 {
 	unit->hp = hp;
@@ -502,14 +489,6 @@ void func_fe6_08017764(struct Unit *unit)
 {
 	if (UNIT_ATTRIBUTES(unit) & UNIT_ATTR_ALT_PINFO)
 		unit->pinfo = GetPInfo(unit->pinfo->id - 1);
-}
-
-void UnitInitSupports(struct Unit *unit)
-{
-	int i, count = GetUnitSupportCount(unit);
-
-	for (i = 0; i < count; ++i)
-		unit->supports[i] = GetUnitInitialSupportExp(unit, i);
 }
 
 void UnitAutolevelWeaponExp(struct Unit *unit, struct UnitInfo const *info)

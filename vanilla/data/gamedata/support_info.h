@@ -16,7 +16,7 @@ struct SupportInfo CONST_DATA SupportInfo_Roy = {
         PID_LANCE,
     },
     .exp_base = {
-        56,
+        200,
         30,
         30,
         20,

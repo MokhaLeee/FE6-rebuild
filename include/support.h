@@ -50,6 +50,7 @@ struct SupportBonuses
     /* 04 */ u8 bonus_avoid;
     /* 05 */ u8 bonus_crit;
     /* 06 */ u8 bonus_dodge;
+    /* 07 */ u8 _pad_;
 };
 
 int GetUnitSupportCount(struct Unit * unit);

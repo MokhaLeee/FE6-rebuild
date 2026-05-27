@@ -291,39 +291,6 @@ bool DoTalkAction(ProcPtr proc)
     return FALSE;
 }
 
-bool DoSupportAction(ProcPtr proc)
-{
-    int expA, expB;
-
-    struct Unit * target = GetUnit(gAction.target);
-
-    int numA = GetUnitSupportNumByPid(gActiveUnit, target->pinfo->id);
-    int numB = GetUnitSupportNumByPid(target, gActiveUnit->pinfo->id);
-
-    if (!CanUnitSupportNow(target, numB))
-    {
-    }
-
-    UnitGainSupportLevel(gActiveUnit, numA);
-    UnitGainSupportLevel(target, numB);
-
-    StartAvailableSupportEvent(gActiveUnit->pinfo->id, target->pinfo->id, GetUnitSupportLevel(gActiveUnit, numA));
-
-    expA = gActiveUnit->supports[numA];
-    expB = target->supports[numB];
-
-    if (expA != expB)
-    {
-        if (expA > expB)
-            target->supports[numB] = expA;
-
-        if (expA < expB)
-            gActiveUnit->supports[numA] = expB;
-    }
-
-    return FALSE;
-}
-
 bool DoStealAction(ProcPtr proc)
 {
     int item = GetUnit(gAction.target)->items[gAction.item_slot];

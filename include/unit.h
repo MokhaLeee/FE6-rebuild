@@ -253,15 +253,20 @@ struct Unit {
 	/* 18 */ i8 bonus_con;
 	/* 19 */ u8 rescue;
 	/* 1A */ i8 bonus_mov;
-	/* 1B */ // pad?
+
+	/* PAD */
+	/* 1B */ u8 _pad_1B;
+
 	/* 1C */ u16 items[ITEMSLOT_INV_COUNT];
 	/* 26 */ u8 wexp[UNIT_WEAPON_EXP_COUNT];
 	/* 2E */ u8 status : 4;
 	/* 2E */ u8 status_duration : 4;
 	/* 2F */ u8 torch : 4;
 	/* 2F */ u8 barrier : 4;
-	/* 30 */ u8 supports[UNIT_SUPPORT_COUNT];
-	/* 3A */ // pad?
+
+	/* PAD */
+	/* 30 */ u8 _pad_30[0xC];
+
 	/* 3C */ struct UnitSprite *map_sprite;
 	/* 40 */ u16 ai_config;
 	/* 42 */ u8 ai_a;

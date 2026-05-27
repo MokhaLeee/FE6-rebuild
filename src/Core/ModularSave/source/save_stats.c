@@ -21,9 +21,10 @@
 #include "save-hw.h"
 
 struct PidStats *EWRAM_DATA gPidStatsSram = NULL;
-
 struct PidStats EWRAM_DATA gPidStats[PID_STATS_COUNT] = { { 0 } };
 struct ChapterStats EWRAM_DATA gChapterStats[CHAPTER_STATS_COUNT] = { { 0 } };
+
+const int sizeof_bwl = sizeof(struct PidStats);
 
 void ClearPidStats(void)
 {
@@ -87,10 +88,18 @@ inline struct PidStats *GetPidStats(fu8 pid)
 
 void PidStatsAddBattle(struct Unit *unit)
 {
+	struct PidStats *bwl = GetPidStats(UNIT_PID(unit));
+
+	if (bwl)
+		bwl->battle_count++;
 }
 
 void PidStatsAddWin(fu8 pid)
 {
+	struct PidStats *bwl = GetPidStats(pid);
+
+	if (bwl)
+		bwl->win_count++;
 }
 
 void PidStatsAddLoss(fu8 pid)
