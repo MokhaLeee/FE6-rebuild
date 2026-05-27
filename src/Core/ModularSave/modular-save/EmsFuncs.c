@@ -37,11 +37,6 @@ struct MsaPackedUnit {
 _Static_assert(sizeof(struct MsaPackedUnit) == 0x30, "size not match: MsaPackedUnit");
 const int sizeof_MsaPackedUnit = sizeof(struct MsaPackedUnit);
 
-/**
- * 62 * 0x30 = 0xBA0 < 0x1000
- * We can save all allies at one turn.
- */
-
 static void pack_msa_unit(const struct Unit *unit, struct MsaPackedUnit *pack)
 {
 	int i;
@@ -305,11 +300,6 @@ struct MsuPackedUnitAI {
 
 _Static_assert(sizeof(struct MsuPackedUnitAI) == 0x3C, "size not match: MsuPackedUnitAI");
 const int sizeof_MsuPackedUnitAI = sizeof(struct MsuPackedUnitAI);
-
-/**
- * 62 * 0x34 = 0xC98 < 0x1000
- * We can save all allies at one turn.
- */
 
 static void pack_msu_unit_ally(const struct Unit *unit, struct MsuPackedUnitAlly *pack)
 {
