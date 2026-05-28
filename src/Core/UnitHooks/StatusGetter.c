@@ -73,8 +73,6 @@ int GetUnitSpeed(struct Unit *unit)
 	status += GetItemSpdBonus(GetUnitEquippedWeapon(unit));
 	status = MSG_DuraStatusSpd(status, unit);
 
-	status -= 5;
-
 	LIMIT_AREA(status, 0, 256);
 	return status;
 }

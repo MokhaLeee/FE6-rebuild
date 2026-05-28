@@ -2,6 +2,7 @@
 
 #include "proc.h"
 #include "util.h"
+#include "constants/songs.h"
 
 struct SoundSt
 {
@@ -9,6 +10,8 @@ struct SoundSt
     /* 02 */ u16 overwritten_song;
     /* 04 */ u16 song;
     /* 06 */ i8 is_song_playing;
+
+    i8 max_channels;
 };
 
 struct MusicProc
@@ -36,6 +39,8 @@ static void DelaySong_OnLoop(struct MusicProc * proc);
 
 static void PlaySongDelayed(int song, int delay, struct MusicPlayer * music_player);
 static void PlaySongCore(int song, struct MusicPlayer * music_player);
+
+static void SetBgmChannels(int song_id);
 
 static struct SoundSt EWRAM_DATA sSoundSt = { 0 };
 
@@ -285,8 +290,27 @@ static void PlaySongDelayed(int song, int delay, struct MusicPlayer * music_play
     proc->music_player = music_player;
 }
 
+/* 16_tracks_12_sounds_patch */
+static void Sound_SetMaxNumChannels(int maxchn)
+{
+    sSoundSt.max_channels = maxchn;
+    m4aSoundMode(maxchn << SOUND_MODE_MAXCHN_SHIFT);
+}
+
+static void SetBgmChannels(int song_id)
+{
+    /**
+     * todo song index
+     */
+    if (song_id < SONG_IDX(0x4A))
+        Sound_SetMaxNumChannels(12);
+}
+
 static void PlaySongCore(int song, struct MusicPlayer * music_player)
 {
+    /* CHAX */
+    SetBgmChannels(song);
+
     if (music_player)
         m4aMPlayStart(music_player, gpSongTable[song].song);
     else

@@ -415,3 +415,4 @@ extern const struct Song song_26B;
 extern const struct Song song_26C;
 
 extern const struct Song Song_Fe6PlayerPhase1;
+extern const struct Song Song_FodlanWinds;
