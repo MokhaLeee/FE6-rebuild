@@ -78,13 +78,19 @@ SoundMain:
 .L0809BB8E:
     str r5, [sp, 8]
     ldr r6, .L0809BBAC @ =PCM_DMA_BUF_SIZE
-    ldr r3, .L0809BBA0 @ =SoundMainRam + 1
+
+    ldr r3, .LSoundMain
     bx r3
+
+.align 2, 0
+.LSoundMain:
+    @ CONFIG_USE_M4A_HQ_MIXER
+    .4byte SoundMain_HQ + 1
+    @ .4byte SoundMainRam + 1
 
     .align 2, 0
 .L0809BB98: .4byte SOUND_INFO_PTR
 .L0809BB9C: .4byte ID_NUMBER
-.L0809BBA0: .4byte SoundMainRam + 1
 .L0809BBA4: .4byte REG_VCOUNT
 .L0809BBA8: .4byte O_SoundInfo_pcm_buffer
 .L0809BBAC: .4byte PCM_DMA_BUF_SIZE

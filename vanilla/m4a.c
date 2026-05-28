@@ -142,7 +142,9 @@ void m4aSoundInit(void)
 {
     int i;
 
+#if !CONFIG_USE_M4A_HQ_MIXER
     CpuCopy32(((void *) (((iptr) SoundMainRam_load) & ~1)), SoundMainRam, sizeof(SoundMainRam));
+#endif
 
     SoundInit(&gSoundInfo);
     MPlayExtender(gCgbChans);
