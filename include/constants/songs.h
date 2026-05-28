@@ -1,5 +1,7 @@
 #pragma once
 
+#define SONG_IDX(x) (x)
+
 enum
 {
     SONG_NONE = 0x00,
