@@ -7,6 +7,17 @@
 
 #include "m4a.h"
 
+struct SoundSt {
+	/* 00 */ u16 unused_00;
+	/* 02 */ u16 overwritten_song;
+	/* 04 */ u16 song;
+	/* 06 */ i8 is_song_playing;
+
+	i8 max_channels;
+};
+
+extern struct SoundSt EWRAM_DATA sSoundSt;
+
 extern struct MusicPlayer gMPlayInfo_SE1_SYS1;
 extern struct MusicPlayer gMPlayInfo_SE2_SYS2;
 extern struct MusicPlayer gMPlayInfo_SE3_BMP1;
@@ -33,12 +44,12 @@ void MakeBgmOverridePersist(void);
 void StartBgmVolumeChange(int volume_from, int volume_to, int duration, ProcPtr parent);
 
 #define PlaySe(id) \
-    if (!gPlaySt.config_se_disable) \
-        m4aSongNumStart((id))
+	if (!gPlaySt.config_se_disable) \
+		m4aSongNumStart((id))
 
 #define PlayBgm(id) \
-    if (!gPlaySt.config_bgm_disable) \
-        StartBgmCore((id), NULL)
+	if (!gPlaySt.config_bgm_disable) \
+		StartBgmCore((id), NULL)
 
 // TODO: move
 
