@@ -200,7 +200,7 @@ struct ProcScr CONST_DATA ProcScr_UnitPrepSwapAnim[] =
     PROC_END,
 };
 
-static void PhaseIntroText_Init(struct Proc * proc);
+extern void PhaseIntroText_Init(struct Proc * proc);
 static void PhaseIntroText_PutText(struct Proc * proc);
 static void PhaseIntroText_InLoop(struct Proc * proc);
 static void PhaseIntroText_OutLoop(struct Proc * proc);
@@ -1187,16 +1187,6 @@ static void PhaseIntroText_PutText(struct Proc * proc)
         *tm++ = TILEREF(BGCHR_PHASE_CHANGE_NAME + i, BGPAL_PHASE_CHANGE);
 
     EnableBgSync(BG0_SYNC_BIT);
-}
-
-static void PhaseIntroText_Init(struct Proc * proc)
-{
-    if (GetCurrentBgmSong() != GetActiveMapSong())
-        FadeBgmOut(4);
-
-    PlaySe(SONG_73);
-
-    proc->unk4C = 15;
 }
 
 static void PhaseIntroText_InLoop(struct Proc * proc)

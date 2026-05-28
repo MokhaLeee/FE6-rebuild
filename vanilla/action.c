@@ -440,14 +440,6 @@ void CombatAction_DoHandleDeaths(struct Proc * proc)
     KillUnitOnCombatDeath(unit_b, unit_a);
 }
 
-void func_fe6_0802A7F4(void)
-{
-    int song = GetActiveMapSong();
-
-    if (GetCurrentBgmSong() != song)
-        StartBgmExt(song, 6, NULL);
-}
-
 void ArenaAction_MaybeSkipDeathFades(struct Proc * proc)
 {
     // prevent playing any animations for battler B (which would be the arena opponent, not on the map)

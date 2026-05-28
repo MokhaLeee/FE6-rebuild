@@ -120,7 +120,7 @@ static EventScr const EventScr_Chapter1_Opening[] =
 
 static EventScr const EventScr_Chapter1_FirstRedTurn[] =
 {
-	EvtSetBgm(SONG_02)
+	// EvtSetBgm(SONG_02)
 	EvtCamera(5, 3)
 	EvtMoveWait
 	EvtMoveUnit(PID_CHAPTER1_4A, 5, 4)

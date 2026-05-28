@@ -3,7 +3,6 @@
 #include "proc.h"
 #include "util.h"
 
-
 struct MusicProc
 {
     /* 00 */ PROC_HEADER;

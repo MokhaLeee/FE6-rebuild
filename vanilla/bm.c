@@ -950,30 +950,3 @@ void Unused_08016344(int x, int y, int duration)
     proc->duration = duration;
     proc->clock = duration;
 }
-
-int GetActiveMapSong(void)
-{
-    switch (gPlaySt.faction)
-    {
-
-    case FACTION_RED:
-        return GetChapterInfo(gPlaySt.chapter)->song_red_bgm;
-
-    case FACTION_GREEN:
-        return GetChapterInfo(gPlaySt.chapter)->song_green_bgm;
-
-    case FACTION_BLUE:
-        if (CountFactionUnitsWithoutFlags(FACTION_RED, UNIT_FLAG_DEAD | UNIT_FLAG_NOT_DEPLOYED) <= GetChapterInfo(gPlaySt.chapter)->victory_bgm_enemy_threshold)
-            return SONG_13;
-
-        return GetChapterInfo(gPlaySt.chapter)->song_blue_bgm;
-
-    default:
-        return GetChapterInfo(gPlaySt.chapter)->song_blue_bgm;
-    }
-}
-
-void StartMapSongBgm(void)
-{
-    StartBgm(GetActiveMapSong(), NULL);
-}
