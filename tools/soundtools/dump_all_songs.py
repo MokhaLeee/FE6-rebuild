@@ -13,7 +13,7 @@ max_tone_pr = 0
 LOCAL_CONFIG_DUMP_TONE = True
 LOCAL_CONFIG_DUMP_SONG_TABLE = False
 
-SKIPPED_SONGS = [] # list(range(1, 0x47)) + [0x54, 0x55, 0x56]
+SKIPPED_SONGS = [] # list(range(1, 0x4A)) + [0x90, 0x91, 0x56]
 
 class Song:
 	def __init__(self, name, header, ms, me):

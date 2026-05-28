@@ -6,24 +6,16 @@
 gSongTable:
     song dummy_song, 0, 0
     song dummy_song, 0, 0
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+
     song Song_Fe6PlayerPhase1, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
     song dummy_song, 0, 0
     song dummy_song, 0, 0
     song dummy_song, 0, 0
@@ -36,21 +28,30 @@ gSongTable:
     song dummy_song, 0, 0
     song dummy_song, 0, 0
     song dummy_song, 0, 0
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
     song dummy_song, 0, 0
     song dummy_song, 0, 0
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
-    song dummy_song, 1, 1
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
     song dummy_song, 0, 0
     song dummy_song, 0, 0
     song dummy_song, 0, 0
@@ -148,8 +149,8 @@ gSongTable:
     song song_08D, 6, 6
     song song_08E, 8, 8
     song song_08F, 8, 8
-    song song_090, 6, 6
-    song song_091, 7, 7
+    song dummy_song, 0, 0
+    song dummy_song, 0, 0
     song song_092, 4, 4
     song song_093, 4, 4
     song song_094, 4, 4

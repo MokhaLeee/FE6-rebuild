@@ -997,6 +997,320 @@ label_song_00A_track6_1:
     .word label_song_00A_track6_2
     .byte FINE
 
+.align 2, 0
+.global voicegroup_08384188
+voicegroup_08384188: @ 08384188
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_directsound 60, 0, wav_083B35A8, 0xFF, 0x00, 0xFF, 0x00
+    voice_directsound 60, 0, wav_083C9280, 0x80, 0x7F, 0xE7, 0x7F
+    voice_directsound 60, 0, wav_0839CE98, 0xFF, 0x00, 0xFF, 0x00
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_directsound 60, 0, wav_083A7CE4, 0xFF, 0x7F, 0xE7, 0x7F
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_directsound 60, 0, wav_0839A844, 0x80, 0x00, 0xFF, 0x59
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_directsound 60, 0, wav_083ADB08, 0xFF, 0x00, 0xFF, 0x00
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_directsound 60, 0, wav_083CAEFC, 0xFF, 0x00, 0xFF, 0x00
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_keysplit_all voicegroup_083933EC
+
+.global voicegroup_083933EC
+voicegroup_083933EC: @ 083933EC
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_directsound_no_resample 60, 0, wav_0840E398, 0xFF, 0x00, 0xFF, 0xCC
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_directsound_no_resample 60, 0, wav_0840EC4C, 0xFF, 0x00, 0xFF, 0xCC
+    voice_directsound_no_resample 60, 0, wav_08412D58, 0xFF, 0x00, 0xFF, 0xCC
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_directsound_no_resample 60, 0, wav_08414310, 0xFF, 0x00, 0xFF, 0xCC
+    voice_directsound_no_resample 60, 0, wav_08414BA4, 0xFF, 0x00, 0xFF, 0xCC
+    voice_directsound_no_resample 60, 0, wav_08415868, 0xFF, 0x00, 0xFF, 0xCC
+    voice_directsound_no_resample 60, 0, wav_08415DAC, 0xFF, 0x00, 0xFF, 0xCC
+    voice_directsound_no_resample 60, 0, wav_08416320, 0xFF, 0x00, 0xFF, 0xCC
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+    voice_square_1 0, 2, 0, 0, 15, 0
+
+.align 2, 0
+.global wav_083B35A8
+wav_083B35A8: @ 003B35A8
+    .short 0x0                      @ type
+    .short 0x4000                   @ status
+    .word  0x00D10C00               @ freq
+    .word  0xDB1                    @ loopStart
+    .word  0x1CA3                   @ size
+    .incbin "fe6-base.gba", 0x3B35B8, 0x1CA3 + 0x1
+
+.align 2, 0
+.global wav_083C9280
+wav_083C9280: @ 003C9280
+    .short 0x0                      @ type
+    .short 0x4000                   @ status
+    .word  0x00D10C00               @ freq
+    .word  0x816                    @ loopStart
+    .word  0x1C6B                   @ size
+    .incbin "fe6-base.gba", 0x3C9290, 0x1C6B + 0x1
+
+.align 2, 0
+.global wav_0839CE98
+wav_0839CE98: @ 0039CE98
+    .short 0x0                      @ type
+    .short 0x4000                   @ status
+    .word  0x00D10C00               @ freq
+    .word  0x115A                   @ loopStart
+    .word  0x2150                   @ size
+    .incbin "fe6-base.gba", 0x39CEA8, 0x2150 + 0x4
+
+.align 2, 0
+.global wav_083A7CE4
+wav_083A7CE4: @ 003A7CE4
+    .short 0x0                      @ type
+    .short 0x4000                   @ status
+    .word  0x00D10C00               @ freq
+    .word  0x650                    @ loopStart
+    .word  0x1A58                   @ size
+    .incbin "fe6-base.gba", 0x3A7CF4, 0x1A58 + 0x4
+
+.align 2, 0
+.global wav_0839A844
+wav_0839A844: @ 0039A844
+    .short 0x0                      @ type
+    .short 0x4000                   @ status
+    .word  0x00D10C00               @ freq
+    .word  0xD9F                    @ loopStart
+    .word  0x2641                   @ size
+    .incbin "fe6-base.gba", 0x39A854, 0x2641 + 0x3
+
+.align 2, 0
+.global wav_083ADB08
+wav_083ADB08: @ 003ADB08
+    .short 0x0                      @ type
+    .short 0x4000                   @ status
+    .word  0x00D10C00               @ freq
+    .word  0x17E0                   @ loopStart
+    .word  0x2B17                   @ size
+    .incbin "fe6-base.gba", 0x3ADB18, 0x2B17 + 0x1
+
+.align 2, 0
+.global wav_083CAEFC
+wav_083CAEFC: @ 003CAEFC
+    .short 0x0                      @ type
+    .short 0x4000                   @ status
+    .word  0x00D10C00               @ freq
+    .word  0xEA8                    @ loopStart
+    .word  0x1CFE                   @ size
+    .incbin "fe6-base.gba", 0x3CAF0C, 0x1CFE + 0x2
+
+.align 2, 0
+.global wav_0840E398
+wav_0840E398: @ 0040E398
+    .short 0x0                      @ type
+    .short 0x0                      @ status
+    .word  0x00D10C00               @ freq
+    .word  0x0                      @ loopStart
+    .word  0x8A1                    @ size
+    .incbin "fe6-base.gba", 0x40E3A8, 0x8A1 + 0x3
+
+.align 2, 0
+.global wav_08412D58
+wav_08412D58: @ 00412D58
+    .short 0x0                      @ type
+    .short 0x4000                   @ status
+    .word  0x00D10C00               @ freq
+    .word  0x4D0                    @ loopStart
+    .word  0x15A5                   @ size
+    .incbin "fe6-base.gba", 0x412D68, 0x15A5 + 0x3
+
+.align 2, 0
+.global wav_08414310
+wav_08414310: @ 00414310
+    .short 0x0                      @ type
+    .short 0x0                      @ status
+    .word  0x00D10C00               @ freq
+    .word  0x0                      @ loopStart
+    .word  0x880                    @ size
+    .incbin "fe6-base.gba", 0x414320, 0x880 + 0x4
+
+.align 2, 0
+.global wav_08414BA4
+wav_08414BA4: @ 00414BA4
+    .short 0x0                      @ type
+    .short 0x0                      @ status
+    .word  0x00D10C00               @ freq
+    .word  0x0                      @ loopStart
+    .word  0xCB0                    @ size
+    .incbin "fe6-base.gba", 0x414BB4, 0xCB0 + 0x4
+
+.align 2, 0
+.global wav_08415868
+wav_08415868: @ 00415868
+    .short 0x0                      @ type
+    .short 0x0                      @ status
+    .word  0x00D10C00               @ freq
+    .word  0x0                      @ loopStart
+    .word  0x531                    @ size
+    .incbin "fe6-base.gba", 0x415878, 0x531 + 0x3
+
+.align 2, 0
+.global wav_08415DAC
+wav_08415DAC: @ 00415DAC
+    .short 0x0                      @ type
+    .short 0x0                      @ status
+    .word  0x00D10C00               @ freq
+    .word  0x0                      @ loopStart
+    .word  0x563                    @ size
+    .incbin "fe6-base.gba", 0x415DBC, 0x563 + 0x1
+
+.align 2, 0
+.global wav_08416320
+wav_08416320: @ 00416320
+    .short 0x0                      @ type
+    .short 0x0                      @ status
+    .word  0x00D10C00               @ freq
+    .word  0x0                      @ loopStart
+    .word  0x682                    @ size
+    .incbin "fe6-base.gba", 0x416330, 0x682 + 0x2
+
+.align 2, 0
+.global wav_0840EC4C
+wav_0840EC4C: @ 0040EC4C
+    .short 0x0                      @ type
+    .short 0x0                      @ status
+    .word  0x00D10C00               @ freq
+    .word  0x0                      @ loopStart
+    .word  0x40F8                   @ size
+    .incbin "fe6-base.gba", 0x40EC5C, 0x40F8 + 0x4
+
 .align 2
 .global Song_Fe6PlayerPhase1 @ 0856C820
 Song_Fe6PlayerPhase1:
