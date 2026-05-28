@@ -17,7 +17,7 @@ struct SongEnt const gSongTable[] = {
 	[SONG_IDX(0x08)] = { &dummy_song, 0, 0 },
 	[SONG_IDX(0x09)] = { &dummy_song, 0, 0 },
 
-	[SONG_IDX(0x0A)] = { &Song_FodlanWinds, 1, 1 },
+	[SONG_IDX(0x0A)] = { &Song_FodlanWinds_SurfingKyogre, 1, 1 },
 
 	[SONG_IDX(0x0B)] = { &dummy_song, 0, 0 },
 	[SONG_IDX(0x0C)] = { &dummy_song, 0, 0 },

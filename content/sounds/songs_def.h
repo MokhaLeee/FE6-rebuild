@@ -415,4 +415,22 @@ extern const struct Song song_26B;
 extern const struct Song song_26C;
 
 extern const struct Song Song_Fe6PlayerPhase1;
-extern const struct Song Song_FodlanWinds;
+extern const struct Song Song_FodlanWinds_SurfingKyogre; // √
+extern const struct Song Song_AFuneralOfFlowers;
+extern const struct Song Song_BetweenHeavenAndEarth;
+extern const struct Song Song_ChasingDaybreak; // ?
+extern const struct Song Song_GarregMachMonastery_SurfingKyogre;
+extern const struct Song Song_IndomitableWill_SurfingKyogre;   // ?
+extern const struct Song Song_IndomitableWillV1_SurfingKyogre; // ?
+extern const struct Song Song_MarchToDeliverance;
+extern const struct Song Song_PathsThatWillNeverCross_SurfingKyogre;
+extern const struct Song Song_RoarOfDominion_SurfingKyogre; // √
+extern const struct Song Song_ShatteringStar_MrGreen3339_SurfingKyogre;
+extern const struct Song Song_TearingThroughHeaven_SurfingKyogre;
+extern const struct Song Song_TeatimeJoy_SurfingKyogre;
+extern const struct Song Song_TempestOfSeasons_SurfingKyogre;
+extern const struct Song Song_TheApexOfTheWorld_SurfingKyogre;
+extern const struct Song Song_TheApexOfTheWorldV2_SurfingKyogre;
+extern const struct Song Song_TheEdgeOfDawn_SurfingKyogre;
+extern const struct Song Song_TwilightOfTheGods;
+extern const struct Song Song_WhatLiesAtTheEnd;
