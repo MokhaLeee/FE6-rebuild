@@ -4,11 +4,17 @@
 
 struct BattleAnim {
     char abbr[12];
-    int * modes;
-    void * script;
-    void * oam_r;
-    void * oam_l;
-    void * pal;
+    int *modes;
+    void *script;
+    void *oam_r;
+
+#if CONFIG_AUTO_LEFT_OAM
+    void *unused_oam_l;
+#else
+    void *oam_l;
+#endif
+
+    void *pal;
 };
 
 extern struct BattleAnim gBanimTable[];

@@ -95,7 +95,7 @@ def dump_one_banim_data_ent(addr, out_dir):
     all_symbols.append(Symbol(modes, abbr_str, _abbr_str, f"BANIM_MODE_{abbr_str}"))
     all_symbols.append(Symbol(script, abbr_str, _abbr_str, f"BANIM_SCR_{abbr_str}"))
     all_symbols.append(Symbol(oam_r, abbr_str, _abbr_str, f"BANIM_OAMR_{abbr_str}"))
-    all_symbols.append(Symbol(oam_l, abbr_str, _abbr_str, f"BANIM_OAML_{abbr_str}"))
+    # all_symbols.append(Symbol(oam_l, abbr_str, _abbr_str, f"BANIM_OAML_{abbr_str}"))
     all_symbols.append(Symbol(pal, abbr_str, _abbr_str, f"BANIM_PAL_{abbr_str}"))
 
     out_dir_ext = f"{out_dir}/{_abbr_str}"
@@ -115,9 +115,9 @@ def dump_one_banim_data_ent(addr, out_dir):
         print(".section .data.oamr")
         oams_r = dump_banim_oam.dump_banim_oam_r(abbr_str, oam_r)
 
-        print("")
-        print(".section .data.oaml")
-        oams_l = dump_banim_oam.dump_banim_oam_l(abbr_str, oam_l)
+        # print("")
+        # print(".section .data.oaml")
+        # oams_l = dump_banim_oam.dump_banim_oam_l(abbr_str, oam_l)
 
         sys.stdout = file_scr
 
@@ -165,6 +165,8 @@ def main(args):
             continue
         if symbol.name[0:10] == "BANIM_MODE":
             continue
+        if symbol.name[0:10] == "BANIM_OAML":
+            continue
 
         print(f"    .global {symbol.name}")
         print(".align 2, 0")
@@ -181,8 +183,8 @@ def main(args):
                 print(f"    .incbin \"{out_dir}/{symbol._abbr}/{symbol._abbr}.agbpal.lz\"")
         elif symbol.name[0:10] == "BANIM_OAMR":
             print(f"    .incbin \"{out_dir}/{symbol._abbr}/{symbol.prefix}.oam.oamr.bin.lz\"")
-        elif symbol.name[0:10] == "BANIM_OAML":
-            print(f"    .incbin \"{out_dir}/{symbol._abbr}/{symbol.prefix}.oam.oaml.bin.lz\"")
+        #elif symbol.name[0:10] == "BANIM_OAML":
+        #    print(f"    .incbin \"{out_dir}/{symbol._abbr}/{symbol.prefix}.oam.oaml.bin.lz\"")
         #elif symbol.name[0:10] == "BANIM_MODE":
         #    print(f"    .incbin \"{out_dir}/{symbol._abbr}/{symbol.prefix}.mode.bin\"")
         #elif symbol.name[0:9] == "BANIM_SCR":

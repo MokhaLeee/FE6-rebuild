@@ -16,6 +16,9 @@
 /* remove unit-kakudai */
 #define CONFIG_REMOVE_BANIM_UNITKAKUDAI 0
 
+/* auto-left OAM */
+#define CONFIG_AUTO_LEFT_OAM 1
+
 #include "configs/config-debug.h"
 
 #endif

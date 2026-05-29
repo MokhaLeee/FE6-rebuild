@@ -26,6 +26,11 @@ def get_symbols(elf_file_path):
     return _symbols_cache
 
 def try_get_ptr_symbol(val):
+
+    # corner case
+    if val == 0x086A1000:
+        return "BANIM_IMG_armm_sp1_0"
+
     _symbols = get_symbols(ELF)
     is_symbol = False
 

@@ -16,6 +16,7 @@
 #include "constants/pids.h"
 #include "constants/jids.h"
 #include "constants/terrains.h"
+#include "constants/banims.h"
 
 EWRAM_DATA i16 gBanimExpPrevious[2] = {};
 EWRAM_DATA i16 gBanimExpGain[2] = {};
@@ -436,6 +437,24 @@ bool _SetupBanim(void)
 				break;
 			}
 		}
+	}
+
+	/* dragon can only display in right */
+	if (valid_l) {
+		bool is_dragon;
+
+		switch (gBanimIdx[POS_L]) {
+		case BANIM_74: // Idunn
+			is_dragon = true;
+			break;
+
+		default:
+			is_dragon = false;
+			break;
+		}
+
+		if (is_dragon)
+			return false;
 	}
 
 	/* Unique palette EN */
