@@ -18,6 +18,12 @@ python -m pip install requests argparse numpy pillow
 make all
 ```
 
-## See also
-
-* [**fe6**](https://github.com/MokhaLeee/fe6/), decomp on fe6.
+## Features
+- Banim
+    1. Update banim data struct, not to compress banim script, who holds banim image pointer. Banim script EWRAM buffer is also removed.
+    2. Auto generate left OAM to save spaces.
+- Save
+    1. Expanded modular save introduced.
+    2. Read/Save operation has been set as 4K aligned.
+- Unit struct
+    1. Unit support has been moved to BWL table, and Unit::support has been removed.
