@@ -222,7 +222,7 @@ STRIPER        := $(BANIM_TOOLS)/strip.sh
 
 ALL_BANIM_SCR_OBJS := $(ALL_BANIM_SCRS:%.S=%.o)
 
-BANIM_SRC_GENERATED += $(ALL_BANIM_SCR_OBJS)
+# BANIM_SRC_GENERATED += $(ALL_BANIM_SCR_OBJS)
 BANIM_SRC_GENERATED += $(ALL_BANIM_OAMS:%.s=%.o) $(ALL_BANIM_OAMS:%.s=%.o.bin) $(ALL_BANIM_OAMS:%.s=%.o.bin.lz) $(ALL_BANIM_OAMS:%.s=%.o.bin.lz.o)
 BANIM_SRC_GENERATED += $(ALL_BANIM_OAMS:%.s=%.oamr.elf) $(ALL_BANIM_OAMS:%.s=%.oamr.bin) $(ALL_BANIM_OAMS:%.s=%.oamr.bin.lz) $(ALL_BANIM_OAMS:%.s=%.oamr.bin.lz.o)
 BANIM_SRC_GENERATED += $(ALL_BANIM_OAMS:%.s=%.script.bin) $(ALL_BANIM_OAMS:%.s=%.script.bin.lz) $(ALL_BANIM_OAMS:%.s=%.script.bin.lz.o)
@@ -337,10 +337,6 @@ $(CACHE_DIR)/%.d: %.S
 # = Targets =
 # ===========
 
-ifeq (,$(findstring $(C_GENERATED),$(VANILLA_SRCS)))
-VANILLA_SRCS += $(C_GENERATED)
-endif
-
 C_OBJS := $(VANILLA_SRCS:%.c=%.o) $(C_SRCS:%.c=%.o)
 ASM_OBJS := $(ASM_SRCS:%.s=%.o) $(S_SRCS:%.S=%.o)
 
@@ -352,10 +348,12 @@ ifneq (clean,$(MAKECMDGOALS))
   .PRECIOUS: %.d
 endif
 
+# some external no-need dependent objects
+ALL_OBJS += $(C_GENERATED:%.c=%.o)
+ALL_OBJS += $(ALL_BANIM_SCR_OBJS)
+
 CLEAN_FILES += $(ALL_OBJS) $(ALL_OBJS:%.o=%.asm) $(ALL_DEPS)
 CLEAN_FILES += $(VANILLA_SRCS:%.c=%.asm)
-
-ALL_OBJS += $(ALL_BANIM_SCR_OBJS)
 
 # ===========
 # = RECIPES =
