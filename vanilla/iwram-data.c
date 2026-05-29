@@ -30,11 +30,6 @@ IWRAM_DATA struct DispIo gDispIo = {};
 IWRAM_DATA IrqFunc gIrqFuncs[INT_COUNT] = {};
 
 /**
- * RAM func
- */
-IWRAM_DATA void (* MapFloodCoreRamFunc)(void) = NULL;
-
-/**
  * OAM
  */
 IWRAM_DATA u16 gOamAffinePutId = 0;
@@ -48,7 +43,6 @@ IWRAM_DATA Func gOnHBlankB = NULL;
 /**
  * Arm func
  */
-IWRAM_DATA u8 RamFuncArea[0xA00] = {};
 IWRAM_DATA void (* DecodeStringRamFunc)(char const * src, char * dst) = NULL;
 IWRAM_DATA void (* PutOamLoRamFunc)(int x, int y, u16 const * oam_list, int oam2) = NULL;
 IWRAM_DATA struct OamView *gOamAffinePutIt = NULL;
@@ -86,14 +80,6 @@ IWRAM_DATA struct Unit *gActiveUnit = NULL;
 // ALIGN(16)
 IWRAM_DATA struct MapFloodSt gMapFloodSt = {};
 
-/**
- * SIO
- */
-IWRAM_DATA int gUnk_Sio_030044D0 = 0;
-IWRAM_DATA int gUnk_Sio_030044D4 = 0;
-IWRAM_DATA u8 gSioBuf_030044E0[0x88] = {};
-IWRAM_DATA u32 gSioStateId = 0;
-IWRAM_DATA struct SioMessage gSioMsgBuf = {};
 
 /**
  * AI
@@ -111,16 +97,11 @@ IWRAM_DATA u16 gUnk_03004750[10 * 0x10] = {};
 /**
  * Event info
  */
-IWRAM_DATA ALIGNED(4) u8 gPermanentFlagBits[(MAX_PERMANENT_FLAGS + CHAR_BIT - 1) / CHAR_BIT] = {};
-IWRAM_DATA ALIGNED(4) u8 gChapterFlagBits[(MAX_CHAPTER_FLAGS + CHAR_BIT - 1) / CHAR_BIT] = {};
+EWRAM_DATA ALIGNED(4) u8 gPermanentFlagBits[(MAX_PERMANENT_FLAGS + CHAR_BIT - 1) / CHAR_BIT] = {};
+EWRAM_DATA ALIGNED(4) u8 gChapterFlagBits[(MAX_CHAPTER_FLAGS + CHAR_BIT - 1) / CHAR_BIT] = {};
 IWRAM_DATA ALIGNED(4) u8 gEndingMonologueState = 0;
 IWRAM_DATA ALIGNED(4) u8 gUnk_030048A8 = 0;
 IWRAM_DATA u8 gEndingMonologueTextDone = 0;
-
-/**
- * Secret screen
- */
-IWRAM_DATA struct UnkStruct_SecretScreen_030048C0 gSecretScreen_030048C0 = {};
 
 /**
  * Play rank

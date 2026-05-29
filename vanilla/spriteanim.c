@@ -30,7 +30,7 @@ static void AnimProc_OnEnd(struct AnimProc * proc);
 
 #define RESOLVE_REFTABLE(table, id) ((table) + ((table)[id] >> 1))
 
-static struct SpriteAnim sAnims[ANIM_COUNT];
+static EWRAM_DATA struct SpriteAnim sAnims[ANIM_COUNT] = {};
 
 struct ProcScr CONST_DATA ProcScr_AnimProc[] =
 {

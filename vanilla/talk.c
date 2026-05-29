@@ -97,12 +97,12 @@ static void TalkBgSync(int bgflags);
 
 #define TALK_TEXT_BY_LINE(line) (sTalkText + ((line) + sTalkSt->top_text_num) % sTalkSt->lines)
 
-static struct TalkSt sTalkStObj;
+static EWRAM_DATA struct TalkSt sTalkStObj = {};
 static struct TalkSt * CONST_DATA sTalkSt = &sTalkStObj;
 
-static struct Text sTalkText[3];
-static int sTalkChoiceResult;
-static struct Font sTalkFont;
+static EWRAM_DATA struct Text sTalkText[3] = {};
+static EWRAM_DATA int sTalkChoiceResult = 0;
+static EWRAM_DATA struct Font sTalkFont = {};
 
 struct ProcScr CONST_DATA ProcScr_TalkSkipListener[] =
 {

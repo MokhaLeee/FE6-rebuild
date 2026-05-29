@@ -39,8 +39,8 @@ static u8 ** sInitializingMap;
 
 static u8 EWRAM_DATA sMapUnitData[MAP_POOL_SIZE] = {};
 static u8 EWRAM_DATA sMapTerrainData[MAP_POOL_SIZE] = {};
-static u8 sMapMovementData[MAP_POOL_SIZE];
-static u8 sMapRangeData[MAP_POOL_SIZE];
+static u8 EWRAM_DATA sMapMovementData[MAP_POOL_SIZE] = {};
+static u8 EWRAM_DATA sMapRangeData[MAP_POOL_SIZE] = {};
 static u8 EWRAM_DATA sMapFogData[MAP_POOL_SIZE] = {};
 static u8 EWRAM_DATA sMapHiddenData[MAP_POOL_SIZE] = {};
 static u8 EWRAM_DATA sMapOtherData[MAP_POOL_SIZE] = {};

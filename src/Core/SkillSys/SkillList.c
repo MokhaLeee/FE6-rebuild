@@ -7,7 +7,7 @@
 #include "klib.h"
 #include "constants/skills.h"
 
-static struct SkillList sSkillLists[3];
+static EWRAM_DATA struct SkillList sSkillLists[3] = {};
 
 #define GenericSkillList (&sSkillLists[0])
 #define BattleSkillListA (&sSkillLists[1])

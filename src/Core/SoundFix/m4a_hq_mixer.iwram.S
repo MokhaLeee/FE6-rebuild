@@ -4,7 +4,7 @@
 #include "configs/configs.h"
 #if CONFIG_USE_M4A_HQ_MIXER
 
-.bss
+.section .ewram_data
 .align 2, 0
 .global hq_buffer
 hq_buffer:
