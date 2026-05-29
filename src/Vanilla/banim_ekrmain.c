@@ -11,6 +11,8 @@
 #include "constants/banims.h"
 #include "constants/jids.h"
 
+EWRAM_OVERLAY(banim) u8 *gpBanimScrs[2] = {};
+
 CONST_DATA AnimScr AnimScr_DefaultAnim[] = {
 	ANIMSCR_FRAME(1, NULL, BAS_OAM_REF_MAX_SIZE),
 	ANIMSCR_BLOCKED
@@ -118,7 +120,10 @@ void UpdateBanimFrame(void)
 		chara_pal = gBanimUniquePal[POS_L];
 
 		tmp_banim = &gBanimTable[bid];
-		LZ77UnCompWram(tmp_banim->script, &gBanimScrs[POS_L * BAS_SCR_MAX_SIZE]);
+
+		// LZ77UnCompWram(tmp_banim->script, &gBanimScrs[POS_L * BAS_SCR_MAX_SIZE]);
+		gpBanimScrs[POS_L] = tmp_banim->script;
+
 		gpBanimModesLeft = tmp_banim->modes;
 
 		tmp_banim0 = &gBanimTable[GetBanimPalette(bid, POS_L)];
@@ -150,7 +155,9 @@ void UpdateBanimFrame(void)
 		bid_pal = gBanimFactionPal[POS_R];
 		chara_pal = gBanimUniquePal[POS_R];
 
-		LZ77UnCompWram(banim[bid].script, &gBanimScrs[POS_R * BAS_SCR_MAX_SIZE]);
+		// LZ77UnCompWram(banim[bid].script, &gBanimScrs[POS_R * BAS_SCR_MAX_SIZE]);
+		gpBanimScrs[POS_R] = banim[bid].script;
+
 		gpBanimModesRight = banim[bid].modes;
 		LZ77UnCompWram(banim[GetBanimPalette(bid, POS_R)].pal, gBanimPaletteRight);
 		
@@ -274,7 +281,8 @@ void InitLeftAnim(int round_type)
 	gEkrYPosReal[0] = 0x58;
 
 	scr_offset = gpBanimModesLeft[frame_front];
-	scr = gBanimScrs + scr_offset;
+	// scr = gBanimScrs + scr_offset;
+	scr = gpBanimScrs[POS_L] + scr_offset;
 
 	if (frame_front == 0xFF)
 		scr = AnimScr_DefaultAnim;
@@ -292,7 +300,8 @@ void InitLeftAnim(int round_type)
 	gAnims[0] = anim;
 
 	scr_offset = gpBanimModesLeft[frame_back];
-	scr = gBanimScrs + scr_offset;
+	// scr = gBanimScrs + scr_offset;
+	scr = gpBanimScrs[POS_L] + scr_offset;
 
 	if (frame_back == 0xFF)
 		scr = AnimScr_DefaultAnim;
@@ -327,7 +336,9 @@ void InitRightAnim(int round_type)
 	gEkrYPosReal[1] = 0x58;
 
 	scr_offset = gpBanimModesRight[frame_front];
-	scr = gBanimScrs + BAS_SCR_MAX_SIZE + scr_offset;
+
+	// scr = gBanimScrs + BAS_SCR_MAX_SIZE + scr_offset;
+	scr = gpBanimScrs[POS_R] + scr_offset;
 
 	if (frame_front == 0xFF)
 		scr = AnimScr_DefaultAnim;
@@ -345,7 +356,9 @@ void InitRightAnim(int round_type)
 	gAnims[2] = anim;
 
 	scr_offset = gpBanimModesRight[frame_back];
-	scr = gBanimScrs + BAS_SCR_MAX_SIZE + scr_offset;
+
+	// scr = gBanimScrs + BAS_SCR_MAX_SIZE + scr_offset;
+	scr = gpBanimScrs[POS_R] + scr_offset;
 
 	if (frame_back == 0xFF)
 		scr = AnimScr_DefaultAnim;

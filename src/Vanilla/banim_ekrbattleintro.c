@@ -124,7 +124,13 @@ void EkrBaStart_InitBattleScreen(struct ProcEkrBattleStarting *proc)
 	}
 
 	EfxClearScreenFx();
+
+#if CONFIG_REMOVE_BANIM_UNITKAKUDAI
+	UpdateBanimFrame();
+#else
 	NewEkrUnitKakudai(0);
+#endif
+
 	NewEkrBaseKaiten(0);
 	NewEkrWindowAppear(0, 0xB);
 	NewEkrNamewinAppear(0, 0xB, 0);
@@ -161,11 +167,6 @@ void EkrBaStart_BgFadeOut(struct ProcEkrBattleStarting *proc)
 
 void EkrBaStart_MergeBG(struct ProcEkrBattleStarting *proc)
 {
-	if (gEkrSnowWeather == 0)
-		gUnk_Banim_0201E0F8 = 0x6;
-	else
-		gUnk_Banim_0201E0F8 = 0xA;
-
 	PutBanimBG(gBanimBG - 1);
 	EfxPalBlackInOut(gPal, BGPAL_EFXDRAGON_L, 0xA, 0x10);
 	Proc_Break(proc);
@@ -270,7 +271,11 @@ void func_fe6_080482F4(struct ProcEkrBattleEnding *proc)
 	proc->y1 = val;
 
 	BasInit();
+
+#if !CONFIG_REMOVE_BANIM_UNITKAKUDAI
 	NewEkrUnitKakudai(1);
+#endif
+
 	NewEkrBaseKaiten(1);
 	NewEkrWindowAppear(1, 0xB);
 	NewEkrBaseAppear(1, 0xB);

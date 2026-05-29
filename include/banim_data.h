@@ -605,6 +605,7 @@ extern int BANIM_MODE_druf_mg1_2[];
 extern u32 BANIM_SCR_druf_mg1_2[];
 extern u32 BANIM_OAMR_druf_mg1_2[];
 extern u32 BANIM_OAML_druf_mg1_2[];
+extern u16 BANIM_PAL_druf_mg1[];
 extern u16 BANIM_PAL_druf_mg1_3[];
 extern int BANIM_MODE_fakf_sp1_2[];
 extern u32 BANIM_SCR_fakf_sp1_2[];

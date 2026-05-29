@@ -1142,7 +1142,7 @@ CONST_DATA struct BattleAnim gBanimTable[BANIM_MAX] = {
         .script = BANIM_SCR_druf_mg1_2,
         .oam_r = BANIM_OAMR_druf_mg1_2,
         .oam_l = BANIM_OAML_druf_mg1_2,
-        .pal = BANIM_PAL_druf_mg1_3,
+        .pal = BANIM_PAL_druf_mg1,
     },
 
     [BANIM_72] = 

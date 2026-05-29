@@ -7,8 +7,8 @@
 	.global ProcScr_EkrUnitKakudai
 ProcScr_EkrUnitKakudai: @ 085CBD28
 	PROC_19
-	PROC_REPEAT func_fe6_08048A64
-	PROC_REPEAT func_fe6_08048BF0
+	PROC_REPEAT UnitKakudaiPrepareAnimScript
+	PROC_REPEAT UnitKakudaiMain
 	PROC_REPEAT func_fe6_08048D98
 	PROC_END
 
@@ -655,8 +655,8 @@ NewEkrUnitKakudai: @ 0x080489E8
 	pop {r0}
 	bx r0
 
-	thumb_func_start func_fe6_08048A64
-func_fe6_08048A64: @ 0x08048A64
+	thumb_func_start UnitKakudaiPrepareAnimScript
+UnitKakudaiPrepareAnimScript: @ 0x08048A64
 	push {r4, r5, r6, lr}
 	adds r4, r0, #0
 	ldr r1, .L08048B74 @ =BanimDefaultStandingTypes
@@ -693,7 +693,11 @@ func_fe6_08048A64: @ 0x08048A64
 	lsls r0, r6, #2
 	adds r0, r0, r1
 	ldr r1, [r0]
-	ldr r0, .L08048B90 @ =gBanimScrs
+
+	@ hack here
+	ldr r0, .L_pr_BanimScr_L
+	ldr r0, [r0]
+
 	adds r1, r1, r0
 	ldr r0, [r1, #4]
 	ldr r1, [r1, #8]
@@ -711,7 +715,11 @@ func_fe6_08048A64: @ 0x08048A64
 	lsls r0, r6, #2
 	adds r0, r0, r1
 	ldr r1, [r0]
-	ldr r0, .L08048BA0 @ =gBanimScrs + 0x2A00
+
+	@ hack here
+	ldr r0, .L_pr_BanimScr_R
+	ldr r0, [r0]
+
 	adds r1, r1, r0
 	ldr r0, [r1, #4]
 	ldr r1, [r1, #8]
@@ -721,19 +729,7 @@ func_fe6_08048A64: @ 0x08048A64
 	ldr r1, .L08048BA8 @ =gBanimImgSheetBuf_Right
 	bl LZ77UnCompWram
 .L08048AE6:
-	ldr r5, .L08048BAC @ =gBanimUnitChgForceImg
-	ldr r0, [r5]
-	cmp r0, #0
-	beq .L08048AF4
-	ldr r1, .L08048BB0 @ =gBanimKakudaiBuf_Left
-	bl LZ77UnCompWram
-.L08048AF4:
-	ldr r0, [r5, #4]
-	cmp r0, #0
-	beq .L08048B00
-	ldr r1, .L08048BB4 @ =gBanimKakudaiBuf_Right
-	bl LZ77UnCompWram
-.L08048B00:
+	bl SetupBanimBallistaImage
 	ldr r1, .L08048BB8 @ =0x06014000
 	ldr r0, .L08048B98 @ =gBanimImgSheetBuf_Left
 	movs r2, #0x80
@@ -791,6 +787,10 @@ func_fe6_08048A64: @ 0x08048A64
 	strh r0, [r4, #0x38]
 	b .L08048BE0
 	.align 2, 0
+
+.L_pr_BanimScr_L: .4byte gpBanimScrs
+.L_pr_BanimScr_R: .4byte gpBanimScrs + 4
+
 .L08048B74: .4byte BanimDefaultStandingTypes
 .L08048B78: .4byte gEkrDistanceType
 .L08048B7C: .4byte BanimDefaultModeConfig
@@ -798,16 +798,11 @@ func_fe6_08048A64: @ 0x08048A64
 .L08048B84: .4byte gPal
 .L08048B88: .4byte gBanimValid
 .L08048B8C: .4byte gpBanimModesLeft
-.L08048B90: .4byte gBanimScrs
 .L08048B94: .4byte gBanimOamBufs
 .L08048B98: .4byte gBanimImgSheetBuf_Left
 .L08048B9C: .4byte gpBanimModesRight
-.L08048BA0: .4byte gBanimScrs + 0x2A00
 .L08048BA4: .4byte gBanimOamBufs + 0x5800
 .L08048BA8: .4byte gBanimImgSheetBuf_Right
-.L08048BAC: .4byte gBanimUnitChgForceImg
-.L08048BB0: .4byte gBanimKakudaiBuf_Left
-.L08048BB4: .4byte gBanimKakudaiBuf_Right
 .L08048BB8: .4byte 0x06014000
 .L08048BBC: .4byte gEkrBmLocation
 .L08048BC0: .4byte BanimTypesPosLeft
@@ -832,8 +827,8 @@ func_fe6_08048A64: @ 0x08048A64
 	.align 2, 0
 .L08048BEC: .4byte BanimLeftDefaultPos
 
-	thumb_func_start func_fe6_08048BF0
-func_fe6_08048BF0: @ 0x08048BF0
+	thumb_func_start UnitKakudaiMain
+UnitKakudaiMain: @ 0x08048BF0
 	push {r4, r5, r6, r7, lr}
 	ldr r4, .L08048C10 @ =0xFFFFFCB4
 	add sp, r4

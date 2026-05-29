@@ -53,22 +53,23 @@ SECTIONS
 
 	.rodata ALIGN(4) : AT (__krodata_start)
 	{
-		EXCLUDE_FILE(banims/*.o) *(.data)
-		EXCLUDE_FILE(banims/*.o) *(.data*)
-		EXCLUDE_FILE(banims/*.o) *(.rodata)
-		EXCLUDE_FILE(banims/*.o) *(.rodata*)
+		*(.data)
+		*(.data*)
+		*(.rodata)
+		*(.rodata*)
 	} >rom = 0xff
 
 	__krodata_end = .;
 
-	__rodata_start = __rom_start + 0x00500000;
+	__rodata_start = .;
 	. = __rodata_start;
 
 	.rodata ALIGN(4) : AT (__rodata_start)
 	{
-		banims/banimdata_gen.o(.data);
 		*(.gameinfo_data)
+		*(.gameinfo_data*)
 		*(.content_data)
+		*(.content_data*)
 	} >rom = 0xff
 
 	__rodata_end = .;

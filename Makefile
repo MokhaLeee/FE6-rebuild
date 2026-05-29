@@ -15,8 +15,6 @@ ifeq ($(strip $(DEVKITARM)),)
 	$(error "Please set DEVKITARM in your environment. export DEVKITARM=<path to>devkitARM)
 endif
 
-BANIM_LINK_ADDR:=0x08500000
-
 # ==================
 # = PROJECT CONFIG =
 # ==================
@@ -177,7 +175,8 @@ CLEAN_FILES += $(TSA_FILES:%.tsa=%.tsa.lz)
 
 BANIM_LDS := lds/linker_script_banim.txt
 
-ALL_BANIM_SCRS := $(shell find ./banims/ -type f -name "*.s")
+ALL_BANIM_SCRS := $(shell find ./banims/ -type f -name "*.scr.S")
+ALL_BANIM_OAMS := $(shell find ./banims/ -type f -name "*.oam.s")
 ALL_BANIM_PALS := $(shell find ./banims/ -type f -name "*.agbpal")
 ALL_BANIM_IMGS := $(shell find ./banims/ -type f -name '*.png')
 
@@ -188,12 +187,6 @@ PNG_TO_GBA4BPP := $(PYTHON) $(BANIM_TOOLS)/png_to_4bpp.py
 PNG_TO_GBA4BPP := $(PYTHON) $(BANIM_TOOLS)/png_to_4bpp.py
 FK_COMPRESSOR  := $(PYTHON) $(BANIM_TOOLS)/compressor.py
 STRIPER        := $(BANIM_TOOLS)/strip.sh
-
-BANIM_OBJECT := banims/banimdata_gen.o
-
-$(BANIM_OBJECT): $(BANIM_LDS) $(shell $(BANIM_LINKER) -t $(BANIM_LDS) -m)
-	@echo "[LYN]	$@"
-	@$(BANIM_LINKER) -o $@ -t $(BANIM_LDS) -b $(BANIM_LINK_ADDR) -l $(LD) --objcopy $(OBJCOPY) -c ./tools/banimtools/compressor.py > /dev/null
 
 %.stripped: %
 	@echo "[STP]	$@"
@@ -211,6 +204,10 @@ $(BANIM_OBJECT): $(BANIM_LDS) $(shell $(BANIM_LINKER) -t $(BANIM_LDS) -m)
 	@echo "[LD ]	$@"
 	@$(LD) -T $(BANIM_TOOLS)/link_mode.ld -o $@ $<
 
+%.script.elf: %.o
+	@echo "[LD ]	$@"
+	@$(LD) -T $(BANIM_TOOLS)/link_script.ld -o $@ $<
+
 %.oamr.bin: %.oamr.elf
 	@echo "[OPY]	$@"
 	@$(OBJCOPY) --only-section=.data.oamr -O binary $< $@
@@ -223,20 +220,20 @@ $(BANIM_OBJECT): $(BANIM_LDS) $(shell $(BANIM_LINKER) -t $(BANIM_LDS) -m)
 	@echo "[OPY]	$@"
 	@$(OBJCOPY) --only-section=.data.modes -O binary $< $@
 
-BANIM_SRC_GENERATED := $(BANIM_OBJECT:%.o=%.*)
-BANIM_SRC_GENERATED += $(ALL_BANIM_SCRS:%.s=%.o) $(ALL_BANIM_SCRS:%.s=%.o.bin) $(ALL_BANIM_SCRS:%.s=%.o.bin.lz) $(ALL_BANIM_SCRS:%.s=%.o.bin.lz.o)
-BANIM_SRC_GENERATED += $(ALL_BANIM_SCRS:%.s=%.oamr.elf) $(ALL_BANIM_SCRS:%.s=%.oamr.bin) $(ALL_BANIM_SCRS:%.s=%.oamr.bin.lz) $(ALL_BANIM_SCRS:%.s=%.oamr.bin.lz.o)
-BANIM_SRC_GENERATED += $(ALL_BANIM_SCRS:%.s=%.script.bin) $(ALL_BANIM_SCRS:%.s=%.script.bin.lz) $(ALL_BANIM_SCRS:%.s=%.script.bin.lz.o)
-BANIM_SRC_GENERATED += $(ALL_BANIM_SCRS:%.s=%.oaml.elf) $(ALL_BANIM_SCRS:%.s=%.oaml.bin) $(ALL_BANIM_SCRS:%.s=%.oaml.bin.lz) $(ALL_BANIM_SCRS:%.s=%.oaml.bin.lz.o)
-BANIM_SRC_GENERATED += $(ALL_BANIM_SCRS:%.s=%.mode.elf) $(ALL_BANIM_SCRS:%.s=%.mode.bin) $(ALL_BANIM_SCRS:%.s=%.mode.bin.o)
-BANIM_SRC_GENERATED += $(ALL_BANIM_SCRS:%.s=%.d)
+ALL_BANIM_SCR_OBJS := $(ALL_BANIM_SCRS:%.S=%.o)
+
+BANIM_SRC_GENERATED += $(ALL_BANIM_SCR_OBJS)
+BANIM_SRC_GENERATED += $(ALL_BANIM_OAMS:%.s=%.o) $(ALL_BANIM_OAMS:%.s=%.o.bin) $(ALL_BANIM_OAMS:%.s=%.o.bin.lz) $(ALL_BANIM_OAMS:%.s=%.o.bin.lz.o)
+BANIM_SRC_GENERATED += $(ALL_BANIM_OAMS:%.s=%.oamr.elf) $(ALL_BANIM_OAMS:%.s=%.oamr.bin) $(ALL_BANIM_OAMS:%.s=%.oamr.bin.lz) $(ALL_BANIM_OAMS:%.s=%.oamr.bin.lz.o)
+BANIM_SRC_GENERATED += $(ALL_BANIM_OAMS:%.s=%.script.bin) $(ALL_BANIM_OAMS:%.s=%.script.bin.lz) $(ALL_BANIM_OAMS:%.s=%.script.bin.lz.o)
+BANIM_SRC_GENERATED += $(ALL_BANIM_OAMS:%.s=%.oaml.elf) $(ALL_BANIM_OAMS:%.s=%.oaml.bin) $(ALL_BANIM_OAMS:%.s=%.oaml.bin.lz) $(ALL_BANIM_OAMS:%.s=%.oaml.bin.lz.o)
+BANIM_SRC_GENERATED += $(ALL_BANIM_OAMS:%.s=%.mode.elf) $(ALL_BANIM_OAMS:%.s=%.mode.bin) $(ALL_BANIM_OAMS:%.s=%.mode.bin.o)
+BANIM_SRC_GENERATED += $(ALL_BANIM_OAMS:%.s=%.d)
 
 BANIM_PAL_GENERATED += $(ALL_BANIM_PALS:%=%.lz) $(ALL_BANIM_PALS:%=%.lz.o)
 BANIM_PAL_GENERATED += $(ALL_BANIM_PALS:%=%.lz.stripped) $(ALL_BANIM_PALS:%=%.lz.stripped.o)
 
 BANIM_IMG_GENERATED += $(ALL_BANIM_IMGS:%.png=%.4bpp) $(ALL_BANIM_IMGS:%.png=%.4bpp.lz) $(ALL_BANIM_IMGS:%.png=%.4bpp.lz.o)
-
-banim: $(BANIM_OBJECT)
 
 # =========
 # = Glyph =
@@ -323,6 +320,11 @@ $(CACHE_DIR)/%.d: %.s
 	@echo "$*.o: \\" > $@
 	@$(ASM_DEP) $(INC_FLAG) $< >> $@
 
+$(CACHE_DIR)/%.d: %.S
+	@mkdir -p $(dir $@)
+	@echo "$*.o: \\" > $@
+	@$(ASM_DEP) $(INC_FLAG) $< >> $@
+
 %.o: %.S
 	@echo "[AS ]	$@"
 	@$(CC) $(CFLAGS) $(EXT_FLAGS) -g -c $< -o $@
@@ -353,14 +355,16 @@ endif
 CLEAN_FILES += $(ALL_OBJS) $(ALL_OBJS:%.o=%.asm) $(ALL_DEPS)
 CLEAN_FILES += $(VANILLA_SRCS:%.c=%.asm)
 
+ALL_OBJS += $(ALL_BANIM_SCR_OBJS)
+
 # ===========
 # = RECIPES =
 # ===========
 
 LDS := lds/gba_cart.lds
 LIBS := $(foreach dir,$(LIB_DIRS),-L$(dir)/lib)
-LD_LDFLAGS = -T $(LDS) -Map $(MAP) $(LIBS) -R $(BANIM_OBJECT).sym.o
-CC_LDFLAGS = -T $(LDS) -Wl,-Map $(MAP) $(LIBS) -Wl,-R $(BANIM_OBJECT).sym.o
+LD_LDFLAGS = -T $(LDS) -Map $(MAP) $(LIBS)
+CC_LDFLAGS = -T $(LDS) -Wl,-Map $(MAP) $(LIBS)
 
 %.gba: %.elf
 	@echo "[OPY]	$@"
@@ -371,7 +375,7 @@ CC_LDFLAGS = -T $(LDS) -Wl,-Map $(MAP) $(LIBS) -Wl,-R $(BANIM_OBJECT).sym.o
 	@echo "[SYM]	$@"
 	@python3 tools/scripts/elf2sym.py $< | python3 tools/scripts/sym_modify.py > $@
 
-$(ELF): $(ALL_OBJS) $(BANIM_OBJECT) lds/*.lds
+$(ELF): $(ALL_OBJS) lds/*.lds
 	@echo "[LD ]	$@"
 	@$(LD) $(LD_LDFLAGS) $(ALL_OBJS) -lmm -lgba -lc -lgcc -o $@
 #	@$(CC) $(CC_LDFLAGS) $(ALL_OBJS) -lmm -lgba -lc -lgcc -o $@
@@ -385,7 +389,7 @@ CLEAN_DIRS += $(shell find . -type d -name "__pycache__")
 
 clean:
 	@rm -f $(CLEAN_FILES)
-#	@rm -f $(BANIM_SRC_GENERATED)
+	@rm -f $(BANIM_SRC_GENERATED)
 	@rm -f $(BANIM_PAL_GENERATED)
 	@rm -f $(BANIM_IMG_GENERATED)
 	@rm -rf $(CLEAN_DIRS)

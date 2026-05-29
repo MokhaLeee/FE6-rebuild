@@ -196,7 +196,8 @@ void BattleAIS_ExecCommands(void)
 								scr_offset = gpBanimModesRight[frame_idx];
 
 							/* We need to make sure that the first script is the frame? */
-							scr_start = (void *)(scr_offset + gBanimScrs + GetAnimPosition(anim) * BAS_SCR_MAX_SIZE);
+							// scr_start = (void *)(scr_offset + gBanimScrs + GetAnimPosition(anim) * BAS_SCR_MAX_SIZE);
+							scr_start = (void *)(gpBanimScrs[GetAnimPosition(anim)] + scr_offset);
 
 							anim1->imgSheet = scr_start->img;
 #if !NONMATCHING
@@ -212,7 +213,7 @@ void BattleAIS_ExecCommands(void)
 							anim2->sprData = anim2->sprDataPool + BAS_OAM_REF_MAX_SIZE;
 #endif
 
-							if (gBanimUnitChgForceImg[GetAnimPosition(anim)] == NULL) {
+							if (gBanimBallistaImages[GetAnimPosition(anim)] == NULL) {
 								if (gpImgSheet[GetAnimPosition(anim1)] != anim1->imgSheet) {
 									NewEkrChienCHR(anim1);
 									gpImgSheet[GetAnimPosition(anim1)] = anim1->imgSheet;
@@ -477,7 +478,7 @@ void BattleAIS_ExecCommands(void)
 
 		if (type & ANIM_BIT2_FRAME) {
 			if (GetAnimLayer(anim) == 0) {
-				if (gBanimUnitChgForceImg[GetAnimPosition(anim)] == NULL)
+				if (gBanimBallistaImages[GetAnimPosition(anim)] == NULL)
 					if (!(anim->flags3 & ANIM_BIT3_4000))
 						if (gpImgSheet[GetAnimPosition(anim)] != anim->imgSheet) {
 							SyncBanimImage(anim);

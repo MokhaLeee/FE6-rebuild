@@ -19,10 +19,12 @@ void LoadAnimFrame(struct Anim *anim, int type)
 	if (frame != 0xFF) {
 		if (GetAnimPosition(anim) == POS_L) {
 			// use r1 for scr
-			scr = gpBanimModesLeft;
-			scr = (void *)(gBanimScrs + scr[frame]);
+			// scr = gpBanimModesLeft;
+			// scr = (void *)(gBanimScrs + scr[frame]);
+			scr = (void *)(gpBanimScrs[POS_L] + gpBanimModesLeft[frame]);
 		} else {
-			scr = (void *)(gBanimScrs + BAS_SCR_MAX_SIZE + gpBanimModesRight[frame]);
+			// scr = (void *)(gBanimScrs + BAS_SCR_MAX_SIZE + gpBanimModesRight[frame]);
+			scr = (void *)(gpBanimScrs[POS_R] + gpBanimModesRight[frame]);
 		}
 		anim->script = scr;
 		anim->scrCur = scr;

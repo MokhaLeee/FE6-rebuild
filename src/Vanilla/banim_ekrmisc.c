@@ -210,19 +210,15 @@ void EkrEfxStatusClear(void)
 {
 	gEkrHpBarCount = 0;
 	gEfxSpellAnimExists = 0;
-	gUnk_Banim_02017728 = 0;
 	gEkrDeadEventExist = 0;
 	gEfxQuakeExist = 0;
 	gEfxHitQuakeExist = 0;
 	gEfxFarAttackExist = 0;
 	gEfxBgSemaphore = 0;
 	gEfxHpBarResireFlag = 0;
-	gUnk_Banim_0201774C = 0;
 	gEfxTeonoState = 0;
 	gEfxTerrainLayerLow = 0;
 	SetEkrBg2QuakeVec(0, 0);
-	gUnk_Banim_0201775C[0] = 0;
-	gUnk_Banim_0201775C[1] = 0;
 	gEfxSpecalEffectExist[0] = 0;
 	gEfxSpecalEffectExist[1] = 0;
 	gEkrHitNow[0] = 0;

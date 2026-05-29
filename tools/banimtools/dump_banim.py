@@ -47,8 +47,9 @@ def dump_scr_frame(img_addr, pal_addr, out_png):
 def dump_modes(prefix, addr, scrs):
     offset = addr & 0x00FFFFFF
 
-    # print(f".global BANIM_MODES_{prefix}")
-    print(f"@ BANIM_MODES_{prefix}:")
+    print(".align 2, 0")
+    print(f".global BANIM_MODE_{prefix}")
+    print(f"BANIM_MODE_{prefix}:")
 
     with open(rom_def.ROM, "rb") as f:
         f.seek(offset)
@@ -69,7 +70,7 @@ def dump_modes(prefix, addr, scrs):
             if i == 0 or scr_offset != 0:
                 for scr in scrs:
                     if scr.offset == scr_offset:
-                        mode_str = f"{scr.name} - SCR"
+                        mode_str = f"0x{scr_offset:04X} @ {scr.name} - SCR"
 
             print(f"    .word {mode_str}")
 
@@ -99,62 +100,74 @@ def dump_one_banim_data_ent(addr, out_dir):
 
     out_dir_ext = f"{out_dir}/{_abbr_str}"
     os.makedirs(out_dir_ext, exist_ok=True)
-    out_sfile = f"{out_dir_ext}/{abbr_str}.s"
+    out_sfile = f"{out_dir_ext}/{abbr_str}.oam.s"
+    out_scrfile = f"{out_dir_ext}/{abbr_str}.scr.S"
 
-    with open(out_sfile, 'w') as file:
+    with open(out_sfile, 'w') as file, open(out_scrfile, 'w') as file_scr:
 
         original_stdout = sys.stdout
+
         sys.stdout = file
+        print(".include \"macro.inc\"")
+        print(".include \"animscr.inc\"")
+        print(".include \"gba_sprites.inc\"")
+        print("")
+        print(".section .data.oamr")
+        oams_r = dump_banim_oam.dump_banim_oam_r(abbr_str, oam_r)
 
-        try:
-            print(".include \"macro.inc\"")
-            print(".include \"animscr.inc\"")
-            print(".include \"gba_sprites.inc\"")
-            print("")
-            print(".section .data.oamr")
-            oams_r = dump_banim_oam.dump_banim_oam_r(abbr_str, oam_r)
+        print("")
+        print(".section .data.oaml")
+        oams_l = dump_banim_oam.dump_banim_oam_l(abbr_str, oam_l)
 
-            print("")
-            print(".section .data.oaml")
-            oams_l = dump_banim_oam.dump_banim_oam_l(abbr_str, oam_l)
+        sys.stdout = file_scr
 
-            print("")
-            print(".section .data.script")
-            scrs, anim_frames = dump_banim_script.dump_banim_script(abbr_str, script, oams_r)
+        print(".include \"macro.inc\"")
+        print(".include \"animscr.inc\"")
+        print(".include \"gba_sprites.inc\"")
+        print("")
+        print(".section .content_data.banim_scr")
+        print(".align 2, 0")
+        print("")
 
-            anim_frames = list(set(anim_frames))
-            anim_frames.sort()
+        scrs, anim_frames = dump_banim_script.dump_banim_script(abbr_str, script, oams_r)
 
-            print("")
-            print(".section .data.modes")
-            dump_modes(abbr_str, modes, scrs)
+        anim_frames = list(set(anim_frames))
+        anim_frames.sort()
 
-            # print("")
-            # print(".section .data.frames")
-            dump_banim_frame.dump_banim_frames(abbr_str, _abbr_str, anim_frames, all_symbols, pal, out_dir_ext)
+        print("")
+        # print(".section .data.modes")
+        dump_modes(abbr_str, modes, scrs)
 
-            for i, img_addr in enumerate(anim_frames):
-                all_symbols.append(Symbol(img_addr, abbr_str, _abbr_str, f"BANIM_IMG_{abbr_str}_{i}", True))
+        # print("")
+        # print(".section .data.frames")
+        dump_banim_frame.dump_banim_frames(abbr_str, _abbr_str, anim_frames, all_symbols, pal, out_dir_ext)
 
-        finally:
-            sys.stdout = original_stdout
+        for i, img_addr in enumerate(anim_frames):
+            all_symbols.append(Symbol(img_addr, abbr_str, _abbr_str, f"BANIM_IMG_{abbr_str}_{i}", True))
 
+        sys.stdout = original_stdout
 
 def main(args):
     global all_symbols
 
-    # out_dir = "out"
-    out_dir = "data/banims"
-
-    overlayed_ptrs = [0x0877FF18, 0x08785480, 0x08789E74, 0x0878ED70, 0x0879093C, 0x08790C8C]
+    out_dir = "banims"
+    # out_dir = "data/banims"
 
     for i in range(122):
         dump_one_banim_data_ent(0x6A0008 + i * 32, out_dir)
 
-    print("    .data")
+    print("    .section .content_data.banim_data")
+    print("")
     sorted_symbols = sort_symbols(all_symbols)
     for i, symbol in enumerate(sorted_symbols):
+
+        if symbol.name[0:9] == "BANIM_SCR":
+            continue
+        if symbol.name[0:10] == "BANIM_MODE":
+            continue
+
         print(f"    .global {symbol.name}")
+        print(".align 2, 0")
         print(f"{symbol.name}: @ 0x{symbol.ptr:08X}")
 
         cur = symbol.ptr & 0x00FFFFFF
@@ -163,44 +176,21 @@ def main(args):
             end = sorted_symbols[i + 1].ptr & 0x00FFFFFF
 
         if symbol.name[0:9] == "BANIM_IMG":
-            print(f"    .incbin \"data/banims/{symbol._abbr}/{symbol.name[10:]}.4bpp.lz\"")
+            print(f"    .incbin \"{out_dir}/{symbol._abbr}/{symbol.name[10:]}.4bpp.lz\"")
         elif symbol.name[0:9] == "BANIM_PAL":
-            if symbol.ptr in overlayed_ptrs:
-                # print(f"    .incbin \"fe6-base.gba\", 0x{cur:06X}, 0x{end:06X} - 0x{cur:06X}")
-                print(f"    .incbin \"data/banims/{symbol._abbr}/{symbol._abbr}.agbpal_lz\"")
-            else:
-                print(f"    .incbin \"data/banims/{symbol._abbr}/{symbol._abbr}.agbpal.lz\"")
-
+                print(f"    .incbin \"{out_dir}/{symbol._abbr}/{symbol._abbr}.agbpal.lz\"")
         elif symbol.name[0:10] == "BANIM_OAMR":
-            print(f"    .incbin \"data/banims/{symbol._abbr}/{symbol.prefix}.oamr.bin.lz\"")
+            print(f"    .incbin \"{out_dir}/{symbol._abbr}/{symbol.prefix}.oam.oamr.bin.lz\"")
         elif symbol.name[0:10] == "BANIM_OAML":
-            print(f"    .incbin \"data/banims/{symbol._abbr}/{symbol.prefix}.oaml.bin.lz\"")
-        elif symbol.name[0:10] == "BANIM_MODE":
-            print(f"    .incbin \"data/banims/{symbol._abbr}/{symbol.prefix}.mode.bin\"")
-
-            if (end - cur) > (24 * 4):
-                cur += 24 * 4
-                print("")
-                ptr = f"{(cur + 0x08000000):08X}"
-                name = f"gUnk_{ptr}"
-                print(f"    .global {name}")
-                print(f"{name}: @ {ptr}")
-                print(f"    .incbin \"fe6-base.gba\", 0x{cur:06X}, 0x{end:06X} - 0x{cur:06X}")
-
+            print(f"    .incbin \"{out_dir}/{symbol._abbr}/{symbol.prefix}.oam.oaml.bin.lz\"")
+        #elif symbol.name[0:10] == "BANIM_MODE":
+        #    print(f"    .incbin \"{out_dir}/{symbol._abbr}/{symbol.prefix}.mode.bin\"")
+        #elif symbol.name[0:9] == "BANIM_SCR":
+        #    print(f"    .incbin \"{out_dir}/{symbol._abbr}/{symbol.prefix}.script.bin\"")
         else:
             print(f"    .incbin \"fe6-base.gba\", 0x{cur:06X}, 0x{end:06X} - 0x{cur:06X}")
 
         print("")
-
-        # some extras
-        if symbol.ptr == 0x087C0FCC:
-            print("    @ ?")
-            print("    .incbin \"fe6-base.gba\", 0x7C18C4, 0x7C2064 - 0x7C18C4")
-            print("")
-        elif symbol.ptr == 0x087DF434:
-            print("    @ ?")
-            print("    .incbin \"fe6-base.gba\", 0x7DFC44, 0x7E0014 - 0x7DFC44")
-            print("")
 
 if __name__ == '__main__':
     main(sys.argv)

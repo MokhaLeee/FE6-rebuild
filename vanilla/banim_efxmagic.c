@@ -688,7 +688,6 @@ void EfxTeonoObj_Loop(struct ProcEfxMagicOBJ *proc)
 
 void EfxTeonoObj_End(struct ProcEfxMagicOBJ *proc)
 {
-	gUnk_Banim_0201774C = 0;
 	Proc_End(proc->seproc);
 	NewEfxTeonoOBJ2(proc->anim);
 	Proc_Break(proc);

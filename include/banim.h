@@ -117,11 +117,10 @@ enum banim_sprites_size {
 };
 
 extern u8 gBanimScrs[2 * BAS_SCR_MAX_SIZE];
+extern u8 *gpBanimScrs[2];
 extern u8 gBanimOamBufs[2 * BAS_OAM_MAX_SIZE];
-extern u8 gBanimImgSheetBuf_Left[BAS_IMG_MAX_SIZE];
-extern u8 gBanimKakudaiBuf_Left[BAS_IMG_MAX_SIZE];
-extern u8 gBanimImgSheetBuf_Right[BAS_IMG_MAX_SIZE];
-extern u8 gBanimKakudaiBuf_Right[BAS_IMG_MAX_SIZE];
+extern u8 gBanimImgSheetBuf_Left[];
+extern u8 gBanimImgSheetBuf_Right[];
 extern u8 gBanimTerrainfxBufObj[0x2000];
 
 struct ProcEfx {
@@ -290,7 +289,7 @@ extern int gEfxPurgeCounter;
 extern u8 gEkrPids[2];
 extern struct Unit * gpEkrTriangleUnits[2];
 extern const u16 * gpBanimTriAtkPalettes[2];
-extern const u8 * gBanimUnitChgForceImg[2];
+extern const u8 * gBanimBallistaImages[2];
 extern i16 gBanimBG;
 extern i16 gEkrInitialHitSide;
 extern i16 gEkrSnowWeather;
@@ -802,8 +801,8 @@ struct ProcEkrBaseKaiten {
 void NewEkrBaseKaiten(int identifier);
 void EkrBaseKaiten_Loop(struct ProcEkrBaseKaiten *proc);
 void NewEkrUnitKakudai(int identifier);
-// func_fe6_08048A64
-// func_fe6_08048BF0
+// UnitKakudaiPrepareAnimScript
+// UnitKakudaiMain
 // func_fe6_08048D98
 
 struct ProcEkrIntroWindow {
@@ -889,6 +888,7 @@ void EkrChienCHR_Loop(struct ProcEfx *proc);
 void SyncBanimImage(struct Anim *anim);
 void ApplyBanimUniquePalette(u32 *buf, int pos);
 int GetBanimPalette(int banim_id, int pos);
+void SetupBanimBallistaImage(void);
 void UpdateBanimFrame(void);
 void InitMainAnims(void);
 void InitBattleAnimFrame(int round_type_left, int round_type_right);

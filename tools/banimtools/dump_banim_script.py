@@ -32,9 +32,9 @@ def dump_banim_script(prefix, addr, oams_r):
 
     anim_frames = []
 
-    # print(f".global BANIM_SCR_{prefix}")
-    print(f"@ BANIM_SCR_{prefix}:")
-    print(f"SCR:")
+    print(f".global BANIM_SCR_{prefix}")
+    print(f"BANIM_SCR_{prefix}:")
+    print(f"@ SCR:")
 
     while True:
         if cur >= len(scr_data):
@@ -47,7 +47,7 @@ def dump_banim_script(prefix, addr, oams_r):
                 name = f"SCR_{scr_idx}"
 
             ret_scrs.append(BanimSCR(name, cur * 4))
-            print(name + ":")
+            print("@ " + name + ":")
             scr_idx += 1
             new_scr = False
 
@@ -70,12 +70,12 @@ def dump_banim_script(prefix, addr, oams_r):
         elif inst == 0: # ANFMT_INS_TYPE_STOP
             print("    ANIMSCR_BLOCKED")
             new_scr = True
-            print("")
+            # print("")
 
         elif inst == 1: # ANFMT_INS_TYPE_END
             print("    ANIMSCR_DISABLED")
             new_scr = True
-            print("")
+            # print("")
 
         elif inst == 2: # ANFMT_INS_TYPE_LOOP
             print("    ANIMSCR_LOOP")
@@ -112,7 +112,7 @@ def dump_banim_script(prefix, addr, oams_r):
             oam_name = f"0x{oam_offset:04X}"
             for oam in oams_r:
                 if oam.offset == oam_offset:
-                    oam_name = f"{oam.name} - OAMR"
+                    oam_name = f"0x{oam_offset:04X} @ {oam.name} - OAMR"
 
             print(f"    ANIMSCR_FRAME 0x{duration:02X}, {frame_name}, 0x{frame_number:02X}, {oam_name}") # @ 0x{data:08X}
 
