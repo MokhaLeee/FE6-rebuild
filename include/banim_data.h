@@ -854,3 +854,9 @@ extern u16 Pal_BanimChar_087FEF3C[];
 extern u16 Pal_BanimChar_087FEF94[];
 extern u16 Pal_BanimChar_087FEFF0[];
 extern u16 Pal_BanimChar_087FF050[];
+
+/* demo */
+extern u16 Anim_LordT0_Sword_pal[];
+extern u32 Anim_LordT0_Sword_sectiondata[];
+extern u32 Anim_LordT0_Sword_framedata[];
+extern u32 Anim_LordT0_Sword_rtl[];

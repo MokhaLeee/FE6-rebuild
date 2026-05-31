@@ -1,0 +1,246 @@
+/// - Mode 1
+1 p- alear_lord_sword_000.png
+C03
+C07
+3 p- alear_lord_sword_000.png
+5 p- alear_lord_sword_001.png
+4 p- alear_lord_sword_002.png
+4 p- alear_lord_sword_003.png
+3 p- alear_lord_sword_004.png
+4 p- alear_lord_sword_005.png
+C34
+4 p- alear_lord_sword_006.png
+3 p- alear_lord_sword_007.png
+C22
+4 p- alear_lord_sword_008.png
+4 p- alear_lord_sword_009.png
+5 p- alear_lord_sword_010.png
+7 p- alear_lord_sword_011.png
+3 p- alear_lord_sword_012.png
+C24
+C04
+C1A
+C21
+2 p- alear_lord_sword_013.png
+C34
+2 p- alear_lord_sword_014.png
+4 p- alear_lord_sword_015.png
+3 p- alear_lord_sword_016.png
+3 p- alear_lord_sword_017.png
+4 p- alear_lord_sword_018.png
+4 p- alear_lord_sword_019.png
+1 p- alear_lord_sword_020.png
+C01
+5 p- alear_lord_sword_021.png
+10 p- alear_lord_sword_022.png
+3 p- alear_lord_sword_023.png
+2 p- alear_lord_sword_024.png
+2 p- alear_lord_sword_025.png
+3 p- alear_lord_sword_026.png
+3 p- alear_lord_sword_027.png
+3 p- alear_lord_sword_028.png
+4 p- alear_lord_sword_029.png
+C34
+3 p- alear_lord_sword_030.png
+3 p- alear_lord_sword_031.png
+3 p- alear_lord_sword_000.png
+C06
+C0D
+~~~
+/// - Mode 3
+1 p- alear_lord_sword_000.png
+C03
+C07
+3 p- alear_lord_sword_000.png
+5 p- alear_lord_sword_001.png
+C22
+2 p- alear_lord_sword_032.png
+2 p- alear_lord_sword_033.png
+2 p- alear_lord_sword_034.png
+3 p- alear_lord_sword_035.png
+5 p- alear_lord_sword_036.png
+7 p- alear_lord_sword_037.png
+12 p- alear_lord_sword_038.png
+C23
+2 p- alear_lord_sword_039.png
+2 p- alear_lord_sword_040.png
+2 p- alear_lord_sword_041.png
+2 p- alear_lord_sword_042.png
+3 p- alear_lord_sword_043.png
+3 p- alear_lord_sword_044.png
+4 p- alear_lord_sword_045.png
+7 p- alear_lord_sword_046.png
+C24
+C04
+C0C
+C21
+2 p- alear_lord_sword_047.png
+C34
+2 p- alear_lord_sword_014.png
+4 p- alear_lord_sword_015.png
+3 p- alear_lord_sword_016.png
+3 p- alear_lord_sword_017.png
+4 p- alear_lord_sword_018.png
+4 p- alear_lord_sword_019.png
+1 p- alear_lord_sword_020.png
+C01
+5 p- alear_lord_sword_021.png
+10 p- alear_lord_sword_022.png
+3 p- alear_lord_sword_023.png
+2 p- alear_lord_sword_024.png
+2 p- alear_lord_sword_025.png
+3 p- alear_lord_sword_026.png
+3 p- alear_lord_sword_027.png
+3 p- alear_lord_sword_028.png
+4 p- alear_lord_sword_029.png
+C34
+3 p- alear_lord_sword_030.png
+3 p- alear_lord_sword_031.png
+3 p- alear_lord_sword_000.png
+C06
+C0D
+~~~
+/// - Mode 5
+1 p- alear_lord_sword_000.png
+C03
+C07
+3 p- alear_lord_sword_000.png
+2 p- alear_lord_sword_048.png
+C22
+3 p- alear_lord_sword_049.png
+C05
+1 p- alear_lord_sword_050.png
+C01
+C23
+3 p- alear_lord_sword_049.png
+2 p- alear_lord_sword_048.png
+3 p- alear_lord_sword_000.png
+C06
+C0D
+~~~
+/// - Mode 6
+1 p- alear_lord_sword_000.png
+C03
+C07
+3 p- alear_lord_sword_000.png
+2 p- alear_lord_sword_048.png
+C22
+3 p- alear_lord_sword_049.png
+2 p- alear_lord_sword_050.png
+3 p- alear_lord_sword_051.png
+2 p- alear_lord_sword_052.png
+3 p- alear_lord_sword_050.png
+4 p- alear_lord_sword_051.png
+3 p- alear_lord_sword_052.png
+3 p- alear_lord_sword_050.png
+6 p- alear_lord_sword_051.png
+5 p- alear_lord_sword_052.png
+1 p- alear_lord_sword_050.png
+C05
+1 p- alear_lord_sword_050.png
+C01
+C23
+3 p- alear_lord_sword_049.png
+2 p- alear_lord_sword_048.png
+3 p- alear_lord_sword_000.png
+C06
+C0D
+~~~
+/// - Mode 7
+1 p- alear_lord_sword_000.png
+C02
+1 p- alear_lord_sword_000.png
+C0E
+3 p- alear_lord_sword_053.png
+1 p- alear_lord_sword_054.png
+C01
+3 p- alear_lord_sword_053.png
+C0D
+~~~
+/// - Mode 8
+1 p- alear_lord_sword_000.png
+C02
+1 p- alear_lord_sword_000.png
+C0E
+3 p- alear_lord_sword_053.png
+1 p- alear_lord_sword_054.png
+C01
+3 p- alear_lord_sword_053.png
+C0D
+~~~
+/// - Mode 9
+4 p- alear_lord_sword_055.png
+3 p- alear_lord_sword_056.png
+3 p- alear_lord_sword_057.png
+4 p- alear_lord_sword_058.png
+3 p- alear_lord_sword_059.png
+3 p- alear_lord_sword_060.png
+4 p- alear_lord_sword_061.png
+3 p- alear_lord_sword_062.png
+3 p- alear_lord_sword_063.png
+2 p- alear_lord_sword_000.png
+~~~
+/// - Mode 10
+2 p- alear_lord_sword_000.png
+C01
+~~~
+/// - Mode 11
+4 p- alear_lord_sword_055.png
+3 p- alear_lord_sword_056.png
+3 p- alear_lord_sword_057.png
+4 p- alear_lord_sword_058.png
+3 p- alear_lord_sword_059.png
+3 p- alear_lord_sword_060.png
+4 p- alear_lord_sword_061.png
+3 p- alear_lord_sword_062.png
+3 p- alear_lord_sword_063.png
+2 p- alear_lord_sword_000.png
+~~~
+/// - Mode 12
+1 p- alear_lord_sword_000.png
+C03
+C07
+3 p- alear_lord_sword_000.png
+5 p- alear_lord_sword_001.png
+4 p- alear_lord_sword_002.png
+4 p- alear_lord_sword_003.png
+3 p- alear_lord_sword_004.png
+4 p- alear_lord_sword_005.png
+C34
+4 p- alear_lord_sword_006.png
+3 p- alear_lord_sword_007.png
+C22
+4 p- alear_lord_sword_008.png
+4 p- alear_lord_sword_009.png
+5 p- alear_lord_sword_010.png
+7 p- alear_lord_sword_011.png
+3 p- alear_lord_sword_012.png
+C24
+C04
+2 p- alear_lord_sword_064.png
+C34
+2 p- alear_lord_sword_065.png
+4 p- alear_lord_sword_015.png
+3 p- alear_lord_sword_016.png
+3 p- alear_lord_sword_017.png
+4 p- alear_lord_sword_018.png
+4 p- alear_lord_sword_019.png
+1 p- alear_lord_sword_020.png
+C01
+5 p- alear_lord_sword_021.png
+10 p- alear_lord_sword_022.png
+3 p- alear_lord_sword_023.png
+2 p- alear_lord_sword_024.png
+2 p- alear_lord_sword_025.png
+3 p- alear_lord_sword_026.png
+3 p- alear_lord_sword_027.png
+3 p- alear_lord_sword_028.png
+4 p- alear_lord_sword_029.png
+C34
+3 p- alear_lord_sword_030.png
+3 p- alear_lord_sword_031.png
+3 p- alear_lord_sword_000.png
+C06
+C0D
+~~~
+/// - End of animation

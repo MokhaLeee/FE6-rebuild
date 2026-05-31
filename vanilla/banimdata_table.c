@@ -168,11 +168,15 @@ CONST_DATA struct BattleAnim gBanimTable[BANIM_MAX] = {
     [BANIM_10] = 
     {
         .abbr = "lorm_sw1",
-        .modes = BANIM_MODE_lorm_sw1,
-        .script = BANIM_SCR_lorm_sw1,
-        .oam_r = BANIM_OAMR_lorm_sw1,
-        // .oam_l = BANIM_OAML_lorm_sw1,
-        .pal = BANIM_PAL_lorm_sw1,
+        .modes = Anim_LordT0_Sword_sectiondata,
+        .script = Anim_LordT0_Sword_framedata,
+        .oam_r = Anim_LordT0_Sword_rtl,
+        .pal = Anim_LordT0_Sword_pal,
+
+        // .modes = BANIM_MODE_lorm_sw1,
+        // .script = BANIM_SCR_lorm_sw1,
+        // .oam_r = BANIM_OAMR_lorm_sw1,
+        // .pal = BANIM_PAL_lorm_sw1,
     },
 
     [BANIM_11] = 
