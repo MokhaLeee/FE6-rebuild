@@ -29,7 +29,7 @@ GAMEINFO_DATA struct PInfo const PInfoTable[] = {
 		.growth_def = 25,
 		.growth_res = 30,
 		.growth_lck = 60,
-		.banim_pal = { BANIM_PAL_01, BANIM_PAL_01 },
+		// .banim_pal = { BANIM_PAL_01, BANIM_PAL_01 },
 		.attributes = 0,
 		.support_info = &SupportInfo_Roy,
 	},
