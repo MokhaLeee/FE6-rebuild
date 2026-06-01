@@ -257,7 +257,7 @@ void ArenaUi_StartArenaBattle(ProcPtr proc)
 
     Proc_EndEach(ProcScr_GoldBox);
 
-    gAction.id = ACTION_16;
+    gAction.id = ACTION_ARENA;
 
     gActiveUnit->flags |= UNIT_FLAG_HAD_ACTION;
 

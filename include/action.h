@@ -27,13 +27,16 @@ enum
     ACTION_CHEST = 0x12,
     ACTION_SHOPPED = 0x14,
     // ACTION_ARENA,
-    ACTION_16 = 0x16,
+    ACTION_ARENA = 0x16,
     ACTION_USEITEM = 0x17,
     ACTION_TRADED = 0x18,
     ACTION_TRADED_SUPPLY = 0x19,
     ACTION_TRADED_NOCHANGES = 0x1A,
     ACTION_TRAPPED = 0x1B,
     ACTION_1C = 0x1C,
+
+    ACTION_AMT,
+    ACTION_MAX = 0x30,
 };
 
 // valid values for Action::suspend_point

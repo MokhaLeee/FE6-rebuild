@@ -40,7 +40,7 @@ bool DoVisitAction(ProcPtr proc);
 bool func_fe6_0802A274(ProcPtr proc);
 bool func_fe6_0802A2C0(ProcPtr proc);
 bool DoCombatAction(ProcPtr proc);
-bool func_fe6_0802A35C(ProcPtr proc);
+bool DoArenaAction(ProcPtr proc);
 bool DoRefreshAction(ProcPtr proc);
 bool DoTalkAction(ProcPtr proc);
 bool DoSupportAction(ProcPtr proc);
@@ -114,65 +114,6 @@ void SaveActionRand(void)
 void RestoreActionRand(void)
 {
     RandSetSt(gAction.action_rand_st);
-}
-
-bool DoAction(ProcPtr proc)
-{
-    gActiveUnit = GetUnit(gAction.instigator);
-
-    switch (gAction.id)
-    {
-
-    case ACTION_WAIT:
-    case ACTION_TRAPPED:
-        gActiveUnit->flags |= UNIT_FLAG_HAD_ACTION;
-        return TRUE;
-
-    case ACTION_RESCUE:
-        return DoRescueAction(proc);
-
-    case ACTION_DROP:
-        return DoRescueDropAction(proc);
-
-    case ACTION_VISIT:
-    case ACTION_SEIZE:
-        return DoVisitAction(proc);
-
-    case ACTION_COMBAT:
-        return DoCombatAction(proc);
-
-    case ACTION_STAFF:
-        DoItemAction(proc);
-        return FALSE;
-
-    case ACTION_REFRESH:
-        return DoRefreshAction(proc);
-
-    case ACTION_TALK:
-        return DoTalkAction(proc);
-
-    case ACTION_SUPPORT:
-        return DoSupportAction(proc);
-
-    case ACTION_DOOR:
-    case ACTION_CHEST:
-        DoItemAction(proc);
-        return FALSE;
-
-    case ACTION_STEAL:
-        return DoStealAction(proc);
-
-    case ACTION_16:
-        return func_fe6_0802A35C(proc);
-
-    case ACTION_USEITEM:
-        DoItemAction(proc);
-        return FALSE;
-
-    default:
-        return TRUE;
-
-    }
 }
 
 bool DoRescueAction(ProcPtr proc)
@@ -263,7 +204,7 @@ bool DoCombatAction(ProcPtr proc)
     return FALSE;
 }
 
-bool func_fe6_0802A35C(ProcPtr proc)
+bool DoArenaAction(ProcPtr proc)
 {
     SpawnProcLocking(ProcScr_ArenaAction, proc);
     return FALSE;

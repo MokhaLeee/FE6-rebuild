@@ -688,7 +688,7 @@ static bool ProcCmd_SetFlag2(struct ProcDummy * proc)
 
 static void StepProcScr(struct ProcDummy * proc)
 {
-    static bool (* funcLut[])(struct ProcDummy *) =
+    static bool (* const funcLut[])(struct ProcDummy *) =
     {
         [PROC_CMD_END] = ProcCmd_End,
         [PROC_CMD_NAME] = ProcCmd_Name,
