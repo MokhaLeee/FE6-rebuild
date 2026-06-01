@@ -528,7 +528,8 @@ fu8 UnitActionMenu_Attack_SwitchIn(struct MenuProc * menu, struct MenuEntProc * 
         int item = GetBallistaItemAt(gActiveUnit->x, gActiveUnit->y);
 
         if (item != 0)
-            MapIncInBoundedRange(gActiveUnit->x, gActiveUnit->y, GetItemMinRange(item), GetItemMaxRange(item));
+            MapIncInBoundedRange(gActiveUnit->x, gActiveUnit->y,
+                GetItemMinRange(item, gActiveUnit), GetItemMaxRange(item, gActiveUnit));
     }
 
     StartLimitView(LIMITVIEW_MMAP_BLUE | LIMITVIEW_RMAP_RED);
@@ -1130,7 +1131,8 @@ fu8 UnitAttackBallista_Entry_SwitchIn(struct MenuProc * menu, struct MenuEntProc
     item = GetBallistaItemAt(gActiveUnit->x, gActiveUnit->y);
     UpdateEquipInfoWindow(item);
 
-    MapIncInBoundedRange(gActiveUnit->x, gActiveUnit->y, GetItemMinRange(item), GetItemMaxRange(item));
+    MapIncInBoundedRange(gActiveUnit->x, gActiveUnit->y,
+        GetItemMinRange(item, gActiveUnit), GetItemMaxRange(item, gActiveUnit));
     StartLimitView(LIMITVIEW_RMAP_RED);
 
     return 0;

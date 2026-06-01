@@ -113,7 +113,7 @@ int GetUnitBattleAiScore(struct Unit * unit)
 
         if (GetItemAttributes(item) & ITEM_ATTR_WEAPON)
         {
-            int range = GetItemMaxRange(item);
+            int range = GetItemMaxRange(item, unit);
 
             if (range > 1)
                 rangedCnt++;

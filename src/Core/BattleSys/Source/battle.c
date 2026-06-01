@@ -326,7 +326,7 @@ void SetBattleUnitWeapon(struct BattleUnit *bu, int item_slot)
 				bu->weapon_attributes = bu->weapon_attributes &~ ITEM_ATTR_LIGHTBRAND;
 		}
 
-		if (!CanItemReachDistance(bu->weapon, gBattleSt.range) || bu->weapon_inventory_slot == 0xFF)
+		if (!CanItemReachDistance(bu->weapon, gBattleSt.range, &bu->unit) || bu->weapon_inventory_slot == 0xFF)
 		{
 			bu->weapon = 0;
 			bu->has_inventory_weapon = FALSE;

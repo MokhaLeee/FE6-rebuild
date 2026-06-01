@@ -208,7 +208,9 @@ void AiFillReversedAttackRangeMap(struct Unit * unit, u16 item)
     // reverse as in "this is the range this unit can be attacked *from*"
 
     MapFill(gMapRange, 0);
-    MapIncInBoundedRange(unit->x, unit->y, GetItemMinRange(item), GetItemMaxRange(item));
+
+    // <!> not unit! here is target! we should judge for AI!
+    MapIncInBoundedRange(unit->x, unit->y, GetItemMinRange(item, gActiveUnit), GetItemMaxRange(item, gActiveUnit));
 }
 
 void AiFloodMovementAndRange(struct Unit * unit, u16 move, u16 item)
@@ -229,7 +231,7 @@ void AiFloodMovementAndRange(struct Unit * unit, u16 move, u16 item)
             if (gMapMovement[iy][ix] > MAP_MOVEMENT_MAX)
                 continue;
 
-            MapIncInBoundedRange(ix, iy, GetItemMinRange(item), GetItemMaxRange(item));
+            MapIncInBoundedRange(ix, iy, GetItemMinRange(item, unit), GetItemMaxRange(item, unit));
         }
     }
 }
@@ -733,7 +735,7 @@ int AiGetInRangeCombatPositionScoreComponent(int x, int y, struct Unit * unit)
     if (item == 0)
         return 0;
 
-    if (dist > GetItemMaxRange(item) || dist < GetItemMinRange(item))
+    if (dist > GetItemMaxRange(item, unit) || dist < GetItemMinRange(item, unit))
         return 50;
 
     return 0;

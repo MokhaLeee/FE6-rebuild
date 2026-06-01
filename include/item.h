@@ -182,6 +182,7 @@ struct IInfo
     /* 1F */ u8 weapon_effect;
 };
 
+struct IInfo const * GetIInfo(int iid);
 int GetItemIid(int item);
 char const * GetItemName(int item);
 int GetItemDescMsg(int item);
@@ -195,9 +196,6 @@ int GetItemHit(int item);
 int GetItemWeight(int item);
 int GetItemCrit(int item);
 int GetItemValue(int item);
-int GetItemMinRange(int item);
-int GetItemMaxRange(int item);
-int GetItemEncodedRange(int item);
 int GetItemRequiredExp(int item);
 u8 const * GetItemEffectiveness(int item);
 struct ItemBonuses const * GetItemBonuses(int item);
@@ -224,10 +222,8 @@ void DrawItemStatScreenLine(struct Text * text, int item, bool is_usable, u16 * 
 u16 GetItemAfterUse(int item);
 u16 GetUnitEquippedWeapon(struct Unit * unit);
 int GetUnitEquippedWeaponSlot(struct Unit * unit);
-bool CanItemReachDistance(int item, int distance);
 void UnitEquipItemSlot(struct Unit * unit, int item_slot);
 bool IsItemEffectiveAgainst(u16 item, struct Unit * unit);
-char const * GetItemRangeString(int item);
 int GetWeaponLevelFromExp(int wexp);
 char const * GetWeaponLevelStringFromExp(int wexp);
 int GetWeaponLevelSpecialCharFromExp(int wexp);
@@ -238,10 +234,6 @@ int GetUnitItemHealAmount(struct Unit * unit, int item);
 int FindUnitItemSlot(struct Unit * unit, int iid);
 bool IsItemStealable(int item);
 bool IsItemRepairable(int item);
-int GetItemReach(int item);
-int GetUnitWeaponReach(struct Unit * unit, int item_slot);
-int GetUnitItemUseReach(struct Unit * unit, int item_slot);
-int GetUnitStaffReach(struct Unit * unit);
 int GetTotalConvoyItemsValue(void);
 int GetTotalUnitItemsValue(void);
 int GetTotalAsset(void);
@@ -256,3 +248,16 @@ enum { ITEM_USES_SHIFT = 8 };
 
 // pretending to be reasonable
 #define ITEM_KIND_DARK ITEM_KIND_ELDER
+
+/**
+ * range getter
+ */
+int GetItemMinRange(int item, struct Unit *unit);
+int GetItemMaxRange(int item, struct Unit *unit);
+int GetItemEncodedRange(int item);
+int GetItemReach(int item);
+int GetUnitWeaponReach(struct Unit *unit, int item_slot);
+int GetUnitItemUseReach(struct Unit *unit, int item_slot);
+int GetUnitStaffReach(struct Unit *unit);
+char const *GetItemRangeString(int item);
+bool CanItemReachDistance(int item, int distance, struct Unit *unit);

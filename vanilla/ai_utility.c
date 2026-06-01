@@ -264,7 +264,7 @@ bool AiReachesByBirdsEyeDistance(struct Unit * unit, struct Unit * other, u16 it
 {
     int maxDistance = RECT_DISTANCE(unit->x, unit->y, other->x, other->y);
 
-    if (maxDistance <= UNIT_MOV(unit) + GetItemMaxRange(item))
+    if (maxDistance <= UNIT_MOV(unit) + GetItemMaxRange(item, unit))
         return TRUE;
 
     return FALSE;
@@ -274,7 +274,7 @@ bool AiCouldReachByBirdsEyeDistance(struct Unit * unit, struct Unit * other, u16
 {
     int maxDistance = RECT_DISTANCE(unit->x, unit->y, other->x, other->y);
 
-    if (maxDistance <= UNIT_MOV(unit) + UNIT_MOV(other) + GetItemMaxRange(item))
+    if (maxDistance <= UNIT_MOV(unit) + UNIT_MOV(other) + GetItemMaxRange(item, unit))
         return TRUE;
 
     return FALSE;
@@ -684,7 +684,7 @@ void AiMakeMoveRangeMapsForUnitAndWeapon(struct Unit * unit, u16 item)
             if (gMapMovement[iy][ix] > MAP_MOVEMENT_MAX)
                 continue;
 
-            MapIncInBoundedRange(ix, iy, GetItemMinRange(item), GetItemMaxRange(item));
+            MapIncInBoundedRange(ix, iy, GetItemMinRange(item, unit), GetItemMaxRange(item, unit));
         }
     }
 }
@@ -724,7 +724,7 @@ void AiMakeMoveRangeMapsForUnitAndWeapon2(struct Unit * unit, u16 item)
             if (gMapMovement[iy][ix] > MAP_MOVEMENT_MAX)
                 continue;
 
-            MapIncInBoundedRange(ix, iy, GetItemMinRange(item), GetItemMaxRange(item));
+            MapIncInBoundedRange(ix, iy, GetItemMinRange(item, unit), GetItemMaxRange(item, unit));
         }
     }
 }
@@ -1171,7 +1171,7 @@ void func_fe6_08030994(struct Unit * unit, u16 item)
 {
     int flag = 0;
 
-    if ((GetItemAttributes(item) & ITEM_ATTR_WEAPON) && GetItemMaxRange(item) > 1)
+    if ((GetItemAttributes(item) & ITEM_ATTR_WEAPON) && GetItemMaxRange(item, unit) > 1)
         flag = AI_UNIT_FLAG_6;
 
     switch (GetItemEffect(item))

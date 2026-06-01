@@ -407,10 +407,10 @@ bool AiEquipGetFlags(u16 * equip_flags_out)
 
         if (GetItemAttributes(item) & ITEM_ATTR_WEAPON)
         {
-            if (GetItemMinRange(item) > 1)
+            if (GetItemMinRange(item, gActiveUnit) > 1)
                 equip_flags_out[i] |= AI_EQUIP_FLAG_RANGE;
 
-            if (GetItemMaxRange(item) == 1)
+            if (GetItemMaxRange(item, gActiveUnit) == 1)
                 equip_flags_out[i] |= AI_EQUIP_FLAG_MELEE;
 
             percent = Div(percent = GetItemUses(item) * 100, GetItemMaxUses(item));
@@ -462,10 +462,10 @@ void AiEquipGetDanger(int x, int y, u16 * range_danger_out, u16 * melee_danger_o
 
         might = AiGetUnitAttackAndWeapon(unit, &item);
 
-        if (GetItemMinRange(item) > 1)
+        if (GetItemMinRange(item, unit) > 1)
             *range_danger_out += might;
 
-        if (GetItemMaxRange(item) == 1)
+        if (GetItemMaxRange(item, unit) == 1)
             *melee_danger_out += might;
 
         for (iy = gMapSize.y - 1; iy >= 0; iy--)
@@ -662,7 +662,7 @@ bool AiTryCombatAt(int x, int y)
         return FALSE;
 
     MapFill(gMapMovement, 0);
-    MapIncInBoundedRange(x, y, GetItemMinRange(item), GetItemMaxRange(item));
+    MapIncInBoundedRange(x, y, GetItemMinRange(item, gActiveUnit), GetItemMaxRange(item, gActiveUnit));
 
     for (iy = gMapSize.y - 1; iy >= 0; iy--)
     {

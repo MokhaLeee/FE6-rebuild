@@ -146,7 +146,7 @@ void ListAttackTargetsForWeapon(struct Unit * unit, int item)
     BeginTargetList(x, y);
 
     MapFill(gMapRange, 0);
-    MapIncInBoundedRange(x, y, GetItemMinRange(item), GetItemMaxRange(item));
+    MapIncInBoundedRange(x, y, GetItemMinRange(item, unit), GetItemMaxRange(item, unit));
 
     ForEachUnitInRange(TryEnlistAttackUnitTarget);
     EnlistAttackObstacleTargets();
@@ -380,7 +380,7 @@ void func_fe6_08021278(struct Unit * unit)
     if (item != 0)
     {
         MapFill(gMapRange, 0);
-        MapIncInBoundedRange(x, y, GetItemMinRange(item), GetItemMaxRange(item));
+        MapIncInBoundedRange(x, y, GetItemMinRange(item, unit), GetItemMaxRange(item, unit));
 
         ForEachUnitInRange(func_fe6_08021240);
     }

@@ -569,7 +569,7 @@ void BuildUnitCompleteAttackRange(struct Unit * unit)
             item = GetBallistaItemAt(ix, iy);
 
             if (item)
-                MapIncInBoundedRange(ix, iy, GetItemMinRange(item), GetItemMaxRange(item));
+                MapIncInBoundedRange(ix, iy, GetItemMinRange(item, gActiveUnit), GetItemMaxRange(item, gActiveUnit));
         })
     }
 

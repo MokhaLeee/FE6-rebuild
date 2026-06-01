@@ -59,8 +59,8 @@ static char *ItemRangeToString(int min, int max)
 
 const char *GetItemRangeString(int item)
 {
-	int min = GetItemMinRange(item);
-	int max = GetItemMaxRange(item);
+	int min = GetItemMinRange(item, NULL);
+	int max = GetItemMaxRange(item, NULL);
 
 	if (GetItemEncodedRange(item) == 0xFF)
 		return "   全体";
