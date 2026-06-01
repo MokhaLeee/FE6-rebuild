@@ -58,9 +58,18 @@ static void auto_generate_left_oam(const struct BattleAnim *conf, void *oam_buf)
 			continue;
 		}
 
+		/**
+		 * ANIM_SPRITE_AFFIN 1, 0x00FC, 0x002C, 0xFFD4, 0x00FC
+		 * -->
+		 * ANIM_SPRITE_AFFIN 1, 0xFF04, 0x002C, 0x002C, 0x00FC
+		 */
 		if (cur[1] == 0xFFFF) {
-			printf("attr, skip at %d", i);
-			// ANIM_SPRITE_AFFIN, skip
+			// ANIM_SPRITE_AFFIN
+			i16 pa = cur[2];
+			i16 pc = cur[4];
+
+			cur[2] = -pa;
+			cur[4] = -pc;
 			continue;
 		}
 
@@ -72,7 +81,8 @@ static void auto_generate_left_oam(const struct BattleAnim *conf, void *oam_buf)
 		cur[3] = 0 - width * 8 - x;
 
 		// flip
-		cur[1] |= OAM1_HFLIP;
+		if (!(cur[0] & OAM0_AFFINE_ENABLE))
+			cur[1] |= OAM1_HFLIP;
 	}
 }
 #endif
