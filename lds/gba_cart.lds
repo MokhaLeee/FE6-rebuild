@@ -70,9 +70,9 @@ SECTIONS
 		*(.gameinfo_data*)
 		*(.content_data)
 		*(.content_data*)
+		. = ALIGN(4);
+		__rodata_end = .;
 	} >rom = 0xff
-
-	__rodata_end = .;
 
 	/**
 	 * EWRAM

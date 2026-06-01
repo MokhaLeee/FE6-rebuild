@@ -175,10 +175,12 @@ CLEAN_FILES += $(TSA_FILES:%.tsa=%.tsa.lz)
 
 BANIM_LDS := lds/linker_script_banim.txt
 
-ALL_BANIM_SCRS := $(shell find ./banims/ -type f -name "*.scr.S")
-ALL_BANIM_OAMS := $(shell find ./banims/ -type f -name "*.oam.s")
-ALL_BANIM_PALS := $(shell find ./banims/ -type f -name "*.agbpal")
-ALL_BANIM_IMGS := $(shell find ./banims/ -type f -name '*.png')
+ALL_BANIM_SCRS := $(shell find ./banims/vanilla -type f -name "*.scr.S")
+ALL_BANIM_OAMS := $(shell find ./banims/vanilla -type f -name "*.oam.s")
+ALL_BANIM_PALS := $(shell find ./banims/vanilla -type f -name "*.agbpal")
+ALL_BANIM_IMGS := $(shell find ./banims/vanilla -type f -name '*.png')
+
+ALL_BANIM_SCRS += $(shell find ./banims/demo -type f -name "*.banim.S")
 
 BANIM_TOOLS := tools/banimtools
 BANIM_LINKER := $(BANIM_TOOLS)/banim_compressing_linker.py
@@ -234,6 +236,10 @@ BANIM_PAL_GENERATED += $(ALL_BANIM_PALS:%=%.lz) $(ALL_BANIM_PALS:%=%.lz.o)
 BANIM_PAL_GENERATED += $(ALL_BANIM_PALS:%=%.lz.stripped) $(ALL_BANIM_PALS:%=%.lz.stripped.o)
 
 BANIM_IMG_GENERATED += $(ALL_BANIM_IMGS:%.png=%.4bpp) $(ALL_BANIM_IMGS:%.png=%.4bpp.lz) $(ALL_BANIM_IMGS:%.png=%.4bpp.lz.o)
+
+# demo banim data
+%.banim.S: %.banim.txt
+	@$(MAKE) -f banims/demo/makefile $@
 
 # =========
 # = Glyph =
