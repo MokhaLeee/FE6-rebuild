@@ -6,6 +6,8 @@
 #include "hardware.h"
 #include "constants/banims.h"
 
+#include "debug.h"
+
 #if CONFIG_AUTO_LEFT_OAM
 /**
 OAMR_0:
@@ -51,12 +53,13 @@ static void auto_generate_left_oam(const struct BattleAnim *conf, void *oam_buf)
 		i16 x;
 		u16 *cur = (u16 *)((u8 *)oam_buf + i);
 
-		if (cur[0] == 1) {
+		if (cur[0] == 1 && cur[1] == 0) {
 			// ANIM_SPRITE_END, skip
 			continue;
 		}
 
 		if (cur[1] == 0xFFFF) {
+			printf("attr, skip at %d", i);
 			// ANIM_SPRITE_AFFIN, skip
 			continue;
 		}
