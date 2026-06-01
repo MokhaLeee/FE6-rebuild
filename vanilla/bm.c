@@ -74,6 +74,8 @@ static void CamMove_OnLoop(struct CamMoveProc * proc);
 
 static void UnkMapCursor_OnLoop(struct UnkMapCursorProc * proc);
 
+extern void BMapMain_PrePhaseHook(ProcPtr proc);
+
 struct ProcScr CONST_DATA ProcScr_BmMain[] =
 {
     PROC_19,
@@ -103,6 +105,9 @@ PROC_LABEL(L_BMMAIN_STARTPHASE),
 
     PROC_START_CHILD_LOCKING(ProcScr_TerrainHealDisplay),
     PROC_START_CHILD_LOCKING(ProcScr_PoisonDamageDisplay),
+
+    PROC_CALL(BMapMain_PrePhaseHook),
+    PROC_YIELD,
 
     PROC_START_CHILD_LOCKING(ProcScr_InitPhaseCursor),
 
