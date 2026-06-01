@@ -382,7 +382,7 @@ static void PrepPhase_MapSwapSelectBegin(struct Proc * proc)
         info++;
     }
 
-    StartLimitView(LIMITVIEW_BLUE);
+    StartLimitView(LIMITVIEW_MMAP_BLUE);
 
     anim = StartSpriteAnim(SpriteAnim_08102450, 0);
     anim->oam2 = OAM2_CHR(OBCHR_SYSTEM_OBJECTS) + OAM2_PAL(OBPAL_SYSTEM_OBJECTS);

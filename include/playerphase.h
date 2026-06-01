@@ -32,9 +32,14 @@ enum
 
 enum
 {
-    LIMITVIEW_BLUE = (1 << 0),
-    LIMITVIEW_RED = (1 << 1),
-    LIMITVIEW_GREEN = (1 << 2),
+    LIMITVIEW_MMAP_BLUE = (1 << 0),  // MMAP
+    LIMITVIEW_RMAP_RED = (1 << 1),   // RMAP
+    LIMITVIEW_RMAP_GREEN = (1 << 2), // RMAP
+
+    /* CHAX */
+    LIMITVIEW_RMAP_BLUE = 1 << 4,
+    LIMITVIEW_MMAP_RED = 1 << 5,
+    LIMITVIEW_MMAP_GREEN = 1 << 6,
 };
 
 void PlayerPhase_Suspend(ProcPtr proc);

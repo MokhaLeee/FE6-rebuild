@@ -329,7 +329,7 @@ put_cursor:
 
 void DisplayUnitActionRange(struct Unit * unit)
 {
-    int flags = LIMITVIEW_BLUE;
+    int flags = LIMITVIEW_MMAP_BLUE;
 
     MapFlood_UpTo(gActiveUnit, UNIT_MOV(gActiveUnit) - gAction.move_count);
 
@@ -346,25 +346,25 @@ void DisplayUnitActionRange(struct Unit * unit)
             if (gBmSt.swap_action_range_count & 1)
             {
                 BuildUnitCompleteStaffRange(gActiveUnit);
-                flags = LIMITVIEW_GREEN | LIMITVIEW_BLUE;
+                flags = LIMITVIEW_RMAP_GREEN | LIMITVIEW_MMAP_BLUE;
             }
             else
             {
                 BuildUnitCompleteAttackRange(gActiveUnit);
-                flags = LIMITVIEW_RED | LIMITVIEW_BLUE;
+                flags = LIMITVIEW_RMAP_RED | LIMITVIEW_MMAP_BLUE;
             }
 
             break;
 
         case UNIT_USEBIT_STAFF:
             BuildUnitCompleteStaffRange(gActiveUnit);
-            flags = LIMITVIEW_GREEN | LIMITVIEW_BLUE;
+            flags = LIMITVIEW_RMAP_GREEN | LIMITVIEW_MMAP_BLUE;
 
             break;
 
         case UNIT_USEBIT_WEAPON:
             BuildUnitCompleteAttackRange(gActiveUnit);
-            flags = LIMITVIEW_RED | LIMITVIEW_BLUE;
+            flags = LIMITVIEW_RMAP_RED | LIMITVIEW_MMAP_BLUE;
 
             break;
 
@@ -921,23 +921,11 @@ void LimitView_Init(struct Proc * proc)
     InitBmBgLayers();
 }
 
-void LimitView_Loop(struct Proc * proc)
-{
-    int frame = (GetGameTime() / 2) & 0x1F;
 
-    if (proc->unk4A & LIMITVIEW_BLUE)
-        ApplyPaletteExt(Pal_LimitViewBlue + frame, 0x20*BGPAL_LIMITVIEW + 2, 0x20);
-
-    if (proc->unk4A & LIMITVIEW_RED)
-        ApplyPaletteExt(Pal_LimitViewRed + frame, 0x20*(BGPAL_LIMITVIEW+1) + 2, 0x20);
-
-    if (proc->unk4A & LIMITVIEW_GREEN)
-        ApplyPaletteExt(Pal_LimitViewGreen + frame, 0x20*(BGPAL_LIMITVIEW+1) + 2, 0x20);
-}
 
 void LimitView_Deinit(struct Proc * proc)
 {
-    if (proc->unk4A & LIMITVIEW_BLUE)
+    if (proc->unk4A & LIMITVIEW_MMAP_BLUE)
     {
         TmFill(gBg2Tm, 0);
         EnableBgSync(BG2_SYNC_BIT);

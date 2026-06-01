@@ -531,7 +531,7 @@ fu8 UnitActionMenu_Attack_SwitchIn(struct MenuProc * menu, struct MenuEntProc * 
             MapIncInBoundedRange(gActiveUnit->x, gActiveUnit->y, GetItemMinRange(item), GetItemMaxRange(item));
     }
 
-    StartLimitView(LIMITVIEW_BLUE | LIMITVIEW_RED);
+    StartLimitView(LIMITVIEW_MMAP_BLUE | LIMITVIEW_RMAP_RED);
 
     return 0;
 }
@@ -597,7 +597,7 @@ fu8 UnitAttackItemMenu_Entry_SwitchIn(struct MenuProc * menu, struct MenuEntProc
     reach = GetUnitWeaponReach(gActiveUnit, ent->id);
     BuildUnitStandingRangeForReach(gActiveUnit, reach);
 
-    StartLimitView(LIMITVIEW_RED);
+    StartLimitView(LIMITVIEW_RMAP_RED);
 
     return 0;
 }
@@ -1131,7 +1131,7 @@ fu8 UnitAttackBallista_Entry_SwitchIn(struct MenuProc * menu, struct MenuEntProc
     UpdateEquipInfoWindow(item);
 
     MapIncInBoundedRange(gActiveUnit->x, gActiveUnit->y, GetItemMinRange(item), GetItemMaxRange(item));
-    StartLimitView(LIMITVIEW_RED);
+    StartLimitView(LIMITVIEW_RMAP_RED);
 
     return 0;
 }
@@ -1186,7 +1186,7 @@ fu8 UnitActionMenu_Staff_SwitchIn(struct MenuProc * menu, struct MenuEntProc * e
     MapFill(gMapRange, 0);
 
     BuildUnitStandingRangeForReach(gActiveUnit, reach);
-    StartLimitView(LIMITVIEW_BLUE | LIMITVIEW_GREEN);
+    StartLimitView(LIMITVIEW_MMAP_BLUE | LIMITVIEW_RMAP_GREEN);
 
     return 0;
 }
@@ -1237,7 +1237,7 @@ fu8 UnitStaffItemMenu_Entry_SwitchIn(struct MenuProc * menu, struct MenuEntProc 
     MapFill(gMapRange, 0);
 
     BuildUnitStandingRangeForReach(gActiveUnit, reach);
-    StartLimitView(LIMITVIEW_GREEN);
+    StartLimitView(LIMITVIEW_RMAP_GREEN);
 
     return 0;
 }
