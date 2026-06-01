@@ -113,7 +113,7 @@ TEXT_DEFS := $(TEXT_DIR)/textdefs.txt
 TEXT_SRC  := $(TEXT_MAIN) $(shell find $(TEXT_DIR) -type f -name "*.txt")
 
 TEXT_HEADER := include/constants/msg.h
-MSG_LIST    := vanilla/msg_data.c
+MSG_LIST    := $(TEXT_DIR)/msg_generated.c
 
 # this should just be used for testing
 $(TEXT_MAIN):
