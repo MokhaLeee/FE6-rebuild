@@ -360,9 +360,8 @@ C_GENERATED_OBJ += $(C_GENERATED:%.c=%.o)
 C_GENERATED_OBJ += $(ALL_BANIM_SCR_OBJS)
 
 # pre-generate new c files
-ALL_OBJS : $(C_GENERATED)
+ALL_OBJS += $(C_GENERATED_OBJ)
 
-ALL_OBJS := $(sort $(ALL_OBJS) $(C_GENERATED_OBJ))
 CLEAN_FILES += $(ALL_OBJS) $(ALL_OBJS:%.o=%.asm) $(ALL_DEPS)
 CLEAN_FILES += $(VANILLA_SRCS:%.c=%.asm)
 
