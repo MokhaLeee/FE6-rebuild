@@ -5,10 +5,12 @@ const int BattleAnimCharaPal_count = 0x66;
 const int BattleAnimCharaPal_size  = 0x30A4;
 
 const struct BattleAnimCharaPal gBanimCharaPalTable[] = {
+#if 0
 	{
 		.abbr = "roy",
 		.pal = Pal_BanimChar_087FC800,
 	},
+#endif
 	{
 		.abbr = "wolt",
 		.pal = Pal_BanimChar_087FC858,

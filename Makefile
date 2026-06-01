@@ -120,7 +120,7 @@ $(TEXT_MAIN):
 	@echo "[GEN]	$@"
 	@$(TEXT_DECODER) > $@
 
-$(MSG_LIST) $(TEXT_HEADER): $(TEXT_SRC) $(TEXT_DEFS)
+$(MSG_LIST): $(TEXT_SRC) $(TEXT_DEFS)
 	@echo "[GEN]	$@"
 	@$(TEXT_PROCESS) $(TEXT_MAIN) $(TEXT_DEFS) $(MSG_LIST) $(TEXT_HEADER) utf8
 
@@ -349,9 +349,14 @@ ifneq (clean,$(MAKECMDGOALS))
 endif
 
 # some external no-need dependent objects
-ALL_OBJS += $(C_GENERATED:%.c=%.o)
-ALL_OBJS += $(ALL_BANIM_SCR_OBJS)
+C_GENERATED_OBJ :=
+C_GENERATED_OBJ += $(C_GENERATED:%.c=%.o)
+C_GENERATED_OBJ += $(ALL_BANIM_SCR_OBJS)
 
+# pre-generate new c files
+ALL_OBJS : $(C_GENERATED)
+
+ALL_OBJS := $(sort $(ALL_OBJS) $(C_GENERATED_OBJ))
 CLEAN_FILES += $(ALL_OBJS) $(ALL_OBJS:%.o=%.asm) $(ALL_DEPS)
 CLEAN_FILES += $(VANILLA_SRCS:%.c=%.asm)
 
