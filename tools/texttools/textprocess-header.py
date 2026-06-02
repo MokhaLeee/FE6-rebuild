@@ -27,14 +27,6 @@ def debug_printf(fmt, *args):
     if DEBUG:
         print(fmt % args)
 
-def GenerateFreqTable(data):
-    freq_table = [0] * 0x10000
-
-    for value in data:
-        freq_table[value] += 1
-
-    return freq_table
-
 def load_control_chars(parse_ref):
     control_chars = {}
     with open(parse_ref, 'r', encoding='utf-8') as file:
@@ -207,75 +199,23 @@ def write_header(messages, header_file):
     header_file.write(f"\n#define MSG_COUNT 0x{(len(messages)):04X}\n")
     header_file.write("\n#endif /* MSG_H */\n")
 
-def write_all_compressed_data(messages, code_table, data_file):
-    for msg in messages:
-        data_file.write(f"static const u8 CompressedText_{msg.definiation}[] = " + "{")
-        for data in huffman.CompressData(msg.data, code_table):
-            data_file.write(f"0x{data:02X}, ")
-        data_file.write("};\n")
-
-def write_text_table(messages, data_file):
-    data_file.write("const u8 * const gMsgTable[] = {")
-    for i, msg in enumerate(messages):
-        if i % 8 == 0:
-            data_file.write("\n    ")
-        else:
-            data_file.write(" ")
-
-        data_file.write(f"CompressedText_{msg.definiation},")
-    data_file.write("\n};\n")
-
-def write_huffman_table(huffman_table, data_file):
-    data_file.write("const u32 gMsgHuffmanTable[] = {")
-    for i, branch in enumerate(huffman_table):
-        if i % 8 == 0:
-            data_file.write("\n    ")
-        else:
-            data_file.write(" ")
-
-        data_file.write(f"0x{branch:08X},")
-    data_file.write("\n};\n\n")
-    data_file.write(f"const u32 * const gMsgHuffmanTableRoot = gMsgHuffmanTable + 0x{(len(huffman_table) - 1):04X};\n")
-
-def dump_msg(messages):
-    for msg in messages:
-        print(f"MSG_{msg.idx:04X}: ", end="")
-        for data in msg.data:
-            print(f"0x{data:04X} ", end="")
-        print("")
-
 def main(args):
     try:
         input_fpath = args[0]
         input_parse_ref = args[1]
-        output_data = args[2]
+        output_header = args[2]
         encoding_method = args[3]
 
     except IndexError:
-        sys.exit(f"Usage: {sys.argv[0]} <text-main> <defs> <output_data> <'cp932' or 'utf8'>")
+        sys.exit(f"Usage: {sys.argv[0]} <text-main> <defs> <output_header> <'cp932' or 'utf8'>")
+
 
     control_chars = load_control_chars(input_parse_ref)
     messages = []
     messages, _unused_ = process_file(messages, input_fpath, control_chars, encoding_method)
 
-    for msg in messages:
-        all_data.extend(msg.data)
-
-    # generate huffman
-    freq_table = GenerateFreqTable(all_data)
-
-    huff_tree = huffman.BuildHuffmanTree(freq_table)
-
-    huffman_table = huffman.BuildHuffmanTable()
-    code_table = huffman.build_code_table(huff_tree)
-
-    # output
-    with open(output_data, 'w', encoding='utf-8') as data_file:
-        data_file.write('#include "prelude.h"\n')
-        write_huffman_table(huffman_table, data_file)
-        write_all_compressed_data(messages, code_table, data_file)
-        write_text_table(messages, data_file)
-        data_file.write("\n")
+    with open(output_header, 'w', encoding='utf-8') as header_file:
+        write_header(messages, header_file)
 
 if __name__ == '__main__':
 	main(sys.argv[1:])

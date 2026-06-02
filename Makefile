@@ -106,6 +106,7 @@ TEXT_TOOLS := tools/texttools
 TEXT_DECODER := $(PYTHON)  $(TEXT_TOOLS)/textdecoder.py
 TEXT_DPARSER := $(PYTHON) $(TEXT_TOOLS)/textdeparser.py
 TEXT_PROCESS := $(PYTHON) $(TEXT_TOOLS)/textprocess-chax.py
+TEXT_PROCESS_HD := $(PYTHON) $(TEXT_TOOLS)/textprocess-header.py
 TEXT_ENCODE := tools/textencode/textencode
 
 TEXT_MAIN := $(TEXT_DIR)/texts.txt
@@ -122,7 +123,11 @@ $(TEXT_MAIN):
 
 $(MSG_LIST): $(TEXT_SRC) $(TEXT_DEFS)
 	@echo "[GEN]	$@"
-	@$(TEXT_PROCESS) $(TEXT_MAIN) $(TEXT_DEFS) $(MSG_LIST) $(TEXT_HEADER) utf8
+	@$(TEXT_PROCESS) $(TEXT_MAIN) $(TEXT_DEFS) $@ utf8
+
+$(TEXT_HEADER): $(TEXT_SRC) $(TEXT_DEFS)
+	@echo "[GEN]	$@"
+	$(TEXT_PROCESS_HD) $(TEXT_MAIN) $(TEXT_DEFS) $@ utf8
 
 C_GENERATED += $(MSG_LIST)
 CLEAN_FILES += $(MSG_LIST) # $(TEXT_HEADER)
