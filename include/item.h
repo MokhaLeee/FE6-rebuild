@@ -122,22 +122,6 @@ enum
 
 enum
 {
-    // Unit ranges are a (sometimes) weirdly hardcoded.
-    // A bitset value is used to represent the combined ranges of a unit's usable items
-    // That's what those "reaches" bits are for.
-
-    REACH_NONE   = 0,
-
-    REACH_RANGE1 = (1 << 0),
-    REACH_RANGE2 = (1 << 1),
-    REACH_RANGE3 = (1 << 2),
-    REACH_TO10   = (1 << 3),
-    REACH_TO15   = (1 << 4),
-    REACH_TOMAG  = (1 << 5),
-};
-
-enum
-{
     WEAPON_EFFECT_POISON = 1,
     WEAPON_EFFECT_NOSFERATU = 2,
     WEAPON_EFFECT_ECLIPSE = 3,
@@ -252,10 +236,32 @@ enum { ITEM_USES_SHIFT = 8 };
 /**
  * range getter
  */
+enum
+{
+    // Unit ranges are a (sometimes) weirdly hardcoded.
+    // A bitset value is used to represent the combined ranges of a unit's usable items
+    // That's what those "reaches" bits are for.
+
+    REACH_NONE   = 0,
+
+    REACH_RANGE1 = (1 << 0),
+    REACH_RANGE2 = (1 << 1),
+    REACH_RANGE3 = (1 << 2),
+    REACH_RANGE4 = (1 << 3),
+    REACH_RANGE5 = (1 << 4),
+    REACH_RANGE6 = (1 << 5),
+    REACH_RANGE7 = (1 << 6),
+    REACH_RANGE8 = (1 << 7),
+    REACH_RANGE9 = (1 << 8),
+
+    REACH_TO10   = (1 << 9),
+    REACH_TO15   = (1 << 14),
+    REACH_TOMAG  = (1 << 30),
+};
+
 int GetItemMinRange(int item, struct Unit *unit);
 int GetItemMaxRange(int item, struct Unit *unit);
 int GetItemEncodedRange(int item);
-int GetItemReach(int item);
 int GetUnitWeaponReach(struct Unit *unit, int item_slot);
 int GetUnitItemUseReach(struct Unit *unit, int item_slot);
 int GetUnitStaffReach(struct Unit *unit);

@@ -32,7 +32,7 @@ int GetItemEncodedRange(int item)
  * usage
  */
 
-int GetItemReach(int item)
+static int get_item_reach(int item, struct Unit *unit)
 {
 	switch (GetItemEncodedRange(item)) {
 	case 0x11:
@@ -80,11 +80,11 @@ int GetUnitWeaponReach(struct Unit *unit, int item_slot)
 	int i, item, result = 0;
 
 	if (item_slot >= 0)
-		return GetItemReach(unit->items[item_slot]);
+		return get_item_reach(unit->items[item_slot], unit);
 
 	for (i = 0; (i < ITEMSLOT_INV_COUNT) && (item = unit->items[i]); ++i) {
 		if (CanUnitUseWeapon(unit, item))
-			result |= GetItemReach(item);
+			result |= get_item_reach(item, unit);
 	}
 
 	return result;
