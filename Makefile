@@ -82,7 +82,7 @@ SHASUM ?= sha1sum
 # = BUILD CONFIG =
 # ================
 
-C_GENERATED :=
+C_GENERATED_OBJ :=
 
 VANILLA_DIR := vanilla
 HACK_SRC  := src
@@ -129,10 +129,8 @@ $(TEXT_HEADER): $(TEXT_SRC) $(TEXT_DEFS)
 	@echo "[GEN]	$@"
 	$(TEXT_PROCESS_HD) $(TEXT_MAIN) $(TEXT_DEFS) $@ utf8
 
-C_GENERATED += $(MSG_LIST)
+C_GENERATED_OBJ += $(MSG_LIST:%.c=%.o)
 CLEAN_FILES += $(MSG_LIST) # $(TEXT_HEADER)
-
-msg : $(MSG_LIST)
 
 # ============
 # = Spritans =
@@ -241,6 +239,9 @@ BANIM_PAL_GENERATED += $(ALL_BANIM_PALS:%=%.lz) $(ALL_BANIM_PALS:%=%.lz.o)
 BANIM_PAL_GENERATED += $(ALL_BANIM_PALS:%=%.lz.stripped) $(ALL_BANIM_PALS:%=%.lz.stripped.o)
 
 BANIM_IMG_GENERATED += $(ALL_BANIM_IMGS:%.png=%.4bpp) $(ALL_BANIM_IMGS:%.png=%.4bpp.lz) $(ALL_BANIM_IMGS:%.png=%.4bpp.lz.o)
+
+# append objects
+C_GENERATED_OBJ += $(ALL_BANIM_SCR_OBJS)
 
 # demo banim data
 %.banim.S: %.banim.txt
@@ -358,11 +359,6 @@ ifneq (clean,$(MAKECMDGOALS))
   -include $(ALL_DEPS)
   .PRECIOUS: %.d
 endif
-
-# some external no-need dependent objects
-C_GENERATED_OBJ :=
-C_GENERATED_OBJ += $(C_GENERATED:%.c=%.o)
-C_GENERATED_OBJ += $(ALL_BANIM_SCR_OBJS)
 
 # pre-generate new c files
 ALL_OBJS += $(C_GENERATED_OBJ)
