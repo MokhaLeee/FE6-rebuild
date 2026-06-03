@@ -1,6 +1,7 @@
 #include "prelude.h"
 #include "ai.h"
 #include "faction.h"
+#include "item.h"
 #include "oam.h"
 #include "util.h"
 #include "mu.h"
@@ -33,6 +34,12 @@ static void setup_status(void)
 	unit = GetUnitByPid(PID_LUGH);
 	if (unit)
 		unit->exp = 99;
+
+	unit = GetUnitByPid(PID_ELEN);
+	if (unit) {
+		unit->wexp[ITEM_KIND_STAFF] = WEXP_S;
+		unit->wexp[ITEM_KIND_LIGHT] = WEXP_S;
+	}
 }
 
 static struct UnitInfo const UnitInfo_Chapter1_BlueA[] =
@@ -48,7 +55,7 @@ static struct UnitInfo const UnitInfo_Chapter1_BlueB[] =
 	{ PID_BORS, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 1, 20, 3, 19, { IID_IRONLANCE, IID_VULNERARY }, { 0 } },
 	{ PID_WOLT, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 2, 20, 2, 16, { IID_IRONBOW, IID_VULNERARY, IID_BALLISTA }, { 0 } },
 	{ PID_LUGH, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 3, 20, 2, 16, { IID_FIRE }, { 0 } },
-	{ PID_ELEN, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 3, 20, 3, 16, { IID_LIGHTNING, IID_BARRIERSTAFF }, { 0 } },
+	{ PID_ELEN, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 3, 20, 3, 16, { IID_LIGHTNING, IID_BARRIERSTAFF, IID_SAINTSSTAFF, IID_SLEEPSTAFF }, { 0 } },
 	{ 0 }, // end
 };
 

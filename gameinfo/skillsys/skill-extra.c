@@ -12,4 +12,6 @@ struct SkillExtraInfo const gSkillExtraInfo[MAX_SKILL_NUM] = {
 	[SID_BlowDuelist] = {{ 20 }},
 	[SID_BlowUncanny] = {{ 30 }},
 	[SID_BlowKilling] = {{ 20 }},
+	[SID_RANGEBONUS1] = {{ 1 }},
+	[SID_RANGEBONUS2] = {{ 2 }},
 };

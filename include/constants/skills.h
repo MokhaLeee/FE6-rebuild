@@ -17,6 +17,10 @@ enum skills {
 	SID_BlowUncanny,
 	SID_BlowKilling,
 
+	// range skills
+	SID_RANGEBONUS1,
+	SID_RANGEBONUS2,
+
 	// Misc battle skills
 	SID_Nihil,
 

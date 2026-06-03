@@ -16,7 +16,7 @@
 #include "save-hw.h"
 #include "debug.h"
 
-#define LOCAL_TRACE 1
+#define LOCAL_TRACE 0
 
 #if CONFIG_SECTOR_OPERATION_IN_4K
 

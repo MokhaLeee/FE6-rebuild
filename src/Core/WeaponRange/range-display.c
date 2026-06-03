@@ -4,209 +4,72 @@
 #include "mapwork.h"
 #include "trap.h"
 
-#define FOR_EACH_IN_MOVEMENT_RANGE(block) \
-	for (iy = gMapSize.y - 1; iy >= 0; --iy) { \
-		for (ix = gMapSize.x - 1; ix >= 0; --ix) { \
-			if (gMapMovement[iy][ix] > MAP_MOVEMENT_MAX) \
-				continue; \
-			if (gMapUnit[iy][ix]) \
-				continue; \
-			block \
-		} \
-	}
-
 void BuildUnitCompleteAttackRange(struct Unit *unit)
 {
 	int ix, iy;
-	int item;
+	u32 mask;
+
+	mask = GetUnitWeaponReach(unit, -1);
 
 	MapFill(gMapRange, 0);
 
-	switch (GetUnitWeaponReach(unit, -1)) {
-	case REACH_RANGE1:
-		FOR_EACH_IN_MOVEMENT_RANGE({
-			MapIncInBoundedRange(ix, iy, 1, 1);
-		})
+	if (UNIT_ATTRIBUTES(unit) & UNIT_ATTR_BALLISTA) {
+		for (iy = gMapSize.y - 1; iy >= 0; --iy) {
+			for (ix = gMapSize.x - 1; ix >= 0; --ix) {
+				int ballista;
 
-		break;
+				if (gMapMovement[iy][ix] > MAP_MOVEMENT_MAX)
+					continue;
+				if (gMapUnit[iy][ix])
+					continue;
 
-	case REACH_RANGE1 | REACH_RANGE2:
-		FOR_EACH_IN_MOVEMENT_RANGE({
-			MapIncInBoundedRange(ix, iy, 1, 2);
-		})
+				AddMap(ix, iy, mask);
 
-		break;
-
-	case REACH_RANGE1 | REACH_RANGE2 | REACH_RANGE3:
-		FOR_EACH_IN_MOVEMENT_RANGE({
-			MapIncInBoundedRange(ix, iy, 1, 3);
-		})
-
-		break;
-
-	case REACH_RANGE2:
-		FOR_EACH_IN_MOVEMENT_RANGE({
-			MapIncInBoundedRange(ix, iy, 2, 2);
-		})
-
-		break;
-
-	case REACH_RANGE2 | REACH_RANGE3:
-		FOR_EACH_IN_MOVEMENT_RANGE({
-			MapIncInBoundedRange(ix, iy, 2, 3);
-		})
-
-		break;
-
-	case REACH_RANGE3:
-		FOR_EACH_IN_MOVEMENT_RANGE({
-			MapIncInBoundedRange(ix, iy, 3, 3);
-		})
-
-		break;
-
-	case REACH_RANGE3 | REACH_TO10:
-		FOR_EACH_IN_MOVEMENT_RANGE({
-			MapIncInBoundedRange(ix, iy, 3, 10);
-		})
-
-		break;
-
-	case REACH_RANGE1 | REACH_RANGE3:
-		FOR_EACH_IN_MOVEMENT_RANGE({
-			MapIncInBoundedRange(ix, iy, 1, 1);
-			MapIncInBoundedRange(ix, iy, 3, 3);
-		})
-
-		break;
-
-	case REACH_RANGE1 | REACH_RANGE3 | REACH_TO10:
-		FOR_EACH_IN_MOVEMENT_RANGE({
-			MapIncInBoundedRange(ix, iy, 1, 1);
-			MapIncInBoundedRange(ix, iy, 3, 10);
-		})
-
-		break;
-
-	case REACH_RANGE1 | REACH_RANGE2 | REACH_RANGE3 | REACH_TO10:
-		FOR_EACH_IN_MOVEMENT_RANGE({
-			MapIncInBoundedRange(ix, iy, 1, 10);
-		})
-
-		break;
-
+				ballista = GetBallistaItemAt(ix, iy);
+				if (ballista)
+					MapIncInBoundedRange(ix, iy,
+						GetItemMinRange(ballista, unit), GetItemMaxRange(ballista, unit));
+			}
+		}
+		goto goto_ret;
 	}
 
-	// BUG: this should be unit not gActiveUnit
-	if (UNIT_ATTRIBUTES(gActiveUnit) & UNIT_ATTR_BALLISTA) {
-		FOR_EACH_IN_MOVEMENT_RANGE({
-			item = GetBallistaItemAt(ix, iy);
+	for (iy = gMapSize.y - 1; iy >= 0; --iy) {
+		for (ix = gMapSize.x - 1; ix >= 0; --ix) {
+			if (gMapMovement[iy][ix] > MAP_MOVEMENT_MAX)
+				continue;
+			if (gMapUnit[iy][ix])
+				continue;
 
-			if (item)
-				MapIncInBoundedRange(ix, iy, GetItemMinRange(item, gActiveUnit), GetItemMaxRange(item, gActiveUnit));
-		})
+			AddMap(ix, iy, mask);
+		}
 	}
 
-	#undef FOR_EACH_IN_MOVEMENT_RANGE
-
+goto_ret:
 	SetWorkingMap(gMapMovement);
 }
 
 void BuildUnitStandingRangeForReach(struct Unit *unit, int reach)
 {
-	int x = unit->x;
-	int y = unit->y;
-
-	switch (reach) {
-	case REACH_RANGE1:
-		MapIncInBoundedRange(x, y, 1, 1);
-		break;
-
-	case REACH_RANGE1 | REACH_RANGE2:
-		MapIncInBoundedRange(x, y, 1, 2);
-		break;
-
-	case REACH_RANGE1 | REACH_RANGE2 | REACH_RANGE3:
-		MapIncInBoundedRange(x, y, 1, 3);
-		break;
-
-	case REACH_RANGE2:
-		MapIncInBoundedRange(x, y, 2, 2);
-		break;
-
-	case REACH_RANGE2 | REACH_RANGE3:
-		MapIncInBoundedRange(x, y, 2, 3);
-		break;
-
-	case REACH_RANGE3:
-		MapIncInBoundedRange(x, y, 3, 3);
-		break;
-
-	case REACH_RANGE3 | REACH_TO10:
-		MapIncInBoundedRange(x, y, 3, 10);
-		break;
-
-	case REACH_RANGE1 | REACH_RANGE3:
-		MapIncInBoundedRange(x, y, 1, 1);
-		MapIncInBoundedRange(x, y, 3, 3);
-		break;
-
-	case REACH_RANGE1 | REACH_RANGE3 | REACH_TO10:
-		MapIncInBoundedRange(x, y, 1, 1);
-		MapIncInBoundedRange(x, y, 3, 10);
-		break;
-
-	case REACH_RANGE1 | REACH_RANGE2 | REACH_RANGE3 | REACH_TO10:
-		MapIncInBoundedRange(x, y, 1, 10);
-		break;
-
-	case REACH_TOMAG:
-		MapIncInBoundedRange(x, y, 1, GetUnitMagRange(unit));
-		break;
-
-	}
+	AddMap(unit->x, unit->y, reach);
 }
 
 void BuildUnitCompleteStaffRange(struct Unit *unit)
 {
 	int ix, iy;
-
-	int magRange, reach = GetUnitStaffReach(gActiveUnit);
+	int reach = GetUnitStaffReach(gActiveUnit);
 
 	MapFill(gMapRange, 0);
 
-	magRange = GetUnitMagRange(unit);
+	for (iy = gMapSize.y - 1; iy >= 0; --iy) {
+		for (ix = gMapSize.x - 1; ix >= 0; --ix) {
+			if (gMapMovement[iy][ix] > MAP_MOVEMENT_MAX)
+				continue;
 
-	#define FOR_EACH_IN_MOVEMENT_RANGE(block) \
-		for (iy = gMapSize.y - 1; iy >= 0; --iy) { \
-			for (ix = gMapSize.x - 1; ix >= 0; --ix) { \
-				if (gMapMovement[iy][ix] > MAP_MOVEMENT_MAX) \
-					continue; \
-				block \
-			} \
+			if (gMapUnit[iy][ix])
+				continue;
+
+			AddMap(ix, iy, reach);
 		}
-
-	switch (reach) {
-	case REACH_RANGE1:
-		FOR_EACH_IN_MOVEMENT_RANGE({
-			MapIncInBoundedRange(ix, iy, 1, 1);
-		})
-
-		break;
-
-	case REACH_RANGE1 | REACH_RANGE2:
-		FOR_EACH_IN_MOVEMENT_RANGE({
-			MapIncInBoundedRange(ix, iy, 1, 2);
-		})
-
-		break;
-
-	case REACH_TOMAG:
-		FOR_EACH_IN_MOVEMENT_RANGE({
-			MapIncInBoundedRange(ix, iy, 1, magRange);
-		})
-
-		break;
-
 	}
 }

@@ -2,6 +2,13 @@
 #include "unit.h"
 #include "item.h"
 #include "itemuse.h"
+#include "mapwork.h"
+
+#include "debug.h"
+#include "skill-sys.h"
+#include "constants/skills.h"
+
+#define LOCAL_TRACE 0
 
 int GetItemMinRange(int item, struct Unit *unit)
 {
@@ -17,10 +24,55 @@ int GetItemMaxRange(int item, struct Unit *unit)
 {
 	int ret = GetIInfo(ITEM_IID(item))->encoded_range & 0xF;
 
+	if (ret == 0)
+		ret = GetUnitMagRange(unit);
+
 	if (unit) {
+		if (SkillFastTester(unit, SID_RANGEBONUS1))
+			ret += SKILL_EFF0(SID_RANGEBONUS1);
+
+		if (SkillFastTester(unit, SID_RANGEBONUS2))
+			ret += SKILL_EFF0(SID_RANGEBONUS2);
 	}
 
 	return ret;
+}
+
+void AddMap(int x, int y, u32 mask)
+{
+	int i;
+	int pre = 0;
+	u32 ref_mask = 1 << 31;
+
+	for (i = 31; i >= 0; i--) {
+		if ((ref_mask & mask)) {
+			/* 1 */
+			if (pre != 1) {
+				LTRACEF("addmap+1 at x=%d, y=%d, i=%d", x, y, i);
+				MapAddInRange(x, y, i, 1);
+				pre = 1;
+			}
+		} else {
+			/* 0 */
+			if (pre != 0) {
+				LTRACEF("addmap-1 at x=%d, y=%d, i=%d", x, y, i);
+				MapAddInRange(x, y, i, -1);
+				pre = 0;
+			}
+		}
+
+		ref_mask = ref_mask >> 1;
+	}
+}
+
+void AddMapForItem(struct Unit *unit, u16 item)
+{
+	MapIncInBoundedRange(
+		unit->x,
+		unit->y,
+		GetItemMinRange(item, unit),
+		GetItemMaxRange(item, unit)
+	);
 }
 
 int GetItemEncodedRange(int item)
@@ -31,37 +83,29 @@ int GetItemEncodedRange(int item)
 /**
  * usage
  */
+static  u32 get_range_mask(int min, int max)
+{
+	int i;
+	u32 mask = 0;
+
+	for (i = 0; i < 32; i++) {
+		if (i < min)
+			continue;
+
+		if (i > max)
+			continue;
+
+		mask |= 1 << i;
+	}
+	return mask;
+}
 
 static int get_item_reach(int item, struct Unit *unit)
 {
-	switch (GetItemEncodedRange(item)) {
-	case 0x11:
-		return REACH_RANGE1;
+	int min = GetItemMinRange(item, unit);
+	int max = GetItemMaxRange(item, unit);
 
-	case 0x12:
-		return REACH_RANGE1 | REACH_RANGE2;
-
-	case 0x13:
-		return REACH_RANGE1 | REACH_RANGE2 | REACH_RANGE3;
-
-	case 0x22:
-		return REACH_RANGE2;
-
-	case 0x23:
-		return REACH_RANGE2 | REACH_RANGE3;
-
-	case 0x33:
-		return REACH_RANGE3;
-
-	case 0x3A:
-		return REACH_RANGE3 | REACH_TO10;
-
-	case 0x3F:
-		return REACH_RANGE3 | REACH_TO15;
-
-	default:
-		return REACH_NONE;
-	}
+	return get_range_mask(min, max);
 }
 
 bool CanItemReachDistance(int item, int distance, struct Unit *unit)
@@ -92,74 +136,50 @@ int GetUnitWeaponReach(struct Unit *unit, int item_slot)
 
 int GetUnitItemUseReach(struct Unit *unit, int item_slot)
 {
-	int i, tmp, range = 0;
+	int i;
+	u32 mask = 0;
 
 	if (item_slot >= 0) {
-		tmp = unit->items[item_slot];
+		int item = unit->items[item_slot];
 
-		if (!CanUnitUseItem(unit, tmp))
-			return REACH_NONE;
+		if (CanUnitUseItem(unit, item))
+			return get_item_reach(item, unit);
 
-		range = GetItemMaxRange(tmp, unit);
-
-		if (range == 0)
-			range = 99;
-	} else {
-		for (i = 0; (i < ITEMSLOT_INV_COUNT) && (tmp = unit->items[i]); ++i) {
-			if (CanUnitUseItem(unit, tmp)) {
-				tmp = GetItemMaxRange(tmp, unit);
-
-				if (tmp == 0)
-					tmp = 99;
-
-				if (range < tmp)
-					range = tmp;
-			}
-		}
+		return 0;
 	}
 
-	switch (range){
-	case 1:
-		return REACH_RANGE1;
+	for (i = 0; i < ITEMSLOT_INV_COUNT; ++i) {
+		int item = unit->items[i];
 
-	case 2:
-		return REACH_RANGE1 | REACH_RANGE2;
+		if (item == 0)
+			break;
 
-	case 99:
-		return REACH_TOMAG;
-
-	default:
-		return REACH_NONE;
+		if (CanUnitUseItem(unit, item))
+			mask = mask | get_item_reach(item, unit);
 	}
+
+	return mask;
 }
 
 int GetUnitStaffReach(struct Unit *unit)
 {
-	int i, tmp, range = 0;
+	int i, tmp;
+	u32 mask = 0;
 
 	for (i = 0; (i < ITEMSLOT_INV_COUNT) && (tmp = unit->items[i]); ++i) {
+		int item = unit->items[i];
+
+		if (item == 0)
+			break;
+
 		if (CanUnitUseStaff(unit, tmp)) {
-			tmp = GetItemMaxRange(tmp, unit);
+			/* 全体 */
+			if (GetItemEncodedRange(item) == 0xFF)
+				continue;
 
-			if (tmp == 0)
-				tmp = 99;
-
-			if (range < tmp)
-				range = tmp;
+			mask = mask | get_item_reach(tmp, unit);
 		}
 	}
 
-	switch (range){
-	case 1:
-		return REACH_RANGE1;
-
-	case 2:
-		return REACH_RANGE1 | REACH_RANGE2;
-
-	case 99:
-		return REACH_TOMAG;
-
-	default:
-		return REACH_NONE;
-	} 
+	return mask;
 }

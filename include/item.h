@@ -236,31 +236,12 @@ enum { ITEM_USES_SHIFT = 8 };
 /**
  * range getter
  */
-enum
-{
-    // Unit ranges are a (sometimes) weirdly hardcoded.
-    // A bitset value is used to represent the combined ranges of a unit's usable items
-    // That's what those "reaches" bits are for.
-
-    REACH_NONE   = 0,
-
-    REACH_RANGE1 = (1 << 0),
-    REACH_RANGE2 = (1 << 1),
-    REACH_RANGE3 = (1 << 2),
-    REACH_RANGE4 = (1 << 3),
-    REACH_RANGE5 = (1 << 4),
-    REACH_RANGE6 = (1 << 5),
-    REACH_RANGE7 = (1 << 6),
-    REACH_RANGE8 = (1 << 7),
-    REACH_RANGE9 = (1 << 8),
-
-    REACH_TO10   = (1 << 9),
-    REACH_TO15   = (1 << 14),
-    REACH_TOMAG  = (1 << 30),
-};
-
 int GetItemMinRange(int item, struct Unit *unit);
 int GetItemMaxRange(int item, struct Unit *unit);
+void AddMap(int x, int y, u32 mask);
+void AddMapForItem(struct Unit *unit, u16 item);
+void ForEachUnit(void (*func)(struct Unit *), u8 **map, const int off);
+
 int GetItemEncodedRange(int item);
 int GetUnitWeaponReach(struct Unit *unit, int item_slot);
 int GetUnitItemUseReach(struct Unit *unit, int item_slot);
