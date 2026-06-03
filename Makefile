@@ -136,8 +136,6 @@ CLEAN_FILES += $(MSG_LIST) # $(TEXT_HEADER)
 # = Spritans =
 # ============
 
-PNG_FILES := $(shell find $(SRC_DIRS) -type f -name '*.png')
-TSA_FILES := $(shell find $(SRC_DIRS) -type f -name '*.tsa')
 GBAGFX := tools/gbagfx/gbagfx$(EXE)
 
 %.1bpp: %.png
@@ -168,9 +166,19 @@ GBAGFX := tools/gbagfx/gbagfx$(EXE)
 	@echo "[LZ ]	$@"
 	@$(GBAGFX) $< $@
 
+GRAPHIC_DIR := graphics
+
+PNG_FILES := $(shell find $(SRC_DIRS) -type f -name '*.png')
 CLEAN_FILES += $(PNG_FILES:%.png=%.4bpp) $(PNG_FILES:%.png=%.4bpp.lz) $(PNG_FILES:%.png=%.4bpp.lz.o)
 CLEAN_FILES += $(PNG_FILES:%.png=%.gbapal) $(PNG_FILES:%.png=%.gbapal.lz)
+
+TSA_FILES := $(shell find $(SRC_DIRS) -type f -name '*.tsa')
 CLEAN_FILES += $(TSA_FILES:%.tsa=%.tsa.lz)
+
+GFX_TSA_ASM := $(shell find $(GRAPHIC_DIR) -type f -name '*.s')
+GFX_TSA_SRC := $(shell find $(GRAPHIC_DIR) -type f -name '*.c')
+GFX_TSA_OBJ := $(GFX_TSA_ASM:%.s=%.o) $(GFX_TSA_SRC:%.c=%.o)
+CLEAN_FILES += $(GFX_TSA_OBJ) $(GFX_TSA_OBJ:%.o=%.dmp) $(GFX_TSA_OBJ:%.o=%.dmp.lz)
 
 # ==============
 # = Banim data =
@@ -344,6 +352,10 @@ $(CACHE_DIR)/%.d: %.S
 %.o: %.s
 	@echo "[AS ]	$<"
 	@$(AS) $(ASFLAGS) $< -o $@
+
+%.dmp: %.o
+	@echo "[OCP]	$@"
+	@$(OBJCOPY) -S $< -O binary $@
 
 # ===========
 # = Targets =

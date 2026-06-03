@@ -238,3 +238,8 @@ extern struct StatScreenBg1Tsa const *const TsaLut_StatScreenBgPlayer[5];
 extern struct StatScreenBg1Tsa const *const TsaLut_StatScreenBgNonePlayer[5];
 
 void InstallExpandedTextPal(void);
+
+/**
+ * modern statscreen
+ */
+void StartModernStatScreen(struct Unit *unit, ProcPtr parent);

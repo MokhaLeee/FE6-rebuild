@@ -68,3 +68,7 @@ void UnitBurstMapUi_Loop(struct MapUiProc * proc);
 void DoStartMapUi(void);
 void StartMapUi(void);
 void EndMapUi(void);
+
+extern CONST_DATA struct ProcScr ProcScr_UnitMapUi[];
+extern CONST_DATA struct ProcScr ProcScr_TerrainMapUi[];
+extern CONST_DATA struct ProcScr ProcScr_UnitBurstMapUi[];
