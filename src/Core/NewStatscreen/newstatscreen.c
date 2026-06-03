@@ -27,17 +27,6 @@ extern const u16 Tsa_Mss_Right[];
 extern const u8 Img_MssUI[];
 extern const u16 Pal_MssUI[0x10];
 
-enum mss_tm_length {
-	MSS_U_TMLEN = 24,
-	MSS_L_TMLEN = 18,
-	MSS_R_TMLEN = 12,
-};
-
-#define MTM_OFF(x, y, len) ((x) + (y) * (len))
-#define U_TMOFF(x, y) TM_OFFSET(x, y) // MTM_OFF(x, y, MSS_U_TMLEN)
-#define L_TMOFF(x, y) TM_OFFSET(x, y) // MTM_OFF(x, y, MSS_L_TMLEN)
-#define R_TMOFF(x, y) TM_OFFSET(x, y) // MTM_OFF(x, y, MSS_R_TMLEN)
-
 static EWRAM_OVERLAY(0) u16 TmBuff_MssR2[0x1C0] = {}; // 12 * 14
 static EWRAM_OVERLAY(0) u16 TmBuff_MssR1[0x1C0] = {}; // 12 * 14
 static EWRAM_OVERLAY(0) u16 TmBuff_MssR0[0x1C0] = {}; // 12 * 14
@@ -187,22 +176,22 @@ static void mss_put_page_upper(ProcPtr proc)
 	TmApplyTsa(TmBuff_MssU1, gBuf, TILEREF(BGCHR_MSS_UI, BGPAL_MSS_UI));
 
 	PutFaceChibi(GetUnitChibiId(unit),
-		TmBuff_MssU0 + U_TMOFF(1, 1),
+		TmBuff_MssU0 + TM_OFFSET(1, 1),
 		BGCHR_MSS_FACE, BGPAL_MSS_FACE, FALSE);
 
 	/* level & exp */
 	x_offset = 6;
 
-	PutTwoSpecialChar(TmBuff_MssU0 + U_TMOFF(x_offset + 0, 1), TEXT_COLOR_SYSTEM_GOLD, TEXT_SPECIAL_LV_A, TEXT_SPECIAL_LV_B);
-	PutNumberOrBlank(TmBuff_MssU0 + U_TMOFF(x_offset + 3, 1), TEXT_COLOR_SYSTEM_BLUE, unit->level);
-	PutSpecialChar(TmBuff_MssU0 + U_TMOFF(x_offset + 4, 1), TEXT_COLOR_SYSTEM_GOLD, TEXT_SPECIAL_EXP_E);
-	PutNumberOrBlank(TmBuff_MssU0 + U_TMOFF(x_offset + 6, 1), TEXT_COLOR_SYSTEM_BLUE, unit->exp);
+	PutTwoSpecialChar(TmBuff_MssU0 + TM_OFFSET(x_offset + 0, 1), TEXT_COLOR_SYSTEM_GOLD, TEXT_SPECIAL_LV_A, TEXT_SPECIAL_LV_B);
+	PutNumberOrBlank(TmBuff_MssU0 + TM_OFFSET(x_offset + 3, 1), TEXT_COLOR_SYSTEM_BLUE, unit->level);
+	PutSpecialChar(TmBuff_MssU0 + TM_OFFSET(x_offset + 4, 1), TEXT_COLOR_SYSTEM_GOLD, TEXT_SPECIAL_EXP_E);
+	PutNumberOrBlank(TmBuff_MssU0 + TM_OFFSET(x_offset + 6, 1), TEXT_COLOR_SYSTEM_BLUE, unit->exp);
 
 	/* HP */
-	PutTwoSpecialChar(TmBuff_MssU0 + U_TMOFF(x_offset + 0, 3), TEXT_COLOR_SYSTEM_GOLD, TEXT_SPECIAL_HP_A, TEXT_SPECIAL_HP_B);
-	PutSpecialChar(TmBuff_MssU0 + U_TMOFF(x_offset + 4, 3), TEXT_COLOR_SYSTEM_GOLD, TEXT_SPECIAL_SLASH);
-	PutNumberOrBlank(TmBuff_MssU0 + U_TMOFF(x_offset + 3, 3), TEXT_COLOR_SYSTEM_BLUE, GetUnitCurrentHp(unit));
-	PutNumberOrBlank(TmBuff_MssU0 + U_TMOFF(x_offset + 6, 3), TEXT_COLOR_SYSTEM_BLUE, GetUnitMaxHp(unit));
+	PutTwoSpecialChar(TmBuff_MssU0 + TM_OFFSET(x_offset + 0, 3), TEXT_COLOR_SYSTEM_GOLD, TEXT_SPECIAL_HP_A, TEXT_SPECIAL_HP_B);
+	PutSpecialChar(TmBuff_MssU0 + TM_OFFSET(x_offset + 4, 3), TEXT_COLOR_SYSTEM_GOLD, TEXT_SPECIAL_SLASH);
+	PutNumberOrBlank(TmBuff_MssU0 + TM_OFFSET(x_offset + 3, 3), TEXT_COLOR_SYSTEM_BLUE, GetUnitCurrentHp(unit));
+	PutNumberOrBlank(TmBuff_MssU0 + TM_OFFSET(x_offset + 6, 3), TEXT_COLOR_SYSTEM_BLUE, GetUnitMaxHp(unit));
 
 	/* p/j name */
 	x_offset = 15;
@@ -212,7 +201,7 @@ static void mss_put_page_upper(ProcPtr proc)
 
 	PutDrawText(
 		&mss_st.texts[MSS_TEXT_PNAME],
-		TmBuff_MssU0 + U_TMOFF(x_offset, 1),
+		TmBuff_MssU0 + TM_OFFSET(x_offset, 1),
 		TEXT_COLOR_SYSTEM_WHITE,
 		x_text, 0, str);
 
@@ -221,7 +210,7 @@ static void mss_put_page_upper(ProcPtr proc)
 
 	PutDrawText(
 		&mss_st.texts[MSS_TEXT_JNAME],
-		TmBuff_MssU0 + U_TMOFF(x_offset, 3),
+		TmBuff_MssU0 + TM_OFFSET(x_offset, 3),
 		TEXT_COLOR_SYSTEM_WHITE,
 		x_text, 0, str);
 
@@ -229,20 +218,20 @@ static void mss_put_page_upper(ProcPtr proc)
 	x_offset = 24;
 
 	if (unit->pinfo->affinity)
-		PutIcon(TmBuff_MssU0 + U_TMOFF(x_offset, 1),
+		PutIcon(TmBuff_MssU0 + TM_OFFSET(x_offset, 1),
 			GetUnitAffinityIcon(unit), TILEREF(0, BGPAL_ICONS + 1));
 }
 
 static struct StatScreenTextInfo const mss_textinfo_page1_left[] = {
-	{ mss_st.texts + MSS_TEXT_POW, TmBuff_MssL0 + L_TMOFF(1, 1),  TEXT_COLOR_SYSTEM_GOLD, 0, "Str" },
-	{ mss_st.texts + MSS_TEXT_MAG, TmBuff_MssL0 + L_TMOFF(1, 3),  TEXT_COLOR_SYSTEM_GOLD, 0, "Mag" },
-	{ mss_st.texts + MSS_TEXT_SKL, TmBuff_MssL0 + L_TMOFF(1, 5),  TEXT_COLOR_SYSTEM_GOLD, 0, "Skl" },
-	{ mss_st.texts + MSS_TEXT_SPD, TmBuff_MssL0 + L_TMOFF(1, 7),  TEXT_COLOR_SYSTEM_GOLD, 0, "Spd" },
-	{ mss_st.texts + MSS_TEXT_DEF, TmBuff_MssL0 + L_TMOFF(1, 9),  TEXT_COLOR_SYSTEM_GOLD, 0, "Def" },
-	{ mss_st.texts + MSS_TEXT_RES, TmBuff_MssL0 + L_TMOFF(1, 11), TEXT_COLOR_SYSTEM_GOLD, 0, "Res" },
+	{ mss_st.texts + MSS_TEXT_POW, TmBuff_MssL0 + TM_OFFSET(1, 1),  TEXT_COLOR_SYSTEM_GOLD, 0, "Str" },
+	{ mss_st.texts + MSS_TEXT_MAG, TmBuff_MssL0 + TM_OFFSET(1, 3),  TEXT_COLOR_SYSTEM_GOLD, 0, "Mag" },
+	{ mss_st.texts + MSS_TEXT_SKL, TmBuff_MssL0 + TM_OFFSET(1, 5),  TEXT_COLOR_SYSTEM_GOLD, 0, "Skl" },
+	{ mss_st.texts + MSS_TEXT_SPD, TmBuff_MssL0 + TM_OFFSET(1, 7),  TEXT_COLOR_SYSTEM_GOLD, 0, "Spd" },
+	{ mss_st.texts + MSS_TEXT_DEF, TmBuff_MssL0 + TM_OFFSET(1, 9),  TEXT_COLOR_SYSTEM_GOLD, 0, "Def" },
+	{ mss_st.texts + MSS_TEXT_RES, TmBuff_MssL0 + TM_OFFSET(1, 11), TEXT_COLOR_SYSTEM_GOLD, 0, "Res" },
 
-	{ mss_st.texts + MSS_TEXT_LCK, TmBuff_MssL0 + L_TMOFF(9, 1),  TEXT_COLOR_SYSTEM_GOLD, 0, "Luck" },
-	{ mss_st.texts + MSS_TEXT_MOV, TmBuff_MssL0 + L_TMOFF(9, 3),  TEXT_COLOR_SYSTEM_GOLD, 0, "Move" },
+	{ mss_st.texts + MSS_TEXT_LCK, TmBuff_MssL0 + TM_OFFSET(9, 1),  TEXT_COLOR_SYSTEM_GOLD, 0, "Luck" },
+	{ mss_st.texts + MSS_TEXT_MOV, TmBuff_MssL0 + TM_OFFSET(9, 3),  TEXT_COLOR_SYSTEM_GOLD, 0, "Move" },
 	{ 0 }, // end
 };
 
