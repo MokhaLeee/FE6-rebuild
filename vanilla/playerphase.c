@@ -224,11 +224,11 @@ void PlayerPhase_IdleLoop(ProcPtr proc)
             EndAllMus();
             SetStatScreenExcludedUnitFlags(UNIT_FLAG_DEAD | UNIT_FLAG_NOT_DEPLOYED | UNIT_FLAG_UNDER_ROOF | UNIT_FLAG_CONCEALED);
 
-#if 0
+#if CONFIG_USE_MODERN_STATSCREEN
+            StartModernStatScreen(GetUnit(gMapUnit[gBmSt.cursor.y][gBmSt.cursor.x]), proc);
+#else
             EndMapUi();
             StartStatScreen(GetUnit(gMapUnit[gBmSt.cursor.y][gBmSt.cursor.x]), proc);
-#else
-            StartModernStatScreen(GetUnit(gMapUnit[gBmSt.cursor.y][gBmSt.cursor.x]), proc);
 #endif
 
             Proc_Goto(proc, L_PLAYERPHASE_5);
@@ -530,7 +530,11 @@ do_act:
         EndAllMus();
         SetStatScreenExcludedUnitFlags(UNIT_FLAG_DEAD | UNIT_FLAG_NOT_DEPLOYED | UNIT_FLAG_UNDER_ROOF | UNIT_FLAG_CONCEALED);
 
+#if CONFIG_USE_MODERN_STATSCREEN
         StartModernStatScreen(GetUnit(uid), proc);
+#else
+         StartStatScreen(GetUnit(uid), proc);
+#endif
         Proc_Goto(proc, L_PLAYERPHASE_6);
         return;
     }

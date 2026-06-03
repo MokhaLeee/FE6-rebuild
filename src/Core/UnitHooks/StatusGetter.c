@@ -106,6 +106,8 @@ int GetUnitLuck(struct Unit *unit)
 	status += GetItemLckBonus(GetUnitEquippedWeapon(unit));
 	status = MSG_DuraStatusLck(status, unit);
 
+	status -= 5;
+
 	LIMIT_AREA(status, 0, 256);
 	return status;
 }
