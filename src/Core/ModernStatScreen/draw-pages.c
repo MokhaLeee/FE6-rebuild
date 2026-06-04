@@ -5,6 +5,7 @@
 #include "msg.h"
 #include "face.h"
 #include "unit.h"
+#include "item.h"
 #include "battle.h"
 #include "armfunc.h"
 #include "klib.h"
@@ -13,7 +14,7 @@
 /**
  * upper
  */
-static void mss_put_page_upper(void)
+static void put_upage(void)
 {
 	int x_offset, x_text;
 	char *str;
@@ -60,15 +61,12 @@ static void mss_put_page_upper(void)
 }
 
 /**
- * left
+ * page 0
  */
-static void mss_put_page_left(int page)
+static void put_lpage1(void)
 {
 }
 
-/**
- * right
- */
 static void mss_PutNumberBonus(int number, u16 *tm)
 {
 	if (number == 0)
@@ -111,7 +109,7 @@ static void mss_put_stat(int num, int x, int y, int base, int total, int max)
 		bonus > 0 ? k_udiv(bonus * 41, 30) : -k_udiv(-bonus * 41, 30));
 }
 
-static struct StatScreenTextInfo const mss_textinfo_page1_right[] = {
+static struct StatScreenTextInfo const textinfo_rpage1[] = {
 	{ gMssSt.texts + MSS_TEXT_POW, TmBuff_MssR0 + TM_OFFSET(1, 2),  TEXT_COLOR_SYSTEM_GOLD, 0, "Str" },
 	{ gMssSt.texts + MSS_TEXT_MAG, TmBuff_MssR0 + TM_OFFSET(1, 4),  TEXT_COLOR_SYSTEM_GOLD, 0, "Mag" },
 	{ gMssSt.texts + MSS_TEXT_SKL, TmBuff_MssR0 + TM_OFFSET(1, 6),  TEXT_COLOR_SYSTEM_GOLD, 0, "Skl" },
@@ -123,11 +121,11 @@ static struct StatScreenTextInfo const mss_textinfo_page1_right[] = {
 	{ 0 }, // end
 };
 
-static void mss_put_page_right(int page)
+static void put_rpage1()
 {
 	struct Unit *unit = gMssSt.unit;
 
-	PutStatScreenText(mss_textinfo_page1_right);
+	PutStatScreenText(textinfo_rpage1);
 
 	mss_put_stat(0, 5, 2,  unit->pow, GetUnitPower(unit), GetUnitMaxStatusPow(unit));
 	mss_put_stat(1, 5, 4,  unit->mag, GetUnitMagic(unit), GetUnitMaxStatusMag(unit));
@@ -139,29 +137,75 @@ static void mss_put_page_right(int page)
 	mss_put_stat(7, 5, 16, UNIT_MOV_BASE(unit), GetUnitMovement(unit), GetUnitMaxStatusMov(unit));
 }
 
+/**
+ * page 1
+ */
+static void put_lpage2(void)
+{
+	int i;
+	struct Unit *unit = gMssSt.unit;
+
+	for (i = 0; i < ITEMSLOT_INV_COUNT; i++) {
+		int item = unit->items[i];
+
+		if (item == 0)
+			break;
+
+		DrawItemStatScreenLine(
+			&gMssSt.texts[MSS_TEXT_ITEM1 + i],
+			item, IsItemDisplayUsable(unit, item),
+			TmBuff_MssL0 + TM_OFFSET(2, 1 + i * 2));
+	}
+}
+
+static void put_rpage2()
+{}
+
+/**
+ * total
+ */
 void Mss_PreparePage(struct ProcMss *proc)
 {
 	CpuFastFill(0, TmBuff_MssU0, sizeof(TmBuff_MssU0));
 	CpuFastFill(0, TmBuff_MssU2, sizeof(TmBuff_MssU2));
 
 	CpuFastFill(0, TmBuff_MssL0, sizeof(TmBuff_MssL0));
-	CpuFastFill(0, TmBuff_MssL2, sizeof(TmBuff_MssL2));
 	CpuFastFill(0, TmBuff_MssL1, sizeof(TmBuff_MssL1));
+	CpuFastFill(0, TmBuff_MssL2, sizeof(TmBuff_MssL2));
 
 	CpuFastFill(0, TmBuff_MssR0, sizeof(TmBuff_MssR0));
 	CpuFastFill(0, TmBuff_MssR1, sizeof(TmBuff_MssR1));
 	CpuFastFill(0, TmBuff_MssR2, sizeof(TmBuff_MssR2));
 
-    Decompress(Tsa_Mss_Upper, gBuf);
+	Decompress(Tsa_Mss_Upper, gBuf);
 	TmApplyTsa(TmBuff_MssU2, gBuf, TILEREF(BGCHR_MSS_UI, BGPAL_MSS_UI));
 
-    Decompress(Tsa_Mss_Right, gBuf);
+	Decompress(Tsa_Mss_Right, gBuf);
 	TmApplyTsa(TmBuff_MssR2, gBuf, TILEREF(BGCHR_MSS_UI, BGPAL_MSS_UI));
 
-    Decompress(Tsa_Mss_Left, gBuf);
+	Decompress(Tsa_Mss_Left, gBuf);
 	TmApplyTsa(TmBuff_MssL2, gBuf, TILEREF(BGCHR_MSS_UI, BGPAL_MSS_UI));
 
-	mss_put_page_upper();
-	mss_put_page_left(proc->page);
-	mss_put_page_right(proc->page);
+	put_upage();
+
+	switch (proc->page) {
+	case 0:
+		put_lpage1();
+		put_rpage1();
+		break;
+
+	case 1:
+		put_lpage2();
+		put_rpage2();
+		break;
+
+	case 2:
+		break;
+
+	case 3:
+		break;
+
+	default:
+		break;
+	}
 }

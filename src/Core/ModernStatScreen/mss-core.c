@@ -44,6 +44,11 @@ static const struct TextInitInfo mss_text_init_info[] = {
 	{ &gMssSt.texts[MSS_TEXT_DEF], 5 },
 	{ &gMssSt.texts[MSS_TEXT_RES], 5 },
 	{ &gMssSt.texts[MSS_TEXT_MOV], 5 },
+	{ &gMssSt.texts[MSS_TEXT_ITEM1], 7 },
+	{ &gMssSt.texts[MSS_TEXT_ITEM2], 7 },
+	{ &gMssSt.texts[MSS_TEXT_ITEM3], 7 },
+	{ &gMssSt.texts[MSS_TEXT_ITEM4], 7 },
+	{ &gMssSt.texts[MSS_TEXT_ITEM5], 7 },
 
 	{}
 };
