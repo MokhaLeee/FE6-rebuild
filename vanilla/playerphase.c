@@ -221,12 +221,12 @@ void PlayerPhase_IdleLoop(ProcPtr proc)
     {
         if ((gKeySt->pressed & KEY_BUTTON_R) && gMapUnit[gBmSt.cursor.y][gBmSt.cursor.x] != 0)
         {
-            EndAllMus();
-            SetStatScreenExcludedUnitFlags(UNIT_FLAG_DEAD | UNIT_FLAG_NOT_DEPLOYED | UNIT_FLAG_UNDER_ROOF | UNIT_FLAG_CONCEALED);
-
 #if CONFIG_USE_MODERN_STATSCREEN
+            EndMapUi();
             StartModernStatScreen(GetUnit(gMapUnit[gBmSt.cursor.y][gBmSt.cursor.x]), proc);
 #else
+            EndAllMus();
+            SetStatScreenExcludedUnitFlags(UNIT_FLAG_DEAD | UNIT_FLAG_NOT_DEPLOYED | UNIT_FLAG_UNDER_ROOF | UNIT_FLAG_CONCEALED);
             EndMapUi();
             StartStatScreen(GetUnit(gMapUnit[gBmSt.cursor.y][gBmSt.cursor.x]), proc);
 #endif

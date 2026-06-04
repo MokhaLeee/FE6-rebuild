@@ -18,6 +18,8 @@
 #include "msg.h"
 #include "sprite.h"
 #include "oam.h"
+#include "mu.h"
+#include "unitsprite.h"
 #include "constants/songs.h"
 #include "constants/videoalloc_global.h"
 
@@ -25,6 +27,7 @@
 
 extern const u16 Tsa_Mss_Upper[];
 extern const u16 Tsa_Mss_Left[];
+extern const u16 Tsa_Mss_Right[];
 extern const u8 Img_MssUI[];
 extern const u16 Pal_MssUI[0x10];
 extern const u8 Img_MssUI2[];
@@ -32,12 +35,13 @@ extern const u16 Pal_MssUI2[0x10];
 extern const u8 Img_MssSprites[];
 
 static EWRAM_OVERLAY(0) u16 TmBuff_MssU0[0xC0] = {}; // 24 * 6
-static EWRAM_OVERLAY(0) u16 TmBuff_MssU1[0xC0] = {}; // 24 * 6
+static EWRAM_OVERLAY(0) u16 TmBuff_MssU2[0xC0] = {}; // 24 * 6
 static EWRAM_OVERLAY(0) u16 TmBuff_MssL0[0x1C0] = {}; // 18 * 14
 static EWRAM_OVERLAY(0) u16 TmBuff_MssL1[0x1C0] = {}; // 18 * 14
 static EWRAM_OVERLAY(0) u16 TmBuff_MssL2[0x1C0] = {}; // 18 * 14
-static EWRAM_OVERLAY(0) u16 TmBuff_MssR0[0x200] = {}; // 16 * 14
-static EWRAM_OVERLAY(0) u16 TmBuff_MssR2[0x200] = {}; // 16 * 14
+static EWRAM_OVERLAY(0) u16 TmBuff_MssR0[0x200] = {}; // 16 * 32
+static EWRAM_OVERLAY(0) u16 TmBuff_MssR1[0x200] = {}; // 16 * 32
+static EWRAM_OVERLAY(0) u16 TmBuff_MssR2[19 * 0x20] = {}; // 18 * 32
 
 static const struct ProcScr proc_mss_sprites[];
 
@@ -58,7 +62,7 @@ enum videoalloc_mss {
 	BGPAL_MSS_STATBAR = BGPAL_MSS_UI + 1,
 
 
-	OBCHR_MSS_SPRITES = 0x7000 / 0x20,
+	OBCHR_MSS_SPRITES = 0x5800 / 0x20,
 	OBPAL_MSS_SPRITES = 2,
 };
 
@@ -111,35 +115,19 @@ static void mss_main(ProcPtr proc)
 	}
 }
 
-static void mss_hide_mapui(ProcPtr proc)
-{
-	ProcPtr ui_proc;
-
-	ui_proc = FindProc(ProcScr_UnitMapUi);
-	if (ui_proc)
-		Proc_Goto(ui_proc, 3);
-
-	ui_proc = FindProc(ProcScr_TerrainMapUi);
-	if (ui_proc)
-		Proc_Break(ui_proc);
-
-	CallDelayed(EndMapUi, 3);
-	StartTemporaryLock(proc, 3);
-}
-
 static void mss_init(ProcPtr proc)
 {
 	struct Unit *unit = mss_st.unit;
 
-	gDispIo.bg0_ct.priority = 1;
-	gDispIo.bg1_ct.priority = 3;
-	gDispIo.bg2_ct.priority = 2;
+	gDispIo.bg0_ct.priority = 0;
+	gDispIo.bg1_ct.priority = 1;
+	gDispIo.bg2_ct.priority = 1;
 	gDispIo.bg3_ct.priority = 3;
 
 	SetBlendAlpha(15, 4);
-	SetBlendTargetA(0, 1, 0, 0, 0);
+	SetBlendTargetA(0, 0, 1, 0, 0);
 	SetBlendBackdropA(0);
-	SetBlendTargetB(0, 0, 1, 1, 1);
+	SetBlendTargetB(0, 1, 0, 1, 1);
 
 	SetBgOffset(BG_0, 0, 0);
 	SetBgOffset(BG_1, 0, 0);
@@ -167,13 +155,14 @@ static void mss_init(ProcPtr proc)
 	BattleGenerateDisplayStats(unit, GetUnitEquippedWeaponSlot(unit));
 
 	CpuFastFill(0, TmBuff_MssU0, sizeof(TmBuff_MssU0));
-	CpuFastFill(0, TmBuff_MssU1, sizeof(TmBuff_MssU1));
+	CpuFastFill(0, TmBuff_MssU2, sizeof(TmBuff_MssU2));
 
 	CpuFastFill(0, TmBuff_MssL0, sizeof(TmBuff_MssL0));
 	CpuFastFill(0, TmBuff_MssL1, sizeof(TmBuff_MssL1));
 	CpuFastFill(0, TmBuff_MssL2, sizeof(TmBuff_MssL2));
 
 	CpuFastFill(0, TmBuff_MssR0, sizeof(TmBuff_MssR0));
+	CpuFastFill(0, TmBuff_MssR1, sizeof(TmBuff_MssR1));
 	CpuFastFill(0, TmBuff_MssR2, sizeof(TmBuff_MssR2));
 
 	SpawnProc(proc_mss_sprites, proc);
@@ -186,7 +175,7 @@ static void mss_put_page_upper(ProcPtr proc)
 	struct Unit *unit = mss_st.unit;
 
 	Decompress(Tsa_Mss_Upper, gBuf);
-	TmApplyTsa(TmBuff_MssU1, gBuf, TILEREF(BGCHR_MSS_UI, BGPAL_MSS_UI));
+	TmApplyTsa(TmBuff_MssU2, gBuf, TILEREF(BGCHR_MSS_UI, BGPAL_MSS_UI));
 
 	PutFaceChibi(GetUnitChibiId(unit),
 		TmBuff_MssU0 + TM_OFFSET(1, 1),
@@ -234,9 +223,33 @@ static void mss_put_page_left(ProcPtr proc)
 	TmApplyTsa(TmBuff_MssL1, gBuf, TILEREF(BGCHR_MSS_UI, BGPAL_MSS_UI));
 }
 
-static void mss_put_stat(int num, int x, int y, int base, int total, int max, u16 *tm)
+static void mss_PutNumberBonus(int number, u16 *tm)
+{
+	if (number == 0)
+		return;
+
+	if (number < 0) {
+		u16 tileref = gActiveFont->tileref;
+
+		gActiveFont->tileref |= BGPAL_MSS_STATBAR << 0xC;
+		PutSpecialChar(tm, 3, TEXT_SPECIAL_DASH);
+		PutNumberSmall(tm + ((number >= 10) ? 2 : 1), 3, -number);
+		gActiveFont->tileref = tileref;
+		return;
+	}
+
+	PutSpecialChar(tm, TEXT_COLOR_SYSTEM_GREEN, TEXT_SPECIAL_PLUS);
+	PutNumberSmall(tm + ((number >= 10) ? 2 : 1), TEXT_COLOR_SYSTEM_GREEN, number);
+}
+
+static void mss_put_stat(int num, int x, int y, int base, int total, int max)
 {
 	int bonus = total - base;
+
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(x, y),
+		(base == max) ? TEXT_COLOR_SYSTEM_GREEN : TEXT_COLOR_SYSTEM_BLUE, base);
+
+	mss_PutNumberBonus(bonus, TmBuff_MssR0 + TM_OFFSET(x + 1, y));
 
 	if (total > 30) {
 		total = 30;
@@ -245,7 +258,7 @@ static void mss_put_stat(int num, int x, int y, int base, int total, int max, u1
 
 	PutDrawUiGauge(
 		BGCHR_MSS_STATBAR + 1 + num * 6, 6,
-		tm + TM_OFFSET(x - 2, y + 1),
+		TmBuff_MssR1 + TM_OFFSET(x - 2, y + 1),
 		TILEREF(0, BGPAL_MSS_STATBAR),
 		k_udiv(max * 41, 30),
 		k_udiv(base * 41, 30),
@@ -269,15 +282,19 @@ static void mss_put_page_right(ProcPtr proc)
 {
 	struct Unit *unit = mss_st.unit;
 
+	Decompress(Tsa_Mss_Right, gBuf);
+	TmApplyTsa(TmBuff_MssR2, gBuf, TILEREF(BGCHR_MSS_UI, BGPAL_MSS_UI));
+
 	PutStatScreenText(mss_textinfo_page1_right);
 
-	mss_put_stat(0, 5, 0,  unit->pow, GetUnitPower(unit), GetUnitMaxStatusPow(unit), TmBuff_MssR2);
-	mss_put_stat(1, 5, 2,  unit->mag, GetUnitMagic(unit), GetUnitMaxStatusMag(unit), TmBuff_MssR2);
-	mss_put_stat(2, 5, 4,  unit->skl, GetUnitSkill(unit), GetUnitMaxStatusSkl(unit), TmBuff_MssR2);
-	mss_put_stat(3, 5, 6,  unit->spd, GetUnitSpeed(unit), GetUnitMaxStatusSpd(unit), TmBuff_MssR2);
-	mss_put_stat(4, 5, 8,  unit->def, GetUnitDefense(unit), GetUnitMaxStatusDef(unit), TmBuff_MssR2);
-	mss_put_stat(5, 5, 10, unit->res, GetUnitResistance(unit), GetUnitMaxStatusRes(unit), TmBuff_MssR2);
-	mss_put_stat(6, 5, 12, unit->lck, GetUnitLuck(unit), GetUnitMaxStatusLck(unit), TmBuff_MssR2);
+	mss_put_stat(0, 5, 0,  unit->pow, GetUnitPower(unit), GetUnitMaxStatusPow(unit));
+	mss_put_stat(1, 5, 2,  unit->mag, GetUnitMagic(unit), GetUnitMaxStatusMag(unit));
+	mss_put_stat(2, 5, 4,  unit->skl, GetUnitSkill(unit), GetUnitMaxStatusSkl(unit));
+	mss_put_stat(3, 5, 6,  unit->spd, GetUnitSpeed(unit), GetUnitMaxStatusSpd(unit));
+	mss_put_stat(4, 5, 8,  unit->def, GetUnitDefense(unit), GetUnitMaxStatusDef(unit));
+	mss_put_stat(5, 5, 10, unit->res, GetUnitResistance(unit), GetUnitMaxStatusRes(unit));
+	mss_put_stat(6, 5, 12, unit->lck, GetUnitLuck(unit), GetUnitMaxStatusLck(unit));
+	mss_put_stat(7, 5, 14, UNIT_MOV_BASE(unit), GetUnitMovement(unit), GetUnitMaxStatusMov(unit));
 }
 
 static void mss_prepare_display(ProcPtr proc)
@@ -288,12 +305,15 @@ static void mss_prepare_display(ProcPtr proc)
 	mss_put_page_right(proc);
 
 	TmCopyRect(TmBuff_MssU0, gBg0Tm + TM_OFFSET(0, 0), 30, 6);
-	TmCopyRect(TmBuff_MssU1, gBg1Tm + TM_OFFSET(0, 0), 30, 6);
+	TmCopyRect(TmBuff_MssU2, gBg2Tm + TM_OFFSET(0, 0), 30, 6);
+
 	TmCopyRect(TmBuff_MssL0, gBg0Tm + TM_OFFSET(0, 6), 20, 14);
-	TmCopyRect(TmBuff_MssL1, gBg1Tm + TM_OFFSET(0, 6), 20, 14);
-	TmCopyRect(TmBuff_MssL2, gBg2Tm + TM_OFFSET(0, 6), 20, 14);
-	TmCopyRect(TmBuff_MssR0, gBg0Tm + TM_OFFSET(20, 2), 12, 16);
-	TmCopyRect(TmBuff_MssR2, gBg2Tm + TM_OFFSET(20, 2), 12, 16);
+	TmCopyRect(TmBuff_MssL1, gBg2Tm + TM_OFFSET(0, 6), 20, 14);
+	TmCopyRect(TmBuff_MssL2, gBg1Tm + TM_OFFSET(0, 6), 20, 14);
+
+	TmCopyRect(TmBuff_MssR0, gBg0Tm + TM_OFFSET(20, 2), 10, 16);
+	TmCopyRect(TmBuff_MssR1, gBg1Tm + TM_OFFSET(20, 2), 10, 16);
+	TmCopyRect(TmBuff_MssR2, gBg2Tm + TM_OFFSET(20, 0), 10, 19);
 
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
 }
@@ -319,44 +339,8 @@ static void mss_sprites_init(ProcPtr proc)
 	ApplyIconPalette(1, 0x10 + OBPAL_MSS_SPRITES);
 }
 
-static const u16 sprite_left_window[] = {
-	20,
-	OAM0_SHAPE_8x32  + OAM0_Y(0) + OAM0_BLEND, OAM1_SIZE_8x32 + OAM1_HFLIP + OAM1_X(-8), OAM2_CHR(0x4),
-	OAM0_SHAPE_8x32  + OAM0_Y(32) + OAM0_BLEND, OAM1_SIZE_8x32 + OAM1_HFLIP + OAM1_X(-8) + OAM1_VFLIP, OAM2_CHR(0x4),
-	OAM0_SHAPE_8x32  + OAM0_Y(60) + OAM0_BLEND, OAM1_SIZE_8x32 + OAM1_HFLIP + OAM1_X(-8) + OAM1_VFLIP, OAM2_CHR(0x4),
-	OAM0_SHAPE_8x32  + OAM0_Y(90) + OAM0_BLEND, OAM1_SIZE_8x32 + OAM1_HFLIP + OAM1_X(-8) + OAM1_VFLIP, OAM2_CHR(0x4),
-	OAM0_SHAPE_8x32  + OAM0_Y(108) + OAM0_BLEND, OAM1_SIZE_8x32 + OAM1_HFLIP + OAM1_X(-8) + OAM1_VFLIP, OAM2_CHR(0x4),
-
-	OAM0_SHAPE_32x32 + OAM0_Y(0) + OAM0_BLEND, OAM1_SIZE_32x32 + OAM1_X(0), 0,
-	OAM0_SHAPE_32x32 + OAM0_Y(0) + OAM0_BLEND, OAM1_SIZE_32x32 + OAM1_X(32), 0,
-
-	OAM0_SHAPE_32x32 + OAM0_Y(32) + OAM0_BLEND, OAM1_SIZE_32x32 + OAM1_X(0), 0,
-	OAM0_SHAPE_32x32 + OAM0_Y(32) + OAM0_BLEND, OAM1_SIZE_32x32 + OAM1_X(32), 0,
-
-	OAM0_SHAPE_32x32 + OAM0_Y(64) + OAM0_BLEND, OAM1_SIZE_32x32 + OAM1_X(0), 0,
-	OAM0_SHAPE_32x32 + OAM0_Y(64) + OAM0_BLEND, OAM1_SIZE_32x32 + OAM1_X(32), 0,
-
-	OAM0_SHAPE_32x32 + OAM0_Y(96) + OAM0_BLEND, OAM1_SIZE_32x32 + OAM1_X(0), 0,
-	OAM0_SHAPE_32x32 + OAM0_Y(96) + OAM0_BLEND, OAM1_SIZE_32x32 + OAM1_X(32), 0,
-
-	OAM0_SHAPE_32x32 + OAM0_Y(108) + OAM0_BLEND, OAM1_SIZE_32x32 + OAM1_X(0), 0,
-	OAM0_SHAPE_32x32 + OAM0_Y(108) + OAM0_BLEND, OAM1_SIZE_32x32 + OAM1_X(32), 0,
-
-	OAM0_SHAPE_8x32  + OAM0_Y(0) + OAM0_BLEND, OAM1_SIZE_8x32  + OAM1_X(64), OAM2_CHR(0x4),
-	OAM0_SHAPE_8x32  + OAM0_Y(32) + OAM0_BLEND, OAM1_SIZE_8x32  + OAM1_X(64) + OAM1_VFLIP, OAM2_CHR(0x4),
-	OAM0_SHAPE_8x32  + OAM0_Y(60) + OAM0_BLEND, OAM1_SIZE_8x32  + OAM1_X(64) + OAM1_VFLIP, OAM2_CHR(0x4),
-	OAM0_SHAPE_8x32  + OAM0_Y(90) + OAM0_BLEND, OAM1_SIZE_8x32  + OAM1_X(64) + OAM1_VFLIP, OAM2_CHR(0x4),
-	OAM0_SHAPE_8x32  + OAM0_Y(108) + OAM0_BLEND, OAM1_SIZE_8x32  + OAM1_X(64) + OAM1_VFLIP, OAM2_CHR(0x4),
-};
-
 static void mss_sprites_loop(ProcPtr proc)
 {
-	PutSprite(
-		12,
-		166, 12,
-		sprite_left_window,
-		OAM2_CHR(OBCHR_MSS_SPRITES) + OAM2_PAL(OBPAL_MSS_SPRITES) + OAM2_LAYER(3)
-	);
 }
 
 static const struct ProcScr proc_mss_sprites[] = {
@@ -370,11 +354,7 @@ static const struct ProcScr proc_mss_sprites[] = {
  * main
  */
 static const struct ProcScr proc_modern_statscreen[] = {
-	PROC_CALL(LockBmDisplay),
-
-	/* remove map-ui */
-	PROC_CALL(mss_hide_mapui),
-	PROC_YIELD,
+	// PROC_CALL(LockBmDisplay),
 
 	PROC_CALL(StartGreenText),
 	PROC_CALL(mss_init),
@@ -385,7 +365,7 @@ static const struct ProcScr proc_modern_statscreen[] = {
 
 	PROC_CALL(mss_end),
 	PROC_YIELD,
-	PROC_CALL(UnlockBmDisplay),
+	// PROC_CALL(UnlockBmDisplay),
 	PROC_CALL(EndGreenText),
 	PROC_END,
 };
@@ -399,6 +379,9 @@ void StartModernStatScreen(struct Unit *unit, ProcPtr parent)
 
 	PidStatsAddStatView(unit->pinfo->id);
 	PlaySe(SONG_6A);
+
+	EndAllMus();
+	ShowUnitSprite(unit);
 
 	SpawnProcLocking(proc_modern_statscreen, parent);
 }

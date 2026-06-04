@@ -54,6 +54,7 @@ GAMEINFO_DATA struct ChapterInfo const ChapterInfoTable[] = {
 		.asset_map = PLIST_CH1_MAP,
 		.asset_img_anims = PLIST_MAPASSET1_IMGANIM,
 		.asset_map_changes = PLIST_CH1_MAPCHG,
+		.weather = WEATHER_SNOWSTORM,
 		.has_prep = false,
 		.title_id = CHAPTER_TITLE(0),
 		.coord_x = 6,
