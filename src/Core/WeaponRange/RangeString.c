@@ -4,6 +4,7 @@
 
 #include "utf8.h"
 #include "klib.h"
+#include "debug.h"
 
 extern char EWRAM_DATA sMsgString[];
 
@@ -20,15 +21,16 @@ static char *ItemRangeToString(int min, int max)
 	u8 min_splited[2], max_splited[2];
 	char str[5];
 
-	if (max == 0)
-		return "1-魔力";
+	if (max == 0) {
+		sprintf(sMsgString, "%d-MAG", min);
+		return sMsgString;
+	}
 
 	if (min > max || min < 0 || max < 0)
 		return "--";
 
 	SplitNumberDec2(min, min_splited);
 	SplitNumberDec2(max, max_splited);
-
 	for (i = 0; i < 2; i++)
 		if (min_splited[i] != 0)
 			break;
@@ -63,7 +65,7 @@ const char *GetItemRangeString(int item)
 	int max = GetItemMaxRange(item, NULL);
 
 	if (GetItemEncodedRange(item) == 0xFF)
-		return "   全体";
+		return "All";
 
 	return ItemRangeToString(min, max);
 }

@@ -7,6 +7,7 @@
 #include "unit.h"
 #include "item.h"
 #include "battle.h"
+#include "icon.h"
 #include "armfunc.h"
 #include "klib.h"
 #include "statscreen.h"
@@ -158,8 +159,94 @@ static void put_lpage2(void)
 	}
 }
 
+static struct StatScreenTextInfo const textinfo_rpage2[] = {
+	{ gMssSt.texts + MSS_TEXT_P2_ATK, TmBuff_MssR0 + TM_OFFSET(1, 3),  TEXT_COLOR_SYSTEM_GOLD, 0, "Attack" },
+	{ gMssSt.texts + MSS_TEXT_P2_HIT, TmBuff_MssR0 + TM_OFFSET(1, 5),  TEXT_COLOR_SYSTEM_GOLD, 0, "Hit" },
+	{ gMssSt.texts + MSS_TEXT_P2_CRT, TmBuff_MssR0 + TM_OFFSET(1, 7),  TEXT_COLOR_SYSTEM_GOLD, 0, "Crit" },
+	{ gMssSt.texts + MSS_TEXT_P2_AVO, TmBuff_MssR0 + TM_OFFSET(1, 9),  TEXT_COLOR_SYSTEM_GOLD, 0, "Avoid" },
+	{ gMssSt.texts + MSS_TEXT_P2_DDG, TmBuff_MssR0 + TM_OFFSET(1, 11), TEXT_COLOR_SYSTEM_GOLD, 0, "Dodge" },
+	{ gMssSt.texts + MSS_TEXT_P2_SIL, TmBuff_MssR0 + TM_OFFSET(1, 13), TEXT_COLOR_SYSTEM_GOLD, 0, "Silencer" },
+	{ gMssSt.texts + MSS_TEXT_P2_RNG, TmBuff_MssR0 + TM_OFFSET(1, 15), TEXT_COLOR_SYSTEM_GOLD, 0, "Range" },
+	{ 0 }, // end
+};
+
 static void put_rpage2()
+{
+	const char *str;
+
+	PutStatScreenText(textinfo_rpage2);
+
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(7, 3),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_attack);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(7, 5),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_hit);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(7, 7),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_crit);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(7, 9),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_avoid);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(7, 11), TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_dodge);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(7, 13), TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_silencer);
+
+	str = GetItemRangeString(gBattleUnitA.weapon_before);
+	Text_InsertDrawString(&gMssSt.texts[MSS_TEXT_P2_RNG], 55 - GetStringTextLen(str), TEXT_COLOR_SYSTEM_BLUE, str);
+}
+
+/**
+ * page 3
+ */
+static void put_lpage3(void)
 {}
+
+static struct StatScreenTextInfo const textinfo_rpage3[] = {
+	{ gMssSt.texts + MSS_TEXT_P3_WEXP1, TmBuff_MssR0 + TM_OFFSET(4, 2),  TEXT_COLOR_SYSTEM_GOLD, 0, "剣" },
+	{ gMssSt.texts + MSS_TEXT_P3_WEXP2, TmBuff_MssR0 + TM_OFFSET(4, 4),  TEXT_COLOR_SYSTEM_GOLD, 0, "槍" },
+	{ gMssSt.texts + MSS_TEXT_P3_WEXP3, TmBuff_MssR0 + TM_OFFSET(4, 6),  TEXT_COLOR_SYSTEM_GOLD, 0, "斧" },
+	{ gMssSt.texts + MSS_TEXT_P3_WEXP4, TmBuff_MssR0 + TM_OFFSET(4, 8),  TEXT_COLOR_SYSTEM_GOLD, 0, "弓" },
+	{ gMssSt.texts + MSS_TEXT_P3_WEXP5, TmBuff_MssR0 + TM_OFFSET(4, 10), TEXT_COLOR_SYSTEM_GOLD, 0, "理" },
+	{ gMssSt.texts + MSS_TEXT_P3_WEXP6, TmBuff_MssR0 + TM_OFFSET(4, 12), TEXT_COLOR_SYSTEM_GOLD, 0, "光" },
+	{ gMssSt.texts + MSS_TEXT_P3_WEXP7, TmBuff_MssR0 + TM_OFFSET(4, 14), TEXT_COLOR_SYSTEM_GOLD, 0, "闇" },
+	{ gMssSt.texts + MSS_TEXT_P3_WEXP8, TmBuff_MssR0 + TM_OFFSET(4, 16), TEXT_COLOR_SYSTEM_GOLD, 0, "杖" },
+	{ 0 }, // end
+};
+
+static void put_wexp_bar(int num, int x, int y, int kind)
+{
+	struct Unit *unit = gMssSt.unit;
+	int wexp = unit->wexp[kind];
+
+	PutIcon(TmBuff_MssR0 + TM_OFFSET(x, y),
+		WTYPE_ICON(kind),
+		TILEREF(0, BGPAL_MSS_ICON1));
+
+	PutSpecialChar(
+		TmBuff_MssR0 + TM_OFFSET(x + 5, y),
+		(wexp >= WEXP_S) ? TEXT_COLOR_SYSTEM_GREEN : TEXT_COLOR_SYSTEM_BLUE,
+		GetWeaponLevelSpecialCharFromExp(wexp));
+
+#if 0
+	if (wexp != WEXP_0)
+		wexp -= WEXP_E;
+
+	PutDrawUiGauge(
+		BGCHR_MSS_STATBAR + 1 + num * 6,
+		5,
+		TmBuff_MssR0 + TM_OFFSET(x + 3, y + 1),
+		TILEREF(0, BGPAL_MSS_STATBAR),
+		34,
+		k_udiv(k_umod(wexp, (WEXP_D - WEXP_E)) * 33, 48), 0);
+#endif
+}
+
+static void put_rpage3(void)
+{
+	PutStatScreenText(textinfo_rpage3);
+
+	put_wexp_bar(0, 1, 2, ITEM_KIND_SWORD);
+	put_wexp_bar(1, 1, 4, ITEM_KIND_LANCE);
+	put_wexp_bar(2, 1, 6, ITEM_KIND_AXE);
+	put_wexp_bar(3, 1, 8, ITEM_KIND_BOW);
+
+	put_wexp_bar(4, 1, 10, ITEM_KIND_ANIMA);
+	put_wexp_bar(5, 1, 12, ITEM_KIND_LIGHT);
+	put_wexp_bar(6, 1, 14, ITEM_KIND_ELDER);
+	put_wexp_bar(7, 1, 16, ITEM_KIND_STAFF);
+}
 
 /**
  * total
@@ -200,6 +287,8 @@ void Mss_PreparePage(struct ProcMss *proc)
 		break;
 
 	case 2:
+		put_lpage3();
+		put_rpage3();
 		break;
 
 	case 3:

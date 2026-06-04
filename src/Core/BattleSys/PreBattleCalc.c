@@ -89,6 +89,11 @@ static void ComputeBattleUnitCritRate(struct BattleUnit *attacker)
 		attacker->battle_crit += 30;
 }
 
+static void ComputeBattleUnitSilencerRate(struct BattleUnit *attacker)
+{
+	attacker->battle_silencer = 0;
+}
+
 static void ComputeBattleUnitDodgeRate(struct BattleUnit *attacker)
 {
 	attacker->battle_dodge = attacker->unit.lck;
@@ -116,6 +121,9 @@ static void PreBattleCalcEnd(struct BattleUnit *attacker, struct BattleUnit *def
 
 	if (attacker->battle_dodge < 0)
 		attacker->battle_dodge = 0;
+
+	if (attacker->battle_silencer < 0)
+		attacker->battle_silencer = 0;
 }
 
 extern void PreBattleCalc_AttackerSkills(struct BattleUnit *attacker, struct BattleUnit *defender);
@@ -131,6 +139,7 @@ void ComputeBattleUnitStats(struct BattleUnit *attacker, struct BattleUnit *defe
 	ComputeBattleUnitAvoidRate(attacker);
 	ComputeBattleUnitCritRate(attacker);
 	ComputeBattleUnitDodgeRate(attacker);
+	ComputeBattleUnitSilencerRate(attacker);
 
 	/* calc loop */
 	PreBattleCalc_AttackerSkills(attacker, defender);

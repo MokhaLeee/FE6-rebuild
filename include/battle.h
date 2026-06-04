@@ -77,7 +77,9 @@ struct BattleUnit
     /* 54 */ i8 terrain_defense;
     /* 55 */ i8 terrain_avoid;
     /* 56 */ i8 terrain_resistance;
-    /* 57 */ // pad?
+
+    /* CHAX */
+    /* 57 */ i8 battle_silencer;
 
     /* 58 */ i16 battle_attack;
     /* 5A */ i16 battle_defense;
