@@ -381,6 +381,7 @@ void StartModernStatScreen(struct Unit *unit, ProcPtr parent)
 	PlaySe(SONG_6A);
 
 	EndAllMus();
+	unit->flags &= ~UNIT_FLAG_HIDDEN;
 	ShowUnitSprite(unit);
 
 	SpawnProcLocking(proc_modern_statscreen, parent);
