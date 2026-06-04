@@ -242,4 +242,102 @@ void InstallExpandedTextPal(void);
 /**
  * modern statscreen
  */
+enum videoalloc_mss {
+	BGCHR_MSS_TEXT = 0,
+	BGCHR_MSS_FACE = 0x3000 / 0x20,
+	BGCHR_MSS_UI = 0x3400 / 0x20,
+	BGCHR_MSS_UI2 = 0x3C00 / 0x20,
+	BGCHR_MSS_STATBAR = 0x4400 / 0x20,
+
+	BGPAL_MSS_TEXT = 0,
+	BGPAL_MSS_UI = 1, // .. 2
+	BGPAL_MSS_FACE = 3,
+	BGPAL_MSS_ICON0 = 4,
+	BGPAL_MSS_ICON1 = 5,
+	BGPAL_MSS_TILESET = 6, // .. 15
+
+	BGPAL_MSS_STATBAR = BGPAL_MSS_UI + 1,
+
+
+	OBCHR_MSS_SPRITES = 0x5800 / 0x20,
+	OBPAL_MSS_SPRITES = 2,
+};
+
+enum mss_proc_label {
+	PL_MSS_IDLE,
+	PL_MSS_SLIDE_UNIT_IN,
+	PL_MSS_SLIDE_UNIT_OUT,
+	PL_MSS_SLIDE_PAGE,
+
+	PL_MSS_END,
+};
+
+struct ProcMss {
+	PROC_HEADER;
+	int slide_step;
+	i8 page, page_count;
+	u16 excluded_unit_flags;
+};
+
 void StartModernStatScreen(struct Unit *unit, ProcPtr parent);
+
+void Mss_PreparePage(struct ProcMss *proc);
+
+enum mss_text_index {
+	MSS_TEXT_PNAME,
+	MSS_TEXT_JNAME,
+	MSS_TEXT_POW,
+	MSS_TEXT_MAG,
+	MSS_TEXT_SKL,
+	MSS_TEXT_SPD,
+	MSS_TEXT_LCK,
+	MSS_TEXT_DEF,
+	MSS_TEXT_RES,
+	MSS_TEXT_MOV,
+
+	MSS_TEXT_MAX,
+};
+
+struct ModStatScreenSt {
+	struct Unit *unit;
+	const struct HelpBoxInfo *help;
+	struct Text texts[MSS_TEXT_MAX];
+};
+extern struct ModStatScreenSt gMssSt;
+
+enum mss_rect {
+	MSS_U_WIDTH = 20,
+	MSS_U_HIGHT = 6,
+	MSS_U_X = 0,
+	MSS_U_Y = 0,
+
+	MSS_L_WIDTH = 20,
+	MSS_L_HIGHT = 14,
+	MSS_L_X = 0,
+	MSS_L_Y = 6,
+
+	MSS_R_WIDTH = 10,
+	MSS_R_HIGHT = 19,
+	MSS_R_X = 20,
+	MSS_R_Y = 0,
+};
+
+extern EWRAM_OVERLAY(0) u16 TmBuff_MssU0[MSS_U_HIGHT * 0x20];
+extern EWRAM_OVERLAY(0) u16 TmBuff_MssU2[MSS_U_HIGHT * 0x20];
+
+extern EWRAM_OVERLAY(0) u16 TmBuff_MssL0[MSS_L_HIGHT * 0x20];
+extern EWRAM_OVERLAY(0) u16 TmBuff_MssL2[MSS_L_HIGHT * 0x20];
+extern EWRAM_OVERLAY(0) u16 TmBuff_MssL1[MSS_L_HIGHT * 0x20];
+
+extern EWRAM_OVERLAY(0) u16 TmBuff_MssR0[MSS_R_HIGHT * 0x20];
+extern EWRAM_OVERLAY(0) u16 TmBuff_MssR1[MSS_R_HIGHT * 0x20];
+extern EWRAM_OVERLAY(0) u16 TmBuff_MssR2[MSS_R_HIGHT * 0x20];
+
+extern const u16 Tsa_Mss_Upper[];
+extern const u16 Tsa_Mss_Left[];
+extern const u16 Tsa_Mss_Right[];
+extern const u8 Img_MssUI[];
+extern const u16 Pal_MssUI[0x10];
+extern const u8 Img_MssUI2[];
+extern const u16 Pal_MssUI2[0x10];
+extern const u8 Img_MssSprites[];
