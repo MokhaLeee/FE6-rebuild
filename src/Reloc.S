@@ -55,3 +55,6 @@ gpPal_StatscreenPageNameFlashing: .word Pal_StatscreenPageNameFlashing
 
 .global gpSkillExtraInfo
 gpSkillExtraInfo: .word gSkillExtraInfo
+
+.global gpSkillInfo
+gpSkillInfo: .word gSkillInfo

@@ -39,6 +39,8 @@ static void setup_status(void)
 	if (unit) {
 		unit->wexp[ITEM_KIND_STAFF] = WEXP_S;
 		unit->wexp[ITEM_KIND_LIGHT] = WEXP_S;
+		unit->wexp[ITEM_KIND_ANIMA] = WEXP_A + 20;
+		UnitAddItem(unit, CreateItem(IID_FIRE));
 	}
 }
 

@@ -36,6 +36,8 @@ static const struct ProcScr ProcScr_mss_sprites[];
 static const struct TextInitInfo mss_text_init_info[] = {
 	{ &gMssSt.texts[MSS_TEXT_PNAME], 7 },
 	{ &gMssSt.texts[MSS_TEXT_JNAME], 7 },
+	{ &gMssSt.texts[MSS_TEXT_P1_SKILLS], 5 },
+	{ &gMssSt.texts[MSS_TEXT_P1_BMAGS], 5 },
 	{ &gMssSt.texts[MSS_TEXT_POW], 3 },
 	{ &gMssSt.texts[MSS_TEXT_MAG], 5 },
 	{ &gMssSt.texts[MSS_TEXT_SKL], 3 },
@@ -446,5 +448,5 @@ void StartModernStatScreen(struct Unit *unit, ProcPtr parent)
 
 	proc = SpawnProcLocking(ProcScr_modern_statscreen, parent);
 	proc->page = 0;
-	proc->page_count = 4;
+	proc->page_count = 3;
 }

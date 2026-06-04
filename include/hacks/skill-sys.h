@@ -6,6 +6,12 @@
 #define MAX_SKILL_NUM 0x400
 #define SKILL_IS_VALID(sid) (sid != 0)
 
+struct SkillInfo {
+	const u8 *icon;
+	u16 msg_name, msg_desc;
+};
+extern struct SkillInfo const *const gpSkillInfo;
+
 struct SkillList {
 	struct {
 		const struct PInfo *pinfo;

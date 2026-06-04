@@ -1,0 +1,16 @@
+extern const unsigned char Gfx_SkillIcon_BonusMag[];
+extern const unsigned char Gfx_SkillIcon_BlowDuelist[];
+extern const unsigned char Gfx_SkillIcon_BonusHp[];
+extern const unsigned char Gfx_SkillIcon_RangeBonusBow1[];
+extern const unsigned char Gfx_SkillIcon_RangeBonusBMag2[];
+extern const unsigned char Gfx_SkillIcon_BlowFiendish[];
+extern const unsigned char Gfx_SkillIcon_RangeBonusBMag1[];
+extern const unsigned char Gfx_SkillIcon_RangeBonusBow2[];
+extern const unsigned char Gfx_SkillIcon_BlowUncanny[];
+extern const unsigned char Gfx_SkillIcon_BlowArmored[];
+extern const unsigned char Gfx_SkillIcon_BonusPow[];
+extern const unsigned char Gfx_SkillIcon_WIP[];
+extern const unsigned char Gfx_SkillIcon_BlowWarding[];
+extern const unsigned char Gfx_SkillIcon_BlowDeath[];
+extern const unsigned char Gfx_SkillIcon_BlowDarting[];
+extern const unsigned char Gfx_SkillIcon_BlowKilling[];

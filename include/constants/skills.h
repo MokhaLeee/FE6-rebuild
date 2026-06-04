@@ -18,8 +18,8 @@ enum skills {
 	SID_BlowKilling,
 
 	// range skills
-	SID_RANGEBONUS1,
-	SID_RANGEBONUS2,
+	SID_RangeBonusBow1,
+	SID_RangeBonusBow2,
 
 	// Misc battle skills
 	SID_Nihil,

@@ -6,6 +6,8 @@
 #include "constants/icons.h"
 #include "constants/videoalloc_global.h"
 
+#include "skill-sys.h"
+
 #define MAX_SIMULTANEOUS_ICONS 32
 static u16 IconReSts[MAX_SIMULTANEOUS_ICONS];
 
@@ -46,22 +48,30 @@ static const u8 *GetCombatArtIcon(const u8 cid)
 
 static const u8 *GetSkillIcon1(const u8 sid_lo)
 {
-	return NULL;
+	const u8 *icon = gpSkillInfo[0x000 + sid_lo].icon;
+
+	return icon ? icon : gpSkillInfo[0].icon;
 }
 
 static const u8 *GetSkillIcon2(const u8 sid_lo)
 {
-	return NULL;
+	const u8 *icon = gpSkillInfo[0x100 + sid_lo].icon;
+
+	return icon ? icon : gpSkillInfo[0].icon;
 }
 
 static const u8 *GetSkillIcon3(const u8 sid_lo)
 {
-	return NULL;
+	const u8 *icon = gpSkillInfo[0x200 + sid_lo].icon;
+
+	return icon ? icon : gpSkillInfo[0].icon;
 }
 
 static const u8 *GetSkillIcon4(const u8 sid_lo)
 {
-	return NULL;
+	const u8 *icon = gpSkillInfo[0x300 + sid_lo].icon;
+
+	return icon ? icon : gpSkillInfo[0].icon;
 }
 
 static const IconGetterFunc IconGetters[ICON_SHEET_AMT] = {
