@@ -37,20 +37,26 @@ extern const u8 Img_MssSprites[];
 enum mss_rect {
 	MSS_U_WIDTH = 20,
 	MSS_U_HIGHT = 6,
+	MSS_U_X = 0,
+	MSS_U_Y = 0,
 
 	MSS_L_WIDTH = 20,
 	MSS_L_HIGHT = 14,
+	MSS_L_X = 0,
+	MSS_L_Y = 6,
 
 	MSS_R_WIDTH = 10,
 	MSS_R_HIGHT = 19,
+	MSS_R_X = 20,
+	MSS_R_Y = 0,
 };
 
 static EWRAM_OVERLAY(0) u16 TmBuff_MssU0[MSS_U_HIGHT * 0x20] = {}; // 24 * 6
 static EWRAM_OVERLAY(0) u16 TmBuff_MssU2[MSS_U_HIGHT * 0x20] = {}; // 24 * 6
 
 static EWRAM_OVERLAY(0) u16 TmBuff_MssL0[MSS_L_HIGHT * 0x20] = {}; // 18 * 14
-static EWRAM_OVERLAY(0) u16 TmBuff_MssL1[MSS_L_HIGHT * 0x20] = {}; // 18 * 14
 static EWRAM_OVERLAY(0) u16 TmBuff_MssL2[MSS_L_HIGHT * 0x20] = {}; // 18 * 14
+static EWRAM_OVERLAY(0) u16 TmBuff_MssL1[MSS_L_HIGHT * 0x20] = {}; // 18 * 14
 
 static EWRAM_OVERLAY(0) u16 TmBuff_MssR0[MSS_R_HIGHT * 0x20] = {}; // 16 * 32
 static EWRAM_OVERLAY(0) u16 TmBuff_MssR1[MSS_R_HIGHT * 0x20] = {}; // 16 * 32
@@ -175,8 +181,8 @@ static void mss_init(ProcPtr proc)
 	CpuFastFill(0, TmBuff_MssU2, sizeof(TmBuff_MssU2));
 
 	CpuFastFill(0, TmBuff_MssL0, sizeof(TmBuff_MssL0));
-	CpuFastFill(0, TmBuff_MssL1, sizeof(TmBuff_MssL1));
 	CpuFastFill(0, TmBuff_MssL2, sizeof(TmBuff_MssL2));
+	CpuFastFill(0, TmBuff_MssL1, sizeof(TmBuff_MssL1));
 
 	CpuFastFill(0, TmBuff_MssR0, sizeof(TmBuff_MssR0));
 	CpuFastFill(0, TmBuff_MssR1, sizeof(TmBuff_MssR1));
@@ -252,7 +258,7 @@ static void mss_put_page_upper(ProcPtr proc)
 static void mss_put_page_left(ProcPtr proc)
 {
 	Decompress(Tsa_Mss_Left, gBuf);
-	TmApplyTsa(TmBuff_MssL1, gBuf, TILEREF(BGCHR_MSS_UI, BGPAL_MSS_UI));
+	TmApplyTsa(TmBuff_MssL2, gBuf, TILEREF(BGCHR_MSS_UI, BGPAL_MSS_UI));
 }
 
 static void mss_PutNumberBonus(int number, u16 *tm)
@@ -334,19 +340,6 @@ static void mss_prepare_display(ProcPtr proc)
 	mss_put_page_upper(proc);
 	mss_put_page_left(proc);
 	mss_put_page_right(proc);
-
-	TmCopyRect(TmBuff_MssU0, gBg0Tm + TM_OFFSET(0, 0), MSS_U_WIDTH, MSS_U_HIGHT);
-	TmCopyRect(TmBuff_MssU2, gBg2Tm + TM_OFFSET(0, 0), MSS_U_WIDTH, MSS_U_HIGHT);
-
-	TmCopyRect(TmBuff_MssL0, gBg0Tm + TM_OFFSET(0, 6), MSS_L_WIDTH, MSS_L_HIGHT);
-	TmCopyRect(TmBuff_MssL1, gBg2Tm + TM_OFFSET(0, 6), MSS_L_WIDTH, MSS_L_HIGHT);
-	TmCopyRect(TmBuff_MssL2, gBg1Tm + TM_OFFSET(0, 6), MSS_L_WIDTH, MSS_L_HIGHT);
-
-	TmCopyRect(TmBuff_MssR0, gBg0Tm + TM_OFFSET(20, 0), MSS_R_WIDTH, MSS_R_HIGHT);
-	TmCopyRect(TmBuff_MssR1, gBg1Tm + TM_OFFSET(20, 0), MSS_R_WIDTH, MSS_R_HIGHT);
-	TmCopyRect(TmBuff_MssR2, gBg2Tm + TM_OFFSET(20, 0), MSS_R_WIDTH, MSS_R_HIGHT);
-
-	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
 }
 
 /**
@@ -372,6 +365,124 @@ static const struct ProcScr ProcScr_mss_sprites[] = {
 /**
  * slide
  */
+enum mss_slide_ops {
+	MSS_SLIDE_IN,
+	MSS_SLIDE_OUT,
+	MSS_SLIDE_NONE,
+};
+
+static void mss_init_slide(struct ProcMss *proc)
+{
+	proc->slide_step = 0;
+}
+
+static void slide_left(int step, enum mss_slide_ops ops)
+{
+	int len, src_off, dst_off;
+
+	if (step > MSS_L_WIDTH)
+		step = MSS_L_WIDTH;
+
+	switch (ops) {
+	case MSS_SLIDE_IN:
+		src_off = MSS_L_WIDTH - step;
+		dst_off = 0;
+		len = MSS_L_WIDTH - src_off;
+		break;
+
+	case MSS_SLIDE_OUT:
+		src_off = step;
+		dst_off = 0;
+		len = MSS_L_WIDTH - src_off;
+		break;
+
+	case MSS_SLIDE_NONE:
+	default:
+		src_off = 0;
+		dst_off = 0;
+		len = MSS_L_WIDTH;
+		break;
+	}
+
+	TmCopyRect(
+		TmBuff_MssL0 + TM_OFFSET(src_off, 0),
+		gBg0Tm + TM_OFFSET(MSS_L_X + dst_off, MSS_L_Y),
+		len, MSS_L_HIGHT);
+
+	TmCopyRect(
+		TmBuff_MssL1 + TM_OFFSET(src_off, 0),
+		gBg1Tm + TM_OFFSET(MSS_L_X + dst_off, MSS_L_Y),
+		len, MSS_L_HIGHT);
+
+	TmCopyRect(
+		TmBuff_MssL2 + TM_OFFSET(src_off, 0),
+		gBg2Tm + TM_OFFSET(MSS_L_X + dst_off, MSS_L_Y),
+		len, MSS_L_HIGHT);
+}
+
+static void slide_up(int step, enum mss_slide_ops ops)
+{
+	int hight, src_off, dst_off;
+
+	if (step > MSS_U_HIGHT)
+		step = MSS_U_HIGHT;
+
+	switch (ops) {
+	case MSS_SLIDE_IN:
+		src_off = MSS_U_HIGHT - step;
+		dst_off = 0;
+		hight = MSS_U_HIGHT - src_off;
+		break;
+
+	case MSS_SLIDE_OUT:
+		src_off = step;
+		dst_off = 0;
+		hight = MSS_U_HIGHT - src_off;
+		break;
+
+	case MSS_SLIDE_NONE:
+	default:
+		src_off = 0;
+		dst_off = 0;
+		hight = MSS_U_HIGHT;
+		break;
+	}
+
+	TmCopyRect(
+		TmBuff_MssU0 + TM_OFFSET(0, src_off),
+		gBg0Tm + TM_OFFSET(MSS_U_X, MSS_U_Y + dst_off),
+		MSS_U_WIDTH, hight);
+
+	TmCopyRect(
+		TmBuff_MssU2,
+		gBg2Tm + TM_OFFSET(MSS_U_X, MSS_U_Y),
+		MSS_U_WIDTH, hight);
+}
+
+static void mss_loop_slide_in(struct ProcMss *proc)
+{
+	int step = proc->slide_step;
+	int max_step = max(MSS_U_HIGHT, max(MSS_L_WIDTH, MSS_R_WIDTH));
+
+	TmFill(gBg0Tm, 0);
+	TmFill(gBg1Tm, 0);
+	TmFill(gBg2Tm, 0);
+
+	slide_up(step, MSS_SLIDE_IN);
+	slide_left(step, MSS_SLIDE_IN);
+
+	/* right */
+
+	TmCopyRect(TmBuff_MssR0, gBg0Tm + TM_OFFSET(MSS_R_X, MSS_R_Y), MSS_R_WIDTH, MSS_R_HIGHT);
+	TmCopyRect(TmBuff_MssR1, gBg1Tm + TM_OFFSET(MSS_R_X, MSS_R_Y), MSS_R_WIDTH, MSS_R_HIGHT);
+	TmCopyRect(TmBuff_MssR2, gBg2Tm + TM_OFFSET(MSS_R_X, MSS_R_Y), MSS_R_WIDTH, MSS_R_HIGHT);
+
+	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
+
+	proc->slide_step++;
+	if (proc->slide_step > max_step)
+		Proc_Break(proc);
+}
 
 /**
  * main
@@ -383,6 +494,9 @@ static const struct ProcScr ProcScr_modern_statscreen[] = {
 	PROC_CALL(mss_init),
 	PROC_YIELD,
 	PROC_CALL(mss_prepare_display),
+
+	PROC_CALL(mss_init_slide),
+	PROC_REPEAT(mss_loop_slide_in),
 
 	PROC_REPEAT(mss_main),
 
