@@ -15,6 +15,8 @@
 #include "text.h"
 #include "msg.h"
 #include "mu.h"
+#include "sprite.h"
+#include "oam.h"
 #include "unitsprite.h"
 #include "constants/songs.h"
 #include "constants/videoalloc_global.h"
@@ -97,7 +99,7 @@ static void mss_main(struct ProcMss *proc)
 	}
 }
 
-static void mss_init(ProcPtr proc)
+static void mss_init(struct ProcMss *proc)
 {
 	struct Unit *unit = gMssSt.unit;
 
@@ -136,10 +138,10 @@ static void mss_init(ProcPtr proc)
 
 	BattleGenerateDisplayStats(unit, GetUnitEquippedWeaponSlot(unit));
 
-	SpawnProc(ProcScr_mss_sprites, proc);
+	proc->proc_sprite = SpawnProc(ProcScr_mss_sprites, proc);
 }
 
-static void mss_end(ProcPtr proc)
+static void mss_end(struct ProcMss *proc)
 {
 	SetBlendNone();
 
@@ -148,20 +150,43 @@ static void mss_end(ProcPtr proc)
 	TmFill(gBg2Tm, 0);
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
 
-	Proc_End(FindProc(ProcScr_mss_sprites));
+	Proc_End(proc->proc_sprite);
 }
 
 /**
  * sprites
  */
-static void mss_sprites_init(ProcPtr proc)
+static void mss_sprites_init(struct ProcMssSprite *proc)
 {
 	Decompress(Img_MssSprites, OBJ_VRAM0 + OBCHR_MSS_SPRITES * CHR_SIZE);
 	ApplyIconPalette(1, 0x10 + OBPAL_MSS_SPRITES);
+
+	proc->clock_left = 0;
+	proc->clock_right = 0;
+	proc->anim_speed_left = 4;
+	proc->anim_speed_right = 4;
 }
 
-static void mss_sprites_loop(ProcPtr proc)
+static void mss_sprites_loop(struct ProcMssSprite *proc)
 {
+	struct ProcMss *mss = proc->proc_parent;
+	int base_oam2 = OAM2_CHR(OBCHR_MSS_SPRITES) + OAM2_PAL(OBPAL_MSS_SPRITES) + OAM2_LAYER(0);
+
+	proc->clock_left += proc->anim_speed_left;
+	proc->clock_right += proc->anim_speed_right;
+
+	/**
+	 * page index
+	 */
+	PutSprite(1, 185, 150, Sprite_8x8, base_oam2 + 0x64 + mss->page + 1);
+	PutSprite(1, 193, 150, Sprite_8x8, base_oam2 + 5);
+	PutSprite(1, 202, 150, Sprite_8x8, base_oam2 + 0x64 + mss->page_count);
+
+	/**
+	 * arrow
+	 */
+	PutSprite(1, 175, 147, Sprite_8x16, base_oam2 + 0x4A + k_umod(proc->clock_left >> 5, 6));
+	PutSprite(1, 212, 147, Sprite_8x16_HFlipped, base_oam2 + 0x4A + k_umod(proc->clock_right >> 5, 6));
 }
 
 static const struct ProcScr ProcScr_mss_sprites[] = {

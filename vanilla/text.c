@@ -282,22 +282,6 @@ void GetStringTextBox(char const * str, int * out_width, int * out_height)
     }
 }
 
-char const * GetStringLineEnd(char const * str)
-{
-    while (*str > 1)
-    {
-        if (*str == 4)
-        {
-            str++;
-            continue;
-        }
-
-        str += 2;
-    }
-
-    return str;
-}
-
 void Text_DrawNumber(struct Text * text, int number)
 {
     if (number == 0)

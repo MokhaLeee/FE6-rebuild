@@ -120,3 +120,14 @@ int NumberToString(int number, char *buf)
 	buf[beg + 1] = '\0';
 	return beg + 1;
 }
+
+char const *GetStringLineEnd(char const *str)
+{
+	while (*str != '\0') {
+		if (*str == '\1')
+			break;
+
+		str += GetChLenUtf8(str);
+	}
+	return str;
+}

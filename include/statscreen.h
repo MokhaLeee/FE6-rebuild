@@ -272,8 +272,19 @@ enum mss_proc_label {
 	PL_MSS_END,
 };
 
+struct ProcMssSprite {
+	PROC_HEADER;
+
+	u16 clock_left;
+	u16 clock_right;
+	i16 anim_speed_left;
+	i16 anim_speed_right;
+};
+
 struct ProcMss {
 	PROC_HEADER;
+	struct ProcMssSprite *proc_sprite;
+
 	int slide_step;
 	i8 page, page_count;
 	u16 excluded_unit_flags;

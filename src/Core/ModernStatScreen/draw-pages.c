@@ -66,27 +66,28 @@ static void put_upage(void)
 /**
  * page 0
  */
-static struct StatScreenTextInfo const textinfo_lpage1[] = {
-	{ gMssSt.texts + MSS_TEXT_P1_SKILLS, TmBuff_MssL0 + TM_OFFSET(1, 1),  TEXT_COLOR_SYSTEM_GOLD, 0, "Skills:" },
-	{ gMssSt.texts + MSS_TEXT_P1_BMAGS, TmBuff_MssL0 + TM_OFFSET(1, 6),  TEXT_COLOR_SYSTEM_GOLD, 0, "B.Magic:" },
-	{ 0 }, // end
-};
+_UNUSED
+static void put_multi_line_text(const char *str, struct Text *texts, u16 *tm, int max_line)
+{
+	int i;
+
+	for (i = 0; i < max_line; i++) {
+		PutDrawText(
+			&texts[i],
+			tm + TM_OFFSET(0, i * 2),
+			TEXT_COLOR_SYSTEM_WHITE,
+			0, 0, str);
+
+		str = GetStringLineEnd(str);
+		if (*str == '\0')
+			break;
+
+		str++;
+	}
+}
 
 static void put_lpage1(void)
 {
-	int i;
-	struct Unit *unit = gMssSt.unit;
-	struct SkillList *slist = GetSkillList(unit);
-
-	PutStatScreenText(textinfo_lpage1);
-
-	for (i = 0; i < slist->amt; i++) {
-		PutIcon(
-			TmBuff_MssL0 + TM_OFFSET(1 + i * 2, 3),
-			SKILL_ICON(slist->sid[i]),
-			TILEREF(0, BGPAL_MSS_ICON0)
-		);
-	}
 }
 
 static void mss_PutNumberBonus(int number, u16 *tm)
@@ -236,8 +237,28 @@ static void put_rpage2(void)
 /**
  * page 3
  */
+static struct StatScreenTextInfo const textinfo_lpage3[] = {
+	{ gMssSt.texts + MSS_TEXT_P1_SKILLS, TmBuff_MssL0 + TM_OFFSET(1, 1),  TEXT_COLOR_SYSTEM_GOLD, 0, "Skills:" },
+	{ gMssSt.texts + MSS_TEXT_P1_BMAGS, TmBuff_MssL0 + TM_OFFSET(1, 6),  TEXT_COLOR_SYSTEM_GOLD, 0, "B.Magic:" },
+	{ 0 }, // end
+};
+
 static void put_lpage3(void)
-{}
+{
+	int i;
+	struct Unit *unit = gMssSt.unit;
+	struct SkillList *slist = GetSkillList(unit);
+
+	PutStatScreenText(textinfo_lpage3);
+
+	for (i = 0; i < slist->amt; i++) {
+		PutIcon(
+			TmBuff_MssL0 + TM_OFFSET(1 + i * 2, 3),
+			SKILL_ICON(slist->sid[i]),
+			TILEREF(0, BGPAL_MSS_ICON0)
+		);
+	}
+}
 
 static struct StatScreenTextInfo const textinfo_rpage3[] = {
 	{ gMssSt.texts + MSS_TEXT_P2_ATK, TmBuff_MssR0 + TM_OFFSET(1, 3),  TEXT_COLOR_SYSTEM_GOLD, 0, "Attack" },
