@@ -3,7 +3,7 @@
 #include "constants/skills.h"
 #include "skillicons.h"
 
-struct SkillInfo const gSkillInfo[] = {
+struct SkillInfo const gSkillInfo[0x400] = {
 	[0] = {
 		.icon = Gfx_SkillIcon_WIP
 	},
