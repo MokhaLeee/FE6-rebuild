@@ -34,16 +34,29 @@ extern const u8 Img_MssUI2[];
 extern const u16 Pal_MssUI2[0x10];
 extern const u8 Img_MssSprites[];
 
-static EWRAM_OVERLAY(0) u16 TmBuff_MssU0[0xC0] = {}; // 24 * 6
-static EWRAM_OVERLAY(0) u16 TmBuff_MssU2[0xC0] = {}; // 24 * 6
-static EWRAM_OVERLAY(0) u16 TmBuff_MssL0[0x1C0] = {}; // 18 * 14
-static EWRAM_OVERLAY(0) u16 TmBuff_MssL1[0x1C0] = {}; // 18 * 14
-static EWRAM_OVERLAY(0) u16 TmBuff_MssL2[0x1C0] = {}; // 18 * 14
-static EWRAM_OVERLAY(0) u16 TmBuff_MssR0[0x200] = {}; // 16 * 32
-static EWRAM_OVERLAY(0) u16 TmBuff_MssR1[0x200] = {}; // 16 * 32
-static EWRAM_OVERLAY(0) u16 TmBuff_MssR2[19 * 0x20] = {}; // 18 * 32
+enum mss_rect {
+	MSS_U_WIDTH = 20,
+	MSS_U_HIGHT = 6,
 
-static const struct ProcScr proc_mss_sprites[];
+	MSS_L_WIDTH = 20,
+	MSS_L_HIGHT = 14,
+
+	MSS_R_WIDTH = 10,
+	MSS_R_HIGHT = 19,
+};
+
+static EWRAM_OVERLAY(0) u16 TmBuff_MssU0[MSS_U_HIGHT * 0x20] = {}; // 24 * 6
+static EWRAM_OVERLAY(0) u16 TmBuff_MssU2[MSS_U_HIGHT * 0x20] = {}; // 24 * 6
+
+static EWRAM_OVERLAY(0) u16 TmBuff_MssL0[MSS_L_HIGHT * 0x20] = {}; // 18 * 14
+static EWRAM_OVERLAY(0) u16 TmBuff_MssL1[MSS_L_HIGHT * 0x20] = {}; // 18 * 14
+static EWRAM_OVERLAY(0) u16 TmBuff_MssL2[MSS_L_HIGHT * 0x20] = {}; // 18 * 14
+
+static EWRAM_OVERLAY(0) u16 TmBuff_MssR0[MSS_R_HIGHT * 0x20] = {}; // 16 * 32
+static EWRAM_OVERLAY(0) u16 TmBuff_MssR1[MSS_R_HIGHT * 0x20] = {}; // 16 * 32
+static EWRAM_OVERLAY(0) u16 TmBuff_MssR2[MSS_R_HIGHT * 0x20] = {}; // 18 * 32
+
+static const struct ProcScr ProcScr_mss_sprites[];
 
 enum videoalloc_mss {
 	BGCHR_MSS_TEXT = 0,
@@ -85,10 +98,14 @@ struct ModStatScreenSt {
 	struct Unit *unit;
 	const struct HelpBoxInfo *help;
 	struct Text texts[MSS_TEXT_MAX];
-
-	u8 page, page_count;
 };
 static EWRAM_DATA struct ModStatScreenSt mss_st = {};
+
+struct ProcMss {
+	PROC_HEADER;
+	int slide_step;
+	u8 page, next_page, page_count;
+};
 
 static const struct TextInitInfo mss_text_init_info[] = {
 	{ &mss_st.texts[MSS_TEXT_PNAME], 7 },
@@ -165,9 +182,24 @@ static void mss_init(ProcPtr proc)
 	CpuFastFill(0, TmBuff_MssR1, sizeof(TmBuff_MssR1));
 	CpuFastFill(0, TmBuff_MssR2, sizeof(TmBuff_MssR2));
 
-	SpawnProc(proc_mss_sprites, proc);
+	SpawnProc(ProcScr_mss_sprites, proc);
 }
 
+static void mss_end(ProcPtr proc)
+{
+	SetBlendNone();
+
+	TmFill(gBg0Tm, 0);
+	TmFill(gBg1Tm, 0);
+	TmFill(gBg2Tm, 0);
+	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
+
+	Proc_End(FindProc(ProcScr_mss_sprites));
+}
+
+/**
+ * draw page
+ */
 static void mss_put_page_upper(ProcPtr proc)
 {
 	int x_offset, x_text;
@@ -266,15 +298,14 @@ static void mss_put_stat(int num, int x, int y, int base, int total, int max)
 }
 
 static struct StatScreenTextInfo const mss_textinfo_page1_right[] = {
-	{ mss_st.texts + MSS_TEXT_POW, TmBuff_MssR0 + TM_OFFSET(1, 0),  TEXT_COLOR_SYSTEM_GOLD, 0, "Str" },
-	{ mss_st.texts + MSS_TEXT_MAG, TmBuff_MssR0 + TM_OFFSET(1, 2),  TEXT_COLOR_SYSTEM_GOLD, 0, "Mag" },
-	{ mss_st.texts + MSS_TEXT_SKL, TmBuff_MssR0 + TM_OFFSET(1, 4),  TEXT_COLOR_SYSTEM_GOLD, 0, "Skl" },
-	{ mss_st.texts + MSS_TEXT_SPD, TmBuff_MssR0 + TM_OFFSET(1, 6),  TEXT_COLOR_SYSTEM_GOLD, 0, "Spd" },
-	{ mss_st.texts + MSS_TEXT_DEF, TmBuff_MssR0 + TM_OFFSET(1, 8),  TEXT_COLOR_SYSTEM_GOLD, 0, "Def" },
-	{ mss_st.texts + MSS_TEXT_RES, TmBuff_MssR0 + TM_OFFSET(1, 10), TEXT_COLOR_SYSTEM_GOLD, 0, "Res" },
-
-	{ mss_st.texts + MSS_TEXT_LCK, TmBuff_MssR0 + TM_OFFSET(1, 12),  TEXT_COLOR_SYSTEM_GOLD, 0, "Lck" },
-	{ mss_st.texts + MSS_TEXT_MOV, TmBuff_MssR0 + TM_OFFSET(1, 14),  TEXT_COLOR_SYSTEM_GOLD, 0, "Mov" },
+	{ mss_st.texts + MSS_TEXT_POW, TmBuff_MssR0 + TM_OFFSET(1, 2),  TEXT_COLOR_SYSTEM_GOLD, 0, "Str" },
+	{ mss_st.texts + MSS_TEXT_MAG, TmBuff_MssR0 + TM_OFFSET(1, 4),  TEXT_COLOR_SYSTEM_GOLD, 0, "Mag" },
+	{ mss_st.texts + MSS_TEXT_SKL, TmBuff_MssR0 + TM_OFFSET(1, 6),  TEXT_COLOR_SYSTEM_GOLD, 0, "Skl" },
+	{ mss_st.texts + MSS_TEXT_SPD, TmBuff_MssR0 + TM_OFFSET(1, 8),  TEXT_COLOR_SYSTEM_GOLD, 0, "Spd" },
+	{ mss_st.texts + MSS_TEXT_DEF, TmBuff_MssR0 + TM_OFFSET(1, 10),  TEXT_COLOR_SYSTEM_GOLD, 0, "Def" },
+	{ mss_st.texts + MSS_TEXT_RES, TmBuff_MssR0 + TM_OFFSET(1, 12), TEXT_COLOR_SYSTEM_GOLD, 0, "Res" },
+	{ mss_st.texts + MSS_TEXT_LCK, TmBuff_MssR0 + TM_OFFSET(1, 14),  TEXT_COLOR_SYSTEM_GOLD, 0, "Lck" },
+	{ mss_st.texts + MSS_TEXT_MOV, TmBuff_MssR0 + TM_OFFSET(1, 16),  TEXT_COLOR_SYSTEM_GOLD, 0, "Mov" },
 	{ 0 }, // end
 };
 
@@ -287,14 +318,14 @@ static void mss_put_page_right(ProcPtr proc)
 
 	PutStatScreenText(mss_textinfo_page1_right);
 
-	mss_put_stat(0, 5, 0,  unit->pow, GetUnitPower(unit), GetUnitMaxStatusPow(unit));
-	mss_put_stat(1, 5, 2,  unit->mag, GetUnitMagic(unit), GetUnitMaxStatusMag(unit));
-	mss_put_stat(2, 5, 4,  unit->skl, GetUnitSkill(unit), GetUnitMaxStatusSkl(unit));
-	mss_put_stat(3, 5, 6,  unit->spd, GetUnitSpeed(unit), GetUnitMaxStatusSpd(unit));
-	mss_put_stat(4, 5, 8,  unit->def, GetUnitDefense(unit), GetUnitMaxStatusDef(unit));
-	mss_put_stat(5, 5, 10, unit->res, GetUnitResistance(unit), GetUnitMaxStatusRes(unit));
-	mss_put_stat(6, 5, 12, unit->lck, GetUnitLuck(unit), GetUnitMaxStatusLck(unit));
-	mss_put_stat(7, 5, 14, UNIT_MOV_BASE(unit), GetUnitMovement(unit), GetUnitMaxStatusMov(unit));
+	mss_put_stat(0, 5, 2,  unit->pow, GetUnitPower(unit), GetUnitMaxStatusPow(unit));
+	mss_put_stat(1, 5, 4,  unit->mag, GetUnitMagic(unit), GetUnitMaxStatusMag(unit));
+	mss_put_stat(2, 5, 6,  unit->skl, GetUnitSkill(unit), GetUnitMaxStatusSkl(unit));
+	mss_put_stat(3, 5, 8,  unit->spd, GetUnitSpeed(unit), GetUnitMaxStatusSpd(unit));
+	mss_put_stat(4, 5, 10,  unit->def, GetUnitDefense(unit), GetUnitMaxStatusDef(unit));
+	mss_put_stat(5, 5, 12, unit->res, GetUnitResistance(unit), GetUnitMaxStatusRes(unit));
+	mss_put_stat(6, 5, 14, unit->lck, GetUnitLuck(unit), GetUnitMaxStatusLck(unit));
+	mss_put_stat(7, 5, 16, UNIT_MOV_BASE(unit), GetUnitMovement(unit), GetUnitMaxStatusMov(unit));
 }
 
 static void mss_prepare_display(ProcPtr proc)
@@ -304,30 +335,18 @@ static void mss_prepare_display(ProcPtr proc)
 	mss_put_page_left(proc);
 	mss_put_page_right(proc);
 
-	TmCopyRect(TmBuff_MssU0, gBg0Tm + TM_OFFSET(0, 0), 30, 6);
-	TmCopyRect(TmBuff_MssU2, gBg2Tm + TM_OFFSET(0, 0), 30, 6);
+	TmCopyRect(TmBuff_MssU0, gBg0Tm + TM_OFFSET(0, 0), MSS_U_WIDTH, MSS_U_HIGHT);
+	TmCopyRect(TmBuff_MssU2, gBg2Tm + TM_OFFSET(0, 0), MSS_U_WIDTH, MSS_U_HIGHT);
 
-	TmCopyRect(TmBuff_MssL0, gBg0Tm + TM_OFFSET(0, 6), 20, 14);
-	TmCopyRect(TmBuff_MssL1, gBg2Tm + TM_OFFSET(0, 6), 20, 14);
-	TmCopyRect(TmBuff_MssL2, gBg1Tm + TM_OFFSET(0, 6), 20, 14);
+	TmCopyRect(TmBuff_MssL0, gBg0Tm + TM_OFFSET(0, 6), MSS_L_WIDTH, MSS_L_HIGHT);
+	TmCopyRect(TmBuff_MssL1, gBg2Tm + TM_OFFSET(0, 6), MSS_L_WIDTH, MSS_L_HIGHT);
+	TmCopyRect(TmBuff_MssL2, gBg1Tm + TM_OFFSET(0, 6), MSS_L_WIDTH, MSS_L_HIGHT);
 
-	TmCopyRect(TmBuff_MssR0, gBg0Tm + TM_OFFSET(20, 2), 10, 16);
-	TmCopyRect(TmBuff_MssR1, gBg1Tm + TM_OFFSET(20, 2), 10, 16);
-	TmCopyRect(TmBuff_MssR2, gBg2Tm + TM_OFFSET(20, 0), 10, 19);
+	TmCopyRect(TmBuff_MssR0, gBg0Tm + TM_OFFSET(20, 0), MSS_R_WIDTH, MSS_R_HIGHT);
+	TmCopyRect(TmBuff_MssR1, gBg1Tm + TM_OFFSET(20, 0), MSS_R_WIDTH, MSS_R_HIGHT);
+	TmCopyRect(TmBuff_MssR2, gBg2Tm + TM_OFFSET(20, 0), MSS_R_WIDTH, MSS_R_HIGHT);
 
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
-}
-
-static void mss_end(ProcPtr proc)
-{
-	SetBlendNone();
-
-	TmFill(gBg0Tm, 0);
-	TmFill(gBg1Tm, 0);
-	TmFill(gBg2Tm, 0);
-	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
-
-	Proc_End(FindProc(proc_mss_sprites));
 }
 
 /**
@@ -343,7 +362,7 @@ static void mss_sprites_loop(ProcPtr proc)
 {
 }
 
-static const struct ProcScr proc_mss_sprites[] = {
+static const struct ProcScr ProcScr_mss_sprites[] = {
 	PROC_CALL(mss_sprites_init),
 	PROC_YIELD,
 	PROC_REPEAT(mss_sprites_loop),
@@ -351,9 +370,13 @@ static const struct ProcScr proc_mss_sprites[] = {
 };
 
 /**
+ * slide
+ */
+
+/**
  * main
  */
-static const struct ProcScr proc_modern_statscreen[] = {
+static const struct ProcScr ProcScr_modern_statscreen[] = {
 	// PROC_CALL(LockBmDisplay),
 
 	PROC_CALL(StartGreenText),
@@ -372,10 +395,10 @@ static const struct ProcScr proc_modern_statscreen[] = {
 
 void StartModernStatScreen(struct Unit *unit, ProcPtr parent)
 {
+	struct ProcMss *proc;
+
 	mss_st.unit = unit;
 	mss_st.help = NULL;
-	mss_st.page = 0;
-	mss_st.page_count = 4;
 
 	PidStatsAddStatView(unit->pinfo->id);
 	PlaySe(SONG_6A);
@@ -384,5 +407,7 @@ void StartModernStatScreen(struct Unit *unit, ProcPtr parent)
 	unit->flags &= ~UNIT_FLAG_HIDDEN;
 	ShowUnitSprite(unit);
 
-	SpawnProcLocking(proc_modern_statscreen, parent);
+	proc = SpawnProcLocking(ProcScr_modern_statscreen, parent);
+	proc->page = proc->next_page = 0;
+	proc->page_count = 4;
 }
