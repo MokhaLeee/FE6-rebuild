@@ -533,7 +533,7 @@ do_act:
 #if CONFIG_USE_MODERN_STATSCREEN
         StartModernStatScreen(GetUnit(uid), proc);
 #else
-         StartStatScreen(GetUnit(uid), proc);
+        StartStatScreen(GetUnit(uid), proc);
 #endif
         Proc_Goto(proc, L_PLAYERPHASE_6);
         return;
