@@ -4,13 +4,13 @@
 #include "skillicons.h"
 
 struct SkillInfo const gSkillInfo[] = {
-    [0] = {
-        .icon = Gfx_SkillIcon_WIP
-    },
+	[0] = {
+		.icon = Gfx_SkillIcon_WIP
+	},
 
-    [SID_PowBonus] = {
-        .msg_desc = 0,
-        .msg_name = 0,
-        .icon = Gfx_SkillIcon_BonusPow,
-    },
+	[SID_PowBonus] = {
+		.msg_desc = 0,
+		.msg_name = 0,
+		.icon = Gfx_SkillIcon_BonusPow,
+	},
 };
