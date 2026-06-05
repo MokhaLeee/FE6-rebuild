@@ -777,13 +777,7 @@ void EndEfxSpellCastSync(void)
         return;
     
     gpProcEfxSpellCast = NULL;
-
-#if BUGFIX
     Proc_End(proc);
-#else
-    /* .... */
-    Proc_End(NULL);
-#endif
 }
 
 void EfxSpellCast_FlashIN(struct ProcEfxSpellCast * proc)

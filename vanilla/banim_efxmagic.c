@@ -27,12 +27,7 @@ void StartSpellAnimation(struct Anim *anim)
 	i16 index = gEkrSpellAnimIndex[GetAnimPosition(anim)];
 	SpellAnimFunc func = gEkrSpellAnimLut[index];
 
-#if BUGFIX
-	if (func != NULL)
-#else
-	if (1)
-#endif
-	{
+	if (func != NULL) {
 		gEfxMagicChk_N = false;
 		func(anim);
 	}
@@ -534,45 +529,6 @@ void EfxMagicQUAKE_Loop(struct ProcEfxMagicQuake *proc)
 
 		Proc_End(proc->qproc);
 		Proc_Break(proc);
-	}
-}
-
-struct ProcScr CONST_DATA ProcScr_EfxDummyMagic[] =
-{
-	PROC_NAME_DEBUG("efxDummymagic"),
-	PROC_REPEAT(EfxDummyMagic_Loop),
-	PROC_END,
-};
-
-void NewEfxDummyMagic(struct Anim *anim)
-{
-	struct ProcEfx *proc;
-
-	SpellFx_Begin();
-	SpellFx_ClearBG1Position();
-
-	proc = SpawnProc(ProcScr_EfxDummyMagic, PROC_TREE_3);
-	proc->anim = anim;
-	proc->timer = 0;
-}
-
-void EfxDummyMagic_Loop(struct ProcEfxMagic *proc)
-{
-	struct Anim *anim_other = GetAnimAnotherSide(proc->anim);
-	int time = ++proc->timer;
-
-	if (time == 1) {
-		anim_other->flags3 |= ANIM_BIT3_C02_BLOCK_END | ANIM_BIT3_C01_BLOCK_END_INBATTLE;
-		return;
-	}
-
-	if (time == 10) {
-		if (GetAnimNextRoundType(anim_other) != ANIM_ROUND_INVALID)
-			anim_other->flags3 |= ANIM_BIT3_NEXT_ROUND_START;
-
-		SpellFx_Finish();
-		Proc_Break(proc);
-		return;
 	}
 }
 

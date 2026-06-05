@@ -1202,7 +1202,6 @@ struct ProcEfxEclipseBG
 };
 
 void NewEfxDummyMagic(struct Anim *anim);
-void EfxDummyMagic_Loop(struct ProcEfxMagic *proc);
 void NewEfxTeono(struct Anim *anim);
 void EfxTeono_Loop(struct ProcEfxMagic *proc);
 void NewEfxTeonoOBJ(struct Anim *anim);
