@@ -58,8 +58,8 @@ struct TalkSt
     /* 13 */ i8 print_delay;
     /* 14 */ i8 print_clock;
     /* 15 */ u8 put_lines;
-    /* 16 */ u8 unk_16;
-    /* 17 */ u8 unk_17;
+    /* 16 */ u8 mouth_move_enabled;
+    /* 17 */ u8 smile_enabled;
     /* 18 */ struct FaceProc * faces[TALK_FACE_COUNT];
     /* 38 */ u16 flags;
     /* 3A */ // pad

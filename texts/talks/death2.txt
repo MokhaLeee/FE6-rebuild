@@ -1,4 +1,2 @@
 ## MSG_2BE
-[LoadFace][FID_0x36][ToggleSmile]くいはない・・・[A][CR][LF]
-ツァイスよ[LF]
-ミレディを・・・たのむ・・・[A][X]
+[LoadFace][FID_0x36][ToggleSmile]...[A][X]

@@ -405,8 +405,8 @@ ProcPtr StartTalkExt(int x, int y, char const * str, ProcPtr parent)
     sTalkSt->speak_talk_face = (i8) TALK_FACE_NONE;
     sTalkSt->put_lines = FALSE;
     sTalkSt->instant_print = FALSE;
-    sTalkSt->unk_16 = 1;
-    sTalkSt->unk_17 = 0;
+    sTalkSt->mouth_move_enabled = 1;
+    sTalkSt->smile_enabled = 0;
 
     sTalkSt->flags = 0;
 
@@ -630,7 +630,7 @@ static bool TalkPrepNextChar(ProcPtr proc)
         sTalkSt->put_lines = TRUE;
     }
 
-    if (sTalkSt->unk_16 != 0)
+    if (sTalkSt->mouth_move_enabled != 0)
         SetTalkFaceMouthMove(sTalkSt->active_talk_face);
 
     return FALSE;
@@ -771,14 +771,13 @@ static int TalkInterpret(ProcPtr proc)
         return 3;
 
     case 0x16:
-        sTalkSt->unk_16 = 1 - sTalkSt->unk_16;
+        sTalkSt->mouth_move_enabled = 1 - sTalkSt->mouth_move_enabled;
 
         sTalkSt->str++;
         return 3;
 
-    case 0x17:
-        sTalkSt->unk_17 = 1 - sTalkSt->unk_17;
-
+    case 0x17: // ToggleSmile
+        sTalkSt->smile_enabled = 1 - sTalkSt->smile_enabled;
         sTalkSt->str++;
         return 3;
 
@@ -1687,7 +1686,7 @@ static void SetTalkFaceDisp(int talk_face, int faceDisp)
     disp = GetFaceDisp(sTalkSt->faces[talk_face]);
     disp &= ~(FACE_DISP_SMILE | FACE_DISP_TALK_1 | FACE_DISP_TALK_2);
 
-    SetFaceDisp(sTalkSt->faces[talk_face], disp | faceDisp | lut[sTalkSt->unk_17]);
+    SetFaceDisp(sTalkSt->faces[talk_face], disp | faceDisp | lut[sTalkSt->smile_enabled]);
 }
 
 static void SetTalkFaceMouthMove(int talk_face)
