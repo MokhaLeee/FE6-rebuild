@@ -396,9 +396,15 @@ CC_LDFLAGS = -T $(LDS) -Wl,-Map $(MAP) $(LIBS)
 	@echo "[SYM]	$@"
 	@python3 tools/scripts/elf2sym.py $< | python3 tools/scripts/sym_modify.py > $@
 
+LIB_DIRS   := $(DEVKITPRO)/libgba
+LIB_PATHES := $(foreach dir,$(LIB_DIRS),-L$(dir)/lib)
+
+LIB_FLAGS := -lmm -lgba
+LIB_FLAGS += -lc -lgcc
+
 $(ELF): $(ALL_OBJS) lds/*.lds
 	@echo "[LD ]	$@"
-	@$(LD) $(LD_LDFLAGS) $(ALL_OBJS) -lmm -lgba -lc -lgcc -o $@
+	@$(LD) $(LD_LDFLAGS) $(ALL_OBJS) $(LIB_PATHES) $(LIB_FLAGS) -o $@
 #	@$(CC) $(CC_LDFLAGS) $(ALL_OBJS) -lmm -lgba -lc -lgcc -o $@
 
 CLEAN_FILES += $(ROM) $(ELF) $(MAP) $(SYM)
