@@ -121,11 +121,6 @@ struct MapChangeInfo
     /* 08 */ u16 const * metatiles;
 };
 
-struct BanimInfoEnt
-{
-    u16 wtype, index;
-};
-
 struct SioMessage
 {
     /* 00 */ u8 kind;

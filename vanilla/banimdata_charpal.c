@@ -7,7 +7,6 @@ const int BattleAnimCharaPal_size  = 0x30A4;
 const struct BattleAnimCharaPal gBanimCharaPalTable[] = {
 	{
 		.abbr = "roy",
-		.pal = Pal_BanimChar_087FC800,
 	},
 	{
 		.abbr = "wolt",
@@ -115,7 +114,6 @@ const struct BattleAnimCharaPal gBanimCharaPalTable[] = {
 	},
 	{
 		.abbr = "lilina",
-		.pal = Pal_BanimChar_087FD244,
 	},
 	{
 		.abbr = "hugh",
@@ -239,7 +237,6 @@ const struct BattleAnimCharaPal gBanimCharaPalTable[] = {
 	},
 	{
 		.abbr = "lilina",
-		.pal = Pal_BanimChar_087FDFB8,
 	},
 	{
 		.abbr = "hugh",

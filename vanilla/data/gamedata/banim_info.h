@@ -1,5 +1,6 @@
 #include "prelude.h"
 #include "item.h"
+#include "banim_data.h"
 #include "constants/iids.h"
 
 struct BanimInfoEnt CONST_DATA BanimInfo_Roy[] = {

@@ -3,44 +3,56 @@
 #include "prelude.h"
 
 struct BattleAnim {
-    char abbr[12];
-    int *modes;
-    void *script;
-    void *oam_r;
+	char abbr[12];
+	int *modes;
+	void *script;
+	void *oam_r;
 
 #if CONFIG_AUTO_LEFT_OAM
-    void *unused_oam_l;
+	void *unused_oam_l;
 #else
-    void *oam_l;
+	void *oam_l;
 #endif
 
-    void *pal;
+	void *pal;
 };
 
 extern struct BattleAnim gBanimTable[];
 
 struct BattleAnimCharaPal {
-    char abbr[12];
-    u16 *pal;
+	char abbr[12];
+	u16 *pal;
 };
 
 extern const struct BattleAnimCharaPal gBanimCharaPalTable[];
 
 struct BattleAnimTerrain {
-    char abbr[12];
-    u16 *tileset;
-    u16 *palette;
-    int null_1; // useless, always 00
+	char abbr[12];
+	u16 *tileset;
+	u16 *palette;
+	int null_1; // useless, always 00
 };
 
 extern const struct BattleAnimTerrain gBanimTerrainTable[];
 
 struct BanimScrFrame {
-    // disassemble of ANIMSCR_FRAME
-    u32 prefix;
-    const u32 *img;
-    u32 oam_offset;
+	// disassemble of ANIMSCR_FRAME
+	u32 prefix;
+	const u32 *img;
+	u32 oam_offset;
 };
+
+struct BanimInfoEnt {
+	u16 wtype, index;
+};
+
+struct IndividualAnimConf {
+	u8 pid, jid;
+	u8 _pad_[2];
+	const struct BanimInfoEnt *anim_conf;
+};
+
+extern struct IndividualAnimConf const *const gpIndividualAnimConf;
 
 extern int BANIM_MODE_armm_sp1[];
 extern u32 BANIM_SCR_armm_sp1[];
@@ -860,3 +872,8 @@ extern u16 Anim_LordT0_Sword_pal[];
 extern u32 Anim_LordT0_Sword_sectiondata[];
 extern u32 Anim_LordT0_Sword_framedata[];
 extern u32 Anim_LordT0_Sword_rtl[];
+
+extern u16 Anim_LilinaMage_Magi_pal[];
+extern u32 Anim_LilinaMage_Magi_sectiondata[];
+extern u32 Anim_LilinaMage_Magi_framedata[];
+extern u32 Anim_LilinaMage_Magi_rtl[];

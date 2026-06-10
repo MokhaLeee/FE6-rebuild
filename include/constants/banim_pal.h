@@ -3,7 +3,7 @@
 enum
 {
     BANIM_PAL_DEFAULT,
-    BANIM_PAL_01 = 0x01,
+    // BANIM_PAL_01 = 0x01,
     BANIM_PAL_02 = 0x02,
     BANIM_PAL_03 = 0x03,
     BANIM_PAL_04 = 0x04,
@@ -30,7 +30,7 @@ enum
     BANIM_PAL_19 = 0x19,
     BANIM_PAL_1A = 0x1A,
     BANIM_PAL_1B = 0x1B,
-    BANIM_PAL_1C = 0x1C,
+    // BANIM_PAL_1C = 0x1C,
     BANIM_PAL_1D = 0x1D,
     BANIM_PAL_1E = 0x1E,
     BANIM_PAL_1F = 0x1F,
@@ -61,7 +61,7 @@ enum
     BANIM_PAL_38 = 0x38,
     BANIM_PAL_39 = 0x39,
     BANIM_PAL_3A = 0x3A,
-    BANIM_PAL_3B = 0x3B,
+    // BANIM_PAL_3B = 0x3B,
     BANIM_PAL_3C = 0x3C,
     BANIM_PAL_3D = 0x3D,
     BANIM_PAL_3E = 0x3E,

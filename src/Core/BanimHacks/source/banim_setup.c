@@ -162,11 +162,11 @@ bool _SetupBanim(void)
 	}
 
 	if (gEkrDistanceType == EKR_DISTANCE_PROMOTION) {
-		gBanimIdx[POS_L] = gBanimIdx_bak[POS_L] = GetBattleAnimationId(animdef1, bu1->weapon);
-		gBanimIdx[POS_R] = gBanimIdx_bak[POS_R] = GetBattleAnimationId(animdef2, bu2->weapon);
+		gBanimIdx[POS_L] = gBanimIdx_bak[POS_L] = GetBattleAnimationId(unit_bu1, animdef1, bu1->weapon);
+		gBanimIdx[POS_R] = gBanimIdx_bak[POS_R] = GetBattleAnimationId(unit_bu2, animdef2, bu2->weapon);
 	} else {
-		if (valid_l) gBanimIdx[POS_L] = gBanimIdx_bak[POS_L] = GetBattleAnimationId(animdef1, bu1->weapon_before);
-		if (valid_r) gBanimIdx[POS_R] = gBanimIdx_bak[POS_R] = GetBattleAnimationId(animdef2, bu2->weapon_before);
+		if (valid_l) gBanimIdx[POS_L] = gBanimIdx_bak[POS_L] = GetBattleAnimationId(unit_bu1, animdef1, bu1->weapon_before);
+		if (valid_r) gBanimIdx[POS_R] = gBanimIdx_bak[POS_R] = GetBattleAnimationId(unit_bu2, animdef2, bu2->weapon_before);
 	}
 
 	if (valid_l)
@@ -546,49 +546,6 @@ bool _SetupBanim(void)
 	}
 
 	return true;
-}
-
-u16 GetBattleAnimationId(const struct BanimInfoEnt *animdef, u16 item)
-{
-	int i, found;
-	u16 itype;
-	int ret = 0;
-
-	if (animdef == NULL || GetItemKind(item) == ITEM_KIND_ITEM)
-		return -1;
-
-	if (item == 0)
-		itype = ITEM_KIND_ITEM;
-	else
-		itype = GetItemKind(item);
-
-
-	for (i = 0, found = false; i < 2; i++) {
-		const struct BanimInfoEnt *it;
-
-		for (it = animdef; it->wtype != 0; it++) {
-			if (i == 0 && it->wtype >= 0x100) {
-				/* round 0: skip wtype judgement */
-				continue;
-			}
-
-			if (i == 1 && it->wtype < 0x100) {
-				/* round 1: skip specific weapon judgement */
-				continue;
-			}
-
-			if (it->wtype == GetItemIid(item) || (it->wtype - 0x100) == itype) {
-				ret = it->index;
-				found = true;
-				break;
-			}
-		}
-
-		if (found == true)
-			break;
-	}
-
-	return (ret - 1);
 }
 
 int GetBanimTerrainGround(u16 terrain, u16 tileset)

@@ -843,7 +843,7 @@ enum banim_terrain_set_type {
     BANIM_TERRAIN_SET_9
 };
 
-u16 GetBattleAnimationId(const struct BanimInfoEnt *animdef, u16 item);
+u16 GetBattleAnimationId(struct Unit *unit, const struct BanimInfoEnt *animdef, u16 item);
 int GetBanimTerrainGround(u16 terrain, u16 tileset);
 int GetBanimBackgroundIndex(u16 terrain, u16 tileset);
 i16 GetSpellAnimId(u16 jid, u16 weapon);

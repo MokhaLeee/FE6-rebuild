@@ -7,6 +7,7 @@
 #include "item.h"
 #include "unit.h"
 #include "support.h"
+#include "banim_data.h"
 
 struct DebugPInfo {
     int idx;

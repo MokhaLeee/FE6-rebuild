@@ -1,10 +1,6 @@
 	.data
 	.align 2,0
 
-	.global Pal_BanimChar_087FC800
-Pal_BanimChar_087FC800:	@ 0x7FC800
-	.incbin "fe6-base.gba", 0x7FC800, 0x7FC858 - 0x7FC800
-
 	.global Pal_BanimChar_087FC858
 Pal_BanimChar_087FC858:	@ 0x7FC858
 	.incbin "fe6-base.gba", 0x7FC858, 0x7FC8B8 - 0x7FC858
@@ -108,10 +104,6 @@ Pal_BanimChar_087FD194:	@ 0x7FD194
 	.global Pal_BanimChar_087FD1EC
 Pal_BanimChar_087FD1EC:	@ 0x7FD1EC
 	.incbin "fe6-base.gba", 0x7FD1EC, 0x7FD244 - 0x7FD1EC
-
-	.global Pal_BanimChar_087FD244
-Pal_BanimChar_087FD244:	@ 0x7FD244
-	.incbin "fe6-base.gba", 0x7FD244, 0x7FD2A0 - 0x7FD244
 
 	.global Pal_BanimChar_087FD2A0
 Pal_BanimChar_087FD2A0:	@ 0x7FD2A0
@@ -232,10 +224,6 @@ Pal_BanimChar_087FDEF0:	@ 0x7FDEF0
 	.global Pal_BanimChar_087FDF40
 Pal_BanimChar_087FDF40:	@ 0x7FDF40
 	.incbin "fe6-base.gba", 0x7FDF40, 0x7FDFB8 - 0x7FDF40
-
-	.global Pal_BanimChar_087FDFB8
-Pal_BanimChar_087FDFB8:	@ 0x7FDFB8
-	.incbin "fe6-base.gba", 0x7FDFB8, 0x7FE014 - 0x7FDFB8
 
 	.global Pal_BanimChar_087FE014
 Pal_BanimChar_087FE014:	@ 0x7FE014

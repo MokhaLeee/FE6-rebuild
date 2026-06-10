@@ -4,6 +4,7 @@
 #include "util.h"
 #include "oam.h"
 #include "hardware.h"
+#include "banim_data.h"
 #include "constants/banims.h"
 
 #include "debug.h"
@@ -167,7 +168,7 @@ void UpdateBanimFrame(void)
 
 	/* triangle*/
 	if (gpEkrTriangleUnits[0] != NULL) {
-		bid = GetBattleAnimationId(gpEkrTriangleUnits[0]->jinfo->banim_info, 0);
+		bid = GetBattleAnimationId(gpEkrTriangleUnits[0], gpEkrTriangleUnits[0]->jinfo->banim_info, 0);
 		gpBanimTriAtkPalettes[0] = banim[bid].pal;
 
 		chara_pal = (i16)GetBanimUniquePal(gpEkrTriangleUnits[0]);
@@ -177,7 +178,7 @@ void UpdateBanimFrame(void)
 			gpBanimTriAtkPalettes[0] = (void *)capal->pal;
 		}
 
-		bid = GetBattleAnimationId(gpEkrTriangleUnits[1]->jinfo->banim_info, 0);
+		bid = GetBattleAnimationId(gpEkrTriangleUnits[1], gpEkrTriangleUnits[1]->jinfo->banim_info, 0);
 		gpBanimTriAtkPalettes[1] = banim[bid].pal;
 
 		chara_pal = (i16)GetBanimUniquePal(gpEkrTriangleUnits[1]);
