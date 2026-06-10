@@ -36,6 +36,7 @@
 #include "augury.h"
 #include "prepscreen.h"
 #include "suspend_ui.h"
+#include "statscreen.h"
 
 #include "constants/videoalloc_global.h"
 #include "constants/terrains.h"

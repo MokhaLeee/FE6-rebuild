@@ -16,6 +16,7 @@
 #include "bmfx.h"
 #include "faction.h"
 #include "ui.h"
+#include "statscreen.h"
 #include "gamedata.h"
 
 #include "constants/terrains.h"

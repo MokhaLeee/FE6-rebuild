@@ -35,9 +35,10 @@
 
 EWRAM_DATA struct StatScreenInfo gStatScreenInfo;
 EWRAM_OVERLAY(0) struct StatScreenSt gStatScreenSt;
-EWRAM_OVERLAY(0) u16 gUiTmScratchC[0x240];
-EWRAM_OVERLAY(0) u16 gUiTmScratchB[0x280];
-EWRAM_OVERLAY(0) u16 gUiTmScratchA[0x280];
+
+// EWRAM_OVERLAY(0) u16 gUiTmScratchC[0x240];
+// EWRAM_OVERLAY(0) u16 gUiTmScratchB[0x280];
+// EWRAM_OVERLAY(0) u16 gUiTmScratchA[0x280];
 
 int GetLastStatScreenUnitId(void)
 {

@@ -354,7 +354,7 @@ enum mss_rect {
 	MSS_L_Y = 6,
 
 	MSS_R_WIDTH = 10,
-	MSS_R_HIGHT = 19,
+	MSS_R_HIGHT = 20,
 	MSS_R_X = 20,
 	MSS_R_Y = 0,
 };
@@ -369,6 +369,10 @@ extern EWRAM_OVERLAY(0) u16 TmBuff_MssL1[MSS_L_HIGHT * 0x20];
 extern EWRAM_OVERLAY(0) u16 TmBuff_MssR0[MSS_R_HIGHT * 0x20];
 extern EWRAM_OVERLAY(0) u16 TmBuff_MssR1[MSS_R_HIGHT * 0x20];
 extern EWRAM_OVERLAY(0) u16 TmBuff_MssR2[MSS_R_HIGHT * 0x20];
+
+#define gUiTmScratchA TmBuff_MssR0
+#define gUiTmScratchB TmBuff_MssR1
+#define gUiTmScratchC TmBuff_MssR2
 
 extern const u16 Tsa_Mss_Upper[];
 extern const u16 Tsa_Mss_Left[];

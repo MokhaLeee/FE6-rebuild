@@ -16,6 +16,7 @@
 #include "faction.h"
 #include "ui.h"
 #include "helpbox.h"
+#include "statscreen.h"
 
 #include "constants/videoalloc_global.h"
 #include "constants/msg.h"
