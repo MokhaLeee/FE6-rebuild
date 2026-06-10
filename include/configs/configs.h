@@ -20,7 +20,7 @@
 #define CONFIG_AUTO_LEFT_OAM 1
 
 /* use rewritten statscreen */
-#define CONFIG_USE_MODERN_STATSCREEN 1
+#define CONFIG_USE_MODERN_STATSCREEN 0
 
 #include "configs/config-debug.h"
 
