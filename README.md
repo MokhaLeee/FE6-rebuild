@@ -22,6 +22,7 @@ make all
 - Banim
     1. Update banim data struct, not to compress banim script, who holds banim image pointer. Banim script EWRAM buffer is also removed.
     2. Auto generate left OAM to save spaces.
+    3. Introduce character unique banim.
 - Save
     1. Expanded modular save introduced.
     2. Read/Save operation has been set as 4K aligned.
