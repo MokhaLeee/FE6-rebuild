@@ -72,7 +72,8 @@ void PutStatScreenPersonalInfoPage(void)
 	else
 		tsa = TsaLut_StatScreenBgNonePlayer[0];
 
-	TmApplyTsa(gUiTmScratchB, tsa, TILEREF(BGCHR_WINDOWFRAME, BGPAL_WINDOWFRAME));
+	Decompress(tsa, gBuf);
+	TmApplyTsa(gUiTmScratchB, gBuf, TILEREF(BGCHR_WINDOWFRAME, BGPAL_WINDOWFRAME));
 
 	PutStatScreenText(gStatScreenPersonalInfoLabelsInfo);
 

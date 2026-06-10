@@ -234,8 +234,8 @@ struct StatScreenBg1Tsa {
 	u16 data[STATSCREEN_BG1_WIDTH * STATSCREEN_BG1_HEIGHT + 1];
 };
 
-extern struct StatScreenBg1Tsa const *const TsaLut_StatScreenBgPlayer[5];
-extern struct StatScreenBg1Tsa const *const TsaLut_StatScreenBgNonePlayer[5];
+extern u16 const *const TsaLut_StatScreenBgPlayer[5];
+extern u16 const *const TsaLut_StatScreenBgNonePlayer[5];
 
 void InstallExpandedTextPal(void);
 
