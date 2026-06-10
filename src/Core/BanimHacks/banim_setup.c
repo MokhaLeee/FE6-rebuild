@@ -44,13 +44,13 @@ static inline i16 GetBanimBattleActorPosition(int faction1, int faction2)
 bool _SetupBanim(void)
 {
 	int zero;
-	struct BattleUnit * bu1, * bu2;
-	struct Unit * unit_bu2;
-	const struct PInfo * pinfo1, * pinfo2;
-	struct Unit * unit_bu1;
+	struct BattleUnit *bu1, *bu2;
+	struct Unit *unit_bu2;
+	const struct PInfo *pinfo1, *pinfo2;
+	struct Unit *unit_bu1;
 	int usrdefined_enable;
-	const struct BanimInfoEnt * animdef1;
-	const struct BanimInfoEnt * animdef2;
+	const struct BanimInfoEnt *animdef1;
+	const struct BanimInfoEnt *animdef2;
 	i16 valid_l, valid_r;
 
 	int char_cnt = 1;
@@ -548,7 +548,7 @@ bool _SetupBanim(void)
 	return true;
 }
 
-u16 GetBattleAnimationId(const struct BanimInfoEnt * animdef, u16 item)
+u16 GetBattleAnimationId(const struct BanimInfoEnt *animdef, u16 item)
 {
 	int i, found;
 	u16 itype;
