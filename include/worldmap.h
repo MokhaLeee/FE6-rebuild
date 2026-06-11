@@ -33,8 +33,8 @@ struct WmArrowSt {
     /* 10 */ int unk_10;
     /* 14 */ int sqrt_array[12];
     /* 44 */ int arctan_array[12];
-    /* 74 */ int unk_74[12];
-    /* A4 */ int unk_A4[12];
+    /* 74 */ int x_sprites[12];
+    /* A4 */ int y_sprites[12];
     /* D4 */ int x_base;
     /* D8 */ int y_base;
 

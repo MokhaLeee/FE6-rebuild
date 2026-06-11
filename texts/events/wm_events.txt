@@ -26,13 +26,13 @@ These smaller lands are...[A][X]
 the Lycian League, whose numerous[LF]
 territories are independently ruled[A][LF]
 by a number of marquesses that are [LF]
-bound by a vow of allegiance{4183}[A][X]
+bound by a vow of allegiance[A][X]
 
 ## MSG_A7B
 Ilia, where the people arduously[LF]
 till the frozen soil and many[A][LF]
 become mercenaries to earn[LF]
-money to survive{4183}[A][X]
+money to survive[A][X]
 
 ## MSG_A7C
 and Sacae, where various clans ride[LF]
