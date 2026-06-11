@@ -88,7 +88,7 @@ void ApplyHelpBoxContentSize(struct HelpBoxProc * proc, int w_inner, int h_inner
 void ApplyHelpBoxPosition(struct HelpBoxProc * proc, int x, int y);
 void SetHelpBoxInitPosition(struct HelpBoxProc * proc, int x, int y);
 void ResetHelpBoxInitSize(struct HelpBoxProc * proc);
-int func_fe6_08070B30(int item);
+int GetHelpBoxItemInfoKind(int item);
 void HelpBoxPopulateAutoItem(struct HelpBoxProc * proc);
 int HelpBoxTryRelocateUp(struct HelpBoxProc * proc);
 int HelpBoxTryRelocateDown(struct HelpBoxProc * proc);
@@ -113,11 +113,11 @@ void PutSpriteTalkBox(int x_box, int y_box, int w_box, int h_box);
 // DrawHelpBoxStaffLabels
 void TypeWritter_Loop(struct ProcTypeWritter * proc);
 void DemoMonologueDisp_Main(struct ProcTypeWritter * proc);
-// func_fe6_08071374
-// func_fe6_080713DC
-// func_fe6_08071410
-void func_fe6_080714F8(int msg, int item);
-void func_fe6_08071514(void);
+// HelpBoxSetupstringLines
+// HelpBoxDrawstring
+// HelpBoxIntroDrawTexts
+void StartHelpBoxTextInit(int msg, int item);
+void ClearHelpBoxText(void);
 // func_fe6_0807155C
 // func_fe6_08071584
 // func_fe6_080715B4
@@ -168,7 +168,7 @@ extern u8 const * CONST_DATA gChapterTitleData[]; // array img ref
 
 extern struct ProcScr CONST_DATA ProcScr_TypeWritter[];
 extern struct ProcScr CONST_DATA ProcScr_DemoMonologueDisp[];
-extern struct ProcScr CONST_DATA gUnk_08677FF8[];
+extern struct ProcScr CONST_DATA ProcScr_HelpBoxIntro[];
 extern struct ProcScr CONST_DATA gUnk_08678020[];
 extern struct ProcScr CONST_DATA gUnk_08678040[];
 extern struct ProcScr CONST_DATA gUnk_08678070[];

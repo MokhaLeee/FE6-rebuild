@@ -7,6 +7,7 @@
 #include "debug.h"
 
 extern char EWRAM_DATA sMsgString[];
+extern int EWRAM_DATA sActiveMsg;
 
 /* 96 ---> 9 6 */
 static void SplitNumberDec2(int in, u8 out[])
@@ -20,6 +21,9 @@ static char *ItemRangeToString(int min, int max)
 	int i, count = 0;
 	u8 min_splited[2], max_splited[2];
 	char str[5];
+
+	/* clear active msg */
+	sActiveMsg = 0;
 
 	if (max == 0) {
 		sprintf(sMsgString, "%d-MAG", min);

@@ -20,822 +20,804 @@
 威力はないがとても扱いやすい剣[X]
 
 ## MSG_5B4
-刃に毒がぬられた剣[X]
+Coated in lethal poison.[X]
 
 ## MSG_5B5
-２回続けて攻撃できる剣[X]
+Can strike consecutively.[X]
 
 ## MSG_5B6
-間接攻撃も可能な光魔法の剣[X]
+Imbued with magic.[X]
 
 ## MSG_5B7
-『神将器』[TAB]烈火の剣[TAB]力＋５[X]
+Increases strength by 5 pts.[X]
 
 ## MSG_5B8
-アーマー系に有効な剣[X]
+Effective against infantry.[X]
 
 ## MSG_5B9
-騎馬ナイト系・アーマー系に有効[X]
+Effective against cavalry, knights.[X]
 
 ## MSG_5BA
-扱いやすく必殺がでやすい剣[X]
+Improves critical hit rate.[X]
 
 ## MSG_5BB
-槍に強く[TAB]斧に弱い剣[X]
+Strong against lances.[X]
 
 ## MSG_5BC
-必殺がでやすい東方の剣[X]
+Improves critical hit rate.[X]
 
 ## MSG_5BD
-ハルトムートの剣[TAB]守備魔防＋５[X]
+Increases Def and Res by 5 pts.[X]
 
 ## MSG_5BE
-騎士たちが使う[TAB]手ごろな槍[X]
+[X]
 
 ## MSG_5BF
-重いが[TAB]より威力のある槍[X]
+[X]
 
 ## MSG_5C0
-非常に威力のある高価な槍[X]
+[X]
 
 ## MSG_5C1
-威力はないがとても扱いやすい槍[X]
+[X]
 
 ## MSG_5C2
-ほ先に毒がぬられた槍[X]
+Coated in lethal poison.[X]
 
 ## MSG_5C3
-２回続けて攻撃できる槍[X]
+Can strike consecutively.[X]
 
 ## MSG_5C4
-間接攻撃も可能な投げ槍[X]
+Doubles as ranged attack.[X]
 
 ## MSG_5C5
-『神将器』[TAB]氷雪の槍[TAB]技＋５[X]
+Increases skill by 5 pts.[X]
 
 ## MSG_5C6
-騎馬ナイト系に有効な槍[X]
+Effective against cavalry.[X]
 
 ## MSG_5C7
-扱いやすく必殺がでやすい槍[X]
+Improves critical hit rate.[X]
 
 ## MSG_5C8
-斧に強く[TAB]剣に弱い槍[X]
+Strong against axes.[X]
 
 ## MSG_5C9
-力自慢が使うのに手ごろな斧[X]
+[X]
 
 ## MSG_5CA
-重いが[TAB]威力の高い斧[X]
+[X]
 
 ## MSG_5CB
-すさまじい威力の高価な斧[X]
+[X]
 
 ## MSG_5CC
-刃に毒がぬられた斧[X]
+Coated in lethal poison.[X]
 
 ## MSG_5CD
-２回続けて攻撃できる斧[X]
+Can strike consecutively.[X]
 
 ## MSG_5CE
-間接攻撃も可能な投げ斧[X]
+Doubles as ranged attack.[X]
 
 ## MSG_5CF
-『神将器』[TAB]天雷の斧[TAB]守備＋５[X]
+Increases defense by 5 pts.[X]
 
 ## MSG_5D0
-アーマー系に有効な斧[X]
+Effective against knights.[X]
 
 ## MSG_5D1
-扱いやすく必殺がでやすい斧[X]
+Improves critical hit rate.[X]
 
 ## MSG_5D2
-剣に強く[TAB]槍に弱い斧[X]
+Strong against swords.[X]
 
 ## MSG_5D3
-使い手に傷を負わせることも[X]
+Might injure its wielder.[X]
 
 ## MSG_5D4
-騎馬ナイト系に有効な斧[X]
+Effective against cavalry.[X]
 
 ## MSG_5D5
-扱いやすい弓[TAB]飛行系に有効[X]
+[X]
 
 ## MSG_5D6
-威力のある弓[TAB]飛行系に有効[X]
+[X]
 
 ## MSG_5D7
-威力の高い弓[TAB]飛行系に有効[X]
+[X]
 
 ## MSG_5D8
-毒がぬられた弓[TAB]飛行系に有効[X]
+Coated in lethal poison.[X]
 
 ## MSG_5D9
-必殺がでやすい弓[TAB]飛行系に有効[X]
+Improves critical hit rate.[X]
 
 ## MSG_5DA
-２回攻撃[TAB]飛行系に有効[X]
+Can strike consecutively.[X]
 
 ## MSG_5DB
-必殺がでやすい東方の弓[X]
+Improves critical hit rate.[X]
 
 ## MSG_5DC
-３マス先の相手に攻撃できる弓[X]
+Extended attack range.[X]
 
 ## MSG_5DD
-『神将器』[TAB]疾風の弓[TAB]速さ＋５[X]
+Increases speed by 5 pts.[X]
 
 ## MSG_5DE
-離れた敵にとどく発射台[X]
+Long-range weapon.[X]
 
 ## MSG_5DF
-より離れた敵に届く発射台[X]
+Super long-range weapon.[X]
 
 ## MSG_5E0
-必殺がでやすい発射台[X]
+Improves critical hit rate.[X]
 
 ## MSG_5E1
-理魔法[TAB]もえさかる炎[X]
+[X]
 
 ## MSG_5E2
-理魔法[TAB]ほとばしる雷[X]
+[X]
 
 ## MSG_5E3
-理魔法[TAB]命を凍らせる冷気[X]
+[X]
 
 ## MSG_5E4
-理魔法[TAB]灰すら焼きつくす炎[X]
+[X]
 
 ## MSG_5E5
-理魔法[TAB]翼を引きちぎる風[X]
+Effective against fliers.[X]
 
 ## MSG_5E6
-理魔法[TAB]息を凍らせる嵐[TAB]遠距離[X]
+Long-range anima magic.[X]
 
 ## MSG_5E7
-理魔法[TAB]身を撃ち貫く雷[TAB]遠距離[X]
+Long-range lightning strike.[X]
 
 ## MSG_5E8
-『神将器』[TAB]業火の理[TAB]幸運＋５[X]
+Increases luck by 5 pts.[X]
 
 ## MSG_5E9
-光魔法[TAB]天上からの怒り[X]
+[X]
 
 ## MSG_5EA
-光魔法[TAB]白き使いの裁き[X]
+[X]
 
 ## MSG_5EB
-光魔法[TAB]逃れえぬ罰[TAB]遠距離[X]
+Long-range magic attack.[X]
 
 ## MSG_5EC
-『神将器』[TAB]至高の光[TAB]魔防＋５[X]
+Boosts resistance by 5 pts.[X]
 
 ## MSG_5ED
-闇魔法[TAB]しのびよる闇[X]
+[X]
 
 ## MSG_5EE
-闇魔法[TAB]ダメージ分ＨＰ吸収[X]
+Drains enemy HP into caster.[X]
 
 ## MSG_5EF
-闇魔法[TAB]侵食する夜[TAB]ＨＰを１に[X]
+Reduces enemy HP to 1.[X]
 
 ## MSG_5F0
-闇魔法[TAB]魂をすする冷たい炎[X]
+[X]
 
 ## MSG_5F1
-『神将器』[TAB]黙示の闇[TAB]魔力＋５[X]
+Boosts magic by 5 pts.[X]
 
 ## MSG_5F2
-隣接する味方の[LF]
-ＨＰを回復します[X]
+Restores HP to allies in[LF]
+adjacent spaces.[X]
 
 ## MSG_5F3
-隣接する味方の[LF]
-ＨＰを多く回復します[X]
+Restores many HP to allies[LF]
+in adjacent spaces.[X]
 
 ## MSG_5F4
-隣接する味方の[LF]
-ＨＰを全て回復します[X]
+Restores all HP to allies[LF]
+in adjacent spaces.[X]
 
 ## MSG_5F5
-離れている味方の[LF]
-ＨＰを回復します[X]
+Restores HP to allies[LF]
+at a distance.[X]
 
 ## MSG_5F6
-近くにいる味方すべての[LF]
-ＨＰを回復します[X]
+Restores all HP to allies[LF]
+nearby.[X]
 
 ## MSG_5F7
-隣接する味方を[LF]
-別の場所にワープさせます[X]
+Moves allies in adjacent[LF]
+spaces instantly elsewhere.[X]
 
 ## MSG_5F8
-離れた場所の味方を[LF]
-自分の近くに引きよせます[X]
+Moves allies from distant[LF]
+spaces to adjacent ones.[X]
 
 ## MSG_5F9
-味方の状態異常を治し[LF]
-正常にもどします[X]
+Returns allies to normal[LF]
+condition. (Cures sleep, etc.)[X]
 
 ## MSG_5FA
-敵の魔法[TAB]杖を[LF]
-数ターン封じこめます[X]
+Halts all enemy magic[LF]
+for several turns.[X]
 
 ## MSG_5FB
-敵を数ターンの間[TAB]眠らせ[LF]
-行動できなくします[X]
+Puts enemies to sleep for[LF]
+several turns.[X]
 
 ## MSG_5FC
-周囲を明るくてらします[LF]
-光はターンごとに弱まります[X]
+Lights an area. The light[LF]
+grows weaker each turn.[X]
 
 ## MSG_5FD
-隣接する味方の持ち物を[LF]
-一つ[TAB]新品にもどします[X]
+Restores an adjacent ally's[LF]
+weapon to new condition.[X]
 
 ## MSG_5FE
-屋根で見えなくなっている場所を[LF]
-見えるようにします[X]
+Makes closed areas visible.[X]
 
 ## MSG_5FF
-敵を混乱させ[LF]
-敵味方なくおそわせます[X]
+Sends enemies into a[LF]
+berserker rage.[X]
 
 ## MSG_600
-扉を開けることができます[LF]
-離れた場所からでも使えます[X]
+Unlocks doors.[X]
 
 ## MSG_601
-隣接する味方の魔防を上げます[LF]
-ターンごとに効果は弱まります[X]
+Increases magic resistance[LF]
+of adjacent allies briefly.[X]
 
 ## MSG_602
-謎の力を秘めた石[LF]
-戦闘時には・・・[X]
+Transforms manaketes[LF]
+into fire dragons.[X]
 
 ## MSG_603
-謎の力を秘めた石[LF]
-戦闘時には・・・[X]
+Transforms Fae into[LF]
+a divine dragon.[X]
 
 ## MSG_604
-謎の力を秘めた石[LF]
-戦闘時には・・・[X]
+Transforms user into[LF]
+a demon dragon.[X]
 
 ## MSG_605
-戦いのわざを伝える書[LF]
-技＋２[TAB]使うと失われます[X]
+Increases skill by[LF]
+2 points. Vanishes after use.[X]
 
 ## MSG_606
-ほほえむ幸運の女神[LF]
-幸運＋２[TAB]使うと失われます[X]
+Increases luck by[LF]
+2 points. Vanishes after use.[X]
 
 ## MSG_607
-地にまい降りた天使の衣[LF]
-最大ＨＰ＋７[TAB]使うと失われます[X]
+Increases HP by a max of[LF]
+7 points. Vanishes after use.[X]
 
 ## MSG_608
-竜のウロコでつくられた盾[LF]
-守備＋２[TAB]使うと失われます[X]
+Increases defense by[LF]
+2 points. Vanishes after use.[X]
 
 ## MSG_609
-戦う力を高める魔法のリング[LF]
-力か魔力＋２[TAB]使うと失われます[X]
+Increases Mag or Str by[LF]
+2 points. Vanishes after use.[X]
 
 ## MSG_60A
-最もすばやい天馬の羽根[LF]
-速さ＋２[TAB]使うと失われます[X]
+Increases speed by[LF]
+2 points. Vanishes after use.[X]
 
 ## MSG_60B
-敵の魔法を払うお守り[LF]
-魔防＋２[TAB]使うと失われます[X]
+Increases resistance by[LF]
+2 points. Vanishes after use.[X]
 
 ## MSG_60C
-魔法がかかったブーツ[LF]
-移動力＋２[TAB]使うと失われます[X]
+Increases movement by[LF]
+2 points. Vanishes after use.[X]
 
 ## MSG_60D
-めきめき筋肉がつくリング[LF]
-体格＋２[TAB]使うと失われます[X]
+Increases constitution by[LF]
+2 points. Vanishes after use.[X]
 
 ## MSG_60E
-１０レベル以上の[TAB]傭兵・剣士[LF]
-戦士・山賊・海賊が使います[X]
+For mercenaries, myrmidons,[LF]
+and axe fighters Lv. 10 and up.[X]
 
 ## MSG_60F
-１０レベル以上の[TAB]ソシアル・[LF]
-アーマーナイトが使います[X]
+For knights and cavaliers[LF]
+Lv. 10 and up.[X]
 
 ## MSG_610
-１０レベル以上の[LF]
-アーチャー・遊牧民が使います[X]
+For archers and nomads[LF]
+Lv. 10 and up.[X]
 
 ## MSG_611
-１０レベル以上の[TAB]ペガサス・[LF]
-ドラゴンナイトが使います[X]
+For pegasus knights and[LF]
+wyvern riders Lv. 10 and up.[X]
 
 ## MSG_612
-僧侶・魔道士・トルバドール・[LF]
-シャーマンが使います[X]
+For magic wielders[LF]
+Lv. 10 and up.[X]
 
 ## MSG_613
-宝箱を開け[TAB]中身を[LF]
-取り出すことができます[X]
+Opens chests.[X]
 
 ## MSG_614
-隣接する扉を開け[LF]
-通り抜けることができます[X]
+Opens doors.[X]
 
 ## MSG_615
 [X]
 
 ## MSG_616
-扉や宝箱を開けます[LF]
-盗賊専用です[X]
+Opens doors and chests.[LF]
+Usable only by thieves.[X]
 
 ## MSG_617
-傷が少しだけ治るくすり[X]
+A medicinal solution used[LF]
+for healing minor wounds.[X]
 
 ## MSG_618
-どんな傷でも治るくすり[LF]
-ＨＰを完全に回復させます[X]
+A powerful solution that[LF]
+restores all HP.[X]
 
 ## MSG_619
-数ターン[TAB]魔防を上げられます[LF]
-ターンごとに効果は弱まります[X]
+A draught that boosts Res.[LF]
+Grows weaker each turn.[X]
 
 ## MSG_61A
-数ターン[TAB]周囲を明るくします[LF]
-ターンごとに効果は弱まります[X]
+A staff with burning pitch.[LF]
+Grows dimmer each turn.[X]
 
 ## MSG_61B
-毒の状態を正常にもどします[X]
+A medicinal solution that[LF]
+cures poison.[X]
 
 ## MSG_61C
-これを持って[TAB]あやしい場所に[LF]
-待機すると・・・[X]
+If someone with this card[LF]
+stops in a suspicious space...[X]
 
 ## MSG_61D
-お店で売っているアイテムを[LF]
-全て半額で買えます[X]
+A special card that reduces[LF]
+the cost of all items by half.[X]
 
 ## MSG_61E
-[X]
+Money.[X]
 
 ## MSG_61F
-魔竜の息吹[X]
+A devastating wave[LF]
+of darkness.[X]
 
 ## MSG_620
-ゼフィール専用[TAB]間接攻撃可能[X]
+Usable only by the king of Bern.[X]
 
 ## MSG_621
-軽くて[TAB]少し威力のある剣[X]
+Wielded by Al.[X]
 
 ## MSG_622
-軽くて[TAB]少し威力のある槍[X]
+Wielded by Gant.[X]
 
 ## MSG_623
-隣接する味方のＨＰを[LF]
-少し多く回復します[X]
+Wielded by Tina.[X]
 
 ## MSG_624
-竜系に有効な剣[X]
+Good against wyverns, dragons.[X]
 
 ## MSG_625
-特別な効果のない[TAB]高価な宝玉[LF]
-１００００Ｇの値打ちがあります[X]
+A valuable gemstone worth[LF]
+10,000 gold.[X]
 
 ## MSG_626
-特別な効果のない[TAB]高価な宝玉[LF]
-５０００Ｇの値打ちがあります[X]
+A rare gemstone woth[LF]
+5,000 gold.[X]
 
 ## MSG_627
-特別な効果のない[TAB]高価な宝玉[LF]
-３０００Ｇの値打ちがあります[X]
+An uncommon gemstone[LF]
+worth 3,000 gold.[X]
 
 ## MSG_628
-いにしえの神「デルフィ」のお守り[LF]
-『飛行系に特効』を無効にします[X]
+An amulet of the god Delphi.[LF]
+Protects fliers from arrows.[X]
 
 ## MSG_629
-間接攻撃も可能な闇魔法の剣[X]
+Restores HP on impact.[X]
 
 ## MSG_62A
-扱いやすく間接攻撃可能な投げ槍[X]
+Doubles as ranged attack.[X]
 
 ## MSG_62B
-扱いやすく間接攻撃可能な投げ斧[X]
+Doubles as ranged attack.[X]
 
 ## MSG_62C
-全味方ユニットの[LF]
-ＨＰと状態を完全に回復します[X]
+Fully restores all allies.[X]
 
 ## MSG_62D
-剣の武器レベルです[X]
+Sword mastery level.[X]
 
 ## MSG_62E
-槍の武器レベルです[X]
+Lance mastery level.[X]
 
 ## MSG_62F
-斧の武器レベルです[X]
+Axe mastery level.[X]
 
 ## MSG_630
-弓の武器レベルです[X]
+Bow mastery level.[X]
 
 ## MSG_631
-杖の武器レベルです[X]
+Staff mastery level.[X]
 
 ## MSG_632
-理魔法の武器レベルです[X]
+Anima mastery level.[X]
 
 ## MSG_633
-光魔法の武器レベルです[X]
+Light mastery level.[X]
 
 ## MSG_634
-闇魔法の武器レベルです[X]
+Dark mastery level.[X]
 
 ## MSG_635
-会話で[TAB]絆を深めた相手です[LF]
-お互いが近くにいると・・・[X]
+Support conversations.[X]
 
 ## MSG_636
-今[TAB]会話できる[LF]
-相手の名前です[X]
+The name of the unit[LF]
+to whom you can talk.[X]
 
 ## MSG_637
-行動を終了します[LF]
-することがなければえらびます[X]
+End the turn. Be sure you're[LF]
+done before you select this.[X]
 
 ## MSG_638
-敵ユニットを攻撃します[LF]
-[X]
+Attack an enemy unit.[X]
 
 ## MSG_639
-杖に秘められた魔法を[LF]
-使います[X]
+Use the magic stored[LF]
+within a staff.[X]
 
 ## MSG_63A
-ひらひら～[LF]
-味方を再行動可能にします[X]
+Perform a dance that allows[LF]
+your allies to move again.[X]
 
 ## MSG_63B
-ポロロン・・・[LF]
-味方を再行動可能にします[X]
+Perform a song that allows[LF]
+your allies to move again.[X]
 
 ## MSG_63C
-スッ・・・[LF]
-敵のもつアイテムをスリ取ります[X]
+Shhh...[LF]
+(Steal enemy items!)[X]
 
 ## MSG_63D
-隣接するユニットを救出し[LF]
-自分に同行させます[X]
+Rescue an ally from[LF]
+an adjacent space.[X]
 
 ## MSG_63E
-同行ユニットを[LF]
-隣接する場所におろします[X]
+Choose to put unit down.[X]
 
 ## MSG_63F
-同行ユニットを[LF]
-隣のユニットに引渡します[X]
+Gives the rescued unit[LF]
+to an adjacent unit.[X]
 
 ## MSG_640
-相手の同行ユニットを引受け[LF]
-自分に同行させます[X]
+Choose to take the held unit.[X]
 
 ## MSG_641
-敵のリーダーを説得します[LF]
-うまくいくかは相手しだいです[X]
+Attempts to make a truce with the enemy leader.[X]
 
 ## MSG_642
-隣接する味方ユニットや[LF]
-敵ユニットに話しかけます[X]
+Talk to an ally or enemy[LF]
+in an adjacent space.[X]
 
 ## MSG_643
-村や[TAB]民家を訪ねます[X]
+Visit a village or home.[X]
 
 ## MSG_644
-拠点を制圧します[LF]
-制圧すればマップクリアです[X]
+Captures the enemy defense point.[X]
 
 ## MSG_645
-とびらを開けます[LF]
-カギを一つ使用します[X]
+A door.[LF]
+Use a key to open it.[X]
 
 ## MSG_646
-はね橋をおろし橋をかけます[LF]
-カギを一つ使用します[X]
+Lowers drawbridge. Uses one key.[X]
 
 ## MSG_647
-宝箱を開けます[LF]
-カギを一つ使用します[X]
+A chest.[LF]
+Use a key to open it.[X]
 
 ## MSG_648
-武器屋に入ります[LF]
-さまざまな武器が売られています[X]
+An armory.[LF]
+Enter to buy weapons.[X]
 
 ## MSG_649
-道具屋に入ります[LF]
-役立つアイテムが売られています[X]
+A shop.[LF]
+Enter to buy items.[X]
 
 ## MSG_64A
-おめでとうございます！[LF]
-幸運なあなただけがこの店に・・・[X]
+Congratulations![LF]
+Welcome to the secret shop.[X]
 
 ## MSG_64B
-闘技場に入ります[LF]
-お金と命をかけて戦います[X]
+Enters the arena to fight for money.[X]
 
 ## MSG_64C
-持ち物を[TAB]使用したり[LF]
-装備したりできます[X]
+Use and equip items.[X]
 
 ## MSG_64D
-隣接する味方ユニットと[LF]
-持ち物を交換します[X]
+Trade items with allies[LF]
+in adjacent spaces.[X]
 
 ## MSG_64E
-主人公やその隣のユニットが[LF]
-持ち物を輸送隊で整理します[X]
+Enter storage.[X]
 
 ## MSG_64F
-通常の弓攻撃を行います[LF]
-[X]
+Attacks with a bow.[X]
 
 ## MSG_650
-シューター地形を利用して[LF]
-より遠くの敵を狙います[X]
+Uses ballista to attack faraway enemies.[X]
 
 ## MSG_651
-武器[TAB]魔道書を持ちかえます[LF]
-装備した武器で反撃します[X]
+Equips item.[X]
 
 ## MSG_652
-アイテムを使用します[X]
+Uses item.[X]
 
 ## MSG_653
-持ち物をすてます[LF]
-大事な持ち物はすてられません[X]
+Discards item.[X]
 
 ## MSG_654
-マップ上にいるユニットを[LF]
-一覧表示します[X]
+Display a chart of all[LF]
+units on the field.[X]
 
 ## MSG_655
-現在の戦況を表示します[X]
+Display current battle[LF]
+progress.[X]
 
 ## MSG_656
-ゲームのスピードや[LF]
-ウィンドウを設定します[X]
+Set game speed and windows.[X]
 
 ## MSG_657
-ゲームを中断します[LF]
-続きは『中断から始める』から[X]
+Stop a battle in progress.[LF]
+Battle can be continued later.[X]
 
 ## MSG_658
-プレイヤーフェイズを[LF]
-終了します[X]
+End player's phase.[X]
 
 ## MSG_659
-出撃するユニットを[LF]
-えらびます[X]
+Select which units to[LF]
+field this battle.[X]
 
 ## MSG_65A
-持っているアイテムを[LF]
-やりとりします[X]
+Manage your units'[LF]
+items.[X]
 
 ## MSG_65B
-それぞれのユニットの[LF]
-詳しい情報を見ます[X]
+Views detailed information[LF]
+on units.[X]
 
 ## MSG_65C
-現在の軍の状態を[LF]
-セーブします[X]
+Save any changed[LF]
+information.[X]
 
 ## MSG_65D
-戦場のマップで[LF]
-自軍の配置を入れかえます[X]
+View the map and change your[LF]
+allies' starting positions.[X]
 
 ## MSG_65E
-このまま[LF]
-戦闘を開始します[X]
+Start the battle.[X]
 
 ## MSG_65F
-ユニットの間で[LF]
-アイテムをやりとりします[X]
+Exchange items[LF]
+between units.[X]
 
 ## MSG_660
-アイテムをすてます[LF]
-大事なアイテムはすてられません[X]
+Discard unneeded[LF]
+items.[X]
 
 ## MSG_661
-輸送隊にアイテムを[LF]
-あずけたり[TAB]受けとったりします[X]
+Transfer items to and[LF]
+from Merlinus.[X]
 
 ## MSG_662
-アイテムの[LF]
-リストを表示します[X]
+Display all units' items.[X]
 
 ## MSG_663
-軍の武器屋で[LF]
-売買をします[X]
+Purchase basic[LF]
+weaponry.[X]
 
 ## MSG_664
-アイテムをあずけます[LF]
-１００個まであずけられます[X]
+Put items in storage.[LF]
+Up to 100 items can be stored.[X]
 
 ## MSG_665
-アイテムを受けとります[LF]
-１ユニットは５つまでもてます[X]
+Receive item.[LF]
+A unit can carry up to 5 items.[X]
 
 ## MSG_666
-ユニットの[LF]
-名前です[X]
+Name of the unit.[X]
 
 ## MSG_667
-ユニットの最大ＨＰ[LF]
-ＨＰの上限です[X]
+Current max HP.[LF]
+Potential max HP.[X]
 
 ## MSG_668
-ユニットの力[TAB]または魔力です[LF]
-攻撃にかかわります[X]
+Strength or magic power.[LF]
+This affects attack ability.[X]
 
 ## MSG_669
-装備している[LF]
-武器[TAB]魔道書です[X]
+Weapon or magical tome[LF]
+being used.[X]
 
 ## MSG_66A
-ユニットの状態です[LF]
-何もなければ[TAB]正常です[X]
+Physical condition.[LF]
+Default is normal.[X]
 
 ## MSG_66B
-このユニットは戦えないため[LF]
-選択できません[X]
+This unit can't fight.[X]
 
 ## MSG_66C
-オンのユニットのみ[LF]
-戦闘アニメーションを実行します[X]
+Configuration for[LF]
+battle scene prep.[X]
 
 ## MSG_66D
-この項目には[LF]
-メッセージがありません[X]
+There is no message here.[X]
 
 ## MSG_66E
-ＨＰを回復します[X]
+Restores HP.[X]
 
 ## MSG_66F
-ＨＰを多く回復します[X]
+Restores many HP.[X]
 
 ## MSG_670
-ＨＰを完全に回復します[X]
+Restores all HP.[X]
 
 ## MSG_671
-はなれた味方を[LF]
-回復します[X]
+Restores HP to[LF]
+distant allies.[X]
 
 ## MSG_672
-周囲の味方全員を[LF]
-回復します[X]
+Restores HP to all[LF]
+allies in one area.[X]
 
 ## MSG_673
-別の地点へ[LF]
-ワープさせます[X]
+Warps allies to[LF]
+other spaces.[X]
 
 ## MSG_674
-味方をとなりに[LF]
-ワープさせます[X]
+Warps allies to a[LF]
+space adjacent to[LF]
+the staff wielder.[X]
 
 ## MSG_675
-味方を正常にもどします[X]
+Restores allies to[LF]
+normal status.[X]
 
 ## MSG_676
-敵の魔法を封じます[X]
+Blocks all enemy[LF]
+magic.[X]
 
 ## MSG_677
-敵をねむらせます[X]
+Puts enemies to[LF]
+sleep.[X]
 
 ## MSG_678
-周囲を明るく[LF]
-てらします[X]
+Lights up an[LF]
+area.[X]
 
 ## MSG_679
-アイテムを[LF]
-新品にもどします[X]
+Restores items to[LF]
+new condition.[X]
 
 ## MSG_67A
-見えない場所を[LF]
-のぞきます[X]
+Views areas[LF]
+without[LF]
+visibility.[X]
 
 ## MSG_67B
-敵を混乱させます[X]
+Drives enemies to[LF]
+attack wildly in a[LF]
+frenzy of rage.[X]
 
 ## MSG_67C
-とびらを開けます[X]
+Opens doors.[X]
 
 ## MSG_67D
-魔防を上げます[X]
+Increases resistance.[X]
 
 ## MSG_67E
-全ユニットのＨＰ[LF]
-状態を完全回復します[X]
+Restores all allies[LF]
+completely.[X]
 
 ## MSG_67F
-マムクート専用[X]
+Manakete only.[X]
 
 ## MSG_680
-ファ専用[X]
+Fae only.[X]
 
 ## MSG_681
-イドゥン専用[X]
+Idunn only.[X]
 
 ## MSG_682
-『技』が増えます[X]
+Increases skill.[X]
 
 ## MSG_683
-『運』が増えます[X]
+Increases luck.[X]
 
 ## MSG_684
-『最大ＨＰ』が増えます[X]
+Increases max HP.[X]
 
 ## MSG_685
-『守備』が増えます[X]
+Increases defense.[X]
 
 ## MSG_686
-『力』または『魔力』[LF]
-が増えます[X]
+Increases either[LF]
+strength or magic.[X]
 
 ## MSG_687
-『速さ』が増えます[X]
+Increases speed.[X]
 
 ## MSG_688
-『魔防』が増えます[X]
+Increases resistance.[X]
 
 ## MSG_689
-『移動力』が増えます[X]
+Increases movement.[X]
 
 ## MSG_68A
-『体格』が増えます[X]
+Increases[LF]
+constitution.[X]
 
 ## MSG_68B
-傭兵[TAB]剣士[TAB]戦士[LF]
-山賊[TAB]海賊を[LF]
-クラスチェンジします[X]
+Use this on a worthy[LF]
+mercenary, myrmidon,[LF]
+or wielder of axes.[X]
 
 ## MSG_68C
-ソシアルナイト[LF]
-アーマーナイトを[LF]
-クラスチェンジします[X]
+Use this on a worthy[LF]
+cavalier or knight.[X]
 
 ## MSG_68D
-アーチャー[TAB]遊牧民を[LF]
-クラスチェンジします[X]
+Use this on a worthy[LF]
+archer or nomad.[X]
 
 ## MSG_68E
-ペガサスナイト[LF]
-ドラゴンナイトを[LF]
-クラスチェンジします[X]
+Use this on a worthy[LF]
+master of a winged[LF]
+mount.[X]
 
 ## MSG_68F
-僧侶[TAB]魔道士[TAB]シャーマン[LF]
-トルバドールを[LF]
-クラスチェンジします[X]
+Use this on a worthy[LF]
+wielder of magic[LF]
+power and staves.[X]
 
 ## MSG_690
-宝箱を開けて[LF]
-中身をとります[X]
+Opens chests.[X]
 
 ## MSG_691
-扉を開けて[LF]
-通れるようにします[X]
+Opens doors.[X]
 
 ## MSG_692
-はね橋をおろし[LF]
-渡れるようにします[X]
+Opens bridge.[X]
 
 ## MSG_693
-盗賊専用の[LF]
-万能カギです[X]
+Universal lockpicks[LF]
+designed for thieves.[X]
 
 ## MSG_694
-ＨＰを回復します[X]
+Restores some HP.[X]
 
 ## MSG_695
-ＨＰを回復します[X]
+Restores all HP.[X]
 
 ## MSG_696
-魔法攻撃で受ける[LF]
-ダメージを減らします[X]
+Reduces damage[LF]
+from magic attacks.[X]
 
 ## MSG_697
-闇を明るくてらします[X]
+Lights an area.[X]
 
 ## MSG_698
-毒を消し去り[LF]
-正常にします[X]
+Cures poison.[X]
 
 ## MSG_699
-ひみつの店に入れます[X]
+Grants access to[LF]
+secret shops.[X]
 
 ## MSG_69A
-安く買い物ができます[X]
+Reduces the cost[LF]
+of items.[X]
 
 ## MSG_69B
-[X]
+Sell for 50G.[X]

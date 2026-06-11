@@ -1,605 +1,605 @@
 ## MSG_7EC
-ロイ[X]
+Roy[X]
 
 ## MSG_7ED
-クラリーネ[X]
+Clarine[X]
 
 ## MSG_7EE
-ファ[X]
+Fae[X]
 
 ## MSG_7EF
-シン[X]
+Sin[X]
 
 ## MSG_7F0
-スー[X]
+Sue[X]
 
 ## MSG_7F1
-ダヤン[X]
+Dayan[X]
 
 ## MSG_7F2
-ダヤンＤ[X]
+Dayan[X]
 
 ## MSG_7F3
-バース[X]
+Barthe[X]
 
 ## MSG_7F4
-ボールス[X]
+Bors[X]
 
 ## MSG_7F5
 ウェンディ[X]
 
 ## MSG_7F6
-ダグラス[X]
+Douglas[X]
 
 ## MSG_7F7
-ダグラスＢ[X]
+Douglas[X]
 
 ## MSG_7F8
-ウォルト[X]
+Wolt[X]
 
 ## MSG_7F9
-ドロシー[X]
+Dorothy [X]
 
 ## MSG_7FA
-クレイン[X]
+Klein[X]
 
 ## MSG_7FB
-サウル[X]
+Saul[X]
 
 ## MSG_7FC
-エレン[X]
+Elen[X]
 
 ## MSG_7FD
-ヨーデル[X]
+Yoder[X]
 
 ## MSG_7FE
-ヨーデルＤ[X]
+Yoder[X]
 
 ## MSG_7FF
-チャド[X]
+Chad[X]
 
 ## MSG_800
-カレル[X]
+Karel[X]
 
 ## MSG_801
-フィル[X]
+Fir[X]
 
 ## MSG_802
-ルトガー[X]
+Rutger[X]
 
 ## MSG_803
-ディーク[X]
+Dieck[X]
 
 ## MSG_804
-オージェ[X]
+Ogier[X]
 
 ## MSG_805
-ガレット[X]
+Garrett[X]
 
 ## MSG_806
-アレン[X]
+Alen[X]
 
 ## MSG_807
-ランス[X]
+Lance[X]
 
 ## MSG_808
-パーシバル[X]
+Perceval[X]
 
 ## MSG_809
-イグレーヌ[X]
+Igrene[X]
 
 ## MSG_80A
-マーカス[X]
+Marcus[X]
 
 ## MSG_80B
-アストール[X]
+Astolfo[X]
 
 ## MSG_80C
-ワード[X]
+Ward[X]
 
 ## MSG_80D
-ロット[X]
+Lot[X]
 
 ## MSG_80E
-バアトル[X]
+Bartre[X]
 
 ## MSG_80F
-バアトルＢ[X]
+Bartre[X]
 
 ## MSG_810
-ルゥ[X]
+Lugh[X]
 
 ## MSG_811
-リリーナ[X]
+Lilina[X]
 
 ## MSG_812
-ヒュウ[X]
+Hugh[X]
 
 ## MSG_813
-ニイメ[X]
+Niime[X]
 
 ## MSG_814
-ニイメＤ[X]
+Niime[X]
 
 ## MSG_815
-レイ[X]
+Raigh[X]
 
 ## MSG_816
-ララム[X]
+Larum[X]
 
 ## MSG_817
-ユーノ[X]
+Juno[X]
 
 ## MSG_818
-ユーノＤ[X]
+Juno[X]
 
 ## MSG_819
-ティト[X]
+Thea[X]
 
 ## MSG_81A
-ティトＣ[X]
+Thea[X]
 
 ## MSG_81B
-ティトＤ[X]
+Thea[X]
 
 ## MSG_81C
-シャニー[X]
+Shanna[X]
 
 ## MSG_81D
-ツァイス[X]
+Zeiss[X]
 
 ## MSG_81E
-ゲイル[X]
+Galle[X]
 
 ## MSG_81F
-エルフィン[X]
+Elffin[X]
 
 ## MSG_820
-キャス[X]
+Cath[X]
 
 ## MSG_821
-ソフィーヤ[X]
+Sophia[X]
 
 ## MSG_822
-ミレディ[X]
+Melady[X]
 
 ## MSG_823
-ゴンザレス[X]
+Gonzalez[X]
 
 ## MSG_824
-ゴンザレスＢ[X]
+Gonzalez[X]
 
 ## MSG_825
-ノア[X]
+Noah[X]
 
 ## MSG_826
-トレック[X]
+Trec[X]
 
 ## MSG_827
-ゼロット[X]
+Zelot[X]
 
 ## MSG_828
-エキドナ[X]
+Echidna[X]
 
 ## MSG_829
-エキドナＢ[X]
+Echidna[X]
 
 ## MSG_82A
-セシリア[X]
+Cecilia[X]
 
 ## MSG_82B
-ギース[X]
+Geese[X]
 
 ## MSG_82C
-ギースＢ[X]
+Geese[X]
 
 ## MSG_82D
-マリナス[X]
+Merlinus[X]
 
 ## MSG_82E
-エリウッド[X]
+Eliwood[X]
 
 ## MSG_82F
-ギネヴィア[X]
+Guinivere[X]
 
 ## MSG_830
-山賊[X]
+Bandit[X]
 
 ## MSG_831
-ダマス[X]
+Damas[X]
 
 ## MSG_832
-ルード[X]
+Ruud[X]
 
 ## MSG_833
-スレーター[X]
+Slater[X]
 
 ## MSG_834
-エリック[X]
+Erik[X]
 
 ## MSG_835
-ドリー[X]
+Dory[X]
 
 ## MSG_836
-ワグナー[X]
+Wagner[X]
 
 ## MSG_837
-デビアス[X]
+Debias[X]
 
 ## MSG_838
-レイガンス[X]
+Legance[X]
 
 ## MSG_839
-スコット[X]
+Scott[X]
 
 ## MSG_83A
-ノード[X]
+Nord[X]
 
 ## MSG_83B
-ウィリアム[X]
+William[X]
 
 ## MSG_83C
-フレアー[X]
+Flaer[X]
 
 ## MSG_83D
-オロ[X]
+Orlo[X]
 
 ## MSG_83E
-ロバーツ[X]
+Roberts[X]
 
 ## MSG_83F
-アイン[X]
+Ein[X]
 
 ## MSG_840
-ナーシェン[X]
+Narcian[X]
 
 ## MSG_841
-ランディ[X]
+Randy[X]
 
 ## MSG_842
-ローズ[X]
+Rose[X]
 
 ## MSG_843
-マギー[X]
+Maggie[X]
 
 ## MSG_844
-レイス[X]
+Raith[X]
 
 ## MSG_845
-アルカルド[X]
+Arcardo[X]
 
 ## MSG_846
-マーテル[X]
+Martel[X]
 
 ## MSG_847
-シグーネ[X]
+Sigune[X]
 
 ## MSG_848
-ロアーツ[X]
+Roartz[X]
 
 ## MSG_849
-マードック[X]
+Murdock[X]
 
 ## MSG_84A
-ブルーニャ[X]
+Brunnya[X]
 
 ## MSG_84B
-ゼフィール[X]
+Zephiel[X]
 
 ## MSG_84C
-イドゥン[X]
+Idunn[X]
 
 ## MSG_84D
-イドゥン[X]
+Idunn[X]
 
 ## MSG_84E
-ヤアン[X]
+Jahn[X]
 
 ## MSG_84F
-ジンク[X]
+Zinque[X]
 
 ## MSG_850
-モンケ[X]
+Monke[X]
 
 ## MSG_851
-ケル[X]
+Kel[X]
 
 ## MSG_852
-山賊[X]
+Brigand[X]
 
 ## MSG_853
-ベルン兵[X]
+Bern[X]
 
 ## MSG_854
-ベルン兵[X]
+Bern[X]
 
 ## MSG_855
-ベルン兵[X]
+Bern[X]
 
 ## MSG_856
-ベルン兵[X]
+Bern[X]
 
 ## MSG_857
-ベルン兵[X]
+Bern[X]
 
 ## MSG_858
-ラウス兵[X]
+Laus[X]
 
 ## MSG_859
-海賊[X]
+Pirate[X]
 
 ## MSG_85A
-山賊[X]
+Bandit[X]
 
 ## MSG_85B
-トリア兵[X]
+Thria[X]
 
 ## MSG_85C
-反乱軍[X]
+Rebel[X]
 
 ## MSG_85D
-ベルン兵[X]
+Bern[X]
 
 ## MSG_85E
-反乱軍[X]
+Rebel[X]
 
 ## MSG_85F
-官吏[X]
+Officials[X]
 
 ## MSG_860
-盗賊[X]
+Thief[X]
 
 ## MSG_861
-西方「賊」[X]
+West Isles[X]
 
 ## MSG_862
-海賊[X]
+Pirate[X]
 
 ## MSG_863
-アルマー兵[X]
+Armagh[X]
 
 ## MSG_864
-西方「賊」[X]
+Robber[X]
 
 ## MSG_865
-レジスタンス[X]
+Resistance[X]
 
 ## MSG_866
-エブラクム兵[X]
+Etruria[X]
 
 ## MSG_867
-山賊[X]
+Bandit[X]
 
 ## MSG_868
-西方兵[X]
+Bandit[X]
 
 ## MSG_869
-西方「賊」[X]
+Bandit[X]
 
 ## MSG_86A
-ベルン兵[X]
+Bern[X]
 
 ## MSG_86B
-ジュトー兵[X]
+Etruria[X]
 
 ## MSG_86C
-西方兵[X]
+West Isles[X]
 
 ## MSG_86D
-ベルン兵[X]
+Bern[X]
 
 ## MSG_86E
-エトルリア兵[X]
+Etruria[X]
 
 ## MSG_86F
-ベルン傭兵[X]
+Bern[X]
 
 ## MSG_870
-山賊[X]
+Bandit[X]
 
 ## MSG_871
-エトルリア兵[X]
+Etruria[X]
 
 ## MSG_872
-ベルン兵[X]
+Bern[X]
 
 ## MSG_873
-イリア騎士団[X]
+Ilia[X]
 
 ## MSG_874
-山賊[X]
+Bandit[X]
 
 ## MSG_875
-ベルン兵[X]
+Bern[X]
 
 ## MSG_876
-エトルリア兵[X]
+Etruria[X]
 
 ## MSG_877
-盗賊[X]
+Thief[X]
 
 ## MSG_878
-エトルリア兵[X]
+Bern[X]
 
 ## MSG_879
-ベルン兵[X]
+Bern[X]
 
 ## MSG_87A
-海賊[X]
+Pirate[X]
 
 ## MSG_87B
-イリア騎士団[X]
+Ilia[X]
 
 ## MSG_87C
-ベルン兵[X]
+Bern[X]
 
 ## MSG_87D
-イリア騎士団[X]
+Ilia[X]
 
 ## MSG_87E
-山賊[X]
+Brigand[X]
 
 ## MSG_87F
-天馬騎士団[X]
+Ilia[X]
 
 ## MSG_880
-イリア騎士団[X]
+Ilia[X]
 
 ## MSG_881
-山賊[X]
+Soldier[X]
 
 ## MSG_882
-イリア騎士団[X]
+Ilia[X]
 
 ## MSG_883
-イリア市民[X]
+Citizen[X]
 
 ## MSG_884
-盗賊[X]
+Thief[X]
 
 ## MSG_885
-ベルン兵[X]
+Bern[X]
 
 ## MSG_886
-ベルン兵[X]
+Bern[X]
 
 ## MSG_887
-ベルン兵[X]
+Bern[X]
 
 ## MSG_888
-盗賊[X]
+Thief[X]
 
 ## MSG_889
-イディナ兵[X]
+Soldier[X]
 
 ## MSG_88A
-市民[X]
+Citizen[X]
 
 ## MSG_88B
-西方「賊」[X]
+Bandit[X]
 
 ## MSG_88C
-エトルリア兵[X]
+Etruria[X]
 
 ## MSG_88D
-サカ部族兵[X]
+Sacae[X]
 
 ## MSG_88E
-ベルン兵[X]
+Bern[X]
 
 ## MSG_88F
-ジュテ族兵[X]
+Djute[X]
 
 ## MSG_890
-ベルン兵[X]
+Bern[X]
 
 ## MSG_891
-サカ部族兵[X]
+Sacae[X]
 
 ## MSG_892
-ベルン兵[X]
+Bern[X]
 
 ## MSG_893
-エトルリア兵[X]
+Etruria[X]
 
 ## MSG_894
-サカ部族兵[X]
+Sacae[X]
 
 ## MSG_895
-盗賊[X]
+Bern[X]
 
 ## MSG_896
-ベルン戦闘竜[X]
+Manakete[X]
 
 ## MSG_897
-ベルン兵[X]
+Bern[X]
 
 ## MSG_898
-ベルン戦闘竜[X]
+Dragon[X]
 
 ## MSG_899
-賊[X]
+Bandit[X]
 
 ## MSG_89A
-ヘニング[X]
+Henning[X]
 
 ## MSG_89B
-スコーラン[X]
+Scollan[X]
 
 ## MSG_89C
-ゲレロ[X]
+Guerrero[X]
 
 ## MSG_89D
-オーツ[X]
+Oates[X]
 
 ## MSG_89E
-ティック[X]
+Tick[X]
 
 ## MSG_89F
-トオリル[X]
+Thoril[X]
 
 ## MSG_8A0
-ブラクル[X]
+Brakul[X]
 
 ## MSG_8A1
-クドカ[X]
+Kudoka[X]
 
 ## MSG_8A2
-マラル[X]
+Marral[X]
 
 ## MSG_8A3
-カブル[X]
+Kabul[X]
 
 ## MSG_8A4
-チャン[X]
+Chan[X]
 
 ## MSG_8A5
-ペレス[X]
+Peres[X]
 
 ## MSG_8A6
-山賊[X]
+Bandit[X]
 
 ## MSG_8A7
-ベルン兵[X]
+Bern[X]
 
 ## MSG_8A8
-サカ兵[X]
+Bern[X]
 
 ## MSG_8A9
-ベルン兵[X]
+Bern[X]
 
 ## MSG_8AA
-ベルン兵[X]
+Bern[X]
 
 ## MSG_8AB
-ウィンダム[X]
+Windham[X]
 
 ## MSG_8AC
-対戦相手[X]
+Enemy[X]
 
 ## MSG_8AD
-壊れる壁[X]
+Broken Wall[X]
 
 ## MSG_8AE
-モルガン[X]
+Morgan[X]
 
 ## MSG_8AF
-ヘクトル[X]
+Hector[X]
 
 ## MSG_8B0
-ボールス[X]
+Bors[X]
 
 ## MSG_8B1
-オスティア兵[X]
+Soldier[X]
 
 ## MSG_8B2
-オスティア兵[X]
+Soldier[X]
 
 ## MSG_8B3
-クレイン隊[X]
+Archer[X]
 
 ## MSG_8B4
-ティト隊[X]
+Peg Kn[X]
 
 ## MSG_8B5
-敵将[X]
+Boss[X]

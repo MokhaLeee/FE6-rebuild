@@ -1,383 +1,383 @@
 ## MSG_728
-てつの剣[X]
+Iron sword[X]
 
 ## MSG_729
-てつの大剣[X]
+Iron blade[X]
 
 ## MSG_72A
-はがねの剣[X]
+Steel sword[X]
 
 ## MSG_72B
-はがねの大剣[X]
+Steel blade[X]
 
 ## MSG_72C
-ぎんの剣[X]
+Silver sword[X]
 
 ## MSG_72D
-ぎんの大剣[X]
+Silver blade[X]
 
 ## MSG_72E
-ほそみの剣[X]
+Slim sword[X]
 
 ## MSG_72F
-どくの剣[X]
+Poison sword[X]
 
 ## MSG_730
-ゆうしゃの剣[X]
+Brave sword[X]
 
 ## MSG_731
-ひかりの剣[X]
+Light Brand[X]
 
 ## MSG_732
-デュランダル[X]
+Durandal[X]
 
 ## MSG_733
-アーマーキラー[X]
+Armorslayer[X]
 
 ## MSG_734
-レイピア[X]
+Rapier[X]
 
 ## MSG_735
-キルソード[X]
+Killing edge[X]
 
 ## MSG_736
-ランスバスター[X]
+Lancereaver[X]
 
 ## MSG_737
-倭刀[X]
+Wo Dao[X]
 
 ## MSG_738
-封印の剣[X]
+Binding Blade[X]
 
 ## MSG_739
-てつのやり[X]
+Iron lance[X]
 
 ## MSG_73A
-はがねのやり[X]
+Steel lance[X]
 
 ## MSG_73B
-ぎんのやり[X]
+Silver lance[X]
 
 ## MSG_73C
-ほそみのやり[X]
+Slim lance[X]
 
 ## MSG_73D
-どくのやり[X]
+Poison lance[X]
 
 ## MSG_73E
-ゆうしゃのやり[X]
+Brave lance[X]
 
 ## MSG_73F
-てやり[X]
+Javelin[X]
 
 ## MSG_740
-マルテ[X]
+Maltet[X]
 
 ## MSG_741
-ナイトキラー[X]
+Horseslayer[X]
 
 ## MSG_742
-キラーランス[X]
+Killer lance[X]
 
 ## MSG_743
-アクスバスター[X]
+Axereaver[X]
 
 ## MSG_744
-てつのおの[X]
+Iron axe[X]
 
 ## MSG_745
-はがねのおの[X]
+Steel axe[X]
 
 ## MSG_746
-ぎんのおの[X]
+Silver axe[X]
 
 ## MSG_747
-どくのおの[X]
+Poison axe[X]
 
 ## MSG_748
-ゆうしゃのおの[X]
+Brave axe[X]
 
 ## MSG_749
-ておの[X]
+Hand axe[X]
 
 ## MSG_74A
-アルマーズ[X]
+Armads[X]
 
 ## MSG_74B
-ハンマー[X]
+Hammer[X]
 
 ## MSG_74C
-キラーアクス[X]
+Killer axe[X]
 
 ## MSG_74D
-ソードバスター[X]
+Swordreaver[X]
 
 ## MSG_74E
-デビルアクス[X]
+Devil axe[X]
 
 ## MSG_74F
-ポールアクス[X]
+Halberd[X]
 
 ## MSG_750
-てつの弓[X]
+Iron bow[X]
 
 ## MSG_751
-はがねの弓[X]
+Steel bow[X]
 
 ## MSG_752
-ぎんの弓[X]
+Silver bow[X]
 
 ## MSG_753
-どくの弓[X]
+Poison bow[X]
 
 ## MSG_754
-キラーボウ[X]
+Killer bow[X]
 
 ## MSG_755
-ゆうしゃの弓[X]
+Brave bow[X]
 
 ## MSG_756
-短弓[X]
+Short bow[X]
 
 ## MSG_757
-長弓[X]
+Longbow[X]
 
 ## MSG_758
-ミュルグレ[X]
+Mulagir[X]
 
 ## MSG_759
-アーチ[X]
+Ballista[X]
 
 ## MSG_75A
-ロングアーチ[X]
+Iron ballista[X]
 
 ## MSG_75B
-キラーアーチ[X]
+Killer ballista[X]
 
 ## MSG_75C
-ファイアー[X]
+Fire[X]
 
 ## MSG_75D
-サンダー[X]
+Thunder[X]
 
 ## MSG_75E
-フィンブル[X]
+Fimbulvetr[X]
 
 ## MSG_75F
-エルファイアー[X]
+Elfire[X]
 
 ## MSG_760
-エイルカリバー[X]
+Aircalibur[X]
 
 ## MSG_761
-ブリザード[X]
+--[X]
 
 ## MSG_762
-①②③④⑤⑥⑦[X]
+Bolting[X]
 
 ## MSG_763
-フォルブレイズ[X]
+Forblaze[X]
 
 ## MSG_764
-ライトニング[X]
+Lightning[X]
 
 ## MSG_765
-ディヴァイン[X]
+Divine[X]
 
 ## MSG_766
-パージ[X]
+Purge[X]
 
 ## MSG_767
-アーリアル[X]
+Aureola[X]
 
 ## MSG_768
-ミィル[X]
+Flux[X]
 
 ## MSG_769
-リザイア[X]
+Nosferatu[X]
 
 ## MSG_76A
-イクリプス[X]
+Eclipse[X]
 
 ## MSG_76B
-ノスフェラート[X]
+Fenrir[X]
 
 ## MSG_76C
-アポカリプス[X]
+Apocalypse[X]
 
 ## MSG_76D
-ライブ[X]
+Heal[X]
 
 ## MSG_76E
-リライブ[X]
+Mend[X]
 
 ## MSG_76F
-リカバー[X]
+Recover[X]
 
 ## MSG_770
-リブロー[X]
+Physic[X]
 
 ## MSG_771
-リザーブ[X]
+Fortify[X]
 
 ## MSG_772
-ワープ[X]
+Warp[X]
 
 ## MSG_773
-レスキュー[X]
+Rescue[X]
 
 ## MSG_774
-レスト[X]
+Restore[X]
 
 ## MSG_775
-サイレス[X]
+Silence[X]
 
 ## MSG_776
-スリープ[X]
+Sleep[X]
 
 ## MSG_777
-トーチ[X]
+Torch[X]
 
 ## MSG_778
-ハマーン[X]
+Hammerne[X]
 
 ## MSG_779
-ウオッチ[X]
+[X]
 
 ## MSG_77A
-バサーク[X]
+Berserk[X]
 
 ## MSG_77B
-アンロック[X]
+Unlock[X]
 
 ## MSG_77C
-Ｍシールド[X]
+Barrier[X]
 
 ## MSG_77D
-火竜石[X]
+Firestone[X]
 
 ## MSG_77E
-神竜石[X]
+Divinestone[X]
 
 ## MSG_77F
-魔竜石[X]
+[X]
 
 ## MSG_780
-秘伝の書[X]
+Secret book[X]
 
 ## MSG_781
-女神のぞう[X]
+Goddess icon[X]
 
 ## MSG_782
-天使の衣[X]
+Angelic robe[X]
 
 ## MSG_783
-竜のたて[X]
+Dragonshield[X]
 
 ## MSG_784
-エナジーリング[X]
+Energy ring[X]
 
 ## MSG_785
-はやての羽[X]
+Speedwings[X]
 
 ## MSG_786
-魔よけ[X]
+Talisman[X]
 
 ## MSG_787
-ブーツ[X]
+Boots[X]
 
 ## MSG_788
-ボディリング[X]
+Body ring[X]
 
 ## MSG_789
-英雄の証[X]
+Hero crest[X]
 
 ## MSG_78A
-騎士の勲章[X]
+Knight crest[X]
 
 ## MSG_78B
-オリオンの矢[X]
+Orion's bolt[X]
 
 ## MSG_78C
-天空のムチ[X]
+Elysian whip[X]
 
 ## MSG_78D
-導きの指輪[X]
+Guiding ring[X]
 
 ## MSG_78E
-たからのかぎ[X]
+Chest key[X]
 
 ## MSG_78F
-とびらのかぎ[X]
+Door key[X]
 
 ## MSG_790
-はね橋のかぎ[X]
+[X]
 
 ## MSG_791
-とうぞくのかぎ[X]
+Lockpick[X]
 
 ## MSG_792
-きずぐすり[X]
+Vulnerary[X]
 
 ## MSG_793
-とっこうやく[X]
+Elixir[X]
 
 ## MSG_794
-せいすい[X]
+Pure water[X]
 
 ## MSG_795
-たいまつ[X]
+Torch[X]
 
 ## MSG_796
-どくけし[X]
+Antitoxin[X]
 
 ## MSG_797
-メンバーカード[X]
+Member card[X]
 
 ## MSG_798
-シルバーカード[X]
+Silver card[X]
 
 ## MSG_799
-ゴールド[X]
+Gold[X]
 
 ## MSG_79A
-闇のブレス[X]
+Dark breath[X]
 
 ## MSG_79B
-エッケザックス[X]
+Eckesachs[X]
 
 ## MSG_79C
-アルの剣[X]
+Al's sword[X]
 
 ## MSG_79D
-ガントのやり[X]
+Gant's lance[X]
 
 ## MSG_79E
-ティーナの杖[X]
+Tina's staff[X]
 
 ## MSG_79F
-聖女の杖[X]
+Saint's Staff[X]
 
 ## MSG_7A0
-ドラゴンキラー[X]
+Wyrmslayer[X]
 
 ## MSG_7A1
-白の宝玉[X]
+White gem[X]
 
 ## MSG_7A2
-青の宝玉[X]
+Blue gem[X]
 
 ## MSG_7A3
-赤の宝玉[X]
+Red gem[X]
 
 ## MSG_7A4
-デルフィの守り[X]
+Delphi shield[X]
 
 ## MSG_7A5
-ルーンソード[X]
+Runesword[X]
 
 ## MSG_7A6
-スレンドスピア[X]
+Spear[X]
 
 ## MSG_7A7
-トマホーク[X]
+Tomahawk[X]
