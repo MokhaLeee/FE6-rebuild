@@ -127,7 +127,8 @@ char const *GetStringLineEnd(char const *str)
 		if (*str == '\1')
 			break;
 
-		str += GetChLenUtf8(str);
+		// str += GetChLenUtf8(str);
+		str++;
 	}
 	return str;
 }
