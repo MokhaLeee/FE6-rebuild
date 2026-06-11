@@ -22,26 +22,9 @@
 #include "constants/iids.h"
 #include "constants/chapters.h"
 
-#if CONFIG_USE_DEBUG
-
 static void setup_status(void)
 {
-    _UNUSED
-	struct Unit *unit;
-
 	SetGold(GetGold() + 5000);
-
-	unit = GetUnitByPid(PID_LUGH);
-	if (unit)
-		unit->exp = 99;
-
-	unit = GetUnitByPid(PID_ELEN);
-	if (unit) {
-		unit->wexp[ITEM_KIND_STAFF] = WEXP_S;
-		unit->wexp[ITEM_KIND_LIGHT] = WEXP_S;
-		unit->wexp[ITEM_KIND_ANIMA] = WEXP_A + 20;
-		UnitAddItem(unit, CreateItem(IID_FIRE));
-	}
 }
 
 static struct UnitInfo const UnitInfo_Chapter1_BlueA[] =
@@ -57,8 +40,6 @@ static struct UnitInfo const UnitInfo_Chapter1_BlueB[] =
 	{ PID_BORS, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 1, 20, 3, 19, { IID_IRONLANCE, IID_VULNERARY }, { 0 } },
 	{ PID_WOLT, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 2, 20, 2, 16, { IID_IRONBOW, IID_VULNERARY, IID_BALLISTA }, { 0 } },
 	{ PID_LUGH, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 3, 20, 2, 16, { IID_FIRE }, { 0 } },
-	{ PID_LILINA, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 3, 20, 3, 15, { IID_FIRE }, { 0 } },
-	{ PID_ELEN, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 3, 20, 3, 16, { IID_LIGHTNING, IID_BARRIERSTAFF, IID_SAINTSSTAFF, IID_SLEEPSTAFF }, { 0 } },
 	{ 0 }, // end
 };
 
@@ -271,7 +252,7 @@ static EventListScr const EventListScr_Chapter1_Move[] =
 	EvtListEnd
 };
 
-struct ChapterEventInfo const ChapterEventInfo_Chapter1_Dbg =
+struct ChapterEventInfo const ChapterEventInfo_Chapter1 =
 {
 	.event_list_turn = EventListScr_Chapter1_Turn,
 	.event_list_talk = EventListScr_Chapter1_Talk,
@@ -281,5 +262,3 @@ struct ChapterEventInfo const ChapterEventInfo_Chapter1_Dbg =
 	.units_blue = UnitInfo_Chapter1_BlueA,
 	.event_script_victory = EventScr_Chapter1_Victory,
 };
-
-#endif /* CONFIG_USE_DEBUG */

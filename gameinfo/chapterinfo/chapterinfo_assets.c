@@ -19,7 +19,13 @@ GAMEINFO_DATA void const *const ChapterAssets[] = {
 
 	[PLIST_CH1_MAP] = MapTsa_Ch1,
 	[PLIST_CH1_MAPCHG] = MapChange_Ch1,
+
+#if CONFIG_USE_DEBUG
+	[PLIST_CH1_EVENT] = &ChapterEventInfo_Chapter1_Dbg,
+#else
 	[PLIST_CH1_EVENT] = &ChapterEventInfo_Chapter1,
+#endif
+
 	[PLIST_CH1_EVENTWM] = EventScr_Wm_Ch1,
 
 	[PLIST_CH2_MAP] = MapTsa_Ch2,
