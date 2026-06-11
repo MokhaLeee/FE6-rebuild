@@ -109,7 +109,7 @@ static EventScr const EventScr_Chapter1_Opening[] =
 	EvtEnd
 };
 
-static EventScr const EventScr_Chapter1_FirstRedTurn[] =
+static CONTENT_DATA EventScr const EventScr_Chapter1_FirstRedTurn[] =
 {
 	// EvtSetBgm(SONG_02)
 	EvtCamera(5, 3)

@@ -38,6 +38,7 @@
 #include "banim.h"
 #include "opanim.h"
 #include "ending.h"
+#include "ai.h"
 #include "ending_monologue.h"
 #include "chapterunits.h"
 
@@ -2078,6 +2079,22 @@ static struct UnitInfo CONST_DATA UnitInfo_Chapter1_BlueUnused[] =
 {
     { PID_ROY, 0, 0, FALSE, FACTION_ID_BLUE, 1, 9, 7, 9, 7, { IID_RAPIER, IID_VULNERARY }, { 0 } },
     { PID_MARCUS, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 6, 7, 6, 7, { IID_IRONLANCE }, { 0 } },
+    { 0 }, // end
+};
+
+static struct UnitInfo CONST_DATA UnitInfo_Chapter2_MixedUnused[] =
+{
+    { PID_ROY, JID_ROY, 0, FALSE, FACTION_ID_BLUE, 3, 6, 10, 6, 10, { IID_RAPIER }, { 0 } },
+    { PID_ELEN, JID_CLERIC, PID_ROY, FALSE, FACTION_ID_BLUE, 3, 8, 10, 8, 10, { IID_HEALSTAFF }, { 0 } },
+    { PID_WOLT, JID_ARCHER, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 12, 1, 12, 1, { 0 }, { 0 } },
+    { PID_MARCUS, JID_PALADIN, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 1, 9, 1, 9, { 0 }, { 0 } },
+    { PID_ALEN, JID_CAVALIER, PID_ROY, FALSE, FACTION_ID_BLUE, 3, 2, 10, 2, 10, { 0 }, { 0 } },
+    { PID_BORS, JID_ARMOR, PID_ROY, FALSE, FACTION_ID_BLUE, 2, 6, 12, 6, 12, { 0 }, { 0 } },
+    { PID_CHAPTER2_GENERIC, JID_FIGHTER, 0, FALSE, FACTION_ID_RED, 1, 3, 6, 3, 6, { 0 }, { AI_A_00, AI_B_03 } },
+    { PID_CHAPTER2_GENERIC, JID_ARCHER, 0, FALSE, FACTION_ID_RED, 1, 5, 5, 5, 5, { 0 }, { AI_A_00, AI_B_03 } },
+    { PID_CHAPTER2_GENERIC, JID_SOLDIER, 0, FALSE, FACTION_ID_RED, 2, 3, 8, 3, 8, { 0 }, { AI_A_00, AI_B_03 } },
+    { PID_CHAPTER2_GENERIC, JID_FIGHTER, 0, FALSE, FACTION_ID_RED, 1, 1, 13, 1, 13, { 0 }, { AI_A_00, AI_B_03 } },
+    { PID_CHAPTER2_MERCENARY, JID_MERCENARY, 0, FALSE, FACTION_ID_RED, 3, 4, 14, 4, 14, { 0 }, { AI_A_00, AI_B_03 } },
     { 0 }, // end
 };
 

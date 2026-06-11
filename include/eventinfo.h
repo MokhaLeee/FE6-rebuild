@@ -228,7 +228,7 @@ extern struct ChapterEventInfo CONST_DATA ChapterEventInfo_Xmap2;
 extern struct ChapterEventInfo CONST_DATA ChapterEventInfo_Ch12x;
 extern struct ChapterEventInfo CONST_DATA ChapterEventInfo_Ch21;
 extern struct ChapterEventInfo CONST_DATA ChapterEventInfo_Ch14x;
-extern struct ChapterEventInfo CONST_DATA ChapterEventInfo_Chapter2;
+extern struct ChapterEventInfo const ChapterEventInfo_Chapter2;
 extern struct ChapterEventInfo CONST_DATA ChapterEventInfo_Ch9;
 extern struct ChapterEventInfo CONST_DATA ChapterEventInfo_Xmap1;
 extern struct ChapterEventInfo CONST_DATA ChapterEventInfo_Ch18c;

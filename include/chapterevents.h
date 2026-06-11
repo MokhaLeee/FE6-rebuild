@@ -79,18 +79,6 @@ extern EventScr CONST_DATA EventScr_Unk_0866B2FC[];
 extern EventScr CONST_DATA EventScr_Unk_0866B350[];
 extern EventScr CONST_DATA EventScr_Unk_0866B5A0[];
 
-extern u8 CONST_DATA MoveScr_Chapter2_ElenA[];
-extern u8 CONST_DATA MoveScr_Chapter2_ElenB[];
-extern EventScr CONST_DATA EventScr_Chapter2_Opening[];
-extern EventScr CONST_DATA EventScr_Chapter2_DieckComes[];
-extern EventScr CONST_DATA EventScr_Chapter2_DieckTalk[];
-extern EventScr CONST_DATA EventScr_Chapter2_VillageUnused[];
-extern EventScr CONST_DATA EventScr_Chapter2_Village[];
-extern EventScr CONST_DATA EventScr_Chapter2_HouseA[];
-extern EventScr CONST_DATA EventScr_Chapter2_HouseB[];
-extern EventScr CONST_DATA EventScr_Chapter2_HouseC[];
-extern EventScr CONST_DATA EventScr_Chapter2_Victory[];
-
 extern EventScr CONST_DATA EventScr_Chapter3_Opening[];
 extern EventScr CONST_DATA EventScr_Chapter3_OrphanageCutscene[];
 extern EventScr CONST_DATA EventScr_Chapter3_ZephielScene[];
