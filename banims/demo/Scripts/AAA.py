@@ -124,7 +124,15 @@ spriteCropDims = {
 
 # Takes a bytes object and returns BYTE AA BB CC DD
 def b_to_EA(data):
-  return '.byte ' + ' '.join([f"{hex(x)}," for x in data])
+  ret = '.byte '
+  i = 0
+  for x in data:
+    if i == 0:
+      ret = ret + f' {hex(x)}'
+    else:
+      ret = ret + f', {hex(x)}'
+    i = i + 1
+  return ret
 
 # Takes an int and size and returns EA format.
 def int_to_EA(data, size):
@@ -787,8 +795,7 @@ POP"""
     print("ERROR: Script doesn't contain any images.")
     exit()
 
-  outputFile.write(".section .content_data.demo_banim_scr\n")
-  outputFile.write(".global Anim_"+animName+"_pal\n")
+  outputFile.write(".section .content_data.demo_banim_scr\n\n")
   outputFile.write(".global Anim_"+animName+"_pal\n")
   outputFile.write(".global Anim_"+animName+"_sectiondata\n")
   outputFile.write(".global Anim_"+animName+"_framedata\n")
@@ -864,6 +871,8 @@ POP"""
     outputFile.write(b_to_EA(rtlOAMData))
   else:
     outputFile.write(b_to_EA(lzss.compress(rtlOAMData)))
+
+  outputFile.write("\n")
   
   if not LEFTOAM_NOLOAD:
     outputFile.write("\n\nAnim_"+animName+"_ltr:\n")

@@ -17,5 +17,15 @@ const struct IndividualAnimConf gIndividualAnimConf[] = {
 			{ 0 }
 		}
 	},
-	{}
+	{
+		.pid = PID_LILINA,
+		.jid = JID_SAGE_F,
+		.anim_conf = (const struct BanimInfoEnt[]) {
+			{ 0x0100 | ITEM_KIND_ANIMA, BANIM_DEMO_LilinaSageMagi },
+			{ 0x0100 | ITEM_KIND_LIGHT, BANIM_DEMO_LilinaSageMagi },
+			{ 0x0100 | ITEM_KIND_ELDER, BANIM_DEMO_LilinaSageMagi },
+			{ 0x0100 | ITEM_KIND_STAFF, BANIM_DEMO_LilinaMageStaff },
+			{ 0 }
+		}
+	},
 };

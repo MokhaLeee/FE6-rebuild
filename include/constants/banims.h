@@ -126,6 +126,8 @@ enum BanimIndex {
 
 	BANIM_PAD_,
 	BANIM_DEMO_LilinaMageMagi,
+	BANIM_DEMO_LilinaSageMagi,
+	BANIM_DEMO_LilinaMageStaff,
 
 	BANIM_MAX
 };

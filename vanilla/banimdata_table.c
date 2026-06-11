@@ -1106,10 +1106,26 @@ CONST_DATA struct BattleAnim gBanimTable[BANIM_MAX] = {
 	},
 
 	[BANIM_DEMO_LilinaMageMagi - 1] = {
-		.abbr = "lilina_magi",
+		.abbr = "lilinaMmagi",
 		.modes = Anim_LilinaMage_Magi_sectiondata,
 		.script = Anim_LilinaMage_Magi_framedata,
 		.oam_r = Anim_LilinaMage_Magi_rtl,
 		.pal = Anim_LilinaMage_Magi_pal,
+	},
+
+	[BANIM_DEMO_LilinaSageMagi - 1] = {
+		.abbr = "lilinaSmagi",
+		.modes = Anim_LilinaSage_Magi_sectiondata,
+		.script = Anim_LilinaSage_Magi_framedata,
+		.oam_r = Anim_LilinaSage_Magi_rtl,
+		.pal = Anim_LilinaSage_Magi_pal,
+	},
+
+	[BANIM_DEMO_LilinaMageStaff - 1] = {
+		.abbr = "lilinaSstaf",
+		.modes = Anim_LilinaSage_Staff_sectiondata,
+		.script = Anim_LilinaSage_Staff_framedata,
+		.oam_r = Anim_LilinaSage_Staff_rtl,
+		.pal = Anim_LilinaSage_Staff_pal,
 	},
 };

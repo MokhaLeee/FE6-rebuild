@@ -877,3 +877,13 @@ extern u16 Anim_LilinaMage_Magi_pal[];
 extern u32 Anim_LilinaMage_Magi_sectiondata[];
 extern u32 Anim_LilinaMage_Magi_framedata[];
 extern u32 Anim_LilinaMage_Magi_rtl[];
+
+extern u16 Anim_LilinaSage_Magi_pal[];
+extern u32 Anim_LilinaSage_Magi_sectiondata[];
+extern u32 Anim_LilinaSage_Magi_framedata[];
+extern u32 Anim_LilinaSage_Magi_rtl[];
+
+extern u16 Anim_LilinaSage_Staff_pal[];
+extern u32 Anim_LilinaSage_Staff_sectiondata[];
+extern u32 Anim_LilinaSage_Staff_framedata[];
+extern u32 Anim_LilinaSage_Staff_rtl[];
