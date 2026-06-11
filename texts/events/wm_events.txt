@@ -1,73 +1,86 @@
 ## MSG_A76
-大陸エレブ[TAB]そこには[LF]
-天敵をもたぬ『人』が広がり[A][LF]
-いくつもの文化を築きあげていた[A][X]
+After defeating the dragons,[LF]
+the humans of Elibe quickly spread their[A][LF]
+culture and civilization to the farthest[LF]
+reaches of the continent.[A][X]
 
 ## MSG_A77
-まず[TAB]西に[TAB]大陸一はなやかで[LF]
-高度な文化をほこる『エトルリア王国』[A][X]
+In the west lies the Kingdom of[LF]
+Etruria, which is widely considered to[A][LF]
+possess the most refined culture[LF]
+in all of Elibe.[A][X]
 
 ## MSG_A78
-東に[TAB]派手さはないが堅実な文化と[LF]
-質実剛健な気風をよしとする『ベルン王国』[A][X]
+The Kingdom of Bern, with its powerful[LF]
+military and logical, pragmatic people,[A][LF]
+is located on the other side of[LF]
+the continent in the east.[A][X]
 
 ## MSG_A79
-この二つの王国が中心となり[LF]
-それにはさまれるかたちで小勢力が続く[A][X]
+These are the two most powerful nations[LF]
+in Elibe with the weaker nations[A][LF]
+situated between them.[LF]
+These smaller lands are...[A][X]
 
 ## MSG_A7A
-複数の領主たちが手を結び[LF]
-二大王国に対する『リキア同盟』[A][X]
+the Lycian League, whose numerous[LF]
+territories are independently ruled[A][LF]
+by a number of marquesses that are [LF]
+bound by a vow of allegiance{4183}[A][X]
 
 ## MSG_A7B
-民と共に荒地を切り開く[LF]
-『イリア』地方の諸騎士団[A][X]
+Ilia, where the people arduously[LF]
+till the frozen soil and many[A][LF]
+become mercenaries to earn[LF]
+money to survive{4183}[A][X]
 
 ## MSG_A7C
-広大な草原を馬で駆けめぐる[LF]
-『サカ』地方の諸部族[A][X]
+and Sacae, where various clans ride[LF]
+through the plains on horseback.[A][X]
 
 ## MSG_A7D
-それらの力のバランスにより[LF]
-小さな争いこそあれ[A][LF]
-全体としては安定を保ってきた・・・[A][LF]
-ところが[TAB]その安定が[LF]
-突然もろくも[TAB]くずれさった[A][X]
+Although there were occasional clashes[LF]
+between these nations, the majority[A][LF]
+of the people of Elibe lived in peace.[LF]
+That peace, however, was not to last...[A][X]
 
 ## MSG_A7E
-東の大国『ベルン王国』が[TAB]国王ゼフィールの[LF]
-命のもと[TAB]各地へと侵攻を開始したのである[A][X]
+King Zephiel of Bern has commanded his[LF]
+forces to conquer the entirety of Elibe.[A][X]
 
 ## MSG_A7F
-ベルン軍はサカ・イリアなどの地方に攻め込み[LF]
-抵抗するものを[TAB]ことごとく討ち果たした[A][LF]
-[LoadOverworldFaces]そして[TAB]その手は[LF]
-リキア地方にも[TAB]のびはじめていた[A][X]
+Bern's armies first attacked Sacae and Ilia,[LF]
+ruthlessly massacring all who opposed them.[A][LF]
+[LoadOverworldFaces]Now, Bern is mounting a merciless[LF]
+invasion into Lycia.[A][X]
 
 ## MSG_A80
-リキア東部の領土[TAB]フェレ周辺を治める[LF]
-フェレ侯エリウッドの嫡男ロイは[A][LF]
-次期領主となるために[TAB]リキア一の大都市[LF]
-[LoadOverworldFaces]オスティアへと留学していた[A][LF]
-[LoadOverworldFaces]しかし[TAB]病中の父エリウッドに[LF]
-突然の帰国を命じられる[A][X]
+Pherae is a territory of Lycia known for[LF]
+its beauty and honorable lords.[A][LF]
+[LoadOverworldFaces]Pherae's Lord Roy was studying in the great[LF]
+territory of Ostia when the invasion began.[A][LF]
+[LoadOverworldFaces]However, the sitting marquess and Roy's[LF]
+father, Eliwood, who has been ill,[A][LF]
+has sent for Roy to return to lead Pherae's[LF]
+soldiers in defending against Bern.[A][X]
 
 ## MSG_A81
-それは[TAB][LoadOverworldFaces]エリウッドの親友[LF]
-オスティア侯ヘクトルの名代として[A][LF]
-[LoadOverworldFaces]ヘクトルの愛娘リリーナが[TAB]フェレへと[LF]
-見舞いに向かった後であった[A][X]
+[LoadOverworldFaces]Marquess Hector of Ostia is Eliwood's[LF]
+long-time friend and confidant, and leads[A][LF]
+the council of lords in Lycia.[LF]
+At the time Eliwood sent for Roy,[A][LF]
+[LoadOverworldFaces]Marquess Ostia's daughter Lilina[LF]
+was in Pherae visiting Eliwood.[A][X]
 
 ## MSG_A82
-そのすぐ後を追うかたちで[LF]
-ロイは[TAB]自分に従うフェレの忠臣たちと[A][LF]
-リリーナ帰路の護衛にと付けられた[LF]
-[LoadOverworldFaces]オスティア重騎士のボールスを従え[A][LF]
-[LoadOverworldFaces]海路[TAB]故郷のフェレを目指した[A][X]
+Upon receiving his father's message, Roy[LF]
+hurries home, taking with him his vassals[A][LF]
+[LoadOverworldFaces]and Bors, a knight from Ostia who is[LF]
+responsible for Lilina's safety.[A][X]
 
 ## MSG_A83
-そして物語は[TAB]ロイたちがフェレ領の[LF]
-すぐそばまで戻ったところから始まる・・・[A][X]
+The story begins when Roy reaches[LF]
+the outskirts of Pherae...[A][X]
 
 ## MSG_A84
 [X]
@@ -88,22 +101,20 @@
 [X]
 
 ## MSG_A8A
-リキア地方にあるフェレ侯爵領と[LF]
-となりあう大陸東方の大国[TAB]ベルン王国[A][LF]
-[LoadOverworldFaces]その国境近くの山ぞいに[LF]
-小さな村がある[A][X]
+There is a small village on the border[LF]
+of Pherae and Bern.[A][LF]
+[LoadOverworldFaces]This is where Roy is to meet the[LF]
+mercenary band that Eliwood hired.[A][X]
 
 ## MSG_A8B
-ロイひきいるフェレ軍は[TAB]エリウッドが雇ったという[LF]
-傭兵団と[TAB]この村で合流する予定となっていた[A][LF]
-その村から東にある山のすぐ向こうに[LF]
-ベルン国境を守る城が[TAB]姿を見せている[A][LF]
-[LoadOverworldFaces]そして[TAB]ロイたちが[TAB]村をおとずれたその時[LF]
-城の中では[TAB]いつにないさわぎがおきていた[A][LF]
-それが[TAB]やがて世界の情勢を[LF]
-大きく揺るがすものになっていくことを[A][LF]
-ロイたちは[TAB]まだ[LF]
-知るよしもなかった・・・[A][X]
+Just east of the village is a small castle[LF]
+occupied by Bern's forces.[A][LF]
+At the time Roy reaches the village,[LF]
+the castle is in an outright panic.[A][LF]
+Roy has yet to realize that this confusion[LF]
+going on in the castle will spread,[A][LF]
+engulfing the entire continent of Elibe[LF]
+in chaos...[A][X]
 
 ## MSG_A8C
 [X]
@@ -115,30 +126,30 @@
 [X]
 
 ## MSG_A8F
-フェレ領のすぐ北に位置する[LF]
-アラフェン城[A][LF]
-[LoadOverworldFaces]リキア同盟は[TAB]まずここに主力を集結し[LF]
-ベルンへの対策を協議し続けていた[A][LF]
-[LoadOverworldFaces]ロイの軍は[TAB]戦いの重要なカギを握る女性[LF]
-[LoadOverworldFaces]ギネヴィアをともない[A][LF]
-同盟へ合流するべく急いだ[A][LF]
-しかし[TAB]アラフェン城まで[TAB]あと半日という[LF]
-距離にせまったころ[A][LF]
-城から[TAB]急を知らせる伝令が飛び込み[A][LF]
-ロイたちには[TAB]とうてい信じられないような[LF]
-内容が伝えられた[A][X]
+Just north of Pherae stands[LF]
+Castle Araphen.[A][LF]
+The armies of Lycia had gathered here to[LF]
+make preparations to strike back at Bern.[A][LF]
+[LoadOverworldFaces][LoadOverworldFaces][LoadOverworldFaces]However, when Roy and Guinivere are only a[LF]
+short distance from Castle Araphen,[A][LF]
+a messenger brings them shocking[LF]
+news they can scarcely believe.[A][LF]
+Leading Bern's army is a trio of elite[LF]
+commanders known as the Wyvern Generals,[A][LF]
+named after the reptilian creatures native[LF]
+to Bern for their ferocity and cunning.[A][X]
 
 ## MSG_A90
-「リキア同盟軍が[TAB]ベルン三竜将と呼ばれる[LF]
-ベルンきっての勇将のうちの二人[A][LF]
-ブルーニャ将軍[LoadOverworldFaces][TAB]ナーシェン将軍[LoadOverworldFaces]ひきいる軍に[LF]
-強襲され[TAB]全滅に近い敗北をきっする」と・・・[A][X]
+[LoadOverworldFaces][LoadOverworldFaces]Two of these three, Brunnya and[LF]
+Narcian, have attacked Castle Araphen,[A][LF]
+virtually decimating the Lycian Army[LF]
+while it was little prepared.[A][X]
 
 ## MSG_A91
-勇猛を誇るリキア同盟の[TAB]突然の敗北・・・[LF]
-その事実に愕然としながらも[A][LF]
-[LoadOverworldFaces]ロイは[TAB]被害の大きさと[TAB]生存者の有無を[LF]
-確かめるべくアラフェン城を目指すのだった[A][X]
+[LoadOverworldFaces]Morale of the group takes a blow, but[LF]
+Roy continues to Castle Araphen,[A][LF]
+both to see it for himself and, hopefully,[LF]
+find and aid any survivors...[X]
 
 ## MSG_A92
 [X]
@@ -159,27 +170,25 @@
 [X]
 
 ## MSG_A98
-ヘクトルの遺言をうけ[A][LF]
-[LoadOverworldFaces]ロイたちは[TAB]リリーナが留守をあずかる[LF]
-[LoadOverworldFaces]オスティア領を目指し[TAB]西へと進み始めた[A][LF]
-[LoadOverworldFaces]途中[TAB]リキア諸侯の一人[TAB]エリックの[LF]
-治める地ラウス領へとさしかかる[A][LF]
-一面の草原に[TAB]豊かな水をたたえる川・・・[LF]
-この[TAB]のどかなラウスの地で[A][LF]
-暗い陰謀が[TAB]着実に進行しつつあることを[LF]
-ロイたちは目の当たりにすることとなる[A][X]
+Respecting Hector's dying request,[LF]
+Roy makes his way west.[A][LF]
+[LoadOverworldFaces]Intent on reaching Lilina, Roy[LF]
+keeps a steady pace toward Ostia.[A][LF]
+[LoadOverworldFaces]On his way there, Roy passes through[LF]
+the territory of Laus,[A][LF]
+[LoadOverworldFaces]governed by Lord Erik.[A][LF]
+At a glance, Laus is a peaceful territory[LF]
+with vast meadows and clear streams.[A][LF]
+Beneath this beauty, however, lies[LF]
+treachery and great skullduggery...[A][X]
 
 ## MSG_A99
-ラウス侯エリックの内通発覚は[LF]
-ロイたちにさらなる衝撃を与えた[A][LF]
-エリックは裏切り者は一人ではないと[LF]
-そう[TAB]におわせていた[A][LF]
-[LoadOverworldFaces]ロイの住みなれた土地リキア・・・そこも[LF]
-もはや安全な土地とは言えなかった[A][LF]
-[LoadOverworldFaces]オスティアを目指すロイたちは[LF]
-いらぬ危険を回避するため[A][LF]
-[LoadOverworldFaces]人どおりもまばらな[TAB]山間の[LF]
-旧街道を通り抜けることにするのだった[A][X]
+Marquess Laus had been working with[LF]
+Bern against his allies in Lycia.[A][LF]
+[LoadOverworldFaces]Roy realizes that the leaders of Lycia, his[LF]
+homeland, can no longer be trusted.[A][LF]
+[LoadOverworldFaces][LoadOverworldFaces]Still heading for Ostia, Roy moves through[LF]
+a treacherous mountain pass...[A][X]
 
 ## MSG_A9A
 [X]
@@ -197,21 +206,22 @@
 [X]
 
 ## MSG_A9F
-新たに[TAB]エリミーヌ教団神父のサウル[LoadOverworldFaces][LF]
-その護衛ドロシー[LoadOverworldFaces]を加え[A][LF]
-ロイたちは[TAB][LoadOverworldFaces]山間の道をぬけ[A][LF]
-オスティアの南東に位置する[LF]
-[LoadOverworldFaces]トリア侯の領地へと足をふみいれた[A][X]
+[LoadOverworldFaces][LoadOverworldFaces]After taking Saul, a priest of St. Elimine,[LF]
+and Dorothy, his bodyguard, into their ranks,[A][LF]
+[LoadOverworldFaces][LoadOverworldFaces]Roy and company enter Thria,[LF]
+southeast of Ostia.[A][LF]
+Thria is governed by Lord Orun,[LF]
+Hector's cousin.[A][X]
 
 ## MSG_AA0
-亡きオスティア侯の従兄弟であり[LF]
-温厚な性格で知られる[TAB]トリア侯オルン[A][LF]
-彼の治める[TAB]この城は[TAB]ロイたちにとって[LF]
-まず[TAB]安心な場所であると思われた[A][X]
+Orun's home castle seems a safe[LF]
+place to stay.[A][X]
 
 ## MSG_AA1
-しかし[TAB]ここにもベルンの魔の手が[LF]
-着実にのびていた・・・[A][X]
+As such, Roy expects a night of[LF]
+quiet rest for his troops.[A][LF]
+However, even Thria is within Bern's[LF]
+influence...[A][X]
 
 ## MSG_AA2
 [X]
@@ -223,38 +233,34 @@
 [X]
 
 ## MSG_AA5
-反乱の知らせを受けたロイたちは[LF]
-オスティアへと急いだ[A][X]
+Hearing of rebellion, Roy[LF]
+hurries his pace towards Ostia.[A][X]
 
 ## MSG_AA6
-その途中[TAB]集めた情報によると[A][LF]
-オスティア侯ヘクトルの部下である[LF]
-[LoadOverworldFaces]レイガンス将軍が[TAB][LoadOverworldFaces]部下のデビアスを誘い[A][LF]
-オスティアをベルン王国に売りわたすべく[LF]
-反乱を起こしたということだった[A][X]
+[LoadOverworldFaces]According to his information,[LF]
+General Legance, an advisor to Hector,[A][LF]
+[LoadOverworldFaces]organized a rebellion with his lieutenant,[LF]
+Debias, to surrender to Bern.[A][X]
 
 ## MSG_AA7
-オスティアの留守を守っていた[TAB]リリーナは[LF]
-レイガンスらに捕らえられ[A][LF]
-利用することができると思われたのか[LF]
-城に閉じ込められているらしい[A][X]
+Legance keeps Lilina hostage in Castle[LF]
+Ostia, thinking she may be of use later.[A][X]
 
 ## MSG_AA8
-その報告を聞いたロイたちは[A][LF]
-自軍だけでも[TAB]リリーナを救う決意で[LF]
-オスティア市街へと乗りこんだ[A][X]
+Roy and company enter Ostia in an[LF]
+effort to rescue Lilina.[A][X]
 
 ## MSG_AA9
-こうして[TAB]リキア一の大都市と[LF]
-うたわれたオスティアは[A][LF]
-戦場となり[TAB]無残にも[LF]
-踏み荒らされてゆくのであった・・・[A][X]
+Ostia, the largest and most populous city[LF]
+in Lycia, is to become a battlefield...[A][X]
 
 ## MSG_AAA
 [X]
 
 ## MSG_AAB
-[X]
+Lilina has been taken hostage by Legance.[A][LF]
+She is imprisoned within Castle Ostia, because[LF]
+Legance thought he might find a use for her.[A][X]
 
 ## MSG_AAC
 [X]
@@ -263,18 +269,16 @@
 [X]
 
 ## MSG_AAE
-オスティアは[TAB]「猛将」のよび声高かった[LF]
-領主ヘクトルの元[A][LF]
-アーマーナイト[TAB]ジェネラルという重騎士を[LF]
-中心に編成される[TAB]軍隊を誇っていた[A][LF]
-[LoadOverworldFaces]彼らが守るオスティア城は[LF]
-過去[TAB]敵の侵入を許すことがなく[A][LF]
-数百年のながきにわたり[LF]
-『難攻不落』と言われ続けてきた[A][LF]
-だが[TAB]今[TAB]その歴史が[LF]
-終わりをつげようとしていた[A][LF]
-[LoadOverworldFaces]くしくも[TAB]オスティアを守らんとする[LF]
-ロイたちの手によって・・・[A][X]
+Ostia's military primarily consists of[LF]
+soldiers in heavy armor.[A][LF]
+With them, Castle Ostia has[LF]
+always been famously secure.[A][LF]
+[LoadOverworldFaces]For countless years, the castle has[LF]
+been said to be impregnable.[A][LF]
+[LoadOverworldFaces]However, the rumors are about to be proven[LF]
+wrong by Roy, who, ironically,[A][LF]
+only does so for the castle's[LF]
+own protection...[A][X]
 
 ## MSG_AAF
 [X]
@@ -301,17 +305,18 @@
 [X]
 
 ## MSG_AB7
-父の死にうちのめされるリリーナを[LF]
-いつまでも守っていくと誓うロイ[A][LF]
-だが[TAB]背後よりせまりくる[LF]
-敵国ベルンの竜騎士団を相手に[A][LF]
-このままでは[TAB]まともに戦う[LF]
-ことができない・・・[A][LF]
-そこでロイたちは[TAB]先に『神将器』を[LF]
-入手すべく[TAB]リリーナの案内で[A][LF]
-オスティア郊外の洞窟へと向かった[A][LF]
-火山のふもとにある[TAB]その洞窟は[LF]
-ロイたちに[TAB]大きな試練を与えることになる[A][X]
+Roy vowed to protect Lilina.[A][LF]
+With Bern coming full force however,[LF]
+Roy's army is no equal.[A][LF]
+Therefore, he decides to try and[LF]
+obtain a legendary weapon.[A][LF]
+He thinks it best to obtain it before[LF]
+Bern manages to get their hands on it.[A][LF]
+Lilina shows them to a cave[LF]
+on the outskirts of Ostia,[A][LF]
+where a legendary weapon is hidden.[A][LF]
+The cave, located at the foot of a volcano,[LF]
+will be no small obstacle for Roy...[A][X]
 
 ## MSG_AB8
 [X]
@@ -320,154 +325,165 @@
 [X]
 
 ## MSG_ABA
-オスティアからナーシェン将軍を退けた後[A][LF]
-[LoadOverworldFaces]さらなる追撃を警戒するロイたちを[LF]
-[LoadOverworldFaces]まるであざ笑うかのように[A][LF]
-ベルンのリキアに対する手出しは[LF]
-ぴたりとやんでしまった[A][LF]
-エトルリアからの弁解要請にも[LF]
-沈黙をまもり続けるベルン王国[A][LF]
-その静けさは[TAB]無気味であるとしか[LF]
-いいようがなく[TAB]諸勢力を困惑させた[A][X]
+After driving Narcian away from Ostia,[A][LF]
+[LoadOverworldFaces][LoadOverworldFaces]Roy and company brace themselves for[LF]
+further attacks from Bern.[A][LF]
+However, Bern's belligerent movements[LF]
+toward Lycia come to an abrupt halt,[A][LF]
+as if to mock Roy and his caution.[A][LF]
+Bern also remains unresponsive[LF]
+to a treaty offer from Etruria.[A][LF]
+Bern's sudden silence and lack of[LF]
+activity can only be described as eerie.[A][X]
 
 ## MSG_ABB
-リキアの有力諸侯は[TAB]フェレ侯エリウッド[LF]
-ただ一人を残すのみとなった[A][LF]
-エリウッドは[TAB]フェレの地に[TAB]各諸侯の[LF]
-後継者を集め[TAB]今後について協議した[A][LF]
-[LoadOverworldFaces]その結果[TAB]まず[LF]
-エリウッドが盟主代行となり[A][LF]
-残る兵力を集結させ[LF]
-再度『リキア同盟軍』を結成[A][LF]
-この軍は[TAB]諸侯領地のへだてなく[LF]
-警護することを[TAB]その目的とした[A][LF]
-[LoadOverworldFaces]新しい『リキア同盟軍』の将には[LF]
-ベルン軍撃退の実績からロイが選ばれ[A][LF]
-リキア地方全体は[TAB]にわかに活気を[LF]
-とりもどし[TAB]復興への道を歩み始めた[A][X]
+With Hector gone, Pherae is now the[LF]
+greatest power in Lycia.[A][LF]
+Eliwood summons the council of marquesses[LF]
+to Pherae to discuss future actions.[A][LF]
+[LoadOverworldFaces]It is decided that Eliwood is to lead[LF]
+the council of the Lycian League.[A][LF]
+A new Lycian Army is also to[LF]
+be established.[A][LF]
+This new army's purpose is not to[LF]
+take the offensive against Bern,[A][LF]
+but rather take a defensive[LF]
+stance for Lycia.[A][LF]
+[LoadOverworldFaces]Owing to his victory against Bern in Ostia,[LF]
+Roy is chosen leader of this new army.[A][LF]
+Gradually, the attitude and morale in[LF]
+Lycia begins to improve.[A][LF]
+People once again conduct business without[LF]
+fear, and they embrace a new optimism.[A][X]
 
 ## MSG_ABC
-そんなおり[TAB]エトルリア本国から[LF]
-新リキア同盟軍に[TAB]正式な出動要請が届く[A][LF]
-[LoadOverworldFaces]『西方三島の賊討伐の任を与える』[LF]
-とするものであった[A][X]
+At this time, Etruria calls for Lycia's[LF]
+assistance.[A][LF]
+[LoadOverworldFaces]The kingdom needs help with restoring[LF]
+law to the Western Isles.[A][LF]
+Many outlaws make their bases there,[LF]
+and anarchy is said to rule.[A][X]
 
 ## MSG_ABD
-なぜ[TAB]わざわざ西方の島々に[LF]
-軍をださなくてはいけないのか[A][LF]
-領民の内に不満の声は高かったが[A][LF]
-いまだ[TAB]エトルリア王国の保護を必要とする[LF]
-リキアには[TAB]要請をのむ他[TAB]手立てはなかった[A][LF]
-エトルリアへの恩にむくいるという大義をかかげ[LF]
-ロイ率いる『リキア同盟軍』は[A][LF]
-[LoadOverworldFaces]エトルリアを横切り[LF]
-西方三島へと出向くのであった[A][X]
+Many in Lycia are uneager to send their[LF]
+troops to the Isles to deal with bandits,[A][LF]
+but having received Etruria's aid in Ostia,[LF]
+they have no choice but to oblige.[A][LF]
+[LoadOverworldFaces]Thus, Roy and the Lycian Army pass[LF]
+through Etruria toward the Isles.[A][X]
 
 ## MSG_ABE
-西方三島とは[TAB]エトルリア王国の保護下にある[LF]
-大陸西方にうかぶ辺境の島々の総称である[A][LF]
-豊富な地下資源にめぐまれ[TAB]その発掘が[LF]
-進んでいるが[TAB]富の横取りをねらう[A][LF]
-様々な「賊」が横行している[A][LF]
-[LoadOverworldFaces]ほとんど無法に近い状態が[TAB]長く続き[LF]
-島の人々を苦しめ続けているのであった・・・[A][X]
+The Western Isles are the numerous[LF]
+islands off the western coast of Elibe.[A][LF]
+Presently, they are colonies of Etruria.[A][LF]
+The Western Isles are rich in resources,[LF]
+so mining is a major industry here.[A][LF]
+However, these resources are[LF]
+worth a fortune.[A][LF]
+[LoadOverworldFaces]Inevitably, varied bands of rogues traveled[LF]
+there hoping to loot the mines.[A][LF]
+As such, the people of the Western Isles[LF]
+live in constant fear of bandit attacks.[A][LF]
+Roy is sent to vanquish these bandits...[A][X]
 
 ## MSG_ABF
-ナーシェン将軍たちが退いた後[LF]
-ロイたちは[TAB]セシリアと共に[A][X]
+Roy accompanies Cecilia to the[LF]
+Etrurian capital of Aquileia.[A][X]
 
 ## MSG_AC0
-エトルリア王都アクレイアに[LF]
-向かうことになった[A][X]
+After debating Roy and Guinivere's positions,[LF]
+the Etrurian Court hands down a decision.[A][X]
 
 ## MSG_AC1
-エトルリア王国では[TAB]ギネヴィアと[LF]
-ロイたちのあつかいについて議論された結果[A][X]
+They decide there is no justification to attack[LF]
+Bern as they have not been attacked directly.[A][X]
 
 ## MSG_AC2
-直接敵対したわけではないベルン王国と[LF]
-戦う必要はないという事になり[A][X]
+Guinivere is to stay under Etrurian[LF]
+protection at Aquileia,[A][LF]
+and the Lycian Army is to be an independent[LF]
+part of Etruria's military.[X]
 
 ## MSG_AC3
-とりあえず[TAB]ギネヴィアについては[LF]
-王都アクレイアで保護することとなった[A][X]
+To test his worth, Etruria sends Roy[LF]
+to the Western Isles,[A][X]
 
 ## MSG_AC4
-ロイたちについては[LF]
-セシリアたちの力ぞえがあって[A][X]
+on a mission to rid the islands[LF]
+of the spreading bandits.[A][X]
 
 ## MSG_AC5
-ひとまず[TAB]エトルリア配下の独立部隊として[LF]
-その力量が試されることとなった[A][X]
+The Western Isles is an archipelago to[LF]
+the west under Etrurian jurisdiction.[A][X]
 
 ## MSG_AC6
-そして[TAB]その最初の任務は西方三島にすくう[LF]
-「賊」たちを[TAB]しずめることであった[A][X]
+Many mining companies have sprouted up to[LF]
+take advantage of the rich resources there.[A][X]
 
 ## MSG_AC7
-西方三島とは[TAB]エトルリア王国の保護下にある[LF]
-大陸西方にうかぶ辺境の島々のことで[A][X]
+However, these riches also inevitably[LF]
+attracted many bandits to the area,[A][X]
 
 ## MSG_AC8
-その豊富な地下資源のため開発が進んでいるが[LF]
-その富をねらう様々な「賊」が横行[A][X]
+and now the people live in[LF]
+constant fear...[A][X]
 
 ## MSG_AC9
-ほとんど無法に近い状態にあり[LF]
-島の人々は[TAB]その状態に苦しめられていた・・・[A][X]
+[X]
 
 ## MSG_ACA
-西方三島は[TAB]現在ロイたちがいる[LF]
-フィベルニア[LoadOverworldFaces][A][X]
+Three separate islands:[A][LF]
+[LoadOverworldFaces]Fibernia,[A][X]
 
 ## MSG_ACB
-南に下がった位置に[TAB]カレドニア[LoadOverworldFaces][A][X]
+[LoadOverworldFaces]Caldonia,[A][X]
 
 ## MSG_ACC
-北東にあるディア[LoadOverworldFaces][A][LoadOverworldFaces][LF]
-この三つの島を指してそう呼ばれる[A][LF]
-どの島にも豊かな鉱脈があり[LF]
-さかんに開発がおこなわれていた[A][LF]
-中でも最大といえるのは[LF]
-[LoadOverworldFaces]フィベルニア島北端の[TAB]エブラクム鉱山である[A][LF]
-[LoadOverworldFaces]「賊」の情報を求めて[TAB]ロイたちは[LF]
-そこを目指し[TAB]北へと進路をとることにした[A][X]
+[LoadOverworldFaces]and Dia.[A][LF]
+All of these islands are rich in minerals,[LF]
+and mining is the economic backbone.[A][LF]
+[LoadOverworldFaces]The largest mine is located in[LF]
+Eburacum, in north Fibernia.[A][LF]
+[LoadOverworldFaces]Roy leads his forces toward Eburacum[LF]
+hoping to learn more about the bandits.[A][X]
 
 ## MSG_ACD
-エブラクム鉱山へは[TAB]山間の城を[LF]
-経由しなければならないとのことで[A][LF]
-ロイは使者をたて[TAB]通行の許可を[LF]
-[LoadOverworldFaces]その城の主[TAB]ノードに求めた[A][LF]
-自分たちは[TAB]エトルリアの正式な要請で[LF]
-この島に来ていることから[A][LF]
-協力を得ることは[TAB]たやすいはず・・・[A][LF]
-その考えが間違いであると気付くのに[LF]
-時間はそうかからなかった・・・[A][X]
+To get to Eburacum, one must pass a[LF]
+castle located nearby.[A][LF]
+[LoadOverworldFaces]Roy sends a messenger to Sir Nord,[LF]
+lord of the castle,[A][LF]
+to request permission to[LF]
+pass through his lands.[A][LF]
+Because Roy and company are in[LF]
+the Isles on Etruria's request,[A][LF]
+they don't anticipate trouble in[LF]
+gaining Nord's support.[A][LF]
+But not everything is as[LF]
+simple as it appears...[A][X]
 
 ## MSG_ACE
-山間の城で[TAB]レジスタンスの少女[LF]
-ララムから聞かされた話は[A][LF]
-ロイたちにとって[LF]
-信じられないようなことだった[A][LF]
-[LoadOverworldFaces]ロイは急ぎ[TAB]セシリアあての書面で[A][LF]
-この地でのエトルリア貴族の横行[LF]
-エブラクム鉱山での悲惨な現状[A][LF]
-それらを知らせ[TAB]今後の自分たちの[LF]
-対応について問い合わせることにした[A][LF]
-[LoadOverworldFaces]そして[TAB]レジスタンスと鉱山の人々を[LF]
-助けるためにエブラクムへと進んだ[A][X]
+Roy can hardly believe Larum's account.[A][LF]
+[LoadOverworldFaces]He quickly pens a letter to Cecilia to let[LF]
+her know of the horrors on the Isles.[A][LF]
+He also tells her of the actions he[LF]
+plans to take from this point.[A][LF]
+[LoadOverworldFaces]After sending the letter, Roy moves[LF]
+towards the Eburacum mine.[A][X]
 
 ## MSG_ACF
-そこでは[TAB]きびしい労働に苦しむ人々を[LF]
-少しでも助けるためにということで[A][LF]
-[LoadOverworldFaces]エリミーヌ教団の司祭を[TAB]その監督とすることを[LF]
-エトルリア本国で決められていたのだが[A][LF]
-その目的を果たせてはいなかった[A][X]
+His goal is to rescue the people[LF]
+suffering from forced labor.[A][LF]
+[LoadOverworldFaces]Etruria has assigned Bishop Orlo of the[LF]
+St. Elimine Church to supervise the mine.[A][LF]
+It was already a fruitful endeavor, but[LF]
+the nobles' greed is unsatiable.[A][X]
 
 ## MSG_AD0
-死の鉱山エブラクム・・・[A][LF]
-そこには[TAB]無理やり集められた人々の[LF]
-うめき声がこだましている[A][X]
+Eburacum... Known now as the Mine of Death.[A][LF]
+The wails of the people forced into[LF]
+labor echo through the mines,[A][LF]
+like the howling of ghosts,[LF]
+never sleeping...[A][X]
 
 ## MSG_AD1
 [X]
@@ -479,16 +495,16 @@
 [X]
 
 ## MSG_AD4
-「賊」と戦い[TAB]島の人々を助けている[LF]
-レジスタンスの話を聞くため[A][LF]
-[LoadOverworldFaces]ロイたちは[TAB]島の海岸線にそって[LF]
-西へと進路をとった[A][X]
+[LoadOverworldFaces]In order to speak to the resistance[LF]
+force about the bandits on the Isles,[A][LF]
+Roy and company move west along[LF]
+the coastline.[A][X]
 
 ## MSG_AD5
-その途中[TAB]レジスタンスの勢力と[LF]
-それを倒そうとする領主の勢力が重なり合う[A][LF]
-山のふもとのとりでのそばにある[LF]
-小さな村へとさしかかった・・・[A][X]
+Along the way, they come across[LF]
+a small village caught in conflict.[A][LF]
+The local lord oppresses the resistance and[LF]
+does anything he can to get rid of them...[A][X]
 
 ## MSG_AD6
 [X]
@@ -497,48 +513,44 @@
 [X]
 
 ## MSG_AD8
-リキア同盟軍は[TAB]エルフィンを軍師に迎え[LF]
-その助言に従い[TAB][LoadOverworldFaces]南のカレドニア島を目指した[A][LF]
-カレドニア島は[TAB]現在ロイたちがいる[LF]
-フィベルニア島[A][LF]
-その東にあるディア島とならび[LF]
-西方三島とよばれる島の一つである[A][LF]
-[LoadOverworldFaces]そして[TAB]たてに長くのびるカレドニアの[LF]
-中央にあるイディナ城[A][X]
+The Lycian Army takes Elffin in[LF]
+as an advisor.[A][LF]
+[LoadOverworldFaces]Following his advice, they move south[LF]
+toward the isle of Caldonia.[A][LF]
+Caldonia is one of the main islands[LF]
+that make up the Western Isles,[A][LF]
+the other two being Fibernia and Dia.[A][LoadOverworldFaces][X]
 
 ## MSG_AD9
-ここには城主モルガンの手で[TAB]カレドニア中から[LF]
-男たちが集められ[TAB]そして「死の鉱山」と[A][LF]
-呼ばれるエブラクムへと連れていかれる[A][X]
+Castle Eidyna is located on Caldonia. Here,[LF]
+men from all over the Isles are imprisoned,[A][LF]
+awaiting transport to Eburacum,[LF]
+the Mine of Death.[A][X]
 
 ## MSG_ADA
-ロイたちが[TAB]イディナに到着したとき[LF]
-事態はすでに動き始めていた・・・[A][X]
+When Roy arrives at Castle Eidyna,[LF]
+the situation appears dire...[A][X]
 
 ## MSG_ADB
 [X]
 
 ## MSG_ADC
-ロイたちは[TAB]島の人々を救うために[LF]
-島の北西にある都市ジュトーへと軍をむけた[A][LF]
-ジュトーは[TAB]西方三島の中で[LF]
-もっとも大きな都市であり[A][LF]
-この地を保護領とするエトルリア王国の[LF]
-総督府がおかれていた[A][X]
+To liberate the people of the Western Isles,[LF]
+Roy heads for Juteaux,[A][LF]
+the Isles' largest city and its capital.[A][LF]
+[X]
 
 ## MSG_ADD
-エルフィンの話によると[LF]
-現在の西方三島総督アルカルドは[A][LF]
-エトルリアの貴族ではあるが[LF]
-たいした人物ではないということだった[A][X]
+According to Elffin, Lord Arcardo, who is[LF]
+in charge of overseeing the Western Isles,[A][LF]
+is an Etrurian of high nobility but of little[LF]
+prominence in the Etrurian court.[A][X]
 
 ## MSG_ADE
-西方三島の総督を攻撃することに対する[LF]
-エトルリア本国の反応は気がかりだったが[A][LF]
-島の人々を救うため[TAB]少しでも早く[LF]
-彼をたおさなければならない[A][LF]
-[LoadOverworldFaces]そう決意したロイは[LF]
-ジュトーへと軍を急がせるのだった[A][X]
+Roy, still wary of how Etruria may[LF]
+respond to his attack,[A][LF]
+[LoadOverworldFaces]prepares his soldiers to rid the Isles[LF]
+of Arcardo to rescue the people...[A][X]
 
 ## MSG_ADF
 [X]
@@ -556,16 +568,14 @@
 [X]
 
 ## MSG_AE4
-エルフィンに教えられた[LF]
-古文書の内容をたよりに[A][LF]
-ロイたちは[TAB]ジュトーの近くにある[LF]
-古い洞窟へとむかった[A][X]
+Following Elffin's guidance,[A][LF]
+Roy heads for a cave near Juteaux[LF]
+to obtain a legendary weapon.[A][X]
 
 ## MSG_AE5
-しかし[TAB]その洞窟の存在を知っていたのは[LF]
-ロイたちだけではなく[A][LF]
-そのことが[TAB]新たなる戦いを[LF]
-引きおこすことになった・・・[A][X]
+But Roy and company aren't the[LF]
+only ones who know of the cave.[A][LF]
+Yet another battle awaits them...[A][X]
 
 ## MSG_AE6
 [X]
@@ -574,44 +584,39 @@
 [X]
 
 ## MSG_AE8
-王都アクレイアで起こったクーデターは[LF]
-たちまちエトルリア全土へと飛び火した[A][X]
+The chaos caused by the coup in Aquileia[LF]
+quickly spreads to the rest of Etruria.[A][X]
 
 ## MSG_AE9
-セシリアは[TAB]ギネヴィア王女をともない[LF]
-王都アクレイアより脱出[A][LF]
-さらに[TAB]反クーデター派を組織し[LF]
-各地を転戦する[A][LF]
-[LoadOverworldFaces]しかし[TAB]ベルン王国を後ろだてとした[LF]
-クーデター派の勢いは強く[A][LF]
-[LoadOverworldFaces]また[TAB]彼らにおさえられた[LF]
-国王モルドレッドの『勅命』により[A][LF]
-[LoadOverworldFaces]三軍将[TAB]『大軍将』ダグラス[LoadOverworldFaces][LF]
-『騎士軍将』パーシバル[LoadOverworldFaces][TAB]この両名が[A][LF]
-クーデター側についたこともあり[A][X]
+Cecilia escapes with Guinivere[LF]
+from Aquileia.[A][LF]
+She also forms a loyalist group to[LF]
+combat the revolutionaries.[A][LF]
+[LoadOverworldFaces]The revolutionaries, however,[LF]
+have Bern on their side.[A][LF]
+[LoadOverworldFaces]King Mordred has also been taken hostage,[LF]
+giving the revolutionaries another edge:[A][LF]
+[LoadOverworldFaces][LoadOverworldFaces][LoadOverworldFaces]Great General Douglas and Knight General [LF]
+Perceval are forced into their service.[A][LF]
+With so much power, the revolutionaries[LF]
+easily push the loyalists out of Etruria.[A][X]
 
 ## MSG_AEA
-反クーデター派は[TAB]しだいに押されはじめ[A][LF]
-[LoadOverworldFaces]やがて[TAB]ミスル半島西端にある[LF]
-古城へと追いこまれた[A][X]
+[LoadOverworldFaces]The loyalists are driven into an old[LF]
+castle on the Missur Peninsula.[A][X]
 
 ## MSG_AEB
-セシリアたちの居場所を[TAB]なんとか[LF]
-さがしあてた[TAB]ロイたちリキア同盟軍は[A][X]
+Roy learns that Cecilia has been[LF]
+forced back by the revolutionaries.[A][X]
 
 ## MSG_AEC
-その救出のため[TAB]西方三島を後にし[LF]
-ミスル半島へと向かった[A][X]
+In response, Roy heads for Missur.[A][X]
 
 ## MSG_AED
-その頃[TAB]反クーデター派は[LF]
-古城に立てこもり[A][LF]
-ベルン・エトルリア連合部隊の[LF]
-攻撃を受けていた[A][LF]
-セシリアの働きにより[TAB]善戦を続けた[LF]
-反クーデター派であったが[A][LF]
-ここにきて[TAB]その敗北は[LF]
-時間の問題といってよかった・・・[A][X]
+The loyalists are under attack by both[LF]
+revolutionaries and Bern's military.[A][LF]
+With such adversity, the loyalists'[LF]
+forces have little time...[A][X]
 
 ## MSG_AEE
 [X]
@@ -629,34 +634,31 @@
 [X]
 
 ## MSG_AF3
-セシリアとギネヴィア王女を[LF]
-無事救出することができたロイは[A][LF]
-[LoadOverworldFaces]『ナバタの里』の巫女だという[LF]
-ソフィーヤの案内で[A][LF]
-ミスル半島の中央にある[LF]
-ナバタ砂漠へと向かった[A][X]
+After Roy rescues Cecilia,[A][LF]
+[LoadOverworldFaces]he obliges Sophia's request and[LF]
+heads into the Nabata desert.[A][X]
 
 ## MSG_AF4
-ソフィーヤの話によると[TAB]『ナバタの里』は[LF]
-砂漠の中のオアシス地帯にあり[A][LF]
-今は[TAB]ベルン軍の襲撃を[LF]
-受けているというのだ[A][LF]
-ベルンの狙いはそこに住む『竜』で[LF]
-あるかも知れない・・・[A][X]
+According to Sophia, her village,[LF]
+Arcadia, is located in a hidden oasis.[A][LF]
+The village is under attack by Bern,[A][LF]
+and Roy believes their aim to be the[LF]
+dragons said to inhabit the village.[A][LF]
+[X]
 
 ## MSG_AF5
-里へと急ぐ[TAB]ロイたちの前には[LF]
-砂嵐という大きな壁がたちふさがっていた[A][X]
+The Lycian Army moves quickly to Arcadia,[LF]
+but a sandstorm impedes their progress...[A][X]
 
 ## MSG_AF6
-『ナバタの里』の奥に[TAB]大きく古めかしい[LF]
-神殿がたっていた[A][LF]
-この神殿の中には『神将器』の一つが[LF]
-隠されているという[A][LF]
-先に入り込んでいるとおぼしき[LF]
-ベルン兵たちの後を追うように[A][LF]
-ロイたちもまた[TAB]その中に足を[LF]
-踏み入れるのであった・・・[A][X]
+In the hidden village of Arcadia[LF]
+stands an ancient temple.[A][LF]
+One of the legendary weapons[LF]
+is said to be hidden within.[A][LF]
+Roy and company are hot on the[LF]
+trail of Bern's troops,[A][LF]
+who have already made their[LF]
+way into the temple...[A][X]
 
 ## MSG_AF7
 [X]
@@ -668,25 +670,30 @@
 [X]
 
 ## MSG_AFA
-『ナバタの里』を救ったロイたちは[LF]
-イグレーヌの案内で砂漠をぬけ[A][LF]
-いよいよクーデター派を倒すため[LF]
-[LoadOverworldFaces]エトルリア本国へと進撃を開始した[A][X]
+After saving the village of Arcadia,[A][LF]
+Roy's army leaves the desert by[LF]
+following Igrene's lead.[A][LF]
+[LoadOverworldFaces]Now, they turn toward Etruria to confront[LF]
+the revolutionary forces.[A][LF]
+[X]
 
 ## MSG_AFB
-そんな彼のもとに[TAB]ナバタの里の長老から[LF]
-大変な知らせがもたらされた[A][X]
+However, they receive a troubling[LF]
+letter from the elder of Arcadia.[A][LF]
+[X]
 
 ## MSG_AFC
-『竜』の少女ファが[TAB]ロイたちを追って[LF]
-ナバタの里から姿を消したというのだ[A][LF]
-ファが[TAB]クーデター派[TAB]そして[TAB]その後ろにいる[LF]
-ベルンの手に落ちれば[TAB]大変なことになる[A][X]
+Apparently, Fae the dragon has[LF]
+left Arcadia in pursuit of Roy.[A][LF]
+If she falls into the hands of the[LF]
+revolutionaries or Bern,[A][LF]
+there is no telling what might[LF]
+happen to her, or to Roy's army.[A][LF]
+[X]
 
 ## MSG_AFD
-ロイたちは[TAB]ファの消息をたどり[A][LF]
-エトルリア国境に近い[LF]
-小さな砦へと向かった[A][X]
+Determined to find Fae, Roy moves to[LF]
+a small fort on the Etrurian border...[A][X]
 
 ## MSG_AFE
 [X]
@@ -695,34 +702,31 @@
 [X]
 
 ## MSG_B00
-『竜』の娘ファを救い出したロイたちは[A][LF]
-[LoadOverworldFaces]いよいよ[TAB]エトルリア王都アクレイアへと[LF]
-進軍する[A][X]
+[LoadOverworldFaces]After rescuing Fae,[LF]
+Roy heads for Aquileia.[A][X]
 
 ## MSG_B01
-アクレイア[A][LF]
-エトルリア王国の王都でもあるこの都市は[LF]
-大陸一をほこる大都市でもある[A][LF]
-[LoadOverworldFaces]クーデター派は[TAB]ロイたちを迎えうつべく[LF]
-ここに戦力を集中した[A][LF]
-彼らは[TAB]当初[TAB]都市の城壁をたよりに[LF]
-一戦をまじえるつもりであったが[A][LF]
-[LoadOverworldFaces]サウルたちをギネヴィアやロイのもとへ送った[LF]
-エリミーヌ教団が[TAB]ロイたちの味方をしたため[A][LF]
-市民たちへのエリミーヌ教団の影響をおそれ[LF]
-王宮にこもって戦わざるをえなくなった[A][X]
+The capital of Etruria,[A][LF]
+Aquileia is also the largest and[LF]
+wealthiest city on the continent.[A][LF]
+[LoadOverworldFaces]Prepared for the Lycian Army's attack,[A][LF]
+the revolutionary forces are[LF]
+fortified in Aquileia.[A][LF]
+[LoadOverworldFaces]The St. Elimine Church supports the Lycian[LF]
+Army, turning popular opinion against[A][LF]
+the revolutionaries, forcing them[LF]
+inside the castle.[A][X]
 
 ## MSG_B02
-エリミーヌ教団・・・『八神将』の一人[LF]
-『聖女』エリミーヌがひらいたといわれる[A][LF]
-[LoadOverworldFaces]この教団は[TAB]エトルリア[TAB]ベルンをはじめ[LF]
-世界の各地に多くの信者をもっていた[A][LF]
-[LoadOverworldFaces]その支援を受けて[TAB]ロイたちは[LF]
-エトルリアの王宮へと進撃する[A][LF]
-だが[TAB]王宮内では[TAB]ベルン三竜将の一人[LF]
-[LoadOverworldFaces]ナーシェン将軍ひきいる[A][LF]
-ベルン南方軍の精鋭部隊が[LF]
-ロイたちをまちかまえていた[A][X]
+The St. Elimine Church was founded by Saint[LF]
+Elimine, one of the Eight Legends.[A][LF]
+[LoadOverworldFaces]The church has legions of followers,[LF]
+particularly in Bern and Etruria.[A][LF]
+[LoadOverworldFaces]Roy's attack on Aquileia is[LF]
+supported by the church.[A][LF]
+[LoadOverworldFaces]However, Narcian and his elite troops[LF]
+await Roy inside the castle...[A][LF]
+[X]
 
 ## MSG_B03
 [X]
@@ -743,58 +747,58 @@
 [X]
 
 ## MSG_B09
-エトルリア国王モルドレッドの[LF]
-頼みを受けて[A][LF]
-ロイたちは[TAB]王都アクレイアの外れにある[LF]
-『聖女の塔』へと向かった[A][LF]
-そこは[TAB]八神将の一人で[TAB]エリミーヌ教の[LF]
-教祖[TAB]聖女エリミーヌを[TAB]まつった塔で[A][LF]
-彼女にまつわる[LF]
-さまざまなものが[TAB]おさめられていた[A][LF]
-[LoadOverworldFaces]しかし[TAB]今[TAB]その神聖な塔は[LF]
-[LoadOverworldFaces]クーデターを起こしたロアーツと結んで[A][LF]
-エリミーヌ教団に叛旗をひるがえした[LF]
-[LoadOverworldFaces]司祭ウィンダムの支配下にあった[A][X]
+At the request of King Mordred, Roy heads[LF]
+for the Saint's Tower outside Aquileia.[A][LF]
+[LoadOverworldFaces]The Saint's Tower was once a place of[LF]
+worship for Saint Elimine.[A][LF]
+In the tower lay numerous sacred relics[LF]
+relating to her.[A][LF]
+[LoadOverworldFaces]However, this sacred tower is now[LF]
+under the control of the revolutionaries.[A][LF]
+[LoadOverworldFaces]Bishop Windham now occupies the tower after[LF]
+betraying the St. Elimine Church...[A][X]
 
 ## MSG_B0A
-ロイたち[TAB]リキア同盟軍の[LF]
-エトルリア王都アクレイア奪回をきっかけに[A][LF]
-様子をみていた他のエトルリアの勢力が[LF]
-次々と[TAB]反クーデター派へとなびき[A][LF]
-[LoadOverworldFaces]宰相ロアーツ[LoadOverworldFaces][TAB]西方三島総督アルカルドら[LoadOverworldFaces][LF]
-クーデター派は[TAB]エトルリアを追われ[A][LF]
-[LoadOverworldFaces]ベルン王国の勢力下にあるイリア地方へと[LF]
-逃げこんでいった[A][X]
+After Roy captures Aquileia, other[LF]
+Etrurian forces flock to the loyalists,[A][LF]
+forcing out the revolutionaries.[A][LF]
+[LoadOverworldFaces][LoadOverworldFaces][LoadOverworldFaces]Roartz and Arcardo are driven out of[LF]
+Etruria.[A][LF]
+[LoadOverworldFaces]They flee north to Ilia,[LF]
+which is under Bern's control.[A][LF]
+Ilia, the frozen highlands, is a[LF]
+land with short summers and long winters.[A][X]
 
 ## MSG_B0B
-イリア地方は[TAB]大陸北部に広がる地で[LF]
-短い夏[TAB]長い冬という厳しい自然の中[A][LF]
-各地で自衛のため騎士団が創設され[LF]
-その指導の下[TAB]荒地が切りひらかれていた[A][X]
+With so little arable land,[A][LF]
+the nation's main source of[LF]
+income is mercenary contracts.[A][X]
 
 ## MSG_B0C
-エトルリア王国は[TAB]解放された[LF]
-国王モルドレッドのもと[A][LF]
-ロイたちリキア同盟と連合軍を結成し[A][LF]
-[LoadOverworldFaces]イリアへと出兵してクーデター派を追撃し[A][LF]
-それと同時に[TAB]問題の根本を解決するため[LF]
-[LoadOverworldFaces]背後のベルン王国をも攻撃することを決定した[A][LF]
-[LoadOverworldFaces]ロイは[TAB]リキア同盟の風下に立つのをよしとしない[LF]
-エトルリアの騎士団などへの影響も考えて[A][LF]
-あえて「エトルリア軍」と呼称することになった[LF]
-連合軍の司令官になり[A][LF]
-エリミーヌ教団の協力を得て[LF]
-遠征の途についた[A][X]
+The now free Kingdom of Etruria[LF]
+joins forces with the Lycian Army.[A][LF]
+Now a joint force under the name of the[LF]
+Etrurian Army,[A][LF]
+[LoadOverworldFaces]their first mission is to enter Ilia[LF]
+and finish off the revolutionaries.[A][LF]
+[LoadOverworldFaces]After that, they plan to launch a[LF]
+direct attack on Bern.[A][LF]
+[LoadOverworldFaces]Roy, nominated as leader of[LF]
+the Etrurian Army,[A][LF]
+has the powerful support of[LF]
+the St. Elimine Church.[A][LF]
+With the church's support comes[LF]
+also the support of the people.[A][X]
 
 ## MSG_B0D
-だが[TAB]寒冷の地イリアの気候のきびしさに加え[LF]
-ロイたちの前に立ちはだかるのは[A][LF]
-イリア地方をたばねる[TAB]ベルン三竜将筆頭[LF]
-[LoadOverworldFaces]マードック将軍指揮するベルン軍[A][LF]
-そして[TAB]それに従う[LF]
-一部のイリア諸騎士団である[A][LF]
-[LoadOverworldFaces]そんな中[TAB]ロイたちは[TAB]イリアへの国境[LF]
-付近にあるレーミー城へとさしかかる[A][X]
+However, Roy has to face not only[LF]
+the freezing cold of Ilia,[A][LF]
+[LoadOverworldFaces]but also the elite troops under[LF]
+Murdock, head of Bern's Wyvern Generals.[A][LF]
+Even worse, many skilled mercenary[LF]
+knights of Ilia have sided with Bern.[A][LF]
+[LoadOverworldFaces]To begin, Roy heads for Castle Remi,[LF]
+located on the Ilian border...[A][X]
 
 ## MSG_B0E
 [X]
@@ -824,18 +828,15 @@
 [X]
 
 ## MSG_B17
-元エトルリアの西方三島総督アルカルドを[LF]
-たおしたロイたちは[A][LF]
-[LoadOverworldFaces]氷雪に閉ざされたイリアの地を[LF]
-東へ[TAB]東へと進軍する[A][LF]
-[LoadOverworldFaces]そして[TAB]ロイたちエトルリア軍が[LF]
-イリア独特の深い森林地帯へ進んだとき[A][LF]
-すでに失われたとされる古代の大魔法で[LF]
-ロイたちを迎えうとうとする[A][LF]
-[LoadOverworldFaces]ベルン北方軍の司祭将軍マーテルひきいる[LF]
-ベルンのイリア駐留軍が[A][LF]
-ロイたちを[LF]
-待ちかまえていた・・・[A][X]
+After defeating Arcardo, Roy moves[LF]
+east, deep into the frozen lands of Ilia.[A][LF]
+[LoadOverworldFaces]He soon enters the thick forests[LF]
+that characterize central Ilia.[A][LF]
+[LoadOverworldFaces][LoadOverworldFaces]However, a commander of Bern,[LF]
+Bishop Martel, lies in wait.[A][LF]
+In his possession is an ancient spell[LF]
+said to have been lost centuries ago...[A][LF]
+[X]
 
 ## MSG_B18
 [X]
@@ -853,17 +854,16 @@
 [X]
 
 ## MSG_B1D
-ベルン北方軍の司祭将軍マーテルをたおし[A][LF]
-[LoadOverworldFaces]森林をぬけたロイたちを待っていたのは[A][LF]
-イリア地方独特の氷雪の嵐[LF]
-・・・ブリザードだった[A][LF]
-[LoadOverworldFaces]この[TAB]きびしいイリアの気候は[LF]
-これまで何度も外敵の侵攻を退けてきたため[A][LF]
-おそれと敬意をもって[LF]
-『冬将軍』とよばれてきた[A][LF]
-そのイリア最強の将[TAB]『冬将軍』が[LF]
-[LoadOverworldFaces]ベルンについた天馬騎士団シグーネ隊と共に[A][LF]
-[LoadOverworldFaces]ロイたちに襲いかかる[A][X]
+After defeating Martel and making it[LF]
+through the woodlands,[A][LF]
+[LoadOverworldFaces]Roy and company face the blizzards[LF]
+common of Ilia's winters.[A][LF]
+[LoadOverworldFaces]Ilia's harsh weather has in the past served[LF]
+as a natural defense against invaders.[A][LF]
+[LoadOverworldFaces][LoadOverworldFaces]In this blizzard, Sigune, captain of a[LF]
+pegasus knight squad working for Bern,[A][LF]
+makes preparations to attack[LF]
+Roy and his troops...[A][X]
 
 ## MSG_B1E
 [X]
@@ -878,28 +878,28 @@
 [X]
 
 ## MSG_B22
-吹雪の中[TAB]シグーネひきいる[LF]
-天馬騎士団をたおしたロイたちは[A][LF]
-[LoadOverworldFaces]イリア地方の南部のエデッサ城へと[LF]
-軍を進める[A][X]
+After defeating Sigune,[A][LF]
+[LoadOverworldFaces]Roy heads for Edessa,[LF]
+located in the northeast of Ilia.[A][X]
 
 ## MSG_B23
-天馬騎士団の本拠地でもあるこの城は[LF]
-もともとは傭兵騎士団の長[A][LF]
-[LoadOverworldFaces]ゼロットを主としていたのだが[LF]
-彼の留守にベルンの侵攻を支えきれず降伏[A][LF]
-[LoadOverworldFaces]以降[TAB]ベルンの[LF]
-イリア経営における中心地となる[A][LF]
-そして[TAB]今[TAB]この地では[TAB]本国へ戻った[LF]
-[LoadOverworldFaces]ベルン三竜将マードック将軍の代わりに[A][LF]
-[LoadOverworldFaces]元エトルリア宰相ロアーツが[LF]
-ベルン駐留軍をあずかっていた[A][LF]
-ロイたちエトルリア軍の進撃の早さに[LF]
-おどろいたロアーツは[A][LF]
-あわててイリアの諸騎士団に[LF]
-味方をするよう申し入れたが[A][LF]
-その返事は[LF]
-はかばかしいものではなかった[A][X]
+[LoadOverworldFaces]Castle Edessa, home of Zelot, leader of[LF]
+the Ilian mercenary knights,[A][LF]
+once served as headquarters of the[LF]
+pegasus knight mercenaries as well.[A][LF]
+[LoadOverworldFaces]However, with Zelot's absence, Bern saw[LF]
+its chance and attacked the castle,[A][LF]
+forcing the mercenaries and pegasus[LF]
+knights into submission.[A][LF]
+[LoadOverworldFaces]Murdock had made the castle his base,[LF]
+but after he returned to Bern,[A][LF]
+[LoadOverworldFaces]High Chancellor Roartz was put in charge.[A][LF]
+Alarmed by the Etrurian Army's[LF]
+speedy advance to Edessa,[A][LF]
+Roartz hurriedly contacts the various[LF]
+Ilian mercenary groups for aid.[A][LF]
+Unfortunately for him, however,[LF]
+their replies are not promising...[A][X]
 
 ## MSG_B24
 [X]
@@ -920,14 +920,12 @@
 [X]
 
 ## MSG_B2A
-ベルン王国のイリア駐留軍を追撃する[LF]
-ロイたちエトルリア軍は[A][LF]
-エデッサから少し離れた場所にある[LF]
-大きな遺跡へと足をふみいれる[A][LF]
-そこは[TAB]『人竜戦役』以来のもので[LF]
-地元のものの話などを総合すると[A][LF]
-ここに『神将器』の一つが存在する[LF]
-可能性は[TAB]きわめて高いといえた[A][X]
+After taking back Castle Edessa,[A][LF]
+Roy turns his troops toward the ancient[LF]
+ruins on the outskirts of the town.[A][LF]
+A legendary weapon is said to be[LF]
+hidden within...[A][LF]
+[X]
 
 ## MSG_B2B
 [X]
@@ -939,44 +937,45 @@
 [X]
 
 ## MSG_B2E
-ロイたち[TAB]リキア同盟軍の[LF]
-エトルリア王都アクレイア奪回をきっかけに[A][LF]
-様子をみていた他のエトルリアの勢力が[LF]
-次々と[TAB]反クーデター派へとなびき[A][LF]
-[LoadOverworldFaces]宰相ロアーツ[TAB][LoadOverworldFaces]西方三島総督アルカルドら[LoadOverworldFaces][LF]
-クーデター派は[TAB]エトルリアを追われ[A][LF]
-[LoadOverworldFaces]ベルン王国の勢力下にあるサカ地方へと[LF]
-逃げこんでいった[A][X]
+After Roy captures Aquileia, powers[LF]
+in Etruria turn against the revolution.[A][LF]
+Driven away from the palace,[A][LF]
+[LoadOverworldFaces][LoadOverworldFaces][LoadOverworldFaces]Roartz and Arcardo flee to Sacae,[LF]
+which remains under Bern's control.[A][X]
 
 ## MSG_B2F
-サカ地方は[TAB]大陸中央部に広がる大草原で[LF]
-ベルンが[TAB]一部の部族と結び侵攻するまでは[A][LF]
-様々な部族が[TAB]拠点を転々としつつ[LF]
-のどかな遊牧生活を送っていた[A][X]
+Sacae lies in the center of the[LF]
+continent and is covered in plains.[A][LF]
+Before Bern's invasion, it was[LF]
+home to numerous nomadic clans.[A][X]
 
 ## MSG_B30
-エトルリア王国は[TAB]解放された[LF]
-国王モルドレッドのもと[A][LF]
-ロイたちリキア同盟と連合軍を結成し[LF]
-[LoadOverworldFaces]サカへと出兵してクーデター派を追撃し[A][LF]
-それと同時に[TAB]問題の根本を解決するため[LF]
-[LoadOverworldFaces]背後のベルン王国をも攻撃することを決定した[A][LF]
-[LoadOverworldFaces]ロイは[TAB]リキア同盟の風下に立つのをよしとしない[LF]
-エトルリアの騎士団などへの影響も考えて[A][LF]
-あえて「エトルリア軍」と呼称することになった[LF]
-連合軍の司令官になり[A][LF]
-エリミーヌ教団の協力を得て[LF]
-遠征の途についた[A][X]
+The Etrurian Army joins the Lycian[LF]
+Army to form a unified force.[A][LF]
+[LoadOverworldFaces]The decision is made for this army[LF]
+to head for Sacae with dual purpose.[A][LF]
+The first is to eliminate the remnants[LF]
+of the revolution,[A][LF]
+[LoadOverworldFaces]and the second is to begin an[LF]
+offensive against Bern.[A][LF]
+[LoadOverworldFaces]Realizing that Etrurian soldiers may[LF]
+not fight under the Lycian banner,[A][LF]
+Roy formally decides to call his[LF]
+force the Etrurian Army.[A][LF]
+Roy is to lead the division that[LF]
+will begin the offensive in Sacae.[A][X]
 
 ## MSG_B31
-だが[TAB]他国の侵入をよしとしない[LF]
-サカ地方の人々の気風に加え[A][LF]
-その最大部族ジュテ族をしたがえている[LF]
-ベルン三竜将の一人[TAB][LoadOverworldFaces]ブルーニャ将軍[A][LF]
-そして[TAB]彼女のひきいる精強なベルン西方軍が[LF]
-ロイたちの前に立ちふさがる[A][LF]
-そんな中[TAB]ロイたちは[TAB]夜に入って[LF]
-[LoadOverworldFaces]エトルリア[TAB]サカ国境にさしかかる[A][X]
+The people of Sacae are wary of[LF]
+outsiders, which is challenge enough,[A][LF]
+[LoadOverworldFaces]but Brunnya, one of Bern's[LF]
+three Wyvern Generals,[A][LF]
+has the Djute, the largest clan in[LF]
+Sacae, under her control.[A][LF]
+[LoadOverworldFaces]With the warriors of the Djute and[LF]
+Brunnya's elite troops in his way,[A][LF]
+Roy knows it is unlikely he will find[LF]
+any respite in this foreign land...[A][X]
 
 ## MSG_B32
 [X]
@@ -1006,24 +1005,21 @@
 [X]
 
 ## MSG_B3B
-元エトルリアの西方三島総督アルカルドを[LF]
-たおしたロイたちは[A][LF]
-[LoadOverworldFaces]いよいよ[TAB]サカの大草原へと兵を進める[A][LF]
-だが[TAB]サカは[TAB]ベルンの侵攻以来[A][LF]
-ベルンと[TAB]それに従うジュテ族などに[LF]
-逆らった部族は[TAB]ほぼ滅ぼされており[A][LF]
-ベルンに敗れたクトラ族の族長で[LF]
-サカでも最高の勇者と言われる[A][LF]
-[LoadOverworldFaces]『灰色の狼』ダヤンたちが[LF]
-ゲリラ的な抵抗をしているものの[A][LF]
-ほぼ親ベルンの勢力と[LF]
-なっていると言えた[A][LF]
-[LoadOverworldFaces]ロイたちが[TAB]大草原のなかばに[LF]
-さしかかったとき[A][LF]
-[LoadOverworldFaces]今や草原最大の部族となった[LF]
-ジュテ族が[TAB]草原独特の戦い方をもって[A][LF]
-ロイたちの行く手に[LF]
-立ちふさがる[A][X]
+After defeating Arcardo,[A][LF]
+[LoadOverworldFaces]Roy crosses the border and[LF]
+enters the land of Sacae.[A][LF]
+The Djute, the most powerful clan in[LF]
+Sacae, serve Bern unbendingly.[A][LF]
+All clans who have stood against these[LF]
+two joint forces have faced decimation.[A][LF]
+[LoadOverworldFaces]The chieftain of the Kutolah clan,[LF]
+the famed Silver Wolf Dayan,[A][LF]
+does lead a guerrilla resistance,[LF]
+but to disappointingly little effect.[A][LF]
+[LoadOverworldFaces]With none to oppose them, Bern essentially[LF]
+has full control over Sacae.[A][LF]
+[LoadOverworldFaces]As Roy sets foot on the plains,[LF]
+the Djute wait to strike...[A][X]
 
 ## MSG_B3C
 [X]
@@ -1047,23 +1043,21 @@
 [X]
 
 ## MSG_B43
-草原最大の部族[TAB]ジュテ族を撃破した[LF]
-ロイたちエトルリア軍は[A][LF]
-[LoadOverworldFaces]サカ草原最大の都市ブルガルへとせまる[A][X]
+After defeating the Djute,[A][LF]
+[LoadOverworldFaces]Roy moves toward Bulgar,[LF]
+the largest city in Sacae.[A][X]
 
 ## MSG_B44
-エトルリア[TAB]ベルン[TAB]イリアの三地方を結ぶ[LF]
-交通[TAB]商業の要所として発達したブルガルは[A][LF]
-自由都市として栄えてきたが[TAB]先のベルンの[LF]
-侵攻で[TAB]その歴史に終わりをつげ[A][LF]
-[LoadOverworldFaces]現在は[TAB]元エトルリア宰相ロアーツが[LF]
-ベルン王国の保護の下[TAB]この地を治めていた[A][X]
+As a center of commerce between[LF]
+Etruria, Bern and Ilia,[A][LF]
+Bulgar has a history of being a[LF]
+free city without rule.[A][LF]
+[LoadOverworldFaces]However, High Chancellor Roartz now holds[LF]
+control of Bulgar with Bern's support.[A][X]
 
 ## MSG_B45
-サカをベルンの手から奪い返すこと[LF]
-そして[TAB]ベルン進攻の足がかりとするために[A][LF]
-[LoadOverworldFaces]ロイたちは[LF]
-今[TAB]その地へ軍を進める[A][X]
+[LoadOverworldFaces]Roy enters Bulgar with the hopes of[LF]
+liberating it and learning more...[A][X]
 
 ## MSG_B46
 [X]
@@ -1072,28 +1066,25 @@
 [X]
 
 ## MSG_B48
-ブルガル市街で[TAB]出会った[LF]
-『山の隠者』ニイメの話によって[A][LF]
-次第に明らかになる[LF]
-ベルンのあつかう『竜』の真実[A][LF]
-[LoadOverworldFaces]ロイたちは[TAB]その話におどろきつつも[LF]
-ブルガルの奥にある領主館へと進軍する[A][X]
+After Roy meets Niime the Hermit,[LF]
+some light is shed on Bern's dragons.[A][LF]
+With many questions still left[LF]
+unanswered,[A][LF]
+[LoadOverworldFaces]Roy directs his troops towards a large[LF]
+manor on the edge of Bulgar.[A][X]
 
 ## MSG_B49
-そこでは[TAB]元エトルリア宰相ロアーツが[A][LF]
-ロイたちを迎え撃つ準備を[LF]
-ととのえて待ちかまえていた・・・[A][X]
+Here, High Chancellor Roartz prepares[LF]
+his defenses for his last stand...[A][X]
 
 ## MSG_B4A
 [X]
 
 ## MSG_B4B
-ロイたちは[TAB]『神将器』の一つを求めて[LF]
-サカ草原の遺跡へと軍をすすめる[A][LF]
-[LoadOverworldFaces]しかし[TAB]そこでは[TAB]かつてロイたちが[LF]
-倒したジュテ族の生き残りが[A][LF]
-[LoadOverworldFaces]ワナをはって[LF]
-ロイたちを待ち受けていた[A][X]
+Roy heads toward the ruins in Sacae[LF]
+hoping to secure a legendary weapon.[A][LF]
+[LoadOverworldFaces][LoadOverworldFaces]However, the remnants of the[LF]
+Djute wait for Roy within...[A] [X]
 
 ## MSG_B4C
 [X]
@@ -1102,22 +1093,20 @@
 [X]
 
 ## MSG_B4E
-数々の困難をのりこえたロイたちは[LF]
-ついにベルン本国へと兵を進める[A][X]
+After surviving many hardships,[LF]
+Roy finally sets foot on Bern's soil.[A][X]
 
 ## MSG_B4F
-そこで[TAB]ギネヴィアに教えられた[LF]
-[LoadOverworldFaces]『封印の神殿』へと進路をとるが[A][LF]
-そこでは『大陸最強』を自他共にみとめる[LF]
-ベルン竜騎士団を中心とするベルン本軍と[A][LF]
-ベルン王国最強の将[TAB]ベルン三竜将筆頭の[LF]
-[LoadOverworldFaces]マードック将軍が[TAB]ロイたちを待ちうける[A][X]
+[LoadOverworldFaces]Guinivere guides Roy to the[LF]
+Shrine of Seals.[A][LF]
+[LoadOverworldFaces]In their way stands Murdock, the brilliant[LF]
+and stalwart head of the Wyvern Generals.[A][X]
 
 ## MSG_B50
-エトルリア王国とベルン王国[LF]
-大陸を二分する両国による正面決戦[A][LF]
-この大戦における『もっとも長い一日』が[LF]
-今[TAB]はじまろうとしていた・・・[A][X]
+Etruria and Bern, the two greatest forces[LF]
+on the continent, begin direct warfare.[A][LF]
+The sun rises as the bloodiest day in[LF]
+the history of Elibe dawns...[A][X]
 
 ## MSG_B51
 [X]
@@ -1129,14 +1118,12 @@
 [X]
 
 ## MSG_B54
-ロイたちは[LF]
-『封印の神殿』の奥深くへと軍を進める[A][LF]
-[LoadOverworldFaces]そこには[TAB]『封印の剣』と共に[LF]
-もう一つの聖なるものがまつられている[A][LF]
-しかし[TAB]ロイたちの前には[LF]
-[LoadOverworldFaces]マードックの部下ペレスが[A][LF]
-様々なワナとともに[LF]
-ロイたちを待ち受けていた[A][X]
+Roy ventures into the depths of[LF]
+the Shrine of Seals.[A][LF]
+Apparently, the shrine contains[LF]
+more than just the Binding Blade.[A][LF]
+[LoadOverworldFaces][LoadOverworldFaces]However, Peres, one of Murdock's best[LF]
+commanders, waits for Roy within...[A][X]
 
 ## MSG_B55
 [X]
@@ -1145,19 +1132,17 @@
 [X]
 
 ## MSG_B57
-『封印の剣』を手に入れたロイたちは[LF]
-[LoadOverworldFaces]ベルン王都へと軍を向ける[A][LF]
-[LoadOverworldFaces]そこには[TAB]ロイたちが倒すべき相手[A][LF]
-この大戦を起こした張本人である[LF]
-[LoadOverworldFaces]ベルン国王ゼフィールが[A][LF]
-屈強のベルン王国近衛軍をひきいて[LF]
-待ちかまえているはずであった[A][X]
+[LoadOverworldFaces]After obtaining the Binding Blade,[LF]
+Roy directs his troops to Bern's capital.[A][LF]
+[LoadOverworldFaces][LoadOverworldFaces][LF]
+King Zephiel awaits within, along with[LF]
+his personal guard.[A][X]
 
 ## MSG_B58
-ロイたちは[TAB]一路[LF]
-ベルン王都へと急ぐ[A][LF]
-この長い戦いに終わりをつげるために[TAB]そして[LF]
-大陸に再び安らかな日を取り戻すために・・・[A][X]
+Roy prepares to charge the castle[LF]
+to end the war,[A][LF]
+and to bring a long-awaited peace[LF]
+back to Elibe...[A][X]
 
 ## MSG_B59
 [X]
@@ -1169,36 +1154,47 @@
 [X]
 
 ## MSG_B5C
-国王ゼフィールが倒れたことにより[LF]
-ベルン王国は降伏[A][LF]
-[LoadOverworldFaces]大陸をまきこんだ大動乱は[LF]
-ひとまず[TAB]ここに終わりをつげた[A][LF]
-しかし[TAB]ロイたちの戦いは[LF]
-まだ[TAB]終わったわけではない[A][X]
+Bern surrenders with King Zephiel's death.[A][LF]
+The great war that rattled the foundations[LF]
+of Elibe is over.[A][LoadOverworldFaces][LF]
+Roy's battle, however, is not.[A][X]
 
 ## MSG_B5D
-『魔竜』である可能性の高い[LF]
-『暗闇の巫女』を追って[A][LF]
-『神将器』のさししめす[LF]
-光の筋をたよりに[A][LF]
-[LoadOverworldFaces]かつての『竜』たちの本拠地[LF]
-『竜殿』へと軍を進めた[A][LF]
-[LoadOverworldFaces]だが『竜殿』の前で[TAB]ベルン三竜将最後の将[LF]
-[LoadOverworldFaces]ブルーニャ将軍が[TAB]ベルンの残存軍をひきい[A][LF]
-『大陸最強』の誇りと意地をかけて[LF]
-ロイたちエトルリア軍に最後の戦いをいどむ[A][X]
+Roy continues his search for the Dark[LF]
+Priestess, believed to be the demon dragon.[A][LF]
+[LoadOverworldFaces]Following the legendary weapons' light,[LF]
+Roy heads for the Dragon Sanctuary.[A][LF]
+[LoadOverworldFaces][LoadOverworldFaces]However, waiting for Roy at the entrance[LF]
+to the sanctuary is Brunnya,[A][LF]
+the last surviving Wyvern General[LF]
+of Bern.[A][LF]
+With the remaining troops of Bern at her[LF]
+command, she awaits Roy's approach.[A][X]
 
 ## MSG_B5E
-すでに[TAB]この世には存在しないベルン王国[A][LF]
-その『亡霊』たちとの戦いは[A][LF]
-ロイたちの気持ちに[LF]
-暗い影を投げかける・・・[A][X]
+With a heavy heart, Roy prepares to[LF]
+fight the ghost of the now dead Bern...[A][X]
 
 ## MSG_B5F
 [X]
 
 ## MSG_B60
-[X]
+lcaring.[A][LF]
+[OpenMidRight]I see...[A][LF]
+Juno was pretty worried about[LF]
+you and Shanna.[A][LF]
+Knowing you, I would think you'd[LF]
+be all right.[A][LF]
+But you know Juno,[LF]
+she's a worrier.[A][OpenMidLeft]Yes, I understand.[A][LF]
+Our sister was often too soft[LF]
+on Shanna and me.[A][LF]
+The day we left was a hectic one,[LF]
+indeed.[A][LF]
+Juno was constantly fretting over[LF]
+us, worrying about our meals, and[A][LF]
+our clothes...[A][LF]
+[OpenMidRight][ToggleSmile]Haha, that's Juno.[A][X]
 
 ## MSG_B61
 [X]
@@ -1216,19 +1212,16 @@
 [X]
 
 ## MSG_B66
-からくも[TAB]ベルンの残存軍をたおした[LF]
-ロイたちは[A][LF]
-[LoadOverworldFaces]かつての『八神将』たちが[LF]
-歩んだのと同じ道をたどり[A][LF]
-[LoadOverworldFaces]ついに『竜殿』へと乗りこむ[A][LF]
-[LoadOverworldFaces]『暗闇の巫女』を追って[TAB]再び世界を[LF]
-『人竜戦役』の不幸から守るために・・・[A][X]
+After defeating Bern's remaining[LF]
+troops, Roy enters the Dragon Sanctuary.[A][LF]
+[LoadOverworldFaces][LoadOverworldFaces][LoadOverworldFaces]He searches for the Dark Priestess[LF]
+to prevent a repeat of the Scouring.[A][X]
 
 ## MSG_B67
-だが[TAB]ここでロイたちは[TAB]語りつがれてきた[LF]
-伝説の本当の姿を知ることになる[A][LF]
-それは[TAB]これまで[TAB]ロイたちが信じてきた事を[LF]
-根底から[TAB]くつがえすものだった・・・[A][X]
+Here in the sanctuary, Roy will learn[LF]
+the truth of the legendary dragons.[A][LF]
+All he knows is about to be proven[LF]
+wrong...[A][X]
 
 ## MSG_B68
 [X]
@@ -1240,16 +1233,17 @@
 [X]
 
 ## MSG_B6B
-大陸南方に広がるリキア地方[A][X]
+The Lycian League. Land of numerous[LF]
+territories and ruling lords.[A][X]
 
 ## MSG_B6C
-その中の一勢力[TAB]フェレ家の嫡男ロイは[LF]
-フェレ家をつぐ者としての修行をするため[A][LF]
-[LoadOverworldFaces]リキア地方一の大都市[LF]
-オスティアへと留学していた[A][X]
+Roy, son of the marquess of the[LF]
+Pherae territory,[A][X]
 
 ## MSG_B6D
-そこで[TAB]西の大国エトルリア王国の[LF]
-駐留武官[TAB][LoadOverworldFaces]セシリア将軍のもと[A][LF]
-領主となるために必要な[LF]
-様々なことを学んでいた・・・[A][X]
+is studying in the great city of Ostia[LF]
+to become a worthy heir.[A][LoadOverworldFaces][LF]
+Today, his instructor, General Cecilia[LF]
+of the Kingdom of Etruria,[A][LF]
+is teaching him about basic tactics[LF]
+and battle strategy...[A][X]
