@@ -33,8 +33,11 @@ all: $(ROM) $(SYM)
 CACHE_DIR := .cache_dir
 $(shell mkdir -p $(CACHE_DIR) > /dev/null)
 
-CLEAN_FILES :=
-CLEAN_DIRS  := $(CACHE_DIR) .release_dir $(shell find -name __pycache__)
+CLEAN_FILES1 :=
+CLEAN_FILES2 :=
+CLEAN_FILES3 :=
+CLEAN_FILES4 :=
+CLEAN_DIRS   := $(CACHE_DIR) .release_dir $(shell find -name __pycache__)
 
 # ====================
 # = TOOL DEFINITIONS =
@@ -130,7 +133,7 @@ $(TEXT_HEADER): $(TEXT_SRC) $(TEXT_DEFS)
 	@$(TEXT_PROCESS_HD) $(TEXT_MAIN) $(TEXT_DEFS) $@ utf8
 
 C_GENERATED_OBJ += $(MSG_LIST:%.c=%.o)
-CLEAN_FILES += $(MSG_LIST) # $(TEXT_HEADER)
+CLEAN_FILES1 += $(MSG_LIST) # $(TEXT_HEADER)
 
 # ============
 # = Spritans =
@@ -166,19 +169,35 @@ GBAGFX := tools/gbagfx/gbagfx$(EXE)
 	@echo "[LZ ]	$@"
 	@$(GBAGFX) $< $@
 
+# gret related
+%.agbpal: %.png
+	@echo "[GEN]	$@"
+	@cd $(dir $<) && $(GRIT) $(notdir $<) $(GRITPALETTEARGS)
+	@mv $(basename $<).pal.bin $@
+
+%.lz77: %.png
+	@echo "[LZ ]	$@"
+	@cd $(dir $<) && $(GRIT) $(notdir $<) $(GRITLZ77ARGS)
+	@mv $(basename $<).img.bin $@
+
+%.img.bin %.map.bin %.pal.bin: %.png
+	@echo "[GEN]	$@"
+	@$(GRIT) $< -gB 4 -gzl -m -mLf -mR4 -mzl -pn 16 -ftb -fh! -o $@
+
 GRAPHIC_DIR := graphics
 
 PNG_FILES := $(shell find $(SRC_DIRS) $(GRAPHIC_DIR) -type f -name '*.png')
-CLEAN_FILES += $(PNG_FILES:%.png=%.4bpp) $(PNG_FILES:%.png=%.4bpp.lz) $(PNG_FILES:%.png=%.4bpp.lz.o)
-CLEAN_FILES += $(PNG_FILES:%.png=%.gbapal) $(PNG_FILES:%.png=%.gbapal.lz)
+CLEAN_FILES2 += $(PNG_FILES:%.png=%.4bpp) $(PNG_FILES:%.png=%.4bpp.lz) $(PNG_FILES:%.png=%.4bpp.lz.o)
+CLEAN_FILES2 += $(PNG_FILES:%.png=%.gbapal) $(PNG_FILES:%.png=%.gbapal.lz)
+CLEAN_FILES2 += $(PNG_FILES:%.png=%.img.bin) $(PNG_FILES:%.png=%.map.bin) $(PNG_FILES:%.png=%.pal.bin)
 
 TSA_FILES := $(shell find $(SRC_DIRS) $(GRAPHIC_DIR) -type f -name '*.tsa')
-CLEAN_FILES += $(TSA_FILES:%.tsa=%.tsa.lz)
+CLEAN_FILES2 += $(TSA_FILES:%.tsa=%.tsa.lz)
 
-GFX_TSA_ASM := $(shell find $(GRAPHIC_DIR) -type f -name '*.s')
-GFX_TSA_SRC := $(shell find $(GRAPHIC_DIR) -type f -name '*.c')
-GFX_TSA_OBJ := $(GFX_TSA_ASM:%.s=%.o) $(GFX_TSA_SRC:%.c=%.o)
-CLEAN_FILES += $(GFX_TSA_OBJ) $(GFX_TSA_OBJ:%.o=%.dmp) $(GFX_TSA_OBJ:%.o=%.dmp.lz)
+GFX_TSA_ASM  := $(shell find $(GRAPHIC_DIR) -type f -name '*.s')
+GFX_TSA_SRC  := $(shell find $(GRAPHIC_DIR) -type f -name '*.c')
+GFX_TSA_OBJ  := $(GFX_TSA_ASM:%.s=%.o) $(GFX_TSA_SRC:%.c=%.o)
+CLEAN_FILES2 += $(GFX_TSA_OBJ) $(GFX_TSA_OBJ:%.o=%.dmp) $(GFX_TSA_OBJ:%.o=%.dmp.lz)
 
 # ==============
 # = Banim data =
@@ -375,8 +394,8 @@ endif
 # pre-generate new c files
 ALL_OBJS += $(C_GENERATED_OBJ)
 
-CLEAN_FILES += $(ALL_OBJS) $(ALL_OBJS:%.o=%.asm) $(ALL_DEPS)
-CLEAN_FILES += $(VANILLA_SRCS:%.c=%.asm)
+CLEAN_FILES1 += $(ALL_OBJS) $(ALL_OBJS:%.o=%.asm) $(ALL_DEPS)
+CLEAN_FILES1 += $(VANILLA_SRCS:%.c=%.asm)
 
 # ===========
 # = RECIPES =
@@ -407,7 +426,7 @@ $(ELF): $(ALL_OBJS) lds/*.lds
 	@$(LD) $(LD_LDFLAGS) $(ALL_OBJS) $(LIB_PATHES) $(LIB_FLAGS) -o $@
 #	@$(CC) $(CC_LDFLAGS) $(ALL_OBJS) -lmm -lgba -lc -lgcc -o $@
 
-CLEAN_FILES += $(ROM) $(ELF) $(MAP) $(SYM)
+CLEAN_FILES1 += $(ROM) $(ELF) $(MAP) $(SYM)
 
 # ==============
 # = Make clean =
@@ -415,7 +434,10 @@ CLEAN_FILES += $(ROM) $(ELF) $(MAP) $(SYM)
 CLEAN_DIRS += $(shell find . -type d -name "__pycache__")
 
 clean:
-	@rm -f $(CLEAN_FILES)
+	@rm -f $(CLEAN_FILES1)
+	@rm -f $(CLEAN_FILES2)
+	@rm -f $(CLEAN_FILES3)
+	@rm -f $(CLEAN_FILES4)
 	@rm -f $(BANIM_SRC_GENERATED)
 	@rm -f $(BANIM_PAL_GENERATED)
 	@rm -f $(BANIM_IMG_GENERATED)
