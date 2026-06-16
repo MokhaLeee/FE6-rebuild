@@ -36,44 +36,6 @@ SECTIONS
 	} >rom = 0xff
 	__text_end = .;
 
-	/* max: 0x400000 */
-	__reloc_map_start = __rom_start + 0x100000;
-	. = __reloc_map_start;
-
-	.reloc ALIGN(4) : AT (__reloc_map_start)
-	{
-		*(.rodata.reloc_list)
-		. = ALIGN(4);
-	} >rom = 0xff
-
-	__reloc_map_end = .;
-
-	__krodata_start = __rom_start + 0x120000;
-	. = __krodata_start;
-
-	.rodata ALIGN(4) : AT (__krodata_start)
-	{
-		*(.data)
-		*(.data*)
-		*(.rodata)
-		*(.rodata*)
-	} >rom = 0xff
-
-	__krodata_end = .;
-
-	__rodata_start = .;
-	. = __rodata_start;
-
-	.rodata ALIGN(4) : AT (__rodata_start)
-	{
-		*(.gameinfo_data)
-		*(.gameinfo_data*)
-		*(.content_data)
-		*(.content_data*)
-		. = ALIGN(4);
-		__rodata_end = .;
-	} >rom = 0xff
-
 	/**
 	 * EWRAM
 	 */
@@ -167,4 +129,42 @@ SECTIONS
 		__bss_end__ = ABSOLUTE(.);
 		__end__ = ABSOLUTE(.);
 	} >iwram
+
+	/* max: 0x400000 */
+	__reloc_map_start = __rom_start + 0x100000;
+	. = __reloc_map_start;
+
+	.reloc ALIGN(4) : AT (__reloc_map_start)
+	{
+		*(.rodata.reloc_list)
+		. = ALIGN(4);
+	} >rom = 0xff
+
+	__reloc_map_end = .;
+
+	__krodata_start = __rom_start + 0x120000;
+	. = __krodata_start;
+
+	.rodata ALIGN(4) : AT (__krodata_start)
+	{
+		*(.data)
+		*(.data*)
+		*(.rodata)
+		*(.rodata*)
+	} >rom = 0xff
+
+	__krodata_end = .;
+
+	__rodata_start = .;
+	. = __rodata_start;
+
+	.rodata ALIGN(4) : AT (__rodata_start)
+	{
+		*(.gameinfo_data)
+		*(.gameinfo_data*)
+		*(.content_data)
+		*(.content_data*)
+		. = ALIGN(4);
+		__rodata_end = .;
+	} >rom = 0xff
 }
