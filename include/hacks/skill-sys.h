@@ -52,7 +52,7 @@ bool JudgeSkillInBattle(struct BattleUnit *bu, int sid);
 
 // Always able to use, generate skill-list when check on new unit
 #define SkillTester(unit, sid)     unlikely(JudgeSkillViaList(unit, sid))
-// Quite but can only check on plist/jlist/dynamic-skills
+// Quick but can only check on plist/jlist/dynamic-skills
 #define SkillFastTester(unit, sid) unlikely(JudgeSkillFast(unit, sid))
 // Only able in battle-calc
 #define BattleSkillTester(bu, sid) unlikely(JudgeSkillInBattle(bu, sid))

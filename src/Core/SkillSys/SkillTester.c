@@ -5,7 +5,7 @@
 bool JudgeSkillViaList(struct Unit *unit, int sid)
 {
 	u32 i;
-	struct SkillList *list = GetSkillList(unit);
+	struct SkillList *list;
 
 	if (unlikely(sid == 0))
 		return false;
@@ -13,6 +13,8 @@ bool JudgeSkillViaList(struct Unit *unit, int sid)
 		return false;
 	if (unlikely(unit->pinfo == NULL))
 		return false;
+
+	list = GetSkillList(unit);
 
 	for (i = 0; i < list->amt; i++)
 		if (unlikely(list->sid[i] == sid))

@@ -7,7 +7,7 @@
 IWRAM_FUNC
 bool JudgeSkillFast(struct Unit *unit, int sid)
 {
-	int pid, jid;
+	int i, pid, jid;
 
 	if (unlikely(sid == 0))
 		return false;
@@ -28,14 +28,9 @@ bool JudgeSkillFast(struct Unit *unit, int sid)
 	if (unlikely(gpSkillJTable[jid].sid[1] == sid))
 		return true;
 
-	if (unlikely(unit->skills[0] == sid))
-		return true;
-	if (unlikely(unit->skills[1] == sid))
-		return true;
-	if (unlikely(unit->skills[2] == sid))
-		return true;
-	if (unlikely(unit->skills[3] == sid))
-		return true;
+	for (i = 0; i < UNIT_DYNAMIC_SKILLS_COUNT; i++)
+		if (unlikely(unit->skills[i] == sid))
+			return true;
 
 	return false;
 }
