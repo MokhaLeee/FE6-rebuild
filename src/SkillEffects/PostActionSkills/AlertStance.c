@@ -11,6 +11,20 @@
 #include "skill-effects.h"
 #include "constants/skills.h"
 
+static void call_skillanim(ProcPtr proc)
+{
+	NewSkillMapAnimMini(
+		gActiveUnit->x,
+		gActiveUnit->y,
+		SID_AlertStance, NULL);
+}
+
+static void wait_skillanim(ProcPtr proc)
+{
+	if (!SkillMapAnimMiniExists())
+		Proc_Break(proc);
+}
+
 static void callback_anim(ProcPtr proc)
 {
 	struct MuProc *mu;
@@ -38,6 +52,10 @@ static void callback_refrain(ProcPtr proc)
 }
 
 static const struct ProcScr proc_alert_stance[] = {
+	PROC_YIELD,
+	PROC_CALL(call_skillanim),
+	PROC_YIELD,
+	PROC_REPEAT(wait_skillanim),
 	PROC_YIELD,
 	PROC_CALL(MapAnim_CommonInit),
 	PROC_YIELD,

@@ -222,7 +222,12 @@ extern struct BattleUnit gBattleUnitA;
 extern struct BattleUnit gBattleUnitB;
 
 extern struct BattleHit gBattleHits[];
-extern struct BattleHit * gBattleHitIt;
+extern struct BattleHit *gBattleHitIt;
+
+static inline int GetBattleHitRound(struct BattleHit *it)
+{
+    return it - gBattleHits;
+}
 
 #define CanBattleUnitGainExp(bu) ((bu)->unit.exp != 0xFF)
 

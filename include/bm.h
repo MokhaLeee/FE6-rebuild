@@ -200,5 +200,7 @@ extern struct PlaySt EWRAM_DATA gPlaySt;
 
 #define SCREEN_TILE_X(x_param) (((x_param) - (gBmSt.camera.x >> 4)) << 1)
 #define SCREEN_TILE_Y(y_param) (((y_param) - (gBmSt.camera.y >> 4)) << 1)
+#define SCREEN_TILE_IX(xPos) ((xPos) * 16 - (gBmSt.camera.x))
+#define SCREEN_TILE_IY(yPos) ((yPos) * 16 - (gBmSt.camera.y))
 
 #endif // BM_H

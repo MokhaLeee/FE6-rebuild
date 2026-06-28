@@ -25,7 +25,7 @@
 #include "constants/pids.h"
 #include "constants/jids.h"
 
-enum { BATTLE_HIT_MAX = 7 };
+enum { BATTLE_HIT_MAX = 20 };
 enum { BATTLE_MAX_DAMAGE = 99 };
 
 struct WeaponTriangleRule {

@@ -56,3 +56,12 @@ bool JudgeSkillInBattle(struct BattleUnit *bu, int sid);
 #define SkillFastTester(unit, sid) unlikely(JudgeSkillFast(unit, sid))
 // Only able in battle-calc
 #define BattleSkillTester(bu, sid) unlikely(JudgeSkillInBattle(bu, sid))
+
+/**
+ * efxskill
+ */
+u16 GetActorEfxSkill(int round);
+u16 GetTargetEfxSkill(int round);
+bool MapAnimRoundAnim_DisplaySkillIcon(ProcPtr parent);
+void NewSkillMapAnimMini(int x, int y, u16 sid, ProcPtr parent);
+bool SkillMapAnimMiniExists(void);
