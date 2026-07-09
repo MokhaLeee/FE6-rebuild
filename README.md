@@ -9,8 +9,8 @@ This is a **rebuild** of Fire Emblem: Fūin no Tsurugi (a.k.a. Fire Emblem: The 
 ```bash
 # install dependencies
 sudo apt update
-sudo apt install -y build-essential gcc-arm-none-eabi binutils-arm-none-eabi libpng-dev
-python -m pip install requests argparse numpy pillow
+sudo apt install -y build-essential gcc-arm-none-eabi binutils-arm-none-eabi libpng-dev \
+    python3-pyelftools python3-requests python3-numpy python3-pil
 ./tools/install_agbcc.sh
 ./build_tools.sh
 

@@ -321,6 +321,12 @@ CPPFLAGS := $(INC_FLAG) -nostdinc -undef
 AGB_CFLAGS := -g -mthumb-interwork -O2 -Wimplicit -Wparentheses -Werror -fhex-asm -ffix-debug-line
 ASFLAGS := -g $(ARCH) $(INC_FLAG)
 
+# Pass include dirs to GAS (.include); required on devkitARM 16+ where gcc no
+# longer forwards -I to the assembler when compiling .S/.s via the driver.
+ASM_WA_INC := $(foreach dir, $(INC_DIRS), -Wa,-I$(dir)) \
+              $(foreach dir, $(LIB_DIRS), -Wa,-I$(dir)/include)
+ASM_CC_FLAGS := -x assembler-with-cpp $(ASM_WA_INC)
+
 ASM_DEP := $(PYTHON) tools/asmtools/asmdep.py
 
 # == vanilla ==
@@ -366,11 +372,13 @@ $(CACHE_DIR)/%.d: %.S
 
 %.o: %.S
 	@echo "[AS ]	$@"
-	@$(CC) $(CFLAGS) $(EXT_FLAGS) -g -c $< -o $@
+	@mkdir -p $(dir $@)
+	@$(CC) $(CFLAGS) $(EXT_FLAGS) $(ASM_CC_FLAGS) -g -c $< -o $@
 
 %.o: %.s
 	@echo "[AS ]	$<"
-	@$(AS) $(ASFLAGS) $< -o $@
+	@mkdir -p $(dir $@)
+	@$(CC) $(CFLAGS) $(EXT_FLAGS) $(ASM_CC_FLAGS) -g -c $< -o $@
 
 %.dmp: %.o
 	@echo "[OCP]	$@"
