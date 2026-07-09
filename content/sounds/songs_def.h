@@ -418,7 +418,9 @@ extern const struct Song Song_Fe6PlayerPhase1;
 extern const struct Song Song_FodlanWinds_SurfingKyogre; // √
 extern const struct Song Song_AFuneralOfFlowers;
 extern const struct Song Song_BetweenHeavenAndEarth;
-extern const struct Song Song_ChasingDaybreak; // ?
+extern const struct Song Song_ChasingDaybreak; // full 14-track + volume balance
+extern const struct Song Song_ChasingDaybreak_Reorder8; // 8-track reorder (melody in first 8)
+extern const struct Song Song_ChasingDaybreak_Merged8; // 8-track merged layout
 extern const struct Song Song_GarregMachMonastery_SurfingKyogre;
 extern const struct Song Song_IndomitableWill_SurfingKyogre;   // ?
 extern const struct Song Song_IndomitableWillV1_SurfingKyogre; // ?

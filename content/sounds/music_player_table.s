@@ -1,8 +1,8 @@
 	.include "asm_m4a.inc"
 
 	.equiv TRACK_SIZE, 0x50
-	.equiv NUM_TRACKS_BGM1, 8
-	.equiv NUM_TRACKS_BGM2, 8
+	.equiv NUM_TRACKS_BGM1, 14
+	.equiv NUM_TRACKS_BGM2, 14
 	.equiv NUM_TRACKS_SE1_SYS1, 2
 	.equiv NUM_TRACKS_SE2_SYS2, 2
 	.equiv NUM_TRACKS_SE3_BMP1, 4

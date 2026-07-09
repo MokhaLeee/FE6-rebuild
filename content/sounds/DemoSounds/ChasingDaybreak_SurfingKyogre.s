@@ -11,6 +11,8 @@
 
 	.section .content_data
 	.global	Song_ChasingDaybreak
+	.global	Song_ChasingDaybreak_Reorder8
+	.global	Song_ChasingDaybreak_Merged8
 	.align	2
 
 
@@ -23,8 +25,8 @@ song06_001:
  .byte   TEMPO , 126*song06_tbs/2
  .byte   VOICE , 49
  .byte   PAN , c_v+3
- .byte   VOL , 47*song06_mvl/mxv
- .byte   VOL , 47*song06_mvl/mxv
+ .byte   VOL , 38*song06_mvl/mxv
+ .byte   VOL , 38*song06_mvl/mxv
  .byte   W24
 Label_0111FB30:
  .byte   N05 ,Gn2 ,v080
@@ -7549,8 +7551,8 @@ song06_010:
  .byte   KEYSH , song06_key+0
  .byte   VOICE , 49
  .byte   PAN , c_v+3
- .byte   VOL , 32*song06_mvl/mxv
- .byte   VOL , 32*song06_mvl/mxv
+ .byte   VOL , 48*song06_mvl/mxv
+ .byte   VOL , 48*song06_mvl/mxv
  .byte   W24
 Label_01125AD6:
  .byte   N05 ,Gn4 ,v080
@@ -9516,8 +9518,8 @@ song06_012:
  .byte   KEYSH , song06_key+0
  .byte   VOICE , 48
  .byte   PAN , c_v+6
- .byte   VOL , 17*song06_mvl/mxv
- .byte   VOL , 17*song06_mvl/mxv
+ .byte   VOL , 35*song06_mvl/mxv
+ .byte   VOL , 35*song06_mvl/mxv
  .byte   W24
 Label_0112619A:
  .byte   N11 ,Gn4 ,v080
@@ -11569,5 +11571,41 @@ Song_ChasingDaybreak:
 	.word	song06_012
 	.word	song06_013
 	.word	song06_014
+
+@ Fix A: 8-track reorder — swap in melody/piano; drop sub-bass and empty tracks
+Song_ChasingDaybreak_Reorder8:
+	.byte	8	@ NumTrks
+	.byte	0	@ NumBlks
+	.byte	song06_pri	@ Priority
+	.byte	song06_rev	@ Reverb.
+
+	.word	song06_grp
+
+	.word	song06_001	@ bass
+	.word	song06_002	@ pad
+	.word	song06_003	@ drums
+	.word	song06_004	@ mid bass
+	.word	song06_005	@ mid
+	.word	song06_009	@ piano (was trk 9)
+	.word	song06_010	@ melody (was trk 10)
+	.word	song06_012	@ melody layer (was trk 12)
+
+@ Fix B: 8-track merge — fit piano + melody within 8 slots; drop duplicate melody layer
+Song_ChasingDaybreak_Merged8:
+	.byte	8	@ NumTrks
+	.byte	0	@ NumBlks
+	.byte	song06_pri	@ Priority
+	.byte	song06_rev	@ Reverb.
+
+	.word	song06_grp
+
+	.word	song06_001	@ bass
+	.word	song06_002	@ pad
+	.word	song06_003	@ drums
+	.word	song06_004	@ mid bass
+	.word	song06_009	@ piano (merged from trk 9)
+	.word	song06_010	@ melody (merged from trk 10)
+	.word	song06_005	@ mid
+	.word	song06_013	@ strings accent (was trk 13)
 
 	.end
