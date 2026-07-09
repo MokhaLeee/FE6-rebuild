@@ -297,7 +297,6 @@ extern u32 gEkrInitPosReal;
 extern u32 gEfxFarAttackExist;
 extern u32 gEfxBgSemaphore;
 extern u32 gEfxHpBarResireFlag;
-extern u32 gUnk_Banim_0201774C;
 extern u32 gEfxTeonoState;
 extern u32 gEfxTerrainLayerLow;
 extern struct Vec2i gEkrBg2QuakeVec;
@@ -570,6 +569,18 @@ struct ProcEfxFlashing {
     STRUCT_PAD(0x32, 0x5C);
 
     /* 5C */ struct Anim *anim;
+};
+
+struct ProcEfxApocalypseDummy {
+    PROC_HEADER;
+
+    STRUCT_PAD(0x29, 0x2C);
+    /* 2C */ i16 timer;
+    /* 2E */ i16 duration;
+    STRUCT_PAD(0x30, 0x5C);
+    /* 5C */ struct BaSprite *anim;
+    STRUCT_PAD(0x60, 0x64);
+    /* 64 */ ProcPtr efxproc;
 };
 
 void NewEfxFlashBgWhite(struct Anim *anim, int duartion);
@@ -1168,9 +1179,11 @@ struct ProcEfxMagicOBJ {
 
     STRUCT_PAD(0x29, 0x2C);
 
-    /* 2C */ i16 timer, terminator;
+    /* 2C */ i16 timer;
+    /* 2E */ i16 terminator;
+    /* 30 */ i16 unk_30;
 
-    STRUCT_PAD(0x30, 0x5C);
+    STRUCT_PAD(0x32, 0x5C);
 
     /* 5C */ struct Anim *anim;
     /* 60 */ struct Anim *anim2;
@@ -1202,6 +1215,7 @@ struct ProcEfxEclipseBG
 };
 
 void NewEfxDummyMagic(struct Anim *anim);
+void EfxDummyMagic_Loop(struct ProcEfxMagic *proc);
 void NewEfxTeono(struct Anim *anim);
 void EfxTeono_Loop(struct ProcEfxMagic *proc);
 void NewEfxTeonoOBJ(struct Anim *anim);
@@ -1322,6 +1336,7 @@ void NewEfxThunderstormDARK(struct Anim *anim, int timer, int terminator);
 void EfxThunderstormDARK_LoopA(struct ProcEfxBGCOL *proc);
 void EfxThunderstormDARK_LoopB(struct ProcEfxBGCOL *proc);
 void StartSpellAnimAircalibur(struct Anim *anim);
+void EfxAlacalibur_Loop(struct ProcEfx *proc);
 void NewEfxAlacaliburBG(struct Anim *anim);
 void NewEfxAlacaliburBG(struct Anim *anim);
 void EfxAlacaliburBG_Loop(struct ProcEfxBG *proc);
@@ -1343,70 +1358,70 @@ void EfxMistyrainOBJ1_Loop3(struct ProcEfxOBJ *proc);
 void EfxMistyrainOBJ2_Loop1(struct ProcEfxOBJ *proc);
 void EfxMistyrainOBJ2_Loop2(struct ProcEfxOBJ *proc);
 void StartSpellAnimNosferatu(struct Anim *anim);
-// EfxResire_Loop
+void EfxResire_Loop(struct ProcEfx *proc);
 void NewEfxResireBG(struct Anim *anim, int type);
 void NewEfxResireBG2(struct Anim *anim);
-// EfxResireBG_Loop1
-// EfxResireBG_Loop2
-// EfxResireBG_Loop3
-// EfxResireBG_Loop4
-// EfxResireBG2_Loop
+void EfxResireBG_Loop1(struct ProcEfxBG *proc);
+void EfxResireBG_Loop2(struct ProcEfxBG *proc);
+void EfxResireBG_Loop3(struct ProcEfxBG *proc);
+void EfxResireBG_Loop4(struct ProcEfxBG *proc);
+void EfxResireBG2_Loop(struct ProcEfxBG *proc);
 void NewEfxResireRST(struct Anim *anim, ProcPtr proc_rst, int duration);
-// EfxResireRST_Loop
+void EfxResireRST_Loop(struct ProcEfxRST *proc);
 void StartSpellAnimLightning(struct Anim *anim);
-// EfxLightning_Loop
+void EfxLightning_Loop(struct ProcEfx *proc);
 void NewEfxLightningBG(struct Anim *anim);
-// EfxLightningBG_Loop
+void EfxLightningBG_Loop(struct ProcEfxBG *proc);
 void StartSpellAnimPurge(struct Anim *anim);
 // EfxPurge_PlaySFX
-// EfxPurge_Loop
+void EfxPurge_Loop(struct ProcEfx *proc);
 void NewEfxPurgeBG(struct Anim *anim);
-// EfxPurgeBG_Loop
+void EfxPurgeBG_Loop(struct ProcEfxBG *proc);
 void NewEfxPurgeOBJRND(struct Anim *anim);
-// EfxPurgeOBJRND_Loop
+void EfxPurgeOBJRND_Loop(struct ProcEfxOBJ *proc);
 void NewEfxPurgeOBJ(struct Anim *anim, int x, int y);
-// EfxPurgeOBJ_OnEnd
+void EfxPurgeOBJ_OnEnd(struct ProcEfxOBJ *proc);
 void StartSpellAnimForblaze(struct Anim *anim);
-// EfxForblaze_Loop
+void EfxForblaze_Loop(struct ProcEfx *proc);
 void NewEfxForblazeBG1(struct Anim *anim);
-// EfxForblazeBG1_Loop
+void EfxForblazeBG1_Loop(struct ProcEfxBG *proc);
 void NewEfxForblazeBGCOL1(struct Anim *anim, int duration);
-// EfxForblazeBGCOL1_Loop
+void EfxForblazeBGCOL1_Loop(struct ProcEfxBGCOL *proc);
 void NewEfxForblazeBGCtrl1(void);
-// EfxForblazeBGCtrl1_Loop1
-// EfxForblazeBGCtrl1_Loop2
-// EfxForblazeBGCtrl1_Loop3
+void EfxForblazeBGCtrl1_Loop1(ProcPtr proc);
+void EfxForblazeBGCtrl1_Loop2(ProcPtr proc);
+void EfxForblazeBGCtrl1_Loop3(ProcPtr proc);
 void NewEfxForblazeObjHandle(struct Anim *anim, int duration);
-// EfxForblazeObjHandle_Loop
+void EfxForblazeObjHandle_Loop(struct ProcEfx *proc);
 void NewEfxForblazeOBJ(struct Anim *anim, int x, int y);
-// EfxForblazeOBJ_Loop
+void EfxForblazeOBJ_Loop(struct ProcEfxMagicOBJ *proc);
 void NewEfxForblazeBG2(struct Anim *anim, int duration);
-// EfxForblazeBG2_Loop
+void EfxForblazeBG2_Loop(struct ProcEfxBG *proc);
 void NewEfxForblazeOBJCtrl(struct Anim *anim);
-// EfxForblazeOBJCtrl_Loop
+void EfxForblazeOBJCtrl_Loop(struct ProcEfxMagic *proc);
 void NewEfxForblazeOBJFall(struct Anim *anim, int duration, int unused);
-// EfxForblazeOBJFall_Loop
+void EfxForblazeOBJFall_Loop(struct ProcEfxOBJ *proc);
 void HBlank_EfxForblaze(void);
 void NewEfxForblazeRST(int duration);
-// EfxForblazeRST_Loop
+void EfxForblazeRST_Loop(struct ProcEfxMagic *proc);
 void StartSpellAnimDivine(struct Anim *anim);
-// EfxDivine_Loop
+void EfxDivine_Loop(struct ProcEfx *proc);
 void NewEfxDivineBG(struct Anim *anim);
 void NewEfxDivineBG2(struct Anim *anim);
 void NewEfxDivineBG3(struct Anim *anim);
-// EfxDivineBG_Loop
+void EfxDivineBG_Loop(struct ProcEfxBG *proc);
 void NewEfxDivineOBJ(struct Anim *anim);
-// EfxDivineOBJ_Loop
+void EfxDivineOBJ_Loop(struct ProcEfxOBJ *proc);
 void StartSpellAnimAureola(struct Anim *anim);
-// EfxAureola_Loop
+void EfxAureola_Loop(struct ProcEfx *proc);
 void NewEfxAureolaBG(struct Anim *anim);
 void EfxAureolaBG_Loop(struct ProcEfxBG *proc);
 void NewEfxAureolaBG2(struct Anim *anim, int duration);
-// EfxAureolaBG2_Loop
+void EfxAureolaBG2_Loop(struct ProcEfxBG *proc);
 void NewEfxAureolaBG2COL(struct Anim *anim, int);
-// EfxAureolaBG2COL_Loop
+void EfxAureolaBG2COL_Loop(struct ProcEfxBGCOL *proc);
 void NewEfxAureolaOBJ(struct Anim *anim, int);
-// EfxAureolaOBJ_Loop
+void EfxAureolaOBJ_Loop(struct ProcEfxMagic *proc);
 
 struct ProcEfxAureolaOBJ {
     PROC_HEADER;
@@ -1434,166 +1449,216 @@ struct ProcEfxAureolaOBJ {
 };
 
 void NewEfxAureolaOBJCtrl(struct Anim *anim, int);
-// EfxAureolaOBJCtrl_Loop
+void EfxAureolaOBJCtrl_Loop(struct ProcEfxAureolaOBJ *proc);
 void NewEfxAureolaOBJ2(struct Anim *anim, int);
-// EfxAureolaOBJ2_Loop
+void EfxAureolaOBJ2_Loop(struct ProcEfxAureolaOBJ *proc);
 void NewEfxAureolaOBJ3(struct Anim *anim);
-// EfxAureolaOBJ3_Loop
+void EfxAureolaOBJ3_Loop(struct ProcEfxAureolaOBJ *proc);
 void NewEfxAureolaOBJ3Ctrl(struct Anim *anim, int);
-// EfxAureolaOBJ3Ctrl_Loop
+void EfxAureolaOBJ3Ctrl_Loop(struct ProcEfxAureolaOBJ *proc);
 void StartSpellAnimApocalypse(struct Anim *anim);
-// EfxApocalypse_Loop
+void EfxApocalypse_Loop(struct ProcEfx *proc);
 void NewEfxApocalypseBG(struct Anim *anim, int);
-// EfxApocalypseBG_Loop
+void EfxApocalypseBG_Loop(struct ProcEfxBG *proc);
 void NewEfxApocalypseBGCtrl(struct Anim *anim);
-// EfxApocalypseBGCtrl_Loop
+void EfxApocalypseBGCtrl_Loop(struct ProcEfxBG *proc);
 void NewEfxApocalypseBGCOL(struct Anim *anim);
-// EfxApocalypseBGCOL_Loop
+void EfxApocalypseBGCOL_Loop(struct ProcEfxBGCOL *proc);
 void NewEfxApocalypseOBJ(struct Anim *anim);
-// EfxApocalypseOBJ_Loop1
-// EfxApocalypseOBJ_Loop2
-// EfxApocalypseOBJ_Loop3
-// EfxApocalypseOBJ_Loop4
+void EfxApocalypseOBJ_Loop2(struct ProcEfxOBJ *proc);
+void EfxApocalypseOBJ_Loop3(struct ProcEfxOBJ *proc);
+void EfxApocalypseOBJ_Loop4(struct ProcEfxOBJ *proc);
+void EfxApocalypseOBJ_Loop1(struct ProcEfxOBJ *proc);
 void NewEfxApocalypseBGCOL2(struct Anim *anim, int);
-// EfxApocalypseBGCOL2_Loop
+void EfxApocalypseBGCOL2_Loop(struct ProcEfxBGCOL *proc);
 void NewEfxApocalypseDummy(struct Anim *anim, ProcPtr, int);
-// EfxApocalypseDummy_Loop
+void EfxApocalypseDummy_Loop(struct ProcEfxApocalypseDummy *proc);
 void NewEfxApocalypseBgFlash1(struct Anim *anim, int, int);
-// EfxApocalypseBgFlash1_Loop
+void EfxApocalypseBgFlash1_Loop(struct ProcEfxFlashing *proc);
 void NewEfxApocalypseBgFlash2(struct Anim *anim, int, int);
-// EfxApocalypseBgFlash2_Loop1
-// EfxApocalypseBgFlash2_Loop2
+void EfxApocalypseBgFlash2_Loop1(struct ProcEfxFlashing *proc);
+void EfxApocalypseBgFlash2_Loop2(struct ProcEfxFlashing *proc);
 void NewEfxApocalypseBG2(struct Anim *anim, int);
-// EfxApocalypseBG2_Loop
+void EfxApocalypseBG2_Loop(struct ProcEfxBG *proc);
+
+struct ProcEfxApocalypseOBJ2 {
+	PROC_HEADER;
+
+	STRUCT_PAD(0x29, 0x2C);
+	/* 2C */ i16 timer;
+	/* 2E */ i16 phase1_duration;
+	/* 30 */ i16 phase2_duration;
+	STRUCT_PAD(0x32, 0x5C);
+	/* 5C */ struct Anim *anim;
+	/* 60 */ struct Anim *anim2;
+};
+
 void NewEfxApocalypseOBJ2(struct Anim *anim, int, int);
-// EfxApocalypseOBJ2_Loop1
-// EfxApocalypseOBJ2_Loop2
+void EfxApocalypseOBJ2_Loop1(struct ProcEfxApocalypseOBJ2 *proc);
+void EfxApocalypseOBJ2_Loop2(struct ProcEfxApocalypseOBJ2 *proc);
+
+struct ProcEfxApocalypseOBJ3 {
+	PROC_HEADER;
+
+	STRUCT_PAD(0x29, 0x2C);
+	/* 2C */ i16 timer;
+	/* 2E */ i16 duration;
+	/* 30 */ i16 phase_counter;
+	STRUCT_PAD(0x32, 0x44);
+	/* 44 */ int spawn_threshold;
+	/* 48 */ int unk48;
+	/* 4C */ int rnd_index;
+	STRUCT_PAD(0x50, 0x5C);
+	/* 5C */ struct Anim *anim;
+};
+
+struct ProcEfxApocalypseOBJ3RND {
+	PROC_HEADER;
+
+	STRUCT_PAD(0x29, 0x2C);
+	/* 2C */ i16 timer;
+	/* 2E */ i16 duration;
+	STRUCT_PAD(0x30, 0x32);
+	/* 32 */ i16 x_center;
+	STRUCT_PAD(0x34, 0x3A);
+	/* 3A */ i16 y_center;
+	STRUCT_PAD(0x3C, 0x44);
+	/* 44 */ int lo;
+	/* 48 */ int angle;
+	STRUCT_PAD(0x4C, 0x5C);
+	/* 5C */ struct Anim *anim;
+	/* 60 */ struct Anim *anim2;
+};
+
 void NewEfxApocalypseOBJ3(struct Anim *anim, int);
-// EfxApocalypseOBJ3_Loop
-// NewEfxApocalypseOBJ3RND
-// EfxApocalypseOBJ3RND_Loop
+void EfxApocalypseOBJ3_Loop(struct ProcEfxApocalypseOBJ3 *proc);
+void NewEfxApocalypseOBJ3RND(struct Anim *anim, int duration, int lo, u32 state);
+void EfxApocalypseOBJ3RND_Loop(struct ProcEfxApocalypseOBJ3RND *proc);
 // StartSpellAnimEclipse
-// EfxHazymoon_Loop
+void EfxHazymoon_Loop(struct ProcEfx *proc);
 void NewEfxHazymoonBG1(struct Anim *anim);
 void NewEfxHazymoonBG2(struct Anim *anim);
 void NewEfxHazymoonBG3(struct Anim *anim);
-// EfxHazymoonBG_Loop
+void EfxHazymoonBG_Loop(struct ProcEfxEclipseBG *proc);
 void NewEfxHazymoonOBJ2(struct Anim *anim);
-// EfxHazymoonOBJ2_OnEnd
-// EfxHazymoonOBJ2_Loop1
-// EfxHazymoonOBJ2_Loop2
-// EfxHazymoonOBJ2_Loop3
+void EfxHazymoonOBJ2_OnEnd(struct ProcEfxMagicOBJ *proc);
+void EfxHazymoonOBJ2_Loop1(struct ProcEfxMagicOBJ *proc);
+void EfxHazymoonOBJ2_Loop2(struct ProcEfxMagicOBJ *proc);
+void EfxHazymoonOBJ2_Loop3(struct ProcEfxMagicOBJ *proc);
 void NewEfxHazymoonOBJ3(struct Anim *anim);
-// EfxHazymoonOBJ3_Loop
+void EfxHazymoonOBJ3_Loop(struct ProcEfxMagicOBJ *proc);
 void NewEfxHazymoonOBJ3RND(struct Anim *anim, int x, int y);
-// EfxHazymoonOBJ3RND_Loop
+void EfxHazymoonOBJ3RND_Loop(struct ProcEfxMagicOBJ *proc);
 void StartSpellAnimFenrir(struct Anim *anim);
-// EfxFenrir_Loop
-// NewEfxFenrirBG
-// EfxFenrirBG_OnEnd
-// EfxFenrirBG_Loop
-// NewEfxFenrirBGCOL
-// EfxFenrirBGCOL_OnEnd
-// EfxFenrirBGCOL_Loop
-// NewEfxFenrirOBJ
-// EfxFenrirOBJ_Loop
-// NewEfxFenrirBG2_A
-// NewEfxFenrirBG2_B
-// EfxFenrirBG2_Loop
-// NewEfxFenrirOBJ2
-// EfxFenrirOBJ2_Loop
-// NewEfxFenrirOBJ2Chiri
-// EfxFenrirOBJ2Chiri_Loop
-// StartSpellAnimHeal
-// EfxLive_Loop
+void EfxFenrir_Loop(struct ProcEfx *proc);
+void NewEfxFenrirBG(struct Anim *anim, int duration);
+void EfxFenrirBG_OnEnd(void);
+void EfxFenrirBG_Loop(struct ProcEfxBG *proc);
+void NewEfxFenrirBGCOL(struct Anim *anim, int duration);
+void EfxFenrirBGCOL_OnEnd(void);
+void EfxFenrirBGCOL_Loop(struct ProcEfxBGCOL *proc);
+void NewEfxFenrirOBJ(struct Anim *anim, int duration);
+void EfxFenrirOBJ_Loop(struct ProcEfxOBJ *proc);
+void NewEfxFenrirBG2_A(struct Anim *anim);
+void NewEfxFenrirBG2_B(struct Anim *anim);
+void EfxFenrirBG2_Loop(struct ProcEfxBG *proc);
+void NewEfxFenrirOBJ2(struct Anim *anim);
+void EfxFenrirOBJ2_Loop(struct ProcEfxOBJ *proc);
+void NewEfxFenrirOBJ2Chiri(struct Anim *anim, int idx);
+void EfxFenrirOBJ2Chiri_Loop(struct ProcEfxOBJ *proc);
+void StartSpellAnimHeal(struct Anim *anim);
+void EfxLive_Loop(struct ProcEfx *proc);
 // StartSpellAnimMend
-// EfxRelive_Loop
+void StartSpellAnimMend(struct Anim *anim);
+void EfxRelive_Loop(struct ProcEfx *proc);
 // StartSpellAnimRecover
-// EfxRecover_Loop
+void StartSpellAnimRecover(struct Anim *anim);
+void EfxRecover_Loop(struct ProcEfx *proc);
 // StartSpellAnimPhysic
-// EfxReblow_Loop
-// NewEfxLiveBG_A
-// NewEfxLiveBG_B
-// EfxLiveBG_Loop
-// NewEfxLiveBGCOL_A
-// NewEfxLiveBGCOL_B
-// EfxLiveBGCOL_Loop
-// NewEfxLiveALPHA
-// EfxLiveALPHA_Delay
-// EfxLiveALPHA_Loop
-// NewEfxLiveOBJ
-// NewEfxReserveOBJ
-// EfxLiveOBJ_Loop
-// EfxReserveOBJ_Loop1
-// EfxReserveOBJ_Loop2
-// NewEfxReblowOBJ
-// EfxReblowOBJ_Loop1
-// EfxReblowOBJ_Loop2
-// StartSpellAnimFortify
-// StartSpellAnimLatona
-// EfxReserve_Loop
-// NewEfxReserveBG
-// EfxReserveBG_Loop
-// NewEfxReserveBGCOL
-// EfxReserveBGCOL_Loop
-// NewEfxReserveBG2
-// EfxReserveBG2_Loop
-// NewEfxReserveBGCOL2
-// EfxReserveBGCOL2_Loop
-// StartSpellAnimRestore
-// EfxRest_Loop
-// NewEfxRestBG
-// EfxRestBG_Loop
-// NewEfxRestOBJ
-// EfxRestOBJ_Loop
-// StartSpellAnimSilence
-// EfxSilence_Loop
-// NewEfxSilenceBG
-// EfxSilenceBG_Loop
-// NewEfxSilenceOBJ
-// EfxSilenceOBJ_OnEnd
-// StartSpellAnimSleep
-// EfxSleep_Loop
-// NewEfxSleepBG
-// EfxSleepBG_Loop
-// NewEfxSleepOBJ
-// NewEfxSleepOBJ2
-// EfxSleepOBJ_OnEnd
-// NewEfxSleepSE
-// EfxSleepSE_PlaySE
-// EfxSleepSE_OnEnd
-// StartSpellAnimHammerne
-// EfxHammarne_Loop
-// NewEfxHammarneBG
-// EfxHammarneBG_Loop
-// NewEfxHammarneOBJ
-// EfxHammarneOBJ_OnEnd
-// StartSpellAnimBerserk
-// EfxBerserk_Loop
-// NewEfxBerserkBG
-// EfxBerserkBG_Loop
-// NewEfxBerserkCLONE
-// EfxBerserkCLONE_Loop
-// EfxBerserkCLONE_OnEnd
-// NewEfxBerserkOBJ
-// EfxBerserkOBJ_OnEnd
-// EfxBerserkOBJ_Loop1
-// EfxBerserkOBJ_Loop3
-// EfxBerserkOBJ_Loop5
-// EfxBerserkOBJ_Loop7
-// EfxBerserkOBJ_Loop9
-// EfxBerserkOBJ_Loop2
-// EfxBerserkOBJ_Loop4
-// EfxBerserkOBJ_Loop6
-// EfxBerserkOBJ_Loop8
-// EfxBerserkOBJ_Loop10
-// StartSpellAnimBarrier
-// EfxMshield_Loop
-// NewEfxMshieldBG
-// EfxMshieldBG_Loop
-// NewEfxMshieldOBJ
-// NewEfxMshieldOBJ2
-// EfxMshieldOBJ_OnEnd
+void StartSpellAnimPhysic(struct Anim *anim);
+void EfxReblow_Loop(struct ProcEfx *proc);
+void NewEfxLiveBG_A(struct Anim *anim, u32 type);
+void NewEfxLiveBG_B(struct Anim *anim, u32 type);
+void EfxLiveBG_Loop(struct ProcEfxBG *proc);
+void NewEfxLiveBGCOL_A(struct Anim *anim, u32 type);
+void NewEfxLiveBGCOL_B(struct Anim *anim, u32 type);
+void EfxLiveBGCOL_Loop(struct ProcEfxBGCOL *proc);
+void NewEfxLiveALPHA(struct Anim *anim, int timer, int duration, int type);
+void EfxLiveALPHA_Delay(struct ProcEfxALPHA *proc);
+void EfxLiveALPHA_Loop(struct ProcEfxALPHA *proc);
+void NewEfxLiveOBJ(struct Anim *anim);
+void NewEfxReserveOBJ(struct Anim *anim);
+void EfxLiveOBJ_Loop(struct ProcEfxOBJ *proc);
+void EfxReserveOBJ_Loop1(struct ProcEfxOBJ *proc);
+void EfxReserveOBJ_Loop2(struct ProcEfxOBJ *proc);
+void NewEfxReblowOBJ(struct Anim *anim, u32 kind);
+void EfxReblowOBJ_Loop1(struct ProcEfxOBJ *proc);
+void EfxReblowOBJ_Loop2(struct ProcEfxOBJ *proc);
+void StartSpellAnimFortify(struct Anim *anim);
+void StartSpellAnimLatona(struct Anim *anim);
+void EfxReserve_Loop(struct ProcEfx *proc);
+void NewEfxReserveBG(struct Anim *anim);
+void EfxReserveBG_Loop(struct ProcEfxBG *proc);
+void NewEfxReserveBGCOL(struct Anim *anim, u32 kind);
+void EfxReserveBGCOL_Loop(struct ProcEfxBGCOL *proc);
+void NewEfxReserveBG2(struct Anim *anim);
+void EfxReserveBG2_Loop(struct ProcEfxBG *proc);
+void NewEfxReserveBGCOL2(struct Anim *anim, u32 kind);
+void EfxReserveBGCOL2_Loop(struct ProcEfxBGCOL *proc);
+void StartSpellAnimRestore(struct Anim *anim);
+void EfxRest_Loop(struct ProcEfx *proc);
+void NewEfxRestBG(struct Anim *anim);
+void EfxRestBG_Loop(struct ProcEfxBG *proc);
+void NewEfxRestOBJ(struct Anim *anim);
+void EfxRestOBJ_Loop(void);
+void StartSpellAnimSilence(struct Anim *anim);
+void EfxSilence_Loop(struct ProcEfx *proc);
+void NewEfxSilenceBG(struct Anim *anim);
+void EfxSilenceBG_Loop(struct ProcEfxBG *proc);
+void NewEfxSilenceOBJ(struct Anim *anim);
+void EfxSilenceOBJ_OnEnd(struct ProcEfxOBJ *proc);
+void StartSpellAnimSleep(struct Anim *anim);
+void EfxSleep_Loop(struct ProcEfx *proc);
+void NewEfxSleepBG(struct Anim *anim);
+void EfxSleepBG_Loop(struct ProcEfxBG *proc);
+void NewEfxSleepOBJ(struct Anim *anim);
+void NewEfxSleepOBJ2(struct Anim *anim);
+void EfxSleepOBJ_OnEnd(void);
+void NewEfxSleepSE(struct Anim *anim);
+void EfxSleepSE_PlaySE(struct ProcEfx *proc);
+void EfxSleepSE_OnEnd(void);
+void StartSpellAnimHammerne(struct Anim *anim);
+void EfxHammarne_Loop(struct ProcEfx *proc);
+void NewEfxHammarneBG(struct Anim *anim);
+void EfxHammarneBG_Loop(struct ProcEfxBG *proc);
+void NewEfxHammarneOBJ(struct Anim *anim);
+void EfxHammarneOBJ_OnEnd(void);
+void StartSpellAnimBerserk(struct Anim *anim);
+void EfxBerserk_Loop(struct ProcEfx *proc);
+void NewEfxBerserkBG(struct Anim *anim, int duration);
+void EfxBerserkBG_Loop(struct ProcEfxBG *proc);
+void NewEfxBerserkCLONE(struct Anim *anim, int duration);
+void EfxBerserkCLONE_Loop(struct ProcEfxBG *proc);
+void EfxBerserkCLONE_OnEnd(void);
+void NewEfxBerserkOBJ(struct Anim *anim);
+void EfxBerserkOBJ_OnEnd(struct ProcEfxOBJ *proc);
+void EfxBerserkOBJ_Loop1(struct ProcEfxOBJ *proc);
+void EfxBerserkOBJ_Loop3(struct ProcEfxOBJ *proc);
+void EfxBerserkOBJ_Loop5(struct ProcEfxOBJ *proc);
+void EfxBerserkOBJ_Loop7(struct ProcEfxOBJ *proc);
+void EfxBerserkOBJ_Loop9(struct ProcEfxOBJ *proc);
+void EfxBerserkOBJ_Loop2(struct ProcEfxOBJ *proc);
+void EfxBerserkOBJ_Loop4(struct ProcEfxOBJ *proc);
+void EfxBerserkOBJ_Loop6(struct ProcEfxOBJ *proc);
+void EfxBerserkOBJ_Loop8(struct ProcEfxOBJ *proc);
+void EfxBerserkOBJ_Loop10(struct ProcEfxOBJ *proc);
+void StartSpellAnimBarrier(struct Anim *anim);
+void EfxMshield_Loop(struct ProcEfx *proc);
+void NewEfxMshieldBG(struct Anim *anim);
+void EfxMshieldBG_Loop(struct ProcEfxBG *proc);
+void NewEfxMshieldOBJ(struct Anim *anim);
+void NewEfxMshieldOBJ2(struct Anim *anim);
+void EfxMshieldOBJ_OnEnd(struct ProcEfxOBJ *proc);
 
 struct ProcEfxDamageMojiEffectOBJ {
     PROC_HEADER;
@@ -2769,7 +2834,6 @@ extern const u8 BanimTypesPosLeft[5];
 extern const u8 BanimTypesPosRight[5];
 extern const u16 BanimLeftDefaultPos[5];
 extern const u16 Tsa_EkrTerrainfx_081122DA[];
-extern u16 const FrameArray_EkrTogiColor[];
 extern u16 TsaConf_BanimTmA_08112380[];
 extern u16 TsaConf_BanimTmA_08112418[];
 extern u16 TsaConf_BanimTmA_081124B0[];
@@ -2827,7 +2891,6 @@ extern u8 const Img_EkrBaseKaiten3[];
 extern u8 const Img_EkrBaseKaiten4[];
 extern u8 const Img_EkrBaseKaiten5[];
 extern u16 const Pal_EkrBaseKaiten[];
-extern u16 const FrameArray_EfxSongBGCOL[];
 extern u16 const FrameConf_EfxEckesachsBGCOL[];
 extern u16 const gUnk_08119D78[];
 extern u16 const FrameConf_EfxDarkbreathBG[];
@@ -2848,41 +2911,10 @@ extern u16 const FrameConf_EfxResireBG[];
 extern u16 const FrameConf_EfxResireBG3[];
 extern u16 const FrameConf_EfxResireBG2[];
 extern u16 const FrameConf_EfxLightningBG[];
-extern u16 const FrameArray_EfxPurgeBG[];
 extern u16 const FrameConf_EfxForblazeBG1[];
-extern u16 const FrameArray_EfxForblazeBGCOL1[];
 // extern ??? gUnk_0811A520
-extern u16 const FrameArray_EfxDivineBG[];
-extern u16 const FrameArray_EfxDivineBG2[];
-extern u16 const FrameArray_EfxDivineBG3[];
-extern u16 const FrameArray_EfxAureolaBG[];
-extern u16 const FrameArray_EfxAureolaBG2COL[];
-extern u16 const FrameArray_EfxApocalypseBGCOL2[];
-extern u16 const FrameArray_EfxApocalypseBG2[];
-extern u16 const FrameArray_EfxHazymoonBG1[];
-extern u16 const FrameArray_EfxHazymoonBG2[];
-extern u16 const FrameArray_EfxHazymoonBG3[];
-extern u16 const FrameArray_EfxFenrirBGCOL[];
-extern u16 const FrameArray_EfxFenrirBG2_A[];
-extern u16 const FrameArray1_EfxLiveBG[];
-extern u16 const FrameArray2_EfxLiveBG[];
-extern u16 const FrameArray3_EfxLiveBG[];
-extern u16 const FrameArray4_EfxLiveBG[];
-extern u16 const FrameArray1_EfxLiveBGCOL[];
-extern u16 const FrameArray2_EfxLiveBGCOL[];
-extern u16 const FrameArray3_EfxLiveBGCOL[];
-extern u16 const FrameArray4_EfxLiveBGCOL[];
-extern u16 const FrameArray_EfxReserveBG[];
 extern u16 const SfxArray_EfxReserveBG[];
 extern u16 const SfxLocArray_EfxReserveBG[];
-extern u16 const FrameArray_EfxReserveBGCOL[];
-extern u16 const FrameArray_EfxReserveBG2[];
-extern u16 const FrameArray_EfxReserveBGCOL2[];
-extern u16 const FrameArray_EfxRestBG[];
-extern u16 const FrameArray_EfxSilenceBG[];
-extern u16 const FrameArray_EfxSleepBG[];
-extern u16 const FrameArray_EfxHammarneBG[];
-extern u16 const FrameArray_EfxMshieldBG[];
 extern const u16 Frames_EfxCriricalEffectBGCOL[];
 extern const u16 FrameConf_EfxNormalEffectBG[];
 extern u16 const FrameConfig_EfxMagFcastBg1[];
@@ -2890,9 +2922,6 @@ extern u16 const FrameConfig_EfxMagFcastBg2[];
 extern u16 const FrameConfig_EfxMagFcastBg3[];
 extern u16 const FrameConfig_EfxMagFcastBg4[];
 extern u16 const FrameConf_EfxMagdhisEffectBG[];
-extern u16 const FrameArray_EfxopFireBG[];
-extern u16 const FrameArray_EfxopThunderBG[];
-extern u16 const FrameArray_EfxopThunderBGCOL[];
 // extern ??? frames
 // extern ??? frames_EfxopLiveBGCOL
 extern const u8 Img_TeonoOBJ[];
@@ -3634,16 +3663,16 @@ extern u16 Pal_EfxFimbulvetrOBJ[];
 extern u16  Img_EfxLiveBG[];
 extern u16  Tsa_Uncomp_EfxLiveBG_BA_L[];
 extern u16  Tsa_Uncomp_EfxLiveBG_BA_R[];
-// extern ??? Pals3_EfxLiveBGCOL[];
-// extern ??? Pals2_EfxLiveBGCOL[];
+extern u16 Pals3_EfxLiveBGCOL[];
+extern u16 Pals2_EfxLiveBGCOL[];
 extern u16 Tsa_EfxReserveBG_081ADFEC[];
 extern u16 Tsa_EfxReserveBG_081AE0F8[];
 extern u16 Tsa_EfxReserveBG_081AE1F8[];
 extern u16 Tsa_EfxReserveBG_081AE304[];
 extern u16 Tsa_EfxReserveBG2_081AE410[];
-// extern ??? Pals1_EfxReserveBGCOL[];
-// extern ??? Pals2_EfxReserveBGCOL[];
-// extern ??? Pals2_EfxReserveBGCOL2[];
+extern u16 const Pals1_EfxReserveBGCOL[];
+extern u16 const Pals2_EfxReserveBGCOL[];
+extern u16 const Pals2_EfxReserveBGCOL2[];
 extern u16 Img_EfxRestBG_081AFC70[];
 extern u16 Img_EfxRestBG_081B029C[];
 extern u16 Img_EfxRestBG_081B0994[];
