@@ -270,9 +270,10 @@ BANIM_IMG_GENERATED += $(ALL_BANIM_IMGS:%.png=%.4bpp) $(ALL_BANIM_IMGS:%.png=%.4
 # append objects
 C_GENERATED_OBJ += $(ALL_BANIM_SCR_OBJS)
 
-# demo banim data
-%.banim.S: %.banim.txt
-	@$(MAKE) -f banims/demo/makefile $@
+# Demo banim .S files are checked in as-is. Run `make banim-demo-regen` to rebuild from .banim.txt.
+.PHONY: banim-demo-regen
+banim-demo-regen:
+	@$(MAKE) -f banims/demo/makefile all
 
 # =========
 # = Glyph =
