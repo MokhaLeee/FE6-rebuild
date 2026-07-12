@@ -11,13 +11,13 @@ Tsa_CommGameBgScreenInShop: @ 083278EC
 	.incbin "fe6-base.gba", 0x3278EC, (0x3280B0 - 0x3278EC) @ length: 07C4
 
 .align 2,0
-.global gUnk_083280B0
-gUnk_083280B0: @ 083280B0
+.global Img_SaveMenuChapterTitleBgChr
+Img_SaveMenuChapterTitleBgChr: @ 083280B0
 	.incbin "fe6-base.gba", 0x3280B0, (0x32A130 - 0x3280B0) @ length: 2080
 
 .align 2,0
-.global gUnk_0832A130
-gUnk_0832A130: @ 0832A130
+.global Tsa_SaveMenuSpinDecoration
+Tsa_SaveMenuSpinDecoration: @ 0832A130
 	.incbin "fe6-base.gba", 0x32A130, (0x32A29C - 0x32A130) @ length: 016C
 
 .align 2,0
@@ -26,8 +26,8 @@ Img_SupportMenu: @ 0832A29C
 	.incbin "fe6-base.gba", 0x32A29C, (0x32B554 - 0x32A29C) @ length: 12B8
 
 .align 2,0
-.global gUnk_0832B554
-gUnk_0832B554: @ 0832B554
+.global Img_SaveMenuDefaultObjGfx
+Img_SaveMenuDefaultObjGfx: @ 0832B554
 	.incbin "fe6-base.gba", 0x32B554, (0x32BDE8 - 0x32B554) @ length: 0894
 
 .align 2,0
@@ -46,13 +46,13 @@ Pal_XmapObj: @ 0832C33C
 	.incbin "fe6-base.gba", 0x32C33C, (0x32C35C - 0x32C33C) @ length: 0020
 
 .align 2,0
-.global gUnk_0832C35C
-gUnk_0832C35C: @ 0832C35C
+.global Pal_SaveMenuObjHighlightCycle
+Pal_SaveMenuObjHighlightCycle: @ 0832C35C
 	.incbin "fe6-base.gba", 0x32C35C, (0x32C39C - 0x32C35C) @ length: 0040
 
 .align 2,0
-.global SpriteAnim_0832C39C
-SpriteAnim_0832C39C: @ 0832C39C
+.global SpriteAnim_SaveMenuSuspendIcon
+SpriteAnim_SaveMenuSuspendIcon: @ 0832C39C
 	.incbin "fe6-base.gba", 0x32C39C, (0x32C5E8 - 0x32C39C) @ length: 024C
 
 .align 2,0

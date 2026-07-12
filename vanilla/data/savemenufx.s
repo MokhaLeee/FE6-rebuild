@@ -86,8 +86,8 @@ Sprite_0868A4D0:	@ 0x68A4D0
 	.incbin "fe6-base.gba", 0x68A4D0, 0x68A4F8 - 0x68A4D0
 
 .align 2,0
-.global Sprites_0868A4F8
-Sprites_0868A4F8: @ 0868A4F8
+.global SaveMenu_ExtraMenuOptionSprites
+SaveMenu_ExtraMenuOptionSprites: @ 0868A4F8
 	.4byte Sprite_0868A3E0
 	.4byte 0x00000000
 	.4byte Sprite_0868A3FA
@@ -98,8 +98,8 @@ Sprites_0868A4F8: @ 0868A4F8
 	.4byte 0x00000000
 
 .align 2,0
-.global Sprites_0868A518
-Sprites_0868A518: @ 0868A518
+.global SaveMenu_MainMenuOptionSprites
+SaveMenu_MainMenuOptionSprites: @ 0868A518
 	.4byte Sprite_0868A348
 	.4byte 0x00000000
 	.4byte Sprite_0868A362
@@ -116,15 +116,15 @@ Sprites_0868A518: @ 0868A518
 	.4byte 0x00000018
 
 .align 2,0
-.global Sprites_0868A550
-Sprites_0868A550: @ 0868A550
+.global SaveMenu_SaveSlotLabelSprites
+SaveMenu_SaveSlotLabelSprites: @ 0868A550
 	.4byte Sprite_0868A484
 	.4byte Sprite_0868A4AA
 	.4byte Sprite_0868A4D0
 
 .align 2,0
-.global Sprites_0868A55C
-Sprites_0868A55C: @ 0868A55C
+.global SaveMenu_SaveSlotFrameSprites
+SaveMenu_SaveSlotFrameSprites: @ 0868A55C
 	.4byte Sprite_0868A448
 	.4byte Sprite_0868A45C
 	.4byte Sprite_0868A470
