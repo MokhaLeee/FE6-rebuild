@@ -198,18 +198,18 @@ void EkrDragonBarkExt(struct ProcEkrDragonBark *proc);
 
 void NewEkrManakete(struct BaSprite *anim);
 void EkrManakete_BgFadeIn(struct ProcEkrDragon *proc);
-void func_fe6_08059144(struct ProcEkrDragon *proc);
+void EkrManakete_StartEnterTransfer(struct ProcEkrDragon *proc);
 void EkrManakete_PauseOnStart(struct ProcEkrDragon *proc);
-void func_fe6_080591CC(struct ProcEkrDragon *proc);
-void func_fe6_080592D0(struct ProcEkrDragon *proc);
+void EkrManakete_InitBodyIntro2(struct ProcEkrDragon *proc);
+void EkrManakete_PlayBodyIntro1(struct ProcEkrDragon *proc);
 void EkrManakete_UpdateBanimfx(struct ProcEkrDragon *proc);
 void EkrManakete_BlockingInBattle(struct ProcEkrDragon *proc);
 void EkrManakete_EndDeamon(struct ProcEkrDragon *proc);
 void EkrManakete_StartExit(struct ProcEkrDragon *proc);
-void func_fe6_0805946C(struct ProcEkrDragon *proc);
-void func_fe6_080594CC(struct ProcEkrDragon *proc);
-void func_fe6_08059578(struct ProcEkrDragon *proc);
-void func_fe6_080595EC(struct ProcEkrDragon *proc);
+void EkrManakete_ResetBodyIntro2(struct ProcEkrDragon *proc);
+void EkrManakete_StartExitTransfer(struct ProcEkrDragon *proc);
+void EkrManakete_ReloadBanimBak(struct ProcEkrDragon *proc);
+void EkrManakete_PauseOnEnd(struct ProcEkrDragon *proc);
 void EkrManakete_ReloadBg(struct ProcEkrDragon *proc);
 void EkrManakete_TriggerEnding(struct ProcEkrDragon *proc);
 

@@ -20,18 +20,18 @@ struct ProcScr CONST_DATA ProcScr_EkrManakete[] =
 {
     PROC_19,
     PROC_REPEAT(EkrManakete_BgFadeIn),
-    PROC_REPEAT(func_fe6_08059144),
+    PROC_REPEAT(EkrManakete_StartEnterTransfer),
     PROC_REPEAT(EkrManakete_PauseOnStart),
-    PROC_REPEAT(func_fe6_080591CC),
-    PROC_REPEAT(func_fe6_080592D0),
+    PROC_REPEAT(EkrManakete_InitBodyIntro2),
+    PROC_REPEAT(EkrManakete_PlayBodyIntro1),
     PROC_REPEAT(EkrManakete_UpdateBanimfx),
     PROC_REPEAT(EkrManakete_BlockingInBattle),
     PROC_REPEAT(EkrManakete_EndDeamon),
     PROC_REPEAT(EkrManakete_StartExit),
-    PROC_REPEAT(func_fe6_0805946C),
-    PROC_REPEAT(func_fe6_080594CC),
-    PROC_REPEAT(func_fe6_08059578),
-    PROC_REPEAT(func_fe6_080595EC),
+    PROC_REPEAT(EkrManakete_ResetBodyIntro2),
+    PROC_REPEAT(EkrManakete_StartExitTransfer),
+    PROC_REPEAT(EkrManakete_ReloadBanimBak),
+    PROC_REPEAT(EkrManakete_PauseOnEnd),
     PROC_REPEAT(EkrManakete_ReloadBg),
     PROC_REPEAT(EkrManakete_TriggerEnding),
     PROC_END,
@@ -60,7 +60,7 @@ void EkrManakete_BgFadeIn(struct ProcEkrDragon * proc)
     }
 }
 
-void func_fe6_08059144(struct ProcEkrDragon * proc)
+void EkrManakete_StartEnterTransfer(struct ProcEkrDragon * proc)
 {
     if (CheckSkipDragonTransfer(proc->anim) == TRUE)
     {
@@ -89,7 +89,7 @@ void EkrManakete_PauseOnStart(struct ProcEkrDragon * proc)
     }
 }
 
-void func_fe6_080591CC(struct ProcEkrDragon * proc)
+void EkrManakete_InitBodyIntro2(struct ProcEkrDragon * proc)
 {
     if (CheckSkipDragonTransfer(proc->anim) == TRUE)
     {
@@ -133,7 +133,7 @@ void func_fe6_080591CC(struct ProcEkrDragon * proc)
     }
 }
 
-void func_fe6_080592D0(struct ProcEkrDragon * proc)
+void EkrManakete_PlayBodyIntro1(struct ProcEkrDragon * proc)
 {
     if (CheckSkipDragonTransfer(proc->anim) == TRUE)
     {
@@ -222,7 +222,7 @@ void EkrManakete_StartExit(struct ProcEkrDragon * proc)
     }
 }
 
-void func_fe6_0805946C(struct ProcEkrDragon * proc)
+void EkrManakete_ResetBodyIntro2(struct ProcEkrDragon * proc)
 {
     if (CheckSkipDragonTransfer(proc->anim) == TRUE)
     {
@@ -247,7 +247,7 @@ void func_fe6_0805946C(struct ProcEkrDragon * proc)
     }
 }
 
-void func_fe6_080594CC(struct ProcEkrDragon * proc)
+void EkrManakete_StartExitTransfer(struct ProcEkrDragon * proc)
 {
     if (proc->timer == 0 && CheckSkipDragonTransfer(proc->anim) == FALSE)
     {
@@ -273,7 +273,7 @@ void func_fe6_080594CC(struct ProcEkrDragon * proc)
     }
 }
 
-void func_fe6_08059578(struct ProcEkrDragon * proc)
+void EkrManakete_ReloadBanimBak(struct ProcEkrDragon * proc)
 {
     if (CheckSkipDragonTransfer(proc->anim) == TRUE)
     {
@@ -292,7 +292,7 @@ void func_fe6_08059578(struct ProcEkrDragon * proc)
     }
 }
 
-void func_fe6_080595EC(struct ProcEkrDragon * proc)
+void EkrManakete_PauseOnEnd(struct ProcEkrDragon * proc)
 {
     if (++proc->timer == 81)
     {
