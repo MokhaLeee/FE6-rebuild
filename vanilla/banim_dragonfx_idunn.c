@@ -24,14 +24,14 @@ struct ProcScr CONST_DATA ProcScr_EkrDragonIdunn[] = {
 	PROC_REPEAT(EkrIdunn_InitBodyfx),
 	PROC_REPEAT(EkrIdunn_PreMainBodyIntro),
 	PROC_REPEAT(EkrIdunn_InitIntroBodyPosition),
-	PROC_REPEAT(func_fe6_0805A0BC),
+	PROC_REPEAT(EkrIdunn_OnIntroFxDone),
 	PROC_REPEAT(EkrIdunn_BodyFallInAndTriggerBattleStart),
 	PROC_REPEAT(EkrIdunn_BlockingInBattle),
-	PROC_REPEAT(EkrDragon_0805A270),
-	PROC_REPEAT(EkrDragon_0805A2BC),
-	PROC_REPEAT(EkrDragon_RemoveBackground),
-	PROC_REPEAT(EkrDragon_RedrawMap),
-	PROC_REPEAT(EkrDragon_SyncDone),
+	PROC_REPEAT(EkrIdunn_StartAliveExit),
+	PROC_REPEAT(EkrIdunn_WaitExitAndBaseAppear),
+	PROC_REPEAT(EkrIdunn_RemoveBackground),
+	PROC_REPEAT(EkrIdunn_ReloadBg),
+	PROC_REPEAT(EkrIdunn_TriggerEnding),
 	PROC_END,
 };
 
@@ -160,7 +160,7 @@ void EkrIdunn_InitIntroBodyPosition(struct ProcEkrDragon *proc)
 	}
 }
 
-void func_fe6_0805A0BC(struct ProcEkrDragon *proc)
+void EkrIdunn_OnIntroFxDone(struct ProcEkrDragon *proc)
 {
 	int _0;
 	u8 *pflag = &proc->procfx->flag;
@@ -237,7 +237,7 @@ void EkrIdunn_BlockingInBattle(struct ProcEkrDragon *proc)
 	Proc_Break(proc);
 }
 
-void EkrDragon_0805A270(struct ProcEkrDragon *proc)
+void EkrIdunn_StartAliveExit(struct ProcEkrDragon *proc)
 {
 	struct ProcEkrDragonFx *procfx = proc->procfx;
 
@@ -253,7 +253,7 @@ void EkrDragon_0805A270(struct ProcEkrDragon *proc)
 	}
 }
 
-void EkrDragon_0805A2BC(struct ProcEkrDragon *proc)
+void EkrIdunn_WaitExitAndBaseAppear(struct ProcEkrDragon *proc)
 {
 	struct ProcEkrDragonFx *procfx = proc->procfx;
 
@@ -283,7 +283,7 @@ void EkrDragon_0805A2BC(struct ProcEkrDragon *proc)
 	}
 }
 
-void EkrDragon_RemoveBackground(struct ProcEkrDragon *proc)
+void EkrIdunn_RemoveBackground(struct ProcEkrDragon *proc)
 {
 	if (proc->procfx->flag == EDRAGONFX_FLAG_DONE) {
 		proc->procfx->flag = EDRAGONFX_FLAG_END;
@@ -294,7 +294,7 @@ void EkrDragon_RemoveBackground(struct ProcEkrDragon *proc)
 	}
 }
 
-void EkrDragon_RedrawMap(struct ProcEkrDragon *proc)
+void EkrIdunn_ReloadBg(struct ProcEkrDragon *proc)
 {
 	int step;
 
@@ -313,7 +313,7 @@ void EkrDragon_RedrawMap(struct ProcEkrDragon *proc)
 	}
 }
 
-void EkrDragon_SyncDone(struct ProcEkrDragon *proc)
+void EkrIdunn_TriggerEnding(struct ProcEkrDragon *proc)
 {
 	gEkrDragonfxState[GetAnimPosition(proc->anim)] = DRAGONFX_STATE_2;
 	Proc_Break(proc);
