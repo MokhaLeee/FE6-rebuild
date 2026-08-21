@@ -1,0 +1,7 @@
+## MSG_SKILL_RangeBonusBow1
+Bow RNG+1:[NL]
+Increases bow range by 1[X]
+
+## MSG_SKILL_RangeBonusBow2
+Bow RNG+2:[NL]
+Increases bow range by 2[X]

@@ -58,4 +58,14 @@ struct SkillInfo const gSkillInfo[0x400] = {
 		.msg_desc = MSG_SKILL_BlowKilling,
 		.icon = Gfx_SkillIcon_BlowKilling,
 	},
+
+	[SID_RangeBonusBow1] = {
+		.msg_desc = MSG_SKILL_RangeBonusBow1,
+		.icon = Gfx_SkillIcon_RangeBonusBow1,
+	},
+
+	[SID_RangeBonusBow2] = {
+		.msg_desc = MSG_SKILL_RangeBonusBow2,
+		.icon = Gfx_SkillIcon_RangeBonusBow2,
+	},
 };

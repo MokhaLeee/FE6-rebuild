@@ -28,11 +28,16 @@ int GetItemMaxRange(int item, struct Unit *unit)
 		ret = GetUnitMagRange(unit);
 
 	if (unit) {
-		if (SkillFastTester(unit, SID_RangeBonusBow1))
-			ret += SKILL_EFF0(SID_RangeBonusBow1);
+		switch (GetItemKind(item)) {
+		case ITEM_KIND_BOW:
+			if (SkillTester(unit, SID_RangeBonusBow1))
+				ret += SKILL_EFF0(SID_RangeBonusBow1);
 
-		if (SkillFastTester(unit, SID_RangeBonusBow2))
-			ret += SKILL_EFF0(SID_RangeBonusBow2);
+			if (SkillTester(unit, SID_RangeBonusBow2))
+				ret += SKILL_EFF0(SID_RangeBonusBow2);
+
+			break;
+		}
 	}
 
 	return ret;

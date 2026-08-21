@@ -3355,7 +3355,9 @@
 #define MSG_SKILL_BlowDuelist 0x0D15
 #define MSG_SKILL_BlowUncanny 0x0D16
 #define MSG_SKILL_BlowKilling 0x0D17
+#define MSG_SKILL_RangeBonusBow1 0x0D18
+#define MSG_SKILL_RangeBonusBow2 0x0D19
 
-#define MSG_COUNT 0x0D18
+#define MSG_COUNT 0x0D1A
 
 #endif /* MSG_H */
