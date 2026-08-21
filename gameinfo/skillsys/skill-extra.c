@@ -4,6 +4,7 @@
 
 GAMEINFO_DATA
 struct SkillExtraInfo const gSkillExtraInfo[MAX_SKILL_NUM] = {
+	[SID_MagBonus] = {{ 2 }},
 	[SID_BlowDarting] = {{ 6 }},
 	[SID_BlowDeath] = {{ 6 }},
 	[SID_BlowArmored] = {{ 6 }},

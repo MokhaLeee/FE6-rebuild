@@ -28,6 +28,9 @@ int GetUnitMagic(struct Unit *unit)
 	status += GetItemMagBonus(GetUnitEquippedWeapon(unit));
 	status = MSG_DuraStatusMag(status, unit);
 
+	if (SkillTester(unit, SID_MagBonus))
+		status += SKILL_EFF0(SID_MagBonus);
+
 	LIMIT_AREA(status, 0, 256);
 	return status;
 }

@@ -1,3 +1,7 @@
 ## MSG_SKILL_StrBonus
 Str+2:[NL]
 Unit is granted STR +2.[X]
+
+## MSG_SKILL_MagBonus
+Mag+2:[NL]
+Unit is granted MAG +2.[X]

@@ -6,6 +6,13 @@ enum skills {
 
 	// Status-getter skills
 	SID_PowBonus,
+	SID_MagBonus,
+	SID_SklBonus,
+	SID_SpdBonus,
+	SID_LckBonus,
+	SID_DefBonus,
+	SID_ResBonus,
+	SID_MovBonus,
 
 	// Blow skills
 	SID_BlowDarting,
