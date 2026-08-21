@@ -387,7 +387,7 @@ static CONTENT_DATA const EventListScr EventListScr_Chapter2_Move[] =
 	EvtListEnd
 };
 
-CONST_DATA const struct ChapterEventInfo ChapterEventInfo_Chapter2 =
+CONTENT_DATA const struct ChapterEventInfo ChapterEventInfo_Chapter2 =
 {
 	.event_list_turn = EventListScr_Chapter2_Turn,
 	.event_list_talk = EventListScr_Chapter2_Talk,
