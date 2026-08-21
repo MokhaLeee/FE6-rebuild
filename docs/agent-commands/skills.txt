@@ -1,0 +1,5 @@
+我正在对 fe6 移植一些技能系统新特性.
+请参考 git commit 7209859b96fb0e4873eb8af33109c6d0b3831a62 与 ce227b815a30d1384988c69e14be8833f8f1a984.
+请参考 fe8 的技能系统代码: ~/fe8u-cskillsys-kernel
+
+请帮我移植技能: SID_BlowFiendish
