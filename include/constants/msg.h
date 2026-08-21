@@ -3357,7 +3357,9 @@
 #define MSG_SKILL_BlowKilling 0x0D17
 #define MSG_SKILL_RangeBonusBow1 0x0D18
 #define MSG_SKILL_RangeBonusBow2 0x0D19
+#define MSG_SKILL_RangeBonusBMag1 0x0D1A
+#define MSG_SKILL_RangeBonusBMag2 0x0D1B
 
-#define MSG_COUNT 0x0D1A
+#define MSG_COUNT 0x0D1C
 
 #endif /* MSG_H */

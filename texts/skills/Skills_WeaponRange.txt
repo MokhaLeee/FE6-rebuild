@@ -5,3 +5,11 @@ Increases bow range by 1[X]
 ## MSG_SKILL_RangeBonusBow2
 Bow RNG+2:[NL]
 Increases bow range by 2[X]
+
+## MSG_SKILL_RangeBonusBMag1
+B.Mag RNG+1:[NL]
+Increases black magic range by 1[X]
+
+## MSG_SKILL_RangeBonusBMag2
+B.Mag RNG+2:[NL]
+Increases black magic range by 2[X]

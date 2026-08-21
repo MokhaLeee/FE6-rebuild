@@ -37,6 +37,17 @@ int GetItemMaxRange(int item, struct Unit *unit)
 				ret += SKILL_EFF0(SID_RangeBonusBow2);
 
 			break;
+
+		case ITEM_KIND_ANIMA:
+		case ITEM_KIND_LIGHT:
+		case ITEM_KIND_ELDER:
+			if (SkillTester(unit, SID_RangeBonusBMag1))
+				ret += SKILL_EFF0(SID_RangeBonusBMag1);
+
+			if (SkillTester(unit, SID_RangeBonusBMag2))
+				ret += SKILL_EFF0(SID_RangeBonusBMag2);
+
+			break;
 		}
 	}
 

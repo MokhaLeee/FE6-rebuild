@@ -68,4 +68,14 @@ struct SkillInfo const gSkillInfo[0x400] = {
 		.msg_desc = MSG_SKILL_RangeBonusBow2,
 		.icon = Gfx_SkillIcon_RangeBonusBow2,
 	},
+
+	[SID_RangeBonusBMag1] = {
+		.msg_desc = MSG_SKILL_RangeBonusBMag1,
+		.icon = Gfx_SkillIcon_RangeBonusBMag1,
+	},
+
+	[SID_RangeBonusBMag2] = {
+		.msg_desc = MSG_SKILL_RangeBonusBMag2,
+		.icon = Gfx_SkillIcon_RangeBonusBMag2,
+	},
 };

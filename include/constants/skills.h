@@ -27,6 +27,8 @@ enum skills {
 	// range skills
 	SID_RangeBonusBow1,
 	SID_RangeBonusBow2,
+	SID_RangeBonusBMag1,
+	SID_RangeBonusBMag2,
 
 	// Misc battle skills
 	SID_Nihil,
