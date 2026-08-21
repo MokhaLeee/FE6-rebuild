@@ -3347,8 +3347,15 @@
 #define MSG_SOUNDROM_41_DESC 0x0D0D
 #define MSG_SKILL_StrBonus 0x0D0E
 #define MSG_SKILL_MagBonus 0x0D0F
-#define MSG_SKILL_BlowArmored 0x0D10
+#define MSG_SKILL_BlowDarting 0x0D10
+#define MSG_SKILL_BlowDeath 0x0D11
+#define MSG_SKILL_BlowArmored 0x0D12
+#define MSG_SKILL_BlowFiendish 0x0D13
+#define MSG_SKILL_BlowWarding 0x0D14
+#define MSG_SKILL_BlowDuelist 0x0D15
+#define MSG_SKILL_BlowUncanny 0x0D16
+#define MSG_SKILL_BlowKilling 0x0D17
 
-#define MSG_COUNT 0x0D11
+#define MSG_COUNT 0x0D18
 
 #endif /* MSG_H */
