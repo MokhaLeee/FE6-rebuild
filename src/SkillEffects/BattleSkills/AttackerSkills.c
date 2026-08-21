@@ -2,6 +2,7 @@
 #include "battle.h"
 
 #include "skill-sys.h"
+#include "str-mag.h"
 #include "constants/skills.h"
 
 void PreBattleCalc_AttackerSkills(struct BattleUnit *attacker, struct BattleUnit *defender)
@@ -18,6 +19,12 @@ void PreBattleCalc_AttackerSkills(struct BattleUnit *attacker, struct BattleUnit
 		switch (list->sid[sid_i]) {
 		case SID_BlowDeath:
 			attacker->battle_attack += SKILL_EFF0(SID_BlowDeath);
+			break;
+
+		case SID_BlowArmored:
+			if (IsBattleActor(attacker) && !IsMagicAttack(defender))
+				attacker->battle_defense += SKILL_EFF0(SID_BlowArmored);
+
 			break;
 
 		default:

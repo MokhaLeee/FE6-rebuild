@@ -221,6 +221,11 @@ extern struct BattleSt gBattleSt;
 extern struct BattleUnit gBattleUnitA;
 extern struct BattleUnit gBattleUnitB;
 
+static inline bool IsBattleActor(const struct BattleUnit *bu)
+{
+    return !!(bu == &gBattleUnitA);
+}
+
 extern struct BattleHit gBattleHits[];
 extern struct BattleHit *gBattleHitIt;
 

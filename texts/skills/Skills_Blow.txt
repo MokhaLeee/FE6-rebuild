@@ -1,0 +1,4 @@
+## MSG_SKILL_BlowArmored
+Armored Blow:[NL]
+If unit initiates combat,[NL]
+grants +6 DEF during combat.[X]

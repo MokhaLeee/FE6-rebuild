@@ -18,4 +18,9 @@ struct SkillInfo const gSkillInfo[0x400] = {
 		.msg_desc = MSG_SKILL_MagBonus,
 		.icon = Gfx_SkillIcon_BonusMag,
 	},
+
+	[SID_BlowArmored] = {
+		.msg_desc = MSG_SKILL_BlowArmored,
+		.icon = Gfx_SkillIcon_BlowArmored,
+	},
 };
