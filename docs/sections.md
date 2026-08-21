@@ -6,4 +6,4 @@ FE6-Rebuild address-mapping:
 0x08050000 - banimdata / gameinfo data / content data
 
 Note:
-1. gamedata should be declared as 
+1. gamedata should be declared as `CONTENT_DATA` so they could be put at section ".content_data" for linking.
