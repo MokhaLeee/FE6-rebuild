@@ -1,0 +1,3 @@
+## MSG_SKILL_StrBonus
+Str+2:[NL]
+Unit is granted STR +2.[X]

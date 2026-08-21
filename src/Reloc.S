@@ -61,3 +61,6 @@ gpSkillInfo: .word gSkillInfo
 
 .global gpIndividualAnimConf
 gpIndividualAnimConf: .word gIndividualAnimConf
+
+.global gpSysConfig
+gpSysConfig: .word gSysConfig

@@ -81,3 +81,5 @@
 #include "misc/popup.txt"
 #include "misc/extramap.txt"
 #include "misc/soundrom.txt"
+
+#include "skills/Skills_StatusGetter.txt"

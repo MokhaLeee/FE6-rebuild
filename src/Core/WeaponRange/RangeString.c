@@ -1,13 +1,11 @@
 #include "prelude.h"
 #include "text.h"
 #include "item.h"
+#include "msg.h"
 
 #include "utf8.h"
 #include "klib.h"
 #include "debug.h"
-
-extern char EWRAM_DATA sMsgString[];
-extern int EWRAM_DATA sActiveMsg;
 
 /* 96 ---> 9 6 */
 static void SplitNumberDec2(int in, u8 out[])

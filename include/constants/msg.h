@@ -3345,7 +3345,8 @@
 #define MSG_SOUNDROM_3F_DESC 0x0D0B
 #define MSG_SOUNDROM_40_DESC 0x0D0C
 #define MSG_SOUNDROM_41_DESC 0x0D0D
+#define MSG_SKILL_StrBonus 0x0D0E
 
-#define MSG_COUNT 0x0D0E
+#define MSG_COUNT 0x0D0F
 
 #endif /* MSG_H */

@@ -1,6 +1,7 @@
 #include "prelude.h"
 #include "skill-sys.h"
 #include "constants/skills.h"
+#include "constants/msg.h"
 #include "skillicons.h"
 
 struct SkillInfo const gSkillInfo[0x400] = {
@@ -9,8 +10,7 @@ struct SkillInfo const gSkillInfo[0x400] = {
 	},
 
 	[SID_PowBonus] = {
-		.msg_desc = 0,
-		.msg_name = 0,
+		.msg_desc = MSG_SKILL_StrBonus,
 		.icon = Gfx_SkillIcon_BonusPow,
 	},
 };

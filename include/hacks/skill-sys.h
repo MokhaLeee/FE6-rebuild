@@ -12,6 +12,13 @@ struct SkillInfo {
 };
 extern struct SkillInfo const *const gpSkillInfo;
 
+u16 GetSkillDescMsg(const u16 sid);
+u16 GetSkillNameMsg(const u16 sid);
+char *GetSkillDescStr(const u16 sid);
+char *GetSkillNameStrFormDesc(const u16 sid);
+char *GetSkillNameStr(const u16 sid);
+char *GetMenuSkillNameStr(const u16 sid);
+
 struct SkillList {
 	struct {
 		const struct PInfo *pinfo;
