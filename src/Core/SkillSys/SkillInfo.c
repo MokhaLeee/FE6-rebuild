@@ -2,7 +2,6 @@
 #include "unit.h"
 #include "msg.h"
 
-#include "common.h"
 #include "utf8.h"
 #include "skill-sys.h"
 

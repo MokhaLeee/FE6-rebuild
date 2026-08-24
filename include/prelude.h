@@ -39,6 +39,8 @@
 #include "unknown_funcs.h"
 #include "unknown_objects.h"
 
+#include "hacks/common_types.h"
+
 // use to pad a struct that contains unused space
 // TODO: use this everywere
 
