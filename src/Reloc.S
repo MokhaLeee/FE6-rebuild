@@ -64,3 +64,6 @@ gpIndividualAnimConf: .word gIndividualAnimConf
 
 .global gpSysConfig
 gpSysConfig: .word gSysConfig
+
+.global gpImg_MapAnimSKILL
+gpImg_MapAnimSKILL: .word Img_MapAnimSKILL

@@ -7,12 +7,15 @@
 #include "spriteanim.h"
 #include "bm.h"
 #include "unit.h"
+#include "mu.h"
+#include "unitsprite.h"
 #include "manim.h"
 #include "sound.h"
 #include "constants/songs.h"
 #include "constants/videoalloc_global.h"
 
 #include "skill-sys.h"
+#include "klib.h"
 
 enum mapanimskillfx_idx {
 	MAPANIMFX_CHR_L = 0x19C,
@@ -30,7 +33,8 @@ struct ProcMapAnimSkillfx {
 	int x, y;
 };
 
-extern const u8 Img_MapAnimSKILL[];
+// extern u8 const Img_MapAnimSKILL[];
+extern u8 const *const gpImg_MapAnimSKILL;
 
 /**
  * skill mapanim fx
@@ -154,7 +158,7 @@ bool MapAnimRoundAnim_DisplaySkillIcon(ProcPtr parent)
 	}
 
 	Decompress(
-		Img_MapAnimSKILL,
+		gpImg_MapAnimSKILL,
 		OBJ_VRAM0 + 0x20 * OBCHR_MANIM_180);
 
 	if (actor_icon != 0) {
@@ -207,7 +211,7 @@ static void SkillMapAnimMini_Init(struct ProcSkillMapAnimMini *proc)
 {
 	/* Sprite anim */
 	Decompress(
-		Img_MapAnimSKILL,
+		gpImg_MapAnimSKILL,
 		OBJ_VRAM0 + 0x20 * OBCHR_MANIM_180);
 
 	StartSpriteAnimProc(
@@ -266,4 +270,115 @@ void NewSkillMapAnimMini(int x, int y, u16 sid, ProcPtr parent)
 bool SkillMapAnimMiniExists(void)
 {
 	return Proc_Exists(ProcScr_SkillMapAnimMini);
+}
+
+/**
+ * mu anim
+ */
+struct ProcMuSkillAnim {
+	PROC_HEADER;
+
+	u16 sid;
+	bool mu_gen;
+	void (*callback1)(ProcPtr proc);
+	void (*callback2)(ProcPtr proc);
+};
+
+static void muskillanim_init(struct ProcMuSkillAnim *proc)
+{
+	struct MuProc *mu;
+
+	proc->mu_gen = false;
+
+	mu = GetUnitMu(gActiveUnit);
+	if (!mu) {
+		HideUnitSprite(gActiveUnit);
+		mu = StartMu(gActiveUnit);
+		proc->mu_gen = true;
+	}
+
+	if (!SKILL_IS_VALID(proc->sid)) {
+		Proc_Goto(proc, 1);
+		return;
+	}
+
+	SetMuDefaultFacing(mu);
+	FreezeSpriteAnim(mu->sprite_anim);
+	SetBlendNone();
+	CameraMoveWatchPosition(proc, gActiveUnit->x, gActiveUnit->y);
+}
+
+static void muskillanim_act(ProcPtr proc)
+{
+	StartMuActionAnim(GetUnitMu(gActiveUnit));
+}
+
+static void muskillanim_start(struct ProcMuSkillAnim *proc)
+{
+	NewSkillMapAnimMini(gActiveUnit->x, gActiveUnit->y, proc->sid, proc);
+}
+
+static void muskillanim_callback1(struct ProcMuSkillAnim *proc)
+{
+	if (proc->callback1)
+		proc->callback1(proc);
+}
+
+static void muskillanim_callback2(struct ProcMuSkillAnim *proc)
+{
+	if (proc->callback2)
+		proc->callback2(proc);
+}
+
+static void muskillanim_wait(ProcPtr proc)
+{
+	if (!SkillMapAnimMiniExists())
+		Proc_Break(proc);
+}
+
+static const struct ProcScr ProcScr_MuSkillAnim[] = {
+	// PROC_CALL(LockGame),
+	// PROC_CALL(MapAnim_CommonInit),
+	PROC_YIELD,
+	PROC_CALL(muskillanim_init),
+	PROC_YIELD,
+	PROC_CALL(muskillanim_act),
+	PROC_YIELD,
+	PROC_CALL(muskillanim_start),
+PROC_LABEL(1),
+	PROC_YIELD,
+	PROC_CALL(muskillanim_callback1),
+	PROC_YIELD,
+	PROC_CALL(muskillanim_callback2),
+	PROC_YIELD,
+	PROC_REPEAT(muskillanim_wait),
+	PROC_YIELD,
+	// PROC_CALL(UnlockGame),
+	PROC_CALL(Manim_Finish),
+	// PROC_CALL(MapAnim_CommonEnd),
+	PROC_YIELD,
+	PROC_END
+};
+
+void NewMuSkillAnimOnActiveUnit(
+		u16 sid,
+		ProcPtr parent,
+		void (*callback1)(ProcPtr proc),
+		void (*callback2)(ProcPtr proc))
+{
+	struct ProcMuSkillAnim *proc;
+
+	if (parent)
+		proc = SpawnProcLocking(ProcScr_MuSkillAnim, parent);
+	else
+		proc = SpawnProc(ProcScr_MuSkillAnim, PROC_TREE_3);
+
+	proc->sid = sid;
+	proc->callback1 = callback1;
+	proc->callback2 = callback2;
+}
+
+bool MuSkillAnimExists(void)
+{
+	return Proc_Exists(ProcScr_MuSkillAnim);
 }

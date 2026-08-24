@@ -1,4 +1,4 @@
-.section .rodata
+	.section .content_data.skillsys
 
 .align 2, 0
 .global Img_MapAnimSKILL

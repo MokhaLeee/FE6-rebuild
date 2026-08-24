@@ -11,20 +11,6 @@
 #include "skill-effects.h"
 #include "constants/skills.h"
 
-static void call_skillanim(ProcPtr proc)
-{
-	NewSkillMapAnimMini(
-		gActiveUnit->x,
-		gActiveUnit->y,
-		SID_AlertStance, NULL);
-}
-
-static void wait_skillanim(ProcPtr proc)
-{
-	if (!SkillMapAnimMiniExists())
-		Proc_Break(proc);
-}
-
 static void callback_anim(ProcPtr proc)
 {
 	struct MuProc *mu;
@@ -51,23 +37,6 @@ static void callback_refrain(ProcPtr proc)
 	StartTemporaryLock(proc, 15);
 }
 
-static const struct ProcScr proc_alert_stance[] = {
-	PROC_YIELD,
-	PROC_CALL(call_skillanim),
-	PROC_YIELD,
-	PROC_REPEAT(wait_skillanim),
-	PROC_YIELD,
-	PROC_CALL(MapAnim_CommonInit),
-	PROC_YIELD,
-	PROC_CALL(callback_anim),
-	PROC_YIELD,
-	PROC_CALL(callback_refrain),
-	PROC_YIELD,
-	PROC_CALL(MapAnim_CommonEnd),
-	PROC_YIELD,
-	PROC_END
-};
-
 bool PostActionSkill_AlertStance(ProcPtr parent)
 {
 	struct Unit *unit = gActiveUnit;
@@ -77,7 +46,12 @@ bool PostActionSkill_AlertStance(ProcPtr parent)
 
 	if (gAction.id == ACTION_WAIT) {
 		if (SkillTester(unit, SID_AlertStance)) {
-			SpawnProcLocking(proc_alert_stance, parent);
+			NewMuSkillAnimOnActiveUnit(
+				SID_AlertStance,
+				parent,
+				callback_anim,
+				callback_refrain
+			);
 			return true;
 		}
 	}
