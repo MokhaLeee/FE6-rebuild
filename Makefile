@@ -91,11 +91,13 @@ VANILLA_DIR := vanilla
 HACK_SRC  := src
 HACK_DIRS := $(HACK_SRC) gamedata gameinfo
 
-VANILLA_SRCS := $(foreach dir, $(VANILLA_DIR),$(shell find $(dir) -name *.c))
-C_SRCS := $(foreach dir, $(HACK_DIRS),$(shell find $(dir) -name *.c))
-S_SRCS := $(foreach dir, $(HACK_DIRS),$(shell find $(dir) -name *.S))
-ASM_SRCS := $(foreach dir, $(VANILLA_DIR),$(shell find $(dir) -name *.s)) \
-            $(foreach dir, $(HACK_DIRS),  $(shell find $(dir) -name *.s))
+# find $(1) for name $(2), skip */unused/*
+find-src = $(shell find $(1) -name '$(2)' -not -path '*/unused/*')
+
+VANILLA_SRCS := $(call find-src,$(VANILLA_DIR),*.c)
+C_SRCS       := $(call find-src,$(HACK_DIRS),*.c)
+S_SRCS       := $(call find-src,$(HACK_DIRS),*.S)
+ASM_SRCS     := $(call find-src,$(VANILLA_DIR) $(HACK_DIRS),*.s)
 
 SRC_DIRS := $(VANILLA_DIR) $(HACK_DIRS)
 LIB_DIRS := $(DEVKITPRO)/libgba $(AGBCC_HOME)
