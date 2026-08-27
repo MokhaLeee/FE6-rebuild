@@ -89,7 +89,7 @@ C_GENERATED_OBJ :=
 
 VANILLA_DIR := vanilla
 HACK_SRC  := src
-HACK_DIRS := $(HACK_SRC) content gameinfo
+HACK_DIRS := $(HACK_SRC) gamedata gameinfo
 
 VANILLA_SRCS := $(foreach dir, $(VANILLA_DIR),$(shell find $(dir) -name *.c))
 C_SRCS := $(foreach dir, $(HACK_DIRS),$(shell find $(dir) -name *.c))
@@ -184,18 +184,18 @@ GBAGFX := tools/gbagfx/gbagfx$(EXE)
 	@echo "[GEN]	$@"
 	@$(GRIT) $< -gB 4 -gzl -m -mLf -mR4 -mzl -pn 16 -ftb -fh! -o $@
 
-GRAPHIC_DIR := graphics
+CONTENTS_DIR := contents
 
-PNG_FILES := $(shell find $(SRC_DIRS) $(GRAPHIC_DIR) -type f -name '*.png')
+PNG_FILES := $(shell find $(SRC_DIRS) $(CONTENTS_DIR) -type f -name '*.png')
 CLEAN_FILES2 += $(PNG_FILES:%.png=%.4bpp) $(PNG_FILES:%.png=%.4bpp.lz) $(PNG_FILES:%.png=%.4bpp.lz.o)
 CLEAN_FILES2 += $(PNG_FILES:%.png=%.gbapal) $(PNG_FILES:%.png=%.gbapal.lz)
 CLEAN_FILES2 += $(PNG_FILES:%.png=%.img.bin) $(PNG_FILES:%.png=%.map.bin) $(PNG_FILES:%.png=%.pal.bin)
 
-TSA_FILES := $(shell find $(SRC_DIRS) $(GRAPHIC_DIR) -type f -name '*.tsa')
+TSA_FILES := $(shell find $(SRC_DIRS) $(CONTENTS_DIR) -type f -name '*.tsa')
 CLEAN_FILES2 += $(TSA_FILES:%.tsa=%.tsa.lz)
 
-GFX_TSA_ASM  := $(shell find $(GRAPHIC_DIR) -type f -name '*.s')
-GFX_TSA_SRC  := $(shell find $(GRAPHIC_DIR) -type f -name '*.c')
+GFX_TSA_ASM  := $(shell find $(CONTENTS_DIR) -type f -name '*.s')
+GFX_TSA_SRC  := $(shell find $(CONTENTS_DIR) -type f -name '*.c')
 GFX_TSA_OBJ  := $(GFX_TSA_ASM:%.s=%.o) $(GFX_TSA_SRC:%.c=%.o)
 CLEAN_FILES2 += $(GFX_TSA_OBJ) $(GFX_TSA_OBJ:%.o=%.dmp) $(GFX_TSA_OBJ:%.o=%.dmp.lz)
 

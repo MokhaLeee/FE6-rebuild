@@ -41882,1483 +41882,1483 @@ _NULLINST:
 
 .align 2, 0
 _0900080C:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x00.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x00.bin"
 .align 2, 0
 _09003D84:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x01.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x01.bin"
 
 .align 2, 0
 _090070C4:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x03.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x03.bin"
 
 .align 2, 0
 _09009C74:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x06.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x06.bin"
 
 .align 2, 0
 _0900C2C8:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x09.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x09.bin"
 
 .align 2, 0
 _0900EBEC:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x0C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x0C.bin"
 
 .align 2, 0
 _090109A0:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x0E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x0E.bin"
 
 .align 2, 0
 _090127A4:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x10.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x10.bin"
 
 .align 2, 0
 _09014464:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x12.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x12.bin"
 
 .align 2, 0
 _09015DA0:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x15.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x15.bin"
 
 .align 2, 0
 _0901709C:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x48.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x48.bin"
 
 .align 2, 0
 _09018818:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x4A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x4A.bin"
 
 .align 2, 0
 _09019394:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x4F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x4F.bin"
 .align 2, 0
 _09019F20:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x50.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x50.bin"
 
 .align 2, 0
 _0901A960:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x53.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x53.bin"
 
 .align 2, 0
 _0901B144:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x57.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x57.bin"
 .align 2, 0
 _0901B514:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x58.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x58.bin"
 
 .align 2, 0
 _0901B86C:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x5B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x5B.bin"
 
 .align 2, 0
 _0901BA20:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x5D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x5D.bin"
 
 .align 2, 0
 _0901BC20:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x61.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x61.bin"
 
 .align 2, 0
 _0901C404:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x64.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x64.bin"
 
 .align 2, 0
 _0901C934:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x67.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x67.bin"
 
 .align 2, 0
 _0901CD08:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x69.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x69.bin"
 
 .align 2, 0
 _0901CF38:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x6B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x6B.bin"
 
 .align 2, 0
 _0901D0DC:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x6F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x6F.bin"
 
 .align 2, 0
 _0901D250:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x72.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x72.bin"
 .align 2, 0
 _0901D380:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x73.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x73.bin"
 
 .align 2, 0
 _0901EDB0:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x75.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x75.bin"
 .align 2, 0
 _090201F8:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x76.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x76.bin"
 
 .align 2, 0
 _090211B0:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x78.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x78.bin"
 
 .align 2, 0
 _09022014:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x7B.bin"
 .align 2, 0
 _090222A0:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI_0x7C.bin"
 
 .align 2, 0
 _09022A90:
-.incbin "content/sounds/AllInstruments/source/0x01MULTI_0x69.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x01MULTI_0x69.bin"
 
 .align 2, 0
 _09022B98:
-.incbin "content/sounds/AllInstruments/source/0x01MULTI_0x6B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x01MULTI_0x6B.bin"
 
 .align 2, 0
 _09022C0C:
-.incbin "content/sounds/AllInstruments/source/0x01MULTI_0x6F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x01MULTI_0x6F.bin"
 
 .align 2, 0
 _09022D00:
-.incbin "content/sounds/AllInstruments/source/0x01MULTI_0x72.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x01MULTI_0x72.bin"
 
 .align 2, 0
 _09022F30:
-.incbin "content/sounds/AllInstruments/source/0x01MULTI_0x76.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x01MULTI_0x76.bin"
 .align 2, 0
 _09022FD0:
-.incbin "content/sounds/AllInstruments/source/0x01MULTI_0x77.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x01MULTI_0x77.bin"
 .align 2, 0
 _0902311C:
-.incbin "content/sounds/AllInstruments/source/0x01MULTI_0x78.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x01MULTI_0x78.bin"
 
 .align 2, 0
 _090232E8:
-.incbin "content/sounds/AllInstruments/source/0x01MULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x01MULTI_0x7B.bin"
 .align 2, 0
 _09023434:
-.incbin "content/sounds/AllInstruments/source/0x01MULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x01MULTI_0x7C.bin"
 .align 2, 0
 _090234F0:
-.incbin "content/sounds/AllInstruments/source/0x01MULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x01MULTI_0x7D.bin"
 
 .align 2, 0
 _09023E74:
-.incbin "content/sounds/AllInstruments/source/0x02MULTI_0x6B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x02MULTI_0x6B.bin"
 
 .align 2, 0
 _09025818:
-.incbin "content/sounds/AllInstruments/source/0x02MULTI_0x6F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x02MULTI_0x6F.bin"
 
 .align 2, 0
 _09026F7C:
-.incbin "content/sounds/AllInstruments/source/0x02MULTI_0x72.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x02MULTI_0x72.bin"
 
 .align 2, 0
 _09027D5C:
-.incbin "content/sounds/AllInstruments/source/0x02MULTI_0x74.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x02MULTI_0x74.bin"
 
 .align 2, 0
 _090286BC:
-.incbin "content/sounds/AllInstruments/source/0x02MULTI_0x77.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x02MULTI_0x77.bin"
 
 .align 2, 0
 _09029084:
-.incbin "content/sounds/AllInstruments/source/0x02MULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x02MULTI_0x7A.bin"
 .align 2, 0
 _0902980C:
-.incbin "content/sounds/AllInstruments/source/0x02MULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x02MULTI_0x7B.bin"
 
 .align 2, 0
 _0902A4B8:
-.incbin "content/sounds/AllInstruments/source/0x03MULTI_0x6A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x03MULTI_0x6A.bin"
 
 .align 2, 0
 _0902A904:
-.incbin "content/sounds/AllInstruments/source/0x03MULTI_0x6D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x03MULTI_0x6D.bin"
 .align 2, 0
 _0902AB68:
-.incbin "content/sounds/AllInstruments/source/0x03MULTI_0x6F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x03MULTI_0x6F.bin"
 
 .align 2, 0
 _0902B16C:
-.incbin "content/sounds/AllInstruments/source/0x03MULTI_0x74.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x03MULTI_0x74.bin"
 
 .align 2, 0
 _0902B39C:
-.incbin "content/sounds/AllInstruments/source/0x03MULTI_0x79.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x03MULTI_0x79.bin"
 
 .align 2, 0
 _0902B4C0:
-.incbin "content/sounds/AllInstruments/source/0x03MULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x03MULTI_0x7B.bin"
 .align 2, 0
 _0902B560:
-.incbin "content/sounds/AllInstruments/source/0x03MULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x03MULTI_0x7C.bin"
 
 .align 2, 0
 _0902C4D0:
-.incbin "content/sounds/AllInstruments/source/0x03MULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x03MULTI_0x7E.bin"
 
 .align 2, 0
 _0902D7A4:
-.incbin "content/sounds/AllInstruments/source/0x04MULTI_0x75.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x04MULTI_0x75.bin"
 .align 2, 0
 _0902E560:
-.incbin "content/sounds/AllInstruments/source/0x04MULTI_0x76.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x04MULTI_0x76.bin"
 
 .align 2, 0
 _0902F3C8:
-.incbin "content/sounds/AllInstruments/source/0x04MULTI_0x79.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x04MULTI_0x79.bin"
 
 .align 2, 0
 _0903014C:
-.incbin "content/sounds/AllInstruments/source/0x04MULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x04MULTI_0x7D.bin"
 
 .align 2, 0
 _09030FDC:
-.incbin "content/sounds/AllInstruments/source/0x05MULTI_0x76.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x05MULTI_0x76.bin"
 
 .align 2, 0
 _090315F4:
-.incbin "content/sounds/AllInstruments/source/0x05MULTI_0x78.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x05MULTI_0x78.bin"
 
 .align 2, 0
 _09031940:
-.incbin "content/sounds/AllInstruments/source/0x05MULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x05MULTI_0x7B.bin"
 
 .align 2, 0
 _09031E48:
-.incbin "content/sounds/AllInstruments/source/0x05MULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x05MULTI_0x7E.bin"
 
 .align 2, 0
 _090327B0:
-.incbin "content/sounds/AllInstruments/source/0x06MULTI_0x70.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x06MULTI_0x70.bin"
 
 .align 2, 0
 _090328E8:
-.incbin "content/sounds/AllInstruments/source/0x06MULTI_0x78.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x06MULTI_0x78.bin"
 
 .align 2, 0
 _090337AC:
-.incbin "content/sounds/AllInstruments/source/0x06MULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x06MULTI_0x7D.bin"
 .align 2, 0
 _0903402C:
-.incbin "content/sounds/AllInstruments/source/0x06MULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x06MULTI_0x7E.bin"
 .align 2, 0
 _090341DC:
-.incbin "content/sounds/AllInstruments/source/0x06MULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x06MULTI_0x7F.bin"
 
 .align 2, 0
 _09034EAC:
-.incbin "content/sounds/AllInstruments/source/0x08MULTI_0x71.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x08MULTI_0x71.bin"
 
 .align 2, 0
 _09034F00:
-.incbin "content/sounds/AllInstruments/source/0x08MULTI_0x75.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x08MULTI_0x75.bin"
 
 .align 2, 0
 _09034F40:
-.incbin "content/sounds/AllInstruments/source/0x08MULTI_0x78.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x08MULTI_0x78.bin"
 
 .align 2, 0
 _09034F88:
-.incbin "content/sounds/AllInstruments/source/0x08MULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x08MULTI_0x7B.bin"
 
 .align 2, 0
 _09034FCC:
-.incbin "content/sounds/AllInstruments/source/0x08MULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x08MULTI_0x7F.bin"
 
 .align 2, 0
 _09035618:
-.incbin "content/sounds/AllInstruments/source/0x09MULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x09MULTI_0x7A.bin"
 
 .align 2, 0
 _09035F58:
-.incbin "content/sounds/AllInstruments/source/0x0AMULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x0AMULTI_0x7D.bin"
 .align 2, 0
 _090370E0:
-.incbin "content/sounds/AllInstruments/source/0x0AMULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x0AMULTI_0x7E.bin"
 
 .align 2, 0
 _09038754:
-.incbin "content/sounds/AllInstruments/source/0x0BMULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x0BMULTI_0x7C.bin"
 
 .align 2, 0
 _09039470:
-.incbin "content/sounds/AllInstruments/source/0x0BMULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x0BMULTI_0x7F.bin"
 
 .align 2, 0
 _0903A5F8:
-.incbin "content/sounds/AllInstruments/source/0x0CMULTI_0x74.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x0CMULTI_0x74.bin"
 .align 2, 0
 _0903AD1C:
-.incbin "content/sounds/AllInstruments/source/0x0CMULTI_0x75.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x0CMULTI_0x75.bin"
 
 .align 2, 0
 _0903B16C:
-.incbin "content/sounds/AllInstruments/source/0x0CMULTI_0x78.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x0CMULTI_0x78.bin"
 
 .align 2, 0
 _0903C760:
-.incbin "content/sounds/AllInstruments/source/0x0FMULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x0FMULTI_0x7C.bin"
 
 .align 2, 0
 _0903E538:
-.incbin "content/sounds/AllInstruments/source/0x12MULTI_0x79.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x12MULTI_0x79.bin"
 
 .align 2, 0
 _0903F8C4:
-.incbin "content/sounds/AllInstruments/source/0x12MULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x12MULTI_0x7B.bin"
 
 .align 2, 0
 _09042548:
-.incbin "content/sounds/AllInstruments/source/0x17MULTI_0x6C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x17MULTI_0x6C.bin"
 
 .align 2, 0
 _090437F0:
-.incbin "content/sounds/AllInstruments/source/0x17MULTI_0x6E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x17MULTI_0x6E.bin"
 .align 2, 0
 _09044740:
-.incbin "content/sounds/AllInstruments/source/0x17MULTI_0x6F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x17MULTI_0x6F.bin"
 
 .align 2, 0
 _0904517C:
-.incbin "content/sounds/AllInstruments/source/0x17MULTI_0x71.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x17MULTI_0x71.bin"
 .align 2, 0
 _09046294:
-.incbin "content/sounds/AllInstruments/source/0x17MULTI_0x72.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x17MULTI_0x72.bin"
 
 .align 2, 0
 _090467BC:
-.incbin "content/sounds/AllInstruments/source/0x17MULTI_0x75.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x17MULTI_0x75.bin"
 
 .align 2, 0
 _09046D04:
-.incbin "content/sounds/AllInstruments/source/0x17MULTI_0x77.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x17MULTI_0x77.bin"
 .align 2, 0
 _090470B8:
-.incbin "content/sounds/AllInstruments/source/0x17MULTI_0x78.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x17MULTI_0x78.bin"
 
 .align 2, 0
 _0904736C:
-.incbin "content/sounds/AllInstruments/source/0x17MULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x17MULTI_0x7C.bin"
 
 .align 2, 0
 _0904750C:
-.incbin "content/sounds/AllInstruments/source/0x17MULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x17MULTI_0x7E.bin"
 
 .align 2, 0
 _09047CA8:
-.incbin "content/sounds/AllInstruments/source/0x18MULTI_0x78.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x18MULTI_0x78.bin"
 .align 2, 0
 _09048AFC:
-.incbin "content/sounds/AllInstruments/source/0x18MULTI_0x79.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x18MULTI_0x79.bin"
 .align 2, 0
 _090497E0:
-.incbin "content/sounds/AllInstruments/source/0x18MULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x18MULTI_0x7A.bin"
 .align 2, 0
 _0904A0D0:
-.incbin "content/sounds/AllInstruments/source/0x18MULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x18MULTI_0x7B.bin"
 
 .align 2, 0
 _0904A7EC:
-.incbin "content/sounds/AllInstruments/source/0x18MULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x18MULTI_0x7E.bin"
 
 .align 2, 0
 _0904B1F8:
-.incbin "content/sounds/AllInstruments/source/0x19MULTI_0x6F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x19MULTI_0x6F.bin"
 
 .align 2, 0
 _0904B670:
-.incbin "content/sounds/AllInstruments/source/0x19MULTI_0x72.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x19MULTI_0x72.bin"
 
 .align 2, 0
 _0904B94C:
-.incbin "content/sounds/AllInstruments/source/0x19MULTI_0x77.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x19MULTI_0x77.bin"
 
 .align 2, 0
 _0904BB08:
-.incbin "content/sounds/AllInstruments/source/0x19MULTI_0x79.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x19MULTI_0x79.bin"
 
 .align 2, 0
 _0904BD1C:
-.incbin "content/sounds/AllInstruments/source/0x19MULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x19MULTI_0x7C.bin"
 .align 2, 0
 _0904C084:
-.incbin "content/sounds/AllInstruments/source/0x19MULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x19MULTI_0x7D.bin"
 
 .align 2, 0
 _0904C9C4:
-.incbin "content/sounds/AllInstruments/source/0x1AMULTI_0x69.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1AMULTI_0x69.bin"
 .align 2, 0
 _0904EA04:
-.incbin "content/sounds/AllInstruments/source/0x1AMULTI_0x6A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1AMULTI_0x6A.bin"
 .align 2, 0
 _09050564:
-.incbin "content/sounds/AllInstruments/source/0x1AMULTI_0x6B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1AMULTI_0x6B.bin"
 
 .align 2, 0
 _09051018:
-.incbin "content/sounds/AllInstruments/source/0x1AMULTI_0x73.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1AMULTI_0x73.bin"
 .align 2, 0
 _09051AF0:
-.incbin "content/sounds/AllInstruments/source/0x1AMULTI_0x74.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1AMULTI_0x74.bin"
 
 .align 2, 0
 _09052388:
-.incbin "content/sounds/AllInstruments/source/0x1AMULTI_0x78.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1AMULTI_0x78.bin"
 .align 2, 0
 _09052EA0:
-.incbin "content/sounds/AllInstruments/source/0x1AMULTI_0x79.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1AMULTI_0x79.bin"
 .align 2, 0
 _090538B4:
-.incbin "content/sounds/AllInstruments/source/0x1AMULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1AMULTI_0x7A.bin"
 
 .align 2, 0
 _09054364:
-.incbin "content/sounds/AllInstruments/source/0x1BMULTI_0x6E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1BMULTI_0x6E.bin"
 .align 2, 0
 _09055F78:
-.incbin "content/sounds/AllInstruments/source/0x1BMULTI_0x6F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1BMULTI_0x6F.bin"
 
 .align 2, 0
 _09057A3C:
-.incbin "content/sounds/AllInstruments/source/0x1BMULTI_0x71.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1BMULTI_0x71.bin"
 
 .align 2, 0
 _090588C0:
-.incbin "content/sounds/AllInstruments/source/0x1BMULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1BMULTI_0x7E.bin"
 
 .align 2, 0
 _0905B4C8:
-.incbin "content/sounds/AllInstruments/source/0x1CMULTI_0x68.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1CMULTI_0x68.bin"
 
 .align 2, 0
 _0905CA64:
-.incbin "content/sounds/AllInstruments/source/0x1CMULTI_0x6B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1CMULTI_0x6B.bin"
 
 .align 2, 0
 _0905D488:
-.incbin "content/sounds/AllInstruments/source/0x1CMULTI_0x76.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1CMULTI_0x76.bin"
 .align 2, 0
 _0905F194:
-.incbin "content/sounds/AllInstruments/source/0x1CMULTI_0x77.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1CMULTI_0x77.bin"
 
 .align 2, 0
 _09060714:
-.incbin "content/sounds/AllInstruments/source/0x1CMULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1CMULTI_0x7A.bin"
 
 .align 2, 0
 _09060884:
-.incbin "content/sounds/AllInstruments/source/0x1CMULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1CMULTI_0x7E.bin"
 
 .align 2, 0
 _090615D0:
-.incbin "content/sounds/AllInstruments/source/0x1DMULTI_0x76.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1DMULTI_0x76.bin"
 
 .align 2, 0
 _090657D0:
-.incbin "content/sounds/AllInstruments/source/0x1DMULTI_0x78.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1DMULTI_0x78.bin"
 
 .align 2, 0
 _09066620:
-.incbin "content/sounds/AllInstruments/source/0x1DMULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1DMULTI_0x7B.bin"
 .align 2, 0
 _09066FE8:
-.incbin "content/sounds/AllInstruments/source/0x1DMULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1DMULTI_0x7C.bin"
 
 .align 2, 0
 _0906755C:
-.incbin "content/sounds/AllInstruments/source/0x1DMULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1DMULTI_0x7E.bin"
 .align 2, 0
 _09069C1C:
-.incbin "content/sounds/AllInstruments/source/0x1DMULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1DMULTI_0x7F.bin"
 
 .align 2, 0
 _0906AEA0:
-.incbin "content/sounds/AllInstruments/source/0x1EMULTI_0x6D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1EMULTI_0x6D.bin"
 
 .align 2, 0
 _0906BA68:
-.incbin "content/sounds/AllInstruments/source/0x1EMULTI_0x74.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1EMULTI_0x74.bin"
 
 .align 2, 0
 _0906C020:
-.incbin "content/sounds/AllInstruments/source/0x1EMULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1EMULTI_0x7B.bin"
 .align 2, 0
 _0906C65C:
-.incbin "content/sounds/AllInstruments/source/0x1EMULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1EMULTI_0x7C.bin"
 
 .align 2, 0
 _0906CBE4:
-.incbin "content/sounds/AllInstruments/source/0x1EMULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1EMULTI_0x7F.bin"
 
 .align 2, 0
 _0906D774:
-.incbin "content/sounds/AllInstruments/source/0x1FMULTI_0x6B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1FMULTI_0x6B.bin"
 
 .align 2, 0
 _0906DC04:
-.incbin "content/sounds/AllInstruments/source/0x1FMULTI_0x6D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1FMULTI_0x6D.bin"
 
 .align 2, 0
 _0906DFD0:
-.incbin "content/sounds/AllInstruments/source/0x1FMULTI_0x70.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1FMULTI_0x70.bin"
 
 .align 2, 0
 _0906E37C:
-.incbin "content/sounds/AllInstruments/source/0x1FMULTI_0x72.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1FMULTI_0x72.bin"
 .align 2, 0
 _0906E3A0:
-.incbin "content/sounds/AllInstruments/source/0x1FMULTI_0x73.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1FMULTI_0x73.bin"
 
 .align 2, 0
 _0906F18C:
-.incbin "content/sounds/AllInstruments/source/0x21MULTI_0x76.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x21MULTI_0x76.bin"
 .align 2, 0
 _0906F894:
-.incbin "content/sounds/AllInstruments/source/0x21MULTI_0x77.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x21MULTI_0x77.bin"
 
 .align 2, 0
 _0906FCD0:
-.incbin "content/sounds/AllInstruments/source/0x21MULTI_0x79.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x21MULTI_0x79.bin"
 
 .align 2, 0
 _09070130:
-.incbin "content/sounds/AllInstruments/source/0x21MULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x21MULTI_0x7C.bin"
 
 .align 2, 0
 _0907045C:
-.incbin "content/sounds/AllInstruments/source/0x21MULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x21MULTI_0x7F.bin"
 
 .align 2, 0
 _09071290:
-.incbin "content/sounds/AllInstruments/source/0x23MULTI_0x77.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x23MULTI_0x77.bin"
 
 .align 2, 0
 _09071E04:
-.incbin "content/sounds/AllInstruments/source/0x23MULTI_0x79.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x23MULTI_0x79.bin"
 
 .align 2, 0
 _0907236C:
-.incbin "content/sounds/AllInstruments/source/0x23MULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x23MULTI_0x7C.bin"
 
 .align 2, 0
 _090731B8:
-.incbin "content/sounds/AllInstruments/source/0x25MULTI_0x78.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x25MULTI_0x78.bin"
 .align 2, 0
 _090758B4:
-.incbin "content/sounds/AllInstruments/source/0x25MULTI_0x79.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x25MULTI_0x79.bin"
 .align 2, 0
 _09078560:
-.incbin "content/sounds/AllInstruments/source/0x25MULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x25MULTI_0x7A.bin"
 
 .align 2, 0
 _0907A2EC:
-.incbin "content/sounds/AllInstruments/source/0x25MULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x25MULTI_0x7D.bin"
 
 .align 2, 0
 _0907B2C8:
-.incbin "content/sounds/AllInstruments/source/0x26MULTI_0x79.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x26MULTI_0x79.bin"
 .align 2, 0
 _0907B588:
-.incbin "content/sounds/AllInstruments/source/0x26MULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x26MULTI_0x7A.bin"
 
 .align 2, 0
 _0907C49C:
-.incbin "content/sounds/AllInstruments/source/0x26MULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x26MULTI_0x7C.bin"
 
 .align 2, 0
 _0907DE58:
-.incbin "content/sounds/AllInstruments/source/0x28MULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x28MULTI_0x7C.bin"
 
 .align 2, 0
 _09080948:
-.incbin "content/sounds/AllInstruments/source/0x28MULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x28MULTI_0x7E.bin"
 
 .align 2, 0
 _09083AC4:
-.incbin "content/sounds/AllInstruments/source/0x29MULTI_0x6A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x29MULTI_0x6A.bin"
 
 .align 2, 0
 _0908604C:
-.incbin "content/sounds/AllInstruments/source/0x29MULTI_0x74.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x29MULTI_0x74.bin"
 
 .align 2, 0
 _090890D0:
-.incbin "content/sounds/AllInstruments/source/0x29MULTI_0x79.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x29MULTI_0x79.bin"
 
 .align 2, 0
 _09089B4C:
-.incbin "content/sounds/AllInstruments/source/0x29MULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x29MULTI_0x7D.bin"
 
 .align 2, 0
 _0908A818:
-.incbin "content/sounds/AllInstruments/source/0x29MULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x29MULTI_0x7F.bin"
 
 .align 2, 0
 _0908BB48:
-.incbin "content/sounds/AllInstruments/source/0x2AMULTI_0x6C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2AMULTI_0x6C.bin"
 .align 2, 0
 _0908C4D4:
-.incbin "content/sounds/AllInstruments/source/0x2AMULTI_0x6D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2AMULTI_0x6D.bin"
 
 .align 2, 0
 _0908D9E8:
-.incbin "content/sounds/AllInstruments/source/0x2AMULTI_0x70.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2AMULTI_0x70.bin"
 
 .align 2, 0
 _0908E030:
-.incbin "content/sounds/AllInstruments/source/0x2AMULTI_0x73.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2AMULTI_0x73.bin"
 .align 2, 0
 _0908E8E4:
-.incbin "content/sounds/AllInstruments/source/0x2AMULTI_0x74.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2AMULTI_0x74.bin"
 
 .align 2, 0
 _0908F444:
-.incbin "content/sounds/AllInstruments/source/0x2AMULTI_0x77.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2AMULTI_0x77.bin"
 .align 2, 0
 _0908FD90:
-.incbin "content/sounds/AllInstruments/source/0x2AMULTI_0x78.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2AMULTI_0x78.bin"
 
 .align 2, 0
 _0909031C:
-.incbin "content/sounds/AllInstruments/source/0x2AMULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2AMULTI_0x7B.bin"
 
 .align 2, 0
 _09090838:
-.incbin "content/sounds/AllInstruments/source/0x2AMULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2AMULTI_0x7E.bin"
 
 .align 2, 0
 _090912B4:
-.incbin "content/sounds/AllInstruments/source/0x2BMULTI_0x67.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2BMULTI_0x67.bin"
 .align 2, 0
 _090915BC:
-.incbin "content/sounds/AllInstruments/source/0x2BMULTI_0x68.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2BMULTI_0x68.bin"
 
 .align 2, 0
 _09091818:
-.incbin "content/sounds/AllInstruments/source/0x2BMULTI_0x6B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2BMULTI_0x6B.bin"
 
 .align 2, 0
 _090919F4:
-.incbin "content/sounds/AllInstruments/source/0x2BMULTI_0x73.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2BMULTI_0x73.bin"
 
 .align 2, 0
 _090921CC:
-.incbin "content/sounds/AllInstruments/source/0x2BMULTI_0x75.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2BMULTI_0x75.bin"
 
 .align 2, 0
 _09092C70:
-.incbin "content/sounds/AllInstruments/source/0x2BMULTI_0x78.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2BMULTI_0x78.bin"
 
 .align 2, 0
 _090932C4:
-.incbin "content/sounds/AllInstruments/source/0x2BMULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2BMULTI_0x7B.bin"
 
 .align 2, 0
 _0909368C:
-.incbin "content/sounds/AllInstruments/source/0x2BMULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2BMULTI_0x7D.bin"
 
 .align 2, 0
 _09093EAC:
-.incbin "content/sounds/AllInstruments/source/0x2CMULTI_0x69.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2CMULTI_0x69.bin"
 .align 2, 0
 _09094534:
-.incbin "content/sounds/AllInstruments/source/0x2CMULTI_0x6A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2CMULTI_0x6A.bin"
 
 .align 2, 0
 _090949E0:
-.incbin "content/sounds/AllInstruments/source/0x2CMULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2CMULTI_0x7A.bin"
 
 .align 2, 0
 _09095A48:
-.incbin "content/sounds/AllInstruments/source/0x2CMULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2CMULTI_0x7D.bin"
 
 .align 2, 0
 _09096E28:
-.incbin "content/sounds/AllInstruments/source/0x2DMULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2DMULTI_0x7B.bin"
 
 .align 2, 0
 _09097B60:
-.incbin "content/sounds/AllInstruments/source/0x2DMULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2DMULTI_0x7F.bin"
 
 .align 2, 0
 _090992D0:
-.incbin "content/sounds/AllInstruments/source/0x30MULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x30MULTI_0x7D.bin"
 .align 2, 0
 _0909A974:
-.incbin "content/sounds/AllInstruments/source/0x30MULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x30MULTI_0x7E.bin"
 
 .align 2, 0
 _0909BF88:
-.incbin "content/sounds/AllInstruments/source/0x31MULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x31MULTI_0x7F.bin"
 
 .align 2, 0
 _0909E2C8:
-.incbin "content/sounds/AllInstruments/source/0x32MULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x32MULTI_0x7E.bin"
 .align 2, 0
 _090A02D4:
-.incbin "content/sounds/AllInstruments/source/0x32MULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x32MULTI_0x7F.bin"
 
 .align 2, 0
 _090A1D74:
-.incbin "content/sounds/AllInstruments/source/0x33MULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x33MULTI_0x7A.bin"
 
 .align 2, 0
 _090A3CC4:
-.incbin "content/sounds/AllInstruments/source/0x33MULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x33MULTI_0x7D.bin"
 
 .align 2, 0
 _090A5A78:
-.incbin "content/sounds/AllInstruments/source/0x34MULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x34MULTI_0x7B.bin"
 
 .align 2, 0
 _090A781C:
-.incbin "content/sounds/AllInstruments/source/0x35MULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x35MULTI_0x7B.bin"
 
 .align 2, 0
 _090A87F4:
-.incbin "content/sounds/AllInstruments/source/0x35MULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x35MULTI_0x7F.bin"
 
 .align 2, 0
 _090A99FC:
-.incbin "content/sounds/AllInstruments/source/0x36MULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x36MULTI_0x7C.bin"
 .align 2, 0
 _090ABF34:
-.incbin "content/sounds/AllInstruments/source/0x36MULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x36MULTI_0x7D.bin"
 
 .align 2, 0
 _090AD5C0:
-.incbin "content/sounds/AllInstruments/source/0x36MULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x36MULTI_0x7F.bin"
 
 .align 2, 0
 _090AF00C:
-.incbin "content/sounds/AllInstruments/source/0x39MULTI_0x6C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x39MULTI_0x6C.bin"
 
 .align 2, 0
 _090AF7BC:
-.incbin "content/sounds/AllInstruments/source/0x39MULTI_0x71.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x39MULTI_0x71.bin"
 
 .align 2, 0
 _090AFCD4:
-.incbin "content/sounds/AllInstruments/source/0x39MULTI_0x74.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x39MULTI_0x74.bin"
 
 .align 2, 0
 _090B0BC8:
-.incbin "content/sounds/AllInstruments/source/0x39MULTI_0x77.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x39MULTI_0x77.bin"
 
 .align 2, 0
 _090B1894:
-.incbin "content/sounds/AllInstruments/source/0x39MULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x39MULTI_0x7B.bin"
 
 .align 2, 0
 _090B21A4:
-.incbin "content/sounds/AllInstruments/source/0x39MULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x39MULTI_0x7E.bin"
 
 .align 2, 0
 _090B29E0:
-.incbin "content/sounds/AllInstruments/source/0x3AMULTI_0x6F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3AMULTI_0x6F.bin"
 
 .align 2, 0
 _090B3424:
-.incbin "content/sounds/AllInstruments/source/0x3AMULTI_0x73.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3AMULTI_0x73.bin"
 
 .align 2, 0
 _090B3928:
-.incbin "content/sounds/AllInstruments/source/0x3AMULTI_0x76.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3AMULTI_0x76.bin"
 .align 2, 0
 _090B3E20:
-.incbin "content/sounds/AllInstruments/source/0x3AMULTI_0x77.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3AMULTI_0x77.bin"
 
 .align 2, 0
 _090B42E0:
-.incbin "content/sounds/AllInstruments/source/0x3AMULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3AMULTI_0x7A.bin"
 
 .align 2, 0
 _090B45DC:
-.incbin "content/sounds/AllInstruments/source/0x3AMULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3AMULTI_0x7E.bin"
 
 .align 2, 0
 _090B50E0:
-.incbin "content/sounds/AllInstruments/source/0x3BMULTI_0x6F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3BMULTI_0x6F.bin"
 
 .align 2, 0
 _090B53C4:
-.incbin "content/sounds/AllInstruments/source/0x3BMULTI_0x73.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3BMULTI_0x73.bin"
 
 .align 2, 0
 _090B5538:
-.incbin "content/sounds/AllInstruments/source/0x3BMULTI_0x77.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3BMULTI_0x77.bin"
 
 .align 2, 0
 _090B5B78:
-.incbin "content/sounds/AllInstruments/source/0x3BMULTI_0x79.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3BMULTI_0x79.bin"
 .align 2, 0
 _090B6048:
-.incbin "content/sounds/AllInstruments/source/0x3BMULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3BMULTI_0x7A.bin"
 
 .align 2, 0
 _090B6440:
-.incbin "content/sounds/AllInstruments/source/0x3BMULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3BMULTI_0x7C.bin"
 
 .align 2, 0
 _090B6790:
-.incbin "content/sounds/AllInstruments/source/0x3BMULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3BMULTI_0x7E.bin"
 .align 2, 0
 _090B6B94:
-.incbin "content/sounds/AllInstruments/source/0x3BMULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3BMULTI_0x7F.bin"
 
 .align 2, 0
 _090B749C:
-.incbin "content/sounds/AllInstruments/source/0x3CMULTI_0x6A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3CMULTI_0x6A.bin"
 
 .align 2, 0
 _090B76F0:
-.incbin "content/sounds/AllInstruments/source/0x3CMULTI_0x6C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3CMULTI_0x6C.bin"
 
 .align 2, 0
 _090B7884:
-.incbin "content/sounds/AllInstruments/source/0x3CMULTI_0x71.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3CMULTI_0x71.bin"
 .align 2, 0
 _090B7B90:
-.incbin "content/sounds/AllInstruments/source/0x3CMULTI_0x72.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3CMULTI_0x72.bin"
 
 .align 2, 0
 _090B7E00:
-.incbin "content/sounds/AllInstruments/source/0x3CMULTI_0x75.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3CMULTI_0x75.bin"
 
 .align 2, 0
 _090B80A8:
-.incbin "content/sounds/AllInstruments/source/0x3CMULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3CMULTI_0x7D.bin"
 
 .align 2, 0
 _090B87A0:
-.incbin "content/sounds/AllInstruments/source/0x3DMULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3DMULTI_0x7C.bin"
 
 .align 2, 0
 _090B8E1C:
-.incbin "content/sounds/AllInstruments/source/0x3EMULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3EMULTI_0x7B.bin"
 
 .align 2, 0
 _090B96F4:
-.incbin "content/sounds/AllInstruments/source/0x3EMULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3EMULTI_0x7F.bin"
 
 .align 2, 0
 _090BA3C8:
-.incbin "content/sounds/AllInstruments/source/0x3FMULTI_0x6A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3FMULTI_0x6A.bin"
 
 .align 2, 0
 _090BAA24:
-.incbin "content/sounds/AllInstruments/source/0x3FMULTI_0x6C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3FMULTI_0x6C.bin"
 .align 2, 0
 _090BADC0:
-.incbin "content/sounds/AllInstruments/source/0x3FMULTI_0x6D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3FMULTI_0x6D.bin"
 
 .align 2, 0
 _090BAEB4:
-.incbin "content/sounds/AllInstruments/source/0x3FMULTI_0x72.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3FMULTI_0x72.bin"
 .align 2, 0
 _090BAFA8:
-.incbin "content/sounds/AllInstruments/source/0x3FMULTI_0x73.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3FMULTI_0x73.bin"
 .align 2, 0
 _090BB368:
-.incbin "content/sounds/AllInstruments/source/0x3FMULTI_0x74.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3FMULTI_0x74.bin"
 .align 2, 0
 _090BB700:
-.incbin "content/sounds/AllInstruments/source/0x3FMULTI_0x75.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3FMULTI_0x75.bin"
 
 .align 2, 0
 _090BB9A8:
-.incbin "content/sounds/AllInstruments/source/0x3FMULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3FMULTI_0x7A.bin"
 
 .align 2, 0
 _090BC90C:
-.incbin "content/sounds/AllInstruments/source/0x41MULTI_0x69.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x41MULTI_0x69.bin"
 
 .align 2, 0
 _090BCC24:
-.incbin "content/sounds/AllInstruments/source/0x41MULTI_0x6B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x41MULTI_0x6B.bin"
 
 .align 2, 0
 _090BCD34:
-.incbin "content/sounds/AllInstruments/source/0x41MULTI_0x73.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x41MULTI_0x73.bin"
 
 .align 2, 0
 _090BCE28:
-.incbin "content/sounds/AllInstruments/source/0x41MULTI_0x76.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x41MULTI_0x76.bin"
 
 .align 2, 0
 _090BCEC4:
-.incbin "content/sounds/AllInstruments/source/0x41MULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x41MULTI_0x7A.bin"
 
 .align 2, 0
 _090BCF34:
-.incbin "content/sounds/AllInstruments/source/0x41MULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x41MULTI_0x7C.bin"
 
 .align 2, 0
 _090BCF8C:
-.incbin "content/sounds/AllInstruments/source/0x41MULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x41MULTI_0x7E.bin"
 
 .align 2, 0
 _090BD620:
-.incbin "content/sounds/AllInstruments/source/0x42MULTI_0x6B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x42MULTI_0x6B.bin"
 .align 2, 0
 _090BDAE0:
-.incbin "content/sounds/AllInstruments/source/0x42MULTI_0x71.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x42MULTI_0x71.bin"
 
 .align 2, 0
 _090BE2B0:
-.incbin "content/sounds/AllInstruments/source/0x42MULTI_0x75.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x42MULTI_0x75.bin"
 
 .align 2, 0
 _090BEAAC:
-.incbin "content/sounds/AllInstruments/source/0x42MULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x42MULTI_0x7A.bin"
 
 .align 2, 0
 _090BF1DC:
-.incbin "content/sounds/AllInstruments/source/0x42MULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x42MULTI_0x7D.bin"
 
 .align 2, 0
 _090BFD3C:
-.incbin "content/sounds/AllInstruments/source/0x43MULTI_0x70.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x43MULTI_0x70.bin"
 
 .align 2, 0
 _090C016C:
-.incbin "content/sounds/AllInstruments/source/0x43MULTI_0x73.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x43MULTI_0x73.bin"
 .align 2, 0
 _090C0434:
-.incbin "content/sounds/AllInstruments/source/0x43MULTI_0x77.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x43MULTI_0x77.bin"
 
 .align 2, 0
 _090C0828:
-.incbin "content/sounds/AllInstruments/source/0x43MULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x43MULTI_0x7E.bin"
 .align 2, 0
 _090C0C68:
-.incbin "content/sounds/AllInstruments/source/0x43MULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x43MULTI_0x7F.bin"
 
 .align 2, 0
 _090C15B4:
-.incbin "content/sounds/AllInstruments/source/0x44MULTI_0x6B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x44MULTI_0x6B.bin"
 
 .align 2, 0
 _090C1708:
-.incbin "content/sounds/AllInstruments/source/0x44MULTI_0x6D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x44MULTI_0x6D.bin"
 .align 2, 0
 _090C17E8:
-.incbin "content/sounds/AllInstruments/source/0x44MULTI_0x70.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x44MULTI_0x70.bin"
 
 .align 2, 0
 _090C2700:
-.incbin "content/sounds/AllInstruments/source/0x44MULTI_0x76.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x44MULTI_0x76.bin"
 
 .align 2, 0
 _090C2EFC:
-.incbin "content/sounds/AllInstruments/source/0x44MULTI_0x79.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x44MULTI_0x79.bin"
 .align 2, 0
 _090C32FC:
-.incbin "content/sounds/AllInstruments/source/0x44MULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x44MULTI_0x7C.bin"
 
 .align 2, 0
 _090C5050:
-.incbin "content/sounds/AllInstruments/source/0x45MULTI_0x72.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x45MULTI_0x72.bin"
 
 .align 2, 0
 _090C6358:
-.incbin "content/sounds/AllInstruments/source/0x45MULTI_0x74.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x45MULTI_0x74.bin"
 
 .align 2, 0
 _090C7500:
-.incbin "content/sounds/AllInstruments/source/0x45MULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x45MULTI_0x7B.bin"
 
 .align 2, 0
 _090C75FC:
-.incbin "content/sounds/AllInstruments/source/0x45MULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x45MULTI_0x7E.bin"
 
 .align 2, 0
 _090C7CC4:
-.incbin "content/sounds/AllInstruments/source/0x46MULTI_0x69.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x46MULTI_0x69.bin"
 
 .align 2, 0
 _090C7D10:
-.incbin "content/sounds/AllInstruments/source/0x46MULTI_0x73.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x46MULTI_0x73.bin"
 
 .align 2, 0
 _090C8954:
-.incbin "content/sounds/AllInstruments/source/0x46MULTI_0x77.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x46MULTI_0x77.bin"
 .align 2, 0
 _090C9390:
-.incbin "content/sounds/AllInstruments/source/0x46MULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x46MULTI_0x7B.bin"
 .align 2, 0
 _090CAB28:
-.incbin "content/sounds/AllInstruments/source/0x46MULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x46MULTI_0x7C.bin"
 .align 2, 0
 _090CCA0C:
-.incbin "content/sounds/AllInstruments/source/0x46MULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x46MULTI_0x7D.bin"
 
 .align 2, 0
 _090CEDD0:
-.incbin "content/sounds/AllInstruments/source/0x47MULTI_0x76.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x47MULTI_0x76.bin"
 
 .align 2, 0
 _090D090C:
-.incbin "content/sounds/AllInstruments/source/0x47MULTI_0x79.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x47MULTI_0x79.bin"
 
 .align 2, 0
 _090D2A00:
-.incbin "content/sounds/AllInstruments/source/0x48MULTI_0x6F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x48MULTI_0x6F.bin"
 
 .align 2, 0
 _090D3454:
-.incbin "content/sounds/AllInstruments/source/0x48MULTI_0x71.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x48MULTI_0x71.bin"
 
 .align 2, 0
 _090D6FF0:
-.incbin "content/sounds/AllInstruments/source/0x48MULTI_0x75.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x48MULTI_0x75.bin"
 
 .align 2, 0
 _090D9848:
-.incbin "content/sounds/AllInstruments/source/0x48MULTI_0x78.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x48MULTI_0x78.bin"
 
 .align 2, 0
 _090DC5A0:
-.incbin "content/sounds/AllInstruments/source/0x49MULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x49MULTI_0x7A.bin"
 
 .align 2, 0
 _090DDBB4:
-.incbin "content/sounds/AllInstruments/source/0x49MULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x49MULTI_0x7D.bin"
 
 .align 2, 0
 _090DFAD0:
-.incbin "content/sounds/AllInstruments/source/0x4AMULTI_0x6B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x4AMULTI_0x6B.bin"
 .align 2, 0
 _090E10B0:
-.incbin "content/sounds/AllInstruments/source/0x4AMULTI_0x6C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x4AMULTI_0x6C.bin"
 
 .align 2, 0
 _090E27F0:
-.incbin "content/sounds/AllInstruments/source/0x4AMULTI_0x71.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x4AMULTI_0x71.bin"
 .align 2, 0
 _090E3FF4:
-.incbin "content/sounds/AllInstruments/source/0x4AMULTI_0x72.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x4AMULTI_0x72.bin"
 
 .align 2, 0
 _090E4CA4:
-.incbin "content/sounds/AllInstruments/source/0x4AMULTI_0x76.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x4AMULTI_0x76.bin"
 .align 2, 0
 _090E5948:
-.incbin "content/sounds/AllInstruments/source/0x4AMULTI_0x77.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x4AMULTI_0x77.bin"
 
 .align 2, 0
 _090E7300:
-.incbin "content/sounds/AllInstruments/source/0x4AMULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x4AMULTI_0x7B.bin"
 
 .align 2, 0
 _090E9110:
-.incbin "content/sounds/AllInstruments/source/0x4AMULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x4AMULTI_0x7E.bin"
 
 .align 2, 0
 _090EA6A8:
-.incbin "content/sounds/AllInstruments/source/0x4BMULTI_0x6F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x4BMULTI_0x6F.bin"
 
 .align 2, 0
 _090EB3F0:
-.incbin "content/sounds/AllInstruments/source/0x4BMULTI_0x71.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x4BMULTI_0x71.bin"
 
 .align 2, 0
 _090EBE28:
-.incbin "content/sounds/AllInstruments/source/0x4BMULTI_0x75.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x4BMULTI_0x75.bin"
 
 .align 2, 0
 _090EC778:
-.incbin "content/sounds/AllInstruments/source/0x4BMULTI_0x77.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x4BMULTI_0x77.bin"
 
 .align 2, 0
 _090EDCE4:
-.incbin "content/sounds/AllInstruments/source/0x4BMULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x4BMULTI_0x7A.bin"
 
 .align 2, 0
 _090EE970:
-.incbin "content/sounds/AllInstruments/source/0x4BMULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x4BMULTI_0x7E.bin"
 
 .align 2, 0
 _090F0630:
-.incbin "content/sounds/AllInstruments/source/0x4CMULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x4CMULTI_0x7C.bin"
 .align 2, 0
 _090F1304:
-.incbin "content/sounds/AllInstruments/source/0x4CMULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x4CMULTI_0x7D.bin"
 
 .align 2, 0
 _090F2C8C:
-.incbin "content/sounds/AllInstruments/source/0x4CMULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x4CMULTI_0x7F.bin"
 
 .align 2, 0
 _090F4964:
-.incbin "content/sounds/AllInstruments/source/0x4DMULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x4DMULTI_0x7B.bin"
 .align 2, 0
 _090F5C38:
-.incbin "content/sounds/AllInstruments/source/0x4DMULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x4DMULTI_0x7C.bin"
 
 .align 2, 0
 _090F6E98:
-.incbin "content/sounds/AllInstruments/source/0x4DMULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x4DMULTI_0x7E.bin"
 
 .align 2, 0
 _090F8298:
-.incbin "content/sounds/AllInstruments/source/0x4EMULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x4EMULTI_0x7A.bin"
 
 .align 2, 0
 _090FA76C:
-.incbin "content/sounds/AllInstruments/source/0x54MULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x54MULTI_0x7D.bin"
 
 .align 2, 0
 _090FB198:
-.incbin "content/sounds/AllInstruments/source/0x55MULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x55MULTI_0x7B.bin"
 
 .align 2, 0
 _090FBBA8:
-.incbin "content/sounds/AllInstruments/source/0x56MULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x56MULTI_0x7B.bin"
 
 .align 2, 0
 _090FC230:
-.incbin "content/sounds/AllInstruments/source/0x57MULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x57MULTI_0x7E.bin"
 
 .align 2, 0
 _090FC9D0:
-.incbin "content/sounds/AllInstruments/source/0x58MULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x58MULTI_0x7A.bin"
 
 .align 2, 0
 _090FD114:
-.incbin "content/sounds/AllInstruments/source/0x58MULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x58MULTI_0x7E.bin"
 
 .align 2, 0
 _090FDC80:
-.incbin "content/sounds/AllInstruments/source/0x59MULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x59MULTI_0x7D.bin"
 
 .align 2, 0
 _090FE87C:
-.incbin "content/sounds/AllInstruments/source/0x5AMULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x5AMULTI_0x7E.bin"
 
 .align 2, 0
 _090FFD04:
-.incbin "content/sounds/AllInstruments/source/0x5CMULTI_0x78.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x5CMULTI_0x78.bin"
 
 .align 2, 0
 _091007F4:
-.incbin "content/sounds/AllInstruments/source/0x5CMULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x5CMULTI_0x7A.bin"
 
 .align 2, 0
 _09100F28:
-.incbin "content/sounds/AllInstruments/source/0x5CMULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x5CMULTI_0x7E.bin"
 .align 2, 0
 _091016D8:
-.incbin "content/sounds/AllInstruments/source/0x5CMULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x5CMULTI_0x7F.bin"
 
 .align 2, 0
 _09103838:
-.incbin "content/sounds/AllInstruments/source/0x61MULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x61MULTI_0x7D.bin"
 
 .align 2, 0
 _09104A94:
-.incbin "content/sounds/AllInstruments/source/0x62MULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x62MULTI_0x7D.bin"
 
 .align 2, 0
 _091057B8:
-.incbin "content/sounds/AllInstruments/source/0x63MULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x63MULTI_0x7B.bin"
 
 .align 2, 0
 _09105B3C:
-.incbin "content/sounds/AllInstruments/source/0x63MULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x63MULTI_0x7D.bin"
 .align 2, 0
 _09105CBC:
-.incbin "content/sounds/AllInstruments/source/0x63MULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x63MULTI_0x7F.bin"
 
 .align 2, 0
 _0910656C:
-.incbin "content/sounds/AllInstruments/source/0x64MULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x64MULTI_0x7B.bin"
 .align 2, 0
 _091070AC:
-.incbin "content/sounds/AllInstruments/source/0x64MULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x64MULTI_0x7C.bin"
 .align 2, 0
 _091076A8:
-.incbin "content/sounds/AllInstruments/source/0x64MULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x64MULTI_0x7D.bin"
 .align 2, 0
 _09107DDC:
-.incbin "content/sounds/AllInstruments/source/0x64MULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x64MULTI_0x7E.bin"
 
 .align 2, 0
 _09108A24:
-.incbin "content/sounds/AllInstruments/source/0x66MULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x66MULTI_0x7B.bin"
 .align 2, 0
 _09108A78:
-.incbin "content/sounds/AllInstruments/source/0x66MULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x66MULTI_0x7C.bin"
 .align 2, 0
 _09108F38:
-.incbin "content/sounds/AllInstruments/source/0x66MULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x66MULTI_0x7D.bin"
 .align 2, 0
 _091092B8:
-.incbin "content/sounds/AllInstruments/source/0x66MULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x66MULTI_0x7E.bin"
 .align 2, 0
 _091096D4:
-.incbin "content/sounds/AllInstruments/source/0x66MULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x66MULTI_0x7F.bin"
 
 .align 2, 0
 _0910A6A4:
-.incbin "content/sounds/AllInstruments/source/0x67MULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x67MULTI_0x7B.bin"
 .align 2, 0
 _0910B76C:
-.incbin "content/sounds/AllInstruments/source/0x67MULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x67MULTI_0x7C.bin"
 .align 2, 0
 _0910C0F4:
-.incbin "content/sounds/AllInstruments/source/0x67MULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x67MULTI_0x7D.bin"
 .align 2, 0
 _0910CC94:
-.incbin "content/sounds/AllInstruments/source/0x67MULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x67MULTI_0x7E.bin"
 
 .align 2, 0
 _0910EC0C:
-.incbin "content/sounds/AllInstruments/source/0x68MULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x68MULTI_0x7A.bin"
 .align 2, 0
 _0910F15C:
-.incbin "content/sounds/AllInstruments/source/0x68MULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x68MULTI_0x7B.bin"
 .align 2, 0
 _091116D0:
-.incbin "content/sounds/AllInstruments/source/0x68MULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x68MULTI_0x7C.bin"
 .align 2, 0
 _09113744:
-.incbin "content/sounds/AllInstruments/source/0x68MULTI_0x7D.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x68MULTI_0x7D.bin"
 .align 2, 0
 _09115A98:
-.incbin "content/sounds/AllInstruments/source/0x68MULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x68MULTI_0x7E.bin"
 .align 2, 0
 _09117E3C:
-.incbin "content/sounds/AllInstruments/source/0x68MULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x68MULTI_0x7F.bin"
 
 .align 2, 0
 _0911A754:
-.incbin "content/sounds/AllInstruments/source/0x69MULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x69MULTI_0x7A.bin"
 .align 2, 0
 _0911AFF8:
-.incbin "content/sounds/AllInstruments/source/0x69MULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x69MULTI_0x7B.bin"
 .align 2, 0
 _0911B84C:
-.incbin "content/sounds/AllInstruments/source/0x69MULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x69MULTI_0x7C.bin"
 .align 2, 0
 _0911C82C:
-.incbin "content/sounds/AllInstruments/source/0x69MULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x69MULTI_0x7E.bin"
 .align 2, 0
 _0911CD7C:
-.incbin "content/sounds/AllInstruments/source/0x69MULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x69MULTI_0x7F.bin"
 
 .align 2, 0
 _0911DCA8:
-.incbin "content/sounds/AllInstruments/source/0x6AMULTI_0x76.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x6AMULTI_0x76.bin"
 .align 2, 0
 _0911DF34:
-.incbin "content/sounds/AllInstruments/source/0x6AMULTI_0x77.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x6AMULTI_0x77.bin"
 .align 2, 0
 _0911EA28:
-.incbin "content/sounds/AllInstruments/source/0x6AMULTI_0x78.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x6AMULTI_0x78.bin"
 .align 2, 0
 _0911F9B4:
-.incbin "content/sounds/AllInstruments/source/0x6AMULTI_0x79.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x6AMULTI_0x79.bin"
 .align 2, 0
 _0911FFC8:
-.incbin "content/sounds/AllInstruments/source/0x6AMULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x6AMULTI_0x7A.bin"
 .align 2, 0
 _0912042C:
-.incbin "content/sounds/AllInstruments/source/0x6AMULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x6AMULTI_0x7B.bin"
 .align 2, 0
 _091208CC:
-.incbin "content/sounds/AllInstruments/source/0x6AMULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x6AMULTI_0x7C.bin"
 .align 2, 0
 _09121028:
-.incbin "content/sounds/AllInstruments/source/0x6AMULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x6AMULTI_0x7E.bin"
 .align 2, 0
 _09122EC0:
-.incbin "content/sounds/AllInstruments/source/0x6AMULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x6AMULTI_0x7F.bin"
 
 .align 2, 0
 _091237AC:
-.incbin "content/sounds/AllInstruments/source/0x6BMULTI_0x76.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x6BMULTI_0x76.bin"
 .align 2, 0
 _091248D8:
-.incbin "content/sounds/AllInstruments/source/0x6BMULTI_0x77.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x6BMULTI_0x77.bin"
 .align 2, 0
 _09124A70:
-.incbin "content/sounds/AllInstruments/source/0x6BMULTI_0x78.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x6BMULTI_0x78.bin"
 .align 2, 0
 _09125144:
-.incbin "content/sounds/AllInstruments/source/0x6BMULTI_0x79.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x6BMULTI_0x79.bin"
 .align 2, 0
 _09125944:
-.incbin "content/sounds/AllInstruments/source/0x6BMULTI_0x7A.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x6BMULTI_0x7A.bin"
 .align 2, 0
 _09126300:
-.incbin "content/sounds/AllInstruments/source/0x6BMULTI_0x7B.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x6BMULTI_0x7B.bin"
 .align 2, 0
 _09126A14:
-.incbin "content/sounds/AllInstruments/source/0x6BMULTI_0x7C.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x6BMULTI_0x7C.bin"
 .align 2, 0
 _09126D70:
-.incbin "content/sounds/AllInstruments/source/0x6BMULTI_0x7E.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x6BMULTI_0x7E.bin"
 .align 2, 0
 _09128338:
-.incbin "content/sounds/AllInstruments/source/0x6BMULTI_0x7F.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x6BMULTI_0x7F.bin"
 
 .align 2, 0
 _091296E4:
-.incbin "content/sounds/AllInstruments/source/0x6CMULTI_0x76.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x6CMULTI_0x76.bin"
 .align 2, 0
 _0912986C:
-.incbin "content/sounds/AllInstruments/source/0x6CMULTI_0x77.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x6CMULTI_0x77.bin"
 
 .align 2, 0
 _0912CB10:
-.incbin "content/sounds/AllInstruments/source/0x00MULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x00MULTI2.bin"
 
 .align 2, 0
 _0912CB90:
-.incbin "content/sounds/AllInstruments/source/0x03MULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x03MULTI2.bin"
 .align 2, 0
 _0912CC10:
-.incbin "content/sounds/AllInstruments/source/0x04MULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x04MULTI2.bin"
 .align 2, 0
 _0912CC90:
-.incbin "content/sounds/AllInstruments/source/0x05MULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x05MULTI2.bin"
 .align 2, 0
 _0912CD10:
-.incbin "content/sounds/AllInstruments/source/0x06MULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x06MULTI2.bin"
 .align 2, 0
 _0902D20C:
-.incbin "content/sounds/AllInstruments/source/0x04MULTI_0x73.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x04MULTI_0x73.bin"
 
 .align 2, 0
 _0912CD90:
-.incbin "content/sounds/AllInstruments/source/0x08MULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x08MULTI2.bin"
 .align 2, 0
 _0912CE10:
-.incbin "content/sounds/AllInstruments/source/0x09MULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x09MULTI2.bin"
 
 .align 2, 0
 _0912CE90:
-.incbin "content/sounds/AllInstruments/source/0x0BMULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x0BMULTI2.bin"
 .align 2, 0
 _0912CF10:
-.incbin "content/sounds/AllInstruments/source/0x0CMULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x0CMULTI2.bin"
 .align 2, 0
 _0912CF90:
-.incbin "content/sounds/AllInstruments/source/0x0DMULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x0DMULTI2.bin"
 .align 2, 0
 _0912D010:
-.incbin "content/sounds/AllInstruments/source/0x0EDIRECTSOUN.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x0EDIRECTSOUN.bin"
 .align 2, 0
 _0912D4B0:
-.incbin "content/sounds/AllInstruments/source/0x0FMULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x0FMULTI2.bin"
 .align 2, 0
 _0912D530:
-.incbin "content/sounds/AllInstruments/source/0x10MULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x10MULTI2.bin"
 
 .align 2, 0
 _0912D5B0:
-.incbin "content/sounds/AllInstruments/source/0x15MULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x15MULTI2.bin"
 .align 2, 0
 _0912D630:
-.incbin "content/sounds/AllInstruments/source/0x16MULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x16MULTI2.bin"
 
 .align 2, 0
 _0912D6B0:
-.incbin "content/sounds/AllInstruments/source/0x1CMULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1CMULTI2.bin"
 .align 2, 0
 _0912D730:
-.incbin "content/sounds/AllInstruments/source/0x1DMULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1DMULTI2.bin"
 .align 2, 0
 _0912D7B0:
-.incbin "content/sounds/AllInstruments/source/0x1EMULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x1EMULTI2.bin"
 
 .align 2, 0
 _0912D830:
-.incbin "content/sounds/AllInstruments/source/0x24MULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x24MULTI2.bin"
 
 .align 2, 0
 _0912D8B0:
-.incbin "content/sounds/AllInstruments/source/0x27MULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x27MULTI2.bin"
 
 .align 2, 0
 _0912D930:
-.incbin "content/sounds/AllInstruments/source/0x2AMULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2AMULTI2.bin"
 
 .align 2, 0
 _0912D9B0:
-.incbin "content/sounds/AllInstruments/source/0x2FDIRECTSOUN.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x2FDIRECTSOUN.bin"
 
 .align 2, 0
 _0912F434:
-.incbin "content/sounds/AllInstruments/source/0x37DIRECTSOUN.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x37DIRECTSOUN.bin"
 
 .align 2, 0
 _09133064:
-.incbin "content/sounds/AllInstruments/source/0x3AMULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3AMULTI2.bin"
 .align 2, 0
 _091330E4:
-.incbin "content/sounds/AllInstruments/source/0x3BMULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3BMULTI2.bin"
 .align 2, 0
 _09133164:
-.incbin "content/sounds/AllInstruments/source/0x3CMULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3CMULTI2.bin"
 
 .align 2, 0
 _091331E4:
-.incbin "content/sounds/AllInstruments/source/0x3FMULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x3FMULTI2.bin"
 
 .align 2, 0
 _09133264:
-.incbin "content/sounds/AllInstruments/source/0x47MULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x47MULTI2.bin"
 
 .align 2, 0
 _091332E4:
-.incbin "content/sounds/AllInstruments/source/0x4BMULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x4BMULTI2.bin"
 
 .align 2, 0
 _09133364:
-.incbin "content/sounds/AllInstruments/source/0x53MULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x53MULTI2.bin"
 
 .align 2, 0
 _091333E4:
-.incbin "content/sounds/AllInstruments/source/0x55MULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x55MULTI2.bin"
 .align 2, 0
 _09133464:
-.incbin "content/sounds/AllInstruments/source/0x56MULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x56MULTI2.bin"
 
 .align 2, 0
 _091334E4:
-.incbin "content/sounds/AllInstruments/source/0x65DIRECTSOUN.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x65DIRECTSOUN.bin"
 
 .align 2, 0
 _09134D70:
-.incbin "content/sounds/AllInstruments/source/0x69MULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x69MULTI2.bin"
 
 .align 2, 0
 _09134DF0:
-.incbin "content/sounds/AllInstruments/source/0x70DIRECTSOUN.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x70DIRECTSOUN.bin"
 
 .align 2, 0
 _09134EE8:
-.incbin "content/sounds/AllInstruments/source/0x76DIRECTSOUN.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x76DIRECTSOUN.bin"
 .align 2, 0
 _091352A0:
-.incbin "content/sounds/AllInstruments/source/0x78DIRECTSOUN.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x78DIRECTSOUN.bin"
 
 .align 2, 0
 _09135C68:
-.incbin "content/sounds/AllInstruments/source/0x7ADIRECTSOUN.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x7ADIRECTSOUN.bin"
 .align 2, 0
 _091391DC:
-.incbin "content/sounds/AllInstruments/source/0x7BDIRECTSOUN.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x7BDIRECTSOUN.bin"
 .align 2, 0
 _0913A1A4:
-.incbin "content/sounds/AllInstruments/source/0x7CDIRECTSOUN.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x7CDIRECTSOUN.bin"
 .align 2, 0
 _0913A7A0:
-.incbin "content/sounds/AllInstruments/source/0x7DDIRECTSOUN.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x7DDIRECTSOUN.bin"
 .align 2, 0
 _0913B6E0:
-.incbin "content/sounds/AllInstruments/source/0x7EDIRECTSOUN.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x7EDIRECTSOUN.bin"
 .align 2, 0
 _0913D350:
-.incbin "content/sounds/AllInstruments/source/0x7FMULTI2.bin"
+.incbin "gamedata/sounds/AllInstruments/source/0x7FMULTI2.bin"

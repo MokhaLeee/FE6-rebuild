@@ -1,6 +1,6 @@
 请帮我分析和修复这首移植音乐的播放问题：
 【文件路径】
-content/sounds/DemoSounds/XXX.s
+gamedata/sounds/DemoSounds/XXX.s
 【现象】（尽量具体）
 - 例如：主旋律偏低 / 缺层 / 只有鼓和低音 / 发糊 / 节奏不对
 【对比参考】（可选）
