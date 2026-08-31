@@ -205,14 +205,10 @@ CLEAN_FILES2 += $(GFX_TSA_OBJ) $(GFX_TSA_OBJ:%.o=%.dmp) $(GFX_TSA_OBJ:%.o=%.dmp.
 # = Banim data =
 # ==============
 
-BANIM_LDS := lds/linker_script_banim.txt
-
-ALL_BANIM_SCRS := $(shell find ./banims/vanilla -type f -name "*.scr.S")
-ALL_BANIM_OAMS := $(shell find ./banims/vanilla -type f -name "*.oam.s")
-ALL_BANIM_PALS := $(shell find ./banims/vanilla -type f -name "*.agbpal")
-ALL_BANIM_IMGS := $(shell find ./banims/vanilla -type f -name '*.png')
-
-ALL_BANIM_SCRS += $(shell find ./banims/demo -type f -name "*.banim.S")
+VANILLA_BANIM_DIR := ./contents/banims
+ALL_BANIM_OAMS := $(shell find $(VANILLA_BANIM_DIR) -type f -name "*.oam.s")
+ALL_BANIM_PALS := $(shell find $(VANILLA_BANIM_DIR) -type f -name "*.agbpal")
+ALL_BANIM_IMGS := $(shell find $(VANILLA_BANIM_DIR) -type f -name '*.png')
 
 BANIM_TOOLS := tools/banimtools
 BANIM_LINKER := $(BANIM_TOOLS)/banim_compressing_linker.py
@@ -254,9 +250,6 @@ STRIPER        := $(BANIM_TOOLS)/strip.sh
 	@echo "[OPY]	$@"
 	@$(OBJCOPY) --only-section=.data.modes -O binary $< $@
 
-ALL_BANIM_SCR_OBJS := $(ALL_BANIM_SCRS:%.S=%.o)
-
-# BANIM_SRC_GENERATED += $(ALL_BANIM_SCR_OBJS)
 BANIM_SRC_GENERATED += $(ALL_BANIM_OAMS:%.s=%.o) $(ALL_BANIM_OAMS:%.s=%.o.bin) $(ALL_BANIM_OAMS:%.s=%.o.bin.lz) $(ALL_BANIM_OAMS:%.s=%.o.bin.lz.o)
 BANIM_SRC_GENERATED += $(ALL_BANIM_OAMS:%.s=%.oamr.elf) $(ALL_BANIM_OAMS:%.s=%.oamr.bin) $(ALL_BANIM_OAMS:%.s=%.oamr.bin.lz) $(ALL_BANIM_OAMS:%.s=%.oamr.bin.lz.o)
 BANIM_SRC_GENERATED += $(ALL_BANIM_OAMS:%.s=%.script.bin) $(ALL_BANIM_OAMS:%.s=%.script.bin.lz) $(ALL_BANIM_OAMS:%.s=%.script.bin.lz.o)
@@ -269,13 +262,10 @@ BANIM_PAL_GENERATED += $(ALL_BANIM_PALS:%=%.lz.stripped) $(ALL_BANIM_PALS:%=%.lz
 
 BANIM_IMG_GENERATED += $(ALL_BANIM_IMGS:%.png=%.4bpp) $(ALL_BANIM_IMGS:%.png=%.4bpp.lz) $(ALL_BANIM_IMGS:%.png=%.4bpp.lz.o)
 
-# append objects
-C_GENERATED_OBJ += $(ALL_BANIM_SCR_OBJS)
-
 # Demo banim .S files are checked in as-is. Run `make banim-demo-regen` to rebuild from .banim.txt.
 .PHONY: banim-demo-regen
 banim-demo-regen:
-	@$(MAKE) -f banims/demo/makefile all
+	@$(MAKE) -f gamedata/banim-data/demo/makefile all
 
 # =========
 # = Glyph =
