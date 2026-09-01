@@ -7,13 +7,17 @@
 #include "klib.h"
 #include "constants/skills.h"
 
-static struct SkillList sSkillLists[3];
+#define GENERIC_LIST_AMT 4
+#define NEXT_SLIST(i) (((i) + 1) & 3)
+
+static EWRAM_DATA struct SkillList sSkillLists[GENERIC_LIST_AMT + 2];
+static EWRAM_DATA u8 next_slist;
 
 #define GenericSkillList (&sSkillLists[0])
-#define BattleSkillListA (&sSkillLists[1])
-#define BattleSkillListB (&sSkillLists[2])
+#define BattleSkillListA (&sSkillLists[GENERIC_LIST_AMT + 0])
+#define BattleSkillListB (&sSkillLists[GENERIC_LIST_AMT + 1])
 
-static bool check_sign(struct SkillList *list, struct Unit *unit)
+static bool check_sign(struct SkillList *list, const struct Unit *unit)
 {
 	if (unlikely(list->sign.pinfo != unit->pinfo))
 		return false;
@@ -30,7 +34,7 @@ static bool check_sign(struct SkillList *list, struct Unit *unit)
 	return true;
 }
 
-static void write_sign(struct SkillList *list, struct Unit *unit)
+static void write_sign(struct SkillList *list, const struct Unit *unit)
 {
 	list->sign.pinfo = unit->pinfo;
 	list->sign.jinfo = unit->jinfo;
@@ -38,7 +42,7 @@ static void write_sign(struct SkillList *list, struct Unit *unit)
 	list->sign.uid   = unit->id;
 }
 
-static void setup_skill_list(struct SkillList *list, struct Unit *unit)
+static void setup_skill_list(struct SkillList *list, const struct Unit *unit)
 {
 	#define ADD_LIST(_sid) { \
 		int _tmp_sid = _sid; \
@@ -79,25 +83,43 @@ static void setup_skill_list(struct SkillList *list, struct Unit *unit)
 
 static struct SkillList *spawn_list_buffer(const struct Unit *unit)
 {
-	if (likely(unit == &gBattleUnitA.unit))
-		return BattleSkillListA;
+	int i;
+	struct SkillList *slist;
+	i8 uid = unit->id;
 
-	if (likely(unit == &gBattleUnitB.unit))
-		return BattleSkillListB;
+	if (likely(uid == gBattleUnitA.unit.id)) {
+		slist = BattleSkillListA;
+		goto check_list;
+	}
 
-	return GenericSkillList;
+	if (likely(uid == gBattleUnitB.unit.id)) {
+		slist = BattleSkillListB;
+		goto check_list;
+	}
+
+	for (i = 0; i < GENERIC_LIST_AMT; i++) {
+		slist = &GenericSkillList[i];
+
+		if (unlikely(check_sign(slist, unit))) {
+			next_slist = NEXT_SLIST(i);
+			return slist;
+		}
+	}
+
+	next_slist = NEXT_SLIST(next_slist);
+	slist = &GenericSkillList[next_slist];
+
+check_list:
+	if (unlikely(!check_sign(slist, unit))) {
+		write_sign(slist, unit);
+		setup_skill_list(slist, unit);
+	}
+	return slist;
 }
 
 struct SkillList *GetSkillList(struct Unit *unit)
 {
-	struct SkillList *list = spawn_list_buffer(unit);
-
-	if (unlikely(!check_sign(list, unit))) {
-		write_sign(list, unit);
-		setup_skill_list(list, unit);
-	}
-
-	return list;
+	return spawn_list_buffer(unit);
 }
 
 /**
