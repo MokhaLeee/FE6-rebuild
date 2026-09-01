@@ -258,7 +258,7 @@ struct ProcEkrFaefx {
 	STRUCT_PAD(0x2E, 0x44);
 
 	/* 44 */ u32 frame;
-	/* 48 */ const u16 * frame_config;
+	/* 48 */ const i16 * frame_config;
 	/* 4C */ const u16 ** tsal;
 	/* 50 */ const u16 ** tsar;
 	/* 54 */ u16 ** img;
@@ -319,7 +319,7 @@ struct ProcEkrIdunnfx {
 	STRUCT_PAD(0x30, 0x44);
 
 	/* 44 */ u32 frame;
-	/* 48 */ const u16 *frame_config;
+	/* 48 */ const i16 *frame_config;
 	/* 4C */ const u16 **tsa;
 	/* 50 */ const u16 **tsa_unused;
 	/* 54 */ int round;

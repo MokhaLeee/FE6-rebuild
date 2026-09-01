@@ -44,15 +44,13 @@ static void setup_status(void)
 	}
 }
 
-static struct UnitInfo const UnitInfo_Chapter1_BlueA[] =
-{
+static struct UnitInfo const UnitInfo_Chapter1_BlueA[] = {
 	{ PID_ROY, 0, 0, FALSE, FACTION_ID_BLUE, 1, 1, 20, 2, 18, { IID_RAPIER, IID_VULNERARY }, { 0 } },
 	{ PID_MARCUS, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 2, 20, 1, 17, { IID_IRONSWORD, IID_SILVERLANCE }, { 0 } },
 	{ 0 }, // end
 };
 
-static struct UnitInfo const UnitInfo_Chapter1_BlueB[] =
-{
+static struct UnitInfo const UnitInfo_Chapter1_BlueB[] = {
 	{ PID_ALEN, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 0, 20, 3, 17, { IID_IRONSWORD, IID_IRONLANCE }, { 0 } },
 	{ PID_BORS, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 1, 20, 3, 19, { IID_IRONLANCE, IID_VULNERARY }, { 0 } },
 	{ PID_WOLT, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 2, 20, 2, 16, { IID_IRONBOW, IID_VULNERARY, IID_BALLISTA }, { 0 } },
@@ -62,14 +60,12 @@ static struct UnitInfo const UnitInfo_Chapter1_BlueB[] =
 	{ 0 }, // end
 };
 
-static struct UnitInfo const UnitInfo_Chapter1_Lance[] =
-{
+static struct UnitInfo const UnitInfo_Chapter1_Lance[] = {
 	{ PID_LANCE, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 10, 9, 2, 17, { IID_IRONSWORD, IID_JAVELIN, IID_VULNERARY }, { 0 } },
 	{ 0 }, // end
 };
 
-static struct UnitInfo const UnitInfo_Chapter1_RedA[] =
-{
+static struct UnitInfo const UnitInfo_Chapter1_RedA[] = {
 	{ PID_CHAPTER1_ARCHER, JID_ARCHER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 1, 0, 1, 2, { IID_IRONBOW }, { AI_A_00, AI_B_06, 0x29, 0x00 } },
 	{ PID_CHAPTER1_4A, JID_FIGHTER, 0, FALSE, FACTION_ID_RED, 5, 5, 0, 5, 6, { IID_STEELAXE }, { AI_A_03, AI_B_03, 0x09, 0x20 } },
 	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 2, 6, 1, 3, { IID_IRONAXE }, { AI_A_00, AI_B_06, 0x09, 0x00 } },
@@ -78,8 +74,7 @@ static struct UnitInfo const UnitInfo_Chapter1_RedA[] =
 	{ 0 }, // end
 };
 
-static struct UnitInfo const UnitInfo_Chapter1_RedB[] =
-{
+static struct UnitInfo const UnitInfo_Chapter1_RedB[] = {
 	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 8, 4, 8, 9, { IID_IRONAXE }, { AI_A_00, AI_B_03, 0x09, 0x00 } },
 	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 9, 4, 9, 9, { IID_IRONAXE }, { AI_A_00, AI_B_03, 0x09, 0x00 } },
 	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 7, 2, 11, 7, { IID_IRONAXE }, { AI_A_00, AI_B_03, 0x09, 0x00 } },
@@ -87,8 +82,7 @@ static struct UnitInfo const UnitInfo_Chapter1_RedB[] =
 	{ 0 }, // end
 };
 
-static struct UnitInfo const UnitInfo_Chapter1_RedC[] =
-{
+static struct UnitInfo const UnitInfo_Chapter1_RedC[] = {
 	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 12, 7, 7, 15, { IID_IRONAXE }, { AI_A_00, AI_B_00, 0x09, 0x00 } },
 	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 12, 8, 8, 14, { IID_IRONAXE }, { AI_A_00, AI_B_00, 0x09, 0x00 } },
 	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 3, 8, 12, 13, { IID_IRONAXE }, { AI_A_00, AI_B_00, 0x09, 0x00 } },
@@ -96,13 +90,29 @@ static struct UnitInfo const UnitInfo_Chapter1_RedC[] =
 	{ 0 }, // end
 };
 
-static struct UnitInfo const UnitInfo_Chapter1_RedDummy[] =
-{
+static struct UnitInfo const UnitInfo_Chapter1_RedD[] = {
+	{
+		.pid = PID_COMMON_MANAKETE,
+		.jid = JID_MANAKETE,
+		.pid_lead = PID_CHAPTER1_4A,
+		.autolevel = false,
+		.faction_id = FACTION_ID_RED,
+		.level = 1,
+		.x_load = 12,
+		.y_load = 7,
+		.x_move = 8,
+		.y_move = 15,
+		.items = { IID_FIRESTONE },
+		.ai = { AI_A_00, AI_B_00, 0x09, 0x00 },
+	},
 	{ 0 }, // end
 };
 
-static EventScr const EventScr_Chapter1_Opening[] =
-{
+static struct UnitInfo const UnitInfo_Chapter1_RedDummy[] = {
+	{ 0 }, // end
+};
+
+static EventScr const EventScr_Chapter1_Opening[] = {
 	EvtUnitCameraOff
 	EvtLoadUnits(UnitInfo_Chapter1_RedA)
 	EvtMoveWait
@@ -112,6 +122,8 @@ static EventScr const EventScr_Chapter1_Opening[] =
 	EvtLoadUnits(UnitInfo_Chapter1_RedB)
 	EvtCamera(8, 17)
 	EvtLoadUnits(UnitInfo_Chapter1_RedC)
+	EvtMoveWait
+	EvtLoadUnits(UnitInfo_Chapter1_RedD)
 	EvtMoveWait
 	EvtSleep(16)
 	EvtLoadUnits(UnitInfo_Chapter1_BlueA)
@@ -128,8 +140,7 @@ static EventScr const EventScr_Chapter1_Opening[] =
 	EvtEnd
 };
 
-static EventScr const EventScr_Chapter1_FirstRedTurn[] =
-{
+static EventScr const EventScr_Chapter1_FirstRedTurn[] = {
 	// EvtSetBgm(SONG_02)
 	EvtCamera(5, 3)
 	EvtMoveWait
@@ -142,8 +153,7 @@ static EventScr const EventScr_Chapter1_FirstRedTurn[] =
 	EvtEnd
 };
 
-static EventScr const EventScr_Chapter1_Village[] =
-{
+static EventScr const EventScr_Chapter1_Village[] = {
 	EvtLowerBgmVolume
 	EvtFadeToBlack(16)
 	EvtExitMap
@@ -159,16 +169,14 @@ static EventScr const EventScr_Chapter1_Village[] =
 	EvtEnd
 };
 
-static EventScr const EventScr_Chapter1_TopVillageDummy[] =
-{
+static EventScr const EventScr_Chapter1_TopVillageDummy[] = {
 	EvtNoSkip
 	EvtGiveMoney(5000)
 	EvtClearSkip
 	EvtEnd
 };
 
-static EventScr const EventScr_Chapter1_HouseA[] =
-{
+static EventScr const EventScr_Chapter1_HouseA[] = {
 	EvtLowerBgmVolume
 	EvtFadeToBlack(16)
 	EvtExitMap
@@ -182,8 +190,7 @@ static EventScr const EventScr_Chapter1_HouseA[] =
 	EvtEnd
 };
 
-static EventScr const EventScr_Chapter1_HouseB[] =
-{
+static EventScr const EventScr_Chapter1_HouseB[] = {
 	EvtLowerBgmVolume
 	EvtFadeToBlack(16)
 	EvtExitMap
@@ -197,8 +204,7 @@ static EventScr const EventScr_Chapter1_HouseB[] =
 	EvtEnd
 };
 
-static EventScr const EventScr_Chapter1_HouseC[] =
-{
+static EventScr const EventScr_Chapter1_HouseC[] = {
 	EvtLowerBgmVolume
 	EvtFadeToBlack(16)
 	EvtExitMap
@@ -212,8 +218,7 @@ static EventScr const EventScr_Chapter1_HouseC[] =
 	EvtEnd
 };
 
-static EventScr const EventScr_Chapter1_Victory[] =
-{
+static EventScr const EventScr_Chapter1_Victory[] = {
 	EvtSetBgm(SONG_27)
 	EvtFadeToBlack(16)
 	EvtExitMap
@@ -240,20 +245,17 @@ EvtLabel(0)
 /**
  * event info
  */
-static EventListScr const EventListScr_Chapter1_Turn[] =
-{
+static EventListScr const EventListScr_Chapter1_Turn[] = {
 	EvtListTurn(0, EventScr_Chapter1_Opening, 1, 0, FACTION_BLUE)
 	EvtListTurn(FLAG_CHAPTER1_TURN1, EventScr_Chapter1_FirstRedTurn, 1, 0, FACTION_RED)
 	EvtListEnd
 };
 
-static EventListScr const EventListScr_Chapter1_Talk[] =
-{
+static EventListScr const EventListScr_Chapter1_Talk[] = {
 	EvtListEnd
 };
 
-static EventListScr const EventListScr_Chapter1_Tile[] =
-{
+static EventListScr const EventListScr_Chapter1_Tile[] = {
 	EvtListTileMapChange(FLAG_CHAPTER1_VILLAGE, EventScr_Chapter1_Village, 12, 19, TILE_COMMAND_VISIT)
 	EvtListTile(FLAG_CHAPTER1_VILLAGE, EVENT_NOSCRIPT, 12, 18, TILE_COMMAND_PILLAGE)
 	EvtListTileMapChange(FLAG_CHAPTER1_TOPVILLAGE, EventScr_Chapter1_TopVillageDummy, 4, 9, TILE_COMMAND_VISIT)
@@ -265,14 +267,12 @@ static EventListScr const EventListScr_Chapter1_Tile[] =
 	EvtListEnd
 };
 
-static EventListScr const EventListScr_Chapter1_Move[] =
-{
+static EventListScr const EventListScr_Chapter1_Move[] = {
 	EvtListFlag(0, EventScr_GameOver, FLAG_101)
 	EvtListEnd
 };
 
-struct ChapterEventInfo const ChapterEventInfo_Chapter1_Dbg =
-{
+struct ChapterEventInfo const ChapterEventInfo_Chapter1_Dbg = {
 	.event_list_turn = EventListScr_Chapter1_Turn,
 	.event_list_talk = EventListScr_Chapter1_Talk,
 	.event_list_tile = EventListScr_Chapter1_Tile,
