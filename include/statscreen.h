@@ -243,7 +243,7 @@ void InstallExpandedTextPal(void);
  * modern statscreen
  */
 enum videoalloc_mss {
-	BGCHR_MSS_TEXT = 0,
+	BGCHR_MSS_TEXT = 2,
 	BGCHR_MSS_FACE = 0x3000 / 0x20,
 	BGCHR_MSS_UI = 0x3400 / 0x20,
 	BGCHR_MSS_UI2 = 0x3C00 / 0x20,
