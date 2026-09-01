@@ -17,7 +17,7 @@
 #include "constants/songs.h"
 
 EWRAM_OVERLAY(0) u8 gMuImgBuf[4 * 0x110 * CHR_SIZE] = {};
-static struct MuConfig sMuConfig[MU_COUNT];
+static EWRAM_DATA struct MuConfig sMuConfig[MU_COUNT];
 
 u16 const *const gMuFlashPalLut[] = {
 	[MU_FLASH_WHITE] = Pal_AllWhite,
