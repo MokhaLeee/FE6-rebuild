@@ -105,6 +105,20 @@ static struct UnitInfo const UnitInfo_Chapter1_RedD[] = {
 		.items = { IID_FIRESTONE },
 		.ai = { AI_A_00, AI_B_00, 0x09, 0x00 },
 	},
+	{
+		.pid = PID_IDUNN_DRAGON,
+		.jid = JID_DEMONDRAGON,
+		.pid_lead = PID_CHAPTER1_4A,
+		.autolevel = false,
+		.faction_id = FACTION_ID_RED,
+		.level = 1,
+		.x_load = 12,
+		.y_load = 7,
+		.x_move = 7,
+		.y_move = 18,
+		.items = { IID_DARKBREATH },
+		.ai = { AI_A_00, AI_B_00, 0x09, 0x00 },
+	},
 	{ 0 }, // end
 };
 

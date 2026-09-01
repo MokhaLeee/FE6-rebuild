@@ -12,13 +12,17 @@
 #include "banim_ekrbattle.h"
 #include "banim_ekrdragon.h"
 
+/**
+ * known issue:
+ * idunn's banim will be put as auto-left.
+ */
+
 EWRAM_OVERLAY(banim) struct ProcEkrDragon *EkrDragonProcs[2] = {};
 EWRAM_OVERLAY(banim) struct ProcEkrDragonDeamon *gEkrDragonDeamonProcs[2] = {};
 EWRAM_OVERLAY(banim) ProcPtr gpProcEkrIdunnBodyMain = NULL;
 EWRAM_OVERLAY(banim) u16 gEkrDragonfxState[2] = {};
 EWRAM_OVERLAY(banim) u16 gEkrDragonDeadFlags[2] = {};
 EWRAM_OVERLAY(banim) u16 gEkrDragonState[2] = {};
-EWRAM_OVERLAY(banim) u16 gEkrDragonTsaBuffer[0x800 / sizeof(*gEkrDragonTsaBuffer)] = {};
 
 EWRAM_DATA u16 gEkrDragonJid[2] = {};
 
@@ -35,7 +39,7 @@ void ResetEkrDragonStatus(void)
 	gEkrDragonState[POS_R] = DRAGON_STATE_DEFAULT;
 }
 
-bool EkrDragonIntroDone(struct BaSprite * anim)
+bool EkrDragonIntroDone(struct BaSprite *anim)
 {
 	if (gEkrDragonfxState[GetAnimPosition(anim)] == 1)
 		return TRUE;
@@ -43,12 +47,12 @@ bool EkrDragonIntroDone(struct BaSprite * anim)
 	return FALSE;
 }
 
-void TriggerEkrDragonEnding(struct BaSprite * anim)
+void TriggerEkrDragonEnding(struct BaSprite *anim)
 {
 	gEkrDragonState[GetAnimPosition(anim)] = DRAGON_STATE_ENDING;
 }
 
-bool CheckEkrDragonEndingDone(struct BaSprite * anim)
+bool CheckEkrDragonEndingDone(struct BaSprite *anim)
 {
 	if (gEkrDragonfxState[GetAnimPosition(anim)] == 2)
 		return TRUE;
@@ -113,7 +117,7 @@ u32 GetEkrDragonStateTypeIdunn(void)
 	return ret;
 }
 
-bool CheckSkipDragonTransfer(struct BaSprite * anim)
+bool CheckSkipDragonTransfer(struct BaSprite *anim)
 {
 	if (*GetEkrDragonDeadFlag(anim) == TRUE)
 		return TRUE;
@@ -124,30 +128,30 @@ bool CheckSkipDragonTransfer(struct BaSprite * anim)
 	return TRUE;
 }
 
-u16 * GetEkrDragonWeapon(int pos)
+u16 *GetEkrDragonWeapon(int pos)
 {
 	return gEkrDragonJid + pos;
 }
 
-u16 * GetEkrDragonDeadFlag(struct BaSprite * anim)
+u16 *GetEkrDragonDeadFlag(struct BaSprite *anim)
 {
 	return gEkrDragonDeadFlags + GetAnimPosition(anim);
 }
 
-ProcPtr GetEkrDragonProc(struct BaSprite * anim)
+ProcPtr GetEkrDragonProc(struct BaSprite *anim)
 {
 	return EkrDragonProcs[GetAnimPosition(anim)];
 }
 
-void EndEkrDragonDaemon(struct BaSprite * anim)
+void EndEkrDragonDaemon(struct BaSprite *anim)
 {
 	Proc_End(gEkrDragonDeamonProcs[GetAnimPosition(anim)]);
 }
 
 void SetDragonBasLayer(u8 layer)
 {
-	struct BaSprite * anim_l = MAIN_ANIM_FRONT(POS_L);
-	struct BaSprite * anim_r = MAIN_ANIM_FRONT(POS_R);
+	struct BaSprite *anim_l = MAIN_ANIM_FRONT(POS_L);
+	struct BaSprite *anim_r = MAIN_ANIM_FRONT(POS_R);
 
 	anim_l->oam2 = (anim_l->oam2 & (OAM2_PAL_MASK | OAM2_CHR_MASK)) | (layer * 0x0400);
 	anim_r->oam2 = (anim_r->oam2 & (OAM2_PAL_MASK | OAM2_CHR_MASK)) | (layer * 0x0400);
@@ -157,12 +161,9 @@ void PutManaketeBodyPalette(struct ProcEkrDragon *proc)
 {
 	CpuFastCopy(Pal_EkrManaketefx, &PAL_BG_COLOR(1, 0), 0x20);
 
-	if (GetAnimPosition(proc->anim) == POS_L)
-	{
+	if (GetAnimPosition(proc->anim) == POS_L) {
 		CpuFastCopy(Pal_EkrManaketefx, &PAL_BG_COLOR(6, 0), 0x20);
-	}
-	else
-	{
+	} else {
 		CpuFastCopy(Pal_EkrManaketefx, &PAL_BG_COLOR(7, 0), 0x20);
 	}
 	EnablePalSync();
@@ -174,8 +175,7 @@ void PutManaketeBodyIntro2(struct ProcEkrDragon *proc)
 	LZ77UnCompWram(Tsa_ManaketeBodyIntro2, gEkrTsaBuffer);
 	EfxTmFillB(0);
 
-	if (GetAnimPosition(proc->anim) == POS_L)
-	{
+	if (GetAnimPosition(proc->anim) == POS_L) {
 		int x = gEkrDistanceType == EKR_DISTANCE_CLOSE ? 0x23 : 0x1D;
 
 		EfxTmCpyExtHFlip(
@@ -201,8 +201,7 @@ void PutManaketeBodyIntro1(struct ProcEkrDragon *proc)
 	LZ77UnCompWram(Tsa_ManaketeBodyIntro1, gEkrTsaBuffer);
 	EfxTmFillB(0);
 
-	if (GetAnimPosition(proc->anim) == POS_L)
-	{
+	if (GetAnimPosition(proc->anim) == POS_L) {
 		int x = gEkrDistanceType == EKR_DISTANCE_CLOSE ? 0x21 : 0x1B;
 
 		EfxTmCpyExtHFlip(
@@ -228,8 +227,7 @@ void PutManaketeBodyStd(struct ProcEkrDragon *proc)
 	LZ77UnCompWram(Tsa_ManaketeBodyStd, gEkrTsaBuffer);
 	EfxTmFillB(0);
 
-	if (GetAnimPosition(proc->anim) == POS_L)
-	{
+	if (GetAnimPosition(proc->anim) == POS_L) {
 		int x;
 
 #if NONMATCHING
@@ -305,8 +303,7 @@ void PutManaketeTotalImg(struct ProcEkrDragon *proc)
 	EfxTmFillB(0);
 
 	pos = GetAnimPosition(proc->anim);
-	if (pos == POS_L)
-	{
+	if (pos == POS_L) {
 		LZ77UnCompWram(Tsa_081BFA34, gEkrTsaBuffer);
 		EfxTmCpyBgHFlip(gEkrTsaBuffer, gBg3Tm, 30, 22, 6, pos);
 
@@ -319,8 +316,7 @@ void PutManaketeTotalImg(struct ProcEkrDragon *proc)
 			EkrDragonMoveBg3(gEkrBgPosition + 48);
 			SetBgOffset(3, gEkrBgPosition + 48, 16);
 
-			if (gEkrBgPosition == 0)
-			{
+			if (gEkrBgPosition == 0) {
 				FillBGRect(gBg3Tm, 2, 22, 240, 0);
 				FillBGRect(gBg3Tm + 2, 2, 22, 240, 0);
 			}
@@ -402,7 +398,7 @@ int CheckEkrDragonWorking(void)
 void EkrDragonTmCpyExt(int x)
 {
 	int _x, tmp1;
-	u16 * buf;
+	u16 *buf;
 
 	_x = x >> 3;
 	tmp1 = 7;
@@ -424,16 +420,13 @@ void EkrDragonTmCpy2(const u8 * tsa)
 {
 	LZ77UnCompWram(tsa, gEkrTsaBuffer);
 
-	if (gEkrDistanceType == EKR_DISTANCE_CLOSE)
-	{
+	if (gEkrDistanceType == EKR_DISTANCE_CLOSE) {
 		EfxTmCpyExt(
 			gEkrTsaBuffer,
 			-1,
 			gBg3Tm,
 			TILE_SIZE_4BPP, 30, 30, 6, 0);
-	}
-	else
-	{
+	} else {
 		EfxTmCpyExt(
 			gEkrTsaBuffer + 4,
 			30,
@@ -447,7 +440,7 @@ void EkrDragonTmCpy3(const u8 * tsa)
 {
 	int loc;
 
-	LZ77UnCompWram(tsa, gEkrDragonTsaBuffer);
+	LZ77UnCompWram(tsa, gBuf);
 
 	if (gEkrDistanceType == EKR_DISTANCE_CLOSE)
 		loc = TM_OFFSET(1, 1);
@@ -457,7 +450,7 @@ void EkrDragonTmCpy3(const u8 * tsa)
 		loc = TM_OFFSET(3, 0);
 
 	EfxTmCpyExt(
-		gEkrDragonTsaBuffer,
+		(void *)gBuf,
 		-1,
 		gTmB_Banim + loc,
 		EFX_BG_WIDTH, 30, 22,
@@ -474,7 +467,7 @@ struct ProcScr CONST_DATA ProcScr_EkrDragonBark[] =
 	PROC_END,
 };
 
-void NewEkrDragonBark(struct BaSprite * anim)
+void NewEkrDragonBark(struct BaSprite *anim)
 {
 	struct ProcEkrDragonBark *proc;
 	proc = SpawnProc(ProcScr_EkrDragonBark, PROC_TREE_3);
@@ -483,7 +476,7 @@ void NewEkrDragonBark(struct BaSprite * anim)
 
 void EkrDragonBarkExt(struct ProcEkrDragonBark *proc)
 {
-	struct BaSprite * anim = proc->anim;
+	struct BaSprite *anim = proc->anim;
 
 	EfxPlaySE(0x0E6, 0x100);
 	M4aPlayWithPostionCtrl(0x0E6, anim->xPosition, 1);

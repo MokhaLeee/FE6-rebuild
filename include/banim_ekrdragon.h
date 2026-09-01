@@ -19,7 +19,6 @@ enum EkrDragonState_idx {
 };
 
 extern u16 gEkrDragonState[2];
-extern u16 gEkrDragonTsaBuffer[];
 extern u16 gEkrDragonJid[2];
 extern u16 gEkrDragonDeadFlags[2];
 extern u16 gEkrBgPaletteBackup1[0x10];
