@@ -26,7 +26,6 @@
 
 static void setup_status(void)
 {
-    _UNUSED
 	struct Unit *unit;
 
 	SetGold(GetGold() + 5000);
@@ -41,6 +40,14 @@ static void setup_status(void)
 		unit->wexp[ITEM_KIND_LIGHT] = WEXP_S;
 		unit->wexp[ITEM_KIND_ANIMA] = WEXP_A + 20;
 		UnitAddItem(unit, CreateItem(IID_FIRE));
+	}
+
+	unit = GetUnitByPid(PID_LILINA);
+	if (unit) {
+		unit->wexp[ITEM_KIND_ANIMA] = WEXP_A - 1;
+		unit->level = 9;
+		unit->exp = 99;
+		unit->items[0] = MAKE_ITEM(IID_FIRE, 1);
 	}
 }
 

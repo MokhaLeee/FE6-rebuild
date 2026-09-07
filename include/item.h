@@ -226,6 +226,7 @@ enum { ITEM_USES_SHIFT = 8 };
 
 #define ITEM_IID(item) ((item) & ((1 << ITEM_USES_SHIFT) - 1))
 #define ITEM_USES(item) ((item) >> ITEM_USES_SHIFT)
+#define MAKE_ITEM(iid, uses) ((iid) | ((uses) << ITEM_USES_SHIFT))
 
 // dummy macro for when the game confuses the two
 #define ITEM_FROM_IID(iid) (iid)

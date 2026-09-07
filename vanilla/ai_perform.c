@@ -18,6 +18,7 @@
 #include "ai_unk.h"
 #include "ui.h"
 #include "mu.h"
+#include "popup.h"
 #include "eventinfo.h"
 
 #include "post-action.h"

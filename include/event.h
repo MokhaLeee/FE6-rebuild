@@ -10,21 +10,6 @@ typedef uptr EventScr;
 
 enum
 {
-    POPUP_CMD_END,
-    POPUP_CMD_SPACE,
-    POPUP_CMD_ITEM_NAME,
-    POPUP_CMD_UNIT_NAME,
-    POPUP_CMD_MSG,
-    POPUP_CMD_STR,
-    POPUP_CMD_COLOR,
-    POPUP_CMD_ICON_ITEM,
-    POPUP_CMD_ICON_IKIND,
-    POPUP_CMD_NUMBER,
-    POPUP_CMD_SONG,
-};
-
-enum
-{
     BACKGROUND_0,
     BACKGROUND_1,
     BACKGROUND_2,
@@ -72,46 +57,6 @@ enum
 
 #define EVTCMD_GET_X(script) (EVTCMD_GET_X_RAW(script) & 0x8000 ? -1 : EVTCMD_GET_X_RAW(script))
 #define EVTCMD_GET_Y(script) (EVTCMD_GET_Y_RAW(script) & 0x8000 ? -1 : EVTCMD_GET_Y_RAW(script))
-
-struct PopupInfo
-{
-    /* 00 */ u8 cmd;
-    /* 04 */ int arg;
-};
-
-struct PopupProc
-{
-    /* 00 */ PROC_HEADER;
-
-    /* 2C */ struct PopupInfo const * info;
-    /* 30 */ int clock;
-
-    /* 34 */ i8 xParam;
-    /* 35 */ i8 yParam;
-
-    /* 36 */ u8 window_kind;
-
-    /* 37 */ u8 frameX;
-    /* 38 */ u8 frameY;
-
-    /* 39 */ u8 frameWidth;
-    /* 3A */ u8 frameHeight;
-
-    /* 3B */ u8 color;
-
-    /* 3C */ u8 pad_3C[0x3E - 0x3C];
-
-    /* 3E */ u16 icon;
-    /* 40 */ u16 iconChr;
-    /* 42 */ u8 iconPalid;
-    /* 43 */ u8 pad_43;
-    /* 44 */ u8 iconX;
-    /* 45 */ u8 pad_45;
-
-    /* 46 */ u16 widthPx;
-
-    /* 48 */ u16 songPlayed;
-};
 
 struct EventProc
 {
@@ -163,23 +108,7 @@ void MoveUnitFromInfo(struct UnitInfo const * info, struct Unit * unit, ProcPtr 
 bool func_fe6_0800CE44(void);
 bool func_fe6_0800CE74(void);
 int func_fe6_0800CE90(void);
-int PreparePopup(struct PopupProc * proc);
-void PutPopup(struct PopupInfo const * info, struct Text text);
-void Popup_OnInit(struct PopupProc * proc);
-void Popup_Prepare(struct PopupProc * proc);
-void Popup_FadeBgmOut(struct PopupProc * proc);
-void Popup_PlaySe(struct PopupProc * proc);
-void Popup_FadeBgmIn(struct PopupProc * proc);
-void PopupIconSprite_OnIdle(struct Proc * proc);
-void Popup_Display(struct PopupProc * proc);
-void Popup_WaitForEnd(struct PopupProc * proc);
-void Popup_Clear(struct PopupProc * proc);
-void SetPopupUnit(struct Unit * unit);
-void SetPopupItem(u16 item);
-void SetPopupNumber(int number);
-ProcPtr StartPopup(struct PopupInfo const * info, int duration, int window_kind, ProcPtr parent);
-ProcPtr StartPopupExt(struct PopupInfo const * info, int duration, int window_kind, int iconChr, int iconPal, ProcPtr parent);
-void EndPopup(void);
+
 void DisableEventSkip(void);
 void EventDisableSkip(ProcPtr proc);
 void Event_FadeOutOfBackgroundTalk(struct EventProc * proc);
@@ -411,18 +340,6 @@ void func_fe6_08012780(void);
 void func_fe6_08012798(void);
 void func_fe6_080127B0(void);
 
-#define POPUP_END { POPUP_CMD_END, 0 }
-#define POPUP_SPACE(len) { POPUP_CMD_SPACE, (len) }
-#define POPUP_ITEM_NAME { POPUP_CMD_ITEM_NAME, 0 }
-#define POPUP_UNIT_NAME { POPUP_CMD_UNIT_NAME, 0 }
-#define POPUP_MSG(msg) { POPUP_CMD_MSG, (msg) }
-#define POPUP_STR(str) { POPUP_CMD_STR, (int) (char const *) (str) }
-#define POPUP_COLOR(color) { POPUP_CMD_COLOR, (color) }
-#define POPUP_ICON_ITEM { POPUP_CMD_ICON_ITEM, 0 }
-#define POPUP_ICON_IKIND { POPUP_CMD_ICON_IKIND, 0 }
-#define POPUP_NUMBER { POPUP_CMD_NUMBER, 0 }
-#define POPUP_SONG(song) { POPUP_CMD_SONG, (song) }
-
 #define _EventCmds \
     [EVT_CMD_END] = { EvtCmd_End, 1 }, \
     [EVT_CMD_KILL] = { EvtCmd_Kill, 1 }, \
@@ -547,18 +464,6 @@ extern struct FaceVramEnt CONST_DATA gFightEventFaceConfig[];
 
 extern EventScr CONST_DATA EventScr_AutoTalk[];
 extern EventScr CONST_DATA EventScr_085C46DC[];
-
-extern struct PopupInfo CONST_DATA Popup_085C46FC[];
-extern struct PopupInfo CONST_DATA Popup_085C473C[];
-extern struct PopupInfo CONST_DATA Popup_085C477C[];
-extern struct PopupInfo CONST_DATA Popup_085C47A4[];
-extern struct PopupInfo CONST_DATA Popup_085C47DC[];
-extern struct PopupInfo CONST_DATA Popup_085C4814[];
-extern struct PopupInfo CONST_DATA Popup_085C4854[];
-extern struct PopupInfo CONST_DATA Popup_PlayerStoleItem[];
-extern struct PopupInfo CONST_DATA Popup_AiStoleItem[];
-extern struct PopupInfo CONST_DATA Popup_085C4914[];
-extern struct ProcScr CONST_DATA ProcScr_GiveItem[];
 
 extern EventScr CONST_DATA EventScr_Item[];
 extern EventScr CONST_DATA EventScr_ItemTo[];
