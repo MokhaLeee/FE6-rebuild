@@ -200,7 +200,7 @@ void BattleAIS_ExecCommands(void)
 							scr_start = (void *)(gpBanimScrs[GetAnimPosition(anim)] + scr_offset);
 
 							anim1->imgSheet = scr_start->img;
-#if !NONMATCHING
+#if 0
 							{
 								register const void *tmp_ptr asm("r4");
 								register int tmp_val asm("r1");
