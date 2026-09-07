@@ -59,7 +59,7 @@ static const struct TextInitInfo mss_text_init_info[] = {
 	{ &gMssSt.texts[MSS_TEXT_P2_AVO], 3 },
 	{ &gMssSt.texts[MSS_TEXT_P2_DDG], 5 },
 	{ &gMssSt.texts[MSS_TEXT_P2_SIL], 5 },
-	{ &gMssSt.texts[MSS_TEXT_P2_RNG], 7 },
+	{ &gMssSt.texts[MSS_TEXT_P2_RNG], 9 },
 	{ &gMssSt.texts[MSS_TEXT_P3_WEXP1], 2 },
 	{ &gMssSt.texts[MSS_TEXT_P3_WEXP2], 2 },
 	{ &gMssSt.texts[MSS_TEXT_P3_WEXP3], 2 },

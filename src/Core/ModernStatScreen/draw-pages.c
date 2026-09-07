@@ -86,8 +86,27 @@ static void put_multi_line_text(const char *str, struct Text *texts, u16 *tm, in
 	}
 }
 
+static struct StatScreenTextInfo const textinfo_lpage1[] = {
+	{ gMssSt.texts + MSS_TEXT_P1_SKILLS, TmBuff_MssL0 + TM_OFFSET(1, 1),  TEXT_COLOR_SYSTEM_GOLD, 0, "Skills:" },
+	{ gMssSt.texts + MSS_TEXT_P1_BMAGS, TmBuff_MssL0 + TM_OFFSET(1, 8),  TEXT_COLOR_SYSTEM_GOLD, 0, "B.Magic:" },
+	{ 0 }, // end
+};
+
 static void put_lpage1(void)
 {
+	int i;
+	struct Unit *unit = gMssSt.unit;
+	struct SkillList *slist = GetSkillList(unit);
+
+	PutStatScreenText(textinfo_lpage1);
+
+	for (i = 0; i < slist->amt; i++) {
+		PutIcon(
+			TmBuff_MssL0 + TM_OFFSET(1 + i * 2, 3),
+			SKILL_ICON(slist->sid[i]),
+			TILEREF(0, BGPAL_MSS_ICON0)
+		);
+	}
 }
 
 static void mss_PutNumberBonus(int number, u16 *tm)
@@ -182,6 +201,42 @@ static void put_lpage2(void)
 }
 
 static struct StatScreenTextInfo const textinfo_rpage2[] = {
+	{ gMssSt.texts + MSS_TEXT_P2_ATK, TmBuff_MssR0 + TM_OFFSET(1, 3),  TEXT_COLOR_SYSTEM_GOLD, 0, "Attack" },
+	{ gMssSt.texts + MSS_TEXT_P2_HIT, TmBuff_MssR0 + TM_OFFSET(1, 5),  TEXT_COLOR_SYSTEM_GOLD, 0, "Hit" },
+	{ gMssSt.texts + MSS_TEXT_P2_CRT, TmBuff_MssR0 + TM_OFFSET(1, 7),  TEXT_COLOR_SYSTEM_GOLD, 0, "Crit" },
+	{ gMssSt.texts + MSS_TEXT_P2_AVO, TmBuff_MssR0 + TM_OFFSET(1, 9),  TEXT_COLOR_SYSTEM_GOLD, 0, "Avoid" },
+	{ gMssSt.texts + MSS_TEXT_P2_DDG, TmBuff_MssR0 + TM_OFFSET(1, 11), TEXT_COLOR_SYSTEM_GOLD, 0, "Dodge" },
+	{ gMssSt.texts + MSS_TEXT_P2_SIL, TmBuff_MssR0 + TM_OFFSET(1, 13), TEXT_COLOR_SYSTEM_GOLD, 0, "Silencer" },
+	{ gMssSt.texts + MSS_TEXT_P2_RNG, TmBuff_MssR0 + TM_OFFSET(1, 15), TEXT_COLOR_SYSTEM_GOLD, 0, "Range" },
+	{ 0 }, // end
+};
+
+static void put_rpage2()
+{
+	const char *str;
+
+	PutStatScreenText(textinfo_rpage2);
+
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 3),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_attack);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 5),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_hit);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 7),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_crit);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 9),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_avoid);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 11), TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_dodge);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 13), TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_silencer);
+
+	str = GetItemRangeString(gBattleUnitA.weapon_before);
+	Text_InsertDrawString(&gMssSt.texts[MSS_TEXT_P2_RNG], 62 - GetStringTextLen(str), TEXT_COLOR_SYSTEM_BLUE, str);
+}
+
+/**
+ * page 3
+ */
+
+static void put_lpage3(void)
+{
+}
+
+static struct StatScreenTextInfo const textinfo_rpage3[] = {
 	{ gMssSt.texts + MSS_TEXT_P3_WEXP1, TmBuff_MssR0 + TM_OFFSET(3, 2),  TEXT_COLOR_SYSTEM_GOLD, 0, "剣" },
 	{ gMssSt.texts + MSS_TEXT_P3_WEXP2, TmBuff_MssR0 + TM_OFFSET(3, 4),  TEXT_COLOR_SYSTEM_GOLD, 0, "槍" },
 	{ gMssSt.texts + MSS_TEXT_P3_WEXP3, TmBuff_MssR0 + TM_OFFSET(3, 6),  TEXT_COLOR_SYSTEM_GOLD, 0, "斧" },
@@ -219,9 +274,9 @@ static void put_wexp_bar(int num, int x, int y, int kind)
 		k_udiv(k_umod(wexp, (WEXP_D - WEXP_E)) * 33, 48), 0);
 }
 
-static void put_rpage2(void)
+static void put_rpage3(void)
 {
-	PutStatScreenText(textinfo_rpage2);
+	PutStatScreenText(textinfo_rpage3);
 
 	put_wexp_bar(0, 1, 2, ITEM_KIND_SWORD);
 	put_wexp_bar(1, 1, 4, ITEM_KIND_LANCE);
@@ -232,60 +287,6 @@ static void put_rpage2(void)
 	put_wexp_bar(5, 1, 12, ITEM_KIND_LIGHT);
 	put_wexp_bar(6, 1, 14, ITEM_KIND_ELDER);
 	put_wexp_bar(7, 1, 16, ITEM_KIND_STAFF);
-}
-
-/**
- * page 3
- */
-static struct StatScreenTextInfo const textinfo_lpage3[] = {
-	{ gMssSt.texts + MSS_TEXT_P1_SKILLS, TmBuff_MssL0 + TM_OFFSET(1, 1),  TEXT_COLOR_SYSTEM_GOLD, 0, "Skills:" },
-	{ gMssSt.texts + MSS_TEXT_P1_BMAGS, TmBuff_MssL0 + TM_OFFSET(1, 6),  TEXT_COLOR_SYSTEM_GOLD, 0, "B.Magic:" },
-	{ 0 }, // end
-};
-
-static void put_lpage3(void)
-{
-	int i;
-	struct Unit *unit = gMssSt.unit;
-	struct SkillList *slist = GetSkillList(unit);
-
-	PutStatScreenText(textinfo_lpage3);
-
-	for (i = 0; i < slist->amt; i++) {
-		PutIcon(
-			TmBuff_MssL0 + TM_OFFSET(1 + i * 2, 3),
-			SKILL_ICON(slist->sid[i]),
-			TILEREF(0, BGPAL_MSS_ICON0)
-		);
-	}
-}
-
-static struct StatScreenTextInfo const textinfo_rpage3[] = {
-	{ gMssSt.texts + MSS_TEXT_P2_ATK, TmBuff_MssR0 + TM_OFFSET(1, 3),  TEXT_COLOR_SYSTEM_GOLD, 0, "Attack" },
-	{ gMssSt.texts + MSS_TEXT_P2_HIT, TmBuff_MssR0 + TM_OFFSET(1, 5),  TEXT_COLOR_SYSTEM_GOLD, 0, "Hit" },
-	{ gMssSt.texts + MSS_TEXT_P2_CRT, TmBuff_MssR0 + TM_OFFSET(1, 7),  TEXT_COLOR_SYSTEM_GOLD, 0, "Crit" },
-	{ gMssSt.texts + MSS_TEXT_P2_AVO, TmBuff_MssR0 + TM_OFFSET(1, 9),  TEXT_COLOR_SYSTEM_GOLD, 0, "Avoid" },
-	{ gMssSt.texts + MSS_TEXT_P2_DDG, TmBuff_MssR0 + TM_OFFSET(1, 11), TEXT_COLOR_SYSTEM_GOLD, 0, "Dodge" },
-	{ gMssSt.texts + MSS_TEXT_P2_SIL, TmBuff_MssR0 + TM_OFFSET(1, 13), TEXT_COLOR_SYSTEM_GOLD, 0, "Silencer" },
-	{ gMssSt.texts + MSS_TEXT_P2_RNG, TmBuff_MssR0 + TM_OFFSET(1, 15), TEXT_COLOR_SYSTEM_GOLD, 0, "Range" },
-	{ 0 }, // end
-};
-
-static void put_rpage3()
-{
-	const char *str;
-
-	PutStatScreenText(textinfo_rpage3);
-
-	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(7, 3),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_attack);
-	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(7, 5),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_hit);
-	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(7, 7),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_crit);
-	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(7, 9),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_avoid);
-	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(7, 11), TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_dodge);
-	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(7, 13), TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_silencer);
-
-	str = GetItemRangeString(gBattleUnitA.weapon_before);
-	Text_InsertDrawString(&gMssSt.texts[MSS_TEXT_P2_RNG], 55 - GetStringTextLen(str), TEXT_COLOR_SYSTEM_BLUE, str);
 }
 
 /**
