@@ -45,7 +45,7 @@ int PreparePopup(struct PopupProc *proc)
 
 		case POPUP_CMD_ICON_IKIND:
 			proc->iconX = result;
-			proc->icon = sPopupItem + 0x70; // TODO: icon constants?
+			proc->icon = WTYPE_ICON(sPopupItem);
 			ApplyIconPalette(1, proc->iconPalid);
 
 			result += 16;
