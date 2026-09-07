@@ -56,58 +56,6 @@ struct UnkSt_030046D0
     /* 04 */ STRUCT_PAD(0x04, 0x08);
 };
 
-enum { MAX_MANIM_DEBUG_HITS = 5 };
-
-enum
-{
-    MANIM_DEBUG_PARAM_PID,
-    MANIM_DEBUG_PARAM_X,
-    MANIM_DEBUG_PARAM_Y,
-    MANIM_DEBUG_PARAM_JID,
-    MANIM_DEBUG_PARAM_IID,
-    MANIM_DEBUG_PARAM_HITS,
-    MAX_MANIM_DEBUG_PARAM = MANIM_DEBUG_PARAM_HITS + MAX_MANIM_DEBUG_HITS,
-};
-
-enum
-{
-    MANIM_DEBUG_HIT_KIND_NONE,
-    MANIM_DEBUG_HIT_KIND_REGULAR,
-    MANIM_DEBUG_HIT_KIND_REGULAR_DEVIL,
-    MANIM_DEBUG_HIT_KIND_REGULAR_HPSTEAL,
-    MANIM_DEBUG_HIT_KIND_REGULAR_POISON,
-    MANIM_DEBUG_HIT_KIND_CRIT,
-    MANIM_DEBUG_HIT_KIND_CRIT_DEVIL,
-    MANIM_DEBUG_HIT_KIND_CRIT_HPSTEAL,
-    MANIM_DEBUG_HIT_KIND_CRIT_POISON,
-    MANIM_DEBUG_HIT_KIND_MISS,
-
-    MAX_MANIM_DEBUG_HIT_KIND,
-};
-
-struct ManimDebugStEnt
-{
-    /* 00 */ short data[MAX_MANIM_DEBUG_PARAM];
-    /* 14 */ struct Text text[MAX_MANIM_DEBUG_PARAM];
-};
-
-struct ManimDebugSt
-{
-    /* 00 */ STRUCT_PAD(0x00, 0x08);
-    /* 08 */ struct ManimDebugStEnt ent[2];
-};
-
-struct ManimDebugParamInfo
-{
-    /* 00 */ u8 text_width;
-    /* 01 */ i8 param_up;
-    /* 02 */ i8 param_down;
-    /* 03 */ i8 param_left;
-    /* 04 */ i8 param_right;
-    /* 05 */ u8 min;
-    /* 06 */ u8 max;
-};
-
 // TODO: split this different procs for each effect
 struct ManimEffectProc
 {

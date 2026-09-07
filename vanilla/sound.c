@@ -33,6 +33,20 @@ static void SetBgmChannels(int song_id);
 
 struct SoundSt EWRAM_DATA sSoundSt;
 
+IWRAM_DATA struct SoundInfo gSoundInfo = { 0 };
+IWRAM_DATA struct MusicPlayer gMPlayInfo_SE4_BMP2 = {};
+IWRAM_DATA struct MusicPlayer gMPlayInfo_SE5_BMP3 = {};
+IWRAM_DATA struct MusicPlayer gMusicPlayer_FightBgm = {};
+IWRAM_DATA MPlayFunc gMPlayJumpTable[36] = { 0 };
+IWRAM_DATA struct CgbChannel gCgbChans[4] = { { 0 } };
+IWRAM_DATA struct MusicPlayer gMPlayInfo_SE6_BMP4 = {};
+IWRAM_DATA struct MusicPlayer gMusicPlayer_MainBgm = {};
+IWRAM_DATA struct MusicPlayer gMPlayInfo_SE1_SYS1 = {};
+IWRAM_DATA struct MusicPlayer gMPlayInfo_SE3_BMP1 = {};
+IWRAM_DATA u8 gMPlayMemAccArea[0x10] = { 0 };
+IWRAM_DATA struct MusicPlayer gMPlayInfo_SE7_EVT = {};
+IWRAM_DATA struct MusicPlayer gMPlayInfo_SE2_SYS2 = {};
+
 struct ProcScr CONST_DATA ProcScr_MusicFadeIn[] =
 {
     PROC_END_DUPS,

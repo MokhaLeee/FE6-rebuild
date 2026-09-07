@@ -38,19 +38,14 @@ IWRAM_DATA void (* MapFloodCoreRamFunc)(void) = NULL;
  * OAM
  */
 IWRAM_DATA u16 gOamAffinePutId = 0;
-IWRAM_DATA void (* PutOamHiRamFunc)(int x, int y, u16 const * oam_list, int oam2) = NULL;
 IWRAM_DATA Func gOnHBlankA = NULL;
 IWRAM_DATA u16 gOam[0x200] = {};
-IWRAM_DATA void (* DrawGlyphRamFunc)(u16 const * cvtLut, void * chr, u32 const * glyph, int offset) = NULL;
 IWRAM_DATA u16 *gOamHiPutIt = NULL;
 IWRAM_DATA Func gOnHBlankB = NULL;
 
 /**
  * Arm func
  */
-IWRAM_DATA u8 RamFuncArea[0xA00] = {};
-IWRAM_DATA void (* DecodeStringRamFunc)(char const * src, char * dst) = NULL;
-IWRAM_DATA void (* PutOamLoRamFunc)(int x, int y, u16 const * oam_list, int oam2) = NULL;
 IWRAM_DATA struct OamView *gOamAffinePutIt = NULL;
 IWRAM_DATA u32 IntrMainRam[0x200] = {};
 IWRAM_DATA void (* MapFloodCoreStepRamFunc)(void) = NULL;
@@ -87,15 +82,6 @@ IWRAM_DATA struct Unit *gActiveUnit = NULL;
 IWRAM_DATA struct MapFloodSt gMapFloodSt = {};
 
 /**
- * SIO
- */
-IWRAM_DATA int gUnk_Sio_030044D0 = 0;
-IWRAM_DATA int gUnk_Sio_030044D4 = 0;
-IWRAM_DATA u8 gSioBuf_030044E0[0x88] = {};
-IWRAM_DATA u32 gSioStateId = 0;
-IWRAM_DATA struct SioMessage gSioMsgBuf = {};
-
-/**
  * AI
  */
 IWRAM_DATA void (*AiDecideFunc)(void) = NULL;
@@ -103,8 +89,6 @@ IWRAM_DATA void (*AiDecideFunc)(void) = NULL;
 /**
  * Map anim
  */
-IWRAM_DATA u8 gUnk_Sio_03004580[0x80] = {};
-IWRAM_DATA struct ManimDebugSt gManimDebugStObj = {};
 IWRAM_DATA struct UnkSt_030046D0 gUnk_030046D0[0x10] = {};
 IWRAM_DATA u16 gUnk_03004750[10 * 0x10] = {};
 
@@ -135,27 +119,5 @@ IWRAM_DATA struct WmArrowSt gWmArrowSt[3] = {};
 /**
  * OP
  */
-IWRAM_DATA u8 gUnk_03005280[4] = {};
 IWRAM_DATA bool bool_opanim_03005284 = false;
 IWRAM_DATA int gOpAnimStep[8] = {};
-
-/**
- * m4a
- */
-IWRAM_DATA struct SoundInfo gSoundInfo = { 0 };
-IWRAM_DATA struct MusicPlayer gMPlayInfo_SE4_BMP2 = {};
-IWRAM_DATA struct MusicPlayer gMPlayInfo_SE5_BMP3 = {};
-IWRAM_DATA struct MusicPlayer gMusicPlayer_FightBgm = {};
-IWRAM_DATA MPlayFunc gMPlayJumpTable[36] = { 0 };
-IWRAM_DATA struct CgbChannel gCgbChans[4] = { { 0 } };
-IWRAM_DATA struct MusicPlayer gMPlayInfo_SE6_BMP4 = {};
-IWRAM_DATA struct MusicPlayer gMusicPlayer_MainBgm = {};
-IWRAM_DATA struct MusicPlayer gMPlayInfo_SE1_SYS1 = {};
-IWRAM_DATA struct MusicPlayer gMPlayInfo_SE3_BMP1 = {};
-IWRAM_DATA u8 gMPlayMemAccArea[0x10] = { 0 };
-IWRAM_DATA struct MusicPlayer gMPlayInfo_SE7_EVT = {};
-IWRAM_DATA struct MusicPlayer gMPlayInfo_SE2_SYS2 = {};
-
-/**
- * Save
- */
