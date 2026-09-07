@@ -3,6 +3,10 @@
 
 #define CONFIG_VERSION "v0.1.0"
 
+/* remove io print */
+#define CONFIG_MGBA_PRINT_EN 0
+#define CONFIG_NCGB_PRINT_EN 1
+
 /* 0: use flash, 1: sram */
 #define CONFIG_SAVE_USE_SRAM 1
 #define CONFIG_SAVE_USE_FLASH 1

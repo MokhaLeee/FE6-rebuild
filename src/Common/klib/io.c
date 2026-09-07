@@ -8,10 +8,18 @@ int mgba_print_level;
  */
 #define NOCASHGBAPRINTADDR 0x4FFFA18
 
+#if CONFIG_NCGB_PRINT_EN
+
 void nocashgba_print(const char *buf)
 {
 	*(volatile u32 *)NOCASHGBAPRINTADDR = (u32)buf;
 }
+
+#else
+
+void nocashgba_print(const char *buf) {}
+
+#endif
 
 /**
  * MGBA print
@@ -19,6 +27,8 @@ void nocashgba_print(const char *buf)
 #define REG_DEBUG_ENABLE ((vu16 *) 0x4FFF780)
 #define REG_DEBUG_FLAGS ((vu16 *) 0x4FFF700)
 #define REG_DEBUG_STRING ((char *) 0x4FFF600)
+
+#if CONFIG_MGBA_PRINT_EN
 
 void mgba_print(const char *buf)
 {
@@ -39,3 +49,11 @@ void mgba_close(void)
 {
 	*REG_DEBUG_ENABLE = 0;
 }
+
+#else
+
+void mgba_print(const char *buf) {}
+bool mgba_open(void) { return true; }
+void mgba_close(void) {}
+
+#endif
