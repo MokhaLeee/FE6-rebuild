@@ -7,9 +7,9 @@
 #define CONFIG_MGBA_PRINT_EN 0
 #define CONFIG_NCGB_PRINT_EN 1
 
-/* 0: use flash, 1: sram */
+/* save media config: sram or flash */
 #define CONFIG_SAVE_USE_SRAM 1
-#define CONFIG_SAVE_USE_FLASH 1
+#define CONFIG_SAVE_USE_FLASH 0
 
 /* read/write save in 4K sector */
 #define CONFIG_SECTOR_OPERATION_IN_4K 1
