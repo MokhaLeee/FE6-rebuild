@@ -149,8 +149,7 @@ void BattleApplyGameStateUpdates(void)
 
 void BattleGenerateSimulation(struct Unit *instigator, struct Unit *target, int x, int y, int item_slot)
 {
-	if (x < 0 && y < 0)
-	{
+	if (x < 0 && y < 0) {
 		x = instigator->x;
 		y = instigator->y;
 	}
@@ -211,8 +210,7 @@ void BattleGenerateDisplayStats(struct Unit *unit, i8 item_slot)
 	SetBattleUnitWeapon(&gBattleUnitA, item_slot);
 	ComputeBattleUnitStats(&gBattleUnitA, &gBattleUnitB);
 
-	if (!gBattleUnitA.weapon)
-	{
+	if (!gBattleUnitA.weapon) {
 		gBattleUnitA.battle_attack = 0xFF;
 		gBattleUnitA.battle_hit = 0xFF;
 		gBattleUnitA.battle_crit = 0xFF;
@@ -263,9 +261,7 @@ void SetBattleUnitWeapon(struct BattleUnit *bu, int item_slot)
 
 	bu->has_inventory_weapon = TRUE;
 
-	switch (item_slot)
-	{
-
+	switch (item_slot) {
 	case ITEMSLOT_INV0 ... ITEMSLOT_INV_COUNT-1:
 		bu->weapon_inventory_slot = item_slot;
 		bu->weapon = bu->unit.items[bu->weapon_inventory_slot];
@@ -316,24 +312,20 @@ void SetBattleUnitWeapon(struct BattleUnit *bu, int item_slot)
 	bu->weapon_attributes = GetItemAttributes(bu->weapon);
 	bu->weapon_kind = GetItemKind(bu->weapon);
 
-	if (!(gBattleSt.flags & BATTLE_FLAG_STATSONLY))
-	{
-		if (bu->weapon_attributes & ITEM_ATTR_LIGHTBRAND)
-		{
+	if (!(gBattleSt.flags & BATTLE_FLAG_STATSONLY)) {
+		if (bu->weapon_attributes & ITEM_ATTR_LIGHTBRAND) {
 			if (gBattleSt.range == 2)
 				bu->weapon_kind = ITEM_KIND_LIGHT;
 			else
 				bu->weapon_attributes = bu->weapon_attributes &~ ITEM_ATTR_LIGHTBRAND;
 		}
 
-		if (!CanItemReachDistance(bu->weapon, gBattleSt.range, &bu->unit) || bu->weapon_inventory_slot == 0xFF)
-		{
+		if (!CanItemReachDistance(bu->weapon, gBattleSt.range, &bu->unit) || bu->weapon_inventory_slot == 0xFF) {
 			bu->weapon = 0;
 			bu->has_inventory_weapon = FALSE;
 		}
 
-		if (bu->unit.status == UNIT_STATUS_SLEEP)
-		{
+		if (bu->unit.status == UNIT_STATUS_SLEEP) {
 			bu->weapon = 0;
 			bu->has_inventory_weapon = FALSE;
 		}
@@ -402,8 +394,7 @@ void ComputeBattleUnitEffectiveCritRate(struct BattleUnit *attacker, struct Batt
 
 void ComputeBattleUnitSpecialWeaponStats(struct BattleUnit *attacker, struct BattleUnit *defender)
 {
-	if (attacker->weapon_attributes & ITEM_ATTR_LIGHTBRAND)
-	{
+	if (attacker->weapon_attributes & ITEM_ATTR_LIGHTBRAND) {
 		attacker->battle_attack = 10;
 		defender->battle_defense = 0;
 
@@ -413,8 +404,7 @@ void ComputeBattleUnitSpecialWeaponStats(struct BattleUnit *attacker, struct Bat
 		return;
 	}
 
-	if (GetItemWeaponEffect(attacker->weapon_before) == WEAPON_EFFECT_ECLIPSE)
-	{
+	if (GetItemWeaponEffect(attacker->weapon_before) == WEAPON_EFFECT_ECLIPSE) {
 		attacker->battle_attack = defender->unit.hp - 1;
 
 		if (attacker->battle_attack == 0)
@@ -431,8 +421,7 @@ void ClearBattleHits(void)
 {
 	int i;
 
-	for (i = 0; i < BATTLE_HIT_MAX; ++i)
-	{
+	for (i = 0; i < BATTLE_HIT_MAX; ++i) {
 		gBattleHits[i].attributes = 0;
 		gBattleHits[i].info = 0;
 		gBattleHits[i].damage = 0;
@@ -448,8 +437,7 @@ void BattleUnwind(void)
 	// this do { ... } while (0); is required for match
 	// which is kind of neat because it implies scrapped plans for supporting some accost kind of thing
 
-	do
-	{
+	do {
 		struct BattleUnit *attacker;
 		struct BattleUnit *defender;
 
@@ -457,12 +445,10 @@ void BattleUnwind(void)
 
 		gBattleHitIt->info |= BATTLE_HIT_INFO_BEGIN;
 
-		if (!BattleGenerateRoundHits(attacker, defender))
-		{
+		if (!BattleGenerateRoundHits(attacker, defender)) {
 			gBattleHitIt->attributes |= BATTLE_HIT_ATTR_RETALIATE;
 
-			if (!BattleGenerateRoundHits(defender, attacker) && BattleGetFollowUpOrder(&attacker, &defender))
-			{
+			if (!BattleGenerateRoundHits(defender, attacker) && BattleGetFollowUpOrder(&attacker, &defender)) {
 				gBattleHitIt->attributes = BATTLE_HIT_ATTR_FOLLOWUP;
 
 				BattleGenerateRoundHits(attacker, defender);
@@ -488,13 +474,10 @@ bool BattleGetFollowUpOrder(struct BattleUnit ** attacker, struct BattleUnit ** 
 	if (ABS(gBattleUnitA.battle_speed - gBattleUnitB.battle_speed) < 4)
 		return FALSE;
 
-	if (gBattleUnitA.battle_speed > gBattleUnitB.battle_speed)
-	{
+	if (gBattleUnitA.battle_speed > gBattleUnitB.battle_speed) {
 		*attacker = &gBattleUnitA;
 		*defender = &gBattleUnitB;
-	}
-	else
-	{
+	} else {
 		*attacker = &gBattleUnitB;
 		*defender = &gBattleUnitA;
 	}
@@ -516,8 +499,7 @@ bool BattleGenerateRoundHits(struct BattleUnit *attacker, struct BattleUnit *def
 	attrs = gBattleHitIt->attributes;
 	count = GetBattleUnitHitCount(attacker);
 
-	for (i = 0; i < count; ++i)
-	{
+	for (i = 0; i < count; ++i) {
 		gBattleHitIt->attributes |= attrs;
 
 		if (BattleGenerateHit(attacker, defender))
@@ -547,8 +529,7 @@ int BattleCheckBraveEffect(struct BattleUnit *attacker)
 
 bool BattleCheckTriangleAttack(struct BattleUnit *attacker, struct BattleUnit *defender)
 {
-	SHOULD_BE_STATIC i8 SHOULD_BE_CONST adjacentLut[] =
-	{
+	SHOULD_BE_STATIC i8 SHOULD_BE_CONST adjacentLut[] = {
 		-1,  0,
 		 0, -1,
 		+1,  0,
@@ -567,8 +548,7 @@ bool BattleCheckTriangleAttack(struct BattleUnit *attacker, struct BattleUnit *d
 	gBattleSt.extra_unit_a = NULL;
 	gBattleSt.extra_unit_b = NULL;
 
-	for (i = 0; i < 4; ++i)
-	{
+	for (i = 0; i < 4; ++i) {
 		struct Unit *unit;
 
 		int uid = gMapUnit[adjacentLut[i*2+1] + y][adjacentLut[i*2+0] + x];
@@ -584,8 +564,7 @@ bool BattleCheckTriangleAttack(struct BattleUnit *attacker, struct BattleUnit *d
 		if (unit->status == UNIT_STATUS_SLEEP)
 			continue;
 
-		if (UNIT_ATTRIBUTES(unit) & triangleAttackAttr)
-		{
+		if (UNIT_ATTRIBUTES(unit) & triangleAttackAttr) {
 			++count;
 
 			if (!gBattleSt.extra_unit_a)
@@ -610,16 +589,14 @@ void BattleGenerateHitAttributes(struct BattleUnit *attacker)
 {
 	gBattleSt.damage = 0;
 
-	if (BattleRandRoll2Rn(gBattleSt.hit, TRUE) == FALSE)
-	{
+	if (BattleRandRoll2Rn(gBattleSt.hit, TRUE) == FALSE) {
 		gBattleHitIt->attributes |= BATTLE_HIT_ATTR_MISS;
 		return;
 	}
 
 	gBattleSt.damage = gBattleSt.attack - gBattleSt.defense;
 
-	if (BattleRandRoll(gBattleSt.crit, FALSE) == TRUE)
-	{
+	if (BattleRandRoll(gBattleSt.crit, FALSE) == TRUE) {
 		gBattleHitIt->attributes |= BATTLE_HIT_ATTR_CRIT;
 		gBattleSt.damage = gBattleSt.damage * 3;
 	}
@@ -664,11 +641,8 @@ void BattleGenerateHitEffects(struct BattleUnit *attacker, struct BattleUnit *de
 {
 	attacker->wexp_gain++;
 
-	if (!(gBattleHitIt->attributes & BATTLE_HIT_ATTR_MISS))
-	{
-		switch (GetItemWeaponEffect(attacker->weapon))
-		{
-
+	if (!(gBattleHitIt->attributes & BATTLE_HIT_ATTR_MISS)) {
+		switch (GetItemWeaponEffect(attacker->weapon)) {
 		case WEAPON_EFFECT_POISON:
 			defender->output_status = UNIT_STATUS_POISON;
 			gBattleHitIt->attributes |= BATTLE_HIT_ATTR_POISON;
@@ -678,20 +652,16 @@ void BattleGenerateHitEffects(struct BattleUnit *attacker, struct BattleUnit *de
 		case WEAPON_EFFECT_ECLIPSE:
 			gBattleHitIt->attributes |= BATTLE_HIT_ATTR_ECLIPSE;
 			break;
-
 		}
 
-		if (GetItemWeaponEffect(attacker->weapon) == WEAPON_EFFECT_DEVIL && (BattleRandRoll(21 - attacker->unit.level, FALSE)))
-		{
+		if (GetItemWeaponEffect(attacker->weapon) == WEAPON_EFFECT_DEVIL && (BattleRandRoll(21 - attacker->unit.level, FALSE))) {
 			gBattleHitIt->attributes |= BATTLE_HIT_ATTR_DEVIL;
 
 			attacker->unit.hp -= gBattleSt.damage;
 
 			if (attacker->unit.hp < 0)
 				attacker->unit.hp = 0;
-		}
-		else
-		{
+		} else {
 			if (gBattleSt.damage > defender->unit.hp)
 				gBattleSt.damage = defender->unit.hp;
 
@@ -701,8 +671,7 @@ void BattleGenerateHitEffects(struct BattleUnit *attacker, struct BattleUnit *de
 				defender->unit.hp = 0;
 		}
 
-		if (GetItemWeaponEffect(attacker->weapon) == WEAPON_EFFECT_NOSFERATU)
-		{
+		if (GetItemWeaponEffect(attacker->weapon) == WEAPON_EFFECT_NOSFERATU) {
 			attacker->unit.hp += gBattleSt.damage;
 
 			if (attacker->unit.hp > attacker->unit.max_hp)
@@ -714,8 +683,7 @@ void BattleGenerateHitEffects(struct BattleUnit *attacker, struct BattleUnit *de
 
 	gBattleHitIt->damage = gBattleSt.damage;
 
-	if (!(gBattleHitIt->attributes & BATTLE_HIT_ATTR_MISS) || attacker->weapon_attributes & (ITEM_ATTR_MAGIC | ITEM_ATTR_UNCOUNTERABLE))
-	{
+	if (!(gBattleHitIt->attributes & BATTLE_HIT_ATTR_MISS) || attacker->weapon_attributes & (ITEM_ATTR_MAGIC | ITEM_ATTR_UNCOUNTERABLE)) {
 		attacker->weapon = GetItemAfterUse(attacker->weapon);
 
 		if (!attacker->weapon)
@@ -734,8 +702,7 @@ bool BattleGenerateHit(struct BattleUnit *attacker, struct BattleUnit *defender)
 	BattleGenerateHitAttributes(attacker);
 	BattleGenerateHitEffects(attacker, defender);
 
-	if (attacker->unit.hp == 0 || defender->unit.hp == 0)
-	{
+	if (attacker->unit.hp == 0 || defender->unit.hp == 0) {
 		attacker->wexp_gain++;
 
 		gBattleHitIt->info |= BATTLE_HIT_INFO_FINISHES;
@@ -753,10 +720,8 @@ bool BattleGenerateHit(struct BattleUnit *attacker, struct BattleUnit *defender)
 
 void BattleApplyExpGains(void)
 {
-	if ((UNIT_FACTION(&gBattleUnitA.unit) != FACTION_BLUE) || (UNIT_FACTION(&gBattleUnitB.unit) != FACTION_BLUE))
-	{
-		if (!(gPlaySt.flags & PLAY_FLAG_COMPLETE))
-		{
+	if ((UNIT_FACTION(&gBattleUnitA.unit) != FACTION_BLUE) || (UNIT_FACTION(&gBattleUnitB.unit) != FACTION_BLUE)) {
+		if (!(gPlaySt.flags & PLAY_FLAG_COMPLETE)) {
 			gBattleUnitA.exp_gain = GetBattleUnitExpGain(&gBattleUnitA, &gBattleUnitB);
 			gBattleUnitB.exp_gain = GetBattleUnitExpGain(&gBattleUnitB, &gBattleUnitA);
 
@@ -773,8 +738,7 @@ int GetStatIncrease(int growth)
 {
 	int result = 0;
 
-	while (growth > 100)
-	{
+	while (growth > 100) {
 		result++;
 		growth -= 100;
 	}
@@ -825,8 +789,7 @@ int GetBattleUnitUpdatedWeaponExp(struct BattleUnit *bu)
 	if (gBmSt.flags & BM_FLAG_LINKARENA)
 		return -1;
 
-	if (!(gBattleSt.flags & BATTLE_FLAG_ARENA))
-	{
+	if (!(gBattleSt.flags & BATTLE_FLAG_ARENA)) {
 		if (!bu->has_inventory_weapon)
 			return -1;
 
@@ -839,13 +802,10 @@ int GetBattleUnitUpdatedWeaponExp(struct BattleUnit *bu)
 
 	result = bu->unit.wexp[bu->weapon_kind] + bu->wexp_gain;
 
-	if (UNIT_ATTRIBUTES(&bu->unit) & UNIT_ATTR_PROMOTED)
-	{
+	if (UNIT_ATTRIBUTES(&bu->unit) & UNIT_ATTR_PROMOTED) {
 		if (result > WEXP_S)
 			result = WEXP_S;
-	}
-	else
-	{
+	} else {
 		if (result > WEXP_A)
 			result = WEXP_A;
 	}
@@ -878,8 +838,7 @@ void UpdateUnitDuringBattle(struct Unit *unit, struct BattleUnit *bu)
 
 void BattleApplyBallistaUpdates(void)
 {
-	if (gBattleSt.flags & BATTLE_FLAG_BALLISTA)
-	{
+	if (gBattleSt.flags & BATTLE_FLAG_BALLISTA) {
 		int uses = GetItemUses(gBattleUnitA.weapon);
 		GetBallistaTrapAt(gBattleUnitA.unit.x, gBattleUnitA.unit.y)->extra = uses;
 	}
@@ -980,8 +939,7 @@ int GetBattleUnitExpGain(struct BattleUnit *bu, struct BattleUnit *other)
 
 void BattleApplyItemExpGains(void)
 {
-	if ((gBattleUnitA.weapon_attributes & ITEM_ATTR_STAFF) && !(gPlaySt.flags & PLAY_FLAG_COMPLETE))
-	{
+	if ((gBattleUnitA.weapon_attributes & ITEM_ATTR_STAFF) && !(gPlaySt.flags & PLAY_FLAG_COMPLETE)) {
 		if (UNIT_FACTION(&gBattleUnitA.unit) == FACTION_BLUE)
 			gBattleUnitA.wexp_gain++;
 
@@ -1081,10 +1039,8 @@ void BattleApplyWeaponTriangleEffect(struct BattleUnit *attacker, struct BattleU
 {
 	struct WeaponTriangleRule const * it;
 
-	for (it = sWeaponTriangleRules; it->attackerKind >= 0; ++it)
-	{
-		if ((attacker->weapon_kind == it->attackerKind) && (defender->weapon_kind == it->defenderKind))
-		{
+	for (it = sWeaponTriangleRules; it->attackerKind >= 0; ++it) {
+		if ((attacker->weapon_kind == it->attackerKind) && (defender->weapon_kind == it->defenderKind)) {
 			attacker->advantage_bonus_hit = it->hitBonus;
 			attacker->advantage_bonus_damage = it->damageBonus;
 
@@ -1106,18 +1062,15 @@ void BattleInitTargetCanCounter(void)
 {
 	// Target cannot counter if either units are using "uncounterable" weapons
 
-	if ((gBattleUnitA.weapon_attributes | gBattleUnitB.weapon_attributes) & ITEM_ATTR_UNCOUNTERABLE)
-	{
+	if ((gBattleUnitA.weapon_attributes | gBattleUnitB.weapon_attributes) & ITEM_ATTR_UNCOUNTERABLE) {
 		gBattleUnitB.weapon = 0;
 		gBattleUnitB.has_inventory_weapon = FALSE;
 	}
 
 	// Target cannot counter if a berserked player unit is attacking another player unit
 
-	if (gBattleUnitA.unit.status == UNIT_STATUS_BERSERK)
-	{
-		if ((UNIT_FACTION(&gBattleUnitA.unit) == FACTION_BLUE) && (UNIT_FACTION(&gBattleUnitB.unit) == FACTION_BLUE))
-		{
+	if (gBattleUnitA.unit.status == UNIT_STATUS_BERSERK) {
+		if ((UNIT_FACTION(&gBattleUnitA.unit) == FACTION_BLUE) && (UNIT_FACTION(&gBattleUnitB.unit) == FACTION_BLUE)) {
 			gBattleUnitB.weapon = 0;
 			gBattleUnitB.has_inventory_weapon = FALSE;
 		}
@@ -1161,8 +1114,7 @@ void UpdateObstacleFromBattle(struct BattleUnit *bu)
 
 	trap->extra = bu->unit.hp;
 
-	if (trap->extra == 0)
-	{
+	if (trap->extra == 0) {
 		int mapchange = GetMapChangeIdAt(trap->x, trap->y);
 
 		RenderMapForFade();
@@ -1191,13 +1143,10 @@ void BeginBattleAnimations(void)
 
 	RenderMap();
 
-	if (SetupBanim())
-	{
+	if (SetupBanim()) {
 		SetBanimLinkArenaFlag(0);
 		BeginAnimsOnBattleAnimations();
-	}
-	else
-	{
+	} else {
 		EndAllMus();
 		RenderMap();
 
@@ -1337,8 +1286,7 @@ void BattleApplyItemEffect(ProcPtr proc)
 
 	BattleApplyItemExpGains();
 
-	if (gBattleUnitA.has_inventory_weapon)
-	{
+	if (gBattleUnitA.has_inventory_weapon) {
 		if (GetItemAttributes(gBattleUnitA.weapon) & ITEM_ATTR_STAFF)
 			gBattleUnitA.weapon_broke = TRUE;
 
@@ -1380,8 +1328,7 @@ void BattleGenerateArena(struct Unit *unit)
 	InitBattleUnit(&gBattleUnitA, unit);
 	InitBattleUnit(&gBattleUnitB, target);
 
-	if (gAction.extra != 0)
-	{
+	if (gAction.extra != 0) {
 		gBattleUnitB.unit.hp = gAction.extra;
 		gBattleUnitB.previous_hp = gAction.extra;
 	}
