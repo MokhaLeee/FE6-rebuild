@@ -57,15 +57,6 @@ static struct WeaponTriangleRule CONST_DATA sWeaponTriangleRules[] = {
 	{ .attackerKind = -1 },
 };
 
-static void DummyBattleAnimLock_UpdateInstigator(ProcPtr proc);
-
-struct ProcScr ProcScr_DummyBattleAnimLock[] = {
-	PROC_SLEEP(1),
-	PROC_CALL(DummyBattleAnimLock_UpdateInstigator),
-
-	PROC_END,
-};
-
 struct BattleSt EWRAM_DATA gBattleSt = {};
 
 struct BattleUnit EWRAM_DATA gBattleUnitA = {};
@@ -1273,6 +1264,13 @@ static void DummyBattleAnimLock_UpdateInstigator(ProcPtr proc)
 {
 	UpdateUnitFromBattle(GetUnit(gBattleUnitA.unit.id), &gBattleUnitA);
 }
+
+static const struct ProcScr ProcScr_DummyBattleAnimLock[] = {
+	PROC_SLEEP(1),
+	PROC_CALL(DummyBattleAnimLock_UpdateInstigator),
+
+	PROC_END,
+};
 
 void BattleApplyMiscAction(ProcPtr proc)
 {

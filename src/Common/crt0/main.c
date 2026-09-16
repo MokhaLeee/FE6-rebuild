@@ -16,7 +16,6 @@
 #include "save-hw.h"
 #include "debug.h"
 
-void SramInit(void);
 void InitGlobalSaveInfo(void);
 
 void AgbMain(void)
