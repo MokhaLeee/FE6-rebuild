@@ -811,10 +811,39 @@ struct ProcEkrBaseKaiten {
 
 void NewEkrBaseKaiten(int identifier);
 void EkrBaseKaiten_Loop(struct ProcEkrBaseKaiten *proc);
+
+struct ProcEkrUnitKakudai {
+    PROC_HEADER;
+
+    STRUCT_PAD(0x29, 0x2C);
+
+    /* 2C */ s16 timer;
+    /* 2E */ s16 terminator;
+    /* 30 */ u16 unk30;
+
+    /* 32 */ s16 x1;
+    /* 34 */ s16 x2;
+    /* 36 */ s16 left_pos;
+    /* 38 */ s16 right_pos;
+    /* 3A */ s16 y1;
+    /* 3C */ s16 y2;
+
+    STRUCT_PAD(0x3E, 0x44);
+
+    /* 44 */ int type;
+
+    STRUCT_PAD(0x48, 0x4C);
+
+    /* 4C */ u32 valid_l;
+    /* 50 */ u32 valid_r;
+    /* 54 */ void *pOaml;
+    /* 58 */ void *pOamr;
+};
+
 void NewEkrUnitKakudai(int identifier);
-// UnitKakudaiPrepareAnimScript
-// UnitKakudaiMain
-// func_fe6_08048D98
+void EkrUnitKakudai_PrepareAnimScript(struct ProcEkrUnitKakudai *proc);
+void EkrUnitKakudai_Main(struct ProcEkrUnitKakudai *proc);
+void EkrUnitKakudai_End(struct ProcEkrUnitKakudai *proc);
 
 struct ProcEkrIntroWindow {
     PROC_HEADER;
@@ -829,16 +858,21 @@ struct ProcEkrIntroWindow {
     /* 48 */ int ymax_name;
 };
 
+extern EWRAM_OVERLAY(banim) int gEkrWindowAppearUnexist;
+
 void NewEkrWindowAppear(int identifier, int duration);
 bool CheckEkrWindowAppearUnexist(void);
-// func_fe6_08048E08
+void EkrWindowAppear_Main(struct ProcEkrIntroWindow *proc);
+
+extern EWRAM_OVERLAY(banim) int gEkrNameWinAppearExist;
+
 void NewEkrNamewinAppear(int identifier, int duration, int delay);
 bool CheckEkrNamewinAppearUnexist(void);
-// func_fe6_08048EEC
-// func_fe6_08048F0C
+void EkrNamewinAppear_Delay(struct ProcEkrIntroWindow *proc);
+void EkrNamewinAppear_Main(struct ProcEkrIntroWindow *proc);
 void NewEkrBaseAppear(int identifier, int duration);
 bool CheckEkrBaseAppearUnexist(void);
-// EkrBaseAppear_Loop
+void EkrBaseAppear_Loop(struct ProcEkrIntroWindow *proc);
 bool _SetupBanim(void);
 
 enum banim_terrain_set_type {
