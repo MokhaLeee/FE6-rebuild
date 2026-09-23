@@ -21,15 +21,14 @@ struct ProcEkrBattle {
     /* 5C */ struct BaSprite * anim;
 };
 
-extern struct ProcEkrBattle * gpProcEkrBattle;
+extern struct ProcEkrBattle *gpProcEkrBattle;
 
 void SetBanimLinkArenaFlag(int flag);
 int GetBanimLinkArenaFlag(void);
 void NewEkrBattleDeamon(void);
 void EndEkrBattleDeamon(void);
 i8 IsBattleDeamonActive(void);
-void EkrBattleDeamon_OnEnd(void);
-void EkrBattleDeamonMain(ProcPtr proc);
+
 void NewEkrBattle(void);
 void InBattleMainRoutine(void);
 void MainUpdateEkrBattle(void);

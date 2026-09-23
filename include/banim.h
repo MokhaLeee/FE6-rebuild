@@ -2260,8 +2260,6 @@ void EkrPopup_EndingPause(struct ProcEkrPopup *proc);
 void EkrPopup_Blocked(struct ProcEkrPopup *proc);
 
 extern CONST_DATA char gNopStr[];
-extern CONST_DATA struct ProcScr ProcScr_EkrBattleDeamon[];
-extern CONST_DATA struct ProcScr ProcScr_EkrBattle[];
 extern CONST_DATA struct ProcScr ProcScr_EkrLvupFan[];
 extern CONST_DATA struct ProcScr ProcScr_EkrGauge[];
 extern CONST_DATA u16 AnimSprite_EkrGauge_1[];

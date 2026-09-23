@@ -626,7 +626,7 @@ extern CONST_DATA u16 Sprite_086791A2[];
 extern CONST_DATA u16 Sprite_086791B0[];
 extern CONST_DATA u16 Sprite_086791BE[];
 extern struct ProcScr ProcScr_PrepUpperDisp[];
-// ??? HelpboxMsg_0867929C
+extern CONST_DATA int HelpboxMsg_0867929C[];
 extern CONST_DATA u16 Sprite_086792A8[];
 extern CONST_DATA u16 Sprite_086792B6[];
 extern CONST_DATA u16 Sprite_086792C4[];
