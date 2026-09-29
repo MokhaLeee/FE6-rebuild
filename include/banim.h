@@ -134,7 +134,7 @@ struct ProcEfx {
     /* 30 */ i16 unk30;
     /* 32 */ u16 unk32;
     /* 34 */ STRUCT_PAD(0x34, 0x44);
-    /* 44 */ u32 unk44;
+    /* 44 */ int unk44;
     /* 48 */ u32 unk48;
     /* 4C */ u32 frame;
     /* 50 */ u32 speed;
@@ -731,7 +731,7 @@ void SpellFx_RegisterBgPal(const u16 * pal, u32 size);
 void func_fe6_08047B10(const u16 * src, u16 * dst, u32 cur, u32 len_src, u32 len_dst);
 void func_fe6_08047B3C(const u16 * src, u16 * dst, u32 cur, u32 len_src, u32 len_dst);
 void func_fe6_08047B6C(const u16 * src, u16 * dst, u32 a, u32 b, u32 c);
-i16 EfxAdvanceFrameLut(i16 * ptime, i16 * pcount, const i16 lut[]);
+i16 EfxAdvanceFrameLut(void *ptime, void *pcount, const void *lut);
 void PutEfxTerrainToLowerLayer(void);
 int EfxGetCamMovDuration(void);
 void EfxTmFillA(u32 val);
@@ -1197,7 +1197,7 @@ struct ProcEfxMagic {
     /* 30 */ i16 unk30;
     /* 32 */ u16 unk32;
     /* 34 */ STRUCT_PAD(0x34, 0x44);
-    /* 44 */ u32 unk44;
+    /* 44 */ int unk44;
     /* 48 */ u32 unk48;
     /* 4C */ u32 frame;
     /* 50 */ u32 speed;

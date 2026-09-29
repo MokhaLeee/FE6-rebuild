@@ -27,12 +27,7 @@ void StartSpellAnimation(struct Anim *anim)
 	i16 index = gEkrSpellAnimIndex[GetAnimPosition(anim)];
 	SpellAnimFunc func = gEkrSpellAnimLut[index];
 
-#if BUGFIX
-	if (func != NULL)
-#else
-	if (1)
-#endif
-	{
+	if (func != NULL) {
 		gEfxMagicChk_N = false;
 		func(anim);
 	}
@@ -208,7 +203,7 @@ void EfxRestWIN_Loop(struct ProcEfxRstWIN *proc)
 	}
 
 	proc->timer++;
-	if (proc->timer == proc->duration) {
+	if (proc->timer == (int)proc->duration) {
 		gEfxBgSemaphore--;
 		Proc_Break(proc);
 	}
@@ -414,7 +409,7 @@ void EfxCircleWIN_Loop(struct ProcEfxCircleWIN *proc)
 	i16 a, b;
 	i16 x, y;
 	u16 var;
-	u32 i;
+	int i;
 
 	u16 * buf = (gEkrBg2ScrollFlip == 0)
 			  ? gpBg2ScrollOffsetTable2
@@ -7399,7 +7394,6 @@ void NewEfxAureolaOBJ2(struct Anim *anim, int duration)
 
 void EfxAureolaOBJ2_Loop(struct ProcEfxAureolaOBJ *proc)
 {
-	int x, y;
 	struct Anim *anim2 = proc->anim2;
 	struct Anim *anim3 = proc->anim3;
 
@@ -7438,7 +7432,7 @@ void NewEfxAureolaOBJ3(struct Anim *anim)
 
 void EfxAureolaOBJ3_Loop(struct ProcEfxAureolaOBJ *proc)
 {
-	int i;
+	u32 i;
 
 	proc->timer++;
 
@@ -9066,8 +9060,7 @@ void NewEfxHazymoonOBJ3(struct BaSprite *anim)
 
 void EfxHazymoonOBJ3_Loop(struct ProcEfxMagicOBJ *proc)
 {
-	i16 r0, r2;
-	void *coord;
+	i16 r2;
 	i16 x, y;
 
 	proc->timer++;
@@ -9076,7 +9069,6 @@ void EfxHazymoonOBJ3_Loop(struct ProcEfxMagicOBJ *proc)
 		proc->timer = 0;
 
 		r2 = proc->terminator;
-		coord = gEclipseAnimSpriteCoordinates;
 
 		x = gEclipseAnimSpriteCoordinates[r2 * 2 + 0];
 		y = gEclipseAnimSpriteCoordinates[r2 * 2 + 1];
