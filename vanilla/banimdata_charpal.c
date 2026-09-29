@@ -411,5 +411,3 @@ const struct BattleAnimCharaPal gBanimCharaPalTable[] = {
 		.pal = Pal_BanimChar_087FF050,
 	},
 };
-
-const u8 BattleAnimCharaPal_allign[0x7FC800 - 0x7FC668] = { 0 };

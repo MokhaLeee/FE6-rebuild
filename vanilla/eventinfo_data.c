@@ -2329,5 +2329,3 @@ struct SupportTalkEnt CONST_DATA gSupportTalkList[] = {
 	},
 	{}
 };
-
-u8 eventinfo_data_align[0x667640 - 0x6675F8] = {};

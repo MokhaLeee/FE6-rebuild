@@ -402,5 +402,3 @@ const struct BattleAnimTerrain gBanimTerrainTable[] = {
 		.null_1 = 0,
 	},
 };
-
-const u8 BattleAnimTerrain_allign[0x7EAC00 - 0x7EA638] = { 0 };
