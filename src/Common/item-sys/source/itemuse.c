@@ -712,6 +712,7 @@ fu8 RepairMapSelect_SwitchIn(struct MapSelectProc * proc, struct SelectTarget * 
 {
     MakeActiveMuWatchPosition(target->x, target->y);
     RefreshUnitRepairInventoryPanel(GetUnit(target->uid));
+    return 0;
 }
 
 void RepairMapSelect_Init(struct MapSelectProc * proc)
@@ -722,10 +723,12 @@ void RepairMapSelect_Init(struct MapSelectProc * proc)
 fu8 RepairItemMenu_Entry_SwitchIn(struct MenuProc * menu, struct MenuEntProc * ent)
 {
     UpdateEquipInfoWindow(ent->id);
+    return 0;
 }
 
 fu8 RepairItemMenu_Entry_SwitchOut(struct MenuProc * menu, struct MenuEntProc * ent)
 {
+    return 0;
 }
 
 fu8 RepairItemMenu_Entry_Available(struct MenuEntInfo const * info, int id)
@@ -756,7 +759,8 @@ fu8 RepairItemMenu_Entry_Select(struct MenuProc * menu, struct MenuEntProc * ent
 {
     if (ent->availability == MENU_ENTRY_DISABLED)
     {
-        int msg, item = GetUnit(gAction.target)->items[ent->id];
+        int msg = 0;
+        int item = GetUnit(gAction.target)->items[ent->id];
 
         if (GetItemAttributes(item) & (ITEM_ATTR_UNBREAKABLE | ITEM_ATTR_UNREPAIRABLE | ITEM_ATTR_LOCK_DRAGON))
             msg = MSG_C45;
@@ -802,12 +806,14 @@ void DoUseRestoreStaff(struct Unit * unit, void (* list_targets)(struct Unit * u
 int RestoreMapSelect_Init(struct MapSelectProc * proc)
 {
     StartUnitHpStatusPanel(proc);
+    return 0;
 }
 
 fu8 RestoreMapSelect_SwitchIn(struct MapSelectProc * proc, struct SelectTarget * target)
 {
     MakeActiveMuWatchPosition(target->x, target->y);
     RefreshUnitHpStatusPanel(GetUnit(target->uid));
+    return 0;
 }
 
 void DoUseBarrierStaff(struct Unit * unit)
@@ -824,12 +830,14 @@ void DoUseBarrierStaff(struct Unit * unit)
 int BarrierMapSelect_Init(struct MapSelectProc * proc)
 {
     StartUnitResChangePanel(proc);
+    return 0;
 }
 
 fu8 BarrierMapSelect_SwitchIn(struct MapSelectProc * proc, struct SelectTarget * target)
 {
     MakeActiveMuWatchPosition(target->x, target->y);
     RefreshUnitResChangePanel(GetUnit(target->uid));
+    return 0;
 }
 
 void DoUseAttackStaff(struct Unit * unit, void (* list_targets)(struct Unit * unit))
@@ -846,6 +854,7 @@ void DoUseAttackStaff(struct Unit * unit, void (* list_targets)(struct Unit * un
 int AttackStaffMapSelect_Init(struct MapSelectProc * proc, struct SelectTarget * target)
 {
     StartUnitStaffOffensePanel(proc);
+    return 0;
 }
 
 fu8 AttackStaffMapSelect_SwitchIn(struct MapSelectProc * proc, struct SelectTarget * target)
@@ -855,6 +864,8 @@ fu8 AttackStaffMapSelect_SwitchIn(struct MapSelectProc * proc, struct SelectTarg
     RefreshUnitStaffOffensePanel(
         GetUnit(target->uid),
         GetOffensiveStaffAccuracy(gActiveUnit, GetUnit(target->uid)));
+
+    return 0;
 }
 
 void SubtitleMapSelect_End(struct MapSelectProc * proc)
