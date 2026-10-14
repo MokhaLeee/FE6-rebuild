@@ -16,7 +16,7 @@
 #include "constants/iids.h"
 #include "constants/icons.h"
 
-inline struct IInfo const *GetIInfo(int iid)
+inline const struct IInfo *GetIInfo(int iid)
 {
 	return pr_IInfoTable + iid;
 }
@@ -26,7 +26,7 @@ inline int GetItemIid(int item)
 	return ITEM_IID(item);
 }
 
-inline char const *GetItemName(int item)
+inline const char *GetItemName(int item)
 {
 	return DecodeMsg(GetIInfo(ITEM_IID(item))->msg_name);
 }
@@ -92,7 +92,7 @@ inline int GetItemCrit(int item)
 
 inline int GetItemValue(int item)
 {
-	return GetIInfo(ITEM_IID(item))->cost_per_use *GetItemUses(item);
+	return GetIInfo(ITEM_IID(item))->cost_per_use * GetItemUses(item);
 }
 
 inline int GetItemRequiredExp(int item)
@@ -100,12 +100,12 @@ inline int GetItemRequiredExp(int item)
 	return GetIInfo(ITEM_IID(item))->required_wexp;
 }
 
-inline u8 const *GetItemEffectiveness(int item)
+inline const u8 *GetItemEffectiveness(int item)
 {
 	return GetIInfo(ITEM_IID(item))->effectiveness;
 }
 
-inline struct ItemBonuses const *GetItemBonuses(int item)
+inline const struct ItemBonuses *GetItemBonuses(int item)
 {
 	return GetIInfo(ITEM_IID(item))->bonuses;
 }
@@ -135,17 +135,18 @@ inline int GetItemCostPerUse(int item)
 
 inline int GetItemMaxValue(int item)
 {
-	return GetIInfo(ITEM_IID(item))->cost_per_use *GetItemMaxUses(item);
+	return GetIInfo(ITEM_IID(item))->cost_per_use * GetItemMaxUses(item);
 }
 
 int GetItemHpBonus(int item)
 {
-	struct ItemBonuses const *bonuses;
+	const struct ItemBonuses *bonuses;
 
 	if (!item)
 		return 0;
 
-	if ((bonuses = GetItemBonuses(item)))
+	bonuses = GetItemBonuses(item);
+	if (bonuses)
 		return bonuses->hp;
 
 	return 0;
@@ -153,12 +154,13 @@ int GetItemHpBonus(int item)
 
 int GetItemPowBonus(int item)
 {
-	struct ItemBonuses const *bonuses;
+	const struct ItemBonuses *bonuses;
 
 	if (!item)
 		return 0;
 
-	if ((bonuses = GetItemBonuses(item)))
+	bonuses = GetItemBonuses(item);
+	if (bonuses)
 		return bonuses->pow;
 
 	return 0;
@@ -166,12 +168,13 @@ int GetItemPowBonus(int item)
 
 int GetItemMagBonus(int item)
 {
-	struct ItemBonuses const *bonuses;
+	const struct ItemBonuses *bonuses;
 
 	if (!item)
 		return 0;
 
-	if ((bonuses = GetItemBonuses(item)))
+	bonuses = GetItemBonuses(item);
+	if (bonuses)
 		return bonuses->mag;
 
 	return 0;
@@ -179,12 +182,13 @@ int GetItemMagBonus(int item)
 
 int GetItemSklBonus(int item)
 {
-	struct ItemBonuses const *bonuses;
+	const struct ItemBonuses *bonuses;
 
 	if (!item)
 		return 0;
 
-	if ((bonuses = GetItemBonuses(item)))
+	bonuses = GetItemBonuses(item);
+	if (bonuses)
 		return bonuses->skl;
 
 	return 0;
@@ -192,12 +196,13 @@ int GetItemSklBonus(int item)
 
 int GetItemSpdBonus(int item)
 {
-	struct ItemBonuses const *bonuses;
+	const struct ItemBonuses *bonuses;
 
 	if (!item)
 		return 0;
 
-	if ((bonuses = GetItemBonuses(item)))
+	bonuses = GetItemBonuses(item);
+	if (bonuses)
 		return bonuses->spd;
 
 	return 0;
@@ -205,12 +210,13 @@ int GetItemSpdBonus(int item)
 
 int GetItemDefBonus(int item)
 {
-	struct ItemBonuses const *bonuses;
+	const struct ItemBonuses *bonuses;
 
 	if (!item)
 		return 0;
 
-	if ((bonuses = GetItemBonuses(item)))
+	bonuses = GetItemBonuses(item);
+	if (bonuses)
 		return bonuses->def;
 
 	return 0;
@@ -218,12 +224,13 @@ int GetItemDefBonus(int item)
 
 int GetItemResBonus(int item)
 {
-	struct ItemBonuses const *bonuses;
+	const struct ItemBonuses *bonuses;
 
 	if (!item)
 		return 0;
 
-	if ((bonuses = GetItemBonuses(item)))
+	bonuses = GetItemBonuses(item);
+	if (bonuses)
 		return bonuses->res;
 
 	return 0;
@@ -231,12 +238,13 @@ int GetItemResBonus(int item)
 
 int GetItemLckBonus(int item)
 {
-	struct ItemBonuses const *bonuses;
+	const struct ItemBonuses *bonuses;
 
 	if (!item)
 		return 0;
 
-	if ((bonuses = GetItemBonuses(item)))
+	bonuses = GetItemBonuses(item);
+	if (bonuses)
 		return bonuses->lck;
 
 	return 0;
@@ -254,7 +262,8 @@ int CreateItem(int item)
 
 bool CanUnitUseWeapon(struct Unit *unit, int item)
 {
-	int required_wexp, unit_exp;
+	int required_wexp;
+	int unit_exp;
 
 	if (!item)
 		return FALSE;
@@ -262,38 +271,41 @@ bool CanUnitUseWeapon(struct Unit *unit, int item)
 	if (!(GetItemAttributes(item) & ITEM_ATTR_WEAPON))
 		return FALSE;
 
-	if (GetItemAttributes(item) & ITEM_ATTR_LOCK_ANY)
-	{
-		if ((GetItemAttributes(item) & ITEM_ATTR_LOCK_ROY) && !(UNIT_ATTRIBUTES(unit) & UNIT_ATTR_LOCK_ROY))
+	if (GetItemAttributes(item) & ITEM_ATTR_LOCK_ANY) {
+		if ((GetItemAttributes(item) & ITEM_ATTR_LOCK_ROY) &&
+		    !(UNIT_ATTRIBUTES(unit) & UNIT_ATTR_LOCK_ROY))
 			return FALSE;
 
-		if ((GetItemAttributes(item) & ITEM_ATTR_LOCK_MYRM) && !(UNIT_ATTRIBUTES(unit) & UNIT_ATTR_LOCK_MYRM))
+		if ((GetItemAttributes(item) & ITEM_ATTR_LOCK_MYRM) &&
+		    !(UNIT_ATTRIBUTES(unit) & UNIT_ATTR_LOCK_MYRM))
 			return FALSE;
 
-		if (GetItemAttributes(item) & ITEM_ATTR_LOCK_DRAGON)
-		{
+		if (GetItemAttributes(item) & ITEM_ATTR_LOCK_DRAGON) {
 			if (!(UNIT_ATTRIBUTES(unit) & UNIT_ATTR_LOCK_DRAGON))
 				return FALSE;
 
 			return TRUE;
 		}
 
-		if ((GetItemAttributes(item) & ITEM_ATTR_LOCK_ZEPHIEL) && !(UNIT_ATTRIBUTES(unit) & UNIT_ATTR_LOCK_ZEPHIEL))
+		if ((GetItemAttributes(item) & ITEM_ATTR_LOCK_ZEPHIEL) &&
+		    !(UNIT_ATTRIBUTES(unit) & UNIT_ATTR_LOCK_ZEPHIEL))
 			return FALSE;
 	}
 
-	if ((unit->status == UNIT_STATUS_SILENCED) && (GetItemAttributes(item) & ITEM_ATTR_MAGIC))
+	if (unit->status == UNIT_STATUS_SILENCED &&
+	    GetItemAttributes(item) & ITEM_ATTR_MAGIC)
 		return FALSE;
 
 	required_wexp = GetItemRequiredExp(item);
-	unit_exp = (unit->wexp[GetItemKind(item)]);
+	unit_exp = unit->wexp[GetItemKind(item)];
 
-	return (unit_exp >= required_wexp) ? TRUE : FALSE;
+	return unit_exp >= required_wexp;
 }
 
 bool CanUnitUseStaff(struct Unit *unit, int item)
 {
-	int required_wexp, unit_exp;
+	int required_wexp;
+	int unit_exp;
 
 	if (!item)
 		return FALSE;
@@ -311,33 +323,48 @@ bool CanUnitUseStaff(struct Unit *unit, int item)
 		return FALSE;
 
 	required_wexp = GetItemRequiredExp(item);
-	unit_exp = (unit->wexp[GetItemKind(item)]);
+	unit_exp = unit->wexp[GetItemKind(item)];
 
-	return (unit_exp >= required_wexp) ? TRUE : FALSE;
+	return unit_exp >= required_wexp;
 }
 
 void DrawItemMenuLine(struct Text *text, int item, bool is_usable, u16 *tm)
 {
-	Text_SetParams(text, 0, (is_usable ? TEXT_COLOR_SYSTEM_WHITE : TEXT_COLOR_SYSTEM_GRAY));
+	int color;
+
+	color = is_usable ? TEXT_COLOR_SYSTEM_WHITE : TEXT_COLOR_SYSTEM_GRAY;
+
+	Text_SetParams(text, 0, color);
 	Text_DrawString(text, GetItemName(item));
 
 	PutText(text, tm + 2);
 
-	PutNumberOrBlank(tm + 11, is_usable ? TEXT_COLOR_SYSTEM_BLUE : TEXT_COLOR_SYSTEM_GRAY, GetItemUses(item));
+	color = is_usable ? TEXT_COLOR_SYSTEM_BLUE : TEXT_COLOR_SYSTEM_GRAY;
+
+	PutNumberOrBlank(tm + 11, color, GetItemUses(item));
 
 	PutIcon(tm, GetItemIcon(item), TILEREF(0, BGPAL_ICONS));
 }
 
 void DrawItemMenuLineLong(struct Text *text, int item, bool is_usable, u16 *tm)
 {
-	Text_SetParams(text, 0, (is_usable ? TEXT_COLOR_SYSTEM_WHITE : TEXT_COLOR_SYSTEM_GRAY));
+	int color;
+
+	color = is_usable ? TEXT_COLOR_SYSTEM_WHITE : TEXT_COLOR_SYSTEM_GRAY;
+
+	Text_SetParams(text, 0, color);
 	Text_DrawString(text, GetItemName(item));
 
 	PutText(text, tm + 2);
 
-	PutNumberOrBlank(tm + 10, is_usable ? TEXT_COLOR_SYSTEM_BLUE : TEXT_COLOR_SYSTEM_GRAY, GetItemUses(item));
-	PutNumberOrBlank(tm + 13, is_usable ? TEXT_COLOR_SYSTEM_BLUE : TEXT_COLOR_SYSTEM_GRAY, GetItemMaxUses(item));
-	PutSpecialChar(tm + 11, is_usable ? TEXT_COLOR_SYSTEM_WHITE : TEXT_COLOR_SYSTEM_GRAY, TEXT_SPECIAL_SLASH);
+	color = is_usable ? TEXT_COLOR_SYSTEM_BLUE : TEXT_COLOR_SYSTEM_GRAY;
+
+	PutNumberOrBlank(tm + 10, color, GetItemUses(item));
+	PutNumberOrBlank(tm + 13, color, GetItemMaxUses(item));
+
+	color = is_usable ? TEXT_COLOR_SYSTEM_WHITE : TEXT_COLOR_SYSTEM_GRAY;
+
+	PutSpecialChar(tm + 11, color, TEXT_SPECIAL_SLASH);
 
 	PutIcon(tm, GetItemIcon(item), TILEREF(0, BGPAL_ICONS));
 }
@@ -354,7 +381,8 @@ void DrawItemMenuLineNoColor(struct Text *text, int item, u16 *tm)
 	PutIcon(tm, GetItemIcon(item), TILEREF(0, BGPAL_ICONS));
 }
 
-void DrawItemStatScreenLine(struct Text *text, int item, bool is_usable, u16 *tm)
+void DrawItemStatScreenLine(struct Text *text, int item, bool is_usable,
+			    u16 *tm)
 {
 	int color;
 
@@ -380,23 +408,22 @@ void DrawItemStatScreenLine(struct Text *text, int item, bool is_usable, u16 *tm
 u16 GetItemAfterUse(int item)
 {
 	if (GetItemAttributes(item) & ITEM_ATTR_UNBREAKABLE)
-		return item; // unbreakable items don't get used
+		return item; /* unbreakable items don't get used */
 
-	item -= (1 << ITEM_USES_SHIFT); // lose one use
+	item -= (1 << ITEM_USES_SHIFT); /* lose one use */
 
 	if (item < (1 << ITEM_USES_SHIFT))
-		return 0; // return no item if uses < 0
+		return 0; /* return no item if uses < 0 */
 
-	return item; // return used item
+	return item; /* return used item */
 }
 
 u16 GetUnitEquippedWeapon(struct Unit *unit)
 {
 	int i;
 
-	for (i = 0; i < ITEMSLOT_INV_COUNT; ++i)
-	{
-		if (CanUnitUseWeapon(unit, unit->items[i]) == TRUE)
+	for (i = 0; i < ITEMSLOT_INV_COUNT; ++i) {
+		if (CanUnitUseWeapon(unit, unit->items[i]))
 			return unit->items[i];
 	}
 
@@ -407,9 +434,8 @@ int GetUnitEquippedWeaponSlot(struct Unit *unit)
 {
 	int i;
 
-	for (i = 0; i < ITEMSLOT_INV_COUNT; ++i)
-	{
-		if (CanUnitUseWeapon(unit, unit->items[i]) == TRUE)
+	for (i = 0; i < ITEMSLOT_INV_COUNT; ++i) {
+		if (CanUnitUseWeapon(unit, unit->items[i]))
 			return i;
 	}
 
@@ -418,7 +444,8 @@ int GetUnitEquippedWeaponSlot(struct Unit *unit)
 
 void UnitEquipItemSlot(struct Unit *unit, int item_slot)
 {
-	int item, i;
+	int item;
+	int i;
 
 	item = unit->items[item_slot];
 
@@ -431,7 +458,9 @@ void UnitEquipItemSlot(struct Unit *unit, int item_slot)
 bool IsItemEffectiveAgainst(u16 item, struct Unit *unit)
 {
 	int jid = unit->jinfo->id;
-	u8 const *list = GetItemEffectiveness(item);
+	const u8 *list = GetItemEffectiveness(item);
+	int i;
+	int attributes;
 
 	if (!list)
 		return FALSE;
@@ -445,22 +474,19 @@ bool IsItemEffectiveAgainst(u16 item, struct Unit *unit)
 
 	return FALSE;
 
-	check_delphi_shield: {
-		int i, attributes;
-
-		if (GetItemEffectiveness(item) != JList_BowEffectiveness)
-			return TRUE;
-
-		attributes = 0;
-
-		for (i = 0; i < ITEMSLOT_INV_COUNT; ++i)
-			attributes = attributes | GetItemAttributes(unit->items[i]);
-
-		if (attributes & ITEM_ATTR_DELPHI_SHIELD)
-			return FALSE;
-
+check_delphi_shield:
+	if (GetItemEffectiveness(item) != JList_BowEffectiveness)
 		return TRUE;
-	}
+
+	attributes = 0;
+
+	for (i = 0; i < ITEMSLOT_INV_COUNT; ++i)
+		attributes |= GetItemAttributes(unit->items[i]);
+
+	if (attributes & ITEM_ATTR_DELPHI_SHIELD)
+		return FALSE;
+
+	return TRUE;
 }
 
 int GetWeaponLevelFromExp(int wexp)
@@ -486,9 +512,9 @@ int GetWeaponLevelFromExp(int wexp)
 	return WPN_LEVEL_S;
 }
 
-char const *GetWeaponLevelStringFromExp(int wexp)
+const char *GetWeaponLevelStringFromExp(int wexp)
 {
-	char const *strings[] = {
+	const char *strings[] = {
 		[WPN_LEVEL_0] = JTEXT("-"),
 		[WPN_LEVEL_E] = JTEXT("E"),
 		[WPN_LEVEL_D] = JTEXT("D"),
@@ -503,7 +529,7 @@ char const *GetWeaponLevelStringFromExp(int wexp)
 
 int GetWeaponLevelSpecialCharFromExp(int wexp)
 {
-	u8 const specials[] = {
+	const u8 specials[] = {
 		[WPN_LEVEL_0] = TEXT_SPECIAL_DASH,
 		[WPN_LEVEL_E] = TEXT_SPECIAL_E,
 		[WPN_LEVEL_D] = TEXT_SPECIAL_D,
@@ -516,19 +542,19 @@ int GetWeaponLevelSpecialCharFromExp(int wexp)
 	return specials[GetWeaponLevelFromExp(wexp)];
 }
 
-char const *GetItemKindString(int kind)
+const char *GetItemKindString(int kind)
 {
-	char const *strings[] = {
-		[ITEM_KIND_SWORD]  = TEXT("剣", "Sword"),
-		[ITEM_KIND_LANCE]  = TEXT("槍", "Lance"),
-		[ITEM_KIND_AXE]	= TEXT("斧", "Axe"),
-		[ITEM_KIND_BOW]	= TEXT("弓", "Bow"),
-		[ITEM_KIND_STAFF]  = TEXT("杖", "Staff"),
-		[ITEM_KIND_ANIMA]  = TEXT("理", "Anima"),
-		[ITEM_KIND_LIGHT]  = TEXT("光", "Light"),
-		[ITEM_KIND_ELDER]  = TEXT("闇", "Dark"),
-		[ITEM_KIND_UNK8]   = JTEXT("道"),
-		[ITEM_KIND_ITEM]   = JTEXT("ア"),
+	const char *strings[] = {
+		[ITEM_KIND_SWORD] = TEXT("剣", "Sword"),
+		[ITEM_KIND_LANCE] = TEXT("槍", "Lance"),
+		[ITEM_KIND_AXE] = TEXT("斧", "Axe"),
+		[ITEM_KIND_BOW] = TEXT("弓", "Bow"),
+		[ITEM_KIND_STAFF] = TEXT("杖", "Staff"),
+		[ITEM_KIND_ANIMA] = TEXT("理", "Anima"),
+		[ITEM_KIND_LIGHT] = TEXT("光", "Light"),
+		[ITEM_KIND_ELDER] = TEXT("闇", "Dark"),
+		[ITEM_KIND_UNK8] = JTEXT("道"),
+		[ITEM_KIND_ITEM] = JTEXT("ア"),
 		[ITEM_KIND_DRAGON] = TEXT("竜", "Dragon"),
 	};
 
@@ -550,7 +576,8 @@ bool IsItemDisplayUsable(struct Unit *unit, int item)
 		if (unit->status == UNIT_STATUS_BERSERK)
 			return FALSE;
 
-		if (!(UNIT_ATTRIBUTES(unit) & UNIT_ATTR_STEAL) && GetItemIid(item) == IID_LOCKPICK)
+		if (!(UNIT_ATTRIBUTES(unit) & UNIT_ATTR_STEAL) &&
+		    GetItemIid(item) == IID_LOCKPICK)
 			return FALSE;
 	}
 
@@ -630,7 +657,9 @@ bool IsItemRepairable(int item)
 	if (!(GetItemAttributes(item) & (ITEM_ATTR_WEAPON | ITEM_ATTR_STAFF)))
 		return FALSE;
 
-	if (GetItemAttributes(item) & (ITEM_ATTR_UNBREAKABLE | ITEM_ATTR_UNREPAIRABLE | ITEM_ATTR_LOCK_DRAGON))
+	if (GetItemAttributes(item) &
+	    (ITEM_ATTR_UNBREAKABLE | ITEM_ATTR_UNREPAIRABLE |
+	     ITEM_ATTR_LOCK_DRAGON))
 		return FALSE;
 
 	if (GetItemUses(item) == GetItemMaxUses(item))
@@ -641,12 +670,12 @@ bool IsItemRepairable(int item)
 
 int GetTotalConvoyItemsValue(void)
 {
-	int i, result = 0;
+	int i;
+	int result = 0;
+	const u16 *supply = GetSupplyItems();
 
-	u16 const *supply = GetSupplyItems();
-
-	for (i = 0; (i < SUPPLY_ITEM_COUNT) && (*supply); ++i) {
-		result += GetItemValue (* supply);
+	for (i = 0; i < SUPPLY_ITEM_COUNT && *supply; ++i) {
+		result += GetItemValue(*supply);
 		supply++;
 	}
 
@@ -655,10 +684,14 @@ int GetTotalConvoyItemsValue(void)
 
 int GetTotalUnitItemsValue(void)
 {
-	int i, item, result = 0;
+	int i;
+	int item;
+	int result = 0;
 
 	FOR_UNITS_FACTION(FACTION_BLUE, unit, {
-		for (i = 0; (i < ITEMSLOT_INV_COUNT) && (item = unit->items[i]); ++i)
+		for (i = 0;
+		     i < ITEMSLOT_INV_COUNT && (item = unit->items[i]);
+		     ++i)
 			result += GetItemValue(item);
 	})
 
@@ -667,14 +700,15 @@ int GetTotalUnitItemsValue(void)
 
 int GetTotalAsset(void)
 {
-	int halved, heldValue;
+	int halved;
+	int held_value;
 
-	heldValue = GetTotalConvoyItemsValue();
-	heldValue = heldValue + GetTotalUnitItemsValue();
+	held_value = GetTotalConvoyItemsValue();
+	held_value += GetTotalUnitItemsValue();
 
-	halved = heldValue / 2;
+	halved = held_value / 2;
 
-	heldValue = halved + GetGold();
+	held_value = halved + GetGold();
 
-	return heldValue;
+	return held_value;
 }

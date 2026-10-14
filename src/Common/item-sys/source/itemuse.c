@@ -29,10 +29,10 @@
 
 extern IWRAM_DATA struct Unit gStatGainSimUnit;
 
-// TODO: map-menu.h
+/* TODO: map-menu.h */
 extern struct ProcScr CONST_DATA ProcScr_BackToUnitMenu[];
 
-static bool HasSelectTarget(struct Unit *unit, void (* list_targets)(struct Unit *unit));
+static bool HasSelectTarget(struct Unit *unit, void (*list_targets)(struct Unit *unit));
 
 static void SetStaffUseAction(struct Unit *unit);
 static void SetItemUseAction(struct Unit *unit);
@@ -43,8 +43,7 @@ static void WarpSelect_HandleConfirm(struct Proc *proc);
 static void WarpSelect_HandleCancel(struct Proc *proc);
 static void WarpSelect_End(struct Proc *proc);
 
-struct ProcScr CONST_DATA ProcScr_SquareSelectWarp[] =
-{
+struct ProcScr CONST_DATA ProcScr_SquareSelectWarp[] = {
 	PROC_ONEND(WarpSelect_End),
 
 	PROC_CALL(LockGame),
@@ -63,24 +62,23 @@ struct ProcScr CONST_DATA ProcScr_SquareSelectWarp[] =
 
 	PROC_GOTO(100),
 
-PROC_LABEL(99),
+	PROC_LABEL(99),
 	PROC_CALL(WarpSelect_HandleCancel),
 	PROC_YIELD,
 
 	PROC_CALL(UnlockGame),
 
-PROC_LABEL(100),
+	PROC_LABEL(100),
 	PROC_END,
 };
 
 bool CanUnitUseItem(struct Unit *unit, int item)
 {
-	if ((GetItemAttributes(item) & ITEM_ATTR_STAFF) && !CanUnitUseStaff(unit, item))
+	if ((GetItemAttributes(item) & ITEM_ATTR_STAFF) &&
+	   !CanUnitUseStaff(unit, item))
 		return FALSE;
 
-	switch (GetItemIid(item))
-	{
-
+	switch (GetItemIid(item)) {
 	case IID_HEALSTAFF:
 	case IID_MENDSTAFF:
 	case IID_RECOVERSTAFF:
@@ -172,15 +170,12 @@ bool CanUnitUseItem(struct Unit *unit, int item)
 
 	default:
 		return FALSE;
-
 	}
 }
 
 int GetUnitItemCantUseMsg(struct Unit *unit, int item)
 {
-	switch (GetItemIid(item))
-	{
-
+	switch (GetItemIid(item)) {
 	case IID_BINDINGBLADE:
 	case IID_TORCHSTAFF:
 	case IID_SECRETBOOK:
@@ -216,17 +211,15 @@ int GetUnitItemCantUseMsg(struct Unit *unit, int item)
 	case IID_KNIGHTCREST:
 	case IID_ORIONSBOLT:
 	case IID_ELYSIANWHIP:
-	case IID_GUIDINGRING:
-	{
-		bool boolval;
-
+	case IID_GUIDINGRING: {
+		bool can_promote;
 		int level = gActiveUnit->level;
 
 		gActiveUnit->level = 10;
-		boolval = CanUnitUsePromotionItem(gActiveUnit, item);
+		can_promote = CanUnitUsePromotionItem(gActiveUnit, item);
 		gActiveUnit->level = level;
 
-		if (boolval)
+		if (can_promote)
 			return MSG_C3E;
 
 		return MSG_C3D;
@@ -234,7 +227,6 @@ int GetUnitItemCantUseMsg(struct Unit *unit, int item)
 
 	default:
 		return MSG_C3D;
-
 	}
 }
 
@@ -243,9 +235,7 @@ void DoUseUnitItem(struct Unit *unit, int item)
 	ClearUi();
 	EndFaceById(0);
 
-	switch (GetItemIid(item))
-	{
-
+	switch (GetItemIid(item)) {
 	case IID_HEALSTAFF:
 	case IID_MENDSTAFF:
 	case IID_RECOVERSTAFF:
@@ -302,11 +292,10 @@ void DoUseUnitItem(struct Unit *unit, int item)
 	default:
 		SetItemUseAction(unit);
 		break;
-
 	}
 }
 
-static bool HasSelectTarget(struct Unit *unit, void (* list_targets)(struct Unit *))
+static bool HasSelectTarget(struct Unit *unit, void (*list_targets)(struct Unit *unit))
 {
 	list_targets(unit);
 	return CountTargets() != 0;
@@ -380,7 +369,9 @@ bool CanUnitUseLockpickItem(struct Unit *unit)
 	if (!(UNIT_ATTRIBUTES(unit) & UNIT_ATTR_STEAL))
 		return FALSE;
 
-	if (!CanUnitUseChestKeyItem(unit) && !CanUnitUseDoorKeyItem(unit) && !CanUnitUseBridgeKeyItem(unit))
+	if (!CanUnitUseChestKeyItem(unit) &&
+	    !CanUnitUseDoorKeyItem(unit) &&
+	    !CanUnitUseBridgeKeyItem(unit))
 		return FALSE;
 
 	return TRUE;
@@ -393,9 +384,7 @@ bool CanUnitUsePromotionItem(struct Unit *unit, int item)
 	if (unit->level < 10)
 		return FALSE;
 
-	switch (GetItemIid(item))
-	{
-
+	switch (GetItemIid(item)) {
 	case IID_HEROCREST:
 		jlist = JList_HeroCrestPromotes;
 		break;
@@ -415,11 +404,9 @@ bool CanUnitUsePromotionItem(struct Unit *unit, int item)
 	case IID_GUIDINGRING:
 		jlist = JList_GuidingRingPromotes;
 		break;
-
 	}
 
-	while (*jlist)
-	{
+	while (*jlist) {
 		if (unit->jinfo->id == *jlist)
 			return TRUE;
 
@@ -432,7 +419,6 @@ bool CanUnitUsePromotionItem(struct Unit *unit, int item)
 bool CanUnitUseStatGainItem(struct Unit *unit, int item)
 {
 	bool result;
-
 	struct ItemBonuses const *bonuses = GetItemBonuses(item);
 
 	ClearUnit(&gStatGainSimUnit);
@@ -501,10 +487,11 @@ fu8 StaffMapSelect_Select(struct MapSelectProc *proc, struct SelectTarget *targe
 	gAction.target = target->uid;
 	SetStaffUseAction(NULL);
 
-	return MENU_ACTION_NOCURSOR | MENU_ACTION_END | MENU_ACTION_SE_6A | MENU_ACTION_CLEAR;
+	return MENU_ACTION_NOCURSOR | MENU_ACTION_END |
+	       MENU_ACTION_SE_6A | MENU_ACTION_CLEAR;
 }
 
-void DoUseRescueStaff(struct Unit *unit, void (* list_targets)(struct Unit *unit))
+void DoUseRescueStaff(struct Unit *unit, void (*list_targets)(struct Unit *unit))
 {
 	list_targets(unit);
 
@@ -521,9 +508,8 @@ static void WarpSelect_Init(struct Proc *proc)
 
 	StartSubtitleHelp(proc, DecodeMsg(MSG_C24));
 
-	CameraMoveWatchPosition(proc,
-		GetUnit(gAction.target)->x,
-		GetUnit(gAction.target)->y);
+	CameraMoveWatchPosition(proc, GetUnit(gAction.target)->x,
+	                        GetUnit(gAction.target)->y);
 
 	EndLimitView();
 
@@ -533,9 +519,8 @@ static void WarpSelect_Init(struct Proc *proc)
 
 	StartLimitView(1);
 
-	SetMapCursorPosition(
-		GetUnit(gAction.target)->x,
-		GetUnit(gAction.target)->y);
+	SetMapCursorPosition(GetUnit(gAction.target)->x,
+	                     GetUnit(gAction.target)->y);
 
 	anim = StartSpriteAnim(SpriteAnim_08102450, 0);
 
@@ -543,19 +528,17 @@ static void WarpSelect_Init(struct Proc *proc)
 	SetSpriteAnimId(anim, 0);
 
 	proc->ptr = anim;
-	proc->unk4A = 2; // neither TRUE nor FALSE
+	proc->unk4A = 2; /* neither TRUE nor FALSE */
 }
 
 static void WarpSelect_Loop(struct Proc *proc)
 {
-	bool warpAllowed = gMapMovementSigned[gBmSt.cursor.y][gBmSt.cursor.x] != -1;
+	bool warp_allowed = gMapMovementSigned[gBmSt.cursor.y][gBmSt.cursor.x] != -1;
 
 	HandlePlayerMapCursor();
 
-	if (gKeySt->pressed & KEY_BUTTON_A)
-	{
-		if (warpAllowed)
-		{
+	if (gKeySt->pressed & KEY_BUTTON_A) {
+		if (warp_allowed) {
 			Proc_Break(proc);
 
 			gAction.x_target = gBmSt.cursor.x;
@@ -567,17 +550,13 @@ static void WarpSelect_Loop(struct Proc *proc)
 			EnableBgSync(BG2_SYNC_BIT);
 
 			PlaySe(SONG_6A);
-
 			return;
 		}
-		else
-		{
-			PlaySe(SONG_6C);
-		}
+
+		PlaySe(SONG_6C);
 	}
 
-	if (gKeySt->pressed & KEY_BUTTON_B)
-	{
+	if (gKeySt->pressed & KEY_BUTTON_B) {
 		Proc_Goto(proc, 99);
 
 		TmFill(gBg2Tm, 0);
@@ -586,16 +565,14 @@ static void WarpSelect_Loop(struct Proc *proc)
 		PlaySe(SONG_6B);
 	}
 
-	if (warpAllowed != proc->unk4A)
-	{
-		SetSpriteAnimId(proc->ptr, warpAllowed ? 0 : 1);
-	}
+	if (warp_allowed != proc->unk4A)
+		SetSpriteAnimId(proc->ptr, warp_allowed ? 0 : 1);
 
 	DisplaySpriteAnim(proc->ptr,
-		gBmSt.cursor_sprite.x - gBmSt.camera.x,
-		gBmSt.cursor_sprite.y - gBmSt.camera.y);
+	                  gBmSt.cursor_sprite.x - gBmSt.camera.x,
+	                  gBmSt.cursor_sprite.y - gBmSt.camera.y);
 
-	proc->unk4A = warpAllowed;
+	proc->unk4A = warp_allowed;
 }
 
 static void WarpSelect_HandleConfirm(struct Proc *proc)
@@ -604,13 +581,9 @@ static void WarpSelect_HandleConfirm(struct Proc *proc)
 	EndLimitView();
 	EndSubtitleHelp();
 
-	SetMapCursorPosition(
-		gActiveUnit->x,
-		gActiveUnit->y);
+	SetMapCursorPosition(gActiveUnit->x, gActiveUnit->y);
 
-	CameraMoveWatchPosition(proc,
-		gActiveUnit->x,
-		gActiveUnit->y);
+	CameraMoveWatchPosition(proc, gActiveUnit->x, gActiveUnit->y);
 }
 
 static void WarpSelect_HandleCancel(struct Proc *proc)
@@ -619,9 +592,7 @@ static void WarpSelect_HandleCancel(struct Proc *proc)
 	EndLimitView();
 	EndSubtitleHelp();
 
-	SetMapCursorPosition(
-		gActiveUnit->x,
-		gActiveUnit->y);
+	SetMapCursorPosition(gActiveUnit->x, gActiveUnit->y);
 
 	SpawnProc(ProcScr_BackToUnitMenu, PROC_TREE_3);
 }
@@ -663,10 +634,11 @@ fu8 UnlockMapSelect_Select(struct MapSelectProc *proc, struct SelectTarget *targ
 
 	SetStaffUseAction(NULL);
 
-	return MENU_ACTION_NOCURSOR | MENU_ACTION_END | MENU_ACTION_SE_6A | MENU_ACTION_CLEAR;
+	return MENU_ACTION_NOCURSOR | MENU_ACTION_END |
+	       MENU_ACTION_SE_6A | MENU_ACTION_CLEAR;
 }
 
-void DoUseUnlockStaff(struct Unit *unit, void (* list_targets)(struct Unit *unit))
+void DoUseUnlockStaff(struct Unit *unit, void (*list_targets)(struct Unit *unit))
 {
 	list_targets(unit);
 
@@ -685,14 +657,14 @@ fu8 RepairMapSelect_Select(struct MapSelectProc *proc, struct SelectTarget *targ
 
 	gAction.target = target->uid;
 
-	StartEquipInfoWindow(
-		StartMenu(&MenuInfo_RepairItem),
-		GetUnit(gAction.target),
-		16, 11);
+	StartEquipInfoWindow(StartMenu(&MenuInfo_RepairItem),
+	                     GetUnit(gAction.target),
+	                     16, 11);
 
 	StartFace(0, GetUnitFid(GetUnit(gAction.target)), 184, 12, 2);
 
-	return MENU_ACTION_NOCURSOR | MENU_ACTION_END | MENU_ACTION_SE_6A | MENU_ACTION_CLEAR;
+	return MENU_ACTION_NOCURSOR | MENU_ACTION_END |
+	       MENU_ACTION_SE_6A | MENU_ACTION_CLEAR;
 }
 
 void DoUseRepairStaff(struct Unit *unit)
@@ -747,9 +719,10 @@ fu8 RepairItemMenu_Entry_Available(struct MenuEntInfo const *info, int id)
 u32 RepairItemMenu_Entry_Display(struct MenuProc *menu, struct MenuEntProc *ent)
 {
 	int item = GetUnit(gAction.target)->items[ent->id];
-	int isRepairable = IsItemRepairable(item);
+	int is_repairable = IsItemRepairable(item);
 
-	DrawItemMenuLineLong(&ent->text, item, isRepairable, gBg0Tm + TM_OFFSET(ent->x, ent->y));
+	DrawItemMenuLineLong(&ent->text, item, is_repairable,
+	                     gBg0Tm + TM_OFFSET(ent->x, ent->y));
 	EnableBgSync(BG0_SYNC_BIT);
 
 	return 0;
@@ -757,14 +730,16 @@ u32 RepairItemMenu_Entry_Display(struct MenuProc *menu, struct MenuEntProc *ent)
 
 fu8 RepairItemMenu_Entry_Select(struct MenuProc *menu, struct MenuEntProc *ent)
 {
-	if (ent->availability == MENU_ENTRY_DISABLED)
-	{
+	if (ent->availability == MENU_ENTRY_DISABLED) {
 		int msg = 0;
 		int item = GetUnit(gAction.target)->items[ent->id];
 
-		if (GetItemAttributes(item) & (ITEM_ATTR_UNBREAKABLE | ITEM_ATTR_UNREPAIRABLE | ITEM_ATTR_LOCK_DRAGON))
+		if (GetItemAttributes(item) &
+		    (ITEM_ATTR_UNBREAKABLE | ITEM_ATTR_UNREPAIRABLE |
+		     ITEM_ATTR_LOCK_DRAGON))
 			msg = MSG_C45;
-		else if (!(GetItemAttributes(item) & (ITEM_ATTR_WEAPON | ITEM_ATTR_STAFF)))
+		else if (!(GetItemAttributes(item) &
+		           (ITEM_ATTR_WEAPON | ITEM_ATTR_STAFF)))
 			msg = MSG_C3A;
 		else if (GetItemUses(item) == GetItemMaxUses(item))
 			msg = MSG_C39;
@@ -778,10 +753,11 @@ fu8 RepairItemMenu_Entry_Select(struct MenuProc *menu, struct MenuEntProc *ent)
 	gAction.extra = ent->id;
 	SetStaffUseAction(gActiveUnit);
 
-	return MENU_ACTION_NOCURSOR | MENU_ACTION_END | MENU_ACTION_SE_6A | MENU_ACTION_CLEAR | MENU_ACTION_ENDFACE;
+	return MENU_ACTION_NOCURSOR | MENU_ACTION_END |
+	       MENU_ACTION_SE_6A | MENU_ACTION_CLEAR | MENU_ACTION_ENDFACE;
 }
 
-void DoUseHealStaff(struct Unit *unit, void (* list_targets)(struct Unit *unit))
+void DoUseHealStaff(struct Unit *unit, void (*list_targets)(struct Unit *unit))
 {
 	list_targets(unit);
 
@@ -792,7 +768,7 @@ void DoUseHealStaff(struct Unit *unit, void (* list_targets)(struct Unit *unit))
 		DecodeMsg(MSG_C28));
 }
 
-void DoUseRestoreStaff(struct Unit *unit, void (* list_targets)(struct Unit *unit))
+void DoUseRestoreStaff(struct Unit *unit, void (*list_targets)(struct Unit *unit))
 {
 	list_targets(unit);
 
@@ -840,7 +816,7 @@ fu8 BarrierMapSelect_SwitchIn(struct MapSelectProc *proc, struct SelectTarget *t
 	return 0;
 }
 
-void DoUseAttackStaff(struct Unit *unit, void (* list_targets)(struct Unit *unit))
+void DoUseAttackStaff(struct Unit *unit, void (*list_targets)(struct Unit *unit))
 {
 	list_targets(unit);
 

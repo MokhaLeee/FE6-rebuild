@@ -20,8 +20,7 @@
 
 static void ApplyStatusChange(ProcPtr proc);
 
-struct ProcScr CONST_DATA ProcScr_ApplyStatusChange[] =
-{
+struct ProcScr CONST_DATA ProcScr_ApplyStatusChange[] = {
 	PROC_SLEEP(1),
 
 	PROC_CALL(ApplyStatusChange),
@@ -35,11 +34,14 @@ void DoItemHealStaffAction(ProcPtr proc)
 	BattleInitItemEffect(GetUnit(gAction.instigator), gAction.item_slot);
 	BattleInitItemEffectTarget(GetUnit(gAction.target));
 
-	healed = GetUnitItemHealAmount(GetUnit(gAction.instigator), GetUnit(gAction.instigator)->items[gAction.item_slot]);
+	healed = GetUnitItemHealAmount(
+		GetUnit(gAction.instigator),
+		GetUnit(gAction.instigator)->items[gAction.item_slot]);
 	AddUnitHp(GetUnit(gAction.target), healed);
 
-	gBattleHitIt->damage = gBattleUnitB.unit.hp - GetUnitCurrentHp(GetUnit(gAction.target));
-	gBattleUnitB.unit.hp = GetUnitCurrentHp(GetUnit(gAction.target));;
+	gBattleHitIt->damage = gBattleUnitB.unit.hp -
+			       GetUnitCurrentHp(GetUnit(gAction.target));
+	gBattleUnitB.unit.hp = GetUnitCurrentHp(GetUnit(gAction.target));
 
 	BattleApplyItemEffect(proc);
 	BeginBattleAnimations();
@@ -69,24 +71,23 @@ void DoItemBarrierStaffAction(ProcPtr proc)
 	BeginBattleAnimations();
 }
 
-static void GetRescueStaffTargetPosition(struct Unit *unit, struct Unit *target, int *x_out, int *y_out)
+static void GetRescueStaffTargetPosition(struct Unit *unit, struct Unit *target,
+					 int *x_out, int *y_out)
 {
-	int foundDist, dist;
+	int found_dist, dist;
 	int ix, iy;
 
 	*x_out = -1;
 	*y_out = -1;
 
-	foundDist = 9999;
+	found_dist = 9999;
 
 	MapFlood_Pass(unit);
 
 	gMapUnit[unit->y][unit->x] = 0xFF;
 
-	for (iy = gMapSize.y-1; iy >= 0; iy--)
-	{
-		for (ix = gMapSize.x-1; ix >= 0; ix--)
-		{
+	for (iy = gMapSize.y - 1; iy >= 0; iy--) {
+		for (ix = gMapSize.x - 1; ix >= 0; ix--) {
 			if (gMapMovement[iy][ix] > MAP_MOVEMENT_MAX)
 				continue;
 
@@ -101,9 +102,8 @@ static void GetRescueStaffTargetPosition(struct Unit *unit, struct Unit *target,
 
 			dist = RECT_DISTANCE(ix, iy, unit->x, unit->y);
 
-			if (foundDist >= dist)
-			{
-				foundDist = dist;
+			if (found_dist >= dist) {
+				found_dist = dist;
 				*x_out = ix;
 				*y_out = iy;
 			}
@@ -113,16 +113,14 @@ static void GetRescueStaffTargetPosition(struct Unit *unit, struct Unit *target,
 	if (*x_out >= 0 && *y_out >= 0)
 		return;
 
-	foundDist = 9999;
+	found_dist = 9999;
 
 	MapFlood_Unitless(unit->x, unit->y, MoveTable_Flying);
 
 	gMapUnit[unit->y][unit->x] = 0xFF;
 
-	for (iy = gMapSize.y-1; iy >= 0; iy--)
-	{
-		for (ix = gMapSize.x-1; ix >= 0; ix--)
-		{
+	for (iy = gMapSize.y - 1; iy >= 0; iy--) {
+		for (ix = gMapSize.x - 1; ix >= 0; ix--) {
 			if (gMapMovement[iy][ix] > MAP_MOVEMENT_MAX)
 				continue;
 
@@ -137,9 +135,8 @@ static void GetRescueStaffTargetPosition(struct Unit *unit, struct Unit *target,
 
 			dist = RECT_DISTANCE(ix, iy, unit->x, unit->y);
 
-			if (foundDist >= dist)
-			{
-				foundDist = dist;
+			if (found_dist >= dist) {
+				found_dist = dist;
 				*x_out = ix;
 				*y_out = iy;
 			}
@@ -160,12 +157,13 @@ void DoItemRescueStaffAction(ProcPtr proc)
 	BattleInitItemEffect(GetUnit(gAction.instigator), gAction.item_slot);
 	BattleInitItemEffectTarget(GetUnit(gAction.target));
 
-	GetRescueStaffTargetPosition(GetUnit(gAction.instigator), GetUnit(gAction.target), &x, &y);
+	GetRescueStaffTargetPosition(GetUnit(gAction.instigator),
+				     GetUnit(gAction.target), &x, &y);
 
 	GetUnit(gAction.target)->x = x;
 	GetUnit(gAction.target)->y = y;
 
-	// huh
+	/* huh */
 	gBattleUnitB.change_hp = x;
 	gBattleUnitB.change_pow = y;
 
@@ -181,7 +179,7 @@ void DoItemWarpStaffAction(ProcPtr proc)
 	GetUnit(gAction.target)->x = gAction.x_target;
 	GetUnit(gAction.target)->y = gAction.y_target;
 
-	// huh again
+	/* huh again */
 	gBattleUnitB.change_hp = gAction.x_target;
 	gBattleUnitB.change_pow = gAction.y_target;
 
@@ -196,18 +194,14 @@ void DoItemAttackStaffAction(ProcPtr proc)
 	BattleInitItemEffect(GetUnit(gAction.instigator), gAction.item_slot);
 	BattleInitItemEffectTarget(GetUnit(gAction.target));
 
-	accuracy = GetOffensiveStaffAccuracy(GetUnit(gAction.instigator), GetUnit(gAction.target));
+	accuracy = GetOffensiveStaffAccuracy(GetUnit(gAction.instigator),
+					     GetUnit(gAction.target));
 	gBattleUnitA.battle_effective_hit = accuracy;
 
-	if (!RandRoll(accuracy))
-	{
+	if (!RandRoll(accuracy)) {
 		gBattleHitIt->attributes |= BATTLE_HIT_ATTR_MISS;
-	}
-	else
-	{
-		switch (GetItemIid(gBattleUnitA.weapon_before))
-		{
-
+	} else {
+		switch (GetItemIid(gBattleUnitA.weapon_before)) {
 		case IID_BERSERKSTAFF:
 			gBattleUnitB.output_status = UNIT_STATUS_BERSERK;
 			break;
@@ -219,7 +213,6 @@ void DoItemAttackStaffAction(ProcPtr proc)
 		case IID_SLEEPSTAFF:
 			gBattleUnitB.output_status = UNIT_STATUS_SLEEP;
 			break;
-
 		}
 	}
 
@@ -236,7 +229,9 @@ void DoItemFortifyStaffAction(ProcPtr proc)
 
 	ListRangedHealTargets(GetUnit(gAction.instigator));
 
-	healed = GetUnitItemHealAmount(GetUnit(gAction.instigator), GetUnit(gAction.instigator)->items[gAction.item_slot]);
+	healed = GetUnitItemHealAmount(
+		GetUnit(gAction.instigator),
+		GetUnit(gAction.instigator)->items[gAction.item_slot]);
 
 	for (count = CountTargets(), i = 0; i < count; ++i)
 		AddUnitHp(GetUnit(GetTarget(i)->uid), healed);
@@ -252,7 +247,7 @@ void DoItemUnlockStaffAction(ProcPtr proc)
 	gBattleUnitB.unit.x = gAction.x_target;
 	gBattleUnitB.unit.y = gAction.y_target;
 
-	// huh again again
+	/* huh again again */
 	gBattleUnitB.change_hp = gAction.x_target;
 	gBattleUnitB.change_pow = gAction.y_target;
 
@@ -265,7 +260,8 @@ void DoItemRepairStaffAction(ProcPtr proc)
 	BattleInitItemEffect(GetUnit(gAction.instigator), gAction.item_slot);
 	BattleInitItemEffectTarget(GetUnit(gAction.target));
 
-	GetUnit(gAction.target)->items[gAction.extra] = CreateItem(GetUnit(gAction.target)->items[gAction.extra]);
+	GetUnit(gAction.target)->items[gAction.extra] =
+		CreateItem(GetUnit(gAction.target)->items[gAction.extra]);
 
 	BattleApplyItemEffect(proc);
 	BeginBattleAnimations();
@@ -279,8 +275,7 @@ void DoItemSaintStaffAction(ProcPtr proc)
 
 	ListSaintsStaffTargets(GetUnit(gAction.instigator));
 
-	for (count = CountTargets(), i = 0; i < count; ++i)
-	{
+	for (count = CountTargets(), i = 0; i < count; ++i) {
 		struct Unit *unit = GetUnit(GetTarget(i)->uid);
 
 		SetUnitHp(unit, GetUnitMaxHp(unit));
@@ -297,7 +292,8 @@ void DoItemHealSelfAction(ProcPtr proc, int amount)
 
 	AddUnitHp(GetUnit(gAction.instigator), amount);
 
-	gBattleHitIt->damage = gBattleUnitA.unit.hp - GetUnitCurrentHp(GetUnit(gAction.instigator));
+	gBattleHitIt->damage = gBattleUnitA.unit.hp -
+			       GetUnitCurrentHp(GetUnit(gAction.instigator));
 	gBattleUnitA.unit.hp = GetUnitCurrentHp(GetUnit(gAction.instigator));
 
 	gBattleUnitA.weapon_before = IID_VULNERARY;
@@ -310,9 +306,11 @@ void DoItemElixirAction(ProcPtr proc)
 {
 	BattleInitItemEffect(GetUnit(gAction.instigator), gAction.item_slot);
 
-	SetUnitHp(GetUnit(gAction.instigator), GetUnitMaxHp(GetUnit(gAction.instigator)));
+	SetUnitHp(GetUnit(gAction.instigator),
+		  GetUnitMaxHp(GetUnit(gAction.instigator)));
 
-	gBattleHitIt->damage = gBattleUnitA.unit.hp - GetUnitCurrentHp(GetUnit(gAction.instigator));
+	gBattleHitIt->damage = gBattleUnitA.unit.hp -
+			       GetUnitCurrentHp(GetUnit(gAction.instigator));
 	gBattleUnitA.unit.hp = GetUnitCurrentHp(GetUnit(gAction.instigator));
 
 	BattleApplyItemEffect(proc);
@@ -361,10 +359,10 @@ void DoItemKeyAction(void)
 	x = GetUnit(gAction.instigator)->x;
 	y = GetUnit(gAction.instigator)->y;
 
-	StartAvailableDoorTileEvent(x-1, y);
-	StartAvailableDoorTileEvent(x+1, y);
-	StartAvailableDoorTileEvent(x, y-1);
-	StartAvailableDoorTileEvent(x, y+1);
+	StartAvailableDoorTileEvent(x - 1, y);
+	StartAvailableDoorTileEvent(x + 1, y);
+	StartAvailableDoorTileEvent(x, y - 1);
+	StartAvailableDoorTileEvent(x, y + 1);
 
 	StartAvailableChestTileEvent(x, y);
 
@@ -373,18 +371,23 @@ void DoItemKeyAction(void)
 
 void DoItemPromoteAction(void)
 {
-	gBattleUnitA.weapon_before = gBattleUnitB.weapon_before = GetUnit(gAction.instigator)->items[gAction.item_slot];
-	gBattleUnitA.weapon = gBattleUnitB.weapon = GetUnitEquippedWeapon(GetUnit(gAction.instigator));
+	gBattleUnitA.weapon_before =
+		GetUnit(gAction.instigator)->items[gAction.item_slot];
+	gBattleUnitB.weapon_before = gBattleUnitA.weapon_before;
 
-	// pre-promote battle unit
+	gBattleUnitA.weapon = GetUnitEquippedWeapon(GetUnit(gAction.instigator));
+	gBattleUnitB.weapon = gBattleUnitA.weapon;
+
+	/* pre-promote battle unit */
 	InitBattleUnitWithoutBonuses(&gBattleUnitB, GetUnit(gAction.instigator));
 
 	UnitPromote(GetUnit(gAction.instigator));
 
-	// post-promote battle unit
+	/* post-promote battle unit */
 	InitBattleUnitWithoutBonuses(&gBattleUnitA, GetUnit(gAction.instigator));
 
-	GenerateBattleUnitStatGainsComparatively(&gBattleUnitA, &gBattleUnitB.unit);
+	GenerateBattleUnitStatGainsComparatively(&gBattleUnitA,
+						 &gBattleUnitB.unit);
 
 	SetBattleUnitTerrainBonusesAuto(&gBattleUnitA);
 	SetBattleUnitTerrainBonusesAuto(&gBattleUnitB);
@@ -404,8 +407,10 @@ void DoItemPromoteAction(void)
 
 void func_fe6_08027DB4(struct Unit *unit, int item)
 {
-	gBattleUnitA.weapon_before = gBattleUnitB.weapon_before = item;
-	gBattleUnitA.weapon = gBattleUnitB.weapon = item;
+	gBattleUnitA.weapon_before = item;
+	gBattleUnitB.weapon_before = item;
+	gBattleUnitA.weapon = item;
+	gBattleUnitB.weapon = item;
 
 	InitBattleUnit(&gBattleUnitB, unit);
 
@@ -413,7 +418,8 @@ void func_fe6_08027DB4(struct Unit *unit, int item)
 
 	InitBattleUnit(&gBattleUnitA, unit);
 
-	GenerateBattleUnitStatGainsComparatively(&gBattleUnitA, &gBattleUnitB.unit);
+	GenerateBattleUnitStatGainsComparatively(&gBattleUnitA,
+						 &gBattleUnitB.unit);
 
 	SetBattleUnitTerrainBonusesAuto(&gBattleUnitA);
 	SetBattleUnitTerrainBonusesAuto(&gBattleUnitB);
@@ -430,10 +436,8 @@ void func_fe6_08027DB4(struct Unit *unit, int item)
 void DoItemStatBoostAction(ProcPtr proc)
 {
 	int msg = 0;
-
 	struct Unit *unit = GetUnit(gAction.instigator);
 	int item = GetUnit(gAction.instigator)->items[gAction.item_slot];
-
 	struct ItemBonuses const *bonuses = GetItemBonuses(item);
 
 	unit->max_hp += bonuses->hp;
@@ -450,9 +454,7 @@ void DoItemStatBoostAction(ProcPtr proc)
 
 	UnitUpdateUsedItem(unit, gAction.item_slot);
 
-	switch (GetItemIid(item))
-	{
-
+	switch (GetItemIid(item)) {
 	case IID_SECRETBOOK:
 		msg = MSG_C12;
 		break;
@@ -488,7 +490,6 @@ void DoItemStatBoostAction(ProcPtr proc)
 	case IID_ENERGYRING:
 		msg = UnitKnowsMagic(unit) ? MSG_C11 : MSG_C10;
 		break;
-
 	}
 
 	PlaySe(SONG_5A);
@@ -498,13 +499,12 @@ void DoItemStatBoostAction(ProcPtr proc)
 
 void DoItemAction(ProcPtr proc)
 {
-	int iid = GetItemIid(GetUnit(gAction.instigator)->items[gAction.item_slot]);
+	int iid = GetItemIid(
+		GetUnit(gAction.instigator)->items[gAction.item_slot]);
 
 	gBattleUnitA.has_item_effect_target = FALSE;
 
-	switch (iid)
-	{
-
+	switch (iid) {
 	case IID_HEALSTAFF:
 	case IID_MENDSTAFF:
 	case IID_RECOVERSTAFF:
@@ -602,7 +602,6 @@ void DoItemAction(ProcPtr proc)
 	case IID_SAINTSSTAFF:
 		DoItemSaintStaffAction(proc);
 		break;
-
 	}
 
 	if (gBattleUnitB.output_status >= 0)
@@ -611,9 +610,9 @@ void DoItemAction(ProcPtr proc)
 
 static void ApplyStatusChange(ProcPtr proc)
 {
-	if (gBattleUnitB.output_status >= 0)
-	{
-		SetUnitStatus(GetUnit(gAction.target), gBattleUnitB.output_status);
+	if (gBattleUnitB.output_status >= 0) {
+		SetUnitStatus(GetUnit(gAction.target),
+			      gBattleUnitB.output_status);
 		gBattleUnitB.output_status = -1;
 	}
 }
