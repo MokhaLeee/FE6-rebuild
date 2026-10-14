@@ -303,14 +303,14 @@ static u16 const *GetFactionBattlePreviewFramePalette(int faction)
 {
 	switch (faction) {
 	case FACTION_BLUE:
-        return Pal_BattlePreviewFrame_Blue;
+		return Pal_BattlePreviewFrame_Blue;
 	case FACTION_RED:
-        return Pal_BattlePreviewFrame_Red;
+		return Pal_BattlePreviewFrame_Red;
 	case FACTION_GREEN:
-        return Pal_BattlePreviewFrame_Green;
+		return Pal_BattlePreviewFrame_Green;
 	case FACTION_PURPLE:
-    default:
-        return Pal_BattlePreviewFrame_Purple;
+	default:
+		return Pal_BattlePreviewFrame_Purple;
 	}
 }
 
