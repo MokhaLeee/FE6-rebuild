@@ -384,3 +384,202 @@ DecodeString: @ 0x080006E4
 .L08000768:
 	pop {r4, r5, r6, r7}
 	bx lr
+
+#if 0
+	.align 2, 0
+.L08000770: .4byte gWorkingMovTable
+.LMovMapFillState: .4byte gMapFloodSt
+.L08000778: .4byte gWorkingMap
+.L0800077C: .4byte gMapTerrain
+.L08000780: .4byte gMapUnit
+
+	arm_func_start MapFloodCoreStep
+MapFloodCoreStep: @ 0x08000784
+	push {r4, r5, r6, r7, r8, sb, sl}
+	ldr r3, .LMovMapFillState @ =gMapFloodSt
+	ldr r4, [r3]
+	ldrb r5, [r4]
+	add r1, r1, r5
+	ldrb r6, [r4, #1]
+	add r2, r2, r6
+	ldr r7, .L0800077C @ =gMapTerrain
+	ldr r7, [r7]
+	ldr r7, [r7, r2, lsl #2]
+	ldrb r7, [r7, r1]
+	ldr r8, .L08000770 @ =gWorkingMovTable
+	ldrb sl, [r8, r7]
+	ldr r7, .L08000778 @ =gWorkingMap
+	ldr r7, [r7]
+	ldr sb, [r7, r6, lsl #2]
+	ldrb sb, [sb, r5]
+	add sl, sl, sb
+	ldr sb, [r7, r2, lsl #2]
+	ldrb sb, [sb, r1]
+	cmp sl, sb
+	bhs .L08000848
+	ldrb r4, [r3, #8]
+	tst r4, r4
+	beq .L08000810
+	ldr r7, .L08000780 @ =gMapUnit
+	ldr r7, [r7]
+	ldr r7, [r7, r2, lsl #2]
+	ldrb r7, [r7, r1]
+	tst r7, r7
+	beq .L08000810
+	ldrb r4, [r3, #0xa]
+	eor r4, r4, r7
+	ands r4, r4, #0x80
+	bne .L08000848
+.L08000810:
+	ldrb r4, [r3, #9]
+	cmp sl, r4
+	bhi .L08000848
+	ldr r4, [r3, #4]
+	strb r1, [r4]
+	strb r2, [r4, #1]
+	strb r0, [r4, #2]
+	strb sl, [r4, #3]
+	add r4, r4, #4
+	str r4, [r3, #4]
+	ldr r7, .L08000778 @ =gWorkingMap
+	ldr r7, [r7]
+	ldr r7, [r7, r2, lsl #2]
+	strb sl, [r7, r1]
+.L08000848:
+	pop {r4, r5, r6, r7, r8, sb, sl}
+	bx lr
+
+	.align 2, 0
+.LMovMapFillStPool1: .4byte gMapFloodSquareBufB
+.LMovMapFillStPool2: .4byte gMapFloodSquareBufA
+.L08000858:
+	b .LMapFloodCore_case4
+	b .LMapFloodCore_case5
+	b .LMapFloodCore_case3
+	b .LMapFloodCore_case2
+	b .LMapFloodCoreLoop2Exit
+	b .LMapFloodCore_case1
+	.4byte .L08000858
+
+	ARM_FUNC_START MapFloodCore
+MapFloodCore: @ 0x08000874
+	push {r4, r5, r6, lr}
+	mov r4, #0
+	ldr r5, .LMovMapFillState  @ gMovMapFillState
+.LMapFloodCoreLoop1:
+	eors r4, r4, #1
+	beq _0800089C
+	ldr r0, .LMovMapFillStPool1  @ gMovMapFillStPool1
+	str r0, [r5]
+	ldr r0, .LMovMapFillStPool2  @ gMovMapFillStPool2
+	str r0, [r5, #4]
+	b _080008AC
+_0800089C:
+	ldr r0, .LMovMapFillStPool2  @ gMovMapFillStPool2
+	str r0, [r5]
+	ldr r0, .LMovMapFillStPool1  @ gMovMapFillStPool1
+	str r0, [r5, #4]
+_080008AC:
+	ldr r6, [r5]
+	ldrb r6, [r6, #2]
+	cmp r6, #4
+	beq .LMapFloodCoreRet
+.LMapFloodCoreLoop2:
+	ldr r6, [r5]
+	ldrb r6, [r6, #2]
+	mov r0, pc
+	add r0, r0, #8
+	add r0, r0, r6, lsl #2
+	bx r0
+	b .LMapFloodCore_case4
+	b .LMapFloodCore_case5
+	b .LMapFloodCore_case3
+	b .LMapFloodCore_case2
+	b .LMapFloodCoreLoop2Exit
+.LMapFloodCore_case1:
+	mov r0, #3
+	mov r1, #0
+	mvn r2, #0
+	bl MapFloodCoreStep
+	mov r0, #2
+	mov r1, #0
+	mov r2, #1
+	bl MapFloodCoreStep
+	mov r0, #0
+	mvn r1, #0
+	mov r2, #0
+	bl MapFloodCoreStep
+	mov r0, #1
+	mov r1, #1
+	mov r2, #0
+	bl MapFloodCoreStep
+	b .LMapFloodCore_default
+.LMapFloodCore_case2:
+	mov r0, #3
+	mov r1, #0
+	mvn r2, #0
+	bl MapFloodCoreStep
+	mov r0, #0
+	mvn r1, #0
+	mov r2, #0
+	bl MapFloodCoreStep
+	mov r0, #1
+	mov r1, #1
+	mov r2, #0
+	bl MapFloodCoreStep
+	b .LMapFloodCore_default
+.LMapFloodCore_case3:
+	mov r0, #2
+	mov r1, #0
+	mov r2, #1
+	bl MapFloodCoreStep
+	mov r0, #0
+	mvn r1, #0
+	mov r2, #0
+	bl MapFloodCoreStep
+	mov r0, #1
+	mov r1, #1
+	mov r2, #0
+	bl MapFloodCoreStep
+	b .LMapFloodCore_default
+.LMapFloodCore_case4:
+	mov r0, #3
+	mov r1, #0
+	mvn r2, #0
+	bl MapFloodCoreStep
+	mov r0, #2
+	mov r1, #0
+	mov r2, #1
+	bl MapFloodCoreStep
+	mov r0, #0
+	mvn r1, #0
+	mov r2, #0
+	bl MapFloodCoreStep
+	b .LMapFloodCore_default
+.LMapFloodCore_case5:
+	mov r0, #3
+	mov r1, #0
+	mvn r2, #0
+	bl MapFloodCoreStep
+	mov r0, #2
+	mov r1, #0
+	mov r2, #1
+	bl MapFloodCoreStep
+	mov r0, #1
+	mov r1, #1
+	mov r2, #0
+	bl MapFloodCoreStep
+.LMapFloodCore_default:
+	ldr r6, [r5, #4]
+	mov r0, #4
+	strb r0, [r6, #2]
+	ldr r6, [r5]
+	add r6, r6, #4
+	str r6, [r5]
+	b .LMapFloodCoreLoop2
+.LMapFloodCoreLoop2Exit:
+	b .LMapFloodCoreLoop1
+.LMapFloodCoreRet:
+	pop {r4, r5, r6, lr}
+	bx lr
+#endif

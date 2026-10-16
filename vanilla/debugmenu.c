@@ -410,7 +410,6 @@ void StartDebugMenu_LoadGame(void)
 
     StartMuralBackground(StartMenu(&MenuInfo_Debug_LoadGame), (u8 *) BG_VRAM + CHR_SIZE * 0x580, -1);
 
-    PutBuildInfo(gBg2Tm + TM_OFFSET(0, 1));
     DebugPutStr(gBg2Tm + TM_OFFSET(0, 2), "DB INTERRUPT AVAILABLE");
 }
 

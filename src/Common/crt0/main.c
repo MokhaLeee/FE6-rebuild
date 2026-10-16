@@ -62,7 +62,3 @@ void AgbMain(void)
 		SoftResetIfKeyCombo();
 	}
 }
-
-void PutBuildInfo(u16 * tm)
-{
-}

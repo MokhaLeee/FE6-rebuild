@@ -43,10 +43,10 @@ void MapFloodCore(void)
 		alt ^= 1;
 
 		if (alt) {
-			gMapFloodSt.active_queue = gMapFloodSquareBufB;
+			gMapFloodSt.active_queue  = gMapFloodSquareBufB;
 			gMapFloodSt.waiting_queue = gMapFloodSquareBufA;
 		} else {
-			gMapFloodSt.active_queue = gMapFloodSquareBufA;
+			gMapFloodSt.active_queue  = gMapFloodSquareBufA;
 			gMapFloodSt.waiting_queue = gMapFloodSquareBufB;
 		}
 
