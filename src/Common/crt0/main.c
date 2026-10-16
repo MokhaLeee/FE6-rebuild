@@ -18,6 +18,8 @@
 
 void InitGlobalSaveInfo(void);
 
+static const char build_time[] = __DATE__ __TIME__;
+
 void AgbMain(void)
 {
 	REG_WAITCNT = WAITCNT_SRAM_4
@@ -31,7 +33,7 @@ void AgbMain(void)
 	SetOnVBlank(NULL);
 
 	io_init();
-	dprintf(INFO, "[version=%s] build time: %s-%s", CONFIG_VERSION, __DATE__, __TIME__);
+	dprintf(INFO, "[version=%s] build time: %s", CONFIG_VERSION, build_time);
 
 	REG_DISPSTAT = 8;
 	REG_IME = 1;
@@ -39,7 +41,6 @@ void AgbMain(void)
 	InitKeySt(gKeySt);
 	RefreshKeySt(gKeySt);
 
-	InitRamFuncs();
 	SaveHwInit();
 	InitProcs();
 	InitSpriteAnims();
