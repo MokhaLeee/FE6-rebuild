@@ -4,6 +4,21 @@
 #include "save_stats.h"
 #include "skill-sys.h"
 
+static void unit_to_battle_hook(struct BattleUnit * bu, struct Unit * unit)
+{
+	/* str-mag */
+	bu->unit.mag = GetUnitMagic(unit);
+	bu->change_mag = 0;
+
+	/* skill */
+	UnitToBattle_SetupSkillList(bu);
+}
+
+static void battle_to_unit_hook(struct Unit *unit, struct BattleUnit *bu)
+{
+	unit->mag += bu->change_mag;
+}
+
 /**
  * U 2 B
  */
@@ -57,13 +72,7 @@ void InitBattleUnit(struct BattleUnit * bu, struct Unit * unit)
 		return;
 
 	InitBattleUnitVanilla(bu, unit);
-
-	/* str-mag */
-	bu->unit.mag = GetUnitMagic(unit);
-	bu->change_mag = 0;
-
-	/* skill */
-	UnitToBattle_SetupSkillList(bu);
+	unit_to_battle_hook(bu, unit);
 }
 
 void InitBattleUnitWithoutBonuses(struct BattleUnit * bu, struct Unit * unit)
@@ -123,6 +132,5 @@ static void UpdateUnitFromBattleVanilla(struct Unit *unit, struct BattleUnit *bu
 void UpdateUnitFromBattle(struct Unit *unit, struct BattleUnit *bu)
 {
 	UpdateUnitFromBattleVanilla(unit, bu);
-
-	unit->mag += bu->change_mag;
+	battle_to_unit_hook(unit, bu);
 }
