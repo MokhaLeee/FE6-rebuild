@@ -176,13 +176,12 @@ extern u8 gPrepMenuItemCnt;
 extern struct Text gPrepTexts1[2][10];
 extern struct Text gPrepTexts3[2];
 
-extern EWRAM_OVERLAY(0) u16 gPrepPageItemTable[800];
-
 struct PrepItemListEnt {
     u8 pid;
     u8 slot;
     u16 item;
 };
+extern EWRAM_OVERLAY(0) struct PrepItemListEnt gPrepPageItemTable[400];
 extern EWRAM_OVERLAY(0) struct PrepItemListEnt gPrepItemListData[400];
 
 void ResetSioPidPool(void);

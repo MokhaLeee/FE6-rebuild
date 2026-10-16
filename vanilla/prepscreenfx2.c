@@ -19,32 +19,74 @@
 extern const char String_Prep_08327294[];
 extern const char Msg_Prep_Supply[]; // 輸送隊
 
-#if 0
-void func_fe6_0807D834(u8 kind)
+void func_fe6_0807D834(fu8 kind)
 {
+	fu8 category_offset = kind * 2;
+
 	int i, j;
+	int gap;
 
 	gPrepMenuScrollPos = 0;
 
 	for (i = 0; i < gPrepAllItemsCount; i++) {
-		u8 ikind = GetItemKind(gPrepItemListData[i].u.info.item);
+		fu8 item_kind = GetItemKind(gPrepItemListData[i].item);
 
-		if (ikind >= PrepItemKindRefTable[kind * 2 + 0] && ikind <= PrepItemKindRefTable[kind * 2 + 1]) {
-			gPrepPageItemTable[gPrepMenuScrollPos] = gPrepItemListData[i].u.info.item;
+		if (item_kind >= PrepItemKindRefTable[category_offset + 0] && item_kind <= PrepItemKindRefTable[category_offset + 1]) {
+			gPrepPageItemTable[gPrepMenuScrollPos] = gPrepItemListData[i];
 			gPrepMenuScrollPos++;
 		}
 	}
 
-	for (j = 1; ; j = j * 3 + 1) {
-		u16 tmp = gPrepMenuScrollPos / 3;
+	/* this is a variant of shellsort
+	 * <https://en.wikipedia.org/wiki/Shellsort> */
 
-		if (j > tmp)
-			break;
+	gap = 1;
+
+	while (gap < gPrepMenuScrollPos / 3)
+		gap = gap * 3 + 1;
+
+	while (gap > 0) {
+		for (i = gap; i < gPrepMenuScrollPos; i++) {
+			for (j = i - gap; j >= 0; j -= gap) {
+				if (GetItemIid(gPrepPageItemTable[j].item) > GetItemIid(gPrepPageItemTable[j + gap].item)) {
+					/* swap if greater IID */
+					struct PrepItemListEnt tmp = gPrepPageItemTable[j];
+					gPrepPageItemTable[j] = gPrepPageItemTable[j + gap];
+					gPrepPageItemTable[j + gap] = tmp;
+				} else {
+					if (GetItemIid(gPrepPageItemTable[j].item) != GetItemIid(gPrepPageItemTable[j + gap].item))
+						break;
+
+					if (gPrepPageItemTable[j].item > gPrepPageItemTable[j + gap].item) {
+						/* swap if greater item value (=> greater uses) */
+						struct PrepItemListEnt tmp = gPrepPageItemTable[j];
+						gPrepPageItemTable[j] = gPrepPageItemTable[j + gap];
+						gPrepPageItemTable[j + gap] = tmp;
+					}
+				}
+			}
+		}
+
+		gap = gap / 3;
 	}
 
-	for (; i > 0; i = i - j) {}
+	/* import in the remaining items */
+
+	j = 0;
+
+	for (i = 0; i < gPrepAllItemsCount; i++)
+	{
+		fu8 item_kind = GetItemKind(gPrepItemListData[i].item);
+
+		if (item_kind < PrepItemKindRefTable[category_offset + 0] || item_kind > PrepItemKindRefTable[category_offset + 1])
+		{
+			gPrepPageItemTable[gPrepMenuScrollPos + j] = gPrepItemListData[i];
+			j++;
+		}
+	}
+
+	memcpy(gPrepItemListData, gPrepPageItemTable, sizeof(gPrepItemListData));
 }
-#endif
 
 void func_fe6_0807D9E4(struct Text *text, u8 x, struct Unit *unit, u16 off, int unused)
 {
