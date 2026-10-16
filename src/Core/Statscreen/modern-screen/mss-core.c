@@ -97,6 +97,18 @@ static void mss_main(struct ProcMss *proc)
 		Proc_Goto(proc, PL_MSS_SLIDE_PAGE);
 		return;
 	}
+
+	if (gKeySt->repeated & KEY_DPAD_UP) {
+		proc->unit_to_change = FindNextStatScreenUnit(gMssSt.unit, -1);
+		Proc_Goto(proc, PL_MSS_SLIDE_PAGEUNIT);
+		return;
+	}
+
+	if (gKeySt->repeated & KEY_DPAD_DOWN) {
+		proc->unit_to_change = FindNextStatScreenUnit(gMssSt.unit, +1);
+		Proc_Goto(proc, PL_MSS_SLIDE_PAGEUNIT);
+		return;
+	}
 }
 
 static void mss_init(struct ProcMss *proc)
@@ -419,10 +431,39 @@ static void mss_loop_page_slideout(struct ProcMss *proc)
 		Proc_Break(proc);
 }
 
+static void mss_unit_change_prepare(struct ProcMss *proc)
+{
+	gMssSt.unit = proc->unit_to_change;
+	gMssSt.help = NULL;
+
+	proc->page = 0;
+}
+
+static void mss_unit_change_move_cam(struct ProcMss *proc)
+{
+	CameraMoveWatchPosition(proc, gMssSt.unit->x, gMssSt.unit->y);
+	SetMapCursorPosition(gMssSt.unit->x, gMssSt.unit->y);
+}
+
+static void mss_unit_change_init_cursor(struct ProcMss *proc)
+{
+	proc->timer = 0;
+}
+
+static void mss_unit_change_wait_cursor(struct ProcMss *proc)
+{
+	PutMapCursor(gBmSt.cursor_sprite.x, gBmSt.cursor_sprite.y, MAP_CURSOR_DEFAULT);
+
+	proc->timer++;
+	if (proc->timer > 30)
+		Proc_Break(proc);
+}
+
 /**
  * main
  */
 static const struct ProcScr ProcScr_modern_statscreen[] = {
+PROC_LABEL(PL_MSS_START),
 	// PROC_CALL(LockBmDisplay),
 
 	PROC_CALL(StartGreenText),
@@ -446,6 +487,22 @@ PROC_LABEL(PL_MSS_SLIDE_PAGE),
 	PROC_CALL(mss_init_slide),
 	PROC_REPEAT(mss_loop_page_slidein),
 	PROC_GOTO(PL_MSS_IDLE),
+
+PROC_LABEL(PL_MSS_SLIDE_PAGEUNIT),
+	PROC_CALL(mss_unit_change_prepare),
+
+	/* common end process */
+	PROC_CALL(mss_init_slide),
+	PROC_REPEAT(mss_loop_unit_slideout),
+	PROC_CALL(mss_end),
+	PROC_YIELD,
+	PROC_CALL(EndGreenText),
+
+	PROC_CALL(mss_unit_change_move_cam),
+	PROC_YIELD,
+	PROC_CALL(mss_unit_change_init_cursor),
+	PROC_REPEAT(mss_unit_change_wait_cursor),
+	PROC_GOTO(PL_MSS_START),
 
 PROC_LABEL(PL_MSS_END),
 	PROC_CALL(mss_init_slide),

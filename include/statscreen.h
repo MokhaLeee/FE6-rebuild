@@ -264,10 +264,12 @@ enum videoalloc_mss {
 };
 
 enum mss_proc_label {
+	PL_MSS_START,
 	PL_MSS_IDLE,
 	PL_MSS_SLIDE_UNIT_IN,
 	PL_MSS_SLIDE_UNIT_OUT,
 	PL_MSS_SLIDE_PAGE,
+	PL_MSS_SLIDE_PAGEUNIT,
 
 	PL_MSS_END,
 };
@@ -284,10 +286,12 @@ struct ProcMssSprite {
 struct ProcMss {
 	PROC_HEADER;
 	struct ProcMssSprite *proc_sprite;
+	struct Unit *unit_to_change;
 
 	int slide_step;
 	i8 page, page_count;
 	u16 excluded_unit_flags;
+	int timer;
 };
 
 void StartModernStatScreen(struct Unit *unit, ProcPtr parent);
