@@ -18,6 +18,7 @@
 
 void InitGlobalSaveInfo(void);
 
+static const char build_version[] = CONFIG_VERSION;
 static const char build_time[] = __DATE__ __TIME__;
 
 void AgbMain(void)
@@ -33,7 +34,7 @@ void AgbMain(void)
 	SetOnVBlank(NULL);
 
 	io_init();
-	dprintf(INFO, "[version=%s] build time: %s", CONFIG_VERSION, build_time);
+	dprintf(INFO, "[version=%s] build time: %s", build_version, build_time);
 
 	REG_DISPSTAT = 8;
 	REG_IME = 1;
