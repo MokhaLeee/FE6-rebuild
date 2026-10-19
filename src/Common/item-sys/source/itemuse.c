@@ -27,6 +27,8 @@
 #include "constants/songs.h"
 #include "constants/msg.h"
 
+#include "demo-promotion.h"
+
 extern IWRAM_DATA struct Unit gStatGainSimUnit;
 
 /* TODO: map-menu.h */
@@ -288,6 +290,16 @@ void DoUseUnitItem(struct Unit *unit, int item)
 	case IID_SAINTSSTAFF:
 		SetStaffUseAction(unit);
 		break;
+
+#if CONFIG_DEMO_PROMO_EN
+	case IID_HEROCREST:
+	case IID_KNIGHTCREST:
+	case IID_ORIONSBOLT:
+	case IID_ELYSIANWHIP:
+	case IID_GUIDINGRING:
+		StartBmPromotion(NULL);
+		break;
+#endif
 
 	default:
 		SetItemUseAction(unit);

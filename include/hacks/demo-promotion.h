@@ -3,8 +3,16 @@
 #include "prelude.h"
 #include "unit.h"
 
-struct ProcPromoMain {
-    struct Unit *unit;
-    int pid;
-    int item_slot;
+enum promotion_type {
+	PROMO_TYPE_BM,
+	PROMO_TYPE_PREP,
 };
+
+struct ProcPromoMain {
+	struct Unit *unit;
+	int promo_type;
+	int pid;
+	int item_slot;
+};
+
+void StartBmPromotion(ProcPtr parent);

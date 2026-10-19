@@ -29,6 +29,9 @@
 /* use all-instrument */
 #define CONFIG_ALL_INSTRUMENT_EN 1
 
+/* use demo promotion */
+#define CONFIG_DEMO_PROMO_EN 1
+
 #include "configs/config-debug.h"
 
 #endif
