@@ -1,8 +1,12 @@
+#include "configs/configs.h"
+
 .section .content_data
 
+#if CONFIG_ALL_INSTRUMENT_EN
+
 .align 2, 0
-.global AllInstrument
-AllInstrument:
+.global sound_groups
+sound_groups:
 	.byte 0x40, 0x00, 0x00, 0x00
 	.word _09000000
 	.word _0912CB10
@@ -43362,3 +43366,5 @@ _0913B6E0:
 .align 2, 0
 _0913D350:
 .incbin "gamedata/sounds/AllInstruments/source/0x7FMULTI2.bin"
+
+#endif

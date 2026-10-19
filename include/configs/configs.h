@@ -26,6 +26,9 @@
 /* use rewritten statscreen */
 #define CONFIG_USE_MODERN_STATSCREEN 1
 
+/* use all-instrument */
+#define CONFIG_ALL_INSTRUMENT_EN 1
+
 #include "configs/config-debug.h"
 
 #endif

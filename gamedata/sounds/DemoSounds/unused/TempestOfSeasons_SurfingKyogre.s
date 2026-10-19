@@ -1,6 +1,6 @@
 	.include "MPlayDef.s"
 
-	.equ	song0B_grp, AllInstrument
+	.equ	song0B_grp, sound_groups
 	.equ	song0B_pri, 0
 	.equ	song0B_rev, 0
 	.equ	song0B_mvl, 127
