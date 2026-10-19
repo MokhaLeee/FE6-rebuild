@@ -319,7 +319,7 @@ EvtLabel(3)
 	EvtNoSkip
 	EvtGiveItemTo(IID_BINDINGBLADE, PID_ROY)
 	EvtSleep(64)
-	EvtFunc(func_fe6_0806D0E4)
+	EvtFunc(EventFunc_RoyPromote)
 	EvtSleep(1280)
 	EvtNextChapter(CHAPTER_22)
 	EvtSleep(1)

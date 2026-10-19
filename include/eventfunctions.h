@@ -184,7 +184,7 @@ void func_fe6_0806D000(void);
 void func_fe6_0806D01C(void);
 bool func_fe6_0806D028(void);
 void func_fe6_0806D064(void);
-void func_fe6_0806D0E4(void);
+void EventFunc_RoyPromote(void);
 // func_fe6_0806D0FC
 bool HaveAllLegendaryWeapons(void);
 void func_fe6_0806D17C(void);

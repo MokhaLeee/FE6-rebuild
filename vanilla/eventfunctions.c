@@ -1530,10 +1530,10 @@ void func_fe6_0806D064(void)
     }
 }
 
-void func_fe6_0806D0E4(void)
+void EventFunc_RoyPromote(void)
 {
     EndMapUi();
-    func_fe6_08027DB4(GetUnitByPid(PID_ROY), ITEM_FROM_IID(IID_BINDINGBLADE));
+    DoUnitPromoteInEvent(GetUnitByPid(PID_ROY), ITEM_FROM_IID(IID_BINDINGBLADE));
 }
 
 bool func_fe6_0806D0FC(int iid)

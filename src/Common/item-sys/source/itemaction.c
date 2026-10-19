@@ -405,7 +405,7 @@ void DoItemPromoteAction(void)
 	BeginBattleAnimations();
 }
 
-void func_fe6_08027DB4(struct Unit *unit, int item)
+void DoUnitPromoteInEvent(struct Unit *unit, int item)
 {
 	gBattleUnitA.weapon_before = item;
 	gBattleUnitB.weapon_before = item;
