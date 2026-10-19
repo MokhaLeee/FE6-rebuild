@@ -1030,7 +1030,8 @@ fu8 UnitItemActionMenu_Use_Select(struct MenuProc * menu, struct MenuEntProc * e
         return MENU_ACTION_SE_6B;
     }
 
-    gAction.id = ACTION_USEITEM;
+    // gAction.id = ACTION_USEITEM;
+    DoUseUnitItem(gActiveUnit, gActiveUnit->items[gAction.item_slot]);
 
     PlaySe(SONG_6A);
     return func_fe6_0801F8E0(menu);
