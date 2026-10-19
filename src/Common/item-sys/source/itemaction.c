@@ -373,38 +373,14 @@ void DoItemKeyAction(void)
 
 void DoItemPromoteAction(void)
 {
-	gBattleUnitA.weapon_before =
-		GetUnit(gAction.instigator)->items[gAction.item_slot];
-	gBattleUnitB.weapon_before = gBattleUnitA.weapon_before;
+	struct Unit *unit = GetUnit(gAction.instigator);
 
-	gBattleUnitA.weapon = GetUnitEquippedWeapon(GetUnit(gAction.instigator));
-	gBattleUnitB.weapon = gBattleUnitA.weapon;
-
-	/* pre-promote battle unit */
-	InitBattleUnitWithoutBonuses(&gBattleUnitB, GetUnit(gAction.instigator));
-
-	UnitPromote(GetUnit(gAction.instigator));
-
-	/* post-promote battle unit */
-	InitBattleUnitWithoutBonuses(&gBattleUnitA, GetUnit(gAction.instigator));
-
-	GenerateBattleUnitStatGainsComparatively(&gBattleUnitA,
-						 &gBattleUnitB.unit);
-
-	SetBattleUnitTerrainBonusesAuto(&gBattleUnitA);
-	SetBattleUnitTerrainBonusesAuto(&gBattleUnitB);
-
-	GetUnit(gAction.instigator)->flags |= UNIT_FLAG_HAD_ACTION;
-
-	UnitUpdateUsedItem(GetUnit(gAction.instigator), gAction.item_slot);
-
-	gBattleHits[0].attributes = 0;
-	gBattleHits[0].info = BATTLE_HIT_INFO_END;
-	gBattleHits[0].damage = 0;
-
-	gBattleSt.flags = BATTLE_FLAG_PROMOTE;
-
-	BeginBattleAnimations();
+#if CONFIG_DEMO_PROMO_EN
+	StartBmDemoPromotion(unit, gAction.item_slot);
+#else
+	UnitUpdateUsedItem(unit, gAction.item_slot);
+	StartUnitPromotionAction(unit, -1, unit->items[gAction.item_slot]);
+#endif
 }
 
 void DoUnitPromoteInEvent(struct Unit *unit, int item)
@@ -416,7 +392,7 @@ void DoUnitPromoteInEvent(struct Unit *unit, int item)
 
 	InitBattleUnit(&gBattleUnitB, unit);
 
-	UnitPromote(unit);
+	UnitPromote(unit, -1);
 
 	InitBattleUnit(&gBattleUnitA, unit);
 
@@ -586,11 +562,7 @@ void DoItemAction(ProcPtr proc)
 	case IID_ORIONSBOLT:
 	case IID_ELYSIANWHIP:
 	case IID_GUIDINGRING:
-#if CONFIG_DEMO_PROMO_EN
-		StartBmDemoPromotion(NULL);
-#else
 		DoItemPromoteAction();
-#endif
 		break;
 
 	case IID_SECRETBOOK:

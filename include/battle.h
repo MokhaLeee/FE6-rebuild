@@ -153,7 +153,7 @@ void BattleApplyExpGains(void);
 int GetStatIncrease(int growth);
 int GetAutoleveledStatIncrease(int growth, int levelCount);
 void CheckBattleUnitLevelUp(struct BattleUnit *bu);
-void UnitPromote(struct Unit *unit);
+void UnitPromote(struct Unit *unit, int jid);
 void GenerateBattleUnitStatGainsComparatively(struct BattleUnit *bu, struct Unit *unit);
 void CheckBattleUnitStatCaps(struct Unit *unit, struct BattleUnit *bu);
 void BattleApplyUnitUpdates(void);

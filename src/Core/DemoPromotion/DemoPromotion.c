@@ -1,6 +1,7 @@
 #include "prelude.h"
 #include "unit.h"
 #include "battle.h"
+#include "item.h"
 #include "action.h"
 #include "bmio.h"
 #include "util.h"
@@ -59,7 +60,6 @@ static void DemoPromo_End(struct ProcPromoMain *proc)
 
 static const struct ProcScr ProcScr_DemoPromoBM[] = {
 	/* start */
-	PROC_CALL(LockGame),
 	PROC_CALL(StartFastFadeToBlack),
 	PROC_REPEAT(WhileFadeExists),
 	PROC_CALL(LockBmDisplay),
@@ -81,21 +81,78 @@ static const struct ProcScr ProcScr_DemoPromoBM[] = {
 	PROC_CALL(InitBmDisplay),
 	PROC_CALL(StartFastFadeFromBlack),
 	PROC_REPEAT(WhileFadeExists),
+	PROC_END
+};
+
+static void PromoHandle_Init(struct ProcPromoHandler *proc)
+{
+	proc->action_type = PROMO_ACT_PROMO;
+	proc->jid_promo = -1;
+}
+
+static void PromoHandle_StartSelect(struct ProcPromoHandler *proc)
+{
+	SpawnProcLocking(ProcScr_DemoPromoBM, proc);
+}
+
+static void PromoHandle_ExecAnim(struct ProcPromoHandler *proc)
+{
+	if (proc->action_type == PROMO_ACT_PROMO) {
+		UnitUpdateUsedItem(proc->unit, proc->item_slot);
+		StartUnitPromotionAction(proc->unit, proc->jid_promo, proc->unit->items[proc->item_slot]);
+	}
+}
+
+static const struct ProcScr ProcScr_DemoPromoHandle[] = {
+	PROC_CALL(LockGame),
+	PROC_YIELD,
+	PROC_CALL(PromoHandle_Init),
+	PROC_CALL(PromoHandle_StartSelect),
+	PROC_YIELD,
+	PROC_CALL(PromoHandle_ExecAnim),
+	PROC_YIELD,
 	PROC_CALL(UnlockGame),
 	PROC_END
 };
 
-void StartBmDemoPromotion(ProcPtr parent)
+void StartBmDemoPromotion(struct Unit *unit, int item_slot)
 {
-	struct ProcPromoMain *proc;
+	struct ProcPromoHandler *proc;
 
-	if (parent)
-		proc = SpawnProcLocking(ProcScr_DemoPromoBM, parent);
-	else
-		proc = SpawnProc(ProcScr_DemoPromoBM, PROC_TREE_3);
-
+	proc = SpawnProc(ProcScr_DemoPromoHandle, PROC_TREE_3);
 	proc->promo_type = PROMO_TYPE_BM;
-	proc->unit = GetUnit(gAction.instigator);
-	proc->pid = UNIT_PID(proc->unit);
-	proc->item_slot = gAction.item_slot;
+
+	proc->unit = unit;
+	proc->pid = UNIT_PID(unit);
+	proc->item_slot = item_slot;
+}
+
+void StartUnitPromotionAction(struct Unit *unit, int promo_jid, int weapon_handle)
+{
+	gBattleUnitA.weapon_before = weapon_handle;
+	gBattleUnitB.weapon_before = gBattleUnitA.weapon_before;
+
+	gBattleUnitA.weapon = GetUnitEquippedWeapon(unit);
+	gBattleUnitB.weapon = gBattleUnitA.weapon;
+
+	/* pre-promote battle unit */
+	InitBattleUnitWithoutBonuses(&gBattleUnitB, unit);
+	UnitPromote(unit, promo_jid);
+
+	/* post-promote battle unit */
+	InitBattleUnitWithoutBonuses(&gBattleUnitA, unit);
+	GenerateBattleUnitStatGainsComparatively(&gBattleUnitA, &gBattleUnitB.unit);
+
+	SetBattleUnitTerrainBonusesAuto(&gBattleUnitA);
+	SetBattleUnitTerrainBonusesAuto(&gBattleUnitB);
+
+	unit->flags |= UNIT_FLAG_HAD_ACTION;
+
+	gBattleHits[0].attributes = 0;
+	gBattleHits[0].info = BATTLE_HIT_INFO_END;
+	gBattleHits[0].damage = 0;
+
+	gBattleSt.flags = BATTLE_FLAG_PROMOTE;
+
+	BeginBattleAnimations();
 }

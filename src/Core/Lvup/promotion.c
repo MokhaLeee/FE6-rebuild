@@ -2,8 +2,9 @@
 #include "unit.h"
 #include "battle.h"
 #include "item.h"
+#include "constants/jids.h"
 
-void UnitPromote(struct Unit * unit)
+void UnitPromote(struct Unit * unit, int jid)
 {
 	int i;
 
@@ -21,8 +22,10 @@ void UnitPromote(struct Unit * unit)
 		unit->wexp[i] -= unit->jinfo->wexp[i];
 
 	// promote!
-
-	unit->jinfo = GetJInfo(unit->jinfo->jid_promote);
+	if (jid <= 0)
+		unit->jinfo = GetJInfo(unit->jinfo->jid_promote);
+	else
+		unit->jinfo = GetJInfo(jid);
 
 	// add to stats the base of the new jinfo
 

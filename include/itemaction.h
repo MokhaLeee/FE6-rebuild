@@ -18,6 +18,7 @@ void DoItemPureWaterAction(ProcPtr proc);
 void DoItemTorchAction(ProcPtr proc);
 void DoItemAntitoxinAction(ProcPtr proc);
 void DoItemKeyAction(void);
+void StartUnitPromotionAction(struct Unit *unit, int promo_jid, int weapon_handle);
 void DoItemPromoteAction(void);
 void DoUnitPromoteInEvent(struct Unit * unit, int item);
 void DoItemStatBoostAction(ProcPtr proc);
