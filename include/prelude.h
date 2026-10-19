@@ -80,3 +80,5 @@
 
 #define max(a, b) ((a) > (b)) ? (a) : (b)
 #define min(a, b) ((a) < (b)) ? (a) : (b)
+
+#define EMU_SRC_BREAK() asm("mov r11, r11")

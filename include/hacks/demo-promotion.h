@@ -9,10 +9,11 @@ enum promotion_type {
 };
 
 struct ProcPromoMain {
+	PROC_HEADER;
 	struct Unit *unit;
 	int promo_type;
 	int pid;
 	int item_slot;
 };
 
-void StartBmPromotion(ProcPtr parent);
+void StartBmDemoPromotion(ProcPtr parent);

@@ -79,29 +79,6 @@ void LoadHelpBoxGfx(void * vram, int pal)
     InitSpriteTextFont(&gHelpBoxSt.font, vram, pal);
     InitSpriteText(gHelpBoxSt.text + 0);
     InitSpriteText(gHelpBoxSt.text + 1);
-    InitSpriteText(gHelpBoxSt.text + 2);
-    SetTextFont(NULL);
-
-    ApplyPalette(Pal_08100A48, pal);
-
-    gHelpBoxSt.unk_30 = OAM2_CHR(((uptr) vram) / CHR_SIZE) + OAM2_PAL(pal);
-}
-
-void func_fe6_08070EEC(void * vram, int pal)
-{
-    if (vram == NULL)
-        vram = ((void *) VRAM) + 0x10000 + OBCHR_HELPBOX_180 * CHR_SIZE;
-
-    if (pal < 0)
-        pal = OBPAL_HELPBOX_5;
-
-    pal = (pal & 15) + 0x10;
-
-    Decompress(Img_Helpbox_08308A78, vram);
-
-    InitSpriteTextFont(&gHelpBoxSt.font, vram, pal);
-    InitSpriteText(gHelpBoxSt.text + 0);
-    InitSpriteText(gHelpBoxSt.text + 1);
     gHelpBoxSt.text[2].tile_width = 0; // ok???
     SetTextFont(NULL);
 

@@ -18,6 +18,8 @@
 #include "constants/songs.h"
 #include "constants/msg.h"
 
+#include "demo-promotion.h"
+
 static void ApplyStatusChange(ProcPtr proc);
 
 struct ProcScr CONST_DATA ProcScr_ApplyStatusChange[] = {
@@ -584,7 +586,11 @@ void DoItemAction(ProcPtr proc)
 	case IID_ORIONSBOLT:
 	case IID_ELYSIANWHIP:
 	case IID_GUIDINGRING:
+#if CONFIG_DEMO_PROMO_EN
+		StartBmDemoPromotion(NULL);
+#else
 		DoItemPromoteAction();
+#endif
 		break;
 
 	case IID_SECRETBOOK:

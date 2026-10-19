@@ -5,6 +5,7 @@
 #include "bmio.h"
 #include "util.h"
 #include "ui.h"
+#include "mu.h"
 #include "hardware.h"
 #include "chapter.h"
 #include "statscreen.h"
@@ -37,6 +38,8 @@ static void DemoPromo_Init(struct ProcPromoMain *proc)
     TmFill(gBg2Tm, 0);
     TmFill(gBg3Tm, 0);
 
+	EndAllMus();
+
 	StartMuralBackground(proc, NULL, -1);
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT | BG3_SYNC_BIT);
 }
@@ -64,8 +67,12 @@ static const struct ProcScr ProcScr_DemoPromoBM[] = {
 	PROC_YIELD,
 	PROC_CALL(DemoPromo_Init),
 	PROC_YIELD,
+    PROC_CALL(StartFastFadeFromBlack),
+    PROC_REPEAT(WhileFadeExists),
 	PROC_REPEAT(DemoPromo_Loop),
 	PROC_YIELD,
+    PROC_CALL(StartFastFadeToBlack),
+    PROC_REPEAT(WhileFadeExists),
 	PROC_CALL(DemoPromo_End),
 	PROC_YIELD,
 
@@ -78,7 +85,7 @@ static const struct ProcScr ProcScr_DemoPromoBM[] = {
 	PROC_END
 };
 
-void StartBmPromotion(ProcPtr parent)
+void StartBmDemoPromotion(ProcPtr parent)
 {
 	struct ProcPromoMain *proc;
 
@@ -91,6 +98,4 @@ void StartBmPromotion(ProcPtr parent)
 	proc->unit = GetUnit(gAction.instigator);
 	proc->pid = UNIT_PID(proc->unit);
 	proc->item_slot = gAction.item_slot;
-
-	LockBmDisplay();
 }
