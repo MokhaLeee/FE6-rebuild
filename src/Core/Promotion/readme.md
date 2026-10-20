@@ -1,9 +1,13 @@
 # promotion-UI
 
 ```
-*
+tree3
 └─ PromoHandler
    └─ PromoMain
-      ├─ PromoFx
-      └─ PromoSel
+      ├─ fx
+      │  ├─ PromoEkrfx
+      │  └─ ...
+      └─ ctrl
+         ├─ PromoSel
+         └─ ...
 ```

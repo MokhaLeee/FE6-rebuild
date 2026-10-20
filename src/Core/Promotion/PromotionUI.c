@@ -16,69 +16,8 @@
 
 #include "demo-promotion.h"
 
-enum videoalloc_promo_ui {
-	OBCHR_UIPROMO_,
-
-	BGCHR_UIPROMO_EKRMAGI = 0x200,
-
-	BGPAL_UIPROMO_EKRMAGI = 12,
-
-	OBCHR_UIPROMO_EKRMINI = 0x180,
-	OBCHR_UIPROMO_EKRMAGI = 0x280,
-	OBCHR_UIPROMO_EKRTERRAIN_L = 0x380,
-	OBCHR_UIPROMO_EKRTERRAIN_R = 0x3C0,
-
-	OBPAL_UIPROMO_EKRMINI = 2,
-	OBPAL_UIPROMO_EKRTERRAIN_L = 10,
-	OBPAL_UIPROMO_EKRTERRAIN_R = 11,
-	OBPAL_UIPROMO_EKRMAGI = 15,
-};
-
-enum promotion_type {
-	PROMO_TYPE_BM,
-	PROMO_TYPE_PREP,
-};
-
-enum promotion_action {
-	PROMO_ACT_INIT,
-	PROMO_ACT_CANCEL,
-	PROMO_ACT_PROMO,
-};
-
-struct ProcPromoHandler;
-struct ProcPromoMain;
-struct ProcPromoFx;
-struct ProcPromoSel;
-
-struct ProcPromoHandler {
-	PROC_HEADER;
-	int action_type;
-	struct Unit *unit;
-	int promo_type;
-	int pid;
-	int item_slot;
-	int jid_promo;
-	struct ProcPromoMain *child;
-};
-
-struct ProcPromoMain {
-	PROC_HEADER_EXT(struct ProcPromoHandler);
-	struct ProcPromoFx *child_fx;
-	struct ProcPromoSel *child_sel;
-};
-
-struct ProcPromoFx {
-	PROC_HEADER_EXT(struct ProcPromoMain);
-	struct ProcPromoSel *brother_sel;
-};
-
-struct ProcPromoSel {
-	PROC_HEADER_EXT(struct ProcPromoMain);
-	struct ProcPromoFx *brother_fx;
-};
-
 /**
- * promo-fx
+ * ekrfx
  */
 EWRAM_OVERLAY_PROM static struct EkrMainMiniDesc PromoEkrMiniDesc = {};
 EWRAM_OVERLAY_PROM static u16 PromoEkrMini_ImgBuf[0x1000] = {};
@@ -112,7 +51,7 @@ static void promofx_ekrmagi_callback(void)
 	gDispIo.blend_ct.target2_enable_bd = 1;
 }
 
-void promofx_put_ekrmainmini(int bid, int char_pal, int x, int y, int round_type)
+static void promofx_put_ekrmainmini(int bid, int char_pal, int x, int y, int round_type)
 {
 	struct EkrMainMiniDesc *mini_desc = &PromoEkrMiniDesc;
 	struct EfxopMagicDesc  *magi_desc = &PromoEkrMagiDesc;
@@ -154,7 +93,7 @@ void promofx_put_ekrmainmini(int bid, int char_pal, int x, int y, int round_type
 	NewEkrUnitMainMini(mini_desc);
 }
 
-void promofx_put_ekrterrainfx(int terrain, int x, int y)
+static void promofx_put_ekrterrainfx(int terrain, int x, int y)
 {
 	struct EkrTerrainfxDesc *desc = &PromoEkrTerrainDesc;
 
@@ -173,7 +112,7 @@ void promofx_put_ekrterrainfx(int terrain, int x, int y)
 	EkrTerrainfx_SetPosition(desc, x, y, x + 0x60, y);
 }
 
-static void PromoFx_Init(struct ProcPromoFx *proc)
+static void PromoEkrFx_Init(struct ProcPromoEkrFx *proc)
 {
 	EndEfxAnimeDrvProc();
 	EndEkrMainMini(&PromoEkrMiniDesc);
@@ -182,36 +121,36 @@ static void PromoFx_Init(struct ProcPromoFx *proc)
 	promofx_put_ekrterrainfx(1, 140, 104);
 }
 
-static void PromoFx_Loop(struct ProcPromoFx *proc)
+static void PromoEkrFx_Loop(struct ProcPromoEkrFx *proc)
 {}
 
-static void PromoFx_End(struct ProcPromoFx *proc)
+static void PromoEkrFx_End(struct ProcPromoEkrFx *proc)
 {
 	EndEfxAnimeDrvProc();
 	EndEkrMainMini(&PromoEkrMiniDesc);
 	EndEkrTerrainfx(&PromoEkrTerrainDesc);
 }
 
-static const struct ProcScr ProcScr_PromoFx[] = {
-	PROC_ONEND(PromoFx_End),
+static const struct ProcScr ProcScr_PromoEkrFx[] = {
+	PROC_ONEND(PromoEkrFx_End),
 	PROC_YIELD,
-	PROC_CALL(PromoFx_Init),
+	PROC_CALL(PromoEkrFx_Init),
 	PROC_YIELD,
-	PROC_REPEAT(PromoFx_Loop),
+	PROC_REPEAT(PromoEkrFx_Loop),
 	PROC_BLOCK, PROC_END
 };
 
 /**
  * promo-sel
  */
-static void PromoSel_Init(struct ProcPromoFx *proc)
+static void PromoSel_Init(struct ProcPromoSel *proc)
 {
 }
 
-static void PromoSel_Loop(struct ProcPromoFx *proc)
+static void PromoSel_Loop(struct ProcPromoSel *proc)
 {}
 
-static void PromoSel_End(struct ProcPromoFx *proc)
+static void PromoSel_End(struct ProcPromoSel *proc)
 {}
 
 static const struct ProcScr ProcScr_PromoSel[] = {
@@ -255,8 +194,8 @@ static void PromoMain_Init(struct ProcPromoMain *proc)
 	StartMuralBackground(proc, NULL, -1);
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT | BG3_SYNC_BIT);
 
-	proc->child_fx  = SpawnProc(ProcScr_PromoFx,  proc);
-	proc->child_sel = SpawnProc(ProcScr_PromoSel, proc);
+	proc->proc_ekrfx = SpawnProc(ProcScr_PromoEkrFx,  proc);
+	proc->proc_sel = SpawnProc(ProcScr_PromoSel, proc);
 }
 
 static void PromoMain_Loop(struct ProcPromoMain *proc)
@@ -269,12 +208,6 @@ static void PromoMain_Loop(struct ProcPromoMain *proc)
 
 static void PromoMain_End(struct ProcPromoMain *proc)
 {
-	if (proc->child_fx)
-		Proc_End(proc->child_fx);
-
-	if (proc->child_sel)
-		Proc_End(proc->child_sel);
-
 	EndMuralBackground();
 }
 
