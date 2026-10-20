@@ -19,19 +19,19 @@
 /**
  * ekrfx
  */
-EWRAM_OVERLAY_PROM static struct EkrMainMiniDesc PromoEkrMiniDesc = {};
-EWRAM_OVERLAY_PROM static u16 PromoEkrMini_ImgBuf[0x1000] = {};
-EWRAM_OVERLAY_PROM static u16 PromoEkrMini_OamBuf[0x2C00] = {};
-EWRAM_OVERLAY_PROM static u16 PromoEkrMini_PalBuf[0x50] = {};
-EWRAM_OVERLAY_PROM static u8  PromoEkrMini_ScrBuf[0x2A00] = {};
+EWRAM_OVERLAY_PROMOTION static struct EkrMainMiniDesc PromoEkrMiniDesc = {};
+EWRAM_OVERLAY_PROMOTION static u16 PromoEkrMini_ImgBuf[0x1000] = {};
+EWRAM_OVERLAY_PROMOTION static u16 PromoEkrMini_OamBuf[0x2C00] = {};
+EWRAM_OVERLAY_PROMOTION static u16 PromoEkrMini_PalBuf[0x50] = {};
+EWRAM_OVERLAY_PROMOTION static u8  PromoEkrMini_ScrBuf[0x2A00] = {};
 
-EWRAM_OVERLAY_PROM static struct EfxopMagicDesc PromoEkrMagiDesc = {};
-EWRAM_OVERLAY_PROM static u8 PromoEkrMagi_BgImgBuf[0x2000] = {};
-EWRAM_OVERLAY_PROM static u8 PromoEkrMagi_BgTsaBuf[0x800] = {};
-EWRAM_OVERLAY_PROM static u8 PromoEkrMagi_ObImgBuf[0x1000] = {};
+EWRAM_OVERLAY_PROMOTION static struct EfxopMagicDesc PromoEkrMagiDesc = {};
+EWRAM_OVERLAY_PROMOTION static u8 PromoEkrMagi_BgImgBuf[0x2000] = {};
+EWRAM_OVERLAY_PROMOTION static u8 PromoEkrMagi_BgTsaBuf[0x800] = {};
+EWRAM_OVERLAY_PROMOTION static u8 PromoEkrMagi_ObImgBuf[0x1000] = {};
 
-EWRAM_OVERLAY_PROM static struct EkrTerrainfxDesc PromoEkrTerrainDesc = {};
-EWRAM_OVERLAY_PROM static u8 PromoEkrTerrain_ImgBuf[0x2000] = {};
+EWRAM_OVERLAY_PROMOTION static struct EkrTerrainfxDesc PromoEkrTerrainDesc = {};
+EWRAM_OVERLAY_PROMOTION static u8 PromoEkrTerrain_ImgBuf[0x2000] = {};
 
 static void promofx_ekrmagi_callback(void)
 {

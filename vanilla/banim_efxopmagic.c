@@ -68,7 +68,7 @@ void ClearCRSpellBgTmBuf(struct Anim *anim)
 	EnableBgSync(1 << magicFx->bg);
 }
 
-struct Anim *CRSpellCreateFrontAnim(struct Anim *anim, u16 scrIdx, void *scrA, void *scrB)
+struct Anim *CRSpellCreateFrontAnim(struct Anim *anim, u16 scrIdx, const void *scrA, const void *scrB)
 {
 	struct Anim *newAnim;
 	struct EfxopMagicDesc *magicFx = GetMagicEffectBufferFor(anim);
@@ -85,9 +85,9 @@ struct Anim *CRSpellCreateFrontAnim(struct Anim *anim, u16 scrIdx, void *scrA, v
 	return newAnim;
 }
 
-void CRSpell_WriteBgMap(struct Anim *anim, u16 notFlipped, void *src, u16 isCompressed)
+void CRSpell_WriteBgMap(struct Anim *anim, u16 notFlipped, const void *src, u16 isCompressed)
 {
-	void *buf;
+	const void *buf;
 	struct EfxopMagicDesc *magicFx = GetMagicEffectBufferFor(anim);
 
 	if (isCompressed == 1)

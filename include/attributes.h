@@ -18,7 +18,7 @@
 #define EWRAM_OVERLAY_ANIM EWRAM_OVERLAY(1)
 #define EWRAM_OVERLAY_ENTR EWRAM_OVERLAY(2)
 #define EWRAM_OVERLAY_TEST EWRAM_OVERLAY(3)
-#define EWRAM_OVERLAY_PROM EWRAM_OVERLAY(4)
+#define EWRAM_OVERLAY_PROMOTION EWRAM_OVERLAY(4)
 
 #define ALIGNED(n) __attribute__((aligned(n)))
 #define BITPACKED __attribute__((aligned(4), packed))

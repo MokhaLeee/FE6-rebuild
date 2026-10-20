@@ -33,9 +33,9 @@ struct AuguryDispConfig {
 struct AuguryConfig {
 	/* 00 */ u8 fid;
 	/* 01 */ u8 pid;
-	/* 04 */ int *msgs1;
-	/* 08 */ int *msgs2;
-	/* 0C */ int *msgs3;
+	/* 04 */ int const * const msgs1;
+	/* 08 */ int const * const msgs2;
+	/* 0C */ int const * const msgs3;
 };
 
 struct Proc_0868AFF0_Augury {
