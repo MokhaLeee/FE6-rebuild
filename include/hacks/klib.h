@@ -36,6 +36,10 @@ static inline bool check_bit(void *bits, u32 idx)
 	return !!(_bits[idx >> 3] & (1 << (idx & 0x7)));
 }
 
+/* malloc */
+void *EWRAM_Malloc(unsigned size);
+void EWRAM_Free(void *ptr);
+
 /* unit-check */
 bool UnitAvailable(struct Unit *unit);
 bool UnitAvailableOnMap(struct Unit *unit);
