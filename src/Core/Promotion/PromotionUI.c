@@ -9,11 +9,30 @@
 #include "mu.h"
 #include "hardware.h"
 #include "chapter.h"
+#include "banim.h"
 #include "statscreen.h"
 #include "sound.h"
 #include "constants/songs.h"
 
 #include "demo-promotion.h"
+
+enum videoalloc_promo_ui {
+	OBCHR_UIPROMO_,
+
+	BGCHR_UIPROMO_EKRMAGI = 0x200,
+
+	BGPAL_UIPROMO_EKRMAGI = 12,
+
+	OBCHR_UIPROMO_EKRMINI = 0x180,
+	OBCHR_UIPROMO_EKRMAGI = 0x280,
+	OBCHR_UIPROMO_EKRTERRAIN_L = 0x380,
+	OBCHR_UIPROMO_EKRTERRAIN_R = 0x3C0,
+
+	OBPAL_UIPROMO_EKRMINI = 2,
+	OBPAL_UIPROMO_EKRTERRAIN_L = 10,
+	OBPAL_UIPROMO_EKRTERRAIN_R = 11,
+	OBPAL_UIPROMO_EKRMAGI = 15,
+};
 
 enum promotion_type {
 	PROMO_TYPE_BM,
@@ -61,10 +80,148 @@ struct ProcPromoSel {
 /**
  * promo-fx
  */
+EWRAM_OVERLAY_PROM static struct EkrMainMiniDesc PromoEkrMiniDesc = {};
+EWRAM_OVERLAY_PROM static u16 PromoEkrMini_ImgBuf[0x1000] = {};
+EWRAM_OVERLAY_PROM static u16 PromoEkrMini_OamBuf[0x2C00] = {};
+EWRAM_OVERLAY_PROM static u16 PromoEkrMini_PalBuf[0x50] = {};
+EWRAM_OVERLAY_PROM static u8  PromoEkrMini_ScrBuf[0x2A00] = {};
+
+EWRAM_OVERLAY_PROM static struct EfxopMagicDesc PromoEkrMagiDesc = {};
+EWRAM_OVERLAY_PROM static u8 PromoEkrMagi_BgImgBuf[0x2000] = {};
+EWRAM_OVERLAY_PROM static u8 PromoEkrMagi_BgTsaBuf[0x800] = {};
+EWRAM_OVERLAY_PROM static u8 PromoEkrMagi_ObImgBuf[0x1000] = {};
+
+EWRAM_OVERLAY_PROM static struct EkrTerrainfxDesc PromoEkrTerrainDesc = {};
+EWRAM_OVERLAY_PROM static u8 PromoEkrTerrain_ImgBuf[0x2000] = {};
+
+static void promofx_ekrmagi_callback(void)
+{
+	SetBlendConfig(1, 0x10, 0x10, 0);
+
+	SetBlendTargetA(0, 1, 0, 0, 0);
+	SetBlendTargetB(0, 0, 1, 1, 1);
+
+	SetWinEnable(1, 0, 0);
+	SetWin0Box(0, 0, 240, 160);
+
+	SetWin0Layers(1, 1, 1, 1, 1);
+	SetWOutLayers(1, 0, 1, 1, 1);
+
+	gDispIo.win_ct.win0_enable_blend = 1;
+	gDispIo.win_ct.wout_enable_blend = 0;
+	gDispIo.blend_ct.target2_enable_bd = 1;
+}
+
+void promofx_put_ekrmainmini(int bid, int char_pal, int x, int y, int round_type)
+{
+	struct EkrMainMiniDesc *mini_desc = &PromoEkrMiniDesc;
+	struct EfxopMagicDesc  *magi_desc = &PromoEkrMagiDesc;
+
+	NewEfxAnimeDrvProc();
+
+	mini_desc->x = x;
+	mini_desc->y = y;
+	mini_desc->bid = bid;
+	mini_desc->round_type = ANIM_ROUND_TAKING_HIT_CLOSE;
+	mini_desc->faction_pal = BANIMPAL_BLUE;
+	mini_desc->pos = POS_R;
+	mini_desc->oam2_chr = OBCHR_UIPROMO_EKRMINI;
+	mini_desc->oam2_pal = OBPAL_UIPROMO_EKRMINI;
+	mini_desc->img_buf = PromoEkrMini_ImgBuf;
+	mini_desc->oam_buf = PromoEkrMini_OamBuf;
+	mini_desc->pal_buf = PromoEkrMini_PalBuf;
+	mini_desc->scr_buf = PromoEkrMini_ScrBuf;
+	mini_desc->magicfx_desc = magi_desc;
+
+	magi_desc->magicFuncIdx = 4;
+	magi_desc->xOffsetBg    = 0;
+	magi_desc->yOffsetBg    = 0;
+	magi_desc->xOffsetObj   = 0;
+	magi_desc->yOffsetObj   = 0;
+	magi_desc->objChr = OBCHR_UIPROMO_EKRMAGI;
+	magi_desc->objPalId = OBPAL_UIPROMO_EKRMAGI;
+	magi_desc->bgPalId = BGPAL_UIPROMO_EKRMAGI;
+	magi_desc->bgChr = BGCHR_UIPROMO_EKRMAGI;
+	magi_desc->bgPalId = BGPAL_UIPROMO_EKRMAGI;
+	magi_desc->bg = BG_1;
+	magi_desc->bgTmBuf = gBg1Tm;
+	magi_desc->bgImgBuf = PromoEkrMagi_BgImgBuf;
+	magi_desc->bgTsaBuf = PromoEkrMagi_BgTsaBuf;
+	magi_desc->objImgBuf = PromoEkrMagi_ObImgBuf;
+	magi_desc->resetCallback = promofx_ekrmagi_callback;
+
+	ResetClassReelSpell();
+	NewEkrUnitMainMini(mini_desc);
+}
+
+void promofx_put_ekrterrainfx(int terrain, int x, int y)
+{
+	struct EkrTerrainfxDesc *desc = &PromoEkrTerrainDesc;
+
+	desc->terrain_l = terrain;
+	desc->pal_l = OBPAL_UIPROMO_EKRTERRAIN_L;
+	desc->chr_l = OBCHR_UIPROMO_EKRTERRAIN_L;
+	desc->terrain_r = terrain;
+	desc->pal_r = OBPAL_UIPROMO_EKRTERRAIN_R;
+	desc->chr_r = OBCHR_UIPROMO_EKRTERRAIN_R;
+	desc->distance = EKR_DISTANCE_CLOSE;
+	desc->bg_index = -1;
+	desc->vram_offset = (u32)OBJ_VRAM0;
+	desc->img_buf = PromoEkrTerrain_ImgBuf;
+
+	NewEkrTerrainfx(desc);
+	EkrTerrainfx_SetPosition(desc, x, y, x + 0x60, y);
+}
+
+static void PromoFx_Init(struct ProcPromoFx *proc)
+{
+	EndEfxAnimeDrvProc();
+	EndEkrMainMini(&PromoEkrMiniDesc);
+	promofx_put_ekrmainmini(0x10, 0, 180, 88, ANIM_ROUND_TAKING_HIT_CLOSE);
+	EndEkrTerrainfx(&PromoEkrTerrainDesc);
+	promofx_put_ekrterrainfx(1, 140, 104);
+}
+
+static void PromoFx_Loop(struct ProcPromoFx *proc)
+{}
+
+static void PromoFx_End(struct ProcPromoFx *proc)
+{
+	EndEfxAnimeDrvProc();
+	EndEkrMainMini(&PromoEkrMiniDesc);
+	EndEkrTerrainfx(&PromoEkrTerrainDesc);
+}
+
+static const struct ProcScr ProcScr_PromoFx[] = {
+	PROC_ONEND(PromoFx_End),
+	PROC_YIELD,
+	PROC_CALL(PromoFx_Init),
+	PROC_YIELD,
+	PROC_REPEAT(PromoFx_Loop),
+	PROC_BLOCK, PROC_END
+};
 
 /**
- * promo-main
+ * promo-sel
  */
+static void PromoSel_Init(struct ProcPromoFx *proc)
+{
+}
+
+static void PromoSel_Loop(struct ProcPromoFx *proc)
+{}
+
+static void PromoSel_End(struct ProcPromoFx *proc)
+{}
+
+static const struct ProcScr ProcScr_PromoSel[] = {
+	PROC_ONEND(PromoSel_End),
+	PROC_YIELD,
+	PROC_CALL(PromoSel_Init),
+	PROC_YIELD,
+	PROC_REPEAT(PromoSel_Loop),
+	PROC_BLOCK, PROC_END
+};
 
 /**
  * promo-main
@@ -97,6 +254,9 @@ static void PromoMain_Init(struct ProcPromoMain *proc)
 
 	StartMuralBackground(proc, NULL, -1);
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT | BG3_SYNC_BIT);
+
+	proc->child_fx  = SpawnProc(ProcScr_PromoFx,  proc);
+	proc->child_sel = SpawnProc(ProcScr_PromoSel, proc);
 }
 
 static void PromoMain_Loop(struct ProcPromoMain *proc)
@@ -109,6 +269,12 @@ static void PromoMain_Loop(struct ProcPromoMain *proc)
 
 static void PromoMain_End(struct ProcPromoMain *proc)
 {
+	if (proc->child_fx)
+		Proc_End(proc->child_fx);
+
+	if (proc->child_sel)
+		Proc_End(proc->child_sel);
+
 	EndMuralBackground();
 }
 

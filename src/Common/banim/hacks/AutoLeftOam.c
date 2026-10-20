@@ -147,7 +147,7 @@ void UpdateBanimFrame(void)
 
 		gpBanimModesRight = banim[bid].modes;
 		LZ77UnCompWram(banim[GetBanimPalette(bid, POS_R)].pal, gBanimPaletteRight);
-		
+
 		if (chara_pal != -1) {
 			const struct BattleAnimCharaPal *capal = &gBanimCharaPalTable[chara_pal];
 
@@ -211,7 +211,8 @@ void EkrMainMini_InitAnim(struct EkrMainMiniDesc *desc)
 	/**
 	 * scr
 	 */
-	LZ77UnCompWram(banim[desc->bid].script, desc->scr_buf);
+	// LZ77UnCompWram(banim[desc->bid].script, desc->scr_buf);
+	desc->scr_buf = banim[desc->bid].script;
 
 	tmp_banim = &banim[desc->bid];
 	modes = tmp_banim->modes;
@@ -304,7 +305,8 @@ void EkrMainMini_UpdateAnim(struct EkrMainMiniDesc *desc)
 	/**
 	 * scr
 	 */
-	LZ77UnCompWram(banim[desc->bid].script, desc->scr_buf);
+	// LZ77UnCompWram(banim[desc->bid].script, desc->scr_buf);
+	desc->scr_buf = banim[desc->bid].script;
 
 	tmp_banim = &banim[desc->bid];
 	modes = tmp_banim->modes;

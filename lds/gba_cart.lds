@@ -80,13 +80,44 @@ SECTIONS
 	__ewram_overlay_end = MAX(__ewram_ov2_end, __ewram_overlay_end);
 
 	. = __ewram_overlay_start;
+	.ov1 ALIGN(4) (NOLOAD) : AT (__ewram_overlay_start)
+	{
+		*(.ewram_overlay_1)
+		*(ewram_overlay_1)
+		. = ALIGN(4);
+		__ewram_ov1_end = .;
+	} >ewram
+	__ewram_overlay_end = MAX(__ewram_ov1_end, __ewram_overlay_end);
+
+	. = __ewram_overlay_start;
+	.ov2 ALIGN(4) (NOLOAD) : AT (__ewram_overlay_start)
+	{
+		*(.ewram_overlay_2)
+		*(ewram_overlay_2)
+		. = ALIGN(4);
+		__ewram_ov2_end = .;
+	} >ewram
+	__ewram_overlay_end = MAX(__ewram_ov2_end, __ewram_overlay_end);
+
+	. = __ewram_overlay_start;
 	.ov3 ALIGN(4) (NOLOAD) : AT (__ewram_overlay_start)
 	{
 		*(.ewram_overlay_3)
+		*(ewram_overlay_3)
 		. = ALIGN(4);
 		__ewram_ov3_end = .;
 	} >ewram
 	__ewram_overlay_end = MAX(__ewram_ov3_end, __ewram_overlay_end);
+
+	. = __ewram_overlay_start;
+	.ov4 ALIGN(4) (NOLOAD) : AT (__ewram_overlay_start)
+	{
+		*(.ewram_overlay_4)
+		*(ewram_overlay_4)
+		. = ALIGN(4);
+		__ewram_ov4_end = .;
+	} >ewram
+	__ewram_overlay_end = MAX(__ewram_ov4_end, __ewram_overlay_end);
 
 	. = __ewram_overlay_end;
 	__ewram_lma = __ewram_overlay_end;
