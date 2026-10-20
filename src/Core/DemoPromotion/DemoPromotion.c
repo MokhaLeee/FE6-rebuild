@@ -29,15 +29,15 @@ static void DemoPromo_Init(struct ProcPromoMain *proc)
 	UnpackUiWindowFrameGraphics();
 	SetDispEnable(1, 1, 1, 1, 1);
 
-    SetBgOffset(BG_0, 0, 0);
-    SetBgOffset(BG_1, 0, 0);
-    SetBgOffset(BG_2, 0, 0);
-    SetBgOffset(BG_3, 0, 0);
+	SetBgOffset(BG_0, 0, 0);
+	SetBgOffset(BG_1, 0, 0);
+	SetBgOffset(BG_2, 0, 0);
+	SetBgOffset(BG_3, 0, 0);
 
-    TmFill(gBg0Tm, 0);
-    TmFill(gBg1Tm, 0);
-    TmFill(gBg2Tm, 0);
-    TmFill(gBg3Tm, 0);
+	TmFill(gBg0Tm, 0);
+	TmFill(gBg1Tm, 0);
+	TmFill(gBg2Tm, 0);
+	TmFill(gBg3Tm, 0);
 
 	EndAllMus();
 
@@ -67,12 +67,12 @@ static const struct ProcScr ProcScr_DemoPromoBM[] = {
 	PROC_YIELD,
 	PROC_CALL(DemoPromo_Init),
 	PROC_YIELD,
-    PROC_CALL(StartFastFadeFromBlack),
-    PROC_REPEAT(WhileFadeExists),
+	PROC_CALL(StartFastFadeFromBlack),
+	PROC_REPEAT(WhileFadeExists),
 	PROC_REPEAT(DemoPromo_Loop),
 	PROC_YIELD,
-    PROC_CALL(StartFastFadeToBlack),
-    PROC_REPEAT(WhileFadeExists),
+	PROC_CALL(StartFastFadeToBlack),
+	PROC_REPEAT(WhileFadeExists),
 	PROC_CALL(DemoPromo_End),
 	PROC_YIELD,
 
