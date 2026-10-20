@@ -15,7 +15,61 @@
 
 #include "demo-promotion.h"
 
-static void DemoPromo_Init(struct ProcPromoMain *proc)
+enum promotion_type {
+	PROMO_TYPE_BM,
+	PROMO_TYPE_PREP,
+};
+
+enum promotion_action {
+	PROMO_ACT_INIT,
+	PROMO_ACT_CANCEL,
+	PROMO_ACT_PROMO,
+};
+
+struct ProcPromoHandler;
+struct ProcPromoMain;
+struct ProcPromoFx;
+struct ProcPromoSel;
+
+struct ProcPromoHandler {
+	PROC_HEADER;
+	int action_type;
+	struct Unit *unit;
+	int promo_type;
+	int pid;
+	int item_slot;
+	int jid_promo;
+	struct ProcPromoMain *child;
+};
+
+struct ProcPromoMain {
+	PROC_HEADER_EXT(struct ProcPromoHandler);
+	struct ProcPromoFx *child_fx;
+	struct ProcPromoSel *child_sel;
+};
+
+struct ProcPromoFx {
+	PROC_HEADER_EXT(struct ProcPromoMain);
+	struct ProcPromoSel *brother_sel;
+};
+
+struct ProcPromoSel {
+	PROC_HEADER_EXT(struct ProcPromoMain);
+	struct ProcPromoFx *brother_fx;
+};
+
+/**
+ * promo-fx
+ */
+
+/**
+ * promo-main
+ */
+
+/**
+ * promo-main
+ */
+static void PromoMain_Init(struct ProcPromoMain *proc)
 {
 	const u16 bg_config[12] = {
 		0x0000, 0x6000, 0,
@@ -45,7 +99,7 @@ static void DemoPromo_Init(struct ProcPromoMain *proc)
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT | BG3_SYNC_BIT);
 }
 
-static void DemoPromo_Loop(struct ProcPromoMain *proc)
+static void PromoMain_Loop(struct ProcPromoMain *proc)
 {
 	if (gKeySt->pressed & KEY_BUTTON_B) {
 		PlaySe(SONG_6B);
@@ -53,27 +107,27 @@ static void DemoPromo_Loop(struct ProcPromoMain *proc)
 	}
 }
 
-static void DemoPromo_End(struct ProcPromoMain *proc)
+static void PromoMain_End(struct ProcPromoMain *proc)
 {
 	EndMuralBackground();
 }
 
-static const struct ProcScr ProcScr_DemoPromoBM[] = {
+static const struct ProcScr ProcScr_PromoMainBM[] = {
 	/* start */
 	PROC_CALL(StartFastFadeToBlack),
 	PROC_REPEAT(WhileFadeExists),
 	PROC_CALL(LockBmDisplay),
 
 	PROC_YIELD,
-	PROC_CALL(DemoPromo_Init),
+	PROC_CALL(PromoMain_Init),
 	PROC_YIELD,
 	PROC_CALL(StartFastFadeFromBlack),
 	PROC_REPEAT(WhileFadeExists),
-	PROC_REPEAT(DemoPromo_Loop),
+	PROC_REPEAT(PromoMain_Loop),
 	PROC_YIELD,
 	PROC_CALL(StartFastFadeToBlack),
 	PROC_REPEAT(WhileFadeExists),
-	PROC_CALL(DemoPromo_End),
+	PROC_CALL(PromoMain_End),
 	PROC_YIELD,
 
 	/* end */
@@ -92,7 +146,7 @@ static void PromoHandle_Init(struct ProcPromoHandler *proc)
 
 static void PromoHandle_StartSelect(struct ProcPromoHandler *proc)
 {
-	SpawnProcLocking(ProcScr_DemoPromoBM, proc);
+	proc->child = SpawnProcLocking(ProcScr_PromoMainBM, proc);
 }
 
 static void PromoHandle_ExecAnim(struct ProcPromoHandler *proc)

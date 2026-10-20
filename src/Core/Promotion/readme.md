@@ -1,7 +1,9 @@
-demo promo process 设计
+# promotion-UI
 
 ```
-- main process: handle selection
-    - ekrmainmini process
-    - fx process
+*
+└─ PromoHandler
+   └─ PromoMain
+      ├─ PromoFx
+      └─ PromoSel
 ```
