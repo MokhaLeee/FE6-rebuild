@@ -44,7 +44,7 @@ EWRAM_OVERLAY(banim) struct BaSprite *gAnims[4] = {};
 EWRAM_OVERLAY(banim) int gEkrDebugTimer = 0;
 EWRAM_OVERLAY(banim) int gEkrDebugFlag1 = 0;
 EWRAM_OVERLAY(banim) int gEkrDebugFlag2 = 0;
-EWRAM_OVERLAY(banim) int gAnimC01Blocking = 0;
+EWRAM_OVERLAY(banim) int gAnimC01LoopCtrl = 0;
 EWRAM_OVERLAY(banim) i16 gEkrXPosReal[2] = {};
 EWRAM_OVERLAY(banim) i16 gEkrYPosReal[2] = {};
 EWRAM_OVERLAY(banim) u16 gEkrXPosBase[2] = {};
@@ -125,7 +125,7 @@ void NewEkrBattle(void)
 	gEkrDebugTimer = 0;
 	gEkrDebugFlag1 = 0;
 	gEkrDebugFlag2 = 0;
-	gAnimC01Blocking = 0;
+	gAnimC01LoopCtrl = 0;
 
 	if (0 == gEkrDebugModeMaybe)
 		EkrPlayMainBGM();
@@ -213,7 +213,7 @@ void EkrBattle_Init(struct ProcEkrBattle *proc)
 	InitMainAnims();
 	InitEkrDragonStatus();
 
-	gAnimC01Blocking = TRUE;
+	gAnimC01LoopCtrl = TRUE;
 
 	if (GetBattleAnimArenaFlag() == TRUE)
 		proc->timer = 0;
@@ -430,7 +430,7 @@ void EkrBattleTriggerNewRoundStart(struct ProcEkrBattle *proc)
 
 void EkrBattleReleaseStandingAnim(struct ProcEkrBattle *proc)
 {
-	gAnimC01Blocking = FALSE;
+	gAnimC01LoopCtrl = FALSE;
 	proc->proc_repeat_func = (ProcFunc)EkrBattleStartPromotion;
 }
 

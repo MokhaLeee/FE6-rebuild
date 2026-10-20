@@ -52,7 +52,7 @@ static void setup_status(void)
 }
 
 static struct UnitInfo const UnitInfo_Chapter1_BlueA[] = {
-	{ PID_ROY, 0, 0, FALSE, FACTION_ID_BLUE, 1, 1, 20, 2, 18, { IID_RAPIER, IID_VULNERARY }, { 0 } },
+	{ PID_ROY, 0, 0, FALSE, FACTION_ID_BLUE, 2, 1, 20, 2, 18, { IID_RAPIER, IID_VULNERARY }, { 0 } },
 	{ PID_MARCUS, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 2, 20, 1, 17, { IID_IRONSWORD, IID_SILVERLANCE }, { 0 } },
 	{ 0 }, // end
 };

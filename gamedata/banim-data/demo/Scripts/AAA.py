@@ -724,7 +724,7 @@ def main():
         loopCount += 3
       imageFileName = line[j+4:-1]
       if (len(imageFileName) <= 0) or (not os.path.isfile(imageFileName)):
-        print("ERROR: line: " + str(i+1) + ", image file not found.")
+        print("ERROR: line: " + str(i+1) + ", image file not found: " + imageFileName)
         exit()
       if imageFileName not in imageFileNameDic:
         frameImage = Image.open(imageFileName)

@@ -250,7 +250,7 @@ extern int *gpBanimModesRight;
 extern int gEkrDebugTimer;
 extern int gEkrDebugFlag1;
 extern int gEkrDebugFlag2;
-extern int gAnimC01Blocking;
+extern int gAnimC01LoopCtrl;
 extern i16 gEkrXPosReal[2];
 extern i16 gEkrYPosReal[2];
 extern u16 gEkrXPosBase[2];

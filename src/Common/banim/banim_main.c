@@ -30,7 +30,7 @@ void BattleAIS_ExecCommands(void)
 					break;
 
 				case BAS_CMD(0x01):
-					if (gAnimC01Blocking == 1)
+					if (gAnimC01LoopCtrl == 1)
 						anim->scrCur = anim->script;
 					else if (!(anim->flags3 & ANIM_BIT3_C01_BLOCK_END_PREBATTLE))
 						anim->scrCur++;
@@ -498,7 +498,7 @@ void BattleAIS_ExecCommands(void)
 							  ANIM_BIT2_0001);
 		}
 
-		if ((type & ANIM_BIT2_STOP) || (gAnimC01Blocking == true)) {
+		if ((type & ANIM_BIT2_STOP) || (gAnimC01LoopCtrl == true)) {
 			if (anim->flags3 & ANIM_BIT3_NEXT_ROUND_START) {
 				type = GetAnimNextRoundType(anim);
 				if (type != ANIM_ROUND_INVALID) {
