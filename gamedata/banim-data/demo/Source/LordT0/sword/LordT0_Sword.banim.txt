@@ -167,18 +167,28 @@ C01
 C0D
 ~~~
 /// - Mode 9
-2 p- lordt0_enter_01.png
-2 p- lordt0_enter_02.png
-2 p- lordt0_enter_03.png
-2 p- lordt0_enter_04.png
-2 p- lordt0_enter_05.png
-2 p- lordt0_enter_06.png
-2 p- lordt0_enter_07.png
-2 p- lordt0_enter_08.png
-2 p- lordt0_enter_09.png
-2 p- lordt0_enter_10.png
+# 2 p- lordt0_enter_01.png
+# 2 p- lordt0_enter_02.png
+# 2 p- lordt0_enter_03.png
+# 2 p- lordt0_enter_04.png
+# 2 p- lordt0_enter_05.png
+# 2 p- lordt0_enter_06.png
+# 2 p- lordt0_enter_07.png
+# 2 p- lordt0_enter_08.png
+# 2 p- lordt0_enter_09.png
+# 2 p- lordt0_enter_10.png
 4 p- Sword_000.png
-# C01
+# C56
+# 4 p- lordt0_idle_01.png
+# 4 p- lordt0_idle_02.png
+# 4 p- lordt0_idle_03.png
+# 4 p- lordt0_idle_04.png
+# 4 p- lordt0_idle_03.png
+# 4 p- lordt0_idle_02.png
+# 8 p- lordt0_idle_01.png
+# C57
+# 4 p- Sword_000.png
+C01
 ~~~
 /// - Mode 10
 4 p- Sword_000.png

@@ -30,6 +30,10 @@ static void setup_status(void)
 
 	SetGold(GetGold() + 5000);
 
+	unit = GetUnitByPid(PID_ROY);
+	if (unit)
+		unit->bonus_mov = 10;
+
 	unit = GetUnitByPid(PID_LUGH);
 	if (unit)
 		unit->exp = 99;

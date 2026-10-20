@@ -5,6 +5,46 @@
 #include "banim.h"
 #include "banim_data.h"
 
+static void AnimMoveBackToCommand(struct Anim *anim, int cmd)
+{
+	const u32 *history;
+	const u32 *pre, *cur;
+
+	history = anim->scrCur;
+	pre = cur = anim->script;
+
+	while (1) {
+		u32 inst = ANINS_GET_TYPE(*cur);
+
+		if (cur == history)
+			break;
+
+		if (inst == BAS_INS_KIND_STOP) {
+			pre = cur;
+			cur -= 3;
+			break;
+		}
+
+		if (inst == BAS_INS_KIND_COMMAND) {
+			int this_cmd = ANINS_COMMAND_GET_ID(*cur);
+
+			if (this_cmd == cmd) {
+				cur = pre;
+				break;
+			}
+
+			pre = cur;
+			cur += 1;
+		}
+
+		if (inst == BAS_INS_KIND_FRAME) {
+			pre = cur;
+			cur += 3;
+		}
+	}
+	anim->scrCur = cur;
+}
+
 void BattleAIS_ExecCommands(void)
 {
 	int type;
@@ -454,6 +494,14 @@ void BattleAIS_ExecCommands(void)
 				case BAS_CMD(0x49):
 				case BAS_CMD(0x4A):
 					EfxPlaySEwithCmdCtrl(anim, anim->cq[anim->cqSize - 1]);
+					break;
+
+				case BAS_CMD(0x56):
+					break;
+
+				case BAS_CMD(0x57):
+					AnimMoveBackToCommand(anim, BAS_CMD(0x56));
+					goto L_cmd_loop_end;
 					break;
 
 				default:
