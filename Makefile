@@ -262,9 +262,9 @@ BANIM_PAL_GENERATED += $(ALL_BANIM_PALS:%=%.lz.stripped) $(ALL_BANIM_PALS:%=%.lz
 
 BANIM_IMG_GENERATED += $(ALL_BANIM_IMGS:%.png=%.4bpp) $(ALL_BANIM_IMGS:%.png=%.4bpp.lz) $(ALL_BANIM_IMGS:%.png=%.4bpp.lz.o)
 
-# Demo banim .S files are checked in as-is. Run `make banim-demo-regen` to rebuild from .banim.txt.
-.PHONY: banim-demo-regen
-banim-demo-regen:
+# Demo banim .S files are checked in as-is. Run `make banim` to rebuild from .banim.txt.
+.PHONY: banim
+banim:
 	@$(MAKE) -f gamedata/banim-data/demo/makefile all
 
 # =========

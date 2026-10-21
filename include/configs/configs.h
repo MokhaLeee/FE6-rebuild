@@ -32,6 +32,9 @@
 /* use demo promotion */
 #define CONFIG_DEMO_PROMO_EN 1
 
+/* banim command misc fix */
+#define CONFIG_BANIM_ENTRY_FIX 1
+
 #include "configs/config-debug.h"
 
 #endif

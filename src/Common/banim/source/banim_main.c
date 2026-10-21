@@ -45,8 +45,13 @@ static void AnimMoveBackToCommand(struct Anim *anim, int cmd)
 	anim->scrCur = cur;
 }
 
+extern bool Banim_C01_DemoBlock(struct Anim *anim);
+
 static bool Banim_C01_BlockGeneric(struct Anim *anim)
 {
+#if CONFIG_BANIM_ENTRY_FIX
+	return Banim_C01_DemoBlock(anim);
+#else
 	if (gAnimC01LoopCtrl == 1)
 		anim->scrCur = anim->script;
 	else if (!(anim->flags3 & ANIM_BIT3_C01_BLOCK_END_PREBATTLE))
@@ -59,6 +64,7 @@ static bool Banim_C01_BlockGeneric(struct Anim *anim)
 	}
 
 	return false;
+#endif
 }
 
 static bool Banim_C02_BlockMiss(struct Anim *anim)
