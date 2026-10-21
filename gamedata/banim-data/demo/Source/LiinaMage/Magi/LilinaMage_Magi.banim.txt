@@ -216,9 +216,14 @@ C0D                               #End of dodge animation. preceeded by 0x06
 /// - Mode 9               #Equiped with Melee Weapon
 2 p- lilina_enter_01.png
 2 p- lilina_enter_02.png
-5 p- lilina_enter_03.png
-7 p- lilina_enter_04.png
-9 p- lilina_enter_05.png
+2 p- lilina_enter_03.png
+2 p- lilina_enter_04.png
+2 p- lilina_enter_05.png
+2 p- lilina_enter_06.png
+2 p- lilina_enter_07.png
+3 p- lilina_enter_08.png
+3 p- lilina_enter_09.png
+4 p- lilina_enter_10.png
 8 p- Magic_000.png
 C01                               #NOP
 ~~~
