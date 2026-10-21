@@ -209,7 +209,12 @@ C01
 C0D
 ~~~
 /// - Mode 9
-16 p- Magic_000.png
+5 p- lilina_enter_01.png
+5 p- lilina_enter_02.png
+5 p- lilina_enter_03.png
+5 p- lilina_enter_04.png
+5 p- lilina_enter_05.png
+8 p- Magic_000.png
 C01
 ~~~
 /// - Mode 10

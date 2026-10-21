@@ -913,7 +913,7 @@ Anim_LilinaSage_Magi_framedata:
 .word 0x10c8
 .word 0x8500000d
 .word 0x80000000
-.word 0x86000004
+.word 0x86000006
 .word Anim_LilinaSage_Magi_Sheet_0
 .word 0xc
 .word 0x85000001

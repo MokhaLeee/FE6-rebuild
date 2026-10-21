@@ -263,7 +263,18 @@ C01
 C0D
 ~~~
 /// - Mode 9
-4 p- Magic_000.png
+2 p- sage_enter_01.png
+2 p- sage_enter_02.png
+2 p- sage_enter_03.png
+2 p- sage_enter_04.png
+2 p- sage_enter_05.png
+3 p- sage_enter_06.png
+2 p- sage_enter_07.png
+2 p- sage_enter_08.png
+2 p- sage_enter_09.png
+3 p- sage_enter_10.png
+2 p- sage_enter_11.png
+6 p- Magic_000.png
 C01
 ~~~
 /// - Mode 10
