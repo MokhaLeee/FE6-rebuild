@@ -45,6 +45,211 @@ static void AnimMoveBackToCommand(struct Anim *anim, int cmd)
 	anim->scrCur = cur;
 }
 
+static bool Banim_C01_BlockGeneric(struct Anim *anim)
+{
+	if (gAnimC01LoopCtrl == 1)
+		anim->scrCur = anim->script;
+	else if (!(anim->flags3 & ANIM_BIT3_C01_BLOCK_END_PREBATTLE))
+		anim->scrCur++;
+	else if (anim->flags3 & ANIM_BIT3_C01_BLOCK_END_INBATTLE) {
+		if (CheckEkrHitDone() == true) {
+			anim->flags3 &= ~(ANIM_BIT3_C02_BLOCK_END | ANIM_BIT3_C01_BLOCK_END_PREBATTLE | ANIM_BIT3_C01_BLOCK_END_INBATTLE);
+			anim->scrCur++;
+		}
+	}
+
+	return false;
+}
+
+static bool Banim_C02_BlockMiss(struct Anim *anim)
+{
+	if (anim->flags3 & ANIM_BIT3_C02_BLOCK_END) {
+		anim->flags3 &= ~ANIM_BIT3_C02_BLOCK_END;
+		anim->scrCur++;
+	}
+	return false;
+}
+
+static bool Banim_C03_EfxSpecial(struct Anim *anim)
+{
+	if (!(anim->flags3 & ANIM_BIT3_BLOCKING)) {
+		anim->flags3 |= ANIM_BIT3_BLOCKING;
+
+		if (GetAnimLayer(anim) == 0)
+			NewEfxSpecalEffect(anim);
+	}
+
+	if (anim->flags3 & ANIM_BIT3_BLOCKEND) {
+		anim->flags3 &= ~ANIM_BIT3_BLOCKING;
+		anim->flags3 &= ~ANIM_BIT3_BLOCKEND;
+		anim->scrCur++;
+	}
+	return false;
+}
+
+static bool Banim_C04_NormalHit(struct Anim *anim)
+{
+	if (!(anim->flags3 & ANIM_BIT3_BLOCKING)) {
+		anim->flags3 |= ANIM_BIT3_BLOCKING;
+		anim->flags3 |= ANIM_BIT3_BLOCKEND;
+	}
+
+	if (anim->flags3 & ANIM_BIT3_BLOCKEND) {
+		struct Anim *anim1;
+		int type;
+
+		anim->flags3 &= ~ANIM_BIT3_BLOCKING;
+		anim->flags3 &= ~ANIM_BIT3_BLOCKEND;
+		anim->scrCur++;
+		anim->flags3 |= ANIM_BIT3_C02_BLOCK_END | ANIM_BIT3_C01_BLOCK_END_INBATTLE;
+
+		anim1 = GetAnimAnotherSide(anim);
+		type = GetAnimRoundTypeAnotherSide(anim);
+
+		if (CheckRoundMiss(type) == true && anim1) {
+			anim1->flags3 |= ANIM_BIT3_C02_BLOCK_END | ANIM_BIT3_C01_BLOCK_END_INBATTLE;
+
+			if (GetAnimLayer(anim) == 0)
+				StartBattleAnimHitEffectsDefault(anim1, CheckRoundMiss(type));
+		}
+	}
+	return false;
+}
+
+static bool Banim_C08_CritialHit(struct Anim *anim)
+{
+	if (GetAnimLayer(anim) == 0) {
+		struct Anim *anim1 = GetAnimAnotherSide(anim);
+		int type = GetAnimRoundTypeAnotherSide(anim);
+
+		if (CheckRoundMiss(type) == false) {
+			if (GetEfxHpChangeType(anim1) != EFX_HPT_NOT_CHANGE)
+				NewEfxCriricalEffect(anim1);
+		}
+
+		if (anim1) {
+			anim1->flags3 |= ANIM_BIT3_C02_BLOCK_END | ANIM_BIT3_C01_BLOCK_END_INBATTLE;
+			type = GetAnimRoundTypeAnotherSide(anim);
+			StartBattleAnimHitEffectsDefault(anim1, CheckRoundMiss(type));
+		}
+	}
+	return false;
+}
+
+static bool Banim_C1A_NormalHit(struct Anim *anim)
+{
+	if (GetAnimLayer(anim) == 0) {
+		struct Anim *anim1 = GetAnimAnotherSide(anim);
+		if (anim1) {
+			int type;
+
+			anim1->flags3 |= ANIM_BIT3_C02_BLOCK_END | ANIM_BIT3_C01_BLOCK_END_INBATTLE;
+			type = GetAnimRoundTypeAnotherSide(anim);
+			StartBattleAnimHitEffectsDefault(anim1, CheckRoundMiss(type));
+		}
+
+		if (GetEfxHpChangeType(anim1) != EFX_HPT_NOT_CHANGE)
+			NewEfxNormalEffect(anim);
+	}
+	return false;
+}
+
+static bool Banim_C06_StartOpponentNextRound(struct Anim *anim)
+{
+	struct Anim *anim1 = GetAnimAnotherSide(anim);
+
+	if (anim1) {
+		int type = GetAnimNextRoundTypeAnotherSide(anim1);
+
+		if (type != ANIM_ROUND_INVALID)
+			anim1->flags3 |= ANIM_BIT3_NEXT_ROUND_START;
+	}
+	return false;
+}
+
+static bool Banim_C0D_StartOwnNextRound(struct Anim *anim)
+{
+	int type = GetAnimNextRoundType(anim);
+	struct Anim *anim1 = gAnims[GetAnimPosition(anim) * 2];
+	struct Anim *anim2 = gAnims[GetAnimPosition(anim) * 2 + 1];
+
+	switch (anim->currentRoundType) {
+	case ANIM_ROUND_HIT_CLOSE:
+	case ANIM_ROUND_CRIT_CLOSE:
+	case ANIM_ROUND_NONCRIT_FAR:
+	case ANIM_ROUND_CRIT_FAR:
+	case ANIM_ROUND_MISS_CLOSE:
+		if (type != -1) {
+			int frame_idx, scr_offset;
+			struct BanimScrFrame *scr_start;
+
+			anim1->nextRoundId++;
+			anim2->nextRoundId++;
+			LoadAnimFrame(anim1, type);
+			LoadAnimFrame(anim2, type);
+			anim1->flags3 |= ANIM_BIT3_C01_BLOCK_END_PREBATTLE;
+			anim2->flags3 |= ANIM_BIT3_C01_BLOCK_END_PREBATTLE;
+
+			type = BanimDefaultStandingTypes[gEkrDistanceType];
+			frame_idx = BanimDefaultModeConfig[type * 4 + 0];
+
+			if (GetAnimPosition(anim) == POS_L)
+				scr_offset = gpBanimModesLeft[frame_idx];
+			else
+				scr_offset = gpBanimModesRight[frame_idx];
+
+			/* We need to make sure that the first script is the frame? */
+			// scr_start = (void *)(scr_offset + gBanimScrs + GetAnimPosition(anim) * BAS_SCR_MAX_SIZE);
+			scr_start = (void *)(gpBanimScrs[GetAnimPosition(anim)] + scr_offset);
+
+			anim1->imgSheet = scr_start->img;
+			anim1->sprData = anim1->sprDataPool + scr_start->oam_offset;
+			anim2->sprData = anim2->sprDataPool + BAS_OAM_REF_MAX_SIZE;
+
+			if (gBanimBallistaImages[GetAnimPosition(anim)] == NULL) {
+				if (gpImgSheet[GetAnimPosition(anim1)] != anim1->imgSheet) {
+					NewEkrChienCHR(anim1);
+					gpImgSheet[GetAnimPosition(anim1)] = anim1->imgSheet;
+				}
+			}
+			return true;
+		}
+		/* fall through */
+
+	case ANIM_ROUND_TAKING_MISS_CLOSE:
+	case ANIM_ROUND_TAKING_MISS_FAR:
+		type = BanimDefaultStandingTypes[gEkrDistanceType];
+		/* fall through */
+
+	case ANIM_ROUND_TAKING_HIT_CLOSE:
+	case ANIM_ROUND_STANDING:
+	case ANIM_ROUND_TAKING_HIT_FAR:
+		LoadAnimFrame(anim1, type);
+		LoadAnimFrame(anim2, type);
+		return true;
+	}
+	return false;
+}
+
+static bool Banim_C05_EfxMagic(struct Anim *anim)
+{
+	if (!(anim->flags3 & ANIM_BIT3_BLOCKING)) {
+		anim->flags3 |= ANIM_BIT3_BLOCKING;
+		anim->flags3 |= ANIM_BIT3_BLOCKEND;
+	}
+
+	if (anim->flags3 & ANIM_BIT3_BLOCKEND) {
+		anim->flags3 &= ~ANIM_BIT3_BLOCKING;
+		anim->flags3 &= ~ANIM_BIT3_BLOCKEND;
+		anim->scrCur++;
+		anim->flags3 |= ANIM_BIT3_C02_BLOCK_END | ANIM_BIT3_C01_BLOCK_END_INBATTLE;
+
+		if (GetAnimLayer(anim) == 0)
+			StartSpellAnimation(anim);
+	}
+	return false;
+}
+
 void BattleAIS_ExecCommands(void)
 {
 	int type;
@@ -70,91 +275,35 @@ void BattleAIS_ExecCommands(void)
 					break;
 
 				case BAS_CMD(0x01):
-					if (gAnimC01LoopCtrl == 1)
-						anim->scrCur = anim->script;
-					else if (!(anim->flags3 & ANIM_BIT3_C01_BLOCK_END_PREBATTLE))
-						anim->scrCur++;
-					else if (anim->flags3 & ANIM_BIT3_C01_BLOCK_END_INBATTLE) {
-						if (CheckEkrHitDone() == true) {
-							anim->flags3 &= ~(ANIM_BIT3_C02_BLOCK_END | ANIM_BIT3_C01_BLOCK_END_PREBATTLE | ANIM_BIT3_C01_BLOCK_END_INBATTLE);
-							anim->scrCur++;
-						}
-					}
+					Banim_C01_BlockGeneric(anim);
 					break;
 
 				/**
 				 * C02: blocking
 				 */
 				case BAS_CMD(0x02):
-					if (anim->flags3 & ANIM_BIT3_C02_BLOCK_END) {
-						anim->flags3 &= ~ANIM_BIT3_C02_BLOCK_END;
-						anim->scrCur++;
-					}
+					Banim_C02_BlockMiss(anim);
 					break;
 
 				/**
 				 * C03: EfxSpecalEffect
 				 */
 				case BAS_CMD(0x03):
-					if (!(anim->flags3 & ANIM_BIT3_BLOCKING)) {
-						anim->flags3 |= ANIM_BIT3_BLOCKING;
-
-						if (GetAnimLayer(anim) == 0)
-							NewEfxSpecalEffect(anim);
-					}
-
-					if (anim->flags3 & ANIM_BIT3_BLOCKEND) {
-						anim->flags3 &= ~ANIM_BIT3_BLOCKING;
-						anim->flags3 &= ~ANIM_BIT3_BLOCKEND;
-						anim->scrCur++;
-					}
+					Banim_C03_EfxSpecial(anim);
 					break;
 
 				/**
 				 * C04: Start normal hitted effect if not MISS
 				 */
 				case BAS_CMD(0x04):
-					if (!(anim->flags3 & ANIM_BIT3_BLOCKING)) {
-						anim->flags3 |= ANIM_BIT3_BLOCKING;
-						anim->flags3 |= ANIM_BIT3_BLOCKEND;
-					}
-
-					if (anim->flags3 & ANIM_BIT3_BLOCKEND) {
-						anim->flags3 &= ~ANIM_BIT3_BLOCKING;
-						anim->flags3 &= ~ANIM_BIT3_BLOCKEND;
-						anim->scrCur++;
-						anim->flags3 |= ANIM_BIT3_C02_BLOCK_END | ANIM_BIT3_C01_BLOCK_END_INBATTLE;
-
-						anim1 = GetAnimAnotherSide(anim);
-						type = GetAnimRoundTypeAnotherSide(anim);
-
-						if (CheckRoundMiss(type) == true && anim1) {
-							anim1->flags3 |= ANIM_BIT3_C02_BLOCK_END | ANIM_BIT3_C01_BLOCK_END_INBATTLE;
-
-							if (GetAnimLayer(anim) == 0)
-								StartBattleAnimHitEffectsDefault(anim1, CheckRoundMiss(type));
-						}
-					}
+					Banim_C04_NormalHit(anim);
 					break;
 
 				/**
 				 * C05: efx magic
 				 */
 				case BAS_CMD(0x05):
-					if (!(anim->flags3 & ANIM_BIT3_BLOCKING)) {
-						anim->flags3 |= ANIM_BIT3_BLOCKING;
-						anim->flags3 |= ANIM_BIT3_BLOCKEND;
-					}
-
-					if (anim->flags3 & ANIM_BIT3_BLOCKEND) {
-						anim->flags3 &= ~ANIM_BIT3_BLOCKING;
-						anim->flags3 &= ~ANIM_BIT3_BLOCKEND;
-						anim->scrCur++;
-						anim->flags3 |= ANIM_BIT3_C02_BLOCK_END | ANIM_BIT3_C01_BLOCK_END_INBATTLE;
-
-						if (GetAnimLayer(anim) == 0)
-							StartSpellAnimation(anim);
-					}
+					Banim_C05_EfxMagic(anim);
 					break;
 
 				/**
@@ -167,12 +316,7 @@ void BattleAIS_ExecCommands(void)
 				 * in end.
 				 */
 				case BAS_CMD(0x06):
-					anim1 = GetAnimAnotherSide(anim);
-					if (anim1) {
-						type = GetAnimNextRoundTypeAnotherSide(anim1);
-						if (type != ANIM_ROUND_INVALID)
-							anim1->flags3 |= ANIM_BIT3_NEXT_ROUND_START;
-					}
+					Banim_C06_StartOpponentNextRound(anim);
 					break;
 
 				/**
@@ -184,21 +328,7 @@ void BattleAIS_ExecCommands(void)
 				case BAS_CMD(0x0A):
 				case BAS_CMD(0x0B):
 				case BAS_CMD(0x0C):
-					if (GetAnimLayer(anim) == 0) {
-						anim1 = GetAnimAnotherSide(anim);
-						type = GetAnimRoundTypeAnotherSide(anim);
-
-						if (CheckRoundMiss(type) == false) {
-							if (GetEfxHpChangeType(anim1) != EFX_HPT_NOT_CHANGE)
-								NewEfxCriricalEffect(anim1);
-						}
-
-						if (anim1) {
-							anim1->flags3 |= ANIM_BIT3_C02_BLOCK_END | ANIM_BIT3_C01_BLOCK_END_INBATTLE;
-							type = GetAnimRoundTypeAnotherSide(anim);
-							StartBattleAnimHitEffectsDefault(anim1, CheckRoundMiss(type));
-						}
-					}
+					Banim_C08_CritialHit(anim);
 					break;
 
 				/**
@@ -206,76 +336,9 @@ void BattleAIS_ExecCommands(void)
 				 * Attack start its own next round anim.
 				 */
 				case BAS_CMD(0x0D):
-					type = GetAnimNextRoundType(anim);
-					anim1 = gAnims[GetAnimPosition(anim) * 2];
-					anim2 = gAnims[GetAnimPosition(anim) * 2 + 1];
-
-					switch (anim->currentRoundType) {
-					case ANIM_ROUND_HIT_CLOSE:
-					case ANIM_ROUND_CRIT_CLOSE:
-					case ANIM_ROUND_NONCRIT_FAR:
-					case ANIM_ROUND_CRIT_FAR:
-					case ANIM_ROUND_MISS_CLOSE:
-						if (type != -1) {
-							int frame_idx, scr_offset;
-							struct BanimScrFrame *scr_start;
-
-							anim1->nextRoundId++;
-							anim2->nextRoundId++;
-							LoadAnimFrame(anim1, type);
-							LoadAnimFrame(anim2, type);
-							anim1->flags3 |= ANIM_BIT3_C01_BLOCK_END_PREBATTLE;
-							anim2->flags3 |= ANIM_BIT3_C01_BLOCK_END_PREBATTLE;
-
-							type = BanimDefaultStandingTypes[gEkrDistanceType];
-							frame_idx = BanimDefaultModeConfig[type * 4 + 0];
-
-							if (GetAnimPosition(anim) == POS_L)
-								scr_offset = gpBanimModesLeft[frame_idx];
-							else
-								scr_offset = gpBanimModesRight[frame_idx];
-
-							/* We need to make sure that the first script is the frame? */
-							// scr_start = (void *)(scr_offset + gBanimScrs + GetAnimPosition(anim) * BAS_SCR_MAX_SIZE);
-							scr_start = (void *)(gpBanimScrs[GetAnimPosition(anim)] + scr_offset);
-
-							anim1->imgSheet = scr_start->img;
-#if 0
-							{
-								register const void *tmp_ptr asm("r4");
-								register int tmp_val asm("r1");
-
-								anim1->sprData = tmp_ptr = (tmp_ptr = anim1->sprDataPool) + (tmp_val = scr_start->oam_offset);
-								anim2->sprData = tmp_ptr = anim2->sprDataPool + BAS_OAM_REF_MAX_SIZE;
-							}
-#else
-							anim1->sprData = anim1->sprDataPool + scr_start->oam_offset;
-							anim2->sprData = anim2->sprDataPool + BAS_OAM_REF_MAX_SIZE;
-#endif
-
-							if (gBanimBallistaImages[GetAnimPosition(anim)] == NULL) {
-								if (gpImgSheet[GetAnimPosition(anim1)] != anim1->imgSheet) {
-									NewEkrChienCHR(anim1);
-									gpImgSheet[GetAnimPosition(anim1)] = anim1->imgSheet;
-								}
-							}
-							goto L_cmd_loop_end;
-						}
-						/* fall through */
-
-					case ANIM_ROUND_TAKING_MISS_CLOSE:
-					case ANIM_ROUND_TAKING_MISS_FAR:
-						type = BanimDefaultStandingTypes[gEkrDistanceType];
-						/* fall through */
-
-					case ANIM_ROUND_TAKING_HIT_CLOSE:
-					case ANIM_ROUND_STANDING:
-					case ANIM_ROUND_TAKING_HIT_FAR:
-						LoadAnimFrame(anim1, type);
-						LoadAnimFrame(anim2, type);
+					if (Banim_C0D_StartOwnNextRound(anim))
 						goto L_cmd_loop_end;
-						break;
-					}
+
 					break;
 
 				/**
@@ -329,17 +392,7 @@ void BattleAIS_ExecCommands(void)
 				 * Normal hit effect
 				 */
 				case BAS_CMD(0x1A):
-					if (GetAnimLayer(anim) == 0) {
-						anim1 = GetAnimAnotherSide(anim);
-						if (anim1) {
-							anim1->flags3 |= ANIM_BIT3_C02_BLOCK_END | ANIM_BIT3_C01_BLOCK_END_INBATTLE;
-							type = GetAnimRoundTypeAnotherSide(anim);
-							StartBattleAnimHitEffectsDefault(anim1, CheckRoundMiss(type));
-						}
-
-						if (GetEfxHpChangeType(anim1) != EFX_HPT_NOT_CHANGE)
-							NewEfxNormalEffect(anim);
-					}
+					Banim_C1A_NormalHit(anim);
 					break;
 
 				case BAS_CMD(0x26):
