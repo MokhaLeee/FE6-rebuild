@@ -48,7 +48,7 @@ static void setup_status(void)
 
 	unit = GetUnitByPid(PID_LILINA);
 	if (unit) {
-		// unit->jinfo = GetJInfo(JID_SAGE_F);
+		unit->jinfo = GetJInfo(JID_SAGE_F);
 		unit->wexp[ITEM_KIND_ANIMA] = WEXP_A - 1;
 		unit->level = 10;
 		unit->exp = 99;
