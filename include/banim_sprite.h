@@ -110,14 +110,14 @@ enum
 
 enum anim_flag2 
 {
-    ANIM_BIT2_0001        = (1 << 0),
-    ANIM_BIT2_0002        = (1 << 1),
-    ANIM_BIT2_0004        = (1 << 2),
-    ANIM_BIT2_0008        = (1 << 3),
-    ANIM_BIT2_0010        = (1 << 4),
-    ANIM_BIT2_0020        = (1 << 5),
-    ANIM_BIT2_0040        = (1 << 6),
-    ANIM_BIT2_0080        = (1 << 7),
+    ANIM_BIT2_UNUSED_0001 = (1 << 0),
+    ANIM_BIT2_UNUSED_0002 = (1 << 1),
+    ANIM_BIT2_UNUSED_0004 = (1 << 2),
+    ANIM_BIT2_UNUSED_0008 = (1 << 3),
+    ANIM_BIT2_UNUSED_0010 = (1 << 4),
+    ANIM_BIT2_UNUSED_0020 = (1 << 5),
+    ANIM_BIT2_UNUSED_0040 = (1 << 6),
+    ANIM_BIT2_UNUSED_0080 = (1 << 7),
 
     ANIM_BIT2_FRONT_FRAME = (1 << 8),
     ANIM_BIT2_BACK_FRAME  = (0 << 8),
@@ -126,7 +126,7 @@ enum anim_flag2
     ANIM_BIT2_POS_LEFT    = (0 << 9),
 
     ANIM_BIT2_0400        = (1 << 10),
-    ANIM_BIT2_0800        = (1 << 11),
+    ANIM_BIT2_UNUSED_0800 = (1 << 11),
     ANIM_BIT2_COMMAND     = (1 << 12), /* 0x1000 */
     ANIM_BIT2_FRAME       = (1 << 13), /* 0x2000 */
     ANIM_BIT2_STOP        = (1 << 14), /* 0x4000 */

@@ -565,16 +565,7 @@ void BattleAIS_ExecCommands(void)
 			}
 
 		L_cmd_loop_end:
-			anim->flags2 &= ~(ANIM_BIT2_COMMAND |
-							  ANIM_BIT2_0800 |
-							  ANIM_BIT2_0080 |
-							  ANIM_BIT2_0040 |
-							  ANIM_BIT2_0020 |
-							  ANIM_BIT2_0010 |
-							  ANIM_BIT2_0008 |
-							  ANIM_BIT2_0004 |
-							  ANIM_BIT2_0002 |
-							  ANIM_BIT2_0001);
+			anim->flags2 &= ~ANIM_BIT2_COMMAND;
 		}
 
 		if (type & ANIM_BIT2_FRAME) {
@@ -587,16 +578,7 @@ void BattleAIS_ExecCommands(void)
 						}
 			}
 
-			anim->flags2 &= ~(ANIM_BIT2_FRAME |
-							  ANIM_BIT2_0800 |
-							  ANIM_BIT2_0080 |
-							  ANIM_BIT2_0040 |
-							  ANIM_BIT2_0020 |
-							  ANIM_BIT2_0010 |
-							  ANIM_BIT2_0008 |
-							  ANIM_BIT2_0004 |
-							  ANIM_BIT2_0002 |
-							  ANIM_BIT2_0001);
+			anim->flags2 &= ~ANIM_BIT2_FRAME;
 		}
 
 		if ((type & ANIM_BIT2_STOP) || (gAnimC01LoopCtrl == true)) {

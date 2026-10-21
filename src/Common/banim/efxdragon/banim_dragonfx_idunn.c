@@ -699,7 +699,7 @@ void EkrIdunnBodyMain_Loop(struct ProcEkrIdunnfx *proc)
 		if (proc->duration == 0) {
 			struct Anim *anim_b = GetAnimAnotherSide(proc->anim);
 
-			if (anim_b->flags3 & ANIM_BIT2_0008)
+			if (anim_b->flags3 & ANIM_BIT3_C01_BLOCK_END_INBATTLE)
 				proc->duration = 1;
 
 			return;
