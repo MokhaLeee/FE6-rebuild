@@ -1,9 +1,6 @@
 #include "prelude.h"
 #include "banim_data.h"
 
-const int BattleAnimCharaPal_count = 0x66;
-const int BattleAnimCharaPal_size  = 0x30A4;
-
 const struct BattleAnimCharaPal gBanimCharaPalTable[] = {
 	{
 		.abbr = "roy",

@@ -199,7 +199,7 @@ void EkrMainMini_InitAnim(struct EkrMainMiniDesc *desc)
 	u32 *scr1, *scr2;
 	struct BattleAnim *banim, *tmp_banim;
 	u8 *scr_buf;
-	int *modes;
+	const u32 *modes;
 
 	banim = gBanimTable;
 
@@ -295,7 +295,7 @@ void EkrMainMini_UpdateAnim(struct EkrMainMiniDesc *desc)
 	u32 *scr1, *scr2;
 	struct BattleAnim *banim, *tmp_banim;
 	u8 *scr_buf;
-	int *modes;
+	const u32 *modes;
 
 	banim = gBanimTable;
 

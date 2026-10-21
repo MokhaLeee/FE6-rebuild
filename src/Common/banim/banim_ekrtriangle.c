@@ -282,14 +282,14 @@ void NewEkrTriPegasusKnightBG(struct Anim *anim, u32 pos, u32 etype, u32 ewtype)
 	const u16 *img;
 	struct ProcEfxBG *proc;
 
-	static const s16 frame_l[0x7] = {
+	static const u16 frame_l[0x7] = {
 		0x03, 0x02,
 		0x04, 0x02,
 		0x05, 0x01,
 		-1
 	};
 
-	static const s16 frame_r[0x7] = {
+	static const u16 frame_r[0x7] = {
 		0x00, 0x02,
 		0x01, 0x02,
 		0x02, 0x01,
@@ -458,7 +458,7 @@ struct ProcScr CONST_DATA ProcScr_EkrTriArmorKnightOBJ[] = {
 void NewEkrTriArmorKnightOBJ(struct Anim *anim, u32 etype1, u32 etype2, u32 ewtype1, u32 ewtype2)
 {
 	struct ProcEfxOBJ * proc;
-	struct Anim *anim2, *anim3;
+	struct Anim *anim2;
 	const u16 *pal;
 	u32 *scr;
 	const u16 *img;
@@ -572,7 +572,6 @@ void NewEkrTriArmorKnightOBJ2(struct Anim *anim, u32 pos, u32 etype, u32 ewtype)
 	const u16 *pal;
 	AnimScr *scr;
 	const u16 * buf;
-	int off;
 
 	proc = SpawnProc(ProcScr_EkrTriArmorKnightOBJ2, PROC_TREE_3);
 	proc->anim = anim;

@@ -244,8 +244,8 @@ struct ProcEfxOBJ {
 extern void *gpBanimTerrainfxBufs[2];
 extern void *gpBanimTerrainTsaBufs[2];
 extern u16 *gpBanimTerrainPalBufs[2];
-extern int *gpBanimModesLeft;
-extern int *gpBanimModesRight;
+extern u32 *gpBanimModesLeft;
+extern u32 *gpBanimModesRight;
 
 extern int gEkrDebugTimer;
 extern int gEkrDebugFlag1;
@@ -369,10 +369,6 @@ struct ProcEkrGauge {
 extern struct ProcEkrGauge * gpProcEkrGauge;
 extern u16 Buf_EkrGaugeNumImg[0x200];
 extern u16 gUnk_Banim_02016DC0[0x40];
-extern u8 gUnk_Banim_02016E40[0x200];
-extern u8 gUnk_Banim_02017040[0x200];
-extern u8 gUnk_Banim_02017240[0x200];
-extern u8 gUnk_Banim_02017440[0x200];
 extern u16 gEkrGaugeDecoder[18];
 
 void EkrGaugeModDec(i16 val, u16 buf[]);

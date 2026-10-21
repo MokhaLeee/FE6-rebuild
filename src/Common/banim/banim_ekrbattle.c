@@ -54,8 +54,8 @@ EWRAM_OVERLAY(banim) void *gpBanimTerrainfxBufs[2] = {};
 EWRAM_OVERLAY(banim) void *gpBanimTerrainTsaBufs[2] = {};
 EWRAM_OVERLAY(banim) u16 *gpBanimTerrainPalBufs[2] = {};
 EWRAM_OVERLAY(banim) u16 *gpEfxUnitPaletteBackup[2] = {};
-EWRAM_OVERLAY(banim) int *gpBanimModesLeft = NULL;
-EWRAM_OVERLAY(banim) int *gpBanimModesRight = NULL;
+EWRAM_OVERLAY(banim) u32 *gpBanimModesLeft = NULL;
+EWRAM_OVERLAY(banim) u32 *gpBanimModesRight = NULL;
 EWRAM_OVERLAY(banim) struct ProcEkrBattle *gpProcEkrBattle = NULL;
 
 CONST_DATA char gNopStr[] = "\0";

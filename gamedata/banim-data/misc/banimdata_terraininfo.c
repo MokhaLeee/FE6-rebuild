@@ -1,9 +1,6 @@
 #include "prelude.h"
 #include "banim_data.h"
 
-const int BattleAnimTerrain_count = 0x42;
-const int BattleAnimTerrain_size  = 0x11978;
-
 const struct BattleAnimTerrain gBanimTerrainTable[] = {
 	{
 		.abbr = "heichi1",
