@@ -61,7 +61,7 @@ static void promofx_put_ekrmainmini(int bid, int char_pal, int x, int y, int rou
 	mini_desc->x = x;
 	mini_desc->y = y;
 	mini_desc->bid = bid;
-	mini_desc->round_type = ANIM_ROUND_TAKING_HIT_CLOSE;
+	mini_desc->round_type = round_type;
 	mini_desc->faction_pal = BANIMPAL_BLUE;
 	mini_desc->pos = POS_R;
 	mini_desc->oam2_chr = OBCHR_UIPROMO_EKRMINI;

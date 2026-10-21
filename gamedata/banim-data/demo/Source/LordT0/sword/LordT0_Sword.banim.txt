@@ -167,16 +167,16 @@ C01
 C0D
 ~~~
 /// - Mode 9
-# 2 p- lordt0_enter_01.png
-# 2 p- lordt0_enter_02.png
-# 2 p- lordt0_enter_03.png
-# 2 p- lordt0_enter_04.png
-# 2 p- lordt0_enter_05.png
-# 2 p- lordt0_enter_06.png
-# 2 p- lordt0_enter_07.png
-# 2 p- lordt0_enter_08.png
-# 2 p- lordt0_enter_09.png
-# 2 p- lordt0_enter_10.png
+2 p- lordt0_enter_01.png
+2 p- lordt0_enter_02.png
+2 p- lordt0_enter_03.png
+2 p- lordt0_enter_04.png
+2 p- lordt0_enter_05.png
+2 p- lordt0_enter_06.png
+2 p- lordt0_enter_07.png
+2 p- lordt0_enter_08.png
+2 p- lordt0_enter_09.png
+2 p- lordt0_enter_10.png
 4 p- Sword_000.png
 # C56
 # 4 p- lordt0_idle_01.png

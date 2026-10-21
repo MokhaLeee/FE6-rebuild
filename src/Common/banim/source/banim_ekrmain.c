@@ -105,20 +105,26 @@ void InitMainAnims(void)
 {
 	struct Anim *anim1, *anim2;
 
+#if CONFIG_BANIM_ENTRY_FIX
+	InitBattleAnimFrame(ANIM_ROUND_TAKING_HIT_CLOSE, ANIM_ROUND_TAKING_HIT_CLOSE);
+#else
 	switch (gEkrDistanceType) {
 	case EKR_DISTANCE_CLOSE:
 	case EKR_DISTANCE_MONOCOMBAT:
 	case EKR_DISTANCE_PROMOTION:
+	default:
 		InitBattleAnimFrame(ANIM_ROUND_TAKING_HIT_CLOSE, ANIM_ROUND_TAKING_HIT_CLOSE);
 		break;
 
 	case EKR_DISTANCE_FAR:
-		InitBattleAnimFrame(ANIM_ROUND_TAKING_HIT_FAR, ANIM_ROUND_TAKING_HIT_FAR);
-		break;
-
 	case EKR_DISTANCE_FARFAR:
 		InitBattleAnimFrame(ANIM_ROUND_TAKING_HIT_FAR, ANIM_ROUND_TAKING_HIT_FAR);
+		break;
+	}
+#endif
 
+	switch (gEkrDistanceType) {
+	case EKR_DISTANCE_FARFAR:
 		if (GetBanimInitPosReal() == POS_L) {
 			anim1 = gAnims[2];
 			anim1->xPosition = 0x180;

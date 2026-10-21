@@ -408,8 +408,10 @@ void NewEkrUnitKakudai(int identifier)
 void EkrUnitKakudai_PrepareAnimScript(struct ProcEkrUnitKakudai *proc)
 {
     void *vram;
-    int std_type = BanimDefaultStandingTypes[gEkrDistanceType];
-	int front_mode = BanimDefaultModeConfig[std_type * 4];
+	int std_type, front_mode;
+
+    std_type = BanimDefaultStandingTypes[gEkrDistanceType];
+	front_mode = BanimDefaultModeConfig[std_type * 4];
 
 	UpdateBanimFrame();
 

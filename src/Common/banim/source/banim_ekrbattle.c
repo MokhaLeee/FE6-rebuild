@@ -213,7 +213,12 @@ void EkrBattle_Init(struct ProcEkrBattle *proc)
 	InitMainAnims();
 	InitEkrDragonStatus();
 
+#if CONFIG_BANIM_ENTRY_FIX
+	/* C01 should not looping */
+	gAnimC01LoopCtrl = false;
+#else
 	gAnimC01LoopCtrl = TRUE;
+#endif
 
 	if (GetBattleAnimArenaFlag() == TRUE)
 		proc->timer = 0;

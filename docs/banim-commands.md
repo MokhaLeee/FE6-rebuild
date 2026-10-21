@@ -81,4 +81,15 @@ The simplist anim command:
 
     但是这样存在很麻烦的问题:当对端通过 C06 重新将本端动画切换成 standing 模式, 此时末尾 C01 已经不再具备 block 的能力
 
+    修改策略: entry 都放到 mode9, 战斗动画内部则切换到 mode10
+
+    1. BanimDefaultStandingTypes 修正: 全部配置成 mode10
+    2. InitMainAnims 会直接将 mode 配置成 mode9, 从而进入 entry 动画中
+    3. todo 项: InitMainAnims 其他的状态要不要都切成 mode9 呢?
+    4. 直接删除开局时 C01 的 looping
+
+    todo 项:
+    1. banim intro 的时候可以直接不展示 unit (unit kakudai 直接删掉?)
+    2. 攻击结束后会跳两下, 需要排查一下是不是 trigger 了两次
+
 2. banim idle
