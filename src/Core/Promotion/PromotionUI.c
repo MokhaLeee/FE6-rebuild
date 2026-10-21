@@ -115,9 +115,9 @@ static void promofx_put_ekrterrainfx(int terrain, int x, int y)
 static void PromoEkrFx_Init(struct ProcPromoEkrFx *proc)
 {
 	EndEfxAnimeDrvProc();
-	EndEkrMainMini(&PromoEkrMiniDesc);
+	// EndEkrMainMini(&PromoEkrMiniDesc);
 	promofx_put_ekrmainmini(0x10, 0, 180, 88, ANIM_ROUND_TAKING_HIT_CLOSE);
-	EndEkrTerrainfx(&PromoEkrTerrainDesc);
+	// EndEkrTerrainfx(&PromoEkrTerrainDesc);
 	promofx_put_ekrterrainfx(1, 140, 104);
 }
 
