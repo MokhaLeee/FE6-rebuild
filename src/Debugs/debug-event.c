@@ -48,8 +48,9 @@ static void setup_status(void)
 
 	unit = GetUnitByPid(PID_LILINA);
 	if (unit) {
+		// unit->jinfo = GetJInfo(JID_SAGE_F);
 		unit->wexp[ITEM_KIND_ANIMA] = WEXP_A - 1;
-		unit->level = 9;
+		unit->level = 10;
 		unit->exp = 99;
 		unit->items[0] = MAKE_ITEM(IID_FIRE, 1);
 	}
@@ -66,7 +67,7 @@ static struct UnitInfo const UnitInfo_Chapter1_BlueB[] = {
 	{ PID_BORS, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 1, 20, 3, 19, { IID_IRONLANCE, IID_VULNERARY }, { 0 } },
 	{ PID_WOLT, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 2, 20, 2, 16, { IID_IRONBOW, IID_VULNERARY, IID_BALLISTA }, { 0 } },
 	{ PID_LUGH, 0, PID_ROY, true, FACTION_ID_BLUE, 10, 3, 20, 2, 16, { IID_FIRE, IID_GUIDINGRING }, { 0 } },
-	{ PID_LILINA, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 3, 20, 3, 15, { IID_FIRE }, { 0 } },
+	{ PID_LILINA, 0, PID_ROY, true, FACTION_ID_BLUE, 10, 3, 20, 3, 15, { IID_FIRE, IID_GUIDINGRING }, { 0 } },
 	{ PID_ELEN, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 3, 20, 3, 16, { IID_LIGHTNING, IID_BARRIERSTAFF, IID_SAINTSSTAFF, IID_SLEEPSTAFF }, { 0 } },
 	{ 0 }, // end
 };

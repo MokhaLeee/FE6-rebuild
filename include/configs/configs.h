@@ -18,7 +18,7 @@
 #define CONFIG_USE_M4A_HQ_MIXER 1
 
 /* remove unit-kakudai */
-#define CONFIG_REMOVE_BANIM_UNITKAKUDAI 0
+#define CONFIG_REMOVE_BANIM_UNITKAKUDAI 1
 
 /* auto-left OAM */
 #define CONFIG_AUTO_LEFT_OAM 1
