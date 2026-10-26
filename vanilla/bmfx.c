@@ -1564,7 +1564,7 @@ static void func_fe6_0801D8E4(struct ShowMapChangeProc * proc)
 
     RenderMapForFade();
 
-    func_fe6_080188F4();
+    ReinitMapForWaterTerrains();
     RenderMap();
 
     StartMapFade(FALSE);

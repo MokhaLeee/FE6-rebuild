@@ -1,5 +1,5 @@
 . = ALIGN(4); vanilla/minimap.o(ewram_overlay_0);
-. = ALIGN(0x1000); vanilla/map.o(ewram_overlay_0);
+/* . = ALIGN(0x1000); vanilla/map.o(ewram_overlay_0); */
 . = ALIGN(4); vanilla/bmfx.o(ewram_overlay_0);
 . = ALIGN(4); vanilla/mapmenu.o(ewram_overlay_0);
 . = ALIGN(4); vanilla/trademenu.o(ewram_overlay_0);

@@ -5,8 +5,8 @@
 
 void InitMapForChapter(int chapter);
 void InitMapForMinimap(int chapter);
-void func_fe6_080187EC(void);
-void func_fe6_080188F4(void);
+void MapSpawnWaterTileChanges(void);
+void ReinitMapForWaterTerrains(void);
 void MapFill(u8 ** map, int value);
 void MapSetEdges(u8 ** map, u8 value);
 void ApplyChapterMapGraphics(int chapter);
