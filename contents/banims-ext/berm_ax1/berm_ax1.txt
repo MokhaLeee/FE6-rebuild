@@ -106,7 +106,16 @@ C01
 C0D
 ~~~
 /// - Mode 9
-1 p- berm_ax1_000.png
+2 p- berm_ax1_enter_01.png
+2 p- berm_ax1_enter_02.png
+2 p- berm_ax1_enter_03.png
+2 p- berm_ax1_enter_04.png
+2 p- berm_ax1_enter_05.png
+2 p- berm_ax1_enter_06.png
+2 p- berm_ax1_enter_07.png
+2 p- berm_ax1_enter_08.png
+2 p- berm_ax1_enter_09.png
+4 p- berm_ax1_000.png
 C01
 ~~~
 /// - Mode 10
