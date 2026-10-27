@@ -10,6 +10,11 @@ u64 k_u64mod(u64 a, u64 b);
 u32 k_udiv10(u32 n);       // n / 10
 u32 k_umod10(u32 n);       // n % 10
 
+static inline int perc_of(u32 num, u32 perc)
+{
+	return k_udiv(num * perc, 100);
+}
+
 /* bit */
 #define BIT(k) (1UL << (k))
 #define GENMASK_32(h, l) \
@@ -49,9 +54,32 @@ static inline bool UNIT_STONED(struct Unit *unit) { return false; } // todo
 typedef bool (*HookProcFunc_t)(ProcPtr proc);
 void SpawnHookProc(HookProcFunc_t const *hook_list, ProcPtr parent);
 
+/**
+ * map.c
+ */
+bool IsPositionValid(int x, int y);
+bool CanUnitStandOnPosition(struct Unit *unit, int x, int y);
+struct Unit *GetUnitAtPosition(int x, int y);
+bool CheckOutdoorTerrain(int terrain);
+
 /* manim-common */
 void MapAnim_CommonInit(void);
 void MapAnim_CommonEnd(void);
+
+/**
+ * ranges
+ */
+#define ARRAY_COUNT_RANGE1x1 4
+#define ARRAY_COUNT_RANGE2x2 12
+#define ARRAY_COUNT_RANGE3x3 24
+
+extern const struct Vec1 gVecs_1x1[ARRAY_COUNT_RANGE1x1];
+extern const struct Vec1 gVecs_2x2[ARRAY_COUNT_RANGE2x2];
+extern const struct Vec1 gVecs_3x3[ARRAY_COUNT_RANGE3x3];
+
+extern const u8 gRange1_In2x2[ARRAY_COUNT_RANGE2x2];
+extern const u8 gRange1_In3x3[ARRAY_COUNT_RANGE3x3];
+extern const u8 gRange2_In3x3[ARRAY_COUNT_RANGE3x3];
 
 /* misc */
 enum UnitStatusIdxRef {

@@ -35,6 +35,11 @@ enum skills {
 
 	// Post-action skills
 	SID_AlertStance,
+
+	// Movement skills
+	SID_MovePass,
+	SID_MoveObstruct,
+	SID_MoveDetailedReport,
 }; 
 
 #endif

@@ -67,25 +67,11 @@ enum glb_pos
     POS_INVALID = -1
 };
 
-struct Vec2i
-{
-    i16 x, y;
-};
-
-struct Vec2u
-{
-    u16 x, y;
-};
-
-struct Vec4i
-{
-    int x, y;
-};
-
-struct Vec1u
-{
-    u8 x, y;
-};
+struct Vec1  { i8 x, y; };
+struct Vec1u { u8 x, y; };
+struct Vec2i { i16 x, y; };
+struct Vec2u { u16 x, y; };
+struct Vec4i { int x, y; };
 
 // Forward decls for common types
 // TODO: move

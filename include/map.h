@@ -7,6 +7,7 @@ void InitMapForChapter(int chapter);
 void InitMapForMinimap(int chapter);
 void MapSpawnWaterTileChanges(void);
 void ReinitMapForWaterTerrains(void);
+void MapInit(u8 *data, u8 ***rowsOut, int width, int height);
 void MapFill(u8 ** map, int value);
 void MapSetEdges(u8 ** map, u8 value);
 void ApplyChapterMapGraphics(int chapter);

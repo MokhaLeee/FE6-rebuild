@@ -17,4 +17,7 @@ struct SkillExtraInfo const gSkillExtraInfo[MAX_SKILL_NUM] = {
 	[SID_RangeBonusBow2] = {{ 2 }},
 	[SID_RangeBonusBMag1] = {{ 1 }},
 	[SID_RangeBonusBMag2] = {{ 2 }},
+	[SID_MovePass] = {{ 25 }},
+	[SID_MoveObstruct] = {{ 25, 1 }},
+	[SID_MoveDetailedReport] = {{ 50, 2 }},
 };

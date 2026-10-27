@@ -17,7 +17,6 @@
 enum { MAP_POOL_SIZE = 0x7B8 };
 enum { TILESET_METATILES = 0x400 };
 
-static void MapInit(u8 * data, u8 *** rowsOut, int width, int height);
 static void UnpackRawMap(void * buf, int chapter);
 static void InitMetatilesMap(void);
 static void RenderMapColumn(u16 x_offset);

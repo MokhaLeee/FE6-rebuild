@@ -78,4 +78,20 @@ struct SkillInfo const gSkillInfo[0x400] = {
 		.msg_desc = MSG_SKILL_RangeBonusBMag2,
 		.icon = Gfx_SkillIcon_RangeBonusBMag2,
 	},
+
+	[SID_MovePass] = {
+		.msg_desc = MSG_SKILL_MovePass,
+		.icon = Gfx_SkillIcon_MovePass,
+	},
+
+	[SID_MoveObstruct] = {
+		.msg_desc = MSG_SKILL_MoveObstruct,
+		.icon = Gfx_SkillIcon_MoveObstruct,
+	},
+
+	[SID_MoveDetailedReport] = {
+		.msg_name = MSG_SKILL_DetailedReport_NAME,
+		.msg_desc = MSG_SKILL_DetailedReport,
+		.icon = Gfx_SkillIcon_MoveDetailedReport,
+	},
 };

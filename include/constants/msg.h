@@ -3359,7 +3359,11 @@
 #define MSG_SKILL_RangeBonusBow2 0x0D19
 #define MSG_SKILL_RangeBonusBMag1 0x0D1A
 #define MSG_SKILL_RangeBonusBMag2 0x0D1B
+#define MSG_SKILL_MovePass 0x0D1C
+#define MSG_SKILL_MoveObstruct 0x0D1D
+#define MSG_SKILL_DetailedReport_NAME 0x0D1E
+#define MSG_SKILL_DetailedReport 0x0D1F
 
-#define MSG_COUNT 0x0D1C
+#define MSG_COUNT 0x0D20
 
 #endif /* MSG_H */

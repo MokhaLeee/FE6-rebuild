@@ -14,3 +14,6 @@ extern const unsigned char Gfx_SkillIcon_BlowWarding[];
 extern const unsigned char Gfx_SkillIcon_BlowDeath[];
 extern const unsigned char Gfx_SkillIcon_BlowDarting[];
 extern const unsigned char Gfx_SkillIcon_BlowKilling[];
+extern const unsigned char Gfx_SkillIcon_MovePass[];
+extern const unsigned char Gfx_SkillIcon_MoveObstruct[];
+extern const unsigned char Gfx_SkillIcon_MoveDetailedReport[];

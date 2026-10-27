@@ -1,0 +1,17 @@
+## MSG_SKILL_MovePass
+Pass:[NL]
+If HP more than 25% unit can[NL]
+move through foes' spaces.[X]
+
+## MSG_SKILL_MoveObstruct
+Obstruct: If HP more than 50%,[NL]
+foes cannot move through adjacent[NL]
+to unit. (Null on Pass skill)[X]
+
+## MSG_SKILL_DetailedReport_NAME
+D-Report[X]
+
+## MSG_SKILL_DetailedReport
+Detailed Report:[NL]
+if HP>50%, ranged foes cannot[NL]
+move throgh 2x2 spaces adjacent.[X]

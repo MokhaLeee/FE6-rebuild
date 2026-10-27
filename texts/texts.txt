@@ -85,3 +85,4 @@
 #include "skills/Skills_StatusGetter.txt"
 #include "skills/Skills_Blow.txt"
 #include "skills/Skills_WeaponRange.txt"
+#include "skills/Skills_Movement.txt"

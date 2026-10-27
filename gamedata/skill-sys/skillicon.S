@@ -79,3 +79,18 @@ Gfx_SkillIcon_BlowDarting:
 .global Gfx_SkillIcon_BlowKilling
 Gfx_SkillIcon_BlowKilling:
 	.incbin "contents/skillsys/SkillIcon/BlowKilling.4bpp"
+
+.align 2, 0
+.global Gfx_SkillIcon_MovePass
+Gfx_SkillIcon_MovePass:
+	.incbin "contents/skillsys/SkillIcon/MovePass.4bpp"
+
+.align 2, 0
+.global Gfx_SkillIcon_MoveObstruct
+Gfx_SkillIcon_MoveObstruct:
+	.incbin "contents/skillsys/SkillIcon/MoveObstruct.4bpp"
+
+.align 2, 0
+.global Gfx_SkillIcon_MoveDetailedReport
+Gfx_SkillIcon_MoveDetailedReport:
+	.incbin "contents/skillsys/SkillIcon/MoveDetailedReport.4bpp"
