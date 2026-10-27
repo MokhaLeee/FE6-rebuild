@@ -310,8 +310,7 @@ void PutLimitViewSquare(u16 * tm, int x, int y, int x_tm, int y_tm)
 	if (!tm)
 		func_fe6_08018CDC();
 
-	if (gMapMovementSigned[y][x] >= 0)
-	{
+	if (gMapMovementSigned[y][x] >= 0) {
 		tm[TM_OFFSET(0, 0)] = TILEREF(BGCHR_LIMITVIEW + 0, BGPAL_LIMITVIEW);
 		tm[TM_OFFSET(1, 0)] = TILEREF(BGCHR_LIMITVIEW + 1, BGPAL_LIMITVIEW);
 		tm[TM_OFFSET(0, 1)] = TILEREF(BGCHR_LIMITVIEW + 2, BGPAL_LIMITVIEW);
@@ -320,19 +319,15 @@ void PutLimitViewSquare(u16 * tm, int x, int y, int x_tm, int y_tm)
 		return;
 	}
 
-	if (gMapRangeSigned[y][x])
-	{
-		if (tm[0])
-		{
+	if (gMapRangeSigned[y][x]) {
+		if (tm[0]) {
 			tm[TM_OFFSET(0, 0)] = TILEREF(BGCHR_LIMITVIEW + 4, BGPAL_LIMITVIEW + 1);
 			tm[TM_OFFSET(1, 0)] = TILEREF(BGCHR_LIMITVIEW + 5, BGPAL_LIMITVIEW + 1);
 			tm[TM_OFFSET(0, 1)] = TILEREF(BGCHR_LIMITVIEW + 6, BGPAL_LIMITVIEW + 1);
 			tm[TM_OFFSET(1, 1)] = TILEREF(BGCHR_LIMITVIEW + 7, BGPAL_LIMITVIEW + 1);
 
 			return;
-		}
-		else
-		{
+		} else {
 			tm[TM_OFFSET(0, 0)] = TILEREF(BGCHR_LIMITVIEW + 0, BGPAL_LIMITVIEW + 1);
 			tm[TM_OFFSET(1, 0)] = TILEREF(BGCHR_LIMITVIEW + 1, BGPAL_LIMITVIEW + 1);
 			tm[TM_OFFSET(0, 1)] = TILEREF(BGCHR_LIMITVIEW + 2, BGPAL_LIMITVIEW + 1);
@@ -384,29 +379,21 @@ void RenderMapForFade(void)
 
 void UpdateRenderMap(void)
 {
-	if (gBmSt.camera.x != gBmSt.camera_previous.x)
-	{
-		if (gBmSt.camera.x > gBmSt.camera_previous.x)
-		{
+	if (gBmSt.camera.x != gBmSt.camera_previous.x) {
+		if (gBmSt.camera.x > gBmSt.camera_previous.x) {
 			if (((gBmSt.camera.x - 1) ^ (gBmSt.camera_previous.x - 1)) & 0x10)
 				RenderMapColumn(15);
-		}
-		else
-		{
+		} else {
 			if ((gBmSt.camera.x ^ gBmSt.camera_previous.x) & 0x10)
 				RenderMapColumn(0);
 		}
 	}
 
-	if (gBmSt.camera.y != gBmSt.camera_previous.y)
-	{
-		if (gBmSt.camera.y > gBmSt.camera_previous.y)
-		{
+	if (gBmSt.camera.y != gBmSt.camera_previous.y) {
+		if (gBmSt.camera.y > gBmSt.camera_previous.y) {
 			if (((gBmSt.camera.y - 1) ^ (gBmSt.camera_previous.y - 1)) & 0x10)
 				RenderMapLine(10);
-		}
-		else
-		{
+		} else {
 			if ((gBmSt.camera.y ^ gBmSt.camera_previous.y) & 0x10)
 				RenderMapLine(0);
 		}
@@ -418,8 +405,7 @@ void UpdateRenderMap(void)
 		gBmSt.camera.x - (u16) gBmSt.map_render_anchor.x*16,
 		gBmSt.camera.y - (u16) gBmSt.map_render_anchor.y*16);
 
-	if (gBmSt.flags & BM_FLAG_LIMITVIEW)
-	{
+	if (gBmSt.flags & BM_FLAG_LIMITVIEW) {
 		SetBgOffset(2,
 			gBmSt.camera.x - (u16) gBmSt.map_render_anchor.x*16,
 			gBmSt.camera.y - (u16) gBmSt.map_render_anchor.y*16);
@@ -436,20 +422,15 @@ void RenderMapColumn(u16 x_offset)
 
 	int iy;
 
-	if (!(gBmSt.flags & BM_FLAG_LIMITVIEW))
-	{
-		for (iy = 10; iy >= 0; --iy)
-		{
+	if (!(gBmSt.flags & BM_FLAG_LIMITVIEW)) {
+		for (iy = 10; iy >= 0; --iy) {
 			PutMapMetatile(gBg3Tm,
 				x_tm, (y_tm + iy) & 0xF, x, (y + iy));
 		}
 
 		EnableBgSync(BG3_SYNC_BIT);
-	}
-	else
-	{
-		for (iy = 10; iy >= 0; --iy)
-		{
+	} else {
+		for (iy = 10; iy >= 0; --iy) {
 			PutMapMetatile(gBg3Tm,
 				x_tm, (y_tm + iy) & 0xF, x, (y + iy));
 
@@ -471,20 +452,15 @@ void RenderMapLine(u16 y_offset)
 
 	int ix;
 
-	if (!(gBmSt.flags & BM_FLAG_LIMITVIEW))
-	{
-		for (ix = 15; ix >= 0; --ix)
-		{
+	if (!(gBmSt.flags & BM_FLAG_LIMITVIEW)) {
+		for (ix = 15; ix >= 0; --ix) {
 			PutMapMetatile(gBg3Tm,
 				(x_tm + ix) & 0xF, y_tm, (x + ix), y);
 		}
 
 		EnableBgSync(BG3_SYNC_BIT);
-	}
-	else
-	{
-		for (ix = 15; ix >= 0; --ix)
-		{
+	} else {
+		for (ix = 15; ix >= 0; --ix) {
 			PutMapMetatile(gBg3Tm,
 				(x_tm + ix) & 0xF, y_tm, (x + ix), y);
 
@@ -509,8 +485,7 @@ void RefreshEntityMaps(void)
 
 	// 1. Blue & Green units
 
-	for (i = 1; i < FACTION_RED; ++i)
-	{
+	for (i = 1; i < FACTION_RED; ++i) {
 		unit = GetUnit(i);
 
 		if (!unit)
@@ -532,12 +507,10 @@ void RefreshEntityMaps(void)
 
 	// 2. Red (& Purple) units
 
-	if (gPlaySt.faction != FACTION_RED)
-	{
+	if (gPlaySt.faction != FACTION_RED) {
 		// 2.1. No red phase
 
-		for (i = FACTION_RED + 1; i < FACTION_PURPLE + 6; ++i)
-		{
+		for (i = FACTION_RED + 1; i < FACTION_PURPLE + 6; ++i) {
 			unit = GetUnit(i);
 
 			if (!unit)
@@ -549,15 +522,12 @@ void RefreshEntityMaps(void)
 			if (unit->flags & UNIT_FLAG_HIDDEN)
 				continue;
 
-			if (gPlaySt.vision != 0 && !gMapFog[unit->y][unit->x])
-			{
+			if (gPlaySt.vision != 0 && !gMapFog[unit->y][unit->x]) {
 				// If in fog, set unit bit on the hidden map, and set the "hidden in fog" flag
 
 				gMapHidden[unit->y][unit->x] = 1;
 				unit->flags |= UNIT_FLAG_CONCEALED;
-			}
-			else
-			{
+			} else {
 				// If not in fog, put unit on the map, and update flags accordingly
 
 				gMapUnit[unit->y][unit->x] = i;

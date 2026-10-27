@@ -53,7 +53,10 @@ static void PreGenerateMovementMap(int default_mov)
 	MapInit(gBuf, &KernelExtMoveBarrierMap, gMapSize.x, gMapSize.y);
 	MapInit(gBuf + 0x1000, &KernelExtMovePioneerMap, gMapSize.x, gMapSize.y);
 
+#if 1
 	return;
+#endif
+
 	MapFill(KernelExtMoveBarrierMap, 0);
 	MapFill(KernelExtMovePioneerMap, 0);
 
@@ -114,13 +117,12 @@ static void PreGenerateMovementMap(int default_mov)
 					int _y = iy + vec_ref[barrier_range][i].y;
 
 					if (IsPositionValid(_x, _y))
-						KernelExtMoveBarrierMap[_y][_x] = -1;
+						KernelExtMoveBarrierMap[_y][_x] = 0xFF;
 				}
 
-				KernelExtMoveBarrierMap[iy][ix] = -1;
+				KernelExtMoveBarrierMap[iy][ix] = 0xFF;
 				break;
 			}
-
 
 			/**
 			 * 2. check for pioneer map

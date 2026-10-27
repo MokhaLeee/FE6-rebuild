@@ -12,4 +12,5 @@ struct SkillTable const gSkillJTable[0x100] = {
 	[JID_ROY] = {{ SID_RangeBonusBow1, 0 }},
 	[JID_SNIPER] = {{ SID_RangeBonusBow2, 0 }},
 	[JID_SNIPER_F] = {{ SID_RangeBonusBow2, 0 }},
+	[JID_DEMONDRAGON] = {{ SID_MoveDetailedReport, 0 }},
 };
