@@ -18,15 +18,19 @@ static void MapFloodCoreStep(int connect, int x, int y)
 	cost = (u8)gWorkingMovTable[gMapTerrain[y][x]]
 		+ (u8)gWorkingMap[(u8)src->y][(u8)src->x];
 
+	cost += KernelExtMoveBarrierMap[y][x];  /* CHAX */
+
 	if (cost >= gWorkingMap[y][x])
 		return;
 
 	if (gMapFloodSt.has_unit && gMapUnit[y][x]
 		&& ((gMapUnit[y][x] ^ gMapFloodSt.uid) & 0x80))
-		return;
+		if (!KernelPassSkillActivated) /* CHAX */
+			return;
 
 	if (cost > gMapFloodSt.move)
-		return;
+		if (KernelExtMovePioneerMap[y][x] == 0) /* CHAX */
+			return;
 
 	gMapFloodSt.waiting_queue->x = x;
 	gMapFloodSt.waiting_queue->y = y;

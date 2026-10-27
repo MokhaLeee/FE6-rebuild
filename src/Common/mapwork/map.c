@@ -14,9 +14,6 @@
 #include "constants/chapters.h"
 #include "constants/terrains.h"
 
-enum { MAP_POOL_SIZE = 0x7B8 };
-enum { TILESET_METATILES = 0x400 };
-
 static void UnpackRawMap(void * buf, int chapter);
 static void InitMetatilesMap(void);
 static void RenderMapColumn(u16 x_offset);

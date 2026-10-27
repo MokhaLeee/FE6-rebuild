@@ -15,7 +15,6 @@ EWRAM_OVERLAY(0) u8 **KernelExtMoveBarrierMap;
 EWRAM_OVERLAY(0) u8 **KernelExtMovePioneerMap;
 EWRAM_OVERLAY(0) bool KernelPassSkillActivated;
 
-_UNUSED
 static void PreGenerateMovementMap(int default_mov)
 {
 	int i, ix, iy;
@@ -52,9 +51,10 @@ static void PreGenerateMovementMap(int default_mov)
 	 * Here we use generic buffer as a external cost buffer
 	 */
 	MapInit(gBuf, &KernelExtMoveBarrierMap, gMapSize.x, gMapSize.y);
-	MapFill(KernelExtMoveBarrierMap, 0);
+	MapInit(gBuf + 0x1000, &KernelExtMovePioneerMap, gMapSize.x, gMapSize.y);
 
-	MapInit(gBuf + 0x800, &KernelExtMovePioneerMap, gMapSize.x, gMapSize.y);
+	return;
+	MapFill(KernelExtMoveBarrierMap, 0);
 	MapFill(KernelExtMovePioneerMap, 0);
 
 	for (iy = 0; iy < gMapSize.y; iy++) {
@@ -182,7 +182,7 @@ void BeginMapFlood(int x, int y, int move, int uid)
 	gMapFloodSt.waiting_queue->connect = 4;
 
 	/* CHAX */
-	// PreGenerateMovementMap(move);
+	PreGenerateMovementMap(move);
 
 	MapFloodCore();
 }

@@ -3,6 +3,9 @@
 
 #include "prelude.h"
 
+enum { MAP_POOL_SIZE = 0x7B8 };
+enum { TILESET_METATILES = 0x400 };
+
 void InitMapForChapter(int chapter);
 void InitMapForMinimap(int chapter);
 void MapSpawnWaterTileChanges(void);
