@@ -23,8 +23,6 @@
 
 static void setup_status(void)
 {
-	struct Unit *unit;
-
 	SetGold(GetGold() + 5000);
 }
 
@@ -171,6 +169,7 @@ static EventScr CONST_DATA EventScr_Chapter1_FirstRedTurn[] =
 	EvtEnd
 };
 
+_UNUSED
 static EventScr CONST_DATA EventScr_Chapter1_UnusedTalk[] =
 {
 	EvtSetBgm(SONG_27)
@@ -250,6 +249,7 @@ static EventScr CONST_DATA EventScr_Chapter1_HouseC[] =
 	EvtEnd
 };
 
+_UNUSED
 static EventScr CONST_DATA EventScr_Chapter1_HouseUnused[] =
 {
 	EvtLowerBgmVolume
@@ -293,19 +293,19 @@ EvtLabel(0)
 /**
  * event info
  */
-static EventListScr CONST_DATA EventListScr_Chapter1_Turn[] =
+static EventListScr const EventListScr_Chapter1_Turn[] =
 {
 	EvtListTurn(0, EventScr_Chapter1_Opening, 1, 0, FACTION_BLUE)
 	EvtListTurn(FLAG_CHAPTER1_TURN1, EventScr_Chapter1_FirstRedTurn, 1, 0, FACTION_RED)
 	EvtListEnd
 };
 
-static EventListScr CONST_DATA EventListScr_Chapter1_Talk[] =
+static EventListScr const EventListScr_Chapter1_Talk[] =
 {
 	EvtListEnd
 };
 
-static EventListScr CONST_DATA EventListScr_Chapter1_Tile[] =
+static EventListScr const EventListScr_Chapter1_Tile[] =
 {
 	EvtListTileMapChange(FLAG_CHAPTER1_VILLAGE, EventScr_Chapter1_Village, 12, 19, TILE_COMMAND_VISIT)
 	EvtListTile(FLAG_CHAPTER1_VILLAGE, EVENT_NOSCRIPT, 12, 18, TILE_COMMAND_PILLAGE)
@@ -318,14 +318,14 @@ static EventListScr CONST_DATA EventListScr_Chapter1_Tile[] =
 	EvtListEnd
 };
 
-static EventListScr CONST_DATA EventListScr_Chapter1_Move[] =
+static EventListScr const EventListScr_Chapter1_Move[] =
 {
 	EvtListFlag(0, EventScr_GameOver, FLAG_101)
 	EvtListEnd
 };
 
 _WEAK
-struct ChapterEventInfo CONST_DATA ChapterEventInfo_Chapter1 =
+struct ChapterEventInfo const ChapterEventInfo_Chapter1 =
 {
 	.event_list_turn = EventListScr_Chapter1_Turn,
 	.event_list_talk = EventListScr_Chapter1_Talk,

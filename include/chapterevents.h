@@ -5,6 +5,7 @@
 
 #include "proc.h"
 #include "event.h"
+#include "eventinfo.h"
 
 // TODO: move (eventfunctions)
 struct Chapter14xTimedMapChangeInfo

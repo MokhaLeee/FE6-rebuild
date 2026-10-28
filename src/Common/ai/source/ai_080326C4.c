@@ -205,11 +205,11 @@ bool AiTryGetNearestHealPoint(struct Vec2i * pos_out)
 
 void AiUpdateUnitsSeekHealing(void)
 {
-    int i, count = 0;
+    int i;
 
     fu8 faction = gPlaySt.faction;
 
-    SHOULD_BE_STATIC int SHOULD_BE_CONST faction_unit_count_table[3] =
+    static int const faction_unit_count_table[3] =
     {
         UNIT_AMOUNT_BLUE,
         UNIT_AMOUNT_GREEN,
@@ -427,9 +427,7 @@ bool AiEquipGetFlags(u16 * equip_flags_out)
         equip_flags_out[i] |= AI_EQUIP_FLAG_MIGHT(GetItemMight(item));
     }
 
-#ifdef BUGFIX
     return TRUE;
-#endif
 }
 
 void AiEquipGetDanger(int x, int y, u16 * range_danger_out, u16 * melee_danger_out, u16 * combined_danger_out)

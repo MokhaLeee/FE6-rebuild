@@ -690,95 +690,95 @@ u8 CONST_DATA TerrainList_AiSeizePoint[] =
 struct AiEscapePt const AiEscapePts_1[] =
 {
     { 0, 4, FACING_LEFT },
-    { -1 },
+    { -1, 0, 0 },
 };
 
 struct AiEscapePt const AiEscapePts_2[] =
 {
-    { -1 },
+    { -1, 0, 0 },
 };
 
 struct AiEscapePt const AiEscapePts_6[] =
 {
     { 14, 0, FACING_UP },
-    { -1 },
+    { -1, 0, 0 },
 };
 
 struct AiEscapePt const AiEscapePts_8[] =
 {
     { 0, 4, FACING_LEFT },
-    { -1 },
+    { -1, 0, 0 },
 };
 
 struct AiEscapePt const AiEscapePts_26[] =
 {
     { 16, 0, FACING_UP },
-    { -1 },
+    { -1, 0, 0 },
 };
 
 struct AiEscapePt const AiEscapePts_11[] =
 {
     { 23, 0, FACING_UP },
-    { -1 },
+    { -1, 0, 0 },
 };
 
 struct AiEscapePt const AiEscapePts_27[] =
 {
     { 28, 0, FACING_UP },
-    { -1 },
+    { -1, 0, 0 },
 };
 
 struct AiEscapePt const AiEscapePts_12[] =
 {
     { 12, 31, FACING_DOWN },
-    { -1 },
+    { -1, 0, 0 },
 };
 
 struct AiEscapePt const AiEscapePts_13[] =
 {
     { 45, 6, FACING_RIGHT },
-    { -1 },
+    { -1, 0, 0 },
 };
 
 struct AiEscapePt const AiEscapePts_15[] =
 {
     { 27, 23, FACING_RIGHT },
-    { -1 },
+    { -1, 0, 0 },
 };
 
 struct AiEscapePt const AiEscapePts_16[] =
 {
     { 6, 22, 5 },
-    { -1 },
+    { -1, 0, 0 },
 };
 
 struct AiEscapePt const AiEscapePts_20[] =
 {
     { 13, 0, FACING_UP },
-    { -1 },
+    { -1, 0, 0 },
 };
 
 struct AiEscapePt const AiEscapePts_22[] =
 {
     { 1, 31, FACING_DOWN },
-    { -1 },
+    { -1, 0, 0 },
 };
 
 struct AiEscapePt const AiEscapePts_31[] =
 {
     { 15, 25, FACING_DOWN },
-    { -1 },
+    { -1, 0, 0 },
 };
 
 struct AiEscapePt const AiEscapePts_33[] =
 {
     { 2, 26, FACING_DOWN },
-    { -1 },
+    { -1, 0, 0 },
 };
 
 struct AiEscapePt const AiEscapePts_None[] =
 {
-    { -1 },
+    { -1, 0, 0 },
 };
 
 struct AiEscapePt const * CONST_DATA gAiRedEscapePoints[CHAPTER_COUNT] =

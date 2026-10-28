@@ -22,6 +22,7 @@ static void (* CONST_DATA sAllDecideFuncs[])(void) =
     NULL, NULL,
 };
 
+_UNUSED
 static void (* CONST_DATA sAllDecideFuncsUnused[])(void) =
 {
     AiDecideSpecialItems,
