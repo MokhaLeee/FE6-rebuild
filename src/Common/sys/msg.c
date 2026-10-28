@@ -2,7 +2,7 @@
 
 #include "armfunc.h"
 
-extern u8 const * const gMsgTable[];
+extern char const * const gMsgTable[];
 
 char EWRAM_DATA sMsgString[0x1000] = {};
 int EWRAM_DATA sActiveMsg = 0;

@@ -4,6 +4,12 @@
 #include "move.h"
 #include "oam.h"
 #include "bm.h"
+#include "klib.h"
+
+#ifdef MODERN
+#undef MODERN
+#endif
+#define MODERN 0
 
 static struct BgCnt * GetBgCt(u16 bgid);
 static void RefreshKeyStFromKeys(struct KeySt * keySt, short keys);
@@ -18,17 +24,15 @@ static unsigned sGameTime;
 static u8 sUnk_03000014;
 static u8 sUnk_03000015;
 
-u8 EWRAM_DATA gBuf[0x2000] = { 0 };
+SECTION("ewram_data.hardware") u16 gBg1Tm[0x400] = { 0 };
+SECTION("ewram_data.hardware") u16 gBg2Tm[0x400] = { 0 };
+SECTION("ewram_data.hardware") u16 gBg3Tm[0x400] = { 0 };
+SECTION("ewram_data.hardware") u16 gBg0Tm[0x400] = { 0 };
+SECTION("ewram_data.hardware") u8 gBuf[0x2000] = { 0 };
 
-i8 EWRAM_DATA gFadeComponentStep[0x20] = { 0 };
-i8 EWRAM_DATA gFadeComponents[0x600] = { 0 };
-
-u16 EWRAM_DATA gPal[0x200] = { 0 };
-
-u16 EWRAM_DATA gBg0Tm[0x400] = { 0 };
-u16 EWRAM_DATA gBg1Tm[0x400] = { 0 };
-u16 EWRAM_DATA gBg2Tm[0x400] = { 0 };
-u16 EWRAM_DATA gBg3Tm[0x400] = { 0 };
+EWRAM_DATA i8 gFadeComponentStep[0x20] = { 0 };
+EWRAM_DATA i8 gFadeComponents[0x600] = { 0 };
+EWRAM_DATA u16 gPal[0x200] = { 0 };
 
 void * EWRAM_DATA gBgMapVramTable[4] = { 0 };
 
@@ -64,11 +68,11 @@ void IncGameTime(void)
 
 bool FormatTime(u32 time, u16 * hours, u16 * minutes, u16 * seconds)
 {
-    *seconds = (time / FRAMES_PER_SECOND) % 60;
-    *minutes = (time / FRAMES_PER_MINUTE) % 60;
-    *hours   = (time / FRAMES_PER_HOUR);
+    *seconds = k_umod(k_udiv(time, FRAMES_PER_SECOND), 60);
+    *minutes = k_umod(k_udiv(time, FRAMES_PER_MINUTE), 60);
+    *hours   = k_udiv(time, FRAMES_PER_HOUR);
 
-    return (time / 30) & 1; // clock `:` on/off boolean
+    return k_udiv(time, 30) & 1; // clock `:` on/off boolean
 }
 
 inline void EnableBgSync(int bits)
@@ -200,9 +204,7 @@ struct BgCnt * GetBgCt(u16 bgid)
 
     }
 
-#if BUGFIX
     return NULL;
-#endif
 }
 
 int GetBgChrOffset(int bg)

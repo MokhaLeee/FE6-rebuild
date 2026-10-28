@@ -29,8 +29,6 @@ SECTIONS
 
 	.text  :
 	{
-		vanilla/armfunc.o(.text)
-
 		*(.text)
 		*(.text*)
 		. = ALIGN(4);
@@ -123,7 +121,7 @@ SECTIONS
 	__ewram_lma = __ewram_overlay_end;
 	.ewdata ALIGN(0x100) (NOLOAD) : AT (__ewram_lma)
 	{
-		vanilla/hardware.o(ewram_data);
+		*(ewram_data.hardware)
 		*(ewram_data)
 		*(.ewram_data)
 		*(.ewram*)

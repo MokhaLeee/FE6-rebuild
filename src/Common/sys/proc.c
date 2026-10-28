@@ -652,9 +652,9 @@ static bool ProcCmd_EndIfDup(struct ProcDummy * proc)
 static bool ProcCmd_EndDups(struct ProcDummy * proc)
 {
     struct ProcDummy * it = sProcArray;
-    int i, count;
+    int i;
 
-    for (i = 0, count = 0; i < PROC_COUNT; i++, it++)
+    for (i = 0; i < PROC_COUNT; i++, it++)
     {
         if (it == proc)
             continue;

@@ -234,16 +234,16 @@ void func_fe6_0800285C(int unk);
 void SetOnHBlankA(Func func);
 void SetOnHBlankB(Func func);
 
-extern u8 EWRAM_DATA gBuf[0x2000];
+extern u8 gBuf[0x2000];
 
 extern i8 EWRAM_DATA gFadeComponentStep[0x20];
 extern i8 EWRAM_DATA gFadeComponents[0x600];
 extern u16 EWRAM_DATA gPal[0x200];
 
-extern u16 EWRAM_DATA gBg0Tm[0x400];
-extern u16 EWRAM_DATA gBg1Tm[0x400];
-extern u16 EWRAM_DATA gBg2Tm[0x400];
-extern u16 EWRAM_DATA gBg3Tm[0x400];
+extern u16 gBg0Tm[0x400];
+extern u16 gBg1Tm[0x400];
+extern u16 gBg2Tm[0x400];
+extern u16 gBg3Tm[0x400];
 
 extern struct KeySt * CONST_DATA gKeySt;
 

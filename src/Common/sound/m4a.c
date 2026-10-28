@@ -2,6 +2,7 @@
 
 #include "prelude.h"
 #include "hardware.h"
+#include "klib.h"
 
 #define MPLAY_JUMP_TABLE_FUNC(n) (*(gMPlayJumpTable + (n)))
 
@@ -439,19 +440,19 @@ void SampleFreqSet(u32 freq)
     freq = (freq & 0xF0000) >> 16;
     sound_info->freq = freq;
     sound_info->pcm_samples_per_vblank = gPcmSamplesPerVBlankTable[freq - 1];
-    sound_info->pcm_dma_period = PCM_DMA_BUF_SIZE / sound_info->pcm_samples_per_vblank;
+    sound_info->pcm_dma_period = k_udiv(PCM_DMA_BUF_SIZE, sound_info->pcm_samples_per_vblank);
 
     // LCD refresh rate 59.7275Hz
-    sound_info->pcm_freq = (597275 * sound_info->pcm_samples_per_vblank + 5000) / 10000;
+    sound_info->pcm_freq = k_udiv(597275 * sound_info->pcm_samples_per_vblank + 5000, 10000);
 
     // CPU frequency 16.78Mhz
-    sound_info->div_freq = (16777216 / sound_info->pcm_freq + 1) >> 1;
+    sound_info->div_freq = (k_udiv(16777216, sound_info->pcm_freq) + 1) >> 1;
 
     // Turn off timer 0.
     REG_TM0CNT_H = 0;
 
     // cycles per LCD fresh 280896
-    REG_TM0CNT_L = -(280896 / sound_info->pcm_samples_per_vblank);
+    REG_TM0CNT_L = -k_udiv(280896, sound_info->pcm_samples_per_vblank);
 
     m4aSoundVSyncOn();
 
@@ -935,8 +936,6 @@ static inline int CgbPan(struct CgbChannel * chan)
 
 void CgbModVol(struct CgbChannel * chan)
 {
-    struct SoundInfo * sound_info = SOUND_INFO_PTR;
-
     if (!CgbPan(chan))
     {
         chan->pan = 0xFF;
@@ -1577,11 +1576,7 @@ void ply_xxx(struct MusicPlayer * music_player, struct MusicPlayerTrack * track)
 
 void ply_xwave(struct MusicPlayer * music_player, struct MusicPlayerTrack * track)
 {
-    u32 wav;
-
-#ifdef BUGFIX
-    wav = 0;
-#endif
+    u32 wav = 0;
 
     READ_XCMD_BYTE(wav, 0) // UB: uninitialized variable
     READ_XCMD_BYTE(wav, 1)

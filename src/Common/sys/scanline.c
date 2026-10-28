@@ -148,7 +148,7 @@ void func_fe6_0806A218(fu16 y_top, fu16 y_bottom, fu16 color_a, fu16 color_b)
 
 void func_fe6_0806A270(int x, int y, int a, int b, u8 const *unk)
 {
-	int var_10;
+	int var_10 = 0;
 
 	InitScanlineBuf(gManimScanlineBufs[1]);
 

@@ -1,4 +1,5 @@
 #include "random.h"
+#include "klib.h"
 
 static u16 sRandStA[3];
 static i32 sRandStB;
@@ -32,21 +33,20 @@ void RandInit(int seed)
     // This table is a collection of 8 possible initial rn state
     // 3 entries will be picked based of which "seed" was given
 
-    SHOULD_BE_STATIC u16 SHOULD_BE_CONST init_table[] =
-    {
+    static u16 const init_table[] = {
         0xA36E, 0x924E,
         0xB784, 0x4F67,
         0x8092, 0x592D,
         0x8E70, 0xA794,
     };
 
-    int i = seed % 7, burn_amount;
+    int i = k_umod(seed, 7), burn_amount;
 
     sRandStA[0] = init_table[i & 7]; i++;
     sRandStA[1] = init_table[i & 7]; i++;
     sRandStA[2] = init_table[i & 7];
 
-    burn_amount = seed % 23;
+    burn_amount = k_umod(seed, 23);
 
     for (i = 0; i < burn_amount; i++)
         NextRN();
@@ -70,14 +70,14 @@ int RandNext_100(void)
 {
     // take the next rn (range 0-0xFFFF) and convert it to a range 0-99 value
     // NOTE: bugged due to rounding
-    return NextRN() / (UINT16_MAX / 100);
+    return k_udiv(NextRN() * 100, UINT16_MAX);
 }
 
 int RandNext(int max)
 {
     // take the next rn (range 0-0xFFFF) and convert it to a range 0-(max-1) value
     // NOTE: bugged due to rounding
-    return NextRN() / (UINT16_MAX / max);
+    return k_udiv(NextRN() * max, UINT16_MAX);
 }
 
 bool RandRoll(int threshold)
