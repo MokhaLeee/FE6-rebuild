@@ -34,6 +34,8 @@ static void PreGenerateMovementMap(int default_mov)
 		ARRAY_COUNT_RANGE3x3
 	};
 
+	KernelPassSkillActivated = false;
+
 	if (!gMapFloodSt.has_unit)
 		return;
 
@@ -42,7 +44,6 @@ static void PreGenerateMovementMap(int default_mov)
 	/**
 	 * check for PASS skill
 	 */
-	KernelPassSkillActivated = false;
 	if (SkillTester(unit, SID_MovePass))
 		if (GetUnitCurrentHp(unit) >= perc_of(GetUnitMaxHp(unit), SKILL_EFF0(SID_MovePass)))
 			KernelPassSkillActivated = true;
