@@ -50,12 +50,8 @@ static void PreGenerateMovementMap(int default_mov)
 	/**
 	 * Here we use generic buffer as a external cost buffer
 	 */
-	MapInit(gBuf, &KernelExtMoveBarrierMap, gMapSize.x, gMapSize.y);
-	MapInit(gBuf + 0x1000, &KernelExtMovePioneerMap, gMapSize.x, gMapSize.y);
-
-#if 1
-	return;
-#endif
+	MapInit(gBuf + 0x400, &KernelExtMoveBarrierMap, gMapSize.x, gMapSize.y);
+	MapInit(gBuf + 0xC00, &KernelExtMovePioneerMap, gMapSize.x, gMapSize.y);
 
 	MapFill(KernelExtMoveBarrierMap, 0);
 	MapFill(KernelExtMovePioneerMap, 0);
@@ -157,9 +153,10 @@ static void PreGenerateMovementMap(int default_mov)
 
 void BeginMapFlood(int x, int y, int move, int uid)
 {
+	u8 **working_map = gWorkingMap;
+
 	gMapFloodSt.waiting_queue = gMapFloodSquareBufB;
 	gMapFloodSt.active_queue  = gMapFloodSquareBufA;
-
 	gMapFloodSt.move = move;
 
 	if (uid == 0) {
@@ -186,6 +183,8 @@ void BeginMapFlood(int x, int y, int move, int uid)
 	/* CHAX */
 	PreGenerateMovementMap(move);
 
+	/* revert working-map */
+	SetWorkingMap(working_map);
 	MapFloodCore();
 }
 
