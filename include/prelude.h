@@ -10,6 +10,8 @@
 #define FE7 (FE7J || FE7E || FE7U)
 #define FE8 (FE8J || FE8U)
 
+#define CHAX 1
+
 #if defined(MODERN) && MODERN
 #  ifndef MODERN
 #    define MODERN
