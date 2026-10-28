@@ -65,11 +65,11 @@ static void PreGenerateMovementMap(int default_mov)
 			int pioneer_range = 0;
 
 			iuid = gMapUnit[iy][ix];
-			if (iuid == 0 || iuid == 0xFF)
+			if (likely(iuid == 0 || iuid == 0xFF))
 				continue;
 
 			iunit = GetUnit(iuid);
-			if (UNIT_IS_VALID(iunit))
+			if (unlikely(!UNIT_IS_VALID(iunit)))
 				continue;
 
 			/**

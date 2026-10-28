@@ -19,7 +19,7 @@
 void InitGlobalSaveInfo(void);
 
 static const char build_version[] = CONFIG_VERSION;
-static const char build_time[] = __DATE__ __TIME__;
+static const char build_time[] = __DATE__" "__TIME__;
 
 void AgbMain(void)
 {
