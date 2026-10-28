@@ -2,7 +2,7 @@
 #include "map.h"
 #include "mapwork.h"
 
-#define LOCAL_HACK_TRIG 0
+#define LOCAL_HACK_TRIG 1
 
 extern EWRAM_OVERLAY(0) u8 **KernelExtMoveBarrierMap;
 extern EWRAM_OVERLAY(0) u8 **KernelExtMovePioneerMap;

@@ -4,6 +4,7 @@
 #include "hardware.h"
 #include "unit.h"
 #include "faction.h"
+#include "event.h"
 
 #include "klib.h"
 #include "skill-sys.h"
@@ -36,6 +37,21 @@ static void PreGenerateMovementMap(int default_mov)
 
 	KernelPassSkillActivated = false;
 
+	/**
+	 * Here we use generic buffer as a external cost buffer
+	 */
+	MapInit(gBuf + 0x400, &KernelExtMoveBarrierMap, gMapSize.x, gMapSize.y);
+	MapInit(gBuf + 0xC00, &KernelExtMovePioneerMap, gMapSize.x, gMapSize.y);
+
+	MapFill(KernelExtMoveBarrierMap, 0);
+	MapFill(KernelExtMovePioneerMap, 0);
+
+	/**
+	 * in event-engine, skip all configs
+	 */
+	if (IsEventRunning())
+		return;
+
 	if (!gMapFloodSt.has_unit)
 		return;
 
@@ -47,15 +63,6 @@ static void PreGenerateMovementMap(int default_mov)
 	if (SkillTester(unit, SID_MovePass))
 		if (GetUnitCurrentHp(unit) >= perc_of(GetUnitMaxHp(unit), SKILL_EFF0(SID_MovePass)))
 			KernelPassSkillActivated = true;
-
-	/**
-	 * Here we use generic buffer as a external cost buffer
-	 */
-	MapInit(gBuf + 0x400, &KernelExtMoveBarrierMap, gMapSize.x, gMapSize.y);
-	MapInit(gBuf + 0xC00, &KernelExtMovePioneerMap, gMapSize.x, gMapSize.y);
-
-	MapFill(KernelExtMoveBarrierMap, 0);
-	MapFill(KernelExtMovePioneerMap, 0);
 
 	for (iy = 0; iy < gMapSize.y; iy++) {
 		for (ix = 0; ix < gMapSize.x; ix++) {

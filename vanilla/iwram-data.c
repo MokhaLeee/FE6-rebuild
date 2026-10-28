@@ -30,11 +30,6 @@ IWRAM_DATA struct DispIo gDispIo = {};
 IWRAM_DATA IrqFunc gIrqFuncs[INT_COUNT] = {};
 
 /**
- * RAM func
- */
-IWRAM_DATA void (* MapFloodCoreRamFunc)(void) = NULL;
-
-/**
  * OAM
  */
 IWRAM_DATA u16 gOamAffinePutId = 0;
@@ -48,7 +43,6 @@ IWRAM_DATA Func gOnHBlankB = NULL;
  */
 IWRAM_DATA struct OamView *gOamAffinePutIt = NULL;
 IWRAM_DATA u32 IntrMainRam[0x200] = {};
-IWRAM_DATA void (* MapFloodCoreStepRamFunc)(void) = NULL;
 
 /**
  * Event
