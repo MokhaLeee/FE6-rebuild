@@ -4,115 +4,115 @@
 
 #include "proc.h"
 
-enum
-{
-    HELPBOX_INFO_NONE,
-    HELPBOX_INFO_WEAPON,
-    HELPBOX_INFO_STAFF,
+enum { HELPBOX_INFO_NONE,
+       HELPBOX_INFO_WEAPON,
+       HELPBOX_INFO_STAFF,
 };
 
-struct HelpBoxProc
-{
-    /* 00 */ PROC_HEADER;
+struct HelpBoxProc {
+	/* 00 */ PROC_HEADER;
 
-    /* 2C */ struct HelpBoxInfo const * info;
+	/* 2C */ struct HelpBoxInfo const *info;
 
-    /* 30 */ i16 x_box;
-    /* 32 */ i16 y_box;
-    /* 34 */ i16 w_box;
-    /* 36 */ i16 h_box;
-    /* 38 */ i16 x_box_init;
-    /* 3A */ i16 y_box_init;
-    /* 3C */ i16 x_box_fini;
-    /* 3E */ i16 y_box_fini;
-    /* 40 */ i16 w_box_init;
-    /* 42 */ i16 h_box_init;
-    /* 44 */ i16 w_box_fini;
-    /* 46 */ i16 h_box_fini;
-    /* 48 */ i16 timer;
-    /* 4A */ i16 timer_end;
+	/* 30 */ i16 x_box;
+	/* 32 */ i16 y_box;
+	/* 34 */ i16 w_box;
+	/* 36 */ i16 h_box;
+	/* 38 */ i16 x_box_init;
+	/* 3A */ i16 y_box_init;
+	/* 3C */ i16 x_box_fini;
+	/* 3E */ i16 y_box_fini;
+	/* 40 */ i16 w_box_init;
+	/* 42 */ i16 h_box_init;
+	/* 44 */ i16 w_box_fini;
+	/* 46 */ i16 h_box_fini;
+	/* 48 */ i16 timer;
+	/* 4A */ i16 timer_end;
 
-    /* 4C */ u16 msg;
-    /* 4E */ u16 item;
+	/* 4C */ u16 msg;
+	/* 4E */ u16 item;
 
-    /* 50 */ u16 move_key_bit; // move ctrl proc only
+	/* 50 */ u16 move_key_bit; // move ctrl proc only
 
-    /* 52 */ u8 unk_52;
+	/* 52 */ u8 plain;
 
-    // NOTE: there's likely more, need to decompile more files
+	// NOTE: there's likely more, need to decompile more files
 };
 
-struct ProcTypeWritter
-{
-    /* 00 */ PROC_HEADER;
+struct ProcTypeWritter {
+	/* 00 */ PROC_HEADER;
 
-    /* 2C */ char const * str_it;
-    /* 30 */ struct Font * font;
-    /* 34 */ struct Text * text[6];
-    /* 4C */ STRUCT_PAD(0x4C, 0x5C);
-    /* 5C */ i16 line;
-    /* 5E */ i16 clock;
-    /* 60 */ i16 clock_interval;
-    /* 62 */ i16 chars_per_print;
+	/* 2C */ char const *str_it;
+	/* 30 */ struct Font *font;
+	/* 34 */ struct Text *text[6];
+	/* 4C */ STRUCT_PAD(0x4C, 0x5C);
+	/* 5C */ i16 line;
+	/* 5E */ i16 clock;
+	/* 60 */ i16 clock_interval;
+	/* 62 */ i16 chars_per_print;
 };
 
-struct HelpBoxInfo
-{
-    /* 00 */ struct HelpBoxInfo const * adjacent_up;
-    /* 04 */ struct HelpBoxInfo const * adjacent_down;
-    /* 08 */ struct HelpBoxInfo const * adjacent_left;
-    /* 0C */ struct HelpBoxInfo const * adjacent_right;
-    /* 10 */ u8 x, y;
-    /* 12 */ u16 msg;
-    /* 14 */ void (* redirect)(struct HelpBoxProc * proc);
-    /* 18 */ void (* populate)(struct HelpBoxProc * proc);
+struct HelpBoxInfo {
+	/* 00 */ struct HelpBoxInfo const *adjacent_up;
+	/* 04 */ struct HelpBoxInfo const *adjacent_down;
+	/* 08 */ struct HelpBoxInfo const *adjacent_left;
+	/* 0C */ struct HelpBoxInfo const *adjacent_right;
+	/* 10 */ u8 x, y;
+	/* 12 */ u16 msg;
+	/* 14 */ void (*redirect)(struct HelpBoxProc *proc);
+	/* 18 */ void (*populate)(struct HelpBoxProc *proc);
 };
 
-void UpdateHelpBoxDisplay(struct HelpBoxProc * proc, int interpolate_method);
-void HelpBox_OnOpen(struct HelpBoxProc * proc);
-void HelpBox_OnLoop(struct HelpBoxProc * proc);
-void HelpBox_OnClose(struct HelpBoxProc * proc);
-void HelpBox_WaitClose(struct HelpBoxProc * proc);
+void UpdateHelpBoxDisplay(struct HelpBoxProc *proc, int interpolate_method);
+void HelpBox_OnOpen(struct HelpBoxProc *proc);
+void HelpBox_OnLoop(struct HelpBoxProc *proc);
+void HelpBox_OnClose(struct HelpBoxProc *proc);
+void HelpBox_WaitClose(struct HelpBoxProc *proc);
 void StartHelpBox(int x, int y, int msg);
 void StartItemHelpBox(int x, int y, int item);
-void StartHelpBoxExt(struct HelpBoxInfo const * info, int unk);
-void StartHelpBox_08070804(int x, int y, int msg);
+void StartHelpBoxExt(struct HelpBoxInfo const *info, int plain);
+void StartSimpleHelpBox(int x, int y, int msg);
 void CloseHelpBox(void);
 void KillHelpBox(void);
 // HelpBoxMoveControl_OnInitBox
 // HelpBoxMoveControl_OnIdle
 // HelpBoxMoveControl_OnEnd
-void StartMovingHelpBox(struct HelpBoxInfo const * info, ProcPtr parent);
-void StartMovingHelpBoxExt(struct HelpBoxInfo const * info, ProcPtr parent, int x, int y);
-void ApplyHelpBoxContentSize(struct HelpBoxProc * proc, int w_inner, int h_inner);
-void ApplyHelpBoxPosition(struct HelpBoxProc * proc, int x, int y);
-void SetHelpBoxInitPosition(struct HelpBoxProc * proc, int x, int y);
-void ResetHelpBoxInitSize(struct HelpBoxProc * proc);
+void StartMovingHelpBox(struct HelpBoxInfo const *info, ProcPtr parent);
+void StartMovingHelpBoxExt(struct HelpBoxInfo const *info,
+			   ProcPtr parent,
+			   int x,
+			   int y);
+void ApplyHelpBoxContentSize(struct HelpBoxProc *proc,
+			     int w_inner,
+			     int h_inner);
+void ApplyHelpBoxPosition(struct HelpBoxProc *proc, int x, int y);
+void SetHelpBoxInitPosition(struct HelpBoxProc *proc, int x, int y);
+void ResetHelpBoxInitSize(struct HelpBoxProc *proc);
 int GetHelpBoxItemInfoKind(int item);
-void HelpBoxPopulateAutoItem(struct HelpBoxProc * proc);
-int HelpBoxTryRelocateUp(struct HelpBoxProc * proc);
-int HelpBoxTryRelocateDown(struct HelpBoxProc * proc);
-int HelpBoxTryRelocateLeft(struct HelpBoxProc * proc);
-int HelpBoxTryRelocateRight(struct HelpBoxProc * proc);
+void HelpBoxPopulateAutoItem(struct HelpBoxProc *proc);
+int HelpBoxTryRelocateUp(struct HelpBoxProc *proc);
+int HelpBoxTryRelocateDown(struct HelpBoxProc *proc);
+int HelpBoxTryRelocateLeft(struct HelpBoxProc *proc);
+int HelpBoxTryRelocateRight(struct HelpBoxProc *proc);
 // func_fe6_08070C4C
 // StartLockingHelpBox
-struct HelpBoxInfo const * GetLastHelpBoxInfo(void);
+struct HelpBoxInfo const *GetLastHelpBoxInfo(void);
 void PutChapterTitlePalettle(int flags, int pal);
 void PutChapterTitleGfx(int chr, int chapter);
 void PutChapterTitleBG1(int chr);
 void PutChapterTitleBG2(int chr);
-void PutChapterTitleTextTSA(u16 * tm, int pal);
-void PutChapterTitleBgTSA(u16 * tm, int pal);
-void PutChapterTitleBgDefaultTSA(u16 * tm, int pal);
-int GetChapterTitleExtra(struct PlaySt const * play_st);
-void LoadHelpBoxGfx(void * vram, int pal);
+void PutChapterTitleTextTSA(u16 *tm, int pal);
+void PutChapterTitleBgTSA(u16 *tm, int pal);
+void PutChapterTitleBgDefaultTSA(u16 *tm, int pal);
+int GetChapterTitleExtra(struct PlaySt const *play_st);
+void LoadHelpBoxGfx(void *vram, int pal);
 // func_fe6_08070EEC
 void PutSpriteTalkBox(int x_box, int y_box, int w_box, int h_box);
 // DrawHelpBoxWeaponLabels
 // DrawHelpBoxWeaponStats
 // DrawHelpBoxStaffLabels
-void TypeWritter_Loop(struct ProcTypeWritter * proc);
-void DemoMonologueDisp_Main(struct ProcTypeWritter * proc);
+void TypeWritter_Loop(struct ProcTypeWritter *proc);
+void DemoMonologueDisp_Main(struct ProcTypeWritter *proc);
 // HelpBoxSetupstringLines
 // HelpBoxDrawstring
 // HelpBoxIntroDrawTexts
@@ -127,12 +127,12 @@ void ClearHelpBoxText(void);
 // func_fe6_080716F0
 // func_fe6_08071714
 // func_fe6_08071734
-void func_fe6_08071748(struct HelpBoxInfo const * info);
+void func_fe6_08071748(struct HelpBoxInfo const *info);
 // func_fe6_08071760
-void func_fe6_08071778(struct HelpBoxProc * proc, int w_inner, int h_inner);
-void func_fe6_080717B8(struct HelpBoxProc * proc, int x, int y);
-void func_fe6_08071830(struct HelpBoxProc * proc, int x, int y);
-void func_fe6_08071838(struct HelpBoxProc * proc);
+void func_fe6_08071778(struct HelpBoxProc *proc, int w_inner, int h_inner);
+void func_fe6_080717B8(struct HelpBoxProc *proc, int x, int y);
+void func_fe6_08071830(struct HelpBoxProc *proc, int x, int y);
+void func_fe6_08071838(struct HelpBoxProc *proc);
 int func_fe6_08071848(int item);
 // func_fe6_08071888
 // func_fe6_080718A8
@@ -164,7 +164,7 @@ void func_fe6_080721D0(void);
 extern struct ProcScr CONST_DATA ProcScr_HelpBox[];
 extern struct ProcScr CONST_DATA ProcScr_HelpBoxMoveControl[];
 
-extern u8 const * CONST_DATA gChapterTitleData[]; // array img ref
+extern u8 const *CONST_DATA gChapterTitleData[]; // array img ref
 
 extern struct ProcScr CONST_DATA ProcScr_TypeWritter[];
 extern struct ProcScr CONST_DATA ProcScr_DemoMonologueDisp[];

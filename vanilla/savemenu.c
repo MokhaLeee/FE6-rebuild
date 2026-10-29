@@ -26,7 +26,9 @@ void SaveMenu_SetConfirmPrompt(struct SaveMenuProc *proc, bool display);
 void SaveMenu_PutPromptText(char const *string, bool display);
 bool SaveMenu_HasRemainingMainMenuAction(struct SaveMenuProc *proc);
 bool SaveMenu_SelectXmapSaveSlot(struct SaveMenuProc *proc, int direction);
-void SaveMenu_StartWindowEffectProc(ProcPtr parent, fi8 anim_direction, fu8 anim_speed);
+void SaveMenu_StartWindowEffectProc(ProcPtr parent,
+				    fi8 anim_direction,
+				    fu8 anim_speed);
 void SaveMenu_ExecXmap(fu8 arg_0, ProcPtr parent);
 void SaveMenu_ExecSoundroom(ProcPtr parent);
 void StartSaveDrawFadeIn(ProcPtr parent);
@@ -38,7 +40,7 @@ extern u16 const Pal_SaveMenuObjHighlightCycle[]; /* colors */
 #define REG_BLDY_16 (*(u16 volatile *)&REG_BLDY)
 
 u16 EWRAM_OVERLAY(savemenu) gSaveMenuFadeFlag = 0;
-u16 EWRAM_OVERLAY(savemenu) gSaveMenuSavedPalette[0x200] = { 0 };
+u16 EWRAM_OVERLAY(savemenu) gSaveMenuSavedPalette[0x200] = {0};
 
 void SaveMenuOnHBlank(void)
 {
@@ -96,7 +98,8 @@ fu8 SaveMenu_GetFirstSetBitIndex(fu8 byte)
 
 void SaveMenu_UpdateHelpBox(struct SaveMenuProc *proc)
 {
-	if ((proc->suspend_save_id == 0xFF) || (proc->confirm_state == SAVEMENU_CONFIRM_NONE)) {
+	if ((proc->suspend_save_id == 0xFF) ||
+	    (proc->confirm_state == SAVEMENU_CONFIRM_NONE)) {
 		CloseHelpBox();
 		proc->help_box_shown = 0;
 
@@ -107,8 +110,10 @@ void SaveMenu_UpdateHelpBox(struct SaveMenuProc *proc)
 	case SAVEMENU_ACTION_CONTINUE_GAME:
 	case SAVEMENU_ACTION_NEW_GAME:
 	case SAVEMENU_ACTION_EXTRA_MENU:
-		if (proc->difficulty_choice != SAVEMENU_DIFFICULTY_UNSET && proc->confirm_state != SAVEMENU_CONFIRM_NONE && proc->help_box_shown == 0) {
-			StartHelpBox_08070804(0x30, 0x30, MSG_6C3);
+		if (proc->difficulty_choice != SAVEMENU_DIFFICULTY_UNSET &&
+		    proc->confirm_state != SAVEMENU_CONFIRM_NONE &&
+		    proc->help_box_shown == 0) {
+			StartSimpleHelpBox(0x30, 0x30, MSG_6C3);
 			proc->help_box_shown = 1;
 		}
 
@@ -118,8 +123,11 @@ void SaveMenu_UpdateHelpBox(struct SaveMenuProc *proc)
 
 void SaveMenu_InitSong(struct SaveMenuProc *proc)
 {
-	if ((proc->action == SAVEMENU_ACTION_MAIN_MENU && (GetCurrentBgmSong() == SONG_01 || GetCurrentBgmSong() == SONG_44 || GetCurrentBgmSong() == SONG_01))
-		|| proc->action == SAVEMENU_ACTION_SAVE_SCREEN) {
+	if ((proc->action == SAVEMENU_ACTION_MAIN_MENU &&
+	     (GetCurrentBgmSong() == SONG_01 ||
+	      GetCurrentBgmSong() == SONG_44 ||
+	      GetCurrentBgmSong() == SONG_01)) ||
+	    proc->action == SAVEMENU_ACTION_SAVE_SCREEN) {
 		StartBgmVolumeChange(0x100, 0x80, 0x20, NULL);
 		return;
 	}
@@ -133,10 +141,18 @@ void SaveMenu_InitSong(struct SaveMenuProc *proc)
 void SaveMenu_InitDisplay(struct SaveMenuProc *proc)
 {
 	static u16 SHOULD_BE_CONST savemenu_bg_config[12] = {
-		0x0000, 0x6000, BG_SIZE_256x256,
-		0xC000, 0x6800, BG_SIZE_256x256,
-		0x8000, 0x7800, BG_SIZE_256x256,
-		0x8000, 0x7800, BG_SIZE_256x256,
+		0x0000,
+		0x6000,
+		BG_SIZE_256x256,
+		0xC000,
+		0x6800,
+		BG_SIZE_256x256,
+		0x8000,
+		0x7800,
+		BG_SIZE_256x256,
+		0x8000,
+		0x7800,
+		BG_SIZE_256x256,
 	};
 
 	InitBgs(savemenu_bg_config);
@@ -173,11 +189,15 @@ void SaveMenu_PutScreen(struct SaveMenuProc *proc)
 	ResetTextFont();
 	ApplySystemObjectsGraphics();
 	ApplyPalettes(Pal_CommGameBgScreenInShop, 2, 2);
-	Decompress(Img_MuralBackground, ((void *)VRAM) + GetBgChrOffset(0) + CHR_SIZE * BGCHR_SAVEMENU_0);
+	Decompress(Img_MuralBackground,
+		   ((void *)VRAM) + GetBgChrOffset(0) +
+			   CHR_SIZE * BGCHR_SAVEMENU_0);
 	TmApplyTsa(gBg0Tm, Tsa_CommGameBgScreenInShop, 0);
 	ApplyPalettes(Pal_SupportMenu, 0x11, 8);
-	LoadHelpBoxGfx(OBJ_VRAM0 + CHR_SIZE * OBCHR_SAVEMENU_1C0, OBPAL_SAVEMENU_9);
-	SaveMenu_CopyPaletteBlock(Pal_SaveMenuObjHighlightCycle, gSaveMenuObjHighlightPalette, 2);
+	LoadHelpBoxGfx(OBJ_VRAM0 + CHR_SIZE * OBCHR_SAVEMENU_1C0,
+		       OBPAL_SAVEMENU_9);
+	SaveMenu_CopyPaletteBlock(
+		Pal_SaveMenuObjHighlightCycle, gSaveMenuObjHighlightPalette, 2);
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT | BG3_SYNC_BIT);
 
 	proc->anim_clock = 0;
@@ -188,14 +208,17 @@ void SaveMenu_PutScreen(struct SaveMenuProc *proc)
 	Decompress(Img_SupportMenu, OBJ_VRAM0 + 0x1000);
 
 	if (proc->action == SAVEMENU_ACTION_SAVE_SCREEN) {
-		LoadHelpBoxGfx(OBJ_VRAM0 + CHR_SIZE * OBCHR_SAVEMENU_1C0, OBPAL_SAVEMENU_9);
+		LoadHelpBoxGfx(OBJ_VRAM0 + CHR_SIZE * OBCHR_SAVEMENU_1C0,
+			       OBPAL_SAVEMENU_9);
 	} else {
-		Decompress(Img_SaveMenuDefaultObjGfx, OBJ_VRAM0 + CHR_SIZE * OBCHR_SAVEMENU_1C0);
+		Decompress(Img_SaveMenuDefaultObjGfx,
+			   OBJ_VRAM0 + CHR_SIZE * OBCHR_SAVEMENU_1C0);
 	}
 
 	if (proc->action == SAVEMENU_ACTION_EXTRA_MENU) {
 		if (proc->sel_index == 1) {
-			LoadHelpBoxGfx(OBJ_VRAM0 + CHR_SIZE * OBCHR_SAVEMENU_200, 9);
+			LoadHelpBoxGfx(
+				OBJ_VRAM0 + CHR_SIZE * OBCHR_SAVEMENU_200, 9);
 		}
 	} else {
 		if (proc->action == SAVEMENU_ACTION_SAVE_SCREEN) {
@@ -236,10 +259,15 @@ void SaveMenu_SetupActiveDisplay(struct SaveMenuProc *proc)
 
 	SetDispEnable(1, 1, 1, 1, 1);
 
-	Decompress(Img_SaveMenuChapterTitleBgChr, ((void *)VRAM) + GetBgChrOffset(2) + CHR_SIZE * BGCHR_SAVEMENU_2_0);
+	Decompress(Img_SaveMenuChapterTitleBgChr,
+		   ((void *)VRAM) + GetBgChrOffset(2) +
+			   CHR_SIZE * BGCHR_SAVEMENU_2_0);
 
 	/* SPINNY BOI LETSGO */
-	func_fe6_08001B8C(gBg3Tm, Tsa_SaveMenuSpinDecoration, 0, 5 /* 32 bytes per line */);
+	func_fe6_08001B8C(gBg3Tm,
+			  Tsa_SaveMenuSpinDecoration,
+			  0,
+			  5 /* 32 bytes per line */);
 	EnableBgSync(BG3_SYNC_BIT);
 
 	for (i = 0; i < 4; i++) {
@@ -256,9 +284,12 @@ void SaveMenu_SetupActiveDisplay(struct SaveMenuProc *proc)
 		SaveMenu_BuildMainMenuMask(proc);
 
 		if (proc->action == SAVEMENU_ACTION_EXTRA_MENU) {
-			proc->main_menu_cursor = SaveMenu_CountMainMenuItemsBefore(SAVEMENU_ACTION_EXTRA_MENU, proc);
+			proc->main_menu_cursor =
+				SaveMenu_CountMainMenuItemsBefore(
+					SAVEMENU_ACTION_EXTRA_MENU, proc);
 		} else {
-			proc->action = GetSaveMenuSelectIndex(proc->main_menu_mask, proc->main_menu_cursor);
+			proc->action = GetSaveMenuSelectIndex(
+				proc->main_menu_mask, proc->main_menu_cursor);
 		}
 	}
 
@@ -305,7 +336,8 @@ void SaveMenu_MainMenu_Loop(struct SaveMenuProc *proc)
 	}
 
 	if ((gKeySt->pressed & KEY_BUTTON_A) != 0) {
-		proc->action = GetSaveMenuSelectIndex(proc->main_menu_mask, proc->main_menu_cursor);
+		proc->action = GetSaveMenuSelectIndex(proc->main_menu_mask,
+						      proc->main_menu_cursor);
 		PlaySe(SONG_6A);
 
 		proc->anim_clock = 0;
@@ -317,22 +349,26 @@ void SaveMenu_MainMenu_Loop(struct SaveMenuProc *proc)
 			break;
 
 		case SAVEMENU_ACTION_CONTINUE_GAME:
-			proc->selected_id = SaveMenu_GetNextSaveIndex(ReadLastGameSaveId(), TRUE, 1);
+			proc->selected_id = SaveMenu_GetNextSaveIndex(
+				ReadLastGameSaveId(), TRUE, 1);
 			Proc_Goto(proc, L_SAVEMENU_2);
 			break;
 
 		case SAVEMENU_ACTION_COPY:
-			proc->selected_id = SaveMenu_GetNextSaveIndex(ReadLastGameSaveId(), TRUE, 1);
+			proc->selected_id = SaveMenu_GetNextSaveIndex(
+				ReadLastGameSaveId(), TRUE, 1);
 			Proc_Goto(proc, L_SAVEMENU_2);
 			break;
 
 		case SAVEMENU_ACTION_ERASE:
-			proc->selected_id = SaveMenu_GetNextSaveIndex(ReadLastGameSaveId(), TRUE, 1);
+			proc->selected_id = SaveMenu_GetNextSaveIndex(
+				ReadLastGameSaveId(), TRUE, 1);
 			Proc_Goto(proc, L_SAVEMENU_2);
 			break;
 
 		case SAVEMENU_ACTION_NEW_GAME:
-			proc->selected_id = SaveMenu_GetNextSaveIndex(proc->selected_id, FALSE, 1);
+			proc->selected_id = SaveMenu_GetNextSaveIndex(
+				proc->selected_id, FALSE, 1);
 			Proc_Goto(proc, L_SAVEMENU_2);
 			break;
 
@@ -361,7 +397,8 @@ void SaveMenu_HandleSlotConfirm(struct SaveMenuProc *proc)
 				proc->copy_from_id = proc->selected_id;
 				SaveMenu_ChangeSaveSlot(proc, 1);
 			} else {
-				CopyGameSave(proc->copy_from_id, proc->selected_id);
+				CopyGameSave(proc->copy_from_id,
+					     proc->selected_id);
 				Proc_Goto(proc, L_SAVEMENU_5);
 			}
 
@@ -409,10 +446,14 @@ void SaveMenu_HandleSlotConfirm(struct SaveMenuProc *proc)
 
 		case SAVEMENU_ACTION_NEW_GAME:
 			if (proc->confirm_state == SAVEMENU_CONFIRM_YES) {
-				if (proc->difficulty_choice == SAVEMENU_DIFFICULTY_NORMAL) {
-					WriteNewGameSave(proc->selected_id, FALSE);
-				} else if (proc->difficulty_choice == SAVEMENU_DIFFICULTY_HARD) {
-					WriteNewGameSave(proc->selected_id, TRUE);
+				if (proc->difficulty_choice ==
+				    SAVEMENU_DIFFICULTY_NORMAL) {
+					WriteNewGameSave(proc->selected_id,
+							 FALSE);
+				} else if (proc->difficulty_choice ==
+					   SAVEMENU_DIFFICULTY_HARD) {
+					WriteNewGameSave(proc->selected_id,
+							 TRUE);
 				}
 
 				Proc_Goto(proc, L_SAVEMENU_5);
@@ -503,11 +544,14 @@ void SaveMenu_SaveSlot_Loop(struct SaveMenuProc *proc)
 			break;
 
 		case SAVEMENU_ACTION_NEW_GAME:
-			if (proc->difficulty_choice == SAVEMENU_DIFFICULTY_UNSET) {
+			if (proc->difficulty_choice ==
+			    SAVEMENU_DIFFICULTY_UNSET) {
 				if (proc->confirm_state == SAVEMENU_CONFIRM_YES)
-					proc->difficulty_choice = SAVEMENU_DIFFICULTY_NORMAL;
+					proc->difficulty_choice =
+						SAVEMENU_DIFFICULTY_NORMAL;
 				else
-					proc->difficulty_choice = SAVEMENU_DIFFICULTY_HARD;
+					proc->difficulty_choice =
+						SAVEMENU_DIFFICULTY_HARD;
 
 				SaveMenu_SetConfirmPrompt(proc, 0);
 
@@ -515,21 +559,30 @@ void SaveMenu_SaveSlot_Loop(struct SaveMenuProc *proc)
 					Proc_Goto(proc, L_SAVEMENU_6);
 					break;
 				}
-			} else if (IsNotFirstPlaythrough() && proc->confirm_state == SAVEMENU_CONFIRM_NONE) {
-				proc->difficulty_choice = SAVEMENU_DIFFICULTY_UNSET;
+			} else if (IsNotFirstPlaythrough() &&
+				   proc->confirm_state ==
+					   SAVEMENU_CONFIRM_NONE) {
+				proc->difficulty_choice =
+					SAVEMENU_DIFFICULTY_UNSET;
 				proc->confirm_state = SAVEMENU_CONFIRM_YES;
-				SaveMenu_PutPromptText(JTEXT("ノーマル　ハード"), TRUE);
+				SaveMenu_PutPromptText(
+					JTEXT("ノーマル　ハード"), TRUE);
 				PlaySe(SONG_6A);
 			}
 
-			if (proc->difficulty_choice != SAVEMENU_DIFFICULTY_UNSET) {
+			if (proc->difficulty_choice !=
+			    SAVEMENU_DIFFICULTY_UNSET) {
 				if (proc->suspend_save_id != 0xFF) {
 					SaveMenu_HandleSlotConfirm(proc);
 				} else {
-					if (proc->difficulty_choice == SAVEMENU_DIFFICULTY_NORMAL) {
-						WriteNewGameSave(proc->selected_id, 0);
-					} else if (proc->difficulty_choice == SAVEMENU_DIFFICULTY_HARD) {
-						WriteNewGameSave(proc->selected_id, 1);
+					if (proc->difficulty_choice ==
+					    SAVEMENU_DIFFICULTY_NORMAL) {
+						WriteNewGameSave(
+							proc->selected_id, 0);
+					} else if (proc->difficulty_choice ==
+						   SAVEMENU_DIFFICULTY_HARD) {
+						WriteNewGameSave(
+							proc->selected_id, 1);
 					}
 
 					Proc_Goto(proc, L_SAVEMENU_5);
@@ -578,9 +631,17 @@ void SaveMenu_ActionAnim_Loop(struct SaveMenuProc *proc)
 		if (proc->chapter_title_ids[proc->selected_id] != 0xFF) {
 			/* tyvm Eebit */
 			/* TODO: there's probably something better to do here */
-			PutChapterTitleGfx(((u32)(proc->selected_id * 0x800 + 0x16800) & 0x0001FFFF) >> 5, proc->chapter_title_ids[proc->selected_id]);
+			PutChapterTitleGfx(
+				((u32)(proc->selected_id * 0x800 + 0x16800) &
+				 0x0001FFFF) >>
+					5,
+				proc->chapter_title_ids[proc->selected_id]);
 		} else {
-			PutChapterTitleGfx(((u32)(proc->selected_id * 0x800 + 0x16800) & 0x0001FFFF) >> 5, -1);
+			PutChapterTitleGfx(
+				((u32)(proc->selected_id * 0x800 + 0x16800) &
+				 0x0001FFFF) >>
+					5,
+				-1);
 		}
 
 		SaveMenu_UpdateChapterTitlePalettes(proc->selected_id);
@@ -598,7 +659,11 @@ void SaveMenu_ActionAnim_Loop(struct SaveMenuProc *proc)
 					proc->selected_id = proc->copy_from_id;
 					proc->copy_from_id = UINT8_MAX;
 				} else {
-					proc->selected_id = SaveMenu_GetNextSaveIndex(proc->selected_id, TRUE, 1);
+					proc->selected_id =
+						SaveMenu_GetNextSaveIndex(
+							proc->selected_id,
+							TRUE,
+							1);
 				}
 
 				Proc_Goto(proc, L_SAVEMENU_4);
@@ -620,9 +685,15 @@ void SaveMenu_ActionAnim_Loop(struct SaveMenuProc *proc)
 	if (proc->anim_clock == 0x10) {
 		SetObjAffineAuto(proc->selected_id, 0, 0x100, 0x100);
 	} else if (proc->anim_clock < 8) {
-		SetObjAffineAuto(proc->selected_id, 0, 0x100, (proc->anim_clock * -0x20) + 0x100);
+		SetObjAffineAuto(proc->selected_id,
+				 0,
+				 0x100,
+				 (proc->anim_clock * -0x20) + 0x100);
 	} else if (proc->anim_clock < 0x10) {
-		SetObjAffineAuto(proc->selected_id, 0, 0x100, (proc->anim_clock * 0x20) - 0xE0);
+		SetObjAffineAuto(proc->selected_id,
+				 0,
+				 0x100,
+				 (proc->anim_clock * 0x20) - 0xE0);
 	}
 
 	proc->anim_clock++;
@@ -634,10 +705,14 @@ void SaveMenu_PanelScrollIn_Loop(struct SaveMenuProc *proc)
 	proc->anim_clock++;
 
 	/* TODO: what */
-	proc->panel_scroll_x = (((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) - (220 * proc->anim_clock * proc->anim_clock / 14)) / 14;
+	proc->panel_scroll_x =
+		(((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) -
+		 (220 * proc->anim_clock * proc->anim_clock / 14)) /
+		14;
 
 	if (proc->anim_clock == 14) {
-		LoadHelpBoxGfx(OBJ_VRAM0 + OBCHR_SAVEMENU_1C0 * CHR_SIZE, OBPAL_SAVEMENU_9);
+		LoadHelpBoxGfx(OBJ_VRAM0 + OBCHR_SAVEMENU_1C0 * CHR_SIZE,
+			       OBPAL_SAVEMENU_9);
 		Proc_Break(proc);
 	}
 }
@@ -648,10 +723,14 @@ void SaveMenu_PanelScrollOut_Loop(struct SaveMenuProc *proc)
 	proc->anim_clock++;
 
 	/* TODO: what */
-	proc->panel_scroll_x = -36 - (((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) - (220 * proc->anim_clock * proc->anim_clock / 14)) / 14;
+	proc->panel_scroll_x =
+		-36 - (((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) -
+		       (220 * proc->anim_clock * proc->anim_clock / 14)) /
+			      14;
 
 	if (proc->anim_clock == 14) {
-		Decompress(Img_SaveMenuDefaultObjGfx, OBJ_VRAM0 + OBCHR_SAVEMENU_1C0 * CHR_SIZE);
+		Decompress(Img_SaveMenuDefaultObjGfx,
+			   OBJ_VRAM0 + OBCHR_SAVEMENU_1C0 * CHR_SIZE);
 		Proc_Break(proc);
 	}
 }
@@ -662,7 +741,10 @@ void SaveMenu_ExtraMenuScrollIn(struct SaveMenuProc *proc)
 	proc->anim_clock++;
 
 	/* TODO: what */
-	proc->extra_panel_scroll_x = (((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) - (220 * proc->anim_clock * proc->anim_clock / 14)) / 14;
+	proc->extra_panel_scroll_x =
+		(((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) -
+		 (220 * proc->anim_clock * proc->anim_clock / 14)) /
+		14;
 
 	if (proc->anim_clock == 14) {
 		Proc_Goto(proc, L_SAVEMENU_EXTRA_MENU);
@@ -675,7 +757,10 @@ void SaveMenu_ExtraMenuScrollOut(struct SaveMenuProc *proc)
 	proc->anim_clock++;
 
 	/* TODO: what */
-	proc->extra_panel_scroll_x = 220 - (((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) - (220 * proc->anim_clock * proc->anim_clock / 14)) / 14;
+	proc->extra_panel_scroll_x =
+		220 - (((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) -
+		       (220 * proc->anim_clock * proc->anim_clock / 14)) /
+			      14;
 
 	if (proc->anim_clock == 14) {
 		Proc_Goto(proc, L_SAVEMENU_1);
@@ -688,7 +773,10 @@ void SaveMenu_XMap1ScrollIn(struct SaveMenuProc *proc)
 	proc->anim_clock++;
 
 	/* TODO: what */
-	proc->extra_panel_scroll_x = 220 + (((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) - (220 * proc->anim_clock * proc->anim_clock / 14)) / 14;
+	proc->extra_panel_scroll_x =
+		220 + (((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) -
+		       (220 * proc->anim_clock * proc->anim_clock / 14)) /
+			      14;
 	proc->panel_scroll_x = proc->extra_panel_scroll_x + 36;
 
 	if (proc->anim_clock == 14) {
@@ -702,7 +790,10 @@ void SaveMenu_XMap1ScrollOut(struct SaveMenuProc *proc)
 	proc->anim_clock++;
 
 	/* TODO: what */
-	proc->extra_panel_scroll_x = 440 - (((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) - (220 * proc->anim_clock * proc->anim_clock / 14)) / 14;
+	proc->extra_panel_scroll_x =
+		440 - (((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) -
+		       (220 * proc->anim_clock * proc->anim_clock / 14)) /
+			      14;
 	proc->panel_scroll_x = proc->extra_panel_scroll_x + 36;
 
 	if (proc->anim_clock == 14) {
@@ -739,7 +830,8 @@ void SaveMenu_ExtraMenu_Loop(struct SaveMenuProc *proc)
 	}
 
 	if ((gKeySt->pressed & KEY_BUTTON_A) != 0) {
-		proc->sel_index = GetSaveMenuSelectIndex(proc->extra_menu_mask, proc->hand_index);
+		proc->sel_index = GetSaveMenuSelectIndex(proc->extra_menu_mask,
+							 proc->hand_index);
 		PlaySe(SONG_6A);
 
 		proc->anim_clock = 0;
@@ -751,7 +843,8 @@ void SaveMenu_ExtraMenu_Loop(struct SaveMenuProc *proc)
 			break;
 
 		case 1:
-			proc->selected_id = SaveMenu_GetNextSaveIndex(ReadLastGameSaveId(), TRUE, 1);
+			proc->selected_id = SaveMenu_GetNextSaveIndex(
+				ReadLastGameSaveId(), TRUE, 1);
 			SaveMenu_SelectXmapSaveSlot(proc, 0);
 			Proc_Goto(proc, L_SAVEMENU_XMAP1_INTRO);
 			break;
@@ -787,7 +880,8 @@ bool SaveMenu_SelectXmapSaveSlot(struct SaveMenuProc *proc, int direction)
 			else
 				proc->selected_id = 0;
 
-			if ((proc->xmap_unlock_flags[proc->selected_id] & 1) != 0)
+			if ((proc->xmap_unlock_flags[proc->selected_id] & 1) !=
+			    0)
 				break;
 		}
 	} else {
@@ -797,7 +891,8 @@ bool SaveMenu_SelectXmapSaveSlot(struct SaveMenuProc *proc, int direction)
 			else
 				proc->selected_id = proc->selected_id - 1;
 
-			if ((proc->xmap_unlock_flags[proc->selected_id] & 1) != 0)
+			if ((proc->xmap_unlock_flags[proc->selected_id] & 1) !=
+			    0)
 				break;
 		}
 	}
@@ -841,7 +936,8 @@ void SaveMenu_Xmap1_Loop(struct SaveMenuProc *proc)
 			PlaySe(SONG_6A);
 		} else {
 			if (proc->help_box_shown == 0) {
-				LoadHelpBoxGfx(OBJ_VRAM0 + CHR_SIZE * 0x200, OBPAL_SAVEMENU_9);
+				LoadHelpBoxGfx(OBJ_VRAM0 + CHR_SIZE * 0x200,
+					       OBPAL_SAVEMENU_9);
 			}
 
 			SaveMenu_HandleSlotConfirm(proc);
@@ -853,7 +949,8 @@ void SaveMenu_Xmap1_Loop(struct SaveMenuProc *proc)
 			SaveMenu_SetConfirmPrompt(proc, 0);
 			SaveMenu_UpdateHelpBox(proc);
 		} else {
-			Decompress(Img_SaveMenuDefaultObjGfx, OBJ_VRAM0 + OBCHR_SAVEMENU_1C0 * CHR_SIZE);
+			Decompress(Img_SaveMenuDefaultObjGfx,
+				   OBJ_VRAM0 + OBCHR_SAVEMENU_1C0 * CHR_SIZE);
 			proc->anim_clock = 0;
 			Proc_Goto(proc, L_SAVEMENU_XMAP1_EXIT);
 		}
@@ -946,7 +1043,7 @@ void SaveMenu_ResumeXmapExtraState(struct SaveMenuProc *proc)
 struct ProcScr CONST_DATA ProcScr_SaveMenu[] = {
 	PROC_19,
 
-PROC_LABEL(L_SAVEMENU_BEGIN),
+	PROC_LABEL(L_SAVEMENU_BEGIN),
 	PROC_YIELD,
 
 	PROC_CALL(SaveMenu_InitDisplay),
@@ -959,21 +1056,21 @@ PROC_LABEL(L_SAVEMENU_BEGIN),
 
 	PROC_CALL(SaveMenu_GotoUiState),
 
-PROC_LABEL(L_SAVEMENU_1),
+	PROC_LABEL(L_SAVEMENU_1),
 	PROC_REPEAT(SaveMenu_MainMenu_Loop),
 	PROC_GOTO(L_SAVEMENU_14),
 
-PROC_LABEL(L_SAVEMENU_4),
+	PROC_LABEL(L_SAVEMENU_4),
 	PROC_REPEAT(SaveMenu_SaveSlot_Loop),
 	PROC_GOTO(L_SAVEMENU_14),
 
-PROC_LABEL(L_SAVEMENU_6),
+	PROC_LABEL(L_SAVEMENU_6),
 	PROC_SLEEP(5),
 
 	PROC_CALL(SaveMenu_SaveScreenConfirm),
 	PROC_GOTO(L_SAVEMENU_4),
 
-PROC_LABEL(L_SAVEMENU_5),
+	PROC_LABEL(L_SAVEMENU_5),
 	PROC_SLEEP(1),
 
 	PROC_CALL(SaveMenu_ActionAnim_Init),
@@ -982,33 +1079,33 @@ PROC_LABEL(L_SAVEMENU_5),
 	PROC_REPEAT(SaveMenu_ActionAnim_Loop),
 	PROC_GOTO(L_SAVEMENU_4),
 
-PROC_LABEL(L_SAVEMENU_2),
+	PROC_LABEL(L_SAVEMENU_2),
 	PROC_REPEAT(SaveMenu_PanelScrollIn_Loop),
 	PROC_GOTO(L_SAVEMENU_4),
 
-PROC_LABEL(L_SAVEMENU_3),
+	PROC_LABEL(L_SAVEMENU_3),
 	PROC_REPEAT(SaveMenu_PanelScrollOut_Loop),
 	PROC_GOTO(L_SAVEMENU_1),
 
-PROC_LABEL(L_SAVEMENU_EXTRA_INTRO),
+	PROC_LABEL(L_SAVEMENU_EXTRA_INTRO),
 	PROC_REPEAT(SaveMenu_ExtraMenuScrollIn),
 
-PROC_LABEL(L_SAVEMENU_EXTRA_EXIT),
+	PROC_LABEL(L_SAVEMENU_EXTRA_EXIT),
 	PROC_REPEAT(SaveMenu_ExtraMenuScrollOut),
 
-PROC_LABEL(L_SAVEMENU_XMAP1_INTRO),
+	PROC_LABEL(L_SAVEMENU_XMAP1_INTRO),
 	PROC_REPEAT(SaveMenu_XMap1ScrollIn),
 
-PROC_LABEL(L_SAVEMENU_XMAP1_EXIT),
+	PROC_LABEL(L_SAVEMENU_XMAP1_EXIT),
 	PROC_REPEAT(SaveMenu_XMap1ScrollOut),
 
-PROC_LABEL(L_SAVEMENU_EXTRA_MENU),
+	PROC_LABEL(L_SAVEMENU_EXTRA_MENU),
 	PROC_REPEAT(SaveMenu_ExtraMenu_Loop),
 
-PROC_LABEL(L_SAVEMENU_XMAP1_MAIN),
+	PROC_LABEL(L_SAVEMENU_XMAP1_MAIN),
 	PROC_REPEAT(SaveMenu_Xmap1_Loop),
 
-PROC_LABEL(L_SAVEMENU_13),
+	PROC_LABEL(L_SAVEMENU_13),
 	PROC_CALL(StartSaveDrawFadeOut),
 	PROC_YIELD,
 
@@ -1023,14 +1120,14 @@ PROC_LABEL(L_SAVEMENU_13),
 	PROC_CALL(StartSaveDrawFadeIn),
 	PROC_CALL(SaveMenu_ResumeXmapExtraState),
 
-PROC_LABEL(L_SAVEMENU_16),
+	PROC_LABEL(L_SAVEMENU_16),
 	PROC_CALL(StartSaveMenuFadeOutFast),
 	PROC_GOTO(L_SAVEMENU_14),
 
-PROC_LABEL(L_SAVEMENU_15),
+	PROC_LABEL(L_SAVEMENU_15),
 	PROC_CALL(StartSaveDrawFadeOut),
 
-PROC_LABEL(L_SAVEMENU_14),
+	PROC_LABEL(L_SAVEMENU_14),
 	PROC_YIELD,
 
 	PROC_CALL(SaveMenu_Finish),
@@ -1058,4 +1155,3 @@ void StartSaveMenu(ProcPtr parent)
 	proc->action = SAVEMENU_ACTION_SAVE_SCREEN;
 	proc->sel_index = 0;
 }
-
