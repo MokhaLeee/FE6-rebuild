@@ -79,9 +79,7 @@ void AiFillDangerMap(void)
         if (AreUnitIdsAllied(gActiveUnitId, unit->id))
             continue;
 
-#if BUGFIX
         item = 0;
-#endif
 
         for (j = 0; (j < ITEMSLOT_INV_COUNT) && (item_tmp = unit->items[j]); ++j)
         {
@@ -1164,11 +1162,7 @@ bool AiFunc_08033B50(void const * arg)
             return TRUE;
 
         // this was also fixed in fe8 (maybe fe7)
-#if BUGFIX
         random_number = RandNext(100);
-#else
-        RandNext(100);
-#endif
 
         if (random_number <= cast->do_offensive_threshold)
             AiAttemptOffensiveAction(AiIsUnitEnemy);

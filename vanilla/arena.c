@@ -197,11 +197,8 @@ bool ArenaIsMagicWeaponKind(int weapon_kind)
     case ITEM_KIND_ELDER:
         return TRUE;
 
-#if BUGFIX
     default:
         return FALSE;
-#endif
-
     }
 }
 
@@ -338,9 +335,7 @@ u16 ArenaGetUpgradedWeapon(u16 item)
         return item;
     }
 
-#if BUGFIX
     return 0;
-#endif
 }
 
 bool ArenaAdjustOpponentDamage(void)

@@ -152,10 +152,8 @@ void StartClassReelSpellAnim(struct Anim *anim)
 {
 	struct EfxopMagicDesc * magicFx = GetMagicEffectBufferFor(anim);
 
-#if BUGFIX
 	if (gClassReelSpellAnimFuncLut[magicFx->magicFuncIdx] == NULL)
 		return;
-#endif
 
 	gClassReelSpellAnimFuncLut[magicFx->magicFuncIdx](anim);
 }

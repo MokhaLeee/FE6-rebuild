@@ -22,13 +22,7 @@
 #include "save_xmap.h"
 
 #include "constants/chapters.h"
-
-// compiler needs to think func returns int (not u8) to match
-#if BUGFIX
-  #include "eventfunctions.h"
-#else
-  int GetEndingId(void);
-#endif
+#include "eventfunctions.h"
 
 struct ProcScr CONST_DATA ProcScr_DelayedUnlockBmDisplay[] =
 {

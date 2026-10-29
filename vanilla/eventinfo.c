@@ -108,11 +108,7 @@ struct EventInfo * SearchNextAvailableEvent(struct EventInfo * info)
     cmdid = EVT_CMD_LO(info->list_script[0]);
     info->list_script += gEventListCmdInfoTable[cmdid].length;
 
-#if BUGFIX
     return SearchAvailableEvent(info);
-#else
-    SearchAvailableEvent(info);
-#endif
 }
 
 int EvtListCmd_End(struct EventInfo * info)
@@ -806,9 +802,7 @@ bool StartAvailableActionSelectEvent(void)
     if (gPlaySt.chapter == CHAPTER_TUTORIAL && SearchAvailableEvent(&info) != NULL)
     {
         StartEventFromInfo(&info);
-#if BUGFIX
         return TRUE;
-#endif
     }
 
     return FALSE;

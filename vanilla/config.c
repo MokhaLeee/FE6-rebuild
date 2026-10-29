@@ -602,11 +602,7 @@ u8 GetGameOption(u8 item_index)
         case 2:
             return 3;
         }
-
-#if BUGFIX
-        // lol
         break;
-#endif
 
     case GAME_OPTION_TERRAIN:
         value = gPlaySt.config_terrain_mapui;

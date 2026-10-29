@@ -138,10 +138,7 @@ struct ProcScr CONST_DATA ProcScr_MonologueDisp[] =
 {
     PROC_CALL(MonologueDisp_Init),
     PROC_REPEAT(MonologueDisp_Loop),
-
-#if BUGFIX
     PROC_END
-#endif
 };
 
 void MonologueDisp_Init(struct Proc * proc)

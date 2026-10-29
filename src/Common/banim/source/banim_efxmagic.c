@@ -820,12 +820,8 @@ void EfxArrow_Loop(struct ProcEfx *proc)
 		}
 	}
 
-	if (proc->timer == (frame + 9)) {
-#if !BUGFIX
-		GetAnimAnotherSide(proc->anim);
-#endif
+	if (proc->timer == (frame + 9))
 		return;
-	}
 
 	if (proc->timer == (frame + 10)) {
 		SpellFx_Finish();
@@ -1052,9 +1048,6 @@ void EfxTeyari_Loop(struct ProcEfx *proc)
 	}
 
 	if (proc->timer == 0xE) {
-#if !BUGFIX
-		GetAnimAnotherSide(proc->anim);
-#endif
 		return;
 	}
 

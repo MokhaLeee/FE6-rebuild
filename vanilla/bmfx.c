@@ -826,9 +826,7 @@ u32 DiscardItemMenu_ExtraEntry_Display(struct MenuProc * menu, struct MenuEntPro
 
     EnableBgSync(BG0_SYNC_BIT);
 
-#if BUGFIX
     return 0;
-#endif
 }
 
 fu8 DiscardItemMenu_InventoryEntry_Select(struct MenuProc * menu, struct MenuEntProc * ent)

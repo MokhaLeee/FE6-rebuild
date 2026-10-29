@@ -404,10 +404,7 @@ fu8 MenuActionClose(struct MenuProc * proc, struct MenuEntProc * ent)
 fu8 MenuHelpBoxRegular(struct MenuProc * proc, struct MenuEntProc * ent)
 {
     StartHelpBox(ent->x * 8, ent->y * 8, ent->info->msg_help);
-
-#if BUGFIX
     return 0;
-#endif
 }
 
 void Menu_HelpBoxInit(struct MenuProc * proc)
@@ -444,10 +441,7 @@ void Menu_HelpBoxMain(struct MenuProc * proc)
 fu8 MenuActionHelpBox(struct MenuProc * proc)
 {
     Proc_GotoScript(proc, ProcScr_MenuHelpBox);
-
-#if BUGFIX
     return 0;
-#endif
 }
 
 void Menu_FrozenHelpBoxMain(struct MenuProc * proc)
@@ -472,10 +466,7 @@ fu8 MenuFrozenHelpBox(struct MenuProc * proc, int msg)
 
     LoadHelpBoxGfx(NULL, -1);
     StartHelpBox(GetUiHandPrevX(), GetUiHandPrevY(), msg);
-
-#if BUGFIX
     return 0;
-#endif
 }
 
 void FreezeMenu(void)

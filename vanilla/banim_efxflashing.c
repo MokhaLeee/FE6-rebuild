@@ -636,20 +636,16 @@ void EndProcEfxWeaponIcon(void)
 
 void DisableEfxWeaponIcon(void)
 {
-#if BUGFIX
 	if (!gpProcEfxWeaponIcon)
 		return;
-#endif
 
 	gpProcEfxWeaponIcon->invalid = true;
 }
 
 void EnableEfxWeaponIcon(void)
 {
-#if BUGFIX
 	if (!gpProcEfxWeaponIcon)
 		return;
-#endif
 
 	gpProcEfxWeaponIcon->invalid = false;
 }

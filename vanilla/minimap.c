@@ -193,9 +193,7 @@ int GetMinimapBridgeKindAt(int x, int y)
     if ((gMapTerrain[y + 1][x] == TERRAIN_LAKE) || (gMapTerrain[y - 1][x] == TERRAIN_LAKE))
         return 0x10;
 
-#if BUGFIX
     return 0x00;
-#endif
 }
 
 int GetMinimapTileAt(int x, int y)

@@ -616,7 +616,5 @@ ProcPtr StartTradeMenu(struct Unit * unit_a, struct Unit * unit_b, int unused)
     if (GetUnitItemCount(unit_a) == 0)
         proc->hoverColumn = TRADEMENU_UNIT_RIGHT;
 
-#if BUGFIX
     return proc;
-#endif
 }
