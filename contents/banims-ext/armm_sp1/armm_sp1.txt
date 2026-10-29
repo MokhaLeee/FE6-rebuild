@@ -195,11 +195,11 @@ C2B
 C0D
 ~~~
 /// - Mode 9
-2 p- armm_sp1_enter_01.png
-2 p- armm_sp1_enter_02.png
-2 p- armm_sp1_enter_03.png
-2 p- armm_sp1_enter_04.png
-2 p- armm_sp1_enter_05.png
+3 p- armm_sp1_enter_01.png
+3 p- armm_sp1_enter_02.png
+3 p- armm_sp1_enter_03.png
+3 p- armm_sp1_enter_04.png
+4 p- armm_sp1_enter_05.png
 2 p- armm_sp1_enter_06.png
 2 p- armm_sp1_enter_07.png
 2 p- armm_sp1_enter_08.png
