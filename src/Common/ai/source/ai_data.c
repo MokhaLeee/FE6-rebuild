@@ -1004,9 +1004,6 @@ struct Vec2i const * CONST_DATA gUnk_085C8870[] =
 
 struct Vec2i const * const * CONST_DATA gUnk_085C8878 = gUnk_085C8870;
 
-char CONST_DATA gUnk_085C887C[] = "CALL TEST\n";
-char CONST_DATA gUnk_085C8887   = 3;
-
 // ==============
 // = AI SCRIPTS =
 // ==============
