@@ -64,7 +64,7 @@ void RegisterChapterStats(struct PlaySt *play_st)
 {
 	struct ChapterStats *chapter_stats = GetChapterStats(GetNextChapterStatsSlot());
 
-	int time_3s = k_udiv((GetGameTime() - play_st->time_chapter_started), (FRAMES_PER_SECOND *3));
+	int time_3s = k_udiv((GetGameTime() - play_st->time_chapter_started), (60 *3));
 
 	// 50 hours = 50 * 60 * 20
 	if (time_3s > 50 * 60 * 20)

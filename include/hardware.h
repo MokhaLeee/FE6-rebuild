@@ -3,12 +3,7 @@
 #include "prelude.h"
 #include "gbaio.h"
 
-enum
-{
-    FRAMES_PER_SECOND = 60,
-    FRAMES_PER_MINUTE = 60 * FRAMES_PER_SECOND,
-    FRAMES_PER_HOUR   = 60 * FRAMES_PER_MINUTE,
-};
+
 
 #ifndef CHR_SIZE
 #define CHR_SIZE 0x20

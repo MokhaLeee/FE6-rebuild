@@ -12,68 +12,27 @@
 #define MODERN 0
 
 static struct BgCnt * GetBgCt(u16 bgid);
-static void RefreshKeyStFromKeys(struct KeySt * keySt, short keys);
 static void OnHBlankBoth(void);
 static void RefreshOnHBlank(void);
 
 static u8 sBgSyncBits;
 static bool sPalSyncFlag;
 
-static unsigned sGameTime;
-
 static u8 sUnk_03000014;
 static u8 sUnk_03000015;
 
-SECTION("ewram_data.hardware") u16 gBg1Tm[0x400] = { 0 };
-SECTION("ewram_data.hardware") u16 gBg2Tm[0x400] = { 0 };
-SECTION("ewram_data.hardware") u16 gBg3Tm[0x400] = { 0 };
-SECTION("ewram_data.hardware") u16 gBg0Tm[0x400] = { 0 };
-SECTION("ewram_data.hardware") u8 gBuf[0x2000] = { 0 };
+SECTION(".ewram.hardware") u16 gBg1Tm[0x400] = { 0 };
+SECTION(".ewram.hardware") u16 gBg2Tm[0x400] = { 0 };
+SECTION(".ewram.hardware") u16 gBg3Tm[0x400] = { 0 };
+SECTION(".ewram.hardware") u16 gBg0Tm[0x400] = { 0 };
 
-EWRAM_DATA i8 gFadeComponentStep[0x20] = { 0 };
-EWRAM_DATA i8 gFadeComponents[0x600] = { 0 };
 EWRAM_DATA u16 gPal[0x200] = { 0 };
 
 void * EWRAM_DATA gBgMapVramTable[4] = { 0 };
 
-static Func EWRAM_DATA MainFunc = NULL;
-
 int EWRAM_DATA pad_02023B1C = 0;
 
-static struct KeySt EWRAM_DATA gKeyStObj = { 0 };
-struct KeySt * CONST_DATA gKeySt = &gKeyStObj;
-
 extern IWRAM_DATA Func gOnHBlankA, gOnHBlankB;
-
-u32 GetGameTime(void)
-{
-    return sGameTime;
-}
-
-void SetGameTime(u32 time)
-{
-    sGameTime = time;
-}
-
-void IncGameTime(void)
-{
-    sGameTime++;
-
-    if (sGameTime >= 1000 * FRAMES_PER_HOUR)
-    {
-        sGameTime = 990 * FRAMES_PER_HOUR;
-        return;
-    }
-}
-
-bool FormatTime(u32 time, u16 * hours, u16 * minutes, u16 * seconds)
-{
-    *seconds = k_umod(k_udiv(time, FRAMES_PER_SECOND), 60);
-    *minutes = k_umod(k_udiv(time, FRAMES_PER_MINUTE), 60);
-    *hours   = k_udiv(time, FRAMES_PER_HOUR);
-
-    return k_udiv(time, 30) & 1; // clock `:` on/off boolean
-}
 
 inline void EnableBgSync(int bits)
 {
@@ -339,86 +298,6 @@ void SetVCount(int vcount)
     gDispIo.disp_stat.vcount_compare = vcount;
 }
 
-void SetMainFunc(Func func)
-{
-    MainFunc = func;
-}
-
-void RunMainFunc(void)
-{
-    if (MainFunc)
-        MainFunc();
-}
-
-void RefreshKeyStFromKeys(struct KeySt * keySt, short keys)
-{
-    keySt->previous = keySt->held;
-    keySt->held = keys;
-
-    // keys that are pressed now, but weren't pressed before
-    keySt->pressed =
-        (keySt->repeated = (keySt->held ^ keySt->previous) & keySt->held) &~ 0;
-
-    if (keySt->pressed)
-        keySt->last = keySt->held;
-
-    keySt->ablr_pressed = 0;
-
-    if (keySt->held == 0)
-    {
-        if (keySt->last && keySt->last == (keySt->previous & (KEY_BUTTON_L | KEY_BUTTON_R | KEY_BUTTON_B | KEY_BUTTON_A)))
-            keySt->ablr_pressed = keySt->previous;
-    }
-
-    if (keySt->held && keySt->held == keySt->previous) // keys are being held
-    {
-        keySt->repeat_clock--;
-
-        if (keySt->repeat_clock == 0)
-        {
-            keySt->repeated = keySt->held;
-            keySt->repeat_clock = keySt->repeat_interval; // reset repeat timer
-        }
-    }
-    else
-    {
-        // held key combination has changed. reset timer
-        keySt->repeat_clock = keySt->repeat_delay;
-    }
-
-    keySt->pressed2 = (keySt->held ^ keySt->pressed2) & keySt->held;
-
-    if (keys & (KEY_BUTTON_A | KEY_BUTTON_B | KEY_DPAD_ANY | KEY_BUTTON_R | KEY_BUTTON_L)) // any button other than start and select
-        keySt->time_since_start_select = 0;
-    else if (keySt->time_since_start_select < UINT16_MAX)
-        keySt->time_since_start_select++;
-}
-
-void RefreshKeySt(struct KeySt * keySt)
-{
-    RefreshKeyStFromKeys(keySt, (~REG_KEYINPUT) & KEY_ANY);
-}
-
-void ClearKeySt(struct KeySt * keySt)
-{
-    keySt->pressed = 0;
-    keySt->repeated = 0;
-    keySt->held = 0;
-}
-
-void InitKeySt(struct KeySt * keySt)
-{
-    keySt->repeat_delay = 12;
-    keySt->repeat_interval = 4;
-
-    keySt->previous = 0;
-    keySt->held = 0;
-    keySt->pressed = 0;
-
-    keySt->repeat_clock = 0;
-    keySt->time_since_start_select = 0;
-}
-
 void SetBgOffset(u16 bgid, u16 x_offset, u16 y_offset)
 {
     switch (bgid)
@@ -509,187 +388,6 @@ void func_fe6_08001C68(u16 * tm, short const * in_data, int unused)
             *out++ = acc;
         }
     }
-}
-
-void ColorFadeInit(void)
-{
-    int i;
-
-    for (i = 31; i >= 0; i--)
-        gFadeComponentStep[i] = 0;
-}
-
-void ColFadeDirect(u16 const * in_pal, int bank, int count, int component_step)
-{
-    int pal_idx, color_idx;
-
-    int add = (component_step < 0) ? 0x20 : 0;
-    int component_idx = bank * 0x30;
-
-    for (pal_idx = 0; pal_idx < count; ++pal_idx)
-    {
-        gFadeComponentStep[bank + pal_idx] = component_step;
-
-        for (color_idx = 0; color_idx < 0x10; ++color_idx)
-        {
-            gFadeComponents[component_idx++] = RGB_GET_RED(*in_pal)   + add;
-            gFadeComponents[component_idx++] = RGB_GET_GREEN(*in_pal) + add;
-            gFadeComponents[component_idx++] = RGB_GET_BLUE(*in_pal)  + add;
-
-            in_pal++;
-        }
-    }
-}
-
-void ColFadeStep(int pal, int num, int fade_col, int speed)
-{
-    int pal_idx;
-    int color_idx;
-    int dst_offset = pal * 16;
-
-    u16 const * src = gPal + dst_offset;
-
-    for (pal_idx = 0; pal_idx < num; ++pal_idx)
-    {
-        gFadeComponentStep[pal + pal_idx] = speed;
-
-        for (color_idx = 0; color_idx < 16; ++color_idx)
-        {
-            gFadeComponents[dst_offset++] = RGB_GET_RED(*src) + fade_col;
-            gFadeComponents[dst_offset++] = RGB_GET_GREEN(*src) + fade_col;
-            gFadeComponents[dst_offset++] = RGB_GET_BLUE(*src) + fade_col;
-
-            src++;
-        }
-    }
-}
-
-void ColFadeSet(int a, int b, int component_step)
-{
-    int i;
-
-    for (i = a; i < a + b; i++)
-        gFadeComponentStep[i] = component_step;
-}
-
-void ColFadeToBlack(fi8 component_step)
-{
-    int i, j;
-
-    for (i = 0x1F; i >= 0; i--)
-    {
-        gFadeComponentStep[i] = component_step;
-
-        for (j = 0; j < 0x10; j++)
-        {
-            gFadeComponents[(i * 0x10 + j) * 3 + 0] = RGB_GET_RED(PAL_COLOR(i, j)) + 0x20;
-            gFadeComponents[(i * 0x10 + j) * 3 + 1] = RGB_GET_GREEN(PAL_COLOR(i, j)) + 0x20;
-            gFadeComponents[(i * 0x10 + j) * 3 + 2] = RGB_GET_BLUE(PAL_COLOR(i, j)) + 0x20;
-        }
-    }
-}
-
-void ColFadeFromBlack(fi8 component_step)
-{
-    int i, j;
-
-    for (i = 0x1F; i >= 0; i--)
-    {
-        gFadeComponentStep[i] = component_step;
-
-        for (j = 0; j < 0x10; j++)
-        {
-            gFadeComponents[(i * 0x10 + j) * 3 + 0] = RGB_GET_RED(PAL_COLOR(i, j));
-            gFadeComponents[(i * 0x10 + j) * 3 + 1] = RGB_GET_GREEN(PAL_COLOR(i, j));
-            gFadeComponents[(i * 0x10 + j) * 3 + 2] = RGB_GET_BLUE(PAL_COLOR(i, j));
-        }
-    }
-}
-
-void ColFadeToWhite(fi8 component_step)
-{
-    int i, j;
-
-    for (i = 0x1F; i >= 0; i--)
-    {
-        gFadeComponentStep[i] = component_step;
-
-        for (j = 0; j < 0x10; j++)
-        {
-            gFadeComponents[(i * 0x10 + j) * 3 + 0] = RGB_GET_RED(PAL_COLOR(i, j)) + 0x20;
-            gFadeComponents[(i * 0x10 + j) * 3 + 1] = RGB_GET_GREEN(PAL_COLOR(i, j)) + 0x20;
-            gFadeComponents[(i * 0x10 + j) * 3 + 2] = RGB_GET_BLUE(PAL_COLOR(i, j)) + 0x20;
-        }
-    }
-}
-
-void ColFadeFromWhite(fi8 component_step)
-{
-    int i, j;
-
-    for (i = 0x1F; i >= 0; i--)
-    {
-        gFadeComponentStep[i] = component_step;
-
-        for (j = 0; j < 0x10; j++)
-        {
-            gFadeComponents[(i * 0x10 + j) * 3 + 0] = RGB_GET_RED(PAL_COLOR(i, j)) + 0x40;
-            gFadeComponents[(i * 0x10 + j) * 3 + 1] = RGB_GET_GREEN(PAL_COLOR(i, j)) + 0x40;
-            gFadeComponents[(i * 0x10 + j) * 3 + 2] = RGB_GET_BLUE(PAL_COLOR(i, j)) + 0x40;
-        }
-    }
-}
-
-void ColFadeTick(void)
-{
-    // This is a C implementation of the handwritten ARM function ColorFadeTick
-    // with the addition of EnablePalSync at the end
-
-    int i, j;
-    short red, green, blue;
-
-    for (i = 0x1F; i >= 0; i--)
-    {
-        if (gFadeComponentStep[i] == 0)
-            continue;
-
-        for (j = 15; j >= 0; j--)
-        {
-            int num = i * 0x10 + j;
-
-            gFadeComponents[num*3 + 0] += gFadeComponentStep[i];
-            gFadeComponents[num*3 + 1] += gFadeComponentStep[i];
-            gFadeComponents[num*3 + 2] += gFadeComponentStep[i];
-
-            red = gFadeComponents[num*3 + 0] - 0x20;
-
-            if (red > 31)
-                red = 31;
-
-            if (red < 0)
-                red = 0;
-
-            green = gFadeComponents[num*3 + 1] - 0x20;
-
-            if (green > 31)
-                green = 31;
-
-            if (green < 0)
-                green = 0;
-
-            blue = gFadeComponents[num*3 + 2] - 0x20;
-
-            if (blue > 31)
-                blue = 31;
-
-            if (blue < 0)
-                blue = 0;
-
-            gPal[num] = (blue << 10) + (green << 5) + red;
-        }
-    }
-
-    EnablePalSync();
 }
 
 void InitBgs(u16 const * config)

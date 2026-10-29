@@ -121,10 +121,10 @@ SECTIONS
 	__ewram_lma = __ewram_overlay_end;
 	.ewdata ALIGN(0x100) (NOLOAD) : AT (__ewram_lma)
 	{
-		*(ewram_data.hardware)
+		*(.ewram.crt0)
+		*(.ewram*)
 		*(ewram_data)
 		*(.ewram_data)
-		*(.ewram*)
 
 		. = ALIGN(4);
 		__ewram_end = ABSOLUTE(.);
