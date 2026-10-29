@@ -93,3 +93,6 @@ post_irq:
 	strh	r1, [r3]
 	msr	spsr_fc, r0
 	bx	lr
+
+.global IrqMain_end
+IrqMain_end:

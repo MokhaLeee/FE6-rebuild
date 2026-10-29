@@ -24,10 +24,6 @@ IWRAM_DATA u8 SoundMainRam[0x400] = {};
 IWRAM_DATA u16 *gOamLoPutIt = NULL;
 IWRAM_DATA struct DispIo gDispIo = {};
 
-/**
- * IRQ
- */
-IWRAM_DATA IrqFunc gIrqFuncs[INT_COUNT] = {};
 
 /**
  * OAM
@@ -42,7 +38,6 @@ IWRAM_DATA Func gOnHBlankB = NULL;
  * Arm func
  */
 IWRAM_DATA struct OamView *gOamAffinePutIt = NULL;
-IWRAM_DATA u32 IntrMainRam[0x200] = {};
 
 /**
  * Event
