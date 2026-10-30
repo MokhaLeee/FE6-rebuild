@@ -1,0 +1,9 @@
+[package]
+name = "fe6-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "讀取 FE6 GBA ROM 的純資料層：ROM 存取、符號表、PInfo 解碼"
+
+[dependencies]
