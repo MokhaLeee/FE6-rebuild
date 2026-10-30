@@ -15,9 +15,9 @@
 #include "constants/msg.h"
 #include "constants/chapters.h"
 
-char const *func_fe6_080867F0(int chapter)
+char const *DecodeExtraMapTitleMsg(int chapter)
 {
-	return GetChapterUnk_0802BBD0(chapter);
+	return GetChapterTitleMsg(chapter);
 }
 
 char const *DecodeExtraMapGoalMsg(int chapter)

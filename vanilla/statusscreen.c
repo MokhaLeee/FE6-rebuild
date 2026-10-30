@@ -193,7 +193,7 @@ void func_fe6_08073808(struct StatusScreenProc * proc)
     SetTextFontGlyphs(TEXT_GLYPHS_TALK);
     gActiveFont->tileref |= TILE_PAL_SAFE(BGPAL_STATUSSCREEN_TALKTEXT);
 
-    text_str = func_fe6_080867F0(gPlaySt.chapter);
+    text_str = DecodeExtraMapTitleMsg(gPlaySt.chapter);
     x_text = GetStringTextCenteredPos(12 * 8, text_str);
 
     Text_InsertDrawString(gStatusScreenSt.text + 0, x_text, 0, text_str);
