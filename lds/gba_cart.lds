@@ -59,6 +59,15 @@ SECTIONS
 	__ewram_overlay_end = MAX(__ewram_ov0_end, __ewram_overlay_end);
 
 	. = __ewram_overlay_start;
+	.ovw ALIGN(4) (NOLOAD) : AT (__ewram_overlay_start)
+	{
+		*(ewram_overlay_worldmap)
+		. = ALIGN(4);
+		__ewram_ovw_end = .;
+	} >ewram
+	__ewram_overlay_end = MAX(__ewram_ovw_end, __ewram_overlay_end);
+
+	. = __ewram_overlay_start;
 	.ov1 ALIGN(4) (NOLOAD) : AT (__ewram_overlay_start)
 	{
 		. = ALIGN(4); INCLUDE "./lds/section_ewram_ov1.lds"

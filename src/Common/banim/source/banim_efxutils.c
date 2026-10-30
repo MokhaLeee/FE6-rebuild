@@ -674,18 +674,18 @@ void EkrsubAnimeEmulator_Loop(struct ProcEkrSubAnimeEmulator *proc)
 	}
 }
 
-const s16 gAnimSpriteRotScalePosX[] = {
-	0x08, 0x10, 0x20, 0x40,
-	0x10, 0x20, 0x20, 0x40,
-	0x08, 0x08, 0x10, 0x20,
-	-1, -1, -1, -1
+const s16 gAnimSpriteRotScalePosX[][4] = {
+	{ 0x08, 0x10, 0x20, 0x40 },
+	{ 0x10, 0x20, 0x20, 0x40 },
+	{ 0x08, 0x08, 0x10, 0x20 },
+	{ -1, -1, -1, -1 },
 };
 
-const s16 gAnimSpriteRotScalePosY[] = {
-	0x08, 0x10, 0x20, 0x40,
-	0x08, 0x08, 0x10, 0x20,
-	0x10, 0x20, 0x20, 0x40,
-	-1, -1, -1, -1
+const s16 gAnimSpriteRotScalePosY[][4] = {
+	{ 0x08, 0x10, 0x20, 0x40 },
+	{ 0x08, 0x08, 0x10, 0x20 },
+	{ 0x10, 0x20, 0x20, 0x40 },
+	{ -1, -1, -1, -1 },
 };
 
 int GetAnimSpriteRotScaleX(u32 header)
@@ -693,7 +693,7 @@ int GetAnimSpriteRotScaleX(u32 header)
 	u32 a = header >> 30;
 	u32 b = header & 0xC000;
 
-	return gAnimSpriteRotScalePosX[a + (b >> 12)];
+	return gAnimSpriteRotScalePosX[(b >> 14)][a];
 }
 
 int GetAnimSpriteRotScaleY(u32 header)
@@ -701,7 +701,7 @@ int GetAnimSpriteRotScaleY(u32 header)
 	u32 a = header >> 30;
 	u32 b = header & 0xC000;
 
-	return gAnimSpriteRotScalePosY[a + (b >> 12)];
+	return gAnimSpriteRotScalePosY[(b >> 14)][a];
 }
 
 void BanimUpdateSpriteRotScale(void *src, struct BaSpriteData *out, s16 x, s16 y, int unused)
