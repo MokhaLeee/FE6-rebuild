@@ -333,32 +333,35 @@ struct ProcScr CONST_DATA ProcScr_EfxMagfcast[] = {
 
 void NewEfxMagfcast(struct Anim *anim, int type)
 {
-    i16 banim_index;
-    struct ProcEfx *proc;
+	i16 banim_index;
+	struct ProcEfx *proc;
 
-    if (gEfxBgSemaphore != 0)
-        return;
+	if (gEfxBgSemaphore != 0)
+		return;
 
-    SpellFx_ClearBG1Position();
-    proc = SpawnProc(ProcScr_EfxMagfcast, PROC_TREE_3);
+	SpellFx_ClearBG1Position();
+	proc = SpawnProc(ProcScr_EfxMagfcast, PROC_TREE_3);
 
-    proc->anim = anim;
-    proc->timer = 0;
+	proc->anim = anim;
+	proc->timer = 0;
 
-    banim_index = gBanimIdx[GetAnimPosition(anim)];
+	banim_index = gBanimIdx[GetAnimPosition(anim)];
 
-    if (banim_index != 0x11) {
-        if (banim_index <= 0x11) {
-        switch (banim_index) {
-        case 0xC:
-        case 0xD:
-            NewEfxMagfcastBG(proc->anim, type);
-            return;
-        }
-        }
-    }
+	/**
+	 * todo: hardcoded banim index
+	 */
+	if (banim_index != 0x11) {
+		if (banim_index <= 0x11) {
+			switch (banim_index) {
+			case 0xC:
+			case 0xD:
+				NewEfxMagfcastBG(proc->anim, type);
+				return;
+			}
+		}
+	}
 
-    NewEfxMagfcastBG(proc->anim, type + 2);
+	NewEfxMagfcastBG(proc->anim, type + 2);
 }
 
 void EfxMagfcast_Loop(struct ProcEfx *proc)
