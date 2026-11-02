@@ -17,7 +17,7 @@ EWRAM_DATA i16 gEkrGaugeDmg[2] = {};
 EWRAM_DATA i16 gEkrGaugeCrt[2] = {};
 
 EWRAM_OVERLAY(banim) u16 Buf_EkrGaugeNumImg[0x200] = {};
-EWRAM_OVERLAY(banim) u16 gUnk_Banim_02016DC0[0x40] = {};
+EWRAM_OVERLAY(banim) u16 gEkrGaugeHpNumImgBuf[0x40] = {};
 EWRAM_OVERLAY(banim) u8 gEkrGaugeBuf[0x800] = {};
 EWRAM_OVERLAY(banim) u16 gEkrGaugeDecoder[18] = {};
 
@@ -379,20 +379,20 @@ void EkrGauge_Loop(struct ProcEkrGauge * proc)
         i32 i;
         i32 j;
 
-        CpuFastFill(0, gUnk_Banim_02016DC0, 0x80);
+        CpuFastFill(0, gEkrGaugeHpNumImgBuf, 0x80);
 
         for (i = 0; i < 2; i++) {
             for (j = 0; j < 2; j++) {
                 CpuCopy16(
                     Img_EkrGaugeNumber + local_d0[i * 2 + j] * 0x10,
-                    (u16 *)gUnk_Banim_02016DC0 + ((i * 0x20) + (j * 0x10)),
+                    (u16 *)gEkrGaugeHpNumImgBuf + ((i * 0x20) + (j * 0x10)),
                     0x20
                 );
             }
         }
 
-        RegisterDataMove(gUnk_Banim_02016DC0 + 0x00, (void *)0x060139C0, 0x40);
-        RegisterDataMove((u16 *)gUnk_Banim_02016DC0 + 0x20, (void *)0x06013DC0, 0x40);
+        RegisterDataMove(gEkrGaugeHpNumImgBuf + 0x00, (void *)0x060139C0, 0x40);
+        RegisterDataMove((u16 *)gEkrGaugeHpNumImgBuf + 0x20, (void *)0x06013DC0, 0x40);
     }
 
     AStack_130.oam2 = 0x000051CE;

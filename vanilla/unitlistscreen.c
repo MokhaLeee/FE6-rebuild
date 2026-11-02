@@ -35,24 +35,24 @@
 
 EWRAM_OVERLAY(0) struct SortedUnitEnt gSortedUnitsBuf[0x40] = {};
 EWRAM_OVERLAY(0) struct SortedUnitEnt *gSortedUnits[0x40] = {};
-EWRAM_OVERLAY(0) u8 gUnk_0200CD38 = 0;
-EWRAM_OVERLAY(0) u16 gUnk_0200CD3A[0x400] = {};
-EWRAM_OVERLAY(0) u16 gUnk_0200D53A[0x41] = {};
-EWRAM_OVERLAY(0) struct Text gUnk_0200D5BC[7] = {};
-EWRAM_OVERLAY(0) struct Text gUnk_0200D5F4[7][3] = {};
-EWRAM_OVERLAY(0) struct Text gUnk_0200D69C = {};
-EWRAM_OVERLAY(0) struct Text gUnk_0200D6A4 = {};
-EWRAM_OVERLAY(0) struct Text gUnk_0200D6AC = {};
-EWRAM_OVERLAY(0) u8 gUnk_0200D6B4[0x1000] = {};
-EWRAM_OVERLAY(0) u32 gUnk_0200E6B4[8] = {};
+EWRAM_OVERLAY(0) u8 gUnitListCount = 0;
+EWRAM_OVERLAY(0) u16 gUnitListRowsTmBuf[0x400] = {};
+EWRAM_OVERLAY(0) u16 gUnitListHeaderTmBuf[0x41] = {};
+EWRAM_OVERLAY(0) struct Text gUnitListNameTexts[7] = {};
+EWRAM_OVERLAY(0) struct Text gUnitListFieldTexts[7][3] = {};
+EWRAM_OVERLAY(0) struct Text gUnitListNameLabelText = {};
+EWRAM_OVERLAY(0) struct Text gUnitListFieldLabelText = {};
+EWRAM_OVERLAY(0) struct Text gUnitListSortKeyText = {};
+EWRAM_OVERLAY(0) u8 gUnitRearrangeBuf[0x1000] = {};
+EWRAM_OVERLAY(0) u32 gUnitListItemIcons[8] = {};
 
 void func_fe6_080741EC(void)
 {
     int i;
 
-    UnitRearrangeInit((void *)gUnk_0200D6B4);
+    UnitRearrangeInit((void *)gUnitRearrangeBuf);
 
-    for (i = 0; i < gUnk_0200CD38; i++)
+    for (i = 0; i < gUnitListCount; i++)
     {
         UnitRearrangeAdd(gSortedUnits[i]->unit);
     }
@@ -96,7 +96,7 @@ void func_fe6_080742D0(fu8 sort_key)
 
     TmFillRect(gBg2Tm + 0x34, 4, 1, 0);
 
-    ClearText(&gUnk_0200D6AC);
+    ClearText(&gUnitListSortKeyText);
 
     for (i = 0; i < 10; i++)
     {
@@ -110,10 +110,10 @@ void func_fe6_080742D0(fu8 sort_key)
                 }
                 else
                 {
-                    Text_SetCursor(&gUnk_0200D6AC, 0);
-                    Text_SetColor(&gUnk_0200D6AC, TEXT_COLOR_SYSTEM_WHITE);
-                    Text_DrawString(&gUnk_0200D6AC, UnitListPageFields[i][j].label_string);
-                    PutText(&gUnk_0200D6AC, gBg2Tm + 0x34);
+                    Text_SetCursor(&gUnitListSortKeyText, 0);
+                    Text_SetColor(&gUnitListSortKeyText, TEXT_COLOR_SYSTEM_WHITE);
+                    Text_DrawString(&gUnitListSortKeyText, UnitListPageFields[i][j].label_string);
+                    PutText(&gUnitListSortKeyText, gBg2Tm + 0x34);
                 }
 
                 break;
@@ -130,15 +130,15 @@ void func_fe6_08074384(int arg_0)
 
     for (i = 0; i < 8; i++)
     {
-        if (gUnk_0200E6B4[i] == arg_0)
+        if (gUnitListItemIcons[i] == arg_0)
             return;
     }
 
     for (i = 0; i < 8; i++)
     {
-        if (gUnk_0200E6B4[i] == UINT8_MAX)
+        if (gUnitListItemIcons[i] == UINT8_MAX)
         {
-            gUnk_0200E6B4[i] = arg_0;
+            gUnitListItemIcons[i] = arg_0;
             return;
         }
     }
@@ -159,7 +159,7 @@ void func_fe6_080743C8(fu16 arg_0)
     if (offset != 0)
         offset = offset - 1;
 
-    for (i = 0; i < 8 && i + offset < gUnk_0200CD38; i++)
+    for (i = 0; i < 8 && i + offset < gUnitListCount; i++)
     {
         if (GetUnitEquippedWeapon(gSortedUnits[offset + i]->unit) != 0)
         {
@@ -169,20 +169,20 @@ void func_fe6_080743C8(fu16 arg_0)
 
     for (i = 0; i < 8; i++)
     {
-        if (gUnk_0200E6B4[i] != UINT8_MAX)
+        if (gUnitListItemIcons[i] != UINT8_MAX)
         {
             bool icon_in_use = FALSE;
 
             for (j = 0; j < 8; j++)
             {
-                if (icons_to_display[j] == gUnk_0200E6B4[i])
+                if (icons_to_display[j] == gUnitListItemIcons[i])
                     icon_in_use = TRUE;
             }
 
             if (!icon_in_use)
             {
-                ClearIcon(gUnk_0200E6B4[i]);
-                gUnk_0200E6B4[i] = UINT8_MAX;
+                ClearIcon(gUnitListItemIcons[i]);
+                gUnitListItemIcons[i] = UINT8_MAX;
             }
         }
     }
@@ -232,14 +232,14 @@ void func_fe6_08074558(struct UnitListScreenProc * proc, fi8 arg_1)
 
     if (arg_1 != 0)
     {
-        unit_id = gUnk_0200E7D8;
+        unit_id = gPrepCursorUnitPid;
     }
     else
     {
         unit_id = GetLastStatScreenUnitId();
     }
 
-    for (i = 0; i < gUnk_0200CD38; i++)
+    for (i = 0; i < gUnitListCount; i++)
     {
         if (arg_1 != 0)
         {
@@ -266,9 +266,9 @@ void func_fe6_08074558(struct UnitListScreenProc * proc, fi8 arg_1)
             return;
         }
 
-        if (i == gUnk_0200CD38 - 1)
+        if (i == gUnitListCount - 1)
         {
-            if (gUnk_0200CD38 < 7)
+            if (gUnitListCount < 7)
             {
                 proc->unk_2C = i;
                 proc->unk_40 = 0;
@@ -277,7 +277,7 @@ void func_fe6_08074558(struct UnitListScreenProc * proc, fi8 arg_1)
             else
             {
                 proc->unk_2C = 5;
-                proc->unk_40 = (gUnk_0200CD38 - 6) * 16;
+                proc->unk_40 = (gUnitListCount - 6) * 16;
                 return;
             }
         }
@@ -372,7 +372,7 @@ void UnitListScreenSprites_Init(struct UnitListScreenSpritesProc * proc)
     proc->unk_30 = 0;
     proc->unk_34 = StartMenuScrollBar(proc);
 
-    SetPrepMenuScrollBarBaseInfo(proc->unk_34, 0xE0, 0x40, 10, proc->main_proc->unk_40, gUnk_0200CD38, 6);
+    SetPrepMenuScrollBarBaseInfo(proc->unk_34, 0xE0, 0x40, 10, proc->main_proc->unk_40, gUnitListCount, 6);
 
     ForceSyncUnitSpriteSheet();
 }
@@ -397,7 +397,7 @@ void UnitListScreenSprites_Main(struct UnitListScreenSpritesProc * proc)
     PutSpriteExt(0x0D, 0x20, 0x08, gUnk_08678818[proc->main_proc->page], OAM2_PAL(9));
     PutSpriteExt(0x0D, 0xA0, 0, Sprite_08678758, OAM2_PAL(9));
 
-    SetPrepMenuScrollBarBaseInfo(proc->unk_34, 0xE0, 0x40, 0x0A, proc->main_proc->unk_40, gUnk_0200CD38, 6);
+    SetPrepMenuScrollBarBaseInfo(proc->unk_34, 0xE0, 0x40, 0x0A, proc->main_proc->unk_40, gUnitListCount, 6);
 
     if (proc->main_proc->unk_29 > 2)
     {
@@ -412,7 +412,7 @@ void UnitListScreenSprites_Main(struct UnitListScreenSpritesProc * proc)
 
     if (proc->unk_38 != proc->main_proc->unk_40 || (proc->main_proc->unk_40 % 0x10) != 0)
     {
-        gPal[0x19E] = gUnk_Pal_02016874[8];
+        gPal[0x19E] = gPrepUiPal[8];
         EnablePalSync();
 
         proc->unk_3C = 0x20;
@@ -426,7 +426,7 @@ void UnitListScreenSprites_Main(struct UnitListScreenSpritesProc * proc)
     }
     else
     {
-        gPal[0x19E] = gUnk_Pal_02016874[(proc->unk_3C / 4) & 0x0F];
+        gPal[0x19E] = gPrepUiPal[(proc->unk_3C / 4) & 0x0F];
         EnablePalSync();
 
         if (proc->unk_3A == 1)
@@ -441,12 +441,12 @@ void UnitListScreenSprites_Main(struct UnitListScreenSpritesProc * proc)
     r5 = proc->unk_38 / 0x10;
     sl = -(proc->unk_38 % 0x10);
 
-    for (i = 0; i < 6 && i + r5 < gUnk_0200CD38; i++)
+    for (i = 0; i < 6 && i + r5 < gUnitListCount; i++)
     {
         PutUnitSprite(4, 8, 56 + i * 16 + sl, gSortedUnits[i + r5]->unit);
     }
 
-    if (proc->unk_3A != 0 && i + r5 < gUnk_0200CD38)
+    if (proc->unk_3A != 0 && i + r5 < gUnitListCount)
     {
         PutUnitSprite(4, 8, 56 + i * 16 + sl, gSortedUnits[i + r5]->unit);
     }
@@ -498,13 +498,13 @@ void func_fe6_08074BA4(struct UnitListScreenProc * proc)
         if ((unit->flags & UNIT_FLAG_NOT_DEPLOYED) == 0)
             proc->unk_3B++;
 
-        gSortedUnitsBuf[gUnk_0200CD38].unit = unit;
+        gSortedUnitsBuf[gUnitListCount].unit = unit;
 
         BattleGenerateDisplayStats(unit, -1);
 
-        gSortedUnitsBuf[gUnk_0200CD38].battle_attack = ((gBattleUnitA.battle_attack + 1) & 0xFF) - 1;
-        gSortedUnitsBuf[gUnk_0200CD38].battle_hit = ((gBattleUnitA.battle_hit + 1) & 0xFF) - 1;
-        gSortedUnitsBuf[gUnk_0200CD38].battle_avoid = ((gBattleUnitA.battle_avoid + 1) & 0xFF) - 1;
+        gSortedUnitsBuf[gUnitListCount].battle_attack = ((gBattleUnitA.battle_attack + 1) & 0xFF) - 1;
+        gSortedUnitsBuf[gUnitListCount].battle_hit = ((gBattleUnitA.battle_hit + 1) & 0xFF) - 1;
+        gSortedUnitsBuf[gUnitListCount].battle_avoid = ((gBattleUnitA.battle_avoid + 1) & 0xFF) - 1;
 
         support_count = GetUnitSupportCount(unit);
         support_now_count = 0;
@@ -518,10 +518,10 @@ void func_fe6_08074BA4(struct UnitListScreenProc * proc)
         if (support_now_count > 3)
             proc->unk_2E = 6 + (support_now_count - 1) / 3;
 
-        gSortedUnitsBuf[gUnk_0200CD38].support_talk_count = support_now_count;
-        gSortedUnits[gUnk_0200CD38] = &gSortedUnitsBuf[gUnk_0200CD38];
+        gSortedUnitsBuf[gUnitListCount].support_talk_count = support_now_count;
+        gSortedUnits[gUnitListCount] = &gSortedUnitsBuf[gUnitListCount];
 
-        gUnk_0200CD38++;
+        gUnitListCount++;
 
         UseUnitSprite(GetUnitMapSprite(unit));
     })
@@ -546,13 +546,13 @@ void func_fe6_08074D54(struct UnitListScreenProc * proc)
         if ((unit->flags & UNIT_FLAG_NOT_DEPLOYED) == 0)
             proc->unk_3B++;
 
-        gSortedUnitsBuf[gUnk_0200CD38].unit = unit;
+        gSortedUnitsBuf[gUnitListCount].unit = unit;
 
         BattleGenerateDisplayStats(unit, -1);
 
-        gSortedUnitsBuf[gUnk_0200CD38].battle_attack = ((gBattleUnitA.battle_attack + 1) & 0xFF) - 1;
-        gSortedUnitsBuf[gUnk_0200CD38].battle_hit = ((gBattleUnitA.battle_hit + 1) & 0xFF) - 1;
-        gSortedUnitsBuf[gUnk_0200CD38].battle_avoid = ((gBattleUnitA.battle_avoid + 1) & 0xFF) - 1;
+        gSortedUnitsBuf[gUnitListCount].battle_attack = ((gBattleUnitA.battle_attack + 1) & 0xFF) - 1;
+        gSortedUnitsBuf[gUnitListCount].battle_hit = ((gBattleUnitA.battle_hit + 1) & 0xFF) - 1;
+        gSortedUnitsBuf[gUnitListCount].battle_avoid = ((gBattleUnitA.battle_avoid + 1) & 0xFF) - 1;
 
         support_count = GetUnitSupportCount(unit);
         support_now_count = 0;
@@ -566,10 +566,10 @@ void func_fe6_08074D54(struct UnitListScreenProc * proc)
         if (support_now_count > 3)
             proc->unk_2E = 6 + (support_now_count - 1) / 3;
 
-        gSortedUnitsBuf[gUnk_0200CD38].support_talk_count = support_now_count;
-        gSortedUnits[gUnk_0200CD38] = &gSortedUnitsBuf[gUnk_0200CD38];
+        gSortedUnitsBuf[gUnitListCount].support_talk_count = support_now_count;
+        gSortedUnits[gUnitListCount] = &gSortedUnitsBuf[gUnitListCount];
 
-        gUnk_0200CD38++;
+        gUnitListCount++;
 
         UseUnitSprite(GetUnitMapSprite(unit));
     })
@@ -590,7 +590,7 @@ void func_fe6_08074EF0(struct UnitListScreenProc * proc)
 
     StartGreenText(proc);
 
-    gUnk_0200CD38 = 0;
+    gUnitListCount = 0;
     proc->unk_3B = 0;
     proc->unk_2E = 6;
 
@@ -643,15 +643,15 @@ void func_fe6_08074EF0(struct UnitListScreenProc * proc)
 
     for (i = 0; i < 7 ; i++)
     {
-        InitText(&gUnk_0200D5BC[i], 5);
-        InitTextDb(&gUnk_0200D5F4[i][0], 7);
-        InitText(&gUnk_0200D5F4[i][1], 7);
-        InitText(&gUnk_0200D5F4[i][2], 5);
+        InitText(&gUnitListNameTexts[i], 5);
+        InitTextDb(&gUnitListFieldTexts[i][0], 7);
+        InitText(&gUnitListFieldTexts[i][1], 7);
+        InitText(&gUnitListFieldTexts[i][2], 5);
     }
 
-    InitText(&gUnk_0200D69C, 4);
-    InitText(&gUnk_0200D6A4, 20);
-    InitText(&gUnk_0200D6AC, 4);
+    InitText(&gUnitListNameLabelText, 4);
+    InitText(&gUnitListFieldLabelText, 20);
+    InitText(&gUnitListSortKeyText, 4);
 
     func_fe6_080742D0(proc->sort_key);
 
@@ -669,18 +669,18 @@ void func_fe6_08074EF0(struct UnitListScreenProc * proc)
     proc->unk_3E = 0;
     proc->unk_2B = 0;
 
-    ClearText(&gUnk_0200D69C);
-    Text_SetCursor(&gUnk_0200D69C, 0);
-    Text_SetColor(&gUnk_0200D69C, 0);
-    Text_DrawString(&gUnk_0200D69C, JTEXT("名　前"));
-    PutText(&gUnk_0200D69C, gBg2Tm + TM_OFFSET(3, 5));
+    ClearText(&gUnitListNameLabelText);
+    Text_SetCursor(&gUnitListNameLabelText, 0);
+    Text_SetColor(&gUnitListNameLabelText, 0);
+    Text_DrawString(&gUnitListNameLabelText, JTEXT("名　前"));
+    PutText(&gUnitListNameLabelText, gBg2Tm + TM_OFFSET(3, 5));
 
     for (i = 0; i < 20; i++)
     {
-        gUnk_0200E6B4[i] = UINT8_MAX;
+        gUnitListItemIcons[i] = UINT8_MAX;
     }
 
-    for (i = proc->unk_40 / 16; i < proc->unk_40 / 16 + 6 && i < gUnk_0200CD38; i++)
+    for (i = proc->unk_40 / 16; i < proc->unk_40 / 16 + 6 && i < gUnitListCount; i++)
     {
         func_fe6_08076448(proc, i, gBg0Tm, proc->page, TRUE);
     }
@@ -965,12 +965,12 @@ void func_fe6_08075570(struct UnitListScreenProc * proc)
 
             if ((gKeySt->repeated & KEY_DPAD_DOWN) != 0 || ((gKeySt->held & KEY_BUTTON_L) != 0 && (gKeySt->pressed2 & KEY_DPAD_DOWN) != 0))
             {
-                if (proc->unk_30 < gUnk_0200CD38 - 1)
+                if (proc->unk_30 < gUnitListCount - 1)
                 {
                     proc->unk_30++;
                     PlaySe(SONG_66);
     
-                    if (proc->unk_2C == 4 && proc->unk_30 != gUnk_0200CD38 - 1)
+                    if (proc->unk_2C == 4 && proc->unk_30 != gUnitListCount - 1)
                     {
                         func_fe6_08076448(proc, 6 + proc->unk_40 / 16, gBg0Tm, proc->page, 1);
                         proc->unk_29 = 1;
@@ -1029,7 +1029,7 @@ void func_fe6_08075570(struct UnitListScreenProc * proc)
 
                 if (SortUnitList(proc->sort_key, proc->target_sort_order))
                 {
-                    for (i = 0; i < 6 && i < gUnk_0200CD38; i++)
+                    for (i = 0; i < 6 && i < gUnitListCount; i++)
                     {
                         func_fe6_08076448(proc, i, gBg0Tm, proc->page, 1);
                     }
@@ -1143,7 +1143,7 @@ void UnitList_OnEnd(struct UnitListScreenProc * proc)
 {
     if (proc->mode == UNITLIST_MODE_PREPMENU)
     {
-        gUnk_0200E7D8 = UNIT_PID(gSortedUnits[proc->unk_30]->unit);
+        gPrepCursorUnitPid = UNIT_PID(gSortedUnits[proc->unk_30]->unit);
         func_fe6_080741EC();
     }
 
@@ -1175,27 +1175,27 @@ void UnitList_StartPageChange(struct UnitListScreenProc * proc)
 {
     int i;
 
-    TmFillRect(gUnk_0200CD3A, 31, 31, 0);
+    TmFillRect(gUnitListRowsTmBuf, 31, 31, 0);
 
-    for (i = proc->unk_40 / 16; i < proc->unk_40 / 16 + 6 && i < gUnk_0200CD38; i++)
+    for (i = proc->unk_40 / 16; i < proc->unk_40 / 16 + 6 && i < gUnitListCount; i++)
     {
-        func_fe6_08076448(proc, i, gUnk_0200CD3A, proc->page, 0);
+        func_fe6_08076448(proc, i, gUnitListRowsTmBuf, proc->page, 0);
     }
 
-    TmFillRect(gUnk_0200D53A, 31, 1, 0);
+    TmFillRect(gUnitListHeaderTmBuf, 31, 1, 0);
 
-    func_fe6_08076314(gUnk_0200D53A, proc->page);
+    func_fe6_08076314(gUnitListHeaderTmBuf, proc->page);
 
     proc->unk_3E = 0;
     proc->unk_37 = proc->page;
     proc->unk_38 = 0;
 }
 
-void func_fe6_08075E94(struct UnitListScreenProc * proc)
+void UnitList_PageSlideOut_Loop(struct UnitListScreenProc * proc)
 {
     int r4, i;
 
-    proc->unk_38 += gUnk_0867871C[proc->unk_3E];
+    proc->unk_38 += gUnitListPageSlideOutSpeedLut[proc->unk_3E];
 
     if (proc->unk_38 > 20)
         proc->unk_38 = 20;
@@ -1227,13 +1227,13 @@ void func_fe6_08075E94(struct UnitListScreenProc * proc)
         for (r4 = proc->unk_40 / 8; r4 < 12 + proc->unk_40 / 8; r4++)
         {
             int off = 8 + (r4 & 0x1F) * 0x20;
-            gBg0Tm[off + i] = *(gUnk_0200CD3A + r1 + (r4 & 0x1F) * 0x20);
+            gBg0Tm[off + i] = *(gUnitListRowsTmBuf + r1 + (r4 & 0x1F) * 0x20);
         }
 
         for (r4 = 0; r4 < 2; r4++)
         {
             int off = 0xA8 + r4 * 0x20;
-            gBg2Tm[i + off] = *(gUnk_0200D53A + r1 + r4 * 0x20);
+            gBg2Tm[i + off] = *(gUnitListHeaderTmBuf + r1 + r4 * 0x20);
         }
     }
 
@@ -1248,17 +1248,17 @@ void func_fe6_08075E94(struct UnitListScreenProc * proc)
     TmFillRect(gBg0Tm+0x10/2, 0x16, 0x1F, 0);
 
     for (r4 = 0; r4 < 20; r4++)
-        gUnk_0200E6B4[r4] = UINT8_MAX;
+        gUnitListItemIcons[r4] = UINT8_MAX;
 
     ClearIcons();
     func_fe6_080742D0(proc->sort_key);
 
-    for (r4 = proc->unk_40 / 16; r4 < proc->unk_40 / 16 + 6 && r4 < gUnk_0200CD38; r4++)
+    for (r4 = proc->unk_40 / 16; r4 < proc->unk_40 / 16 + 6 && r4 < gUnitListCount; r4++)
     {
-        func_fe6_08076448(proc, r4, gUnk_0200CD3A, proc->page, 0);
+        func_fe6_08076448(proc, r4, gUnitListRowsTmBuf, proc->page, 0);
     }
 
-    func_fe6_08076314(gUnk_0200D53A, proc->page);
+    func_fe6_08076314(gUnitListHeaderTmBuf, proc->page);
     func_fe6_080763D8(proc->unk_2E, proc->page, 0);
 
     proc->unk_38 = 0;
@@ -1267,14 +1267,12 @@ void func_fe6_08075E94(struct UnitListScreenProc * proc)
     Proc_Break(proc);
 }
 
-#if NONMATCHING
-
-void func_fe6_08076060(struct UnitListScreenProc * proc)
+void UnitList_PageSlideIn_Loop(struct UnitListScreenProc * proc)
 {
     int r5, r4;
     fu8 r1;
 
-    proc->unk_38 += gUnk_08678722[proc->unk_3E];
+    proc->unk_38 += gUnitListPageSlideInSpeedLut[proc->unk_3E];
 
     if (proc->unk_38 > 20)
         proc->unk_38 = 20;
@@ -1287,12 +1285,12 @@ void func_fe6_08076060(struct UnitListScreenProc * proc)
         {    
             for (r4 = proc->unk_40 / 8; r4 < 12 + proc->unk_40 / 8; r4++)
             {
-                gBg0Tm[r5 + 0x1C + (r4 & 0x1F) * 0x20 - proc->unk_38] = *(r5 + 8 + (r4 & 0x1F) * 0x20 + gUnk_0200CD3A);
+                gBg0Tm[r5 + 0x1C + (r4 & 0x1F) * 0x20 - proc->unk_38] = *(r5 + 8 + (r4 & 0x1F) * 0x20 + gUnitListRowsTmBuf);
             }
 
             for (r4 = 0; r4 < 2; r4++)
             {
-                gBg2Tm[r5 + 0x1C - proc->unk_38 + r4 * 0x20 + 0xA0] = *(gUnk_0200D53A + r5 + 8 + r4 * 0x20);
+                gBg2Tm[r5 + 0x1C - proc->unk_38 + r4 * 0x20 + 0xA0] = *(gUnitListHeaderTmBuf + r5 + 8 + r4 * 0x20);
             }
         }
     }
@@ -1302,12 +1300,12 @@ void func_fe6_08076060(struct UnitListScreenProc * proc)
         {    
             for (r4 = proc->unk_40 / 8; r4 < 12 + proc->unk_40 / 8; r4++)
             {
-                gBg0Tm[(((r4 & 0x1F) << 5) + 8) + r5] = *((r5 + 0x1C - proc->unk_38) + (r4 & 0x1F) * 0x20 + gUnk_0200CD3A);
+                gBg0Tm[(((r4 & 0x1F) << 5) + 8) + r5] = *((r5 + 0x1C - proc->unk_38) + (r4 & 0x1F) * 0x20 + gUnitListRowsTmBuf);
             }
 
             for (r4 = 0; r4 < 2; r4++)
             {
-                gBg2Tm[0xA8 + TM_OFFSET(r5, r4)] = *(gUnk_0200D53A + (r5 + 0x1C - proc->unk_38) + r4 * 0x20);
+                gBg2Tm[0xA8 + TM_OFFSET(r5, r4)] = *(gUnitListHeaderTmBuf + (r5 + 0x1C - proc->unk_38) + r4 * 0x20);
             }
         }
     }
@@ -1318,256 +1316,6 @@ void func_fe6_08076060(struct UnitListScreenProc * proc)
         Proc_Break(proc);
 }
 
-#else // NONMATCHING
-
-NAKEDFUNC
-void func_fe6_08076060(struct UnitListScreenProc * proc)
-{
-    // https://decomp.me/scratch/j9zM3
-
-    asm(".syntax unified\n\
-        push {r4, r5, r6, r7, lr}\n\
-        mov r7, sl\n\
-        mov r6, sb\n\
-        mov r5, r8\n\
-        push {r5, r6, r7}\n\
-        sub sp, #0x18\n\
-        str r0, [sp]\n\
-        adds r2, r0, #0\n\
-        adds r2, #0x38\n\
-        ldr r0, .L08076150 @ =gUnk_08678722\n\
-        ldr r1, [sp]\n\
-        ldrh r1, [r1, #0x3e]\n\
-        adds r0, r1, r0\n\
-        ldrb r3, [r2]\n\
-        ldrb r0, [r0]\n\
-        adds r0, r3, r0\n\
-        strb r0, [r2]\n\
-        lsls r0, r0, #0x18\n\
-        lsrs r0, r0, #0x18\n\
-        cmp r0, #0x14\n\
-        bls .L0807608E\n\
-        movs r0, #0x14\n\
-        strb r0, [r2]\n\
-    .L0807608E:\n\
-        ldr r5, [sp]\n\
-        ldrh r0, [r5, #0x3e]\n\
-        adds r0, #1\n\
-        strh r0, [r5, #0x3e]\n\
-        adds r0, r5, #0\n\
-        adds r0, #0x36\n\
-        adds r1, r5, #0\n\
-        adds r1, #0x37\n\
-        ldrb r0, [r0]\n\
-        ldrb r1, [r1]\n\
-        cmp r0, r1\n\
-        bls .L08076164\n\
-        movs r5, #0\n\
-        str r2, [sp, #8]\n\
-        ldrb r6, [r2]\n\
-        cmp r5, r6\n\
-        blt .L080760B2\n\
-        b .L08076202\n\
-    .L080760B2:\n\
-        ldr r7, [sp]\n\
-        adds r7, #0x40\n\
-        str r7, [sp, #4]\n\
-        str r2, [sp, #0x10]\n\
-    .L080760BA:\n\
-        ldr r0, [sp, #4]\n\
-        ldrh r0, [r0]\n\
-        lsrs r4, r0, #3\n\
-        adds r0, r4, #0\n\
-        adds r0, #0xc\n\
-        adds r6, r5, #0\n\
-        adds r6, #0x1c\n\
-        movs r1, #8\n\
-        adds r1, r1, r5\n\
-        mov ip, r1\n\
-        adds r5, #1\n\
-        mov sb, r5\n\
-        cmp r4, r0\n\
-        bge .L08076116\n\
-        str r6, [sp, #0xc]\n\
-        ldr r2, .L08076154 @ =gUnk_0200CD3A\n\
-        mov sl, r2\n\
-        lsls r1, r1, #1\n\
-        str r1, [sp, #0x14]\n\
-        movs r3, #0x1f\n\
-        mov r8, r3\n\
-    .L080760E4:\n\
-        adds r3, r4, #0\n\
-        mov r5, r8\n\
-        ands r3, r5\n\
-        lsls r1, r3, #5\n\
-        ldr r2, [sp, #0xc]\n\
-        ldr r7, [sp, #0x10]\n\
-        ldrb r7, [r7]\n\
-        subs r0, r2, r7\n\
-        adds r1, r1, r0\n\
-        lsls r1, r1, #1\n\
-        ldr r0, .L08076158 @ =gBg0Tm\n\
-        adds r1, r1, r0\n\
-        lsls r0, r3, #6\n\
-        ldr r2, [sp, #0x14]\n\
-        adds r0, r2, r0\n\
-        add r0, sl\n\
-        ldrh r0, [r0]\n\
-        strh r0, [r1]\n\
-        adds r4, #1\n\
-        ldr r3, [sp, #4]\n\
-        ldrh r3, [r3]\n\
-        lsrs r0, r3, #3\n\
-        adds r0, #0xc\n\
-        cmp r4, r0\n\
-        blt .L080760E4\n\
-    .L08076116:\n\
-        ldr r5, .L0807615C @ =gBg2Tm\n\
-        mov r8, r5\n\
-        adds r5, r6, #0\n\
-        mov r6, ip\n\
-        lsls r0, r6, #1\n\
-        ldr r7, .L08076160 @ =gUnk_0200D53A\n\
-        adds r2, r0, r7\n\
-        movs r3, #0xa0\n\
-        movs r4, #1\n\
-    .L08076128:\n\
-        ldr r1, [sp, #0x10]\n\
-        ldrb r1, [r1]\n\
-        subs r0, r5, r1\n\
-        adds r0, r3, r0\n\
-        lsls r0, r0, #1\n\
-        add r0, r8\n\
-        ldrh r1, [r2]\n\
-        strh r1, [r0]\n\
-        adds r2, #0x40\n\
-        adds r3, #0x20\n\
-        subs r4, #1\n\
-        cmp r4, #0\n\
-        bge .L08076128\n\
-        mov r5, sb\n\
-        ldr r2, [sp, #0x10]\n\
-        ldrb r2, [r2]\n\
-        cmp r5, r2\n\
-        blt .L080760BA\n\
-        b .L08076202\n\
-        .align 2, 0\n\
-    .L08076150: .4byte gUnk_08678722\n\
-    .L08076154: .4byte gUnk_0200CD3A\n\
-    .L08076158: .4byte gBg0Tm\n\
-    .L0807615C: .4byte gBg2Tm\n\
-    .L08076160: .4byte gUnk_0200D53A\n\
-    .L08076164:\n\
-        movs r5, #0\n\
-        str r2, [sp, #8]\n\
-        ldrb r3, [r2]\n\
-        cmp r5, r3\n\
-        bge .L08076202\n\
-        ldr r6, [sp]\n\
-        adds r6, #0x40\n\
-        mov sl, r6\n\
-        str r2, [sp, #0x10]\n\
-    .L08076176:\n\
-        mov r7, sl\n\
-        ldrh r7, [r7]\n\
-        lsrs r4, r7, #3\n\
-        adds r0, r4, #0\n\
-        adds r0, #0xc\n\
-        adds r6, r5, #0\n\
-        adds r6, #0x1c\n\
-        adds r1, r5, #1\n\
-        mov sb, r1\n\
-        cmp r4, r0\n\
-        bge .L080761CC\n\
-        mov ip, r6\n\
-        movs r2, #0x1f\n\
-        mov r8, r2\n\
-    .L08076192:\n\
-        adds r3, r4, #0\n\
-        mov r7, r8\n\
-        ands r3, r7\n\
-        lsls r2, r3, #5\n\
-        adds r2, #8\n\
-        adds r2, r2, r5\n\
-        lsls r2, r2, #1\n\
-        ldr r0, .L08076228 @ =gBg0Tm\n\
-        adds r2, r2, r0\n\
-        str r2, [sp, #0x14]\n\
-        mov r2, ip\n\
-        ldr r1, [sp, #0x10]\n\
-        ldrb r1, [r1]\n\
-        subs r0, r2, r1\n\
-        lsls r0, r0, #1\n\
-        lsls r1, r3, #6\n\
-        adds r0, r0, r1\n\
-        ldr r2, .L0807622C @ =gUnk_0200CD3A\n\
-        adds r0, r0, r2\n\
-        ldrh r0, [r0]\n\
-        ldr r3, [sp, #0x14]\n\
-        strh r0, [r3]\n\
-        adds r4, #1\n\
-        mov r7, sl\n\
-        ldrh r7, [r7]\n\
-        lsrs r0, r7, #3\n\
-        adds r0, #0xc\n\
-        cmp r4, r0\n\
-        blt .L08076192\n\
-    .L080761CC:\n\
-        movs r4, #0\n\
-        ldr r0, .L08076230 @ =gUnk_0200D53A\n\
-        mov ip, r0\n\
-        adds r3, r6, #0\n\
-        adds r0, r5, #0\n\
-        adds r0, #0xa8\n\
-        lsls r0, r0, #1\n\
-        ldr r1, .L08076234 @ =gBg2Tm\n\
-        adds r2, r0, r1\n\
-    .L080761DE:\n\
-        ldr r5, [sp, #0x10]\n\
-        ldrb r5, [r5]\n\
-        subs r0, r3, r5\n\
-        lsls r0, r0, #1\n\
-        lsls r1, r4, #6\n\
-        adds r0, r0, r1\n\
-        add r0, ip\n\
-        ldrh r0, [r0]\n\
-        strh r0, [r2]\n\
-        adds r2, #0x40\n\
-        adds r4, #1\n\
-        cmp r4, #1\n\
-        ble .L080761DE\n\
-        mov r5, sb\n\
-        ldr r6, [sp, #0x10]\n\
-        ldrb r6, [r6]\n\
-        cmp r5, r6\n\
-        blt .L08076176\n\
-    .L08076202:\n\
-        movs r0, #5\n\
-        bl EnableBgSync\n\
-        ldr r7, [sp, #8]\n\
-        ldrb r7, [r7]\n\
-        cmp r7, #0x13\n\
-        bls .L08076216\n\
-        ldr r0, [sp]\n\
-        bl Proc_Break\n\
-    .L08076216:\n\
-        add sp, #0x18\n\
-        pop {r3, r4, r5}\n\
-        mov r8, r3\n\
-        mov sb, r4\n\
-        mov sl, r5\n\
-        pop {r4, r5, r6, r7}\n\
-        pop {r0}\n\
-        bx r0\n\
-        .align 2, 0\n\
-    .L08076228: .4byte gBg0Tm\n\
-    .L0807622C: .4byte gUnk_0200CD3A\n\
-    .L08076230: .4byte gUnk_0200D53A\n\
-    .L08076234: .4byte gBg2Tm\n\
-        .syntax divided");
-}
-
-#endif // NONMATCHING
 
 struct ProcScr CONST_DATA ProcScr_UnitListScreen[] =
 {
@@ -1602,8 +1350,8 @@ PROC_LABEL(1),
 
 PROC_LABEL(2),
     PROC_CALL(UnitList_StartPageChange),
-    PROC_REPEAT(func_fe6_08075E94),
-    PROC_REPEAT(func_fe6_08076060),
+    PROC_REPEAT(UnitList_PageSlideOut_Loop),
+    PROC_REPEAT(UnitList_PageSlideIn_Loop),
     PROC_GOTO(1),
 
 PROC_LABEL(3),
@@ -1641,8 +1389,8 @@ PROC_LABEL(1),
     PROC_GOTO(4),
 PROC_LABEL(2),
     PROC_CALL(UnitList_StartPageChange),
-    PROC_REPEAT(func_fe6_08075E94),
-    PROC_REPEAT(func_fe6_08076060),
+    PROC_REPEAT(UnitList_PageSlideOut_Loop),
+    PROC_REPEAT(UnitList_PageSlideIn_Loop),
     PROC_GOTO(1),
 PROC_LABEL(3),
     PROC_CALL(UnitList_StartStatScreen),
@@ -1747,7 +1495,7 @@ void func_fe6_08076314(u16 * tm, fu8 page)
 
     TmFillRect(tm + 9, 0x13, 1, 0);
 
-    ClearText(&gUnk_0200D6A4);
+    ClearText(&gUnitListFieldLabelText);
 
     if (page == UNITLIST_PAGE_WEXP)
     {
@@ -1760,12 +1508,12 @@ void func_fe6_08076314(u16 * tm, fu8 page)
     {
         for (i = 1; i < 9 && UnitListPageFields[page][i].x_column != 0; i++)
         {
-            Text_SetCursor(&gUnk_0200D6A4, UnitListPageFields[page][i].x_column - 0x40);
-            Text_SetColor(&gUnk_0200D6A4, TEXT_COLOR_SYSTEM_WHITE);
-            Text_DrawString(&gUnk_0200D6A4, UnitListPageFields[page][i].label_string);
+            Text_SetCursor(&gUnitListFieldLabelText, UnitListPageFields[page][i].x_column - 0x40);
+            Text_SetColor(&gUnitListFieldLabelText, TEXT_COLOR_SYSTEM_WHITE);
+            Text_DrawString(&gUnitListFieldLabelText, UnitListPageFields[page][i].label_string);
         }
         
-        PutText(&gUnk_0200D6A4, tm + 8);
+        PutText(&gUnitListFieldLabelText, tm + 8);
     }
 
     EnableBgSync(BG2_SYNC_BIT);
@@ -1813,64 +1561,64 @@ void func_fe6_08076448(struct UnitListScreenProc * proc, fu8 unit_num, u16 * tm,
 
     if (put_name != 0)
     {
-        ClearText(&gUnk_0200D5BC[row]);
-        Text_SetCursor(&gUnk_0200D5BC[row], 0);
+        ClearText(&gUnitListNameTexts[row]);
+        Text_SetCursor(&gUnitListNameTexts[row], 0);
 
         if (proc->unk_3C == 0 && proc->mode == UNITLIST_MODE_PREPMENU && IsUnitMandatoryDeploy(gSortedUnits[unit_num]->unit))
         {
-            Text_SetColor(&gUnk_0200D5BC[row], TEXT_COLOR_SYSTEM_GREEN);
+            Text_SetColor(&gUnitListNameTexts[row], TEXT_COLOR_SYSTEM_GREEN);
         }
         else
         {
-            Text_SetColor(&gUnk_0200D5BC[row], inactive ? TEXT_COLOR_SYSTEM_GRAY : TEXT_COLOR_SYSTEM_WHITE);
+            Text_SetColor(&gUnitListNameTexts[row], inactive ? TEXT_COLOR_SYSTEM_GRAY : TEXT_COLOR_SYSTEM_WHITE);
         }
 
-        Text_DrawString(&gUnk_0200D5BC[row], DecodeMsg(gSortedUnits[unit_num]->unit->pinfo->msg_name));
-        PutText(&gUnk_0200D5BC[row], tm + y * 0x20 + 3);
+        Text_DrawString(&gUnitListNameTexts[row], DecodeMsg(gSortedUnits[unit_num]->unit->pinfo->msg_name));
+        PutText(&gUnitListNameTexts[row], tm + y * 0x20 + 3);
     }
 
-    ClearText(&gUnk_0200D5F4[row][0]);
-    ClearText(&gUnk_0200D5F4[row][1]);
+    ClearText(&gUnitListFieldTexts[row][0]);
+    ClearText(&gUnitListFieldTexts[row][1]);
 
     TmFillRect(tm + y * 0x20 + 8, 0x18, 1, 0);
 
     switch (page)
     {
         case UNITLIST_PAGE_SOLOANIM:
-            PutDrawText(&gUnk_0200D5F4[row][0], tm + y * 0x20 + 8, 0, 0, 0, DecodeMsg(gSortedUnits[unit_num]->unit->jinfo->msg_name));
-            Text_SetColor(&gUnk_0200D5F4[row][1], inactive ? TEXT_COLOR_SYSTEM_GRAY : TEXT_COLOR_SYSTEM_WHITE);
+            PutDrawText(&gUnitListFieldTexts[row][0], tm + y * 0x20 + 8, 0, 0, 0, DecodeMsg(gSortedUnits[unit_num]->unit->jinfo->msg_name));
+            Text_SetColor(&gUnitListFieldTexts[row][1], inactive ? TEXT_COLOR_SYSTEM_GRAY : TEXT_COLOR_SYSTEM_WHITE);
 
             if (GetUnitEquippedWeapon(gSortedUnits[unit_num]->unit) == 0)
             {
-                PutDrawText(&gUnk_0200D5F4[row][1], tm + y * 0x20 + 17, inactive ? TEXT_COLOR_SYSTEM_GRAY : TEXT_COLOR_SYSTEM_WHITE, 0, 0, JTEXT("ーーーー"));
+                PutDrawText(&gUnitListFieldTexts[row][1], tm + y * 0x20 + 17, inactive ? TEXT_COLOR_SYSTEM_GRAY : TEXT_COLOR_SYSTEM_WHITE, 0, 0, JTEXT("ーーーー"));
             }
             else
             {
-                PutDrawText(&gUnk_0200D5F4[row][1], tm + y * 0x20 + 17, inactive ? TEXT_COLOR_SYSTEM_GRAY : TEXT_COLOR_SYSTEM_WHITE, 0, 0, GetItemName(GetUnitEquippedWeapon(gSortedUnits[unit_num]->unit)));
+                PutDrawText(&gUnitListFieldTexts[row][1], tm + y * 0x20 + 17, inactive ? TEXT_COLOR_SYSTEM_GRAY : TEXT_COLOR_SYSTEM_WHITE, 0, 0, GetItemName(GetUnitEquippedWeapon(gSortedUnits[unit_num]->unit)));
                 PutIcon(tm + y * 0x20 + 15, GetItemIcon(GetUnitEquippedWeapon(gSortedUnits[unit_num]->unit)), TILEREF(0, BGPAL_ICONS));
                 func_fe6_08074384(GetItemIcon(GetUnitEquippedWeapon(gSortedUnits[unit_num]->unit)));
             }
 
-            ClearText(&gUnk_0200D5F4[row][2]);
+            ClearText(&gUnitListFieldTexts[row][2]);
 
             if (gSortedUnits[unit_num]->unit->pinfo->id == PID_MERLINUS)
             {
-                PutDrawText(&gUnk_0200D5F4[row][2], tm + y * 0x20 + 24, 1, 4, 0, JTEXT("オフ"));
+                PutDrawText(&gUnitListFieldTexts[row][2], tm + y * 0x20 + 24, 1, 4, 0, JTEXT("オフ"));
             }
             else
             {
                 switch (gSortedUnits[unit_num]->unit->flags & UNIT_FLAG_SOLOANIM)
                 {
                     case UNIT_FLAG_SOLOANIM_1:
-                        PutDrawText(&gUnk_0200D5F4[row][2], tm + y * 0x20 + 24, 4, 8, 0, JTEXT("１"));
+                        PutDrawText(&gUnitListFieldTexts[row][2], tm + y * 0x20 + 24, 4, 8, 0, JTEXT("１"));
                         break;
 
                     case UNIT_FLAG_SOLOANIM_2:
-                        PutDrawText(&gUnk_0200D5F4[row][2], tm + y * 0x20 + 24, 4, 8, 0, JTEXT("２"));
+                        PutDrawText(&gUnitListFieldTexts[row][2], tm + y * 0x20 + 24, 4, 8, 0, JTEXT("２"));
                         break;
 
                     case 0:
-                        PutDrawText(&gUnk_0200D5F4[row][2], tm + y * 0x20 + 24, 1, 4, 0, JTEXT("オフ"));
+                        PutDrawText(&gUnitListFieldTexts[row][2], tm + y * 0x20 + 24, 1, 4, 0, JTEXT("オフ"));
                         break;
                 }
             }
@@ -1879,7 +1627,7 @@ void func_fe6_08076448(struct UnitListScreenProc * proc, fu8 unit_num, u16 * tm,
 
         case UNITLIST_PAGE_1:
             // jinfo
-            PutDrawText(&gUnk_0200D5F4[row][0], tm + y * 0x20 + 8, inactive ? TEXT_COLOR_SYSTEM_GRAY : TEXT_COLOR_SYSTEM_WHITE, 0, 0, DecodeMsg(gSortedUnits[unit_num]->unit->jinfo->msg_name));
+            PutDrawText(&gUnitListFieldTexts[row][0], tm + y * 0x20 + 8, inactive ? TEXT_COLOR_SYSTEM_GRAY : TEXT_COLOR_SYSTEM_WHITE, 0, 0, DecodeMsg(gSortedUnits[unit_num]->unit->jinfo->msg_name));
 
             // level
             PutNumberOrBlank(tm + y * 0x20 + 17, inactive ? TEXT_COLOR_SYSTEM_GRAY : TEXT_COLOR_SYSTEM_BLUE, gSortedUnits[unit_num]->unit->level);
@@ -1914,13 +1662,13 @@ void func_fe6_08076448(struct UnitListScreenProc * proc, fu8 unit_num, u16 * tm,
         case UNITLIST_PAGE_3:
             if (GetUnitEquippedWeapon(gSortedUnits[unit_num]->unit) == 0)
             {
-                PutDrawText(&gUnk_0200D5F4[row][0], tm + y * 0x20 + 10, inactive ? TEXT_COLOR_SYSTEM_GRAY : TEXT_COLOR_SYSTEM_WHITE, 0, 0, JTEXT("ーーーー"));
+                PutDrawText(&gUnitListFieldTexts[row][0], tm + y * 0x20 + 10, inactive ? TEXT_COLOR_SYSTEM_GRAY : TEXT_COLOR_SYSTEM_WHITE, 0, 0, JTEXT("ーーーー"));
             }
             else
             {
                 char const * name = GetItemName(GetUnitEquippedWeapon(gSortedUnits[unit_num]->unit));
 
-                PutDrawText(&gUnk_0200D5F4[row][0], tm + y * 0x20 + 10,
+                PutDrawText(&gUnitListFieldTexts[row][0], tm + y * 0x20 + 10,
                     inactive ? TEXT_COLOR_SYSTEM_GRAY : TEXT_COLOR_SYSTEM_WHITE, 0, dummy_zero, name);
 
                 PutIcon(tm + y * 0x20 + 8, GetItemIcon(GetUnitEquippedWeapon(gSortedUnits[unit_num]->unit)), TILEREF(0, BGPAL_ICONS));
@@ -1941,13 +1689,13 @@ void func_fe6_08076448(struct UnitListScreenProc * proc, fu8 unit_num, u16 * tm,
         case UNITLIST_PAGE_4:
             if ((gSortedUnits[unit_num]->unit->flags & UNIT_FLAG_RESCUING) != 0)
             {
-                PutDrawText(&gUnk_0200D5F4[row][1], tm + y * 0x20 + 18,
+                PutDrawText(&gUnitListFieldTexts[row][1], tm + y * 0x20 + 18,
                     inactive ? TEXT_COLOR_SYSTEM_GRAY : TEXT_COLOR_SYSTEM_WHITE, 0, 0,
                     GetUnitRescueName(gSortedUnits[unit_num]->unit));
             }
             else
             {
-                PutDrawText(&gUnk_0200D5F4[row][1], tm + y * 0x20 + 18,
+                PutDrawText(&gUnitListFieldTexts[row][1], tm + y * 0x20 + 18,
                     inactive ? TEXT_COLOR_SYSTEM_GRAY : TEXT_COLOR_SYSTEM_WHITE, 0, 0,
                     JTEXT("ーーー"));
             }
@@ -1961,7 +1709,7 @@ void func_fe6_08076448(struct UnitListScreenProc * proc, fu8 unit_num, u16 * tm,
             PutNumberOrBlank(tm + y * 0x20 + 16, inactive ? TEXT_COLOR_SYSTEM_GRAY : TEXT_COLOR_SYSTEM_BLUE,
                 GetUnitAid(gSortedUnits[unit_num]->unit));
 
-            PutDrawText(&gUnk_0200D5F4[row][0], tm + y * 0x20 + 23,
+            PutDrawText(&gUnitListFieldTexts[row][0], tm + y * 0x20 + 23,
                 inactive ? TEXT_COLOR_SYSTEM_GRAY : TEXT_COLOR_SYSTEM_WHITE, 0, 0,
                 GetUnitStatusName(gSortedUnits[unit_num]->unit));
 
@@ -2002,7 +1750,7 @@ void func_fe6_08076448(struct UnitListScreenProc * proc, fu8 unit_num, u16 * tm,
             num = 0;
             support_count = GetUnitSupportCount(gSortedUnits[unit_num]->unit);
 
-            ClearText(&gUnk_0200D5F4[row][2]);
+            ClearText(&gUnitListFieldTexts[row][2]);
 
             for (i = 0; i < support_count; i++)
             {
@@ -2017,7 +1765,7 @@ void func_fe6_08076448(struct UnitListScreenProc * proc, fu8 unit_num, u16 * tm,
                             char const * name = DecodeMsg(
                                 GetPInfo(GetUnitSupportPid(gSortedUnits[unit_num]->unit, i))->msg_name);
 
-                            PutDrawText(&gUnk_0200D5F4[row][num], tm + y * 0x20 + 9 + num * 6,
+                            PutDrawText(&gUnitListFieldTexts[row][num], tm + y * 0x20 + 9 + num * 6,
                                 inactive ? TEXT_COLOR_SYSTEM_GRAY : TEXT_COLOR_SYSTEM_WHITE, 0, 0, name);
                         }
                         else
@@ -2025,7 +1773,7 @@ void func_fe6_08076448(struct UnitListScreenProc * proc, fu8 unit_num, u16 * tm,
                             char const * name = DecodeMsg(
                                 GetPInfo(GetUnitSupportPid(gSortedUnits[unit_num]->unit, i))->msg_name);
 
-                            PutDrawText(&gUnk_0200D5F4[row][num], tm + y * 0x20 + 9 + num * 6,
+                            PutDrawText(&gUnitListFieldTexts[row][num], tm + y * 0x20 + 9 + num * 6,
                                 TEXT_COLOR_SYSTEM_GRAY, 0, 0, name);
                         }
     
@@ -2043,7 +1791,7 @@ void func_fe6_08076448(struct UnitListScreenProc * proc, fu8 unit_num, u16 * tm,
 
             for (; num < 3; num++)
             {
-                PutDrawText(&gUnk_0200D5F4[row][num], tm + y * 0x20 + 9 + num * 6 ,
+                PutDrawText(&gUnitListFieldTexts[row][num], tm + y * 0x20 + 9 + num * 6 ,
                     inactive ? TEXT_COLOR_SYSTEM_GRAY : TEXT_COLOR_SYSTEM_WHITE, 0, 0, JTEXT("ーーー"));
             }
 
@@ -2072,7 +1820,7 @@ bool SortUnitList(fu8 key, fu8 order)
 
     #define BUILD_CACHE(key) \
     { \
-        for (i = 0; i < gUnk_0200CD38; i++) \
+        for (i = 0; i < gUnitListCount; i++) \
         { \
             cache[i] = key(i); \
         } \
@@ -2098,9 +1846,9 @@ bool SortUnitList(fu8 key, fu8 order)
     #define SORT_CORE(cond, swap) \
     { \
         /* this is a bubble sort, I think */ \
-        for (i = 0; i < gUnk_0200CD38 - 1; i++) \
+        for (i = 0; i < gUnitListCount - 1; i++) \
         { \
-            for (j = 0; j < gUnk_0200CD38 - 1 - i; j++) \
+            for (j = 0; j < gUnitListCount - 1 - i; j++) \
             { \
                 if (cond) \
                 { \
@@ -2115,9 +1863,9 @@ bool SortUnitList(fu8 key, fu8 order)
     #define SORT_CORE_KEY(key, arrow, swap) \
     { \
         /* this is a bubble sort, I think */ \
-        for (i = 0; i < gUnk_0200CD38 - 1; i++) \
+        for (i = 0; i < gUnitListCount - 1; i++) \
         { \
-            for (j = 0; j < gUnk_0200CD38 - 1 - i; j++) \
+            for (j = 0; j < gUnitListCount - 1 - i; j++) \
             { \
                 if (key(j + 1) arrow key(j)) \
                 { \
@@ -2257,14 +2005,14 @@ bool SortUnitList(fu8 key, fu8 order)
         case UNITLIST_SORTKEY_14:
             SORT_MAIN(
             {
-                for (i = 0; i < gUnk_0200CD38; i++)
+                for (i = 0; i < gUnitListCount; i++)
                 {
                     cache[i] = GetItemIid(GetUnitEquippedWeapon(gSortedUnits[i]->unit));
                 }
 
-                for (i = 0; i < gUnk_0200CD38 - 1; i++)
+                for (i = 0; i < gUnitListCount - 1; i++)
                 {
-                    for (j = 0; j < gUnk_0200CD38 - 1 - i; j++)
+                    for (j = 0; j < gUnitListCount - 1 - i; j++)
                     {
                         if (cache[j + 1] > cache[j])
                         {
@@ -2280,14 +2028,14 @@ bool SortUnitList(fu8 key, fu8 order)
                 }
             },
             {
-                for (i = 0; i < gUnk_0200CD38; i++)
+                for (i = 0; i < gUnitListCount; i++)
                 {
                     cache[i] = GetItemIid(GetUnitEquippedWeapon(gSortedUnits[i]->unit));
                 }
 
-                for (i = 0; i < gUnk_0200CD38 - 1; i++)
+                for (i = 0; i < gUnitListCount - 1; i++)
                 {
-                    for (j = 0; j < gUnk_0200CD38 - 1 - i; j++)
+                    for (j = 0; j < gUnitListCount - 1 - i; j++)
                     {
                         if (cache[j + 1] < cache[j])
                         {
@@ -2329,7 +2077,7 @@ bool SortUnitList(fu8 key, fu8 order)
         case UNITLIST_SORTKEY_22:
             SORT_MAIN(
             {
-                for (i = 0; i < gUnk_0200CD38; i++)
+                for (i = 0; i < gUnitListCount; i++)
                 {
                     if ((gSortedUnits[i]->unit->flags & 0x10) != 0)
                         cache[i] = 1;
@@ -2340,7 +2088,7 @@ bool SortUnitList(fu8 key, fu8 order)
                 SORT_CORE(cache[j + 1] > cache[j], SWAP_CACHE)
             },
             {
-                for (i = 0; i < gUnk_0200CD38; i++)
+                for (i = 0; i < gUnitListCount; i++)
                 {
                     if ((gSortedUnits[i]->unit->flags & 0x10) != 0)
                         cache[i] = 1;
@@ -2407,7 +2155,7 @@ struct ProcScr CONST_DATA ProcScr_UnitListScreenSprites[] =
     PROC_END,
 };
 
-u8 CONST_DATA gUnk_0867871C[] =
+u8 CONST_DATA gUnitListPageSlideOutSpeedLut[] =
 {
     0x5,
     0x4,
@@ -2417,7 +2165,7 @@ u8 CONST_DATA gUnk_0867871C[] =
     0x2,
 };
 
-u8 CONST_DATA gUnk_08678722[] =
+u8 CONST_DATA gUnitListPageSlideInSpeedLut[] =
 {
     0x5,
     0x4,

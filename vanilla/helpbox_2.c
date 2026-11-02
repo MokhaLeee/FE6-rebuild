@@ -17,7 +17,7 @@
 #include "constants/videoalloc_global.h"
 #include "constants/songs.h"
 
-struct Unk_0203D40C
+struct HelpBoxSt
 {
     /* 00 */ struct Font font;
     /* 18 */ struct Text text[3];
@@ -62,7 +62,7 @@ struct ProcTypeWritter2
 };
 
 int EWRAM_DATA unused_0203D408 = 0;
-struct Unk_0203D40C EWRAM_DATA gHelpBoxSt = { { 0 } };
+struct HelpBoxSt EWRAM_DATA gHelpBoxSt = { { 0 } };
 
 void LoadHelpBoxGfx(void * vram, int pal)
 {
@@ -466,7 +466,7 @@ void func_fe6_080715DC(int x, int y, int msg)
     func_fe6_08071748(&static_info);
 }
 
-struct HelpBoxInfo const * EWRAM_DATA gUnk_0203D45C = NULL;
+struct HelpBoxInfo const * EWRAM_DATA gCurrentHelpBoxInfo = NULL;
 
 void func_fe6_080715FC(struct HelpBoxInfo const * info)
 {
@@ -506,7 +506,7 @@ void func_fe6_080715FC(struct HelpBoxInfo const * info)
     ClearHelpBoxText();
     StartHelpBoxTextInit(proc->item, proc->msg);
 
-    gUnk_0203D45C = info;
+    gCurrentHelpBoxInfo = info;
 }
 
 void func_fe6_080716C8(void)
@@ -674,12 +674,12 @@ bool func_fe6_080718E0(void)
     return FALSE;
 }
 
-struct Unk_0203D40C EWRAM_DATA gUnk_0203D460 = { { 0 } };
+struct HelpBoxSt EWRAM_DATA gHelpBoxStAlt = { { 0 } };
 
 void func_fe6_080718FC(void * vram, int pal)
 {
     // identical to LoadHelpBoxGfx
-    // except for gUnk_0203D460 instead of gHelpBoxSt
+    // except for gHelpBoxStAlt instead of gHelpBoxSt
 
     if (vram == NULL)
         vram = ((void *) VRAM) + 0x10000 + OBCHR_HELPBOX_180 * CHR_SIZE;
@@ -691,15 +691,15 @@ void func_fe6_080718FC(void * vram, int pal)
 
     Decompress(Img_Helpbox_08308A78, vram);
 
-    InitSpriteTextFont(&gUnk_0203D460.font, vram, pal);
-    InitSpriteText(gUnk_0203D460.text + 0);
-    InitSpriteText(gUnk_0203D460.text + 1);
-    InitSpriteText(gUnk_0203D460.text + 2);
+    InitSpriteTextFont(&gHelpBoxStAlt.font, vram, pal);
+    InitSpriteText(gHelpBoxStAlt.text + 0);
+    InitSpriteText(gHelpBoxStAlt.text + 1);
+    InitSpriteText(gHelpBoxStAlt.text + 2);
     SetTextFont(NULL);
 
     ApplyPalette(Pal_08100A48, pal);
 
-    gUnk_0203D460.unk_30 = OAM2_CHR(((uptr) vram) / CHR_SIZE) + OAM2_PAL(pal);
+    gHelpBoxStAlt.unk_30 = OAM2_CHR(((uptr) vram) / CHR_SIZE) + OAM2_PAL(pal);
 }
 
 void func_fe6_08071978(struct HelpBoxProc * proc, int x, int y)
@@ -1022,7 +1022,7 @@ void func_fe6_08071D04(int x, int y, int msg)
 void func_fe6_08071D94(int x_box, int y_box, int w_box, int h_box)
 {
     // identical to PutSpriteTalkBox
-    // except it refers to gUnk_0203D460 instead of gHelpBoxSt, and uses layer 2 instead of 0
+    // except it refers to gHelpBoxStAlt instead of gHelpBoxSt, and uses layer 2 instead of 0
 
     int y_count, x_count;
     int iy, ix, x_px, y_px;
@@ -1056,7 +1056,7 @@ void func_fe6_08071D94(int x_box, int y_box, int w_box, int h_box)
                 y_px = h_box;
             y_px = y_px - 0x10;
 
-            PutSprite(2, x_box + x_px, y_box + y_px, Sprite_32x16, gUnk_0203D460.unk_30 + ix * 4 + iy * 0x40);
+            PutSprite(2, x_box + x_px, y_box + y_px, Sprite_32x16, gHelpBoxStAlt.unk_30 + ix * 4 + iy * 0x40);
         }
     }
 
@@ -1067,8 +1067,8 @@ void func_fe6_08071D94(int x_box, int y_box, int w_box, int h_box)
             x_px = w_box;
         x_px = x_px - 0x20;
 
-        PutSprite(2, x_box + x_px, y_box - 8, Sprite_32x8, gUnk_0203D460.unk_30 + 0x1B);
-        PutSprite(2, x_box + x_px, y_box + h_box, Sprite_32x8_VFlipped, gUnk_0203D460.unk_30 + 0x1B);
+        PutSprite(2, x_box + x_px, y_box - 8, Sprite_32x8, gHelpBoxStAlt.unk_30 + 0x1B);
+        PutSprite(2, x_box + x_px, y_box + h_box, Sprite_32x8_VFlipped, gHelpBoxStAlt.unk_30 + 0x1B);
     }
 
     for (iy = y_count; iy >= 0; iy--)
@@ -1078,14 +1078,14 @@ void func_fe6_08071D94(int x_box, int y_box, int w_box, int h_box)
             y_px = h_box;
         y_px -= 0x10;
 
-        PutSprite(2, x_box - 8, y_box + y_px, Sprite_8x16, gUnk_0203D460.unk_30 + 0x1F);
-        PutSprite(2, x_box + w_box, y_box + y_px, Sprite_8x16_HFlipped, gUnk_0203D460.unk_30 + 0x1F);
+        PutSprite(2, x_box - 8, y_box + y_px, Sprite_8x16, gHelpBoxStAlt.unk_30 + 0x1F);
+        PutSprite(2, x_box + w_box, y_box + y_px, Sprite_8x16_HFlipped, gHelpBoxStAlt.unk_30 + 0x1F);
     }
 
-    PutSprite(2, x_box - 8, y_box - 8, Sprite_8x8, gUnk_0203D460.unk_30 + 0x3E);
-    PutSprite(2, x_box + w_box, y_box - 8, Sprite_8x8_HFlipped, gUnk_0203D460.unk_30 + 0x3E);
-    PutSprite(2, x_box - 8, y_box + h_box, Sprite_8x8_VFlipped, gUnk_0203D460.unk_30 + 0x3E);
-    PutSprite(2, x_box + w_box, y_box + h_box, Sprite_8x8_HFlipped_VFlipped, gUnk_0203D460.unk_30 + 0x3E);
+    PutSprite(2, x_box - 8, y_box - 8, Sprite_8x8, gHelpBoxStAlt.unk_30 + 0x3E);
+    PutSprite(2, x_box + w_box, y_box - 8, Sprite_8x8_HFlipped, gHelpBoxStAlt.unk_30 + 0x3E);
+    PutSprite(2, x_box - 8, y_box + h_box, Sprite_8x8_VFlipped, gHelpBoxStAlt.unk_30 + 0x3E);
+    PutSprite(2, x_box + w_box, y_box + h_box, Sprite_8x8_HFlipped_VFlipped, gHelpBoxStAlt.unk_30 + 0x3E);
 }
 
 void func_fe6_08071F50(struct ProcTypeWritter2 * proc)
@@ -1100,11 +1100,11 @@ void func_fe6_08071F64(struct ProcTypeWritter2 * proc)
 
     if (proc->unk_58 == 1)
     {
-        SetTextFont(&gUnk_0203D460.font);
+        SetTextFont(&gHelpBoxStAlt.font);
 
-        SpriteText_DrawBackground(&gUnk_0203D460.text[0]);
-        SpriteText_DrawBackground(&gUnk_0203D460.text[1]);
-        SpriteText_DrawBackground(&gUnk_0203D460.text[2]);
+        SpriteText_DrawBackground(&gHelpBoxStAlt.text[0]);
+        SpriteText_DrawBackground(&gHelpBoxStAlt.text[1]);
+        SpriteText_DrawBackground(&gHelpBoxStAlt.text[2]);
 
         SetTextFont(NULL);
 
@@ -1207,13 +1207,13 @@ void func_fe6_08072100(struct HelpBoxStartPrintProc * proc)
 {
     struct ProcTypeWritter2 * new_proc;
 
-    SetTextFont(&gUnk_0203D460.font);
+    SetTextFont(&gHelpBoxStAlt.font);
 
     SetTextFontGlyphs(TEXT_GLYPHS_SYSTEM); // NOTE: useless
     SetTextFontGlyphs(TEXT_GLYPHS_TALK);
-    Text_SetColor(&gUnk_0203D460.text[0], TEXT_COLOR_4DEF);
-    Text_SetColor(&gUnk_0203D460.text[1], TEXT_COLOR_4DEF);
-    Text_SetColor(&gUnk_0203D460.text[2], TEXT_COLOR_4DEF);
+    Text_SetColor(&gHelpBoxStAlt.text[0], TEXT_COLOR_4DEF);
+    Text_SetColor(&gHelpBoxStAlt.text[1], TEXT_COLOR_4DEF);
+    Text_SetColor(&gHelpBoxStAlt.text[2], TEXT_COLOR_4DEF);
 
     SetTextFont(NULL);
 
@@ -1221,10 +1221,10 @@ void func_fe6_08072100(struct HelpBoxStartPrintProc * proc)
 
     new_proc = SpawnProc(ProcScr_HelpBoxPrint_086780E8, PROC_TREE_3);
 
-    new_proc->font = &gUnk_0203D460.font;
-    new_proc->text[0] = &gUnk_0203D460.text[0];
-    new_proc->text[1] = &gUnk_0203D460.text[1];
-    new_proc->text[2] = &gUnk_0203D460.text[2];
+    new_proc->font = &gHelpBoxStAlt.font;
+    new_proc->text[0] = &gHelpBoxStAlt.text[0];
+    new_proc->text[1] = &gHelpBoxStAlt.text[1];
+    new_proc->text[2] = &gHelpBoxStAlt.text[2];
     new_proc->line = 0;
     new_proc->str = DecodeMsg(proc->msg);
     new_proc->unk_50 = GetTextPrintDelay();
@@ -1250,11 +1250,11 @@ void func_fe6_080721B8(int msg)
 
 void func_fe6_080721D0(void)
 {
-    SetTextFont(&gUnk_0203D460.font);
+    SetTextFont(&gHelpBoxStAlt.font);
 
-    SpriteText_DrawBackground(&gUnk_0203D460.text[0]);
-    SpriteText_DrawBackground(&gUnk_0203D460.text[1]);
-    SpriteText_DrawBackground(&gUnk_0203D460.text[2]);
+    SpriteText_DrawBackground(&gHelpBoxStAlt.text[0]);
+    SpriteText_DrawBackground(&gHelpBoxStAlt.text[1]);
+    SpriteText_DrawBackground(&gHelpBoxStAlt.text[2]);
 
     Proc_EndEach(ProcScr_HelpBoxPrint_086780E8);
     Proc_EndEach(ProcScr_HelpBoxStartPrint_08678110);

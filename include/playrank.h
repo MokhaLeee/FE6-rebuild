@@ -232,7 +232,7 @@ void PlayRankTrialOBJ_Loop(ProcPtr proc);
 
 void NewPlayRankTrail(ProcPtr parent);
 
-extern CONST_DATA struct HelpBoxInfo HelpInfo_0868B1B0;
+extern CONST_DATA struct HelpBoxInfo HelpInfo_StatusScreen;
 extern CONST_DATA struct HelpBoxInfo HelpInfo_0868B1CC;
 extern CONST_DATA struct HelpBoxInfo HelpInfo_0868B1E8;
 extern CONST_DATA struct HelpBoxInfo HelpInfo_0868B204;
@@ -242,7 +242,7 @@ extern CONST_DATA struct HelpBoxInfo HelpInfo_0868B258;
 extern CONST_DATA struct HelpBoxInfo HelpInfo_0868B274;
 extern CONST_DATA struct HelpBoxInfo HelpInfo_0868B290;
 extern CONST_DATA struct HelpBoxInfo HelpInfo_0868B2AC;
-extern CONST_DATA struct HelpBoxInfo HelpInfo_0868B2C8;
+extern CONST_DATA struct HelpBoxInfo HelpInfo_StatusScreenExtraMap;
 extern CONST_DATA struct HelpBoxInfo HelpInfo_0868B2E4;
 extern CONST_DATA struct HelpBoxInfo HelpInfo_0868B300;
 extern CONST_DATA struct HelpBoxInfo HelpInfo_0868B31C;
@@ -251,7 +251,7 @@ extern CONST_DATA struct HelpBoxInfo HelpInfo_0868B354;
 extern CONST_DATA struct HelpBoxInfo HelpInfo_0868B370;
 extern CONST_DATA struct HelpBoxInfo HelpInfo_0868B38C;
 extern CONST_DATA struct HelpBoxInfo HelpInfo_0868B3A8;
-extern CONST_DATA struct HelpBoxInfo HelpInfo_0868B3C4;
+extern CONST_DATA struct HelpBoxInfo HelpInfo_StatusScreenExtraMapInfo;
 extern CONST_DATA struct HelpBoxInfo HelpInfo_0868B3E0;
 extern CONST_DATA struct PlayRankSt *gpPlayRankSt;
 extern u16 CONST_DATA Sprite_0868B410[];

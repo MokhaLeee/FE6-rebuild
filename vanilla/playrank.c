@@ -27,7 +27,7 @@
 #include "playrank.h"
 
 // 0x868B1B0
-CONST_DATA struct HelpBoxInfo HelpInfo_0868B1B0 = {
+CONST_DATA struct HelpBoxInfo HelpInfo_StatusScreen = {
 	.adjacent_down =  &HelpInfo_0868B204,
 	.adjacent_right = &HelpInfo_0868B1CC,
 	.x = 0x08,
@@ -38,7 +38,7 @@ CONST_DATA struct HelpBoxInfo HelpInfo_0868B1B0 = {
 // 0x868B1CC
 CONST_DATA struct HelpBoxInfo HelpInfo_0868B1CC = {
 	.adjacent_down =  &HelpInfo_0868B1E8,
-	.adjacent_left =  &HelpInfo_0868B1B0,
+	.adjacent_left =  &HelpInfo_StatusScreen,
 	.x = 0x8D,
 	.y = 0x20,
 	.msg = MSG_69D,
@@ -48,7 +48,7 @@ CONST_DATA struct HelpBoxInfo HelpInfo_0868B1CC = {
 CONST_DATA struct HelpBoxInfo HelpInfo_0868B1E8 = {
 	.adjacent_up =    &HelpInfo_0868B1CC,
 	.adjacent_down =  &HelpInfo_0868B274,
-	.adjacent_left =  &HelpInfo_0868B1B0,
+	.adjacent_left =  &HelpInfo_StatusScreen,
 	.x = 0x8D,
 	.y = 0x30,
 	.msg = MSG_6A2,
@@ -56,7 +56,7 @@ CONST_DATA struct HelpBoxInfo HelpInfo_0868B1E8 = {
 
 // 0x868B204
 CONST_DATA struct HelpBoxInfo HelpInfo_0868B204 = {
-	.adjacent_up =    &HelpInfo_0868B1B0,
+	.adjacent_up =    &HelpInfo_StatusScreen,
 	.adjacent_down =  &HelpInfo_0868B220,
 	.adjacent_right = &HelpInfo_0868B23C,
 	.x = 0x3C,
@@ -126,7 +126,7 @@ CONST_DATA struct HelpBoxInfo HelpInfo_0868B2AC = {
 };
 
 // 0x868B2C8
-CONST_DATA struct HelpBoxInfo HelpInfo_0868B2C8 = {
+CONST_DATA struct HelpBoxInfo HelpInfo_StatusScreenExtraMap = {
 	.adjacent_down =  &HelpInfo_0868B300,
 	.adjacent_right = &HelpInfo_0868B2E4,
 	.x = 0x08,
@@ -137,7 +137,7 @@ CONST_DATA struct HelpBoxInfo HelpInfo_0868B2C8 = {
 // 0x868B2E4
 CONST_DATA struct HelpBoxInfo HelpInfo_0868B2E4 = {
 	.adjacent_down =  &HelpInfo_0868B370,
-	.adjacent_left =  &HelpInfo_0868B2C8,
+	.adjacent_left =  &HelpInfo_StatusScreenExtraMap,
 	.x = 0xA5,
 	.y = 0x30,
 	.msg = MSG_69D,
@@ -145,7 +145,7 @@ CONST_DATA struct HelpBoxInfo HelpInfo_0868B2E4 = {
 
 // 0x868B300
 CONST_DATA struct HelpBoxInfo HelpInfo_0868B300 = {
-	.adjacent_up =    &HelpInfo_0868B2C8,
+	.adjacent_up =    &HelpInfo_StatusScreenExtraMap,
 	.adjacent_down =  &HelpInfo_0868B31C,
 	.adjacent_right = &HelpInfo_0868B338,
 	.x = 0x3C,
@@ -215,7 +215,7 @@ CONST_DATA struct HelpBoxInfo HelpInfo_0868B3A8 = {
 };
 
 // 0x868B3C4
-CONST_DATA struct HelpBoxInfo HelpInfo_0868B3C4 = {
+CONST_DATA struct HelpBoxInfo HelpInfo_StatusScreenExtraMapInfo = {
 	.adjacent_right = &HelpInfo_0868B3E0,
 	.x = 0x08,
 	.y = 0x31,
@@ -224,7 +224,7 @@ CONST_DATA struct HelpBoxInfo HelpInfo_0868B3C4 = {
 
 // 0x868B3E0
 CONST_DATA struct HelpBoxInfo HelpInfo_0868B3E0 = {
-	.adjacent_left =  &HelpInfo_0868B3C4,
+	.adjacent_left =  &HelpInfo_StatusScreenExtraMapInfo,
 	.x = 0xA5,
 	.y = 0x30,
 	.msg = MSG_69D,
@@ -1184,7 +1184,7 @@ void PlayRank_InitDisplay(void)
 	SetDispEnable(1, 1, 1, 1, 1);
 
 	gPlayRankCurChapter = 0;
-	unk_02016A26 = 0;
+	gPlayRankDispStep = 0;
 	gPasswdScreenDisabled = 0;
 	gPlayRankBg0Offset = 0x80;
 	gPlayRankBg1Offset = 0xE0;
@@ -1254,7 +1254,7 @@ void PlayRank_Loop(struct ProcPlayRank *proc)
 		proc->unk_30 = 0;
 	}
 
-	if (unk_02016A26 <= 8) {
+	if (gPlayRankDispStep <= 8) {
 		if (proc->unk_2E++ < 4)
 			return;
 		proc->unk_2E = 0;
@@ -1263,7 +1263,7 @@ void PlayRank_Loop(struct ProcPlayRank *proc)
 	gPlayRankBg0Offset++;
 	SetBgOffset(BG_0, 0, gPlayRankBg0Offset & 0xFF);
 
-	if (unk_02016A26 > 0xC) {
+	if (gPlayRankDispStep > 0xC) {
 		gPlayRankBg1Offset++;
 		SetBgOffset(BG_1, 0, gPlayRankBg1Offset & 0xFF);
 	}
@@ -1276,7 +1276,7 @@ void PlayRank_Loop(struct ProcPlayRank *proc)
 
 	proc->unk_30 = true;
 
-	switch (unk_02016A26) {
+	switch (gPlayRankDispStep) {
 	case 0:
 		if (!PlayRank_ChapterTurns_DrawTurn(gPlayRankDispLine))
 			return;
@@ -1318,7 +1318,7 @@ void PlayRank_Loop(struct ProcPlayRank *proc)
 		break;
 	}
 
-	unk_02016A26++;
+	gPlayRankDispStep++;
 }
 
 void PlayRank_Idle(ProcPtr proc)

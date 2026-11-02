@@ -368,7 +368,7 @@ struct ProcEkrGauge {
 
 extern struct ProcEkrGauge * gpProcEkrGauge;
 extern u16 Buf_EkrGaugeNumImg[0x200];
-extern u16 gUnk_Banim_02016DC0[0x40];
+extern u16 gEkrGaugeHpNumImgBuf[0x40];
 extern u16 gEkrGaugeDecoder[18];
 
 void EkrGaugeModDec(i16 val, u16 buf[]);

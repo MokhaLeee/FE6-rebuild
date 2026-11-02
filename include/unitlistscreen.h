@@ -124,12 +124,12 @@ struct SortedUnitEnt
 extern struct SortedUnitEnt gSortedUnitsBuf[];
 extern struct SortedUnitEnt * gSortedUnits[];
 
-extern struct Text gUnk_0200D6AC;
-extern u8 gUnk_0200D6B4[];
-extern u8 gUnk_0200CD38;
-extern u32 gUnk_0200E6B4[]; // equipped item icons
+extern struct Text gUnitListSortKeyText;
+extern u8 gUnitRearrangeBuf[];
+extern u8 gUnitListCount;
+extern u32 gUnitListItemIcons[]; // equipped item icons
 
-extern u8 CONST_DATA gUnk_08678722[];
+extern u8 CONST_DATA gUnitListPageSlideInSpeedLut[];
 
 extern u16 const * CONST_DATA gUnk_08678744[3];
 
@@ -150,7 +150,7 @@ extern u16 const * CONST_DATA gUnk_08678818[]; // sprites
 extern u16 CONST_DATA Sprite_08678758[]; // sprite
 extern u16 CONST_DATA Sprite_08678760[]; // sprite
 
-extern u16 gUnk_Pal_02016874[0x3E];
+extern u16 gPrepUiPal[0x3E];
 
 extern u8 const Img_Prep_083198CC[]; // img
 extern u16 const Pal_SpinningArrow[]; // pal
@@ -160,11 +160,11 @@ extern u8 const Tsa_UnitList_083210A0[]; // tsa
 extern u32 const Img_HorizontalSpinningArrow[]; // tm
 extern u16 const Pal_MonologueBG[]; // pal
 
-extern struct Text gUnk_0200D5BC[];
-extern struct Text gUnk_0200D5F4[][3];
-extern struct Text gUnk_0200D69C;
-extern struct Text gUnk_0200D6A4;
-extern struct Text gUnk_0200D6AC;
+extern struct Text gUnitListNameTexts[];
+extern struct Text gUnitListFieldTexts[][3];
+extern struct Text gUnitListNameLabelText;
+extern struct Text gUnitListFieldLabelText;
+extern struct Text gUnitListSortKeyText;
 
 extern struct ProcScr CONST_DATA ProcScr_UnitListScreenSprites[];
 
@@ -186,10 +186,10 @@ enum
     OBPAL_UNITLIST_9 = 9,
 };
 
-extern u16 gUnk_0200CD3A[]; // tm
-extern u16 gUnk_0200D53A[]; // tm
+extern u16 gUnitListRowsTmBuf[]; // tm
+extern u16 gUnitListHeaderTmBuf[]; // tm
 
-extern u8 CONST_DATA gUnk_0867871C[];
+extern u8 CONST_DATA gUnitListPageSlideOutSpeedLut[];
 
 void func_fe6_080741EC(void);
 void func_fe6_08074254(fu8 x, fu8 y, fu8 width);
@@ -214,8 +214,8 @@ void func_fe6_080754F4(struct Unit * unit, int step);
 void func_fe6_08075570(struct UnitListScreenProc * proc);
 void UnitList_OnEnd(struct UnitListScreenProc * proc);
 void UnitList_StartPageChange(struct UnitListScreenProc * proc);
-void func_fe6_08075E94(struct UnitListScreenProc * proc);
-void func_fe6_08076060(struct UnitListScreenProc * proc);
+void UnitList_PageSlideOut_Loop(struct UnitListScreenProc * proc);
+void UnitList_PageSlideIn_Loop(struct UnitListScreenProc * proc);
 void StartUnitListScreen(void);
 void func_fe6_08076250(ProcPtr parent);
 void StartUnitListScreenForSoloAnim(ProcPtr parent);
@@ -226,6 +226,6 @@ void func_fe6_08076448(struct UnitListScreenProc * proc, fu8 unit_num, u16 * tm,
 int func_fe6_08076D30(struct Unit * unit);
 bool SortUnitList(fu8 arg_0, fu8 arg_1);
 
-extern int gUnk_0200E7D8; // unit id
+extern int gPrepCursorUnitPid; // unit id
 
 #endif // UNITLISTSCREEN_H

@@ -11,7 +11,7 @@
 
 // some or those are not so much "unknown" as much as they just don't have a home yet
 
-extern struct Font gFont_Unk_02002770;
+extern struct Font gItemActionMenuFont;
 // extern u16 gUiTmScratchA[0x280];
 // extern u16 gUiTmScratchB[0x280];
 // extern u16 gUiTmScratchC[0x240];
@@ -118,9 +118,9 @@ extern u16 const Pal_EfxRestBG[]; // manim
 
 extern u8 const Tsa_StatusScreen_FactionInfoFrame[]; // tsa
 extern u8 const Tsa_StatusScreen_PlaytimeFrame[]; // tsa
-extern u8 const Tsa_08309408[]; // compressed tsa
-extern u8 const gUnk_0833C6F4[]; // tsa
-extern u8 const gUnk_0833C8D8[]; // tsa
+extern u8 const Tsa_StatusScreen_ExtraMapInfoBg[]; // compressed tsa
+extern u8 const Tsa_StatusScreen_FactionInfoBg[]; // tsa
+extern u8 const Tsa_StatusScreen_PlaytimeBg[]; // tsa
 
 extern u8 const Img_Prep_083198CC[]; // img
 extern u16 const Pal_SpinningArrow[];
@@ -393,10 +393,10 @@ extern u16 const Pal_PlayRankTimeOBJ[];
 extern u8 const Img_0833C09C[];
 extern u8 const Tsa_0833C1D8[];
 extern u8 const Tsa_0833C234[];
-extern u8 const Img_Unk_0833C378[];
-// extern const ??? gUnk_0833C6F4
-// extern const ??? gUnk_0833C8D8
-extern u16 const Pal_Unk_0833C944[];
+extern u8 const Img_StatusScreen_Bg[];
+// extern const ??? Tsa_StatusScreen_FactionInfoBg
+// extern const ??? Tsa_StatusScreen_PlaytimeBg
+extern u16 const Pal_StatusScreen_Bg[];
 extern u8 const Img_WorldMap_PlayRank[];
 extern u8 const Tsa_08340ED8[];
 extern u16 const Pal_PlayRankWmBG[];
