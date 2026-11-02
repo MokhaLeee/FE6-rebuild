@@ -93,7 +93,7 @@ IWRAM_DATA u8 gEndingMonologueTextDone = 0;
 /**
  * Secret screen
  */
-IWRAM_DATA struct UnkStruct_SecretScreen_030048C0 gSecretScreen_030048C0 = {};
+IWRAM_DATA struct SecretScreenPlayRankStats gSecretScreen_030048C0 = {};
 
 /**
  * Play rank

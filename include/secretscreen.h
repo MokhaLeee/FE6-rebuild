@@ -26,13 +26,13 @@ struct SecretScreenData {
 
 extern struct SecretScreenData gSecretScreenData[];
 
-struct UnkStruct_020169C4 {
+struct SecretScreenPasswordMeta {
 	STRUCT_PAD(0x0, 0x6);
 
 	u16 unk_06;
 };
 
-struct UnkStruct_SecretScreen_030048C0 {
+struct SecretScreenPlayRankStats {
 	/* 00 */ u16 total_turn;
 	/* 02 */ u16 winning_rate;
 	/* 04 */ u16 dead_allies;
@@ -44,7 +44,7 @@ struct UnkStruct_SecretScreen_030048C0 {
 	/* 11 */ u8 unk_11;
 };
 
-extern IWRAM_DATA struct UnkStruct_SecretScreen_030048C0 gSecretScreen_030048C0;
+extern IWRAM_DATA struct SecretScreenPlayRankStats gSecretScreen_030048C0;
 
 
 void func_fe6_08082E74(int a, int b);
@@ -86,7 +86,7 @@ extern EWRAM_OVERLAY(0) int Unk_020168F4;
 extern EWRAM_OVERLAY(0) struct Text gSecretScreenTexts[5];
 extern EWRAM_OVERLAY(0) int gSecretScreenRN;
 extern EWRAM_OVERLAY(0) u8 Unk_02016924[0xA0];
-extern EWRAM_OVERLAY(0) struct UnkStruct_020169C4 Unk_020169C4;
+extern EWRAM_OVERLAY(0) struct SecretScreenPasswordMeta Unk_020169C4;
 
 extern EWRAM_DATA u8 SioPidPool[SID_PID_POOL_SIZE];
 extern EWRAM_DATA u8 Unk_0203D518[10];
