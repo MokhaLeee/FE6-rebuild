@@ -36,8 +36,8 @@
 EWRAM_OVERLAY(0) struct SortedUnitEnt gSortedUnitsBuf[0x40] = {};
 EWRAM_OVERLAY(0) struct SortedUnitEnt *gSortedUnits[0x40] = {};
 EWRAM_OVERLAY(0) u8 gUnitListCount = 0;
-EWRAM_OVERLAY(0) u16 gUnitListRowsTmBuf[0x400] = {};
-EWRAM_OVERLAY(0) u16 gUnitListHeaderTmBuf[0x41] = {};
+EWRAM_OVERLAY(0) u16 gUnitListRowsTmBuf[0x20][0x20] = {};
+EWRAM_OVERLAY(0) u16 gUnitListHeaderTmBuf[2][0x20] = {};
 EWRAM_OVERLAY(0) struct Text gUnitListNameTexts[7] = {};
 EWRAM_OVERLAY(0) struct Text gUnitListFieldTexts[7][3] = {};
 EWRAM_OVERLAY(0) struct Text gUnitListNameLabelText = {};
@@ -348,7 +348,7 @@ void UnitList_StartStatScreen(struct UnitListScreenProc * proc)
 
     gPlaySt.last_sort_key = (proc->sort_order << 7) + proc->sort_key;
 
-    proc->state = 4;
+    proc->state = UNITLIST_STATE_STATSCREEN;
 }
 
 void UnitList_ResetFromStatScreen(struct UnitListScreenProc * proc)
@@ -379,19 +379,19 @@ void UnitListScreenSprites_Init(struct UnitListScreenSpritesProc * proc)
 
 void UnitListScreenSprites_Main(struct UnitListScreenSpritesProc * proc)
 {
-    fu8 r5;
-    fi8 sl;
+    fu8 first_unit;
+    fi8 y_offset;
     fu8 i;
 
-    u8 sp_0C[4] = { 0, 1, 2, 1 };
+    u8 bob_offsets[4] = { 0, 1, 2, 1 };
 
     if (proc->main_proc->sort_order == 0)
     {
-        PutSpriteExt(0x0B, 0xB8, sp_0C[(proc->sort_arrow_clock / 8) % 4] + 7, Sprite_08678750, OAM2_PAL(9));
+        PutSpriteExt(0x0B, 0xB8, bob_offsets[(proc->sort_arrow_clock / 8) % 4] + 7, Sprite_08678750, OAM2_PAL(9));
     }
     else
     {
-        PutSpriteExt(0x0B, 0xB8 + 0x2000, sp_0C[(proc->sort_arrow_clock / 8) % 4] + 7, Sprite_08678750, OAM2_PAL(9));
+        PutSpriteExt(0x0B, 0xB8 + 0x2000, bob_offsets[(proc->sort_arrow_clock / 8) % 4] + 7, Sprite_08678750, OAM2_PAL(9));
     }
 
     PutSpriteExt(0x0D, 0x20, 0x08, gUnitListPageTitleSpriteLut[proc->main_proc->page], OAM2_PAL(9));
@@ -399,7 +399,7 @@ void UnitListScreenSprites_Main(struct UnitListScreenSpritesProc * proc)
 
     SetPrepMenuScrollBarBaseInfo(proc->scroll_bar, 0xE0, 0x40, 0x0A, proc->main_proc->scroll_y, gUnitListCount, 6);
 
-    if (proc->main_proc->state > 2)
+    if (proc->main_proc->state > UNITLIST_STATE_SCROLL_UP)
     {
         PutUiHand(
             UnitListPageFields[proc->main_proc->page][proc->main_proc->cursor_column].x_column,
@@ -438,17 +438,17 @@ void UnitListScreenSprites_Main(struct UnitListScreenSpritesProc * proc)
 
     SyncUnitSpriteSheet();
 
-    r5 = proc->last_scroll_y / 0x10;
-    sl = -(proc->last_scroll_y % 0x10);
+    first_unit = proc->last_scroll_y / 0x10;
+    y_offset = -(proc->last_scroll_y % 0x10);
 
-    for (i = 0; i < 6 && i + r5 < gUnitListCount; i++)
+    for (i = 0; i < 6 && i + first_unit < gUnitListCount; i++)
     {
-        PutUnitSprite(4, 8, 56 + i * 16 + sl, gSortedUnits[i + r5]->unit);
+        PutUnitSprite(4, 8, 56 + i * 16 + y_offset, gSortedUnits[i + first_unit]->unit);
     }
 
-    if (proc->is_scrolling != 0 && i + r5 < gUnitListCount)
+    if (proc->is_scrolling != 0 && i + first_unit < gUnitListCount)
     {
-        PutUnitSprite(4, 8, 56 + i * 16 + sl, gSortedUnits[i + r5]->unit);
+        PutUnitSprite(4, 8, 56 + i * 16 + y_offset, gSortedUnits[i + first_unit]->unit);
     }
 
     if (proc->main_proc->page < proc->main_proc->max_page && proc->main_proc->mode != UNITLIST_MODE_SOLOANIM)
@@ -577,7 +577,7 @@ void UnitList_CollectBlueUnits(struct UnitListScreenProc * proc)
 
 void UnitList_Setup(struct UnitListScreenProc * proc)
 {
-    fu8 i, thing;
+    fu8 i, saved;
 
     SetDispEnable(1, 1, 1, 1, 1);
     SetOnVMatch(NULL);
@@ -598,25 +598,25 @@ void UnitList_Setup(struct UnitListScreenProc * proc)
 
     if (proc->mode != UNITLIST_MODE_PREPMENU || proc->has_sorted == 1)
     {
-        thing = gPlaySt.last_sort_key;
+        saved = gPlaySt.last_sort_key;
 
-        if (thing != 0)
+        if (saved != 0)
         {
-            proc->target_sort_order = (thing >> 7) & 1;
+            proc->target_sort_order = (saved >> 7) & 1;
             proc->sort_order = proc->target_sort_order;
-            proc->sort_key = thing & 0x7F;
+            proc->sort_key = saved & 0x7F;
         }
 
-        if (proc->state != 4 && proc->page != 0)
+        if (proc->state != UNITLIST_STATE_STATSCREEN && proc->page != 0)
         {
-            thing = gPlaySt.last_unit_list_page;
+            saved = gPlaySt.last_unit_list_page;
 
-            if (thing != 0)
+            if (saved != 0)
             {
-                if (thing > 6)
+                if (saved > 6)
                     proc->page = 6;
                 else
-                    proc->page = thing;
+                    proc->page = saved;
 
                 proc->page_target = proc->page;
             }
@@ -655,10 +655,10 @@ void UnitList_Setup(struct UnitListScreenProc * proc)
 
     UnitList_PutSortKeyLabel(proc->sort_key);
 
-    if (proc->state == 4)
+    if (proc->state == UNITLIST_STATE_STATSCREEN)
     {
         UnitList_MoveCursorToLastUnit(proc, 0);
-        proc->state = 0;
+        proc->state = UNITLIST_STATE_ROWS;
     }
     else
     {
@@ -725,7 +725,7 @@ void UnitList_Setup(struct UnitListScreenProc * proc)
 
 void UnitList_Init(struct UnitListScreenProc * proc)
 {
-    proc->state = 0;
+    proc->state = UNITLIST_STATE_ROWS;
     proc->scroll_speed = 1;
     proc->cursor_row = 0;
     proc->cursor_column = 0;
@@ -822,14 +822,14 @@ void CycleUnitSoloAnim(struct Unit * unit, int step)
 
 void UnitList_Loop(struct UnitListScreenProc * proc)
 {
-    fu8 var_04 = proc->cursor_column;
+    fu8 prev_column = proc->cursor_column;
 
     int i;
-    fu8 var_08;
+    fu8 prev_sort_key;
 
     switch (proc->state)
     {
-        case 0:
+        case UNITLIST_STATE_ROWS:
             if ((gKeySt->held & KEY_BUTTON_L) != 0)
             {
                 proc->scroll_speed = 2;
@@ -927,7 +927,7 @@ void UnitList_Loop(struct UnitListScreenProc * proc)
                         break;
 
                     PlaySe(SONG_66);
-                    proc->state = 3;
+                    proc->state = UNITLIST_STATE_HEADER;
                     break;
                 }
 
@@ -945,7 +945,7 @@ void UnitList_Loop(struct UnitListScreenProc * proc)
                         }
 
                         UnitList_PutUnitRow(proc, proc->scroll_y / 16 - 1, gBg0Tm, proc->page, 1);
-                        proc->state = 2;
+                        proc->state = UNITLIST_STATE_SCROLL_UP;
                         proc->scroll_y = -(proc->scroll_speed * 4) + proc->scroll_y;
                         SetBgOffset(0, 0, (proc->scroll_y - 0x38) & 0xFF);
 
@@ -973,7 +973,7 @@ void UnitList_Loop(struct UnitListScreenProc * proc)
                     if (proc->cursor_row == 4 && proc->cursor_unit != gUnitListCount - 1)
                     {
                         UnitList_PutUnitRow(proc, 6 + proc->scroll_y / 16, gBg0Tm, proc->page, 1);
-                        proc->state = 1;
+                        proc->state = UNITLIST_STATE_SCROLL_DOWN;
                         proc->scroll_y = proc->scroll_y + proc->scroll_speed * 4;
                         SetBgOffset(0, 0, (proc->scroll_y - 0x38) & 0xFF);
                         break;
@@ -986,31 +986,31 @@ void UnitList_Loop(struct UnitListScreenProc * proc)
 
             break;
 
-        case 1:
+        case UNITLIST_STATE_SCROLL_DOWN:
             proc->scroll_y += 4 * proc->scroll_speed;
             SetBgOffset(0, 0, (proc->scroll_y - 0x38) & 0xFF);
 
             if ((proc->scroll_y % 0x10) == 0)
             {
-                proc->state = 0;
+                proc->state = UNITLIST_STATE_ROWS;
                 UnitList_ClearOffscreenItemIcons(proc->scroll_y);
             }
 
             break;
 
-        case 2:
+        case UNITLIST_STATE_SCROLL_UP:
             proc->scroll_y += -(4 * proc->scroll_speed);
             SetBgOffset(0, 0, (proc->scroll_y - 0x38) & 0xFF);
 
             if ((proc->scroll_y % 0x10) == 0)
             {
-                proc->state = 0;
+                proc->state = UNITLIST_STATE_ROWS;
                 UnitList_ClearOffscreenItemIcons(proc->scroll_y);
             }
 
             break;
 
-        case 3:
+        case UNITLIST_STATE_HEADER:
             if (proc->help_open != 0 && (gKeySt->pressed & (KEY_BUTTON_B | KEY_BUTTON_R)) != 0)
             {
                 CloseHelpBox();
@@ -1020,7 +1020,7 @@ void UnitList_Loop(struct UnitListScreenProc * proc)
 
             if ((gKeySt->pressed & KEY_BUTTON_A) != 0 && proc->help_open == 0)
             {
-                var_08 = proc->sort_key;
+                prev_sort_key = proc->sort_key;
 
                 proc->has_sorted = 1;
                 PlaySe(SONG_6A);
@@ -1041,7 +1041,7 @@ void UnitList_Loop(struct UnitListScreenProc * proc)
                 proc->sort_order = proc->target_sort_order;
                 proc->sort_column = proc->cursor_column;
                 
-                if (proc->sort_key != var_08)
+                if (proc->sort_key != prev_sort_key)
                     UnitList_PutSortKeyLabel(proc->sort_key);
 
                 break;
@@ -1051,7 +1051,7 @@ void UnitList_Loop(struct UnitListScreenProc * proc)
             {
                 PlaySe(SONG_66);
                 proc->target_sort_order = 1;
-                proc->state = 0;
+                proc->state = UNITLIST_STATE_ROWS;
                 break;
             }
 
@@ -1131,7 +1131,7 @@ void UnitList_Loop(struct UnitListScreenProc * proc)
         Proc_Break(proc);
     }
 
-    if (proc->help_open != 0 && var_04 != proc->cursor_column)
+    if (proc->help_open != 0 && prev_column != proc->cursor_column)
     {
         StartHelpBox(
             UnitListPageFields[proc->page_target][proc->cursor_column].x_column, 0x28,
@@ -1175,16 +1175,16 @@ void UnitList_StartPageChange(struct UnitListScreenProc * proc)
 {
     int i;
 
-    TmFillRect(gUnitListRowsTmBuf, 31, 31, 0);
+    TmFillRect(gUnitListRowsTmBuf[0], 31, 31, 0);
 
     for (i = proc->scroll_y / 16; i < proc->scroll_y / 16 + 6 && i < gUnitListCount; i++)
     {
-        UnitList_PutUnitRow(proc, i, gUnitListRowsTmBuf, proc->page, 0);
+        UnitList_PutUnitRow(proc, i, gUnitListRowsTmBuf[0], proc->page, 0);
     }
 
-    TmFillRect(gUnitListHeaderTmBuf, 31, 1, 0);
+    TmFillRect(gUnitListHeaderTmBuf[0], 31, 1, 0);
 
-    UnitList_PutFieldLabels(gUnitListHeaderTmBuf, proc->page);
+    UnitList_PutFieldLabels(gUnitListHeaderTmBuf[0], proc->page);
 
     proc->page_slide_clock = 0;
     proc->page_from = proc->page;
@@ -1193,7 +1193,9 @@ void UnitList_StartPageChange(struct UnitListScreenProc * proc)
 
 void UnitList_PageSlideOut_Loop(struct UnitListScreenProc * proc)
 {
-    int r4, i;
+    int i;
+    int row;
+    u8 src_column;
 
     proc->page_slide += gUnitListPageSlideOutSpeedLut[proc->page_slide_clock];
 
@@ -1204,36 +1206,31 @@ void UnitList_PageSlideOut_Loop(struct UnitListScreenProc * proc)
 
     for (i = 0; i < 20; i++)
     { 
-        fu8 r1;
-
         if (proc->page_target > proc->page)
         {
-            // permuter found that idk though
-            proc->sort_key = proc->sort_key;
-
             if (proc->page_slide + i > 20)
-                r1 = 0;
+                src_column = 0;
             else
-                r1 = i + proc->page_slide + 8;
+                src_column = i + proc->page_slide + 8;
         }
         else
         {
             if (i < proc->page_slide)
-                r1 = 0;
+                src_column = 0;
             else
-                r1 = i - proc->page_slide + 8;
+                src_column = i - proc->page_slide + 8;
         }
 
-        for (r4 = proc->scroll_y / 8; r4 < 12 + proc->scroll_y / 8; r4++)
+        for (row = proc->scroll_y / 8; row < 12 + proc->scroll_y / 8; row++)
         {
-            int off = 8 + (r4 & 0x1F) * 0x20;
-            gBg0Tm[off + i] = *(gUnitListRowsTmBuf + r1 + (r4 & 0x1F) * 0x20);
+            u16 off = 8 + (row & 0x1F) * 0x20;
+            gBg0Tm[off + i] = gUnitListRowsTmBuf[row & 0x1F][src_column];
         }
 
-        for (r4 = 0; r4 < 2; r4++)
+        for (row = 0; row < 2; row++)
         {
-            int off = 0xA8 + r4 * 0x20;
-            gBg2Tm[i + off] = *(gUnitListHeaderTmBuf + r1 + r4 * 0x20);
+            int off = 0xA8 + row * 0x20;
+            gBg2Tm[off + i] = gUnitListHeaderTmBuf[row][src_column];
         }
     }
 
@@ -1247,18 +1244,18 @@ void UnitList_PageSlideOut_Loop(struct UnitListScreenProc * proc)
     TmFillRect(gBg2Tm+0x150/2, 0x16, 1, 0);
     TmFillRect(gBg0Tm+0x10/2, 0x16, 0x1F, 0);
 
-    for (r4 = 0; r4 < 20; r4++)
-        gUnitListItemIcons[r4] = UINT8_MAX;
+    for (row = 0; row < 20; row++)
+        gUnitListItemIcons[row] = UINT8_MAX;
 
     ClearIcons();
     UnitList_PutSortKeyLabel(proc->sort_key);
 
-    for (r4 = proc->scroll_y / 16; r4 < proc->scroll_y / 16 + 6 && r4 < gUnitListCount; r4++)
+    for (row = proc->scroll_y / 16; row < proc->scroll_y / 16 + 6 && row < gUnitListCount; row++)
     {
-        UnitList_PutUnitRow(proc, r4, gUnitListRowsTmBuf, proc->page, 0);
+        UnitList_PutUnitRow(proc, row, gUnitListRowsTmBuf[0], proc->page, 0);
     }
 
-    UnitList_PutFieldLabels(gUnitListHeaderTmBuf, proc->page);
+    UnitList_PutFieldLabels(gUnitListHeaderTmBuf[0], proc->page);
     UnitList_PutPageHeader(proc->max_page, proc->page, 0);
 
     proc->page_slide = 0;
@@ -1269,8 +1266,7 @@ void UnitList_PageSlideOut_Loop(struct UnitListScreenProc * proc)
 
 void UnitList_PageSlideIn_Loop(struct UnitListScreenProc * proc)
 {
-    int r5, r4;
-    fu8 r1;
+    int row, column, tm_row;
 
     proc->page_slide += gUnitListPageSlideInSpeedLut[proc->page_slide_clock];
 
@@ -1281,31 +1277,43 @@ void UnitList_PageSlideIn_Loop(struct UnitListScreenProc * proc)
 
     if (proc->page_target > proc->page_from)
     {
-        for (r5 = 0; r5 < proc->page_slide; r5++)
-        {    
-            for (r4 = proc->scroll_y / 8; r4 < 12 + proc->scroll_y / 8; r4++)
+        for (column = 0; column < proc->page_slide; column++)
+        {
+            for (row = proc->scroll_y / 8; row < proc->scroll_y / 8 + 12; row++)
             {
-                gBg0Tm[r5 + 0x1C + (r4 & 0x1F) * 0x20 - proc->page_slide] = *(r5 + 8 + (r4 & 0x1F) * 0x20 + gUnitListRowsTmBuf);
+                tm_row = row & 0x1F;
+                gBg0Tm[tm_row * 0x20 + (({column + 0x1C;}) - proc->page_slide)] = gUnitListRowsTmBuf[tm_row][column + 8];
             }
 
-            for (r4 = 0; r4 < 2; r4++)
+            for (row = 0; row < 2; row++)
             {
-                gBg2Tm[r5 + 0x1C - proc->page_slide + r4 * 0x20 + 0xA0] = *(gUnitListHeaderTmBuf + r5 + 8 + r4 * 0x20);
+                gBg2Tm[(row + 5) * 0x20 + (({column + 0x1C;}) - proc->page_slide)] = gUnitListHeaderTmBuf[row][column + 8];
             }
         }
     }
     else
     {
-        for (r5 = 0; r5 < proc->page_slide; r5++)
-        {    
-            for (r4 = proc->scroll_y / 8; r4 < 12 + proc->scroll_y / 8; r4++)
+        for (column = 0; column < proc->page_slide; column++)
+        {
+            // FAKEMATCH: these two do-whiles set the allocation order that puts &proc->scroll_y in sl and the mask in r8.
+            do
             {
-                gBg0Tm[(((r4 & 0x1F) << 5) + 8) + r5] = *((r5 + 0x1C - proc->page_slide) + (r4 & 0x1F) * 0x20 + gUnitListRowsTmBuf);
+                row = proc->scroll_y / 8;
+            } while (0);
+
+            for (; row < proc->scroll_y / 8 + 12; row++)
+            {
+                do
+                {
+                    tm_row = row & 0x1F;
+                } while (0);
+
+                gBg0Tm[TM_OFFSET(column + 8, tm_row)] = gUnitListRowsTmBuf[tm_row][({column + 0x1C;}) - proc->page_slide];
             }
 
-            for (r4 = 0; r4 < 2; r4++)
+            for (row = 0; row < 2; row++)
             {
-                gBg2Tm[0xA8 + TM_OFFSET(r5, r4)] = *(gUnitListHeaderTmBuf + (r5 + 0x1C - proc->page_slide) + r4 * 0x20);
+                gBg2Tm[TM_OFFSET(column + 8, row + 5)] = gUnitListHeaderTmBuf[row][({column + 0x1C;}) - proc->page_slide];
             }
         }
     }
@@ -1519,13 +1527,13 @@ void UnitList_PutFieldLabels(u16 * tm, fu8 page)
     EnableBgSync(BG2_SYNC_BIT);
 }
 
-void UnitList_PutPageHeader(fu8 max_pages, fu8 page, bool arg_2)
+void UnitList_PutPageHeader(fu8 max_page, fu8 page, bool put_labels)
 {
     if (page != 0)
     {
         PutNumber(gBg2Tm + (0x74 / 2), TEXT_COLOR_SYSTEM_BLUE, page);
         PutSpecialChar(gBg2Tm + (0x74 / 2) + 1, TEXT_COLOR_SYSTEM_WHITE, TEXT_SPECIAL_SLASH);
-        PutNumber(gBg2Tm + (0x74 / 2) + 2, TEXT_COLOR_SYSTEM_BLUE, max_pages);
+        PutNumber(gBg2Tm + (0x74 / 2) + 2, TEXT_COLOR_SYSTEM_BLUE, max_page);
     }
     else
     {
@@ -1533,7 +1541,7 @@ void UnitList_PutPageHeader(fu8 max_pages, fu8 page, bool arg_2)
         EnableBgSync(BG1_SYNC_BIT);
     }
 
-    if (arg_2)
+    if (put_labels)
     {
         UnitList_PutFieldLabels(gBg2Tm + (0x140 / 2), page);
     }

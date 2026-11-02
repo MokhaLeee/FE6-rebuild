@@ -25,6 +25,15 @@ enum
 
 enum
 {
+    UNITLIST_STATE_ROWS = 0,
+    UNITLIST_STATE_SCROLL_DOWN = 1,
+    UNITLIST_STATE_SCROLL_UP = 2,
+    UNITLIST_STATE_HEADER = 3,
+    UNITLIST_STATE_STATSCREEN = 4,
+};
+
+enum
+{
     UNITLIST_SORTKEY_0,
     UNITLIST_SORTKEY_1,
     UNITLIST_SORTKEY_2,
@@ -186,8 +195,8 @@ enum
     OBPAL_UNITLIST_9 = 9,
 };
 
-extern u16 gUnitListRowsTmBuf[]; // tm
-extern u16 gUnitListHeaderTmBuf[]; // tm
+extern u16 gUnitListRowsTmBuf[0x20][0x20]; // tm
+extern u16 gUnitListHeaderTmBuf[2][0x20]; // tm
 
 extern u8 CONST_DATA gUnitListPageSlideOutSpeedLut[];
 
