@@ -131,7 +131,7 @@ extern u32 gUnitListItemIcons[]; // equipped item icons
 
 extern u8 CONST_DATA gUnitListPageSlideInSpeedLut[];
 
-extern u16 const * CONST_DATA gUnk_08678744[3];
+extern u16 const * CONST_DATA gUnitListBoxSpriteLut[3];
 
 struct UnitListScreenField
 {
@@ -146,7 +146,7 @@ struct UnitListScreenField
 extern struct UnitListScreenField UnitListPageFields[][9];
 
 extern u16 CONST_DATA Sprite_08678750[]; // sprite
-extern u16 const * CONST_DATA gUnk_08678818[]; // sprites
+extern u16 const * CONST_DATA gUnitListPageTitleSpriteLut[]; // sprites
 extern u16 CONST_DATA Sprite_08678758[]; // sprite
 extern u16 CONST_DATA Sprite_08678760[]; // sprite
 

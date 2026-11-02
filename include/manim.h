@@ -444,7 +444,6 @@ extern u8 const Img_ManimHammerne[]; // img
 extern u16 const Pal_EfxHammarneBG[]; // pal
 extern u8 const Tsa_ManimHammerne[]; // ???
 extern u8 const Tsa_ManimRestore[]; // ??? ^
-extern u8 const gUnk_08307928[]; // ???
 // extern u8 const Img_EfxHammarneOBJ[]; // img
 extern u16 const Pal_EfxRestOBJ[]; // pal
 extern u16 const SpriteAnim_ManimSleep[]; // sprite anim

@@ -764,17 +764,17 @@ void EkrBaStart_InitBattleScreen(struct ProcEkrBattleStarting *proc);
 void EkrBaStart_ExecEkrBattle(struct ProcEkrBattleStarting *proc);
 void EkrBaStart_BgFadeOut(struct ProcEkrBattleStarting *proc);
 void EkrBaStart_MergeBG(struct ProcEkrBattleStarting *proc);
-void func_fe6_08048154(struct ProcEkrBattleStarting *proc);
+void EkrBaStart_BgPaletteIn(struct ProcEkrBattleStarting *proc);
 
 void NewEkrbattleending(void);
-void func_fe6_080481CC(struct ProcEkrBattleEnding *proc);
-void func_fe6_08048244(struct ProcEkrBattleEnding *proc);
-void func_fe6_08048298(struct ProcEkrBattleEnding *proc);
-void func_fe6_080482F4(struct ProcEkrBattleEnding *proc);
-void func_fe6_08048354(struct ProcEkrBattleEnding *proc);
-void func_fe6_080483E0(struct ProcEkrBattleEnding *proc);
-void func_fe6_08048470(struct ProcEkrBattleEnding *proc);
-void func_fe6_0804855C(struct ProcEkrBattleEnding *proc);
+void EkrBaEnd_BgPaletteIn(struct ProcEkrBattleEnding *proc);
+void EkrBaEnd_RestoreChapterMap(struct ProcEkrBattleEnding *proc);
+void EkrBaEnd_ChapterMapFadeOut(struct ProcEkrBattleEnding *proc);
+void EkrBaEnd_InitOutroFx(struct ProcEkrBattleEnding *proc);
+void EkrBaEnd_WaitOutroAndEndGauge(struct ProcEkrBattleEnding *proc);
+void EkrBaEnd_RestoreMapDisplay(struct ProcEkrBattleEnding *proc);
+void EkrBaEnd_ScreenFailOut(struct ProcEkrBattleEnding *proc);
+void EkrBaEnd_Finish(struct ProcEkrBattleEnding *proc);
 
 struct ProcEkrBaseKaiten {
     PROC_HEADER;

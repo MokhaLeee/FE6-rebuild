@@ -80,14 +80,14 @@ void UnitList_PutBoxSprites(fu8 x, fu8 y, fu8 width)
 {
     int i;
 
-    PutSpriteExt(0x0D, x, y, gUnk_08678744[0], OAM2_PAL(5));
+    PutSpriteExt(0x0D, x, y, gUnitListBoxSpriteLut[0], OAM2_PAL(5));
 
     for (i = 0; i < width - 1; i++)
     {
-        PutSpriteExt(0x0D, x + i * 16 + 8, y, gUnk_08678744[1], OAM2_PAL(5));
+        PutSpriteExt(0x0D, x + i * 16 + 8, y, gUnitListBoxSpriteLut[1], OAM2_PAL(5));
     }
 
-    PutSpriteExt(0x0D, x + i * 16 + 8, y, gUnk_08678744[2], OAM2_PAL(5));
+    PutSpriteExt(0x0D, x + i * 16 + 8, y, gUnitListBoxSpriteLut[2], OAM2_PAL(5));
 }
 
 void UnitList_PutSortKeyLabel(fu8 sort_key)
@@ -394,7 +394,7 @@ void UnitListScreenSprites_Main(struct UnitListScreenSpritesProc * proc)
         PutSpriteExt(0x0B, 0xB8 + 0x2000, sp_0C[(proc->sort_arrow_clock / 8) % 4] + 7, Sprite_08678750, OAM2_PAL(9));
     }
 
-    PutSpriteExt(0x0D, 0x20, 0x08, gUnk_08678818[proc->main_proc->page], OAM2_PAL(9));
+    PutSpriteExt(0x0D, 0x20, 0x08, gUnitListPageTitleSpriteLut[proc->main_proc->page], OAM2_PAL(9));
     PutSpriteExt(0x0D, 0xA0, 0, Sprite_08678758, OAM2_PAL(9));
 
     SetPrepMenuScrollBarBaseInfo(proc->scroll_bar, 0xE0, 0x40, 0x0A, proc->main_proc->scroll_y, gUnitListCount, 6);
@@ -2197,7 +2197,7 @@ u16 CONST_DATA Sprite_0867873C[] =
     OAM0_SHAPE_8x16, OAM1_SIZE_8x16, OAM2_CHR(0x25F),
 };
 
-u16 const * CONST_DATA gUnk_08678744[] =
+u16 const * CONST_DATA gUnitListBoxSpriteLut[] =
 {
     Sprite_0867872C,
     Sprite_08678734,
@@ -2284,7 +2284,7 @@ u16 CONST_DATA Sprite_08678804[] =
     OAM0_SHAPE_16x16, OAM1_SIZE_16x16 + OAM1_X(64), OAM2_CHR(0x315),
 };
 
-u16 const * CONST_DATA gUnk_08678818[] =
+u16 const * CONST_DATA gUnitListPageTitleSpriteLut[] =
 {
     [UNITLIST_PAGE_SOLOANIM] = Sprite_08678804,
     [UNITLIST_PAGE_1] = Sprite_0867878C,

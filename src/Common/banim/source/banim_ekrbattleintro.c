@@ -21,7 +21,7 @@ struct ProcScr CONST_DATA ProcScr_EkrBattleStarting[] = {
 	PROC_REPEAT(EkrBaStart_ExecEkrBattle),
 	PROC_REPEAT(EkrBaStart_BgFadeOut),
 	PROC_REPEAT(EkrBaStart_MergeBG),
-	PROC_REPEAT(func_fe6_08048154),
+	PROC_REPEAT(EkrBaStart_BgPaletteIn),
 	PROC_END,
 };
 
@@ -172,7 +172,7 @@ void EkrBaStart_MergeBG(struct ProcEkrBattleStarting *proc)
 	Proc_Break(proc);
 }
 
-void func_fe6_08048154(struct ProcEkrBattleStarting *proc)
+void EkrBaStart_BgPaletteIn(struct ProcEkrBattleStarting *proc)
 {
 	int val = Interpolate(0, 0x10, 0, proc->timer, 8);
 
@@ -189,14 +189,14 @@ void func_fe6_08048154(struct ProcEkrBattleStarting *proc)
 struct ProcScr CONST_DATA ProcScr_Ekrbattleending[] =
 {
 	PROC_NAME_DEBUG("ekrBattleEnding"),
-	PROC_REPEAT(func_fe6_080481CC),
-	PROC_REPEAT(func_fe6_08048244),
-	PROC_REPEAT(func_fe6_08048298),
-	PROC_REPEAT(func_fe6_080482F4),
-	PROC_REPEAT(func_fe6_08048354),
-	PROC_REPEAT(func_fe6_080483E0),
-	PROC_REPEAT(func_fe6_08048470),
-	PROC_REPEAT(func_fe6_0804855C),
+	PROC_REPEAT(EkrBaEnd_BgPaletteIn),
+	PROC_REPEAT(EkrBaEnd_RestoreChapterMap),
+	PROC_REPEAT(EkrBaEnd_ChapterMapFadeOut),
+	PROC_REPEAT(EkrBaEnd_InitOutroFx),
+	PROC_REPEAT(EkrBaEnd_WaitOutroAndEndGauge),
+	PROC_REPEAT(EkrBaEnd_RestoreMapDisplay),
+	PROC_REPEAT(EkrBaEnd_ScreenFailOut),
+	PROC_REPEAT(EkrBaEnd_Finish),
 	PROC_END,
 };
 
@@ -207,7 +207,7 @@ void NewEkrbattleending(void)
 	proc->timer = 0;
 }
 
-void func_fe6_080481CC(struct ProcEkrBattleEnding *proc)
+void EkrBaEnd_BgPaletteIn(struct ProcEkrBattleEnding *proc)
 {
 	int ret;
 
@@ -227,7 +227,7 @@ void func_fe6_080481CC(struct ProcEkrBattleEnding *proc)
 	}
 }
 
-void func_fe6_08048244(struct ProcEkrBattleEnding *proc)
+void EkrBaEnd_RestoreChapterMap(struct ProcEkrBattleEnding *proc)
 {
 	if (gBanimBG == 0 || GetEkrDragonStateType() != 0) {
 		Proc_Break(proc);
@@ -241,7 +241,7 @@ void func_fe6_08048244(struct ProcEkrBattleEnding *proc)
 	Proc_Break(proc);
 }
 
-void func_fe6_08048298(struct ProcEkrBattleEnding *proc)
+void EkrBaEnd_ChapterMapFadeOut(struct ProcEkrBattleEnding *proc)
 {
 	if (gBanimBG == 0 || GetEkrDragonStateType() != 0) {
 		Proc_Break(proc);
@@ -256,7 +256,7 @@ void func_fe6_08048298(struct ProcEkrBattleEnding *proc)
 	}
 }
 
-void func_fe6_080482F4(struct ProcEkrBattleEnding *proc)
+void EkrBaEnd_InitOutroFx(struct ProcEkrBattleEnding *proc)
 {
 	int val;
 
@@ -282,7 +282,7 @@ void func_fe6_080482F4(struct ProcEkrBattleEnding *proc)
 	Proc_Break(proc);
 }
 
-void func_fe6_08048354(struct ProcEkrBattleEnding *proc)
+void EkrBaEnd_WaitOutroAndEndGauge(struct ProcEkrBattleEnding *proc)
 {
 	if (++proc->timer > 0xC) {
 		EndEkrGauge();
@@ -296,7 +296,7 @@ void func_fe6_08048354(struct ProcEkrBattleEnding *proc)
 	}
 }
 
-void func_fe6_080483E0(struct ProcEkrBattleEnding *proc)
+void EkrBaEnd_RestoreMapDisplay(struct ProcEkrBattleEnding *proc)
 {
 	proc->timer = 0;
 	proc->terminator = 0xF;
@@ -318,7 +318,7 @@ void func_fe6_080483E0(struct ProcEkrBattleEnding *proc)
 	Proc_Break(proc);
 }
 
-void func_fe6_08048470(struct ProcEkrBattleEnding *proc)
+void EkrBaEnd_ScreenFailOut(struct ProcEkrBattleEnding *proc)
 {
 	int left, top, right, bottom;
 
@@ -342,7 +342,7 @@ void func_fe6_08048470(struct ProcEkrBattleEnding *proc)
 	}
 }
 
-void func_fe6_0804855C(struct ProcEkrBattleEnding *proc)
+void EkrBaEnd_Finish(struct ProcEkrBattleEnding *proc)
 {
 	EndEkrBattleDeamon();
 	func_fe6_08029240();
