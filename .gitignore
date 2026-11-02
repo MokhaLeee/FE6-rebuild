@@ -942,3 +942,6 @@ MigrationBackup/
 
 .vscode
 .cache_dir
+
+# tools/emu 的模拟器构建产物（mGBA 核心库、gbarun、测试输出）
+tools/emu/.build/
