@@ -212,7 +212,7 @@ int EvtListCmd_Tile(struct EventInfo * info)
 int EvtListCmd_TileWithMapChange(struct EventInfo * info)
 {
     int result = EvtListCmd_Tile(info);
-    info->given_money = 3; // TODO: named constant
+    info->given_money = EVENT_MONEY_MAPCHANGE;
     return result;
 }
 
@@ -598,7 +598,7 @@ void StartAvailableTileEvent(fi8 x, fi8 y)
         case TILE_COMMAND_SEIZE:
             StartEventFromInfo(&info);
 
-            if (info.given_money != 3) // TODO: constant
+            if (info.given_money != EVENT_MONEY_MAPCHANGE)
                 return;
 
             // fallthrough

@@ -2,7 +2,7 @@
 	.thumb
 
 #include "asm_gbaio.inc"
-#include "macro.inc"
+#include "asm_macros.inc"
 
 	THUMB_FUNC_START ArcTan2
 ArcTan2:

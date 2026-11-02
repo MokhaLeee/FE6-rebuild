@@ -67,7 +67,7 @@ void DoItemBarrierStaffAction(ProcPtr proc)
 	BattleInitItemEffect(GetUnit(gAction.instigator), gAction.item_slot);
 	BattleInitItemEffectTarget(unit);
 
-	SetDuraStatusVal(unit, DURA_STATUS_RES, 7);
+	SetDuraStatusVal(unit, DURA_STATUS_RES, UNIT_BARRIER_MAX);
 
 	BattleApplyItemEffect(proc);
 	BeginBattleAnimations();
@@ -325,7 +325,7 @@ void DoItemPureWaterAction(ProcPtr proc)
 
 	BattleInitItemEffect(unit, gAction.item_slot);
 
-	SetDuraStatusVal(unit, DURA_STATUS_RES, 7);
+	SetDuraStatusVal(unit, DURA_STATUS_RES, UNIT_BARRIER_MAX);
 
 	BattleApplyItemEffect(proc);
 	BeginBattleAnimations();
@@ -335,7 +335,7 @@ void DoItemTorchAction(ProcPtr proc)
 {
 	BattleInitItemEffect(GetUnit(gAction.instigator), gAction.item_slot);
 
-	GetUnit(gAction.instigator)->torch = 4;
+	GetUnit(gAction.instigator)->torch = UNIT_TORCH_MAX;
 
 	BattleApplyItemEffect(proc);
 	BeginBattleAnimations();

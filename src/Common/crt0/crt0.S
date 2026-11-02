@@ -2,7 +2,7 @@
 .arm
 
 #include "asm_gbaio.inc"
-#include "macro.inc"
+#include "asm_macros.inc"
 
 .set PSR_USR_MODE,  0x00000010
 .set PSR_FIQ_MODE,  0x00000011

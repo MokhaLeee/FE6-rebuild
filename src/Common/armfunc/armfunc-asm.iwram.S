@@ -1,4 +1,4 @@
-	.include "macro.inc"
+	.include "asm_macros.inc"
 	.syntax unified
 	.arm
 

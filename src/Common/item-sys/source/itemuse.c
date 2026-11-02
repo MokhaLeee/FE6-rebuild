@@ -321,7 +321,7 @@ bool CanUnitUseBindingBladeToHeal(struct Unit *unit)
 
 bool CanUnitUsePureWaterItem(struct Unit *unit)
 {
-	if (GetDuraStatusVal(unit, DURA_STATUS_RES) == 7)
+	if (GetDuraStatusVal(unit, DURA_STATUS_RES) == UNIT_BARRIER_MAX)
 		return FALSE;
 
 	return TRUE;
@@ -329,7 +329,7 @@ bool CanUnitUsePureWaterItem(struct Unit *unit)
 
 bool CanUnitUseTorchItem(struct Unit *unit)
 {
-	if (gPlaySt.vision != 0 && unit->torch != 4)
+	if (gPlaySt.vision != 0 && unit->torch != UNIT_TORCH_MAX)
 		return TRUE;
 
 	return FALSE;

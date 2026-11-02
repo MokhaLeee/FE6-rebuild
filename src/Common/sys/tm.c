@@ -1,6 +1,6 @@
 #include "prelude.h"
 #include "hardware.h"
-#include "move.h"
+#include "datamove.h"
 
 static EWRAM_DATA u8 sUnk_03000014;
 static EWRAM_DATA u8 sUnk_03000015;

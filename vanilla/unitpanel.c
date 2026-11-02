@@ -401,8 +401,7 @@ void RefreshUnitResChangePanel(struct Unit * unit)
 
     struct UnitPanelProc * proc = InitUnitPanel(NULL, unit, x, y, WIDTH, 1);
 
-    // TODO: named constant for barrier duration?
-    DrawUnitResChangeText(proc->lines+0, unit, 7 - GetDuraStatusVal(unit, DURA_STATUS_RES));
+    DrawUnitResChangeText(proc->lines+0, unit, UNIT_BARRIER_MAX - GetDuraStatusVal(unit, DURA_STATUS_RES));
     PutText(proc->lines+0, gBg0Tm + TM_OFFSET(x+1, y+3));
 }
 
@@ -423,8 +422,7 @@ void RefreshUnitStaffOffensePanel(struct Unit * unit, int hit)
 
     struct UnitPanelProc * proc = InitUnitPanel(NULL, unit, x, y, WIDTH, 2);
 
-    // TODO: named constant for barrier duration?
-    DrawUnitResUnkText(proc->lines+0, unit, 7 - GetDuraStatusVal(unit, DURA_STATUS_RES));
+    DrawUnitResUnkText(proc->lines+0, unit, UNIT_BARRIER_MAX - GetDuraStatusVal(unit, DURA_STATUS_RES));
     PutText(proc->lines+0, gBg0Tm + TM_OFFSET(x+1, y+3));
 
     DrawAccuracyText(proc->lines+1, hit);

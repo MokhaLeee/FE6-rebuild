@@ -1143,7 +1143,7 @@ void StartMainMenu(ProcPtr parent)
 	proc->action = SAVEMENU_ACTION_MAIN_MENU;
 	proc->sel_index = 0;
 
-	gPlaySt.config_talk_speed = 2;
+	gPlaySt.config_talk_speed = PLAY_TALKSPEED_FAST;
 }
 
 void StartSaveMenu(ProcPtr parent)

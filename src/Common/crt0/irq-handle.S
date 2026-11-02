@@ -3,7 +3,7 @@
 .arm
 
 #include "asm_gbaio.inc"
-#include "macro.inc"
+#include "asm_macros.inc"
 
 ARM_FUNC_START IrqMain
 IrqMain:

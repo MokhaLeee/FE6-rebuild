@@ -108,7 +108,6 @@ def dump_one_banim_data_ent(addr, out_dir):
         original_stdout = sys.stdout
 
         sys.stdout = file
-        print(".include \"macro.inc\"")
         print(".include \"animscr.inc\"")
         print(".include \"gba_sprites.inc\"")
         print("")
@@ -121,7 +120,6 @@ def dump_one_banim_data_ent(addr, out_dir):
 
         sys.stdout = file_scr
 
-        print(".include \"macro.inc\"")
         print(".include \"animscr.inc\"")
         print(".include \"gba_sprites.inc\"")
         print("")
