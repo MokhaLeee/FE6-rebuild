@@ -8,18 +8,18 @@ SpriteAnim_ManimStatGain: @ 082A75FC
     .incbin "fe6-base.gba", 0x2A79D4, (0x2A7CBC - 0x2A79D4)
 
 .align 2,0
-.global SpriteAnim_082A7CBC
-SpriteAnim_082A7CBC: @ 082A7CBC
+.global SpriteAnim_ManimLevelUpText
+SpriteAnim_ManimLevelUpText: @ 082A7CBC
     .incbin "fe6-base.gba", 0x2A7CBC, (0x2A8448 - 0x2A7CBC) @ length: 078C
 
 .align 2,0
-.global SpriteAnim_082A8448
-SpriteAnim_082A8448: @ 082A8448
+.global SpriteAnim_ManimTorch
+SpriteAnim_ManimTorch: @ 082A8448
     .incbin "fe6-base.gba", 0x2A8448, (0x2A84A4 - 0x2A8448) @ length: 005C
 
 .align 2,0
-.global SpriteAnim_082A84A4
-SpriteAnim_082A84A4: @ 082A84A4
+.global SpriteAnim_ManimUnlock
+SpriteAnim_ManimUnlock: @ 082A84A4
     .incbin "fe6-base.gba", 0x2A84A4, (0x2A9190 - 0x2A84A4) @ length: 0CEC
 
 .align 2,0

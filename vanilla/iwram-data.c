@@ -78,8 +78,8 @@ IWRAM_DATA void (*AiDecideFunc)(void) = NULL;
 /**
  * Map anim
  */
-IWRAM_DATA struct UnkSt_030046D0 gUnk_030046D0[0x10] = {};
-IWRAM_DATA u16 gUnk_03004750[10 * 0x10] = {};
+IWRAM_DATA struct ManimStarSt gManimStars[0x10] = {};
+IWRAM_DATA u16 gManimPalBackup[10 * 0x10] = {};
 
 /**
  * Event info

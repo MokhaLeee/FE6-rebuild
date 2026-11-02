@@ -103,7 +103,7 @@ void ApplyAllHardModeBonusLevels(void)
     }
 }
 
-bool func_fe6_0806BB34(struct EventInfo * info)
+bool Chapter11A_CheckTalkShannaThea(struct EventInfo * info)
 {
     if (CheckFlag(FLAG_CHAPTER11A_10))
         return FALSE;
@@ -114,7 +114,7 @@ bool func_fe6_0806BB34(struct EventInfo * info)
     return EventInfoCheckTalk(info, PID_SHANNA, PID_THEA);
 }
 
-bool func_fe6_0806BB68(struct EventInfo * info)
+bool Chapter11A_CheckShannaRecruitsThea(struct EventInfo * info)
 {
     if (!CheckFlag(FLAG_CHAPTER11A_7))
         return FALSE;
@@ -125,7 +125,7 @@ bool func_fe6_0806BB68(struct EventInfo * info)
     return EventInfoCheckTalk(info, PID_SHANNA, PID_THEA);
 }
 
-bool func_fe6_0806BB9C(struct EventInfo * info)
+bool Chapter11A_CheckTalkShannaTheaAfterKlein(struct EventInfo * info)
 {
     if (CheckFlag(FLAG_CHAPTER11A_7))
         return FALSE;
@@ -136,7 +136,7 @@ bool func_fe6_0806BB9C(struct EventInfo * info)
     return EventInfoCheckTalk(info, PID_SHANNA, PID_THEA);
 }
 
-bool func_fe6_0806BBD0(struct EventInfo * info)
+bool Chapter13_CheckBlueEntersEast(struct EventInfo * info)
 {
     if (gPlaySt.turn < 4)
         return FALSE;
@@ -144,7 +144,8 @@ bool func_fe6_0806BBD0(struct EventInfo * info)
     return CheckAnyBlueUnitArea(20, 0, 45, 24);
 }
 
-bool func_fe6_0806BBF8(void)
+// Unused; name guessed from Chapter14_CheckFindHiddenItem, which adds a thief check to the same roll.
+bool CheckFindHiddenItemNoThief(void)
 {
     if (gPlaySt.faction != FACTION_BLUE)
         return FALSE;
@@ -155,7 +156,7 @@ bool func_fe6_0806BBF8(void)
     return FALSE;
 }
 
-bool func_fe6_0806BC20(struct EventInfo * info)
+bool Chapter15_CheckTalkRoyPerceval(struct EventInfo * info)
 {
     if (!IsPercivalBlueDeployed())
         return FALSE;
@@ -169,7 +170,7 @@ bool func_fe6_0806BC20(struct EventInfo * info)
     return FALSE;
 }
 
-bool func_fe6_0806BC5C(struct EventInfo * info)
+bool Chapter24_CheckReinforcementWave1(struct EventInfo * info)
 {
     if (gPlaySt.faction != FACTION_RED)
         return FALSE;
@@ -189,7 +190,7 @@ bool func_fe6_0806BC5C(struct EventInfo * info)
     return TRUE;
 }
 
-bool func_fe6_0806BCA4(struct EventInfo * info)
+bool Chapter24_CheckReinforcementWave2(struct EventInfo * info)
 {
     if (gPlaySt.faction != FACTION_RED)
         return FALSE;
@@ -209,7 +210,7 @@ bool func_fe6_0806BCA4(struct EventInfo * info)
     return TRUE;
 }
 
-bool func_fe6_0806BCEC(struct EventInfo * info)
+bool Chapter24_CheckReinforcementWave3(struct EventInfo * info)
 {
     if (gPlaySt.faction != FACTION_RED)
         return FALSE;
@@ -229,7 +230,7 @@ bool func_fe6_0806BCEC(struct EventInfo * info)
     return TRUE;
 }
 
-bool func_fe6_0806BD34(struct EventInfo * info)
+bool Chapter24_CheckReinforcementWave4(struct EventInfo * info)
 {
     if (gPlaySt.faction != FACTION_RED)
         return FALSE;
@@ -249,7 +250,7 @@ bool func_fe6_0806BD34(struct EventInfo * info)
     return TRUE;
 }
 
-bool func_fe6_0806BD7C(struct EventInfo * info)
+bool Chapter24_CheckReinforcementWave5(struct EventInfo * info)
 {
     if (gPlaySt.faction != FACTION_RED)
         return FALSE;
@@ -269,7 +270,7 @@ bool func_fe6_0806BD7C(struct EventInfo * info)
     return TRUE;
 }
 
-bool func_fe6_0806BDC4(struct EventInfo * info)
+bool Chapter24_CheckReinforcementWave6(struct EventInfo * info)
 {
     if (gPlaySt.faction != FACTION_RED)
         return FALSE;
@@ -330,7 +331,8 @@ bool Chapter10B_CheckShannaRecruitsThea(struct EventInfo * info)
 #undef IsKleinBlueBugged
 #undef IsKleinNonBlueBugged
 
-bool func_fe6_0806BE90(struct EventInfo * info)
+// Unused; name guessed from the Shanna/Thea talk checks in chapters 10B and 11A.
+bool CheckTalkShannaTheaWhileDouglasEnemy(struct EventInfo * info)
 {
     if (!IsDouglasNonBlue())
         return FALSE;
@@ -338,7 +340,7 @@ bool func_fe6_0806BE90(struct EventInfo * info)
     return EventInfoCheckTalk(info, PID_SHANNA, PID_THEA);
 }
 
-bool func_fe6_0806BEB8(struct EventInfo * info)
+bool CheckTalkShannaTheaAfterDouglas(struct EventInfo * info)
 {
     if (!CheckFlag(9)) // TODO: which chapter?
         return FALSE;
@@ -349,7 +351,8 @@ bool func_fe6_0806BEB8(struct EventInfo * info)
     return EventInfoCheckTalk(info, PID_SHANNA, PID_THEA);
 }
 
-bool func_fe6_0806BEEC(struct EventInfo * info)
+// Unsure whether an enemy reaching (10, 14) is the trial's loss condition.
+bool TrialC_CheckRedOnTile(struct EventInfo * info)
 {
     if (gPlaySt.faction != FACTION_RED)
         return FALSE;
@@ -357,7 +360,7 @@ bool func_fe6_0806BEEC(struct EventInfo * info)
     return func_fe6_0806AE7C(10, 14, 10, 14);
 }
 
-bool func_fe6_0806BF14(struct EventInfo * info)
+bool TrialD_CheckBerserkerDefeated(struct EventInfo * info)
 {
     if (!CheckFlag(FLAG_CHAPTER_BASE))
         return FALSE;
@@ -401,12 +404,12 @@ bool IsGuinivereAround(void)
     return FALSE;
 }
 
-void func_fe6_0806BF70(void)
+void SoftResetKeepEwram(void)
 {
     SoftReset(GBA_RESET_ALL & ~GBA_RESET_EWRAM);
 }
 
-bool func_fe6_0806BF7C(void)
+bool IsAButtonNotPressed(void)
 {
     if (gKeySt->pressed & KEY_BUTTON_A)
         return FALSE;
@@ -414,12 +417,12 @@ bool func_fe6_0806BF7C(void)
     return TRUE;
 }
 
-void func_fe6_0806BF98(void)
+void SoftResetKeepEwram2(void)
 {
     SoftReset(GBA_RESET_ALL & ~GBA_RESET_EWRAM);
 }
 
-bool func_fe6_0806BFA4(void)
+bool IsAButtonPressed(void)
 {
     if (gKeySt->pressed & KEY_BUTTON_A)
         return TRUE;
@@ -642,7 +645,7 @@ bool IsDouglasBlue(void)
     return IsPidBlue(PID_DOUGLAS);
 }
 
-bool func_fe6_0806C2C4(void)
+bool IsAnyNonBlueUnitAlive(void)
 {
     FOR_UNITS(FACTION_GREEN + 1, FACTION_RED + 0x40, unit,
     {
@@ -655,9 +658,9 @@ bool func_fe6_0806C2C4(void)
     return FALSE;
 }
 
-bool func_fe6_0806C2F8(void)
+bool AreAllNonBlueUnitsDead(void)
 {
-    return func_fe6_0806C2C4() ? FALSE : TRUE;
+    return IsAnyNonBlueUnitAlive() ? FALSE : TRUE;
 }
 
 bool IsPidNonBlue(fu8 pid)
@@ -679,7 +682,7 @@ bool IsTheaNonBlue(void)
     return IsPidNonBlue(PID_THEA);
 }
 
-bool func_fe6_0806C35C(void)
+bool IsUnknown5ENonBlue(void)
 {
     return IsPidNonBlue(PID_UNKNOWN_5E);
 }
@@ -704,12 +707,12 @@ bool IsGalleNonBlue(void)
     return IsPidNonBlue(PID_GALLE);
 }
 
-bool func_fe6_0806C3AC(void)
+bool IsUnknownC4NonBlue(void)
 {
     return IsPidNonBlue(PID_UNKNOWN_C4);
 }
 
-bool func_fe6_0806C3BC(void)
+bool IsUnknownC6NonBlue(void)
 {
     return IsPidNonBlue(PID_UNKNOWN_C6);
 }
@@ -724,22 +727,22 @@ bool IsPercevalNonBlue(void)
     return IsPidNonBlue(PID_PERCEVAL);
 }
 
-bool func_fe6_0806C3EC(void)
+bool IsUnknownD5NonBlue(void)
 {
     return IsPidNonBlue(PID_UNKNOWN_D5);
 }
 
-bool func_fe6_0806C3FC(void)
+bool IsUnknownD6NonBlue(void)
 {
     return IsPidNonBlue(PID_UNKNOWN_D6);
 }
 
-bool func_fe6_0806C40C(void)
+bool IsUnknownD7NonBlue(void)
 {
     return IsPidNonBlue(PID_UNKNOWN_D7);
 }
 
-int func_fe6_0806C41C(fu8 pid, int faction)
+int CountFactionUnitsByPid(fu8 pid, int faction)
 {
     int count = 0;
 
@@ -755,7 +758,7 @@ int func_fe6_0806C41C(fu8 pid, int faction)
     return count;
 }
 
-int func_fe6_0806C460(int faction)
+int CountFactionUnits(int faction)
 {
     int count = 0;
 
@@ -819,7 +822,7 @@ bool IsActiveUnitMale(void)
     return TRUE;
 }
 
-bool func_fe6_0806C524(void)
+bool HasTenThousandGold(void)
 {
     if (GetGold() < 10000)
         return FALSE;
@@ -827,7 +830,7 @@ bool func_fe6_0806C524(void)
     return TRUE;
 }
 
-bool func_fe6_0806C540(void)
+bool HasEightThousandGold(void)
 {
     if (GetGold() < 8000)
         return FALSE;
@@ -835,7 +838,7 @@ bool func_fe6_0806C540(void)
     return TRUE;
 }
 
-bool func_fe6_0806C55C(void)
+bool HasSixThousandGold(void)
 {
     if (GetGold() < 6000)
         return FALSE;
@@ -843,7 +846,7 @@ bool func_fe6_0806C55C(void)
     return TRUE;
 }
 
-bool func_fe6_0806C578(void)
+bool HasFiveThousandGold(void)
 {
     if (GetGold() < 5000)
         return FALSE;
@@ -851,9 +854,9 @@ bool func_fe6_0806C578(void)
     return TRUE;
 }
 
-bool func_fe6_0806C594(void)
+bool IsTalkChoiceYes(void)
 {
-    if (GetTalkChoiceResult() == 1) // TODO: talk choice constants
+    if (GetTalkChoiceResult() == TALK_CHOICE_YES)
         return TRUE;
 
     return FALSE;
@@ -882,13 +885,13 @@ bool AreWeGoingToSacae(void)
     return FALSE;
 }
 
-void func_fe6_0806C608(void)
+void GameOver_FadeOutBgm(void)
 {
     if (gPlaySt.flags & PLAY_FLAG_TUTORIAL || !gPlaySt.config_bgm_disable)
         FadeBgmOut(4);
 }
 
-bool func_fe6_0806C62C(void)
+bool GameOver_ShouldSkipScreen(void)
 {
     if (gPlaySt.flags & PLAY_FLAG_COMPLETE)
         return TRUE;
@@ -899,7 +902,7 @@ bool func_fe6_0806C62C(void)
     return FALSE;
 }
 
-void func_fe6_0806C64C(void)
+void Tutorial_InitActionSelectHelp(void)
 {
     u32 unk;
 
@@ -909,7 +912,7 @@ void func_fe6_0806C64C(void)
     gTutorialActionsInPlace = unk;
 }
 
-void func_fe6_0806C670(void)
+void Tutorial_FreezeMenuOnce(void)
 {
     if (gUnk_030048A8 == 0)
     {
@@ -918,18 +921,18 @@ void func_fe6_0806C670(void)
     }
 }
 
-bool func_fe6_0806C68C(void)
+bool Tutorial_IsMenuFrozen(void)
 {
     return gUnk_030048A8;
 }
 
-void func_fe6_0806C69C(void)
+void Tutorial_ResumeMenu(void)
 {
     gUnk_030048A8 = 0;
     ResumeMenu();
 }
 
-void func_fe6_0806C6B0(void)
+void Tutorial_StartMoveSelectEvent(void)
 {
     u32 unk = func_fe6_0802B9DC();
     gTutorialActionsAfterMove = unk;
@@ -954,25 +957,25 @@ void func_fe6_0806C6B0(void)
     }
 }
 
-void func_fe6_0806C718(void)
+void Tutorial_StartAttackMenuEvent(void)
 {
     if (!CheckFlag(FLAG_TUTORIAL_9))
         StartEvent(gUnk_0866AEA8);
 }
 
-void func_fe6_0806C734(void)
+void Tutorial_StartAttackMenuItemEvent(void)
 {
     if (!CheckFlag(FLAG_TUTORIAL_10))
         StartEvent(gUnk_0866AEE0);
 }
 
-void func_fe6_0806C750(void)
+void Tutorial_StartMapMenuEvent(void)
 {
     if (!CheckFlag(FLAG_TUTORIAL_11))
         StartEvent(gUnk_0866AF28);
 }
 
-void func_fe6_0806C76C(int a, int b, int c)
+void TutorialHighlight_SetFade(int a, int b, int c)
 {
     int var = Interpolate(INTERPOLATE_SQUARE, a, b, c, 8);
 
@@ -981,14 +984,14 @@ void func_fe6_0806C76C(int a, int b, int c)
     EnablePalSync();
 }
 
-void func_fe6_0806C7BC(struct TutorialEventProcA * proc)
+void TutorialHighlight_Init(struct TutorialHighlightProc * proc)
 {
-    proc->unk_64 = 0;
-    proc->unk_66 = 0;
+    proc->clock = 0;
+    proc->fading_out = 0;
     ApplyPalette(Pal_08342A98, 0x12);
 }
 
-void func_fe6_0806C7E0(struct TutorialEventProcA * proc)
+void TutorialHighlight_Loop(struct TutorialHighlightProc * proc)
 {
     int x, y, r4;
 
@@ -1002,7 +1005,7 @@ void func_fe6_0806C7E0(struct TutorialEventProcA * proc)
                 x = (target->x * 16) - gBmSt.camera.x;
                 y = (target->y * 16) - gBmSt.camera.y;
 
-                PutOamHi(OAM1_X(x + 0x200), OAM0_Y(y + 0x100), Sprite_0866ACCC, OAM2_CHR(OBCHR_SYSTEM_OBJECTS + 0x22) + OAM2_PAL(2) + OAM2_LAYER(2));
+                PutOamHi(OAM1_X(x + 0x200), OAM0_Y(y + 0x100), Sprite_TutorialHighlight, OAM2_CHR(OBCHR_SYSTEM_OBJECTS + 0x22) + OAM2_PAL(2) + OAM2_LAYER(2));
             }
 
             break;
@@ -1010,50 +1013,50 @@ void func_fe6_0806C7E0(struct TutorialEventProcA * proc)
         case 1:
             x = 0xD0 - gBmSt.camera.x;
             y = 0x70 - gBmSt.camera.y;
-            PutOamHi(OAM1_X(x + 0x200), OAM0_Y(y + 0x100), Sprite_0866ACCC, OAM2_CHR(OBCHR_SYSTEM_OBJECTS + 0x22) + OAM2_PAL(2) + OAM2_LAYER(2));
+            PutOamHi(OAM1_X(x + 0x200), OAM0_Y(y + 0x100), Sprite_TutorialHighlight, OAM2_CHR(OBCHR_SYSTEM_OBJECTS + 0x22) + OAM2_PAL(2) + OAM2_LAYER(2));
             break;
 
         case 2:
             x = 0x160 - gBmSt.camera.x;
             y = 0x40 - gBmSt.camera.y;
-            PutOamHi(OAM1_X(x + 0x200), OAM0_Y(y + 0x100), Sprite_0866ACCC, OAM2_CHR(OBCHR_SYSTEM_OBJECTS + 0x22) + OAM2_PAL(2) + OAM2_LAYER(2));
+            PutOamHi(OAM1_X(x + 0x200), OAM0_Y(y + 0x100), Sprite_TutorialHighlight, OAM2_CHR(OBCHR_SYSTEM_OBJECTS + 0x22) + OAM2_PAL(2) + OAM2_LAYER(2));
             break;
 
     }
 
     if ((GetGameTime() & 1) == 0)
     {
-        if (proc->unk_66 != 0)
+        if (proc->fading_out != 0)
         {
-            func_fe6_0806C76C(0x10, 0, proc->unk_64);
+            TutorialHighlight_SetFade(0x10, 0, proc->clock);
 
-            if (++proc->unk_64 > 8)
+            if (++proc->clock > 8)
             {
-                proc->unk_64 = 0;
-                proc->unk_66 = 0;
+                proc->clock = 0;
+                proc->fading_out = 0;
             }
         }
         else
         {
-            func_fe6_0806C76C(0, 0x10, proc->unk_64);
+            TutorialHighlight_SetFade(0, 0x10, proc->clock);
 
-            if (++proc->unk_64 > 8)
+            if (++proc->clock > 8)
             {
-                proc->unk_64 = 0;
-                proc->unk_66 = 1;
+                proc->clock = 0;
+                proc->fading_out = 1;
             }
         }
     }
 }
 
-void func_fe6_0806C948(struct TutorialEventProcB * proc)
+void TutorialHighlightEnd_Init(struct TutorialHighlightEndProc * proc)
 {
-    proc->unk_64 = 60;
+    proc->timer = 60;
 }
 
-void func_fe6_0806C950(struct TutorialEventProcB * proc)
+void TutorialHighlightEnd_Loop(struct TutorialHighlightEndProc * proc)
 {
-    if (--proc->unk_64 != 0)
+    if (--proc->timer != 0)
     {
         if (func_fe6_080718E0())
             return;
@@ -1062,11 +1065,12 @@ void func_fe6_0806C950(struct TutorialEventProcB * proc)
             return;
     }
 
-    Proc_EndEach(ProcScr_Unk_0866ACE8);
+    Proc_EndEach(ProcScr_TutorialHighlight);
     Proc_Break(proc);
 }
 
-void func_fe6_0806C998(int what)
+// Unsure what tile (13, 7) marks in mode 1; mode 0 marks attack targets and mode 2 the throne.
+void Tutorial_StartHighlight(int what)
 {
     gTutorialPointerKind = what;
 
@@ -1077,7 +1081,7 @@ void func_fe6_0806C998(int what)
     {
         struct SelectTarget * target;
 
-        SpawnProc(ProcScr_Unk_0866ACE8, PROC_TREE_3);
+        SpawnProc(ProcScr_TutorialHighlight, PROC_TREE_3);
 
         target = GetTarget(0);
         CameraMoveWatchPosition(NULL, target->x, target->y);
@@ -1085,121 +1089,123 @@ void func_fe6_0806C998(int what)
     }
 }
 
-bool func_fe6_0806C9F8(void)
+bool Tutorial_EndHighlightAfterHelp(void)
 {
     bool result = func_fe6_080718E0();
 
     if (!result)
-        SpawnProc(ProcScr_Unk_0866AD00, PROC_TREE_3);
+        SpawnProc(ProcScr_TutorialHighlightEnd, PROC_TREE_3);
 
     return result;
 }
 
-void func_fe6_0806CA1C(void)
+void Tutorial_HelpMoveRange(void)
 {
     func_fe6_08071B80(16, 104, MSG_019, NULL);
 }
 
-void func_fe6_0806CA30(void)
+void Tutorial_HelpAttackRange(void)
 {
     func_fe6_08071B80(16, 104, MSG_01A, NULL);
 }
 
-void func_fe6_0806CA44(void)
+void Tutorial_HelpBowRange(void)
 {
     func_fe6_08071B80(16, 104, MSG_01E, NULL);
 }
 
-void func_fe6_0806CA58(void)
+void Tutorial_HelpBowAttack(void)
 {
     func_fe6_08071B80(16, 104, MSG_01F, NULL);
 }
 
-void func_fe6_0806CA6C(void)
+void Tutorial_HelpBowMove(void)
 {
     func_fe6_08071B80(16, 104, MSG_020, NULL);
-    func_fe6_0806C998(0);
+    Tutorial_StartHighlight(0);
 }
 
-void func_fe6_0806CA84(void)
+void Tutorial_HelpMagicRange(void)
 {
     func_fe6_08071B80(16, 104, MSG_023, NULL);
 }
 
-void func_fe6_0806CA98(void)
+void Tutorial_HelpMagicAttack(void)
 {
     func_fe6_08071B80(16, 104, MSG_024, NULL);
 }
 
-void func_fe6_0806CAAC(void)
+void Tutorial_HelpMagicMove(void)
 {
     func_fe6_08071B80(16, 104, MSG_025, NULL);
-    func_fe6_0806C998(0);
+    Tutorial_StartHighlight(0);
 }
 
-void func_fe6_0806CAC4(void)
+void Tutorial_HelpWeaponSelect(void)
 {
     func_fe6_08071B80(16, 104, MSG_029, NULL);
 }
 
-void func_fe6_0806CAD8(void)
+void Tutorial_HelpTargetSelect(void)
 {
     func_fe6_08071B80(16, 104, MSG_02A, NULL);
 }
 
-void func_fe6_0806CAEC(void)
+void Tutorial_HelpConfirmAttack(void)
 {
     func_fe6_08071B80(40, 104, MSG_02B, NULL);
 }
 
-void func_fe6_0806CB00(void)
+// Unsure of the topic: MSG_02D is empty in the text dump.
+void Tutorial_HelpAlenMove(void)
 {
     func_fe6_08071B80(16, 16, MSG_02D, NULL);
-    func_fe6_0806C998(1);
+    Tutorial_StartHighlight(1);
 }
 
-void func_fe6_0806CB18(void)
+void Tutorial_HelpVisit(void)
 {
     func_fe6_08071B80(16, 56, MSG_02E, NULL);
 }
 
-void func_fe6_0806CB2C(void)
+// Unsure of the topic: unused, and MSG_030 is empty in the text dump.
+void Tutorial_HelpUnused(void)
 {
     func_fe6_08071B80(16, 16, MSG_030, NULL);
 }
 
-void func_fe6_0806CB40(void)
+void Tutorial_HelpMapMenu(void)
 {
     func_fe6_08071B80(16, 104, MSG_045, NULL);
 }
 
-void func_fe6_0806CB54(void)
+void Tutorial_HelpMeleeMove(void)
 {
     func_fe6_08071B80(16, 104, MSG_01B, NULL);
-    func_fe6_0806C998(0);
+    Tutorial_StartHighlight(0);
 }
 
-void func_fe6_0806CB6C(void)
+void Tutorial_HelpTrade(void)
 {
     func_fe6_08071B80(16, 104, MSG_040, NULL);
 }
 
-void func_fe6_0806CB80(void)
+void Tutorial_HelpRescue(void)
 {
     func_fe6_08071B80(16, 104, MSG_03F, NULL);
 }
 
-void func_fe6_0806CB94(void)
+void Tutorial_HelpSeize(void)
 {
     func_fe6_08071B80(16, 104, MSG_03E, NULL);
 }
 
-void func_fe6_0806CBA8(void)
+void Tutorial_HelpUnitMenu(void)
 {
     func_fe6_08071B80(16, 104, MSG_042, NULL);
 }
 
-void func_fe6_0806CBBC(void)
+void Tutorial_HelpAttackCommand(void)
 {
     switch (UNIT_PID(gActiveUnit))
     {
@@ -1238,7 +1244,7 @@ bool IsActiveUnitAlen(void)
     return (UNIT_PID(gActiveUnit) == PID_ALEN) ? TRUE : FALSE;
 }
 
-bool func_fe6_0806CC68(void)
+bool Tutorial_CanAttackAfterMove(void)
 {
     if ((gTutorialActionsAfterMove & 2) != 0)
         return TRUE;
@@ -1251,7 +1257,7 @@ bool IsCombatAction(void)
     return gAction.id == ACTION_COMBAT ? TRUE : FALSE;
 }
 
-bool func_fe6_0806CC94(void)
+bool Tutorial_CheckFirstVisit(void)
 {
     if (CheckFlag(FLAG_TUTORIAL_22))
         return FALSE;
@@ -1265,12 +1271,13 @@ bool func_fe6_0806CC94(void)
     return FALSE;
 }
 
-bool func_fe6_0806CCC0(void)
+// Unsure of the intended purpose: unused, and it only returns FALSE.
+bool Tutorial_FalseStub(void)
 {
     return FALSE;
 }
 
-void func_fe6_0806CCC4(void)
+void Tutorial_DisableUnitMenuHelp(void)
 {
     if (CheckFlag(FLAG_TUTORIAL_18))
         return;
@@ -1326,7 +1333,7 @@ bool IsPastTurn1(void)
     return FALSE;
 }
 
-bool func_fe6_0806CDC0(void)
+bool Tutorial_ShouldHelpAttack(void)
 {
     switch (UNIT_PID(gActiveUnit))
     {
@@ -1356,7 +1363,7 @@ bool func_fe6_0806CDC0(void)
     return FALSE;
 }
 
-bool func_fe6_0806CE18(void)
+bool Tutorial_CanVisit(void)
 {
     if ((gTutorialActionsInPlace & 0x8000) != 0)
         return TRUE;
@@ -1364,7 +1371,7 @@ bool func_fe6_0806CE18(void)
     return FALSE;
 }
 
-bool func_fe6_0806CE34(void)
+bool Tutorial_CanSeize(void)
 {
     if ((gTutorialActionsInPlace & 0x10000) != 0)
         return TRUE;
@@ -1372,7 +1379,7 @@ bool func_fe6_0806CE34(void)
     return FALSE;
 }
 
-bool func_fe6_0806CE50(void)
+bool Tutorial_ShouldHelpUnitMenu(void)
 {
     if (CheckFlag(FLAG_TUTORIAL_18))
         return FALSE;
@@ -1383,7 +1390,7 @@ bool func_fe6_0806CE50(void)
     return TRUE;
 }
 
-bool func_fe6_0806CE80(void)
+bool Tutorial_ShouldHelpRescue(void)
 {
     if (CheckFlag(FLAG_TUTORIAL_20))
         return FALSE;
@@ -1394,7 +1401,7 @@ bool func_fe6_0806CE80(void)
     return FALSE;
 }
 
-bool func_fe6_0806CEAC(void)
+bool Tutorial_ShouldHelpTrade(void)
 {
     if (CheckFlag(FLAG_TUTORIAL_21))
         return FALSE;
@@ -1410,7 +1417,7 @@ void RefreshClarine(void)
     GetUnitByPid(PID_CLARINE)->flags &= ~UNIT_FLAG_TURN_ENDED;
 }
 
-bool func_fe6_0806CEF0(void)
+bool Chapter6_CheckWestDoorReinforcements(void)
 {
     if (gPlaySt.faction != FACTION_RED)
         return FALSE;
@@ -1427,7 +1434,7 @@ bool func_fe6_0806CEF0(void)
     return FALSE;
 }
 
-bool func_fe6_0806CF3C(void)
+bool Chapter6_CheckEastDoorReinforcements(void)
 {
     if (gPlaySt.faction != FACTION_RED)
         return FALSE;
@@ -1454,37 +1461,37 @@ void Chapter8_WeakenNorthWestWall(void)
         trap->extra = 10;
 }
 
-void func_fe6_0806CFA0(void)
+void PlayBgmSong28(void)
 {
     m4aMPlayStart(&gMusicPlayer_MainBgm, &dummy_song);
 }
 
-void func_fe6_0806CFB8(void)
+void PlayBgmSong2B(void)
 {
     m4aMPlayStart(&gMusicPlayer_MainBgm, &dummy_song);
 }
 
-void func_fe6_0806CFD0(void)
+void PlayBgmSong2A(void)
 {
     m4aMPlayStart(&gMusicPlayer_MainBgm, &dummy_song);
 }
 
-void func_fe6_0806CFE8(void)
+void PlayBgmSong26(void)
 {
     m4aMPlayStart(&gMusicPlayer_MainBgm, &dummy_song);
 }
 
-void func_fe6_0806D000(void)
+void PlaySeC4(void)
 {
     PlaySe(SONG_C4);
 }
 
-void func_fe6_0806D01C(void)
+void StopEarthQuakeSound(void)
 {
     EarthQuakeSoundFadeOut(0);
 }
 
-bool func_fe6_0806D028(void)
+bool Chapter14_CheckFindHiddenItem(void)
 {
     if (gPlaySt.faction != FACTION_BLUE)
         return FALSE;
@@ -1501,7 +1508,7 @@ bool func_fe6_0806D028(void)
     return FALSE;
 }
 
-void func_fe6_0806D064(void)
+void Chapter16_PayHughCost(void)
 {
     if (CheckFlag(FLAG_CHAPTER16_15))
     {
@@ -1536,7 +1543,7 @@ void EventFunc_RoyPromote(void)
     DoUnitPromoteInEvent(GetUnitByPid(PID_ROY), ITEM_FROM_IID(IID_BINDINGBLADE));
 }
 
-bool func_fe6_0806D0FC(int iid)
+bool IsItemOwned(int iid)
 {
     int i;
 
@@ -1569,21 +1576,21 @@ bool HaveAllLegendaryWeapons(void)
 {
     u8 const * it;
 
-    for (it = gUnk_08672458; *it != 0; it++)
+    for (it = LegendaryWeaponIids; *it != 0; it++)
     {
-        if (!func_fe6_0806D0FC(*it))
+        if (!IsItemOwned(*it))
             return FALSE;
     }
 
     return TRUE;
 }
 
-void func_fe6_0806D17C(void)
+void Chapter23_StartMapChange(void)
 {
     StartMapChangeEvent(GetMapChangeIdAt(22, 23));
 }
 
-void func_fe6_0806D194(void)
+void Chapter24_ResetReinforcementCount(void)
 {
     int i;
 
@@ -1593,7 +1600,7 @@ void func_fe6_0806D194(void)
     }
 }
 
-void func_fe6_0806D1AC(void)
+void Chapter24_CountReinforcementWave(void)
 {
     int i;
 
@@ -1609,7 +1616,7 @@ void func_fe6_0806D1AC(void)
     }
 }
 
-void func_fe6_0806D1D4(void)
+void FinalChapter_InitUnitQuotes(void)
 {
     gDefeatTalkState = 0;
     gDefeatTalkNextIdx = 0;
@@ -1617,7 +1624,7 @@ void func_fe6_0806D1D4(void)
     gDefeatTalkMsg = 0;
 }
 
-bool func_fe6_0806D1FC(struct EventProc * proc)
+bool FinalChapter_PlayUnitQuotes(struct EventProc * proc)
 {
     struct Unit * unit;
     int i, j;
@@ -1697,7 +1704,7 @@ bool func_fe6_0806D1FC(struct EventProc * proc)
     return TRUE;
 }
 
-bool func_fe6_0806D35C(void)
+bool IsThreeOrMoreNonBlueAlive(void)
 {
     int count = 0;
 
@@ -1715,7 +1722,7 @@ bool func_fe6_0806D35C(void)
     return TRUE;
 }
 
-bool func_fe6_0806D398(void)
+bool EventRandOneInFive(void)
 {
     if (EventRandNext_N(5) == 0)
         return TRUE;
@@ -1723,21 +1730,21 @@ bool func_fe6_0806D398(void)
     return FALSE;
 }
 
-bool func_fe6_0806D3B4(void)
+bool Chapter18S_CheckReinforcements(void)
 {
-    if (func_fe6_0806D398())
+    if (EventRandOneInFive())
     {
-        if (gChapterFlagBits[sizeof(gChapterFlagBits) - 1] + 4 != func_fe6_0806C460(FACTION_RED))
+        if (gChapterFlagBits[sizeof(gChapterFlagBits) - 1] + 4 != CountFactionUnits(FACTION_RED))
             return TRUE;
     }
 
     return FALSE;
 }
 
-void func_fe6_0806D3E0(void)
+void Chapter18S_UpdateReinforcementState(void)
 {
     gChapterFlagBits[sizeof(gChapterFlagBits) - 2]++;
-    gChapterFlagBits[sizeof(gChapterFlagBits) - 1] = func_fe6_0806C460(FACTION_RED);
+    gChapterFlagBits[sizeof(gChapterFlagBits) - 1] = CountFactionUnits(FACTION_RED);
 
     if (IsHard())
     {
@@ -1783,7 +1790,7 @@ void AddChapter8xFireTraps(void)
     AddFireTrap( 3, 10, 1, 3);
 }
 
-void func_fe6_0806D55C(void)
+void SetChapter8x(void)
 {
     gPlaySt.chapter = CHAPTER_8X;
 }
@@ -1828,9 +1835,9 @@ void AddChapter16xArrowTraps(void)
     AddArrowTrap(17, 6, 9);
 }
 
-void func_fe6_0806D6B4(void)
+void Chapter20xS_ChooseRealSeizeTile(void)
 {
-    SetFlag(gUnk_08675750[EventRandNext_N(ARRAY_COUNT(gUnk_08675750))]);
+    SetFlag(Chapter20xS_RealSeizeTileFlags[EventRandNext_N(ARRAY_COUNT(Chapter20xS_RealSeizeTileFlags))]);
 }
 
 void AddChapter21xStepTraps(void)
@@ -1856,15 +1863,15 @@ void AddChapter21xStepTraps(void)
     AddStepPikeTrap(16,  7, FACING_LEFT);
 }
 
-void func_fe6_0806D77C(void)
+void Chapter21x_ChooseTrappedChests(void)
 {
     int i, count;
 
     for (i = 0, count = 0;; i++)
     {
-        if (!CheckFlag(gUnk_08675B90[i % (int) ARRAY_COUNT(gUnk_08675B90)]) && EventRandNext_N(11) == 0)
+        if (!CheckFlag(Chapter21x_TrappedChestFlags[i % (int) ARRAY_COUNT(Chapter21x_TrappedChestFlags)]) && EventRandNext_N(11) == 0)
         {
-            SetFlag(gUnk_08675B90[i % (int) ARRAY_COUNT(gUnk_08675B90)]);
+            SetFlag(Chapter21x_TrappedChestFlags[i % (int) ARRAY_COUNT(Chapter21x_TrappedChestFlags)]);
 
             count++;
 
@@ -1887,7 +1894,7 @@ struct DemoMonologueMsg CONST_DATA gDemoMonologueMsg[] = {
     { MSG_BD2, 0x06 },
 };
 
-u8 CONST_DATA MoveScr_Unk_086761B4[] = {
+u8 CONST_DATA MoveScr_DemoScene_RideLeft[] = {
     MOVE_CMD_SET_SPEED, 0x18,
     MOVE_CMD_MOVE_LEFT,
     MOVE_CMD_MOVE_LEFT,
@@ -1914,7 +1921,7 @@ u8 CONST_DATA MoveScr_Unk_086761B4[] = {
     MOVE_CMD_HALT
 };
 
-u8 CONST_DATA MoveScr_Unk_086761CD[] = {
+u8 CONST_DATA MoveScr_DemoScene_RideLeftCamera[] = {
     MOVE_CMD_SET_SPEED, 0x30,
     MOVE_CMD_MOVE_LEFT,
     MOVE_CMD_MOVE_LEFT,
@@ -1942,7 +1949,7 @@ u8 CONST_DATA MoveScr_Unk_086761CD[] = {
     MOVE_CMD_HALT
 };
 
-u8 CONST_DATA MoveScr_Unk_086761E7[] = {
+u8 CONST_DATA MoveScr_DemoScene_RideLeftDown[] = {
     MOVE_CMD_SET_SPEED, 0x30,
     MOVE_CMD_MOVE_LEFT,
     MOVE_CMD_MOVE_LEFT,
@@ -1970,7 +1977,7 @@ u8 CONST_DATA MoveScr_Unk_086761E7[] = {
     MOVE_CMD_HALT
 };
 
-struct BattleHit CONST_DATA FightScr_Unk_08676204[] = {
+struct BattleHit CONST_DATA FightScr_DemoScene_RoyVsMarcus[] = {
     {
         .attributes = BATTLE_HIT_ATTR_MISS,
         .info = BATTLE_HIT_INFO_BEGIN,
@@ -1985,7 +1992,7 @@ struct BattleHit CONST_DATA FightScr_Unk_08676204[] = {
     },
 };
 
-struct BattleHit CONST_DATA FightScr_Unk_08676210[] = {
+struct BattleHit CONST_DATA FightScr_DemoScene_WoltKills[] = {
     {
         .info = BATTLE_HIT_INFO_FINISHES | BATTLE_HIT_INFO_BEGIN,
         .damage = 9,
@@ -1995,7 +2002,7 @@ struct BattleHit CONST_DATA FightScr_Unk_08676210[] = {
     },
 };
 
-struct BattleHit CONST_DATA FightScr_Unk_08676218[] = {
+struct BattleHit CONST_DATA FightScr_DemoScene_ElenHealsRoy[] = {
     {
         .info = BATTLE_HIT_INFO_FINISHES | BATTLE_HIT_INFO_BEGIN,
         .damage = -10,
@@ -2112,11 +2119,11 @@ EventScr CONST_DATA EventScr_DemoScene[] =
     EvtLoadUnits(UnitInfo_Chaper4_UnusedCavaliers)
     EvtLoadUnits(UnitInfo_Chaper4_UnusedPegasi)
     EvtSleep(16)
-    EvtMoveScript(21, 10, MoveScr_Unk_086761B4)
-    EvtMoveScript(19, 11, MoveScr_Unk_086761B4)
+    EvtMoveScript(21, 10, MoveScr_DemoScene_RideLeft)
+    EvtMoveScript(19, 11, MoveScr_DemoScene_RideLeft)
     EvtSleep(30)
-    EvtMoveScript(20, 9, MoveScr_Unk_086761CD)
-    EvtMoveScript(21, 12, MoveScr_Unk_086761E7)
+    EvtMoveScript(20, 9, MoveScr_DemoScene_RideLeftCamera)
+    EvtMoveScript(21, 12, MoveScr_DemoScene_RideLeftDown)
     EvtSleep(60)
     EvtMoveWait
     EvtSleep(30)
@@ -2140,7 +2147,7 @@ EventScr CONST_DATA EventScr_DemoScene[] =
     EvtTalk(MSG_BA6)
     EvtSleep(60)
     EvtFunc(ClearTalk)
-    EvtFightScript(PID_ROY, PID_MARCUS, FightScr_Unk_08676204, FALSE)
+    EvtFightScript(PID_ROY, PID_MARCUS, FightScr_DemoScene_RoyVsMarcus, FALSE)
     EvtTalk(MSG_BA7)
     EvtSleep(60)
     EvtFadeToBlack(4)
@@ -2180,7 +2187,7 @@ EventScr CONST_DATA EventScr_DemoScene[] =
     EvtMove(8, 20, 6, 19)
     EvtMoveWait
     EvtSleep(60)
-    EvtFightScript(PID_WOLT, PID_UNKNOWN_7B, FightScr_Unk_08676210, TRUE)
+    EvtFightScript(PID_WOLT, PID_UNKNOWN_7B, FightScr_DemoScene_WoltKills, TRUE)
     EvtSleep(60)
     EvtFadeToBlack(4)
     EvtExitMap
@@ -2220,7 +2227,7 @@ EventScr CONST_DATA EventScr_DemoScene[] =
     EvtTalk(MSG_BA8)
     EvtSleep(60)
     EvtFunc(ClearTalk)
-    EvtFightScript(PID_ELEN, PID_ROY, FightScr_Unk_08676218, FALSE)
+    EvtFightScript(PID_ELEN, PID_ROY, FightScr_DemoScene_ElenHealsRoy, FALSE)
     EvtTalk(MSG_BA9)
     EvtSleep(60)
     EvtFadeToBlack(4)
@@ -2600,27 +2607,27 @@ void TrueEnding_EarthQuakeEnd(void)
     EarthQuakeSoundFadeOut(4);
 }
 
-struct ProcScr CONST_DATA ProcScr_Unk_08676854[] =
+struct ProcScr CONST_DATA ProcScr_MapShake[] =
 {
-    PROC_CALL(func_fe6_0806DBA0),
-    PROC_REPEAT(func_fe6_0806DBA8),
+    PROC_CALL(MapShake_Init),
+    PROC_REPEAT(MapShake_Loop),
     PROC_END,
 };
 
-void func_fe6_0806DBA0(struct UnkProc_08676854 * proc)
+void MapShake_Init(struct ProcMapShake * proc)
 {
-    proc->unk_64 = 0;
+    proc->timer = 0;
 }
 
-void func_fe6_0806DBA8(struct UnkProc_08676854 * proc)
+void MapShake_Loop(struct ProcMapShake * proc)
 {
     if (GetGameTime() % 2 != 0)
     {
         gBmSt.camera.x ^= 2;
 
-        proc->unk_64++;
+        proc->timer++;
 
-        if (proc->unk_64 > 5)
+        if (proc->timer > 5)
             Proc_Break(proc);
     }
 
@@ -2628,14 +2635,14 @@ void func_fe6_0806DBA8(struct UnkProc_08676854 * proc)
     SetBgOffset(3, gBmSt.camera.x - (u16) gBmSt.map_render_anchor.x * 16, gBmSt.camera.y - (u16) gBmSt.map_render_anchor.y * 16);
 }
 
-void func_fe6_0806DC24(ProcPtr parent)
+void StartMapShake(ProcPtr parent)
 {
-    SpawnProc(ProcScr_Unk_08676854, parent);
+    SpawnProc(ProcScr_MapShake, parent);
 }
 
-void func_fe6_0806DC38(void)
+void EndMapShake(void)
 {
-    Proc_EndEach(ProcScr_Unk_08676854);
+    Proc_EndEach(ProcScr_MapShake);
 }
 
 struct ProcScr CONST_DATA ProcScr_EndingCreditFade[] =
@@ -2648,14 +2655,14 @@ struct ProcScr CONST_DATA ProcScr_EndingCreditFade[] =
 
 void EndingCreditFade_Init(struct ProcGameCreditFade * proc)
 {
-    proc->unk_64 = 0;
+    proc->timer = 0;
 }
 
 void EndingCreditFade_FadeBg(struct ProcGameCreditFade * proc)
 {
     if (GetGameTime() % 8 == 0)
     {
-        if (proc->unk_64++ > 11)
+        if (proc->timer++ > 11)
             Proc_Break(proc);
 
         ColFadeStep(0, 0x20, 0x20, -1);
@@ -2741,17 +2748,17 @@ void Epilogue_StartWind(void)
     SetWeather(WEATHER_SANDSTORM);
 }
 
-void func_fe6_0806DE00(void)
+void PlaySe269(void)
 {
     PlaySe(SONG_269);
 }
 
-void TruEnding_PlaySe269(void)
+void TrueEnding_PlaySe269(void)
 {
     PlaySe(SONG_269);
 }
 
-void func_fe6_0806DE40(void)
+void PlaySe6A(void)
 {
     PlaySe(SONG_6A);
 }
@@ -2759,21 +2766,21 @@ void func_fe6_0806DE40(void)
 struct ProcScr CONST_DATA ProcScr_EndingBgmLooper[] =
 {
     PROC_CALL(EndingBgmLooper_Init),
-    PROC_REPEAT(EndingBgmLooper_Ioop),
+    PROC_REPEAT(EndingBgmLooper_Loop),
     PROC_END,
 };
 
-void EndingBgmLooper_Init(struct UnkProc_086768C4 * proc)
+void EndingBgmLooper_Init(struct ProcEndingBgmLooper * proc)
 {
     StartBgm(SONG_43, NULL);
-    proc->unk_64 = 17600;
+    proc->timer = 17600;
 }
 
-void EndingBgmLooper_Ioop(struct UnkProc_086768C4 * proc)
+void EndingBgmLooper_Loop(struct ProcEndingBgmLooper * proc)
 {
-    proc->unk_64--;
+    proc->timer--;
 
-    if (proc->unk_64 == 0)
+    if (proc->timer == 0)
     {
         StartBgm(SONG_34, NULL);
         Proc_Break(proc);
@@ -2825,27 +2832,27 @@ struct ProcScr CONST_DATA ProcScr_TrueEnding_SortAllies[] =
     PROC_END,
 };
 
-void TrueEnding_SortAllies_Init(struct UnkProc_086768DC * proc)
+void TrueEnding_SortAllies_Init(struct ProcTrueEndingSortAllies * proc)
 {
-    proc->unk_64 = 1;
+    proc->uid = 1;
 
     if (CheckFlag(FLAG_IDUNN_NOT_DIE))
-        proc->unk_64++;
+        proc->uid++;
 }
 
-void TrueEnding_SortAllies_Loop(struct UnkProc_086768DC * proc)
+void TrueEnding_SortAllies_Loop(struct ProcTrueEndingSortAllies * proc)
 {
     for (;;)
     {
         if (!CanStartMu())
             return;
 
-        proc->unk_64 = GetNextAvailableBlueUnitId(proc->unk_64);
+        proc->uid = GetNextAvailableBlueUnitId(proc->uid);
 
-        if (proc->unk_64 != 0)
+        if (proc->uid != 0)
         {
-            TryMoveUnitDisplayed(proc->unk_4C, GetUnit(proc->unk_64), 8, (gBmSt.camera.x >> 4) + 13);
-            proc->unk_64++;
+            TryMoveUnitDisplayed(proc->parent, GetUnit(proc->uid), 8, (gBmSt.camera.x >> 4) + 13);
+            proc->uid++;
             continue;
         }
 
@@ -2856,10 +2863,10 @@ void TrueEnding_SortAllies_Loop(struct UnkProc_086768DC * proc)
 
 void TrueEnding_SortAllies(ProcPtr parent)
 {
-    struct UnkProc_086768DC * proc;
+    struct ProcTrueEndingSortAllies * proc;
 
     proc = SpawnProc(ProcScr_TrueEnding_SortAllies, parent);
-    proc->unk_4C = parent;
+    proc->parent = parent;
 }
 
 bool TrueEnding_SortAlliesExists(void)
@@ -2934,7 +2941,7 @@ void Epilogue_BgmFadeOut(ProcPtr parent)
     SpawnProcLocking(ProcScr_Epilogue_BgmFadeOut, parent);
 }
 
-void func_fe6_0806E074(void)
+void RestoreBlueUnits(void)
 {
     int i;
 
@@ -3255,10 +3262,10 @@ EvtLabel(4)
     EvtSleep(15)
     EvtFunc(NewEndingBgmLooper)
     EvtTalk(MSG_24C)
-    EvtFunc(func_fe6_0806DC24)
+    EvtFunc(StartMapShake)
     EvtTalkContinue
     EvtSleep(15)
-    EvtFunc(func_fe6_0806DE40)
+    EvtFunc(PlaySe6A)
     EvtTalkContinue
     EvtSleep(15)
     EvtTalkContinue
@@ -3416,7 +3423,7 @@ EventScr CONST_DATA EventScr_TrueEnding[] =
     EvtNoSkipNoTextSkip
     EvtSetBgm(0)
     EvtSleep(59)
-    EvtFunc(func_fe6_0806E32C)
+    EvtFunc(SetupEndingUids)
     EvtUnitCameraOff
     EvtFunc(GC_DarkenScreen)
     EvtSleep(1)
@@ -3426,7 +3433,7 @@ EventScr CONST_DATA EventScr_TrueEnding[] =
     EvtEnterMap
     EvtGotoIfNotFlag(3, FLAG_IDUNN_NOT_DIE)
 
-    EvtFunc(TruEnding_PlaySe269)
+    EvtFunc(TrueEnding_PlaySe269)
     EvtFadeToWhite(4)
     EvtExitMap
     EvtSleep(30)
@@ -3456,13 +3463,13 @@ EventScr CONST_DATA EventScr_FalseEnding[] =
     EvtNoSkipNoTextSkip
     EvtSetBgm(0)
     EvtSleep(30)
-    EvtFunc(func_fe6_0806E32C)
+    EvtFunc(SetupEndingUids)
     EvtSetBgm(SONG_3C)
     EvtSleep(29)
     EvtFunc(GC_DarkenScreen)
     EvtSleep(1)
     EvtSetMap(CHAPTER_22, 16, 9)
-    EvtFunc(func_fe6_0806E074)
+    EvtFunc(RestoreBlueUnits)
     EvtFunc(Epilogue_RemoveEventEngineNoMap)
     EvtMapChangePosition(15, 15)
     EvtFunc(RenderMap)
@@ -3508,7 +3515,7 @@ void StartGameEndingScene(ProcPtr parent)
     StartEventLocking(EventScrs_EndingScene[GetEndingId()], parent);
 }
 
-void func_fe6_0806E32C(void)
+void SetupEndingUids(void)
 {
     switch (GetEndingId())
     {
