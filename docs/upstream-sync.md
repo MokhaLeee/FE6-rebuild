@@ -39,6 +39,7 @@
 | 工具 | debug 章节开场接 `EvtNextChapter(CHAPTER_2)`，测试可进第二章准备画面 | `3814b4f` |
 | 工具 | `gbarun` 状态驱动输入（`--sym`/`--press-when`/`--gdb-when`/`--probe`、AND 条件） | `a4146ba` `3e4388b` |
 | 工具 | 用例 8：准备画面子菜单交互（部署 / 物品 / 存档 / 地图 / 出击） | `1a9021f` |
+| 工具 | 用例 9：帮助框（prepscreen 主菜单按 R，覆盖 `helpbox.c`/`helpbox_display.c`；`helpbox_alt` 是 dead code，`helpdialogue` 走教程路径未覆盖） | `709bece` |
 
 ## 有意未同步
 
