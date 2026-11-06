@@ -325,7 +325,7 @@ void BattleAIS_ExecCommands(void)
 
 				/**
 				 * C08
-				 * Critical hit
+				 * Critical hit (C08-C0C)
 				 */
 				case BAS_CMD(0x08):
 				case BAS_CMD(0x09):
@@ -509,37 +509,37 @@ void BattleAIS_ExecCommands(void)
 						NewEfxDanceOBJ(anim);
 					break;
 
-				case 25:
-				case 27:
-				case 28:
-				case 29:
-				case 30:
-				case 31:
-				case 32:
-				case 33:
-				case 34:
-				case 35:
-				case 36:
-				case 37:
-				case 40:
-				case 41:
-				case 42:
-				case 43:
-				case 51:
-				case 52:
-				case 53:
-				case 54:
-				case 55:
-				case 56:
-				case 60:
-				case 61:
-				case 62:
-				case 63:
-				case 64:
-				case 65:
-				case 66:
-				case 67:
-				case 70:
+				case BAS_CMD(0x19):
+				case BAS_CMD(0x1B):
+				case BAS_CMD(0x1C):
+				case BAS_CMD(0x1D):
+				case BAS_CMD(0x1E):
+				case BAS_CMD(0x1F):
+				case BAS_CMD(0x20):
+				case BAS_CMD(0x21):
+				case BAS_CMD(0x22):
+				case BAS_CMD(0x23):
+				case BAS_CMD(0x24):
+				case BAS_CMD(0x25):
+				case BAS_CMD(0x28):
+				case BAS_CMD(0x29):
+				case BAS_CMD(0x2A):
+				case BAS_CMD(0x2B):
+				case BAS_CMD(0x33):
+				case BAS_CMD(0x34):
+				case BAS_CMD(0x35):
+				case BAS_CMD(0x36):
+				case BAS_CMD(0x37):
+				case BAS_CMD(0x38):
+				case BAS_CMD(0x3C):
+				case BAS_CMD(0x3D):
+				case BAS_CMD(0x3E):
+				case BAS_CMD(0x3F):
+				case BAS_CMD(0x40):
+				case BAS_CMD(0x41):
+				case BAS_CMD(0x42):
+				case BAS_CMD(0x43):
+				case BAS_CMD(0x46):
 					EfxPlaySEwithCmdCtrl(anim, anim->cq[anim->cqSize - 1]);
 					break;
 
@@ -559,7 +559,6 @@ void BattleAIS_ExecCommands(void)
 				case BAS_CMD(0x57):
 					AnimMoveBackToCommand(anim, BAS_CMD(0x56));
 					goto L_cmd_loop_end;
-					break;
 
 				default:
 					break;

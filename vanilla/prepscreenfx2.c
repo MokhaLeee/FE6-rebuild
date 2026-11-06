@@ -222,8 +222,8 @@ void PrepAllItems_Update(void)
 
 void func_fe6_0807DEC8(struct PrepSubItemProc *proc, u16 item)
 {
-	register u8 i;
-	register u8 kind;
+	u8 i;
+	u8 kind;
 
 	kind = GetItemKind(item);
 
