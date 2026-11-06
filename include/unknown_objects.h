@@ -454,18 +454,6 @@ extern char const Str_OpInfo_Mag[];
 // extern const ??? gUnk_0835C829
 extern const char String_ShopGoldG[];
 extern const char String_Shop_0835CA78[];
-extern u16 const Pal_Title_BG[];
-extern u8 const Img_Title_BG[];
-extern u8 const Img_Title_Sprites[];
-extern u16 const SpriteAnim_0835F2C8[];
-extern u16 const Pal_Title_0835F388[];
-extern u8 const Tsa_Title_BG2[];
-extern u8 const Tsa_Title_BG0[];
-extern u8 const Tsa_Title_BG1[];
-extern u8 const Img_Title_BG3[];
-extern u16 const Pal_Title_BG3[];
-extern u8 const Img_Title_08364438[];
-extern u16 const Pal_Title_08364A94[];
 // extern const ??? Img_Title_08364AB4
 // extern const ??? Tsa_OpAnim_083674BC
 // extern const ??? Img_Title_08367B30
