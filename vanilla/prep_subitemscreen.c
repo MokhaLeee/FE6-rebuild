@@ -161,13 +161,13 @@ void StartBmSupplyForDrop(struct Unit *unit, ProcPtr parent)
 	proc->unk4B = 1;
 }
 
-const char String_Prep_0832726C[] = "属性";
-const char String_Prep_08327274[] = "威力";
-const char String_Prep_0832727C[] = "命中";
-const char String_Prep_08327284[] = "必殺";
-const char String_Prep_0832728C[] = "重さ";
-const char String_Prep_08327294[] = "何もありません";
-const char Msg_Prep_Supply[] = "輸送隊";
+const char String_PrepItem_Affin[] = TEXT("属性", "Affin");
+const char String_PrepItem_Might[] = TEXT("威力", "Mt");
+const char String_PrepItem_Hit[] = TEXT("命中", "Hit");
+const char String_PrepItem_Crit[] = TEXT("必殺", "Crt");
+const char String_PrepItem_Weight[] = TEXT("重さ", "Wt");
+const char String_PrepItem_None[] = TEXT("何もありません", "None");
+const char Msg_Prep_Supply[] = TEXT("輸送隊", "Supply");
 const char String_Prep_083272AC[] = "あずける";
 const char String_Prep_083272B8[] = "うけとる";
 const char String_Prep_083272C4[] = "すてる";

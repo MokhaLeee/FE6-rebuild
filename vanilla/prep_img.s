@@ -36,8 +36,8 @@ Pal_Sio_0831AABC: @ 0831AABC
 	.incbin "fe6-base.gba", 0x31AABC, (0x31AAFC - 0x31AABC) @ length: 0040
 
 .align 2,0
-.global Pal_0831AAFC
-Pal_0831AAFC: @ 0831AAFC
+.global Pal_PrepGoldPulse
+Pal_PrepGoldPulse: @ 0831AAFC
 	.incbin "fe6-base.gba", 0x31AAFC, (0x31AB1C - 0x31AAFC) @ length: 0020
 
 .align 2,0

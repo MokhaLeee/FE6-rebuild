@@ -126,7 +126,7 @@ void PrepSubItemScreen_Init(struct PrepSubItemProc *proc)
 		Text_SetCursor(text, (0x30 - GetStringTextLen(DecodeMsg(proc->units[0]->pinfo->msg_name))) / 2);
 		Text_DrawString(text, DecodeMsg(proc->units[0]->pinfo->msg_name));
 		PutText(text, gBg0Tm);
-		func_fe6_0807D6C0(0, proc->units[0]);
+		PrepItem_PutUnitItems(0, proc->units[0]);
 		StartFace(0, GetUnitFid(proc->units[0]), 0x40, -4, FACE_DISP_KIND(FACE_96x80_FLIPPED));
 	}
 
@@ -160,7 +160,7 @@ void PrepSubItem_StartTradeScreen(struct PrepSubItemProc *proc)
 	Text_SetCursor(text, (0x28 - GetStringTextLen(DecodeMsg(proc->units[1]->pinfo->msg_name))) / 2);
 	Text_DrawString(text, DecodeMsg(proc->units[1]->pinfo->msg_name));
 	PutText(text, gBg0Tm + TM_OFFSET(0x18, 0));
-	func_fe6_0807D6C0(1, proc->units[1]);
+	PrepItem_PutUnitItems(1, proc->units[1]);
 	StartFace(1, GetUnitFid(proc->units[1]), 0xAC, -4, FACE_DISP_KIND(FACE_96x80));
 
 	if (proc->unk2D != 3) {
@@ -188,7 +188,7 @@ void PrepSubItem_StartTradeScreen(struct PrepSubItemProc *proc)
 	else if (proc->unk2D == 3)
 		Proc_End(proc->subproc1);
 
-	proc->subproc1 = func_fe6_0807D074(proc);
+	proc->subproc1 = StartPrepTradeFx(proc);
 	proc->unk2D = 1;
 }
 
@@ -345,8 +345,8 @@ void PrepSubItem_Trade_Loop(struct PrepSubItemProc *proc)
 				UnitRemoveInvalidItems(proc->units[0]);
 				UnitRemoveInvalidItems(proc->units[1]);
 
-				func_fe6_0807D6C0(0, proc->units[0]);
-				func_fe6_0807D6C0(1, proc->units[1]);
+				PrepItem_PutUnitItems(0, proc->units[0]);
+				PrepItem_PutUnitItems(1, proc->units[1]);
 
 				if (proc->units[proc->unk30]->items[proc->sel_action]) {
 					proc->hand_disp_x = proc->unk30;
