@@ -284,9 +284,10 @@ struct ProcMssSprite {
 };
 
 struct MssSlideState {
-	i16 step;   // current slide step in tiles
-	i16 delay;  // frames to wait before sliding (stagger)
-	i16 speed;  // tiles per frame
+	i16 step;    // current slide step in tiles
+	i16 delay;   // frames to wait before sliding (stagger)
+	i16 clock;   // frames elapsed since the slide started
+	i16 length;  // total slide duration in frames
 };
 
 struct ProcMss {
@@ -297,8 +298,10 @@ struct ProcMss {
 	struct MssSlideState slide_u;
 	struct MssSlideState slide_l;
 	struct MssSlideState slide_r;
+	i8 slide_mode;
 
 	i8 page, page_count;
+	i8 page_to_change;
 	u16 excluded_unit_flags;
 	int timer;
 };

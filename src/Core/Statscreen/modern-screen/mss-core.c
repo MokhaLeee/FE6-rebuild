@@ -33,6 +33,27 @@ EWRAM_OVERLAY(0) u16 TmBuff_MssR1[MSS_R_HIGHT * 0x20] = {}; // 16 * 32
 EWRAM_OVERLAY(0) u16 TmBuff_MssR2[MSS_R_HIGHT * 0x20] = {}; // 18 * 32
 EWRAM_OVERLAY(0) struct ModStatScreenSt gMssSt = {};
 
+enum mss_slide_ops {
+	MSS_SLIDE_IN,
+	MSS_SLIDE_OUT,
+	MSS_SLIDE_NONE,
+};
+
+/*
+ * The page label and arrows sit on top of the right panel, so they follow its
+ * horizontal slide: off-screen while the panel is out, then back in with it.
+ */
+static int mss_page_slide_offset(struct ProcMss *mss)
+{
+	if (mss->slide_mode == MSS_SLIDE_OUT)
+		return mss->slide_r.step * 8;
+
+	if (mss->slide_mode == MSS_SLIDE_IN)
+		return (MSS_R_WIDTH - mss->slide_r.step) * 8;
+
+	return 0;
+}
+
 static const struct ProcScr ProcScr_mss_sprites[];
 
 static const struct TextInitInfo mss_text_init_info[] = {
@@ -81,18 +102,18 @@ static void mss_main(struct ProcMss *proc)
 	}
 
 	if (gKeySt->repeated & KEY_DPAD_LEFT) {
-		proc->page--;
-		if (proc->page < 0)
-			proc->page = proc->page_count - 1;
+		proc->page_to_change = proc->page - 1;
+		if (proc->page_to_change < 0)
+			proc->page_to_change = proc->page_count - 1;
 
 		Proc_Goto(proc, PL_MSS_SLIDE_PAGE);
 		return;
 	}
 
 	if (gKeySt->repeated & KEY_DPAD_RIGHT) {
-		proc->page++;
-		if (proc->page >= proc->page_count)
-			proc->page = 0;
+		proc->page_to_change = proc->page + 1;
+		if (proc->page_to_change >= proc->page_count)
+			proc->page_to_change = 0;
 
 		Proc_Goto(proc, PL_MSS_SLIDE_PAGE);
 		return;
@@ -114,6 +135,11 @@ static void mss_main(struct ProcMss *proc)
 static void mss_init(struct ProcMss *proc)
 {
 	struct Unit *unit = gMssSt.unit;
+
+	proc->slide_mode = MSS_SLIDE_IN;
+	proc->slide_u.step = 0;
+	proc->slide_l.step = 0;
+	proc->slide_r.step = 0;
 
 	gDispIo.bg0_ct.priority = 0;
 	gDispIo.bg1_ct.priority = 1;
@@ -183,6 +209,7 @@ static void mss_sprites_loop(struct ProcMssSprite *proc)
 {
 	struct ProcMss *mss = proc->proc_parent;
 	int base_oam2 = OAM2_CHR(OBCHR_MSS_SPRITES) + OAM2_PAL(OBPAL_MSS_SPRITES) + OAM2_LAYER(0);
+	int page_dx = mss_page_slide_offset(mss);
 
 	proc->clock_left += proc->anim_speed_left;
 	proc->clock_right += proc->anim_speed_right;
@@ -190,15 +217,15 @@ static void mss_sprites_loop(struct ProcMssSprite *proc)
 	/**
 	 * page index
 	 */
-	PutSprite(1, 185, 150, Sprite_8x8, base_oam2 + 0x64 + mss->page + 1);
-	PutSprite(1, 193, 150, Sprite_8x8, base_oam2 + 5);
-	PutSprite(1, 202, 150, Sprite_8x8, base_oam2 + 0x64 + mss->page_count);
+	PutSprite(1, 185 + page_dx, 150, Sprite_8x8, base_oam2 + 0x64 + mss->page + 1);
+	PutSprite(1, 193 + page_dx, 150, Sprite_8x8, base_oam2 + 5);
+	PutSprite(1, 202 + page_dx, 150, Sprite_8x8, base_oam2 + 0x64 + mss->page_count);
 
 	/**
 	 * arrow
 	 */
-	PutSprite(1, 175, 147, Sprite_8x16, base_oam2 + 0x4A + k_umod(proc->clock_left >> 5, 6));
-	PutSprite(1, 212, 147, Sprite_8x16_HFlipped, base_oam2 + 0x4A + k_umod(proc->clock_right >> 5, 6));
+	PutSprite(1, 175 + page_dx, 147, Sprite_8x16, base_oam2 + 0x4A + k_umod(proc->clock_left >> 5, 6));
+	PutSprite(1, 212 + page_dx, 147, Sprite_8x16_HFlipped, base_oam2 + 0x4A + k_umod(proc->clock_right >> 5, 6));
 }
 
 static const struct ProcScr ProcScr_mss_sprites[] = {
@@ -211,35 +238,40 @@ static const struct ProcScr ProcScr_mss_sprites[] = {
 /**
  * slide
  */
-enum mss_slide_ops {
-	MSS_SLIDE_IN,
-	MSS_SLIDE_OUT,
-	MSS_SLIDE_NONE,
+enum { MSS_SLIDE_EASE_MAX = 16 };
+
+/* ease-out: fast start, slow settle */
+static const u8 s_mss_ease_out[MSS_SLIDE_EASE_MAX + 1] = {
+	0, 3, 6, 8, 10, 11, 12, 13, 14, 15, 15, 16, 16, 16, 16, 16, 16
 };
 
-static void mss_slide_init(struct MssSlideState *slide, int delay, int speed)
+static void mss_slide_init(struct MssSlideState *slide, int delay, int length)
 {
 	slide->step = 0;
 	slide->delay = delay;
-	slide->speed = speed;
+	slide->clock = 0;
+	slide->length = length;
 }
 
 static int mss_slide_tick(struct MssSlideState *slide, int max)
 {
-	int step;
+	int t;
 
 	if (slide->delay > 0) {
 		slide->delay--;
 		return 0;
 	}
 
-	step = slide->step;
-	slide->step += slide->speed;
+	t = k_udiv(slide->clock * MSS_SLIDE_EASE_MAX, slide->length);
+	if (t > MSS_SLIDE_EASE_MAX)
+		t = MSS_SLIDE_EASE_MAX;
 
-	if (slide->step > max)
-		slide->step = max;
+	slide->step = k_udiv(max * s_mss_ease_out[t], MSS_SLIDE_EASE_MAX);
 
-	return step;
+	if (slide->clock < slide->length)
+		slide->clock++;
+
+	return slide->step;
 }
 
 /*
@@ -248,30 +280,44 @@ static int mss_slide_tick(struct MssSlideState *slide, int max)
  */
 static void mss_init_slide_unit_out(struct ProcMss *proc)
 {
-	mss_slide_init(&proc->slide_u, 0, 1);
-	mss_slide_init(&proc->slide_r, 2, 1);
-	mss_slide_init(&proc->slide_l, 4, 1);
+	proc->slide_mode = MSS_SLIDE_OUT;
+	mss_slide_init(&proc->slide_u, 0, 8);
+	mss_slide_init(&proc->slide_r, 2, 10);
+	mss_slide_init(&proc->slide_l, 4, 12);
 }
 
 static void mss_init_slide_unit_in(struct ProcMss *proc)
 {
-	mss_slide_init(&proc->slide_l, 0, 1);
-	mss_slide_init(&proc->slide_u, 4, 1);
-	mss_slide_init(&proc->slide_r, 8, 1);
+	proc->slide_mode = MSS_SLIDE_IN;
+	mss_slide_init(&proc->slide_l, 0, 12);
+	mss_slide_init(&proc->slide_u, 4, 8);
+	mss_slide_init(&proc->slide_r, 8, 10);
 }
 
 static void mss_init_slide_page_out(struct ProcMss *proc)
 {
-	mss_slide_init(&proc->slide_u, 0, 1);
-	mss_slide_init(&proc->slide_r, 2, 1);
-	mss_slide_init(&proc->slide_l, 4, 1);
+	proc->slide_mode = MSS_SLIDE_OUT;
+	mss_slide_init(&proc->slide_u, 0, 8);
+	mss_slide_init(&proc->slide_r, 2, 10);
+	mss_slide_init(&proc->slide_l, 4, 12);
 }
 
 static void mss_init_slide_page_in(struct ProcMss *proc)
 {
-	mss_slide_init(&proc->slide_l, 0, 1);
-	mss_slide_init(&proc->slide_u, 3, 1);
-	mss_slide_init(&proc->slide_r, 6, 1);
+	proc->slide_mode = MSS_SLIDE_IN;
+	mss_slide_init(&proc->slide_l, 0, 12);
+	mss_slide_init(&proc->slide_u, 3, 8);
+	mss_slide_init(&proc->slide_r, 6, 10);
+}
+
+static void mss_slide_idle(struct ProcMss *proc)
+{
+	proc->slide_mode = MSS_SLIDE_NONE;
+}
+
+static void mss_apply_page(struct ProcMss *proc)
+{
+	proc->page = proc->page_to_change;
 }
 
 static void slide_up(int step, enum mss_slide_ops ops)
@@ -419,9 +465,9 @@ static void mss_loop_unit_slidein(struct ProcMss *proc)
 
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
 
-	if (u >= MSS_U_HIGHT
-	 && l >= MSS_L_WIDTH / 2
-	 && r >= MSS_R_WIDTH)
+	if (proc->slide_u.clock >= proc->slide_u.length
+	 && proc->slide_l.clock >= proc->slide_l.length
+	 && proc->slide_r.clock >= proc->slide_r.length)
 		Proc_Break(proc);
 }
 
@@ -441,9 +487,9 @@ static void mss_loop_unit_slideout(struct ProcMss *proc)
 
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
 
-	if (u >= MSS_U_HIGHT
-	 && l >= MSS_L_WIDTH / 2
-	 && r >= MSS_R_WIDTH)
+	if (proc->slide_u.clock >= proc->slide_u.length
+	 && proc->slide_l.clock >= proc->slide_l.length
+	 && proc->slide_r.clock >= proc->slide_r.length)
 		Proc_Break(proc);
 }
 
@@ -463,9 +509,9 @@ static void mss_loop_page_slidein(struct ProcMss *proc)
 
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
 
-	if (u >= MSS_U_HIGHT
-	 && l >= MSS_L_WIDTH / 2
-	 && r >= MSS_R_WIDTH)
+	if (proc->slide_u.clock >= proc->slide_u.length
+	 && proc->slide_l.clock >= proc->slide_l.length
+	 && proc->slide_r.clock >= proc->slide_r.length)
 		Proc_Break(proc);
 }
 
@@ -485,9 +531,9 @@ static void mss_loop_page_slideout(struct ProcMss *proc)
 
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
 
-	if (u >= MSS_U_HIGHT
-	 && l >= MSS_L_WIDTH / 2
-	 && r >= MSS_R_WIDTH)
+	if (proc->slide_u.clock >= proc->slide_u.length
+	 && proc->slide_l.clock >= proc->slide_l.length
+	 && proc->slide_r.clock >= proc->slide_r.length)
 		Proc_Break(proc);
 }
 
@@ -496,7 +542,7 @@ static void mss_unit_change_prepare(struct ProcMss *proc)
 	gMssSt.unit = proc->unit_to_change;
 	gMssSt.help = NULL;
 
-	proc->page = 0;
+	proc->page_to_change = 0;
 }
 
 static void mss_unit_change_move_cam(struct ProcMss *proc)
@@ -531,18 +577,21 @@ PROC_LABEL(PL_MSS_START),
 
 PROC_LABEL(PL_MSS_SLIDE_UNIT_IN),
 	PROC_YIELD,
+	PROC_CALL(mss_apply_page),
 	PROC_CALL(Mss_PreparePage),
 	PROC_CALL(mss_init_slide_unit_in),
 	PROC_REPEAT(mss_loop_unit_slidein),
 	PROC_GOTO(PL_MSS_IDLE),
 
 PROC_LABEL(PL_MSS_IDLE),
+	PROC_CALL(mss_slide_idle),
 	PROC_REPEAT(mss_main),
 
 PROC_LABEL(PL_MSS_SLIDE_PAGE),
 	PROC_CALL(mss_init_slide_page_out),
 	PROC_REPEAT(mss_loop_page_slideout),
 	PROC_YIELD,
+	PROC_CALL(mss_apply_page),
 	PROC_CALL(Mss_PreparePage),
 	PROC_CALL(mss_init_slide_page_in),
 	PROC_REPEAT(mss_loop_page_slidein),
@@ -591,4 +640,5 @@ void StartModernStatScreen(struct Unit *unit, ProcPtr parent)
 	proc = SpawnProcLocking(ProcScr_modern_statscreen, parent);
 	proc->page = 0;
 	proc->page_count = 3;
+	proc->page_to_change = 0;
 }
