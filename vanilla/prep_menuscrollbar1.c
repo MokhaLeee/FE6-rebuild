@@ -15,8 +15,8 @@ void MenuScroll_Init(struct MenuScrollBarProc * proc)
 	proc->numTotalRows = proc->currentSegment;
 	proc->numVisibleRows = 0;
 	proc->prevSegment = proc->currentSegment;
-	proc->oam2Chr = 0x390;
-	proc->oam2Pal = 0x1000;
+	proc->oam2Chr = OBCHR_PREPMENU_390;
+	proc->oam2Pal = OAM2_PAL(OBPAL_PREPMENU_1);
 	proc->topArrowFrameIdx = 0;
 	proc->bottomArrowFrameIdx = 0;
 }

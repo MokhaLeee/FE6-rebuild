@@ -5,16 +5,6 @@
 
 #include "proc.h"
 
-// code_0802B814.c
-// func_fe6_0802B814
-// func_fe6_0802B8A0
-// func_fe6_0802B928
-// func_fe6_0802B964
-// func_fe6_0802B980
-// func_fe6_0802B99C
-int func_fe6_0802B9DC(void);
-int func_fe6_0802BA08(void);
-void func_fe6_0802BA44(struct Unit * unit);
 
 // SioPollingMsg
 // GetSioIndex

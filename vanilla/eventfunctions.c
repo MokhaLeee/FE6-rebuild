@@ -41,6 +41,7 @@
 #include "ai.h"
 #include "ending_monologue.h"
 #include "chapterunits.h"
+#include "commandflags.h"
 
 #include "constants/flags.h"
 #include "constants/pids.h"
@@ -908,7 +909,7 @@ void Tutorial_InitActionSelectHelp(void)
 
     gUnk_030048A8 = 0;
     ClearFlag(FLAG_TUTORIAL_22);
-    unk = func_fe6_0802BA08();
+    unk = GetActiveUnitCommandFlagsInPlace();
     gTutorialActionsInPlace = unk;
 }
 
@@ -934,7 +935,7 @@ void Tutorial_ResumeMenu(void)
 
 void Tutorial_StartMoveSelectEvent(void)
 {
-    u32 unk = func_fe6_0802B9DC();
+    u32 unk = GetActiveUnitCommandFlagsAfterMove();
     gTutorialActionsAfterMove = unk;
 
     switch (UNIT_PID(gActiveUnit))
@@ -1074,7 +1075,7 @@ void Tutorial_StartHighlight(int what)
 {
     gTutorialPointerKind = what;
 
-    func_fe6_0802BA44(gActiveUnit);
+    ListAttackPositions(gActiveUnit);
     gTutorialTargetCount = CountTargets();
 
     if (gTutorialTargetCount != 0)
@@ -1246,7 +1247,7 @@ bool IsActiveUnitAlen(void)
 
 bool Tutorial_CanAttackAfterMove(void)
 {
-    if ((gTutorialActionsAfterMove & 2) != 0)
+    if ((gTutorialActionsAfterMove & COMMAND_FLAG_ATTACK) != 0)
         return TRUE;
 
     return FALSE;
@@ -1357,7 +1358,7 @@ bool Tutorial_ShouldHelpAttack(void)
             break;
     }
 
-    if ((gTutorialActionsInPlace & 2) != 0)
+    if ((gTutorialActionsInPlace & COMMAND_FLAG_ATTACK) != 0)
         return TRUE;
 
     return FALSE;
