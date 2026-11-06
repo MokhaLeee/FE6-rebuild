@@ -311,6 +311,7 @@ struct ProcMss {
 
 void StartModernStatScreen(struct Unit *unit, ProcPtr parent);
 
+void Mss_InitPageText(int page);
 void Mss_PreparePage(struct ProcMss *proc);
 
 enum mss_text_index {

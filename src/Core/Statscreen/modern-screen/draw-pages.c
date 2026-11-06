@@ -294,6 +294,8 @@ static void put_rpage3(void)
  */
 void Mss_PreparePage(struct ProcMss *proc)
 {
+	Mss_InitPageText(proc->page);
+
 	CpuFastFill(0, TmBuff_MssU0, sizeof(TmBuff_MssU0));
 	CpuFastFill(0, TmBuff_MssU2, sizeof(TmBuff_MssU2));
 

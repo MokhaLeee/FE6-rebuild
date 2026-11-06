@@ -56,9 +56,21 @@ static int mss_page_slide_offset(struct ProcMss *mss)
 
 static const struct ProcScr ProcScr_mss_sprites[];
 
-static const struct TextInitInfo mss_text_init_info[] = {
+/**
+ * Text slots are rebuilt for every page instead of being registered once at
+ * start-up. InitText() carves each text's glyph tiles out of the font's VRAM in
+ * list order, so one combined list would keep all three pages' slots reserved at
+ * the same time. Clearing the counter and re-initializing per page lets each
+ * page reserve only the slots it actually draws.
+ */
+static const struct TextInitInfo mss_text_init_info_upper[] = {
 	{ &gMssSt.texts[MSS_TEXT_PNAME], 7 },
 	{ &gMssSt.texts[MSS_TEXT_JNAME], 7 },
+
+	{}
+};
+
+static const struct TextInitInfo mss_text_init_info_page0[] = {
 	{ &gMssSt.texts[MSS_TEXT_P1_SKILLS], 5 },
 	{ &gMssSt.texts[MSS_TEXT_P1_BMAGS], 5 },
 	{ &gMssSt.texts[MSS_TEXT_POW], 3 },
@@ -69,6 +81,11 @@ static const struct TextInitInfo mss_text_init_info[] = {
 	{ &gMssSt.texts[MSS_TEXT_DEF], 3 },
 	{ &gMssSt.texts[MSS_TEXT_RES], 3 },
 	{ &gMssSt.texts[MSS_TEXT_MOV], 3 },
+
+	{}
+};
+
+static const struct TextInitInfo mss_text_init_info_page1[] = {
 	{ &gMssSt.texts[MSS_TEXT_ITEM1], 7 },
 	{ &gMssSt.texts[MSS_TEXT_ITEM2], 7 },
 	{ &gMssSt.texts[MSS_TEXT_ITEM3], 7 },
@@ -81,6 +98,11 @@ static const struct TextInitInfo mss_text_init_info[] = {
 	{ &gMssSt.texts[MSS_TEXT_P2_DDG], 5 },
 	{ &gMssSt.texts[MSS_TEXT_P2_SIL], 5 },
 	{ &gMssSt.texts[MSS_TEXT_P2_RNG], 9 },
+
+	{}
+};
+
+static const struct TextInitInfo mss_text_init_info_page2[] = {
 	{ &gMssSt.texts[MSS_TEXT_P3_WEXP1], 2 },
 	{ &gMssSt.texts[MSS_TEXT_P3_WEXP2], 2 },
 	{ &gMssSt.texts[MSS_TEXT_P3_WEXP3], 2 },
@@ -92,6 +114,21 @@ static const struct TextInitInfo mss_text_init_info[] = {
 
 	{}
 };
+
+static const struct TextInitInfo *const mss_text_init_info_pages[] = {
+	mss_text_init_info_page0,
+	mss_text_init_info_page1,
+	mss_text_init_info_page2,
+};
+
+void Mss_InitPageText(int page)
+{
+	ResetTextFont();
+	InitTextList(mss_text_init_info_upper);
+
+	if (page >= 0 && page < (int)ARRAY_COUNT(mss_text_init_info_pages))
+		InitTextList(mss_text_init_info_pages[page]);
+}
 
 static void mss_main(struct ProcMss *proc)
 {
@@ -166,7 +203,6 @@ static void mss_init(struct ProcMss *proc)
 		BGCHR_MSS_TEXT, BGPAL_MSS_TEXT);
 
 	InitIcons();
-	InitTextList(mss_text_init_info);
 
 	ApplyIconPalettes(BGPAL_MSS_ICON0);
 	ApplyPalette(Pal_MssUI, BGPAL_MSS_UI);

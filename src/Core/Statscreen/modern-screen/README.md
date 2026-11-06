@@ -307,6 +307,7 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 - 每字符两个 8x8 sprite，跟随左右面板滑动（`step * 16` 修正）。
 - 标题使用专用 pal bank，白 ↔ 金每 2 帧闪烁（`s_mss_title_flash`）。
 - 面板内容恢复原坐标（不再为标题让位）；标题在 Left (8,44) / Right (168,4)。
+- 文本槽位改为按页重建：`Mss_InitPageText()` 在 `Mss_PreparePage()` 开头 `ResetTextFont()` 后初始化上栏 + 当前页的 text，三页不再同时占 VRAM。
 
 ---
 
@@ -359,7 +360,8 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 
 - 注释用英文；用户明确要求过。
 - 缩进用 tab（与目录内现有文件一致）。
-- 新增文本索引加到 `enum mss_text_index`，并在 `mss_text_init_info` 里注册。
+- 新增文本索引加到 `enum mss_text_index`，并在 `mss_text_init_info_upper`（上栏共用）或对应页的 `mss_text_init_info_pageN` 里注册。
+- `Mss_InitPageText()` 在每次 `Mss_PreparePage()` 开头按当前页重建文本槽位（`ResetTextFont()` + 逐页 `InitTextList()`），所以每页只占用该页实际需要的 VRAM。新增文本时不要改回启动时一次性 `InitTextList()`。
 - 新增 OBJ 资源：
   - 在 `mssfx.S` 加 `Img_*` / `Pal_*`；
   - 在 `include/statscreen.h` 加 `OBCHR_*` / `OBPAL_*` 和 `extern`；
