@@ -9,6 +9,7 @@
 #include "battle.h"
 #include "icon.h"
 #include "armfunc.h"
+#include "support.h"
 
 #include "klib.h"
 #include "statscreen.h"
@@ -229,11 +230,90 @@ static void put_rpage2()
 }
 
 /**
- * page 3
+ * page 2 (SUPPORT / WEAPON)
  */
+enum { MSS_SUPPORT_MAX_SHOW = MAX_SIMULTANEOUS_SUPPORT_COUNT_PER_UNIT };
 
 static void put_lpage3(void)
 {
+	int count, i, j, line, y, idx, support_level, rank_color, pid, affin_icon;
+	int order[UNIT_SUPPORT_COUNT];
+	struct Unit *unit = gMssSt.unit;
+	int text_color = GetUnitTotalSupportLevel(unit) == MAX_SIMULTANEOUS_SUPPORT_COUNT_PER_UNIT
+		? TEXT_COLOR_SYSTEM_GREEN : TEXT_COLOR_SYSTEM_WHITE;
+
+	line = 0;
+	y = 2;
+
+	count = GetUnitSupportCount(unit);
+	if (count > (int) ARRAY_COUNT(order))
+		count = ARRAY_COUNT(order);
+
+	for (i = 0; i < count; i++)
+		order[i] = i;
+
+	/* Show ranked supports first, then the remaining support candidates. */
+	for (i = 1; i < count; i++) {
+		int key = order[i];
+		int key_level = GetUnitSupportLevel(unit, key);
+
+		for (j = i - 1; j >= 0; j--) {
+			if (GetUnitSupportLevel(unit, order[j]) >= key_level)
+				break;
+
+			order[j + 1] = order[j];
+		}
+
+		order[j + 1] = key;
+	}
+
+	for (i = 0; i < count && line < MSS_SUPPORT_MAX_SHOW; i++) {
+		idx = order[i];
+		support_level = GetUnitSupportLevel(unit, idx);
+		pid = GetUnitSupportPid(unit, idx);
+
+		if (pid == 0)
+			continue;
+
+		affin_icon = GetAffinityIconByPid(pid);
+		if (affin_icon >= 0) {
+			PutIcon(TmBuff_MssL0 + TM_OFFSET(1, y),
+				affin_icon, TILEREF(0, BGPAL_MSS_ICON1));
+		}
+
+		ClearText(&gMssSt.texts[MSS_TEXT_SUPPORT1 + line]);
+		PutDrawText(
+			&gMssSt.texts[MSS_TEXT_SUPPORT1 + line],
+			TmBuff_MssL0 + TM_OFFSET(4, y),
+			(support_level != 0) ? text_color : TEXT_COLOR_SYSTEM_WHITE,
+			0, 0, DecodeMsg(GetPInfo(pid)->msg_name));
+
+		rank_color = TEXT_COLOR_SYSTEM_GRAY;
+
+		if (support_level != 0) {
+			rank_color = TEXT_COLOR_SYSTEM_BLUE;
+
+			if (support_level == SUPPORT_LEVEL_A)
+				rank_color = TEXT_COLOR_SYSTEM_GREEN;
+
+			if (text_color == TEXT_COLOR_SYSTEM_GREEN)
+				rank_color = TEXT_COLOR_SYSTEM_GREEN;
+		}
+
+		PutSpecialChar(TmBuff_MssL0 + TM_OFFSET(14, y),
+			rank_color, GetSupportLevelSpecialChar(support_level));
+
+		y += 2;
+		line++;
+	}
+
+	if (line == 0) {
+		ClearText(&gMssSt.texts[MSS_TEXT_NOSUPPORT]);
+		PutDrawText(
+			&gMssSt.texts[MSS_TEXT_NOSUPPORT],
+			TmBuff_MssL0 + TM_OFFSET(1, 2),
+			TEXT_COLOR_SYSTEM_GRAY, 0, 0, "No supports");
+	}
 }
 
 static struct StatScreenTextInfo const textinfo_rpage3[] = {
@@ -294,6 +374,7 @@ static void put_rpage3(void)
  */
 void Mss_PreparePage(struct ProcMss *proc)
 {
+	ClearIcons();
 	Mss_InitPageText(proc->page);
 
 	CpuFastFill(0, TmBuff_MssU0, sizeof(TmBuff_MssU0));

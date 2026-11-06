@@ -103,6 +103,12 @@ static const struct TextInitInfo mss_text_init_info_page1[] = {
 };
 
 static const struct TextInitInfo mss_text_init_info_page2[] = {
+	{ &gMssSt.texts[MSS_TEXT_SUPPORT1], 7 },
+	{ &gMssSt.texts[MSS_TEXT_SUPPORT2], 7 },
+	{ &gMssSt.texts[MSS_TEXT_SUPPORT3], 7 },
+	{ &gMssSt.texts[MSS_TEXT_SUPPORT4], 7 },
+	{ &gMssSt.texts[MSS_TEXT_SUPPORT5], 7 },
+	{ &gMssSt.texts[MSS_TEXT_NOSUPPORT], 8 },
 	{ &gMssSt.texts[MSS_TEXT_P3_WEXP1], 2 },
 	{ &gMssSt.texts[MSS_TEXT_P3_WEXP2], 2 },
 	{ &gMssSt.texts[MSS_TEXT_P3_WEXP3], 2 },
