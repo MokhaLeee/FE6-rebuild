@@ -317,6 +317,8 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 - `Img_MssTitles` / `Pal_MssTitles`，加载到 `OBCHR_MSS_TITLES` / `OBPAL_MSS_TITLES`。
 - 每字符两个 8x8 sprite，跟随左右面板滑动（`step * 16` 修正）。
 - 标题使用专用 pal bank，由 64 步 HSV 色轮驱动红/黄/绿/青/蓝/紫循环渐变，并用正弦亮度带保持鲜艳（`mss_update_title_palette`）。
+- `mss_load_gfx` 在进入 MSS 后延迟两帧加载调色板/UI，再启动 OAM 标题；这样 playerphase 单位面板的 OAM HP 数字会先随面板一起消失，不会在面板 BG 尚未清掉时被 MSS 的 OAM 覆盖成米黄色方块。
+- `mss_load_gfx` 显式把 `Pal_Text` 应用到 `BGPAL_MSS_TEXT`，避免地图调色板残留把蓝色 HP 数字染成与 HP 条相同的颜色。
 - 面板内容恢复原坐标（不再为标题让位）；标题在 Left (8,44) / Right (168,4)。
 - 文本槽位改为按页重建：`Mss_InitPageText()` 在 `Mss_PreparePage()` 开头 `ResetTextFont()` 后初始化上栏 + 当前页的 text，三页不再同时占 VRAM。
 

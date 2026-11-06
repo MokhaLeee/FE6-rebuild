@@ -175,6 +175,29 @@ static void mss_main(struct ProcMss *proc)
 	}
 }
 
+static void mss_load_gfx(struct ProcMss *proc)
+{
+	/*
+	 * The map can leave its own colours in BG palette 0. Load the UI text
+	 * palette explicitly, like the vanilla statscreen, so HP digits keep
+	 * the blue text colours instead of blending into the HP bar.
+	 */
+	ApplyPalette(Pal_Text, BGPAL_MSS_TEXT);
+	ApplyIconPalettes(BGPAL_MSS_ICON0);
+	ApplyPalette(Pal_MssUI, BGPAL_MSS_UI);
+	ApplyPalette(Pal_MssUI2, BGPAL_MSS_STATBAR);
+	Decompress(Img_MssUI, (u8 *)BG_VRAM + BGCHR_MSS_UI * CHR_SIZE);
+	Decompress(Img_MssUI2, (u8 *)BG_VRAM + BGCHR_MSS_UI2 * CHR_SIZE);
+
+	/*
+	 * Do not start drawing OAM sprites until the player-phase unit panel
+	 * has disappeared. Its HP digits are OAM and used to be overwritten
+	 * one frame before the panel's BG tiles were cleared, leaving two
+	 * tan blocks where "18" should be.
+	 */
+	proc->proc_sprite = SpawnProc(ProcScr_mss_sprites, proc);
+}
+
 static void mss_init(struct ProcMss *proc)
 {
 	struct Unit *unit = gMssSt.unit;
@@ -210,15 +233,7 @@ static void mss_init(struct ProcMss *proc)
 
 	InitIcons();
 
-	ApplyIconPalettes(BGPAL_MSS_ICON0);
-	ApplyPalette(Pal_MssUI, BGPAL_MSS_UI);
-	ApplyPalette(Pal_MssUI2, BGPAL_MSS_STATBAR);
-	Decompress(Img_MssUI, (u8 *)BG_VRAM + BGCHR_MSS_UI * CHR_SIZE);
-	Decompress(Img_MssUI2, (u8 *)BG_VRAM + BGCHR_MSS_UI2 * CHR_SIZE);
-
 	BattleGenerateDisplayStats(unit, GetUnitEquippedWeaponSlot(unit));
-
-	proc->proc_sprite = SpawnProc(ProcScr_mss_sprites, proc);
 }
 
 static void mss_end(struct ProcMss *proc)
@@ -708,6 +723,8 @@ PROC_LABEL(PL_MSS_START),
 
 PROC_LABEL(PL_MSS_SLIDE_UNIT_IN),
 	PROC_YIELD,
+	PROC_YIELD,
+	PROC_CALL(mss_load_gfx),
 	PROC_CALL(mss_apply_page),
 	PROC_CALL(Mss_PreparePage),
 	PROC_CALL(mss_init_slide_unit_in),
