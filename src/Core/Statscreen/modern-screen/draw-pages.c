@@ -236,7 +236,7 @@ enum { MSS_SUPPORT_MAX_SHOW = MAX_SIMULTANEOUS_SUPPORT_COUNT_PER_UNIT };
 
 static void put_lpage3(void)
 {
-	int count, i, j, line, y, idx, support_level, rank_color, pid, affin_icon;
+	int count, i, j, line, y, rank_color, affin_icon;
 	int order[UNIT_SUPPORT_COUNT];
 	struct Unit *unit = gMssSt.unit;
 	int text_color = GetUnitTotalSupportLevel(unit) == MAX_SIMULTANEOUS_SUPPORT_COUNT_PER_UNIT
@@ -268,9 +268,9 @@ static void put_lpage3(void)
 	}
 
 	for (i = 0; i < count && line < MSS_SUPPORT_MAX_SHOW; i++) {
-		idx = order[i];
-		support_level = GetUnitSupportLevel(unit, idx);
-		pid = GetUnitSupportPid(unit, idx);
+		int idx = order[i];
+		int support_level = GetUnitSupportLevel(unit, idx);
+		int pid = GetUnitSupportPid(unit, idx);
 
 		if (pid == 0)
 			continue;
