@@ -223,6 +223,17 @@ static void mss_put_title_sprite(const char *str, int x, int y, int oam2)
 	}
 }
 
+static const u16 s_mss_title_flash[8] = {
+	RGB(31, 31, 31),
+	RGB(31, 31, 29),
+	RGB(31, 30, 24),
+	RGB(31, 28, 18),
+	RGB(31, 26, 12),
+	RGB(31, 28, 18),
+	RGB(31, 30, 24),
+	RGB(31, 31, 29),
+};
+
 static void mss_sprites_loop(struct ProcMssSprite *proc)
 {
 	struct ProcMss *mss = proc->proc_parent;
@@ -253,15 +264,18 @@ static void mss_sprites_loop(struct ProcMssSprite *proc)
 		int lx = 8, rx = 168;
 
 		if (mss->slide_mode == MSS_SLIDE_OUT) {
-			lx -= mss->slide_l.step * 8;
+			lx -= mss->slide_l.step * 16;
 			rx += mss->slide_r.step * 8;
 		} else if (mss->slide_mode == MSS_SLIDE_IN) {
-			lx -= (MSS_L_WIDTH - mss->slide_l.step) * 8;
+			lx -= (MSS_L_WIDTH - mss->slide_l.step * 2) * 8;
 			rx += (MSS_R_WIDTH - mss->slide_r.step) * 8;
 		}
 
-		mss_put_title_sprite(s_left_titles[mss->page], lx, 56, title_oam2);
-		mss_put_title_sprite(s_right_titles[mss->page], rx, 8, title_oam2);
+		mss_put_title_sprite(s_left_titles[mss->page], lx, 44, title_oam2);
+		mss_put_title_sprite(s_right_titles[mss->page], rx, 4, title_oam2);
+
+		gPal[(0x10 + OBPAL_MSS_TITLES) * 0x10 + 2] = s_mss_title_flash[(GetGameTime() / 2) & 7];
+		EnablePalSync();
 	}
 }
 
