@@ -410,3 +410,5 @@ extern const u16 Pal_MssUI2[0x10];
 extern const u8 Img_MssSprites[];
 extern const u8 Img_MssTitles[];
 extern const u16 Pal_MssTitles[0x10];
+extern const u8 Img_MssTitleLetters[];
+extern const u16 Pal_MssTitleLetters[0x10];

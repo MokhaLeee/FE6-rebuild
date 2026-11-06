@@ -18,7 +18,8 @@ contents/statscreen/Modern/
 ├── ModernStatScreen_UI.png       面板边框/填充 tile 图集（256x32）
 ├── ModernStatScreen_UI2.png      statbar 图集
 ├── ModernStatScreen_Spirtes.png  页码/箭头/小图标（256x32）
-├── ModernStatScreen_Titles.png   标题字符集（8x16，A-Z + space）
+├── ModernStatScreen_Titles.png   整词艺术字（16x384，SKILLS/ITEMS/SUPPORT/STATS/COMBAT/WEAPON）
+├── ModernStatScreen_TitleLetters.png  旧版 8x16 字符集（A-Z + space），config=0 时使用
 ├── Tsa_Mss_Upper.c               Upper 面板 TSA
 ├── Tsa_Mss_Left.c                Left 面板 TSA
 └── Tsa_Mss_Right.c               Right 面板 TSA
@@ -92,24 +93,42 @@ i16 length;  // total slide duration in frames
 
 ## 4. 标题 sprite
 
-标题不再用 BG 文字，而是图片 + OAM：
+标题不再用 BG 文字，而是图片 + OAM。两套方案由 `include/configs/configs.h` 里的宏切换：
 
-- `ModernStatScreen_Titles.png`：8x16 字符集，顺序 A-Z + 空格（索引 0-25，空格 26），白色字 + 深棕描边。
-- 每个字符 8x16 = 2 个 tile（上/下）。
-- `mss_sprites_init()`：`Decompress(Img_MssTitles, OBJ_VRAM0 + OBCHR_MSS_TITLES * CHR_SIZE)`，`ApplyPalette(Pal_MssTitles, 0x10 + OBPAL_MSS_TITLES)`。
-- `mss_put_title_sprite()`：逐字符画 **两个 8x8 sprite**：
+```c
+/* 1 = 整词艺术字；0 = 旧版 8x16 字符集逐字母 */
+#define CONFIG_MSS_TITLE_WHOLE_WORD 1
+```
+
+### 4.1 整词艺术字（默认）
+
+- `ModernStatScreen_Titles.png`：16x384，六行整词图，顺序 `SKILLS / ITEMS / SUPPORT / STATS / COMBAT / WEAPON`。
+- 每个词是 64x16 的艺术字，拆成 4x2 个 **16x8** chunk；每个 chunk = 2 个 tile，所以每个词 16 tile，六词共 96 tile。
+- 字形使用 DejaVu Serif Condensed Bold Italic，1px 深棕描边，主体按 y 映射到调色板 `2..12` 的 11 级渐变。
+- `mss_put_title_word()` 用 8 个 `Sprite_16x8` 拼出整词：
+
+```c
+for (row = 0; row < 2; row++)
+    for (col = 0; col < 4; col++)
+        PutSprite(1, x + col * 16, y + row * 8, Sprite_16x8,
+            base + (row * 4 + col) * 2);
+```
+
+> 不要改用 32x16、64x32 这类大 OAM。这个 OBJ tile 布局下它们的跨行 tile 顺序和 64x16 图不一致，会把相邻词也读进来。16x8 条带最稳，同时仍然是一整词的图，不是逐字母画。
+
+### 4.2 旧版字符集（`CONFIG_MSS_TITLE_WHOLE_WORD = 0`）
+
+- `ModernStatScreen_TitleLetters.png`：8x432，顺序 A-Z + 空格，每个字母 8x16。
+- 每字符画两个 8x8 sprite：
 
 ```c
 PutSprite(1, x + i * 8, y,     Sprite_8x8, oam2 + idx * 2);
 PutSprite(1, x + i * 8, y + 8, Sprite_8x8, oam2 + idx * 2 + 1);
 ```
 
-> 注意：不要改回单个 `Sprite_8x16`。之前试过，8x16 OAM 的 tile 跨行排列和字符图对不齐，字符会串位。两个 8x8 是最稳的。
+- 词表：Left `SKILLS / ITEMS / SUPPORT`，Right `STATS / COMBAT / WEAPON`。
 
-标题字符串：
-
-- Left：`SKILLS` / `ITEMS` / `SUPPORT`
-- Right：`STATS` / `COMBAT` / `WEAPON`
+两套图都在 `mssfx.S` 里各有一份 `Img_*` / `Pal_*`，`mss_sprites_init()` 按宏选择加载；OAM 绘制也按宏选择 `mss_put_title_word()` 的实现。
 
 标题 x 跟随 `slide_l.step` / `slide_r.step`，翻页时跟面板一起飞。
 
@@ -128,22 +147,18 @@ PutSprite(1, x + i * 8, y + 8, Sprite_8x8, oam2 + idx * 2 + 1);
 
 标题使用专用 OBJ pal bank `OBPAL_MSS_TITLES = 3`。字符图主体使用索引 `2..12`，每个字符按 y 映射成完整的 11 级纵向渐变。
 
-`mss_update_title_palette` 用 64 步 HSV 色轮 + 正弦亮度带来驱动 11 个颜色：
+`mss_update_title_palette` 直接复用 vanilla statscreen 页面标题的 11 色滑动窗口：
 
 ```c
-int phase = (GetGameTime() / 4) & 63;
-u16 base = s_mss_title_hues[phase];
+int color_num = (GetGameTime() / 4) & 0x3F;
 
-int wave = s_mss_title_wave[(phase + i * 4) & 63];
-int scale = 216 + (((255 - 216) * wave) >> 8);
-
-pal[i] = RGB(
-    ((base & 0x1F) * scale) >> 8,
-    (((base >> 5) & 0x1F) * scale) >> 8,
-    (((base >> 10) & 0x1F) * scale) >> 8);
+CpuCopy16(
+    gpPal_StatscreenPageNameFlashing + color_num,
+    gPal + (0x10 + OBPAL_MSS_TITLES) * 0x10 + 2,
+    sizeof(u16) * 11);
 ```
 
-`s_mss_title_hues` 是饱和度 0.45 的 64 步色轮，颜色会依次经过红、黄、绿、青、蓝、紫；`scale` 保持在 216..255，保证循环中不会出现明显发暗的阶段。色轮和亮度都是闭合循环，因此没有白闪、循环停顿或跳变。
+标题主体索引 `2..12` 对应窗口里的 11 个颜色，颜色依次经过白、金、粉、青，和 vanilla 页面标题的金属高光一致。
 
 ---
 
@@ -313,10 +328,10 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 - 16 段 ease-out 表（`s_mss_ease_out`）。
 - 页码/箭头 OAM 按 `slide_r.step` 跟随 Right 面板。
 - `page_to_change` + `mss_apply_page`，滑出旧页、滑入新页。
-- 标题图 `ModernStatScreen_Titles.png`（8x16 字符集，11 级渐变主体 + 深棕描边）。
+- 标题图 `ModernStatScreen_Titles.png`（16x384，六整词艺术字，11 级渐变主体 + 深棕描边）；`CONFIG_MSS_TITLE_WHOLE_WORD = 0` 时改用 `ModernStatScreen_TitleLetters.png` 的旧版逐字母方案，两套资源都保留。
 - `Img_MssTitles` / `Pal_MssTitles`，加载到 `OBCHR_MSS_TITLES` / `OBPAL_MSS_TITLES`。
-- 每字符两个 8x8 sprite，跟随左右面板滑动（`step * 16` 修正）。
-- 标题使用专用 pal bank，由 64 步 HSV 色轮驱动红/黄/绿/青/蓝/紫循环渐变，并用正弦亮度带保持鲜艳（`mss_update_title_palette`）。
+- 每词用 8 个 `16x8` OAM sprite 拼成整词，跟随左右面板滑动（`step * 16` 修正）。
+- 标题使用专用 pal bank，直接复制 `gpPal_StatscreenPageNameFlashing` 的 11 色滑动窗口，颜色与 vanilla 页面标题一致（白/金/粉/青）。
 - `mss_load_gfx` 在进入 MSS 后延迟两帧加载调色板/UI，再启动 OAM 标题；这样 playerphase 单位面板的 OAM HP 数字会先随面板一起消失，不会在面板 BG 尚未清掉时被 MSS 的 OAM 覆盖成米黄色方块。
 - `mss_load_gfx` 显式把 `Pal_Text` 应用到 `BGPAL_MSS_TEXT`，避免地图调色板残留把蓝色 HP 数字染成与 HP 条相同的颜色。
 - 面板内容恢复原坐标（不再为标题让位）；标题在 Left (8,44) / Right (168,4)。

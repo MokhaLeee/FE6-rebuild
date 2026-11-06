@@ -26,6 +26,9 @@
 /* use rewritten statscreen */
 #define CONFIG_USE_MODERN_STATSCREEN 1
 
+/* MSS title style: 1 = whole-word art, 0 = per-letter sheet */
+#define CONFIG_MSS_TITLE_WHOLE_WORD 1
+
 /* use all-instrument */
 #define CONFIG_ALL_INSTRUMENT_EN 1
 

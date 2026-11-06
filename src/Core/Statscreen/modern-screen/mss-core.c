@@ -256,8 +256,13 @@ static void mss_sprites_init(struct ProcMssSprite *proc)
 	Decompress(Img_MssSprites, OBJ_VRAM0 + OBCHR_MSS_SPRITES * CHR_SIZE);
 	ApplyIconPalette(1, 0x10 + OBPAL_MSS_SPRITES);
 
+#if CONFIG_MSS_TITLE_WHOLE_WORD
 	Decompress(Img_MssTitles, OBJ_VRAM0 + OBCHR_MSS_TITLES * CHR_SIZE);
 	ApplyPalette(Pal_MssTitles, 0x10 + OBPAL_MSS_TITLES);
+#else
+	Decompress(Img_MssTitleLetters, OBJ_VRAM0 + OBCHR_MSS_TITLES * CHR_SIZE);
+	ApplyPalette(Pal_MssTitleLetters, 0x10 + OBPAL_MSS_TITLES);
+#endif
 
 	proc->clock_left = 0;
 	proc->clock_right = 0;
@@ -265,12 +270,42 @@ static void mss_sprites_init(struct ProcMssSprite *proc)
 	proc->anim_speed_right = 4;
 }
 
+#if CONFIG_MSS_TITLE_WHOLE_WORD
+
+enum {
+	MSS_TITLE_CHUNK_TILES = 2, /* 16x8 OAM = 2x1 tiles */
+	MSS_TITLE_CHUNKS = 8,      /* 4 columns x 2 rows per 64x16 word */
+};
+
+static void mss_put_title_word(int word, int x, int y, int oam2)
+{
+	int base = oam2 + word * (MSS_TITLE_CHUNK_TILES * MSS_TITLE_CHUNKS);
+	int row, col;
+
+	for (row = 0; row < 2; row++) {
+		for (col = 0; col < 4; col++) {
+			int chunk = row * 4 + col;
+
+			PutSprite(1, x + col * 16, y + row * 8, Sprite_16x8,
+				base + chunk * MSS_TITLE_CHUNK_TILES);
+		}
+	}
+}
+
+#else
+
 static const char *const s_left_titles[] = { "SKILLS", "ITEMS", "SUPPORT" };
 static const char *const s_right_titles[] = { "STATS", "COMBAT", "WEAPON" };
 
-static void mss_put_title_sprite(const char *str, int x, int y, int oam2)
+static void mss_put_title_word(int word, int x, int y, int oam2)
 {
+	const char *str;
 	int i;
+
+	if (word < 3)
+		str = s_left_titles[word];
+	else
+		str = s_right_titles[word - 3];
 
 	for (i = 0; str[i] != '\0'; i++) {
 		int idx = (str[i] == ' ') ? 26 : (str[i] - 'A');
@@ -280,52 +315,17 @@ static void mss_put_title_sprite(const char *str, int x, int y, int oam2)
 	}
 }
 
-static const u8 s_mss_title_wave[64] = {
-	128, 140, 152, 165, 176, 188, 198, 208, 218, 226, 234, 240, 245, 250, 253, 254,
-	255, 254, 253, 250, 245, 240, 234, 226, 218, 208, 198, 188, 176, 165, 152, 140,
-	128, 115, 103, 90, 79, 67, 57, 47, 37, 29, 21, 15, 10, 5, 2, 1,
-	0, 1, 2, 5, 10, 15, 21, 29, 37, 47, 57, 67, 79, 90, 103, 115,
-};
-
-/* Bright pastel HSV colour wheel, saturation 0.45. The hue advances every 4 frames. */
-static const u16 s_mss_title_hues[64] = {
-	RGB(31, 17, 17), RGB(31, 18, 17), RGB(31, 20, 17), RGB(31, 21, 17),
-	RGB(31, 22, 17), RGB(31, 24, 17), RGB(31, 25, 17), RGB(31, 26, 17),
-	RGB(31, 28, 17), RGB(31, 29, 17), RGB(31, 30, 17), RGB(31, 31, 17),
-	RGB(29, 31, 17), RGB(28, 31, 17), RGB(27, 31, 17), RGB(25, 31, 17),
-	RGB(24, 31, 17), RGB(23, 31, 17), RGB(21, 31, 17), RGB(20, 31, 17),
-	RGB(19, 31, 17), RGB(17, 31, 17), RGB(17, 31, 18), RGB(17, 31, 19),
-	RGB(17, 31, 21), RGB(17, 31, 22), RGB(17, 31, 23), RGB(17, 31, 24),
-	RGB(17, 31, 26), RGB(17, 31, 27), RGB(17, 31, 28), RGB(17, 31, 30),
-	RGB(17, 31, 31), RGB(17, 30, 31), RGB(17, 28, 31), RGB(17, 27, 31),
-	RGB(17, 26, 31), RGB(17, 24, 31), RGB(17, 23, 31), RGB(17, 22, 31),
-	RGB(17, 21, 31), RGB(17, 19, 31), RGB(17, 18, 31), RGB(17, 17, 31),
-	RGB(19, 17, 31), RGB(20, 17, 31), RGB(21, 17, 31), RGB(23, 17, 31),
-	RGB(24, 17, 31), RGB(25, 17, 31), RGB(27, 17, 31), RGB(28, 17, 31),
-	RGB(29, 17, 31), RGB(31, 17, 31), RGB(31, 17, 30), RGB(31, 17, 29),
-	RGB(31, 17, 28), RGB(31, 17, 26), RGB(31, 17, 25), RGB(31, 17, 24),
-	RGB(31, 17, 22), RGB(31, 17, 21), RGB(31, 17, 20), RGB(31, 17, 18),
-};
+#endif
 
 static void mss_update_title_palette(void)
 {
-	u16 *pal = gPal + (0x10 + OBPAL_MSS_TITLES) * 0x10 + 2;
-	int phase = (GetGameTime() / 4) & 63;
-	u16 base = s_mss_title_hues[phase];
-	int base_r = base & 0x1F;
-	int base_g = (base >> 5) & 0x1F;
-	int base_b = (base >> 10) & 0x1F;
-	int i;
+	int color_num = (GetGameTime() / 4) & 0x3F;
 
-	for (i = 0; i < 11; i++) {
-		int wave = s_mss_title_wave[(phase + i * 4) & 63];
-		int scale = 216 + (((255 - 216) * wave) >> 8);
-
-		pal[i] = RGB(
-			(base_r * scale) >> 8,
-			(base_g * scale) >> 8,
-			(base_b * scale) >> 8);
-	}
+	/* Same 11-colour scrolling window as the vanilla statscreen page name. */
+	CpuCopy16(
+		gpPal_StatscreenPageNameFlashing + color_num,
+		gPal + (0x10 + OBPAL_MSS_TITLES) * 0x10 + 2,
+		sizeof(u16) * 11);
 
 	EnablePalSync();
 }
@@ -367,8 +367,8 @@ static void mss_sprites_loop(struct ProcMssSprite *proc)
 			rx += (MSS_R_WIDTH - mss->slide_r.step) * 8;
 		}
 
-		mss_put_title_sprite(s_left_titles[mss->page], lx, 44, title_oam2);
-		mss_put_title_sprite(s_right_titles[mss->page], rx, 4, title_oam2);
+		mss_put_title_word(mss->page, lx, 44, title_oam2);
+		mss_put_title_word(3 + mss->page, rx, 4, title_oam2);
 
 		mss_update_title_palette();
 	}

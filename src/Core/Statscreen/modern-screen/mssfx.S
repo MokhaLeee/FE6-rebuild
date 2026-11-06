@@ -49,3 +49,13 @@ Img_MssTitles:
 .global Pal_MssTitles
 Pal_MssTitles:
 	.incbin "contents/statscreen/Modern/ModernStatScreen_Titles.gbapal", 0, 0x20
+
+.align 2, 0
+.global Img_MssTitleLetters
+Img_MssTitleLetters:
+	.incbin "contents/statscreen/Modern/ModernStatScreen_TitleLetters.4bpp.lz"
+
+.align 2, 0
+.global Pal_MssTitleLetters
+Pal_MssTitleLetters:
+	.incbin "contents/statscreen/Modern/ModernStatScreen_TitleLetters.gbapal", 0, 0x20
