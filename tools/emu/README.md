@@ -26,7 +26,7 @@
 退出码 0 = 全过，非 0 = 有失败项（会逐条列出）。截图和日志留在
 `tools/emu/.build/out/`。
 
-六个用例：
+七个用例：
 
 | 用例 | 断言 |
 |---|---|
@@ -36,6 +36,7 @@
 | 4 存档 | 游戏能写出 SRAM；读回后主菜单多出「記録から始める」等选项 |
 | 5 压力 | 固定种子的随机按键跑 20000 帧不崩溃，结束时画面正常 |
 | 6 banim | 用 mGBA 的 GDB stub 在 `BattleAIS_ExecCommands` / `EfxAdvanceFrameLut` 上打断点，确认剧情战斗动画真的跑过 |
+| 7 prepscreen | debug 章节开场自动 `EvtNextChapter(CHAPTER_2)` 通关第一章；B 过存档提示、START 打开第二章的 MENU SELECT 准备画面 |
 
 第 5 项用固定随机种子，同样的 ROM 每次跑结果一致，所以"这次挂了、上次没挂"一定是代码改动造成的。
 

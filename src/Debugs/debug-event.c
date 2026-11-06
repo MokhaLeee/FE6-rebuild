@@ -169,6 +169,9 @@ static EventScr const EventScr_Chapter1_Opening[] = {
 	EvtFightScript(PID_ROY, PID_MARCUS, FightScr_DemoScene_RoyVsMarcus, FALSE)
 	EvtFightScript(PID_ROY, PID_CHAPTER1_BANDIT, FightScr_DemoScene_RoyVsMarcus, FALSE)
 	EvtFightScript(PID_LUGH, PID_CHAPTER1_ARCHER, FightScr_DemoScene_RoyVsMarcus, FALSE)
+	EvtSleep(30)
+	// 测试用：直接"通关"第一章，让后续流程进入第二章（has_prep = true）
+	EvtNextChapter(CHAPTER_2)
 
 	EvtClearSkip
 	EvtEnd

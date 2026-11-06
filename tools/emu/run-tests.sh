@@ -83,14 +83,14 @@ assert_completed() {
 }
 
 echo "== ROM: $ROM"
-echo "== 1/6 开机与标题画面"
+echo "== 1/7 开机与标题画面"
 "$RUN" "$ROM" --quiet --frames 700 --stats 240 --stats 600 --shot 600 \
 	--out "$OUT" >"$OUT/1-boot.log" 2>&1
 assert_completed "$OUT/1-boot.log" "开机 700 帧无崩溃"
 assert_visible "$OUT/1-boot.log" "标题画面有内容" 32
 sed -n 's/^DONE.*secs=\([0-9.]*\) fps=\([0-9.]*\)/    速度: \2 fps/p' "$OUT/1-boot.log"
 
-echo "== 2/6 标题 → 主菜单（按 START）"
+echo "== 2/7 标题 → 主菜单（按 START）"
 "$RUN" "$ROM" --quiet --frames 1100 --hold 700:START:6 --stats 900 --hash 900 --shot 900 \
 	--out "$OUT" >"$OUT/2-menu.log" 2>&1
 assert_completed "$OUT/2-menu.log" "主菜单流程无崩溃"
@@ -103,13 +103,13 @@ if [ "$QUICK" = "1" ]; then
 	exit 0
 fi
 
-echo "== 3/6 连按 A 进入章节地图（12000 帧）"
+echo "== 3/7 连按 A 进入章节地图（12000 帧）"
 "$RUN" "$ROM" --quiet --frames 12000 --hold-every 720:12000:50:A:3 \
 	--stats 2400 --stats 12000 --shot 12000 --out "$OUT" >"$OUT/3-chapter.log" 2>&1
 assert_completed "$OUT/3-chapter.log" "推进到章节无崩溃"
 assert_visible "$OUT/3-chapter.log" "章节地图有内容" 32
 
-echo "== 4/6 存档写入 + 读回"
+echo "== 4/7 存档写入 + 读回"
 "$RUN" "$ROM" --quiet --frames 20000 --hold-every 720:20000:50:A:3 \
 	--save-out "$OUT/game.sav" --out "$OUT" >"$OUT/4-save.log" 2>&1
 SAV_SIZE=$(stat -c %s "$OUT/game.sav" 2>/dev/null || echo 0)
@@ -132,7 +132,7 @@ else
 	bad "存档似乎没有被读取（菜单哈希未变：$H_BASE）"
 fi
 
-echo "== 5/6 随机输入压力测试（20000 帧，固定种子可复现）"
+echo "== 5/7 随机输入压力测试（20000 帧，固定种子可复现）"
 RANDOM=12345
 KEYS=(A B START SELECT UP DOWN LEFT RIGHT L R)
 HOLDS=()
@@ -144,7 +144,7 @@ done
 assert_completed "$OUT/5-stress.log" "随机输入 20000 帧无崩溃"
 assert_visible "$OUT/5-stress.log" "压力测试结束时画面正常" 8
 
-echo "== 6/6 banim 战斗动画路径（GDB 断点）"
+echo "== 6/7 banim 战斗动画路径（GDB 断点）"
 if ./tools/emu/gdb-check.sh "$ROM" >"$OUT/6-banim.log" 2>&1; then
 	sed 's/^/  /' "$OUT/6-banim.log"
 	ok "banim 代码路径被覆盖（BattleAIS_ExecCommands / EfxAdvanceFrameLut）"
@@ -154,6 +154,20 @@ else
 fi
 
 echo
+echo "== 7/7 第二章准备画面（prepscreen）"
+"$RUN" "$ROM" --quiet --frames 16000 \
+	--hold-every 720:9000:50:A:3 \
+	--hold-every 9500:10500:40:B:4 \
+	--hold 12000:START:5 --hold 12600:START:5 \
+	--stats 12300 --shot 12300 --out "$OUT" >"$OUT/7-prep.log" 2>&1
+assert_completed "$OUT/7-prep.log" "通关第一章后进入第二章准备画面"
+PREP_COLORS=$(field "$OUT/7-prep.log" STATS colors)
+if [ -n "$PREP_COLORS" ] && [ "$PREP_COLORS" -ge 150 ] && [ "$PREP_COLORS" -le 200 ]; then
+	ok "准备画面菜单已显示（$PREP_COLORS 种颜色）"
+else
+	bad "准备画面菜单没有出现（colors=${PREP_COLORS:-?}）"
+fi
+
 if [ ${#FAILS[@]} -eq 0 ]; then
 	printf '== \033[32m全部通过\033[0m（%d 项），截图在 %s\n' "$PASSES" "$OUT"
 	exit 0
