@@ -174,7 +174,7 @@ void StartHelpBoxExt(struct HelpBoxInfo const *info, int plain)
 	ApplyHelpBoxPosition(proc, info->x, info->y);
 
 	ClearHelpBoxText();
-	StartHelpBoxTextInit(proc->item, proc->msg);
+	StartHelpBoxPrint(proc->item, proc->msg);
 
 	gLastHelpBoxInfo = info;
 }
@@ -206,7 +206,7 @@ void StartSimpleHelpBox(int x, int y, int msg)
 	proc->y_box_fini = y + 8;
 
 	ClearHelpBoxText();
-	StartHelpBoxTextInit(proc->item, proc->msg);
+	StartHelpBoxPrint(proc->item, proc->msg);
 }
 
 void CloseHelpBox(void)
@@ -450,14 +450,14 @@ int HelpBoxTryRelocateRight(struct HelpBoxProc *proc)
 	return TRUE;
 }
 
-void func_fe6_08070C4C(ProcPtr proc)
+void HelpBoxLockHelper_Loop(ProcPtr proc)
 {
 	if (gKeySt->pressed & (KEY_BUTTON_B | KEY_BUTTON_R))
 		Proc_Break(proc);
 }
 
 struct ProcScr CONST_DATA ProcScr_HelpBoxLockHelper[] = {
-	PROC_REPEAT(func_fe6_08070C4C),
+	PROC_REPEAT(HelpBoxLockHelper_Loop),
 	PROC_END,
 };
 

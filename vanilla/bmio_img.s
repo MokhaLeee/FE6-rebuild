@@ -33,8 +33,8 @@ Pal_Text: @ 08100A08
 	.incbin "fe6-base.gba", 0x100A08, (0x100A48 - 0x100A08) @ length: 0040
 
 .align 2,0
-.global Pal_08100A48
-Pal_08100A48: @ 08100A48
+.global Pal_HelpBox
+Pal_HelpBox: @ 08100A48
 	.incbin "fe6-base.gba", 0x100A48, (0x100A68 - 0x100A48) @ length: 0020
 
 .align 2,0

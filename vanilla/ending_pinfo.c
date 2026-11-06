@@ -363,7 +363,7 @@ void EndingP0InfoText_Init(struct ProcEndingPinfoText *proc)
 	struct Unit *unit = GetUnit(uid - 1);
 	int pid = UNIT_PID(unit);
 	struct PidStats *pid_status = GetPidStats(pid);
-	struct ProcTypeWritter *type_writter =  SpawnProc(ProcScr_TypeWritter, PROC_TREE_3);
+	struct ProcTypeWriter *type_writter =  SpawnProc(ProcScr_TypeWriter, PROC_TREE_3);
 
 	for (i = 0; i < 6; i++) {
 		struct Text *text = &gEndingPInfoTexts[i];
@@ -409,14 +409,14 @@ void EndingP0InfoText_Loop(struct ProcEndingPinfoText *proc)
 
 	if (GetUnit(uid - 1)->flags & UNIT_FLAG_DEAD) {
 		int i;
-		struct ProcTypeWritter *type_writter;
+		struct ProcTypeWriter *type_writter;
 
-		if (FindProc(ProcScr_TypeWritter)) {
+		if (FindProc(ProcScr_TypeWriter)) {
 			/* waiting for exists typing done */
 			return;
 		}
 
-		type_writter = SpawnProc(ProcScr_TypeWritter, PROC_TREE_3);
+		type_writter = SpawnProc(ProcScr_TypeWriter, PROC_TREE_3);
 
 		for (i = 0; i < 6; i++)
 			type_writter->text[i] = &gEndingPInfoTexts[i];
@@ -499,7 +499,7 @@ void EndingPInfo1_Idle(struct ProcEndingPInfo1 *proc)
 void EndingPInfo1_End(struct ProcEndingPInfo1 *proc)
 {
 	EndFaceById(0);
-	Proc_EndEach(ProcScr_TypeWritter);
+	Proc_EndEach(ProcScr_TypeWriter);
 	Proc_EndEach(ProcScr_EndingFacePosCtrl);
 	SetOnHBlankA(NULL);
 }
@@ -524,7 +524,7 @@ void EndingP1InfoText_Init(struct ProcEndingPinfoText *proc)
 	struct Unit *unit = GetUnit(uid - 1);
 	int pid = UNIT_PID(unit);
 	struct PidStats *pid_status = GetPidStats(pid);
-	struct ProcTypeWritter *type_writter =  SpawnProc(ProcScr_TypeWritter, PROC_TREE_3);
+	struct ProcTypeWriter *type_writter =  SpawnProc(ProcScr_TypeWriter, PROC_TREE_3);
 
 	for (i = 0; i < 2; i++) {
 		struct Text *text = &gEndingPInfoTexts[i];
@@ -564,14 +564,14 @@ void EndingP1InfoText_Loop(struct ProcEndingPinfoText *proc)
 
 	if (GetUnit(uid - 1)->flags & UNIT_FLAG_DEAD) {
 		int i;
-		struct ProcTypeWritter *type_writter;
+		struct ProcTypeWriter *type_writter;
 
-		if (FindProc(ProcScr_TypeWritter)) {
+		if (FindProc(ProcScr_TypeWriter)) {
 			/* waiting for exists typing done */
 			return;
 		}
 
-		type_writter = SpawnProc(ProcScr_TypeWritter, PROC_TREE_3);
+		type_writter = SpawnProc(ProcScr_TypeWriter, PROC_TREE_3);
 
 		for (i = 0; i < 2; i++)
 			type_writter->text[i] = &gEndingPInfoTexts[i];
@@ -609,7 +609,7 @@ void EndingP2InfoText_Init(struct ProcEndingPinfoText *proc)
 	struct Unit *unit = GetUnit(uid - 1);
 	int pid = UNIT_PID(unit);
 	struct PidStats *pid_status = GetPidStats(pid);
-	struct ProcTypeWritter *type_writter =  SpawnProc(ProcScr_TypeWritter, PROC_TREE_3);
+	struct ProcTypeWriter *type_writter =  SpawnProc(ProcScr_TypeWriter, PROC_TREE_3);
 
 	for (i = 0; i < 2; i++) {
 		struct Text *text = &gEndingPInfo2Texts[i];
@@ -649,14 +649,14 @@ void EndingP2InfoText_Loop(struct ProcEndingPinfoText *proc)
 
 	if (GetUnit(uid - 1)->flags & UNIT_FLAG_DEAD) {
 		int i;
-		struct ProcTypeWritter *type_writter;
+		struct ProcTypeWriter *type_writter;
 
-		if (FindProc(ProcScr_TypeWritter)) {
+		if (FindProc(ProcScr_TypeWriter)) {
 			/* waiting for exists typing done */
 			return;
 		}
 
-		type_writter = SpawnProc(ProcScr_TypeWritter, PROC_TREE_3);
+		type_writter = SpawnProc(ProcScr_TypeWriter, PROC_TREE_3);
 
 		for (i = 0; i < 2; i++)
 			type_writter->text[i] = &gEndingPInfo2Texts[i];
@@ -782,7 +782,7 @@ void EndingPInfoDisp_End(struct ProcEndingPInfoDisp *proc)
 {
 	EndFaceById(0);
 	EndFaceById(1);
-	Proc_EndEach(ProcScr_TypeWritter);
+	Proc_EndEach(ProcScr_TypeWriter);
 	Proc_EndEach(ProcScr_EndingFacePosCtrl);
 	SetOnHBlankA(NULL);
 }
