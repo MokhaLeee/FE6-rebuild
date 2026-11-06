@@ -87,8 +87,8 @@ static void put_multi_line_text(const char *str, struct Text *texts, u16 *tm, in
 }
 
 static struct StatScreenTextInfo const textinfo_lpage1[] = {
-	{ gMssSt.texts + MSS_TEXT_P1_SKILLS, TmBuff_MssL0 + TM_OFFSET(1, 1),  TEXT_COLOR_SYSTEM_GOLD, 0, "Skills:" },
-	{ gMssSt.texts + MSS_TEXT_P1_BMAGS, TmBuff_MssL0 + TM_OFFSET(1, 8),  TEXT_COLOR_SYSTEM_GOLD, 0, "B.Magic:" },
+	{ gMssSt.texts + MSS_TEXT_P1_SKILLS, TmBuff_MssL0 + TM_OFFSET(1, 3),  TEXT_COLOR_SYSTEM_GOLD, 0, "Skills:" },
+	{ gMssSt.texts + MSS_TEXT_P1_BMAGS, TmBuff_MssL0 + TM_OFFSET(1, 10),  TEXT_COLOR_SYSTEM_GOLD, 0, "B.Magic:" },
 	{ 0 }, // end
 };
 
@@ -102,7 +102,7 @@ static void put_lpage1(void)
 
 	for (i = 0; i < slist->amt; i++) {
 		PutIcon(
-			TmBuff_MssL0 + TM_OFFSET(1 + i * 2, 3),
+			TmBuff_MssL0 + TM_OFFSET(1 + i * 2, 5),
 			SKILL_ICON(slist->sid[i]),
 			TILEREF(0, BGPAL_MSS_ICON0)
 		);
@@ -152,14 +152,14 @@ static void mss_put_stat(int num, int x, int y, int base, int total, int max)
 }
 
 static struct StatScreenTextInfo const textinfo_rpage1[] = {
-	{ gMssSt.texts + MSS_TEXT_POW, TmBuff_MssR0 + TM_OFFSET(1, 2),  TEXT_COLOR_SYSTEM_GOLD, 0, "Str" },
-	{ gMssSt.texts + MSS_TEXT_MAG, TmBuff_MssR0 + TM_OFFSET(1, 4),  TEXT_COLOR_SYSTEM_GOLD, 0, "Mag" },
-	{ gMssSt.texts + MSS_TEXT_SKL, TmBuff_MssR0 + TM_OFFSET(1, 6),  TEXT_COLOR_SYSTEM_GOLD, 0, "Skl" },
-	{ gMssSt.texts + MSS_TEXT_SPD, TmBuff_MssR0 + TM_OFFSET(1, 8),  TEXT_COLOR_SYSTEM_GOLD, 0, "Spd" },
-	{ gMssSt.texts + MSS_TEXT_DEF, TmBuff_MssR0 + TM_OFFSET(1, 10), TEXT_COLOR_SYSTEM_GOLD, 0, "Def" },
-	{ gMssSt.texts + MSS_TEXT_RES, TmBuff_MssR0 + TM_OFFSET(1, 12), TEXT_COLOR_SYSTEM_GOLD, 0, "Res" },
-	{ gMssSt.texts + MSS_TEXT_LCK, TmBuff_MssR0 + TM_OFFSET(1, 14), TEXT_COLOR_SYSTEM_GOLD, 0, "Lck" },
-	{ gMssSt.texts + MSS_TEXT_MOV, TmBuff_MssR0 + TM_OFFSET(1, 16), TEXT_COLOR_SYSTEM_GOLD, 0, "Mov" },
+	{ gMssSt.texts + MSS_TEXT_POW, TmBuff_MssR0 + TM_OFFSET(1, 3),  TEXT_COLOR_SYSTEM_GOLD, 0, "Str" },
+	{ gMssSt.texts + MSS_TEXT_MAG, TmBuff_MssR0 + TM_OFFSET(1, 5),  TEXT_COLOR_SYSTEM_GOLD, 0, "Mag" },
+	{ gMssSt.texts + MSS_TEXT_SKL, TmBuff_MssR0 + TM_OFFSET(1, 7),  TEXT_COLOR_SYSTEM_GOLD, 0, "Skl" },
+	{ gMssSt.texts + MSS_TEXT_SPD, TmBuff_MssR0 + TM_OFFSET(1, 9),  TEXT_COLOR_SYSTEM_GOLD, 0, "Spd" },
+	{ gMssSt.texts + MSS_TEXT_DEF, TmBuff_MssR0 + TM_OFFSET(1, 11), TEXT_COLOR_SYSTEM_GOLD, 0, "Def" },
+	{ gMssSt.texts + MSS_TEXT_RES, TmBuff_MssR0 + TM_OFFSET(1, 13), TEXT_COLOR_SYSTEM_GOLD, 0, "Res" },
+	{ gMssSt.texts + MSS_TEXT_LCK, TmBuff_MssR0 + TM_OFFSET(1, 15), TEXT_COLOR_SYSTEM_GOLD, 0, "Lck" },
+	{ gMssSt.texts + MSS_TEXT_MOV, TmBuff_MssR0 + TM_OFFSET(1, 17), TEXT_COLOR_SYSTEM_GOLD, 0, "Mov" },
 	{ 0 }, // end
 };
 
@@ -169,14 +169,14 @@ static void put_rpage1()
 
 	PutStatScreenText(textinfo_rpage1);
 
-	mss_put_stat(0, 5, 2,  unit->pow, GetUnitPower(unit), GetUnitMaxStatusPow(unit));
-	mss_put_stat(1, 5, 4,  unit->mag, GetUnitMagic(unit), GetUnitMaxStatusMag(unit));
-	mss_put_stat(2, 5, 6,  unit->skl, GetUnitSkill(unit), GetUnitMaxStatusSkl(unit));
-	mss_put_stat(3, 5, 8,  unit->spd, GetUnitSpeed(unit), GetUnitMaxStatusSpd(unit));
-	mss_put_stat(4, 5, 10,  unit->def, GetUnitDefense(unit), GetUnitMaxStatusDef(unit));
-	mss_put_stat(5, 5, 12, unit->res, GetUnitResistance(unit), GetUnitMaxStatusRes(unit));
-	mss_put_stat(6, 5, 14, unit->lck, GetUnitLuck(unit), GetUnitMaxStatusLck(unit));
-	mss_put_stat(7, 5, 16, UNIT_MOV_BASE(unit), GetUnitMovement(unit), GetUnitMaxStatusMov(unit));
+	mss_put_stat(0, 5, 3,  unit->pow, GetUnitPower(unit), GetUnitMaxStatusPow(unit));
+	mss_put_stat(1, 5, 5,  unit->mag, GetUnitMagic(unit), GetUnitMaxStatusMag(unit));
+	mss_put_stat(2, 5, 7,  unit->skl, GetUnitSkill(unit), GetUnitMaxStatusSkl(unit));
+	mss_put_stat(3, 5, 9,  unit->spd, GetUnitSpeed(unit), GetUnitMaxStatusSpd(unit));
+	mss_put_stat(4, 5, 11,  unit->def, GetUnitDefense(unit), GetUnitMaxStatusDef(unit));
+	mss_put_stat(5, 5, 13, unit->res, GetUnitResistance(unit), GetUnitMaxStatusRes(unit));
+	mss_put_stat(6, 5, 15, unit->lck, GetUnitLuck(unit), GetUnitMaxStatusLck(unit));
+	mss_put_stat(7, 5, 17, UNIT_MOV_BASE(unit), GetUnitMovement(unit), GetUnitMaxStatusMov(unit));
 }
 
 /**
@@ -196,18 +196,18 @@ static void put_lpage2(void)
 		DrawItemStatScreenLine(
 			&gMssSt.texts[MSS_TEXT_ITEM1 + i],
 			item, IsItemDisplayUsable(unit, item),
-			TmBuff_MssL0 + TM_OFFSET(2, 2 + i * 2));
+			TmBuff_MssL0 + TM_OFFSET(2, 3 + i * 2));
 	}
 }
 
 static struct StatScreenTextInfo const textinfo_rpage2[] = {
-	{ gMssSt.texts + MSS_TEXT_P2_ATK, TmBuff_MssR0 + TM_OFFSET(1, 3),  TEXT_COLOR_SYSTEM_GOLD, 0, "Attack" },
-	{ gMssSt.texts + MSS_TEXT_P2_HIT, TmBuff_MssR0 + TM_OFFSET(1, 5),  TEXT_COLOR_SYSTEM_GOLD, 0, "Hit" },
-	{ gMssSt.texts + MSS_TEXT_P2_CRT, TmBuff_MssR0 + TM_OFFSET(1, 7),  TEXT_COLOR_SYSTEM_GOLD, 0, "Crit" },
-	{ gMssSt.texts + MSS_TEXT_P2_AVO, TmBuff_MssR0 + TM_OFFSET(1, 9),  TEXT_COLOR_SYSTEM_GOLD, 0, "Avoid" },
-	{ gMssSt.texts + MSS_TEXT_P2_DDG, TmBuff_MssR0 + TM_OFFSET(1, 11), TEXT_COLOR_SYSTEM_GOLD, 0, "Dodge" },
-	{ gMssSt.texts + MSS_TEXT_P2_SIL, TmBuff_MssR0 + TM_OFFSET(1, 13), TEXT_COLOR_SYSTEM_GOLD, 0, "Silencer" },
-	{ gMssSt.texts + MSS_TEXT_P2_RNG, TmBuff_MssR0 + TM_OFFSET(1, 15), TEXT_COLOR_SYSTEM_GOLD, 0, "Range" },
+	{ gMssSt.texts + MSS_TEXT_P2_ATK, TmBuff_MssR0 + TM_OFFSET(1, 4),  TEXT_COLOR_SYSTEM_GOLD, 0, "Attack" },
+	{ gMssSt.texts + MSS_TEXT_P2_HIT, TmBuff_MssR0 + TM_OFFSET(1, 6),  TEXT_COLOR_SYSTEM_GOLD, 0, "Hit" },
+	{ gMssSt.texts + MSS_TEXT_P2_CRT, TmBuff_MssR0 + TM_OFFSET(1, 8),  TEXT_COLOR_SYSTEM_GOLD, 0, "Crit" },
+	{ gMssSt.texts + MSS_TEXT_P2_AVO, TmBuff_MssR0 + TM_OFFSET(1, 10),  TEXT_COLOR_SYSTEM_GOLD, 0, "Avoid" },
+	{ gMssSt.texts + MSS_TEXT_P2_DDG, TmBuff_MssR0 + TM_OFFSET(1, 12), TEXT_COLOR_SYSTEM_GOLD, 0, "Dodge" },
+	{ gMssSt.texts + MSS_TEXT_P2_SIL, TmBuff_MssR0 + TM_OFFSET(1, 14), TEXT_COLOR_SYSTEM_GOLD, 0, "Silencer" },
+	{ gMssSt.texts + MSS_TEXT_P2_RNG, TmBuff_MssR0 + TM_OFFSET(1, 16), TEXT_COLOR_SYSTEM_GOLD, 0, "Range" },
 	{ 0 }, // end
 };
 
@@ -217,12 +217,12 @@ static void put_rpage2()
 
 	PutStatScreenText(textinfo_rpage2);
 
-	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 3),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_attack);
-	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 5),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_hit);
-	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 7),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_crit);
-	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 9),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_avoid);
-	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 11), TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_dodge);
-	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 13), TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_silencer);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 4),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_attack);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 6),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_hit);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 8),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_crit);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 10),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_avoid);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 12), TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_dodge);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 14), TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_silencer);
 
 	str = GetItemRangeString(gBattleUnitA.weapon_before);
 	Text_InsertDrawString(&gMssSt.texts[MSS_TEXT_P2_RNG], 62 - GetStringTextLen(str), TEXT_COLOR_SYSTEM_BLUE, str);
@@ -237,14 +237,14 @@ static void put_lpage3(void)
 }
 
 static struct StatScreenTextInfo const textinfo_rpage3[] = {
-	{ gMssSt.texts + MSS_TEXT_P3_WEXP1, TmBuff_MssR0 + TM_OFFSET(3, 2),  TEXT_COLOR_SYSTEM_GOLD, 0, "剣" },
-	{ gMssSt.texts + MSS_TEXT_P3_WEXP2, TmBuff_MssR0 + TM_OFFSET(3, 4),  TEXT_COLOR_SYSTEM_GOLD, 0, "槍" },
-	{ gMssSt.texts + MSS_TEXT_P3_WEXP3, TmBuff_MssR0 + TM_OFFSET(3, 6),  TEXT_COLOR_SYSTEM_GOLD, 0, "斧" },
-	{ gMssSt.texts + MSS_TEXT_P3_WEXP4, TmBuff_MssR0 + TM_OFFSET(3, 8),  TEXT_COLOR_SYSTEM_GOLD, 0, "弓" },
-	{ gMssSt.texts + MSS_TEXT_P3_WEXP5, TmBuff_MssR0 + TM_OFFSET(3, 10), TEXT_COLOR_SYSTEM_GOLD, 0, "理" },
-	{ gMssSt.texts + MSS_TEXT_P3_WEXP6, TmBuff_MssR0 + TM_OFFSET(3, 12), TEXT_COLOR_SYSTEM_GOLD, 0, "光" },
-	{ gMssSt.texts + MSS_TEXT_P3_WEXP7, TmBuff_MssR0 + TM_OFFSET(3, 14), TEXT_COLOR_SYSTEM_GOLD, 0, "闇" },
-	{ gMssSt.texts + MSS_TEXT_P3_WEXP8, TmBuff_MssR0 + TM_OFFSET(3, 16), TEXT_COLOR_SYSTEM_GOLD, 0, "杖" },
+	{ gMssSt.texts + MSS_TEXT_P3_WEXP1, TmBuff_MssR0 + TM_OFFSET(3, 3),  TEXT_COLOR_SYSTEM_GOLD, 0, "剣" },
+	{ gMssSt.texts + MSS_TEXT_P3_WEXP2, TmBuff_MssR0 + TM_OFFSET(3, 5),  TEXT_COLOR_SYSTEM_GOLD, 0, "槍" },
+	{ gMssSt.texts + MSS_TEXT_P3_WEXP3, TmBuff_MssR0 + TM_OFFSET(3, 7),  TEXT_COLOR_SYSTEM_GOLD, 0, "斧" },
+	{ gMssSt.texts + MSS_TEXT_P3_WEXP4, TmBuff_MssR0 + TM_OFFSET(3, 9),  TEXT_COLOR_SYSTEM_GOLD, 0, "弓" },
+	{ gMssSt.texts + MSS_TEXT_P3_WEXP5, TmBuff_MssR0 + TM_OFFSET(3, 11), TEXT_COLOR_SYSTEM_GOLD, 0, "理" },
+	{ gMssSt.texts + MSS_TEXT_P3_WEXP6, TmBuff_MssR0 + TM_OFFSET(3, 13), TEXT_COLOR_SYSTEM_GOLD, 0, "光" },
+	{ gMssSt.texts + MSS_TEXT_P3_WEXP7, TmBuff_MssR0 + TM_OFFSET(3, 15), TEXT_COLOR_SYSTEM_GOLD, 0, "闇" },
+	{ gMssSt.texts + MSS_TEXT_P3_WEXP8, TmBuff_MssR0 + TM_OFFSET(3, 17), TEXT_COLOR_SYSTEM_GOLD, 0, "杖" },
 	{ 0 }, // end
 };
 
@@ -278,15 +278,15 @@ static void put_rpage3(void)
 {
 	PutStatScreenText(textinfo_rpage3);
 
-	put_wexp_bar(0, 1, 2, ITEM_KIND_SWORD);
-	put_wexp_bar(1, 1, 4, ITEM_KIND_LANCE);
-	put_wexp_bar(2, 1, 6, ITEM_KIND_AXE);
-	put_wexp_bar(3, 1, 8, ITEM_KIND_BOW);
+	put_wexp_bar(0, 1, 3, ITEM_KIND_SWORD);
+	put_wexp_bar(1, 1, 5, ITEM_KIND_LANCE);
+	put_wexp_bar(2, 1, 7, ITEM_KIND_AXE);
+	put_wexp_bar(3, 1, 9, ITEM_KIND_BOW);
 
-	put_wexp_bar(4, 1, 10, ITEM_KIND_ANIMA);
-	put_wexp_bar(5, 1, 12, ITEM_KIND_LIGHT);
-	put_wexp_bar(6, 1, 14, ITEM_KIND_ELDER);
-	put_wexp_bar(7, 1, 16, ITEM_KIND_STAFF);
+	put_wexp_bar(4, 1, 11, ITEM_KIND_ANIMA);
+	put_wexp_bar(5, 1, 13, ITEM_KIND_LIGHT);
+	put_wexp_bar(6, 1, 15, ITEM_KIND_ELDER);
+	put_wexp_bar(7, 1, 17, ITEM_KIND_STAFF);
 }
 
 /**

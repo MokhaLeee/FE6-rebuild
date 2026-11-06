@@ -261,6 +261,9 @@ enum videoalloc_mss {
 
 	OBCHR_MSS_SPRITES = 0x5800 / 0x20,
 	OBPAL_MSS_SPRITES = 2,
+
+	OBCHR_MSS_TITLES = 0x6800 / 0x20,
+	OBPAL_MSS_TITLES = 3,
 };
 
 enum mss_proc_label {
@@ -398,3 +401,5 @@ extern const u16 Pal_MssUI[0x10];
 extern const u8 Img_MssUI2[];
 extern const u16 Pal_MssUI2[0x10];
 extern const u8 Img_MssSprites[];
+extern const u8 Img_MssTitles[];
+extern const u16 Pal_MssTitles[0x10];

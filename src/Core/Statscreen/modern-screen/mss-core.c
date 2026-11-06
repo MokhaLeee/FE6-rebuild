@@ -199,10 +199,28 @@ static void mss_sprites_init(struct ProcMssSprite *proc)
 	Decompress(Img_MssSprites, OBJ_VRAM0 + OBCHR_MSS_SPRITES * CHR_SIZE);
 	ApplyIconPalette(1, 0x10 + OBPAL_MSS_SPRITES);
 
+	Decompress(Img_MssTitles, OBJ_VRAM0 + OBCHR_MSS_TITLES * CHR_SIZE);
+	ApplyPalette(Pal_MssTitles, 0x10 + OBPAL_MSS_TITLES);
+
 	proc->clock_left = 0;
 	proc->clock_right = 0;
 	proc->anim_speed_left = 4;
 	proc->anim_speed_right = 4;
+}
+
+static const char *const s_left_titles[] = { "SKILLS", "ITEMS", "SUPPORT" };
+static const char *const s_right_titles[] = { "STATS", "COMBAT", "WEAPON" };
+
+static void mss_put_title_sprite(const char *str, int x, int y, int oam2)
+{
+	int i;
+
+	for (i = 0; str[i] != '\0'; i++) {
+		int idx = (str[i] == ' ') ? 26 : (str[i] - 'A');
+
+		PutSprite(1, x + i * 8, y, Sprite_8x8, oam2 + idx * 2);
+		PutSprite(1, x + i * 8, y + 8, Sprite_8x8, oam2 + idx * 2 + 1);
+	}
 }
 
 static void mss_sprites_loop(struct ProcMssSprite *proc)
@@ -226,6 +244,25 @@ static void mss_sprites_loop(struct ProcMssSprite *proc)
 	 */
 	PutSprite(1, 175 + page_dx, 147, Sprite_8x16, base_oam2 + 0x4A + k_umod(proc->clock_left >> 5, 6));
 	PutSprite(1, 212 + page_dx, 147, Sprite_8x16_HFlipped, base_oam2 + 0x4A + k_umod(proc->clock_right >> 5, 6));
+
+	/**
+	 * panel titles
+	 */
+	if (mss->page >= 0 && mss->page < 3) {
+		int title_oam2 = OAM2_CHR(OBCHR_MSS_TITLES) + OAM2_PAL(OBPAL_MSS_TITLES) + OAM2_LAYER(1);
+		int lx = 8, rx = 168;
+
+		if (mss->slide_mode == MSS_SLIDE_OUT) {
+			lx -= mss->slide_l.step * 8;
+			rx += mss->slide_r.step * 8;
+		} else if (mss->slide_mode == MSS_SLIDE_IN) {
+			lx -= (MSS_L_WIDTH - mss->slide_l.step) * 8;
+			rx += (MSS_R_WIDTH - mss->slide_r.step) * 8;
+		}
+
+		mss_put_title_sprite(s_left_titles[mss->page], lx, 56, title_oam2);
+		mss_put_title_sprite(s_right_titles[mss->page], rx, 8, title_oam2);
+	}
 }
 
 static const struct ProcScr ProcScr_mss_sprites[] = {

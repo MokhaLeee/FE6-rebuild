@@ -39,3 +39,13 @@ Pal_MssUI2:
 .global Img_MssSprites
 Img_MssSprites:
 	.incbin "contents/statscreen/Modern/ModernStatScreen_Spirtes.4bpp.lz"
+
+.align 2, 0
+.global Img_MssTitles
+Img_MssTitles:
+	.incbin "contents/statscreen/Modern/ModernStatScreen_Titles.4bpp.lz"
+
+.align 2, 0
+.global Pal_MssTitles
+Pal_MssTitles:
+	.incbin "contents/statscreen/Modern/ModernStatScreen_Titles.gbapal", 0, 0x20
