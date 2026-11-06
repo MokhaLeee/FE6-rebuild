@@ -83,14 +83,14 @@ assert_completed() {
 }
 
 echo "== ROM: $ROM"
-echo "== 1/9 开机与标题画面"
+echo "== 1/10 开机与标题画面"
 "$RUN" "$ROM" --quiet --frames 700 --stats 240 --stats 600 --shot 600 \
 	--out "$OUT" >"$OUT/1-boot.log" 2>&1
 assert_completed "$OUT/1-boot.log" "开机 700 帧无崩溃"
 assert_visible "$OUT/1-boot.log" "标题画面有内容" 32
 sed -n 's/^DONE.*secs=\([0-9.]*\) fps=\([0-9.]*\)/    速度: \2 fps/p' "$OUT/1-boot.log"
 
-echo "== 2/9 标题 → 主菜单（按 START）"
+echo "== 2/10 标题 → 主菜单（按 START）"
 "$RUN" "$ROM" --quiet --frames 1100 --hold 700:START:6 --stats 900 --hash 900 --shot 900 \
 	--out "$OUT" >"$OUT/2-menu.log" 2>&1
 assert_completed "$OUT/2-menu.log" "主菜单流程无崩溃"
@@ -103,13 +103,13 @@ if [ "$QUICK" = "1" ]; then
 	exit 0
 fi
 
-echo "== 3/9 连按 A 进入章节地图（12000 帧）"
+echo "== 3/10 连按 A 进入章节地图（12000 帧）"
 "$RUN" "$ROM" --quiet --frames 12000 --hold-every 720:12000:50:A:3 \
 	--stats 2400 --stats 12000 --shot 12000 --out "$OUT" >"$OUT/3-chapter.log" 2>&1
 assert_completed "$OUT/3-chapter.log" "推进到章节无崩溃"
 assert_visible "$OUT/3-chapter.log" "章节地图有内容" 32
 
-echo "== 4/9 存档写入 + 读回"
+echo "== 4/10 存档写入 + 读回"
 "$RUN" "$ROM" --quiet --frames 20000 --hold-every 720:20000:50:A:3 \
 	--save-out "$OUT/game.sav" --out "$OUT" >"$OUT/4-save.log" 2>&1
 SAV_SIZE=$(stat -c %s "$OUT/game.sav" 2>/dev/null || echo 0)
@@ -132,7 +132,7 @@ else
 	bad "存档似乎没有被读取（菜单哈希未变：$H_BASE）"
 fi
 
-echo "== 5/9 随机输入压力测试（20000 帧，固定种子可复现）"
+echo "== 5/10 随机输入压力测试（20000 帧，固定种子可复现）"
 RANDOM=12345
 KEYS=(A B START SELECT UP DOWN LEFT RIGHT L R)
 HOLDS=()
@@ -144,7 +144,7 @@ done
 assert_completed "$OUT/5-stress.log" "随机输入 20000 帧无崩溃"
 assert_visible "$OUT/5-stress.log" "压力测试结束时画面正常" 8
 
-echo "== 6/9 banim 战斗动画路径（GDB 断点）"
+echo "== 6/10 banim 战斗动画路径（GDB 断点）"
 if ./tools/emu/gdb-check.sh "$ROM" >"$OUT/6-banim.log" 2>&1; then
 	sed 's/^/  /' "$OUT/6-banim.log"
 	ok "banim 代码路径被覆盖（BattleAIS_ExecCommands / EfxAdvanceFrameLut）"
@@ -154,7 +154,7 @@ else
 fi
 
 echo
-echo "== 7/9 第二章准备画面（prepscreen）"
+echo "== 7/10 第二章准备画面（prepscreen）"
 "$RUN" "$ROM" --quiet --frames 16000 \
 	--sym "${ROM%.gba}.sym" \
 	--hold-every 720:9000:50:A:3 \
@@ -169,7 +169,7 @@ else
 	bad "准备画面菜单没有出现（colors=${PREP_COLORS:-?}）"
 fi
 
-echo "== 8/9 准备画面子菜单交互（部署 / 物品 / 存档 / 地图 / 出击）"
+echo "== 8/10 准备画面子菜单交互（部署 / 物品 / 存档 / 地图 / 出击）"
 "$RUN" "$ROM" --quiet --frames 17000 \
 	--sym "${ROM%.gba}.sym" \
 	--hold-every 720:9000:50:A:3 \
@@ -203,7 +203,7 @@ else
 	bad "出击后画面异常（colors=${MAP_COLORS:-?}）"
 fi
 
-echo "== 9/9 帮助框（prepscreen 主菜单按 R）"
+echo "== 9/10 帮助框（prepscreen 主菜单按 R）"
 "$RUN" "$ROM" --quiet --frames 12000 \
 	--sym "${ROM%.gba}.sym" \
 	--hold-every 720:9000:50:A:3 \
@@ -228,6 +228,30 @@ if [ -n "$HELP_COLORS" ] && [ "$HELP_COLORS" -ge 170 ] && [ "$HELP_COLORS" -le 1
 else
 	bad "帮助框异常（colors=${HELP_COLORS:-?}）"
 fi
+
+echo "== 10/10 准备画面物品子菜单（交換/捨てる/輸送隊/リスト/武器屋）"
+"$RUN" "$ROM" --quiet --frames 15500 \
+	--sym "${ROM%.gba}.sym" \
+	--hold-every 720:9000:50:A:3 \
+	--hold-every 9500:10500:40:B:4 \
+	--press-when "gBmSt+0x4:8:&16;START;5;0" \
+	--hold 10650:A:5 --hold 10900:B:5 --hold 11100:DOWN:5 --hold 11200:A:5 \
+	--hold 11400:A:5 --hold 11600:A:5 --hold 12100:B:5 --hold 12300:DOWN:5 \
+	--hold 12400:A:5 --hold 12700:B:5 --hold 12900:DOWN:5 --hold 13000:A:5 \
+	--hold 13400:B:5 --hold 13600:DOWN:5 --hold 13700:A:5 --hold 14100:B:5 \
+	--hold 14300:DOWN:5 --hold 14400:A:5 --hold 14800:B:5 \
+	--stats 11800 --stats 12500 --stats 13200 --stats 13900 --stats 14600 \
+	--shot 11800 --shot 13200 --shot 14600 \
+	--out "$OUT" >"$OUT/10-prepsub.log" 2>&1
+assert_completed "$OUT/10-prepsub.log" "准备画面物品子菜单交互无崩溃"
+for f in 11800 12500 13200 13900 14600; do
+	C=$(grep "STATS frame=$f" "$OUT/10-prepsub.log" | sed -n 's/.*colors=\([0-9]*\).*/\1/p')
+	if [ -n "$C" ] && [ "$C" -ge 60 ] && [ "$C" -le 220 ]; then
+		ok "子界面 $f 有内容（$C 种颜色）"
+	else
+		bad "子界面 $f 异常（colors=${C:-?}）"
+	fi
+done
 
 if [ ${#FAILS[@]} -eq 0 ]; then
 	printf '== \033[32m全部通过\033[0m（%d 项），截图在 %s\n' "$PASSES" "$OUT"
