@@ -218,7 +218,7 @@ void StartEkrFaeTransferfx(struct BaSprite * anim)
 
 void EkrFaeTransferBackfx_Loop(struct ProcEkrFaefx * proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 	if (ret >= 0)
 	{
 		const u16 ** tsaL = proc->tsal;

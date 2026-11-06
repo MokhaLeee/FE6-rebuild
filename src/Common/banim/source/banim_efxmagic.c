@@ -1208,7 +1208,7 @@ struct ProcScr CONST_DATA ProcScr_EfxSongBGCOL[] = {
 
 void NewEfxSongBGCOL(struct Anim *anim)
 {
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0, 1,
 		1, 1,
 		2, 1,
@@ -1256,7 +1256,7 @@ void NewEfxSongBGCOL(struct Anim *anim)
 
 void EfxSongBGCOL_Loop(struct ProcEfxBGCOL *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		const u16 *pal = proc->pal;
@@ -1612,7 +1612,7 @@ struct ProcScr CONST_DATA ProcScr_EfxEckesachsBGCOL[] = {
 
 void NewEfxEckesachsBGCOL(struct Anim *anim)
 {
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0, 1,
 		1, 1,
 		2, 1,
@@ -1638,7 +1638,7 @@ void NewEfxEckesachsBGCOL(struct Anim *anim)
 
 void EfxEckesachsBGCOL_Loop(struct ProcEfxBGCOL *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		const u16 *pal = proc->pal;
@@ -1932,7 +1932,7 @@ struct ProcScr CONST_DATA ProcScr_EfxFirebreathBGCOL[] =
 void NewEfxFirebreathBGCOL(struct Anim *anim)
 {
 	// clang-format off
-	static const u16 frames[] =
+	static const i16 frames[] =
 	{
 		4, 2,
 		5, 2, 6, 2, 5, 2, 6, 2,
@@ -1958,7 +1958,7 @@ void NewEfxFirebreathBGCOL(struct Anim *anim)
 
 void EfxFirebreathBGCOL_Loop(struct ProcEfxBGCOL *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 #if FE8
@@ -2169,7 +2169,7 @@ u16 * CONST_DATA Tsa_EfxDarkbreathBG[] = {
 
 void NewEfxDarkbreathBG(struct Anim *anim)
 {
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		11, 12,
 		0, 2,
 		1, 2,
@@ -2209,7 +2209,7 @@ void NewEfxDarkbreathBG(struct Anim *anim)
 
 void EfxDarkbreathBG_Loop(struct ProcEfxBG *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **tsaL = proc->tsal;
@@ -2237,7 +2237,7 @@ struct ProcScr CONST_DATA ProcScr_EfxDarkbreathBGCOL[] =
 
 void NewEfxDarkbreathBGCOL(struct Anim *anim)
 {
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0, 2,
 		1, 2,
 		2, 2,
@@ -2295,7 +2295,7 @@ void NewEfxDarkbreathBGCOL(struct Anim *anim)
 
 void EfxDarkbreathBGCOL_Loop(struct ProcEfxBGCOL *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		const u16 * pal = proc->pal;
@@ -2423,7 +2423,7 @@ struct ProcScr CONST_DATA ProcScr_EfxThunderBG[] = {
 
 void NewEfxThunderBG(struct Anim *anim)
 {
-	static const u16 frame_config[] = {
+	static const i16 frame_config[] = {
 		0, 4, 1, 40, -1
 	};
 
@@ -2464,7 +2464,7 @@ void EfxThunderBG_Loop(struct ProcEfxBG *proc)
 	int val, ret;
 
 	val = 0;
-	ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 	if (ret >= 0) {
 		u16 **buf1 = proc->tsal;
 		u16 **buf2 = proc->tsar;
@@ -2498,7 +2498,7 @@ struct ProcScr CONST_DATA ProcScr_EfxThunderBGCOL[] = {
 
 void NewEfxThunderBGCOL(struct Anim *anim)
 {
-	static const u16 frame_config[] = {
+	static const i16 frame_config[] = {
 		0, 4,
 		1, 4,
 		2, 2,
@@ -2531,7 +2531,7 @@ void NewEfxThunderBGCOL(struct Anim *anim)
 void EfxThunderBGCOL_Loop(struct ProcEfxBGCOL *proc)
 {
 	int ret;
-	ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 	if (ret >= 0) {
 		const u16 * pal = proc->pal;
 
@@ -2678,7 +2678,7 @@ struct ProcScr CONST_DATA ProcScr_EfxFireBG[] = {
 
 void NewEfxFireBG(struct Anim *anim)
 {
-	static const u16 frame_config[] = {
+	static const i16 frame_config[] = {
 		0, 3,
 		1, 2,
 		2, 2,
@@ -2744,7 +2744,7 @@ void EfxFireBG_Loop(struct ProcEfxBG *proc)
 {
 	int ret;
 
-	ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 	if (ret >= 0) {
 		u16 **buf1 = proc->tsal;
 		u16 **buf2 = proc->tsar;
@@ -2860,7 +2860,7 @@ CONST_DATA u16 *TsaArray_EfxFireHITBG[] = {
 	Tsa_EfxFireHITBG_0813A574
 };
 
-const u16 FrameConf_EfxFireHITBG[] = {
+const i16 FrameConf_EfxFireHITBG[] = {
 	0, 1,
 	1, 1,
 	2, 1,
@@ -2913,7 +2913,7 @@ void NewEfxFireHITBG(struct Anim *anim)
 
 void EfxFireHITBG_Loop(struct ProcEfxBG *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **buf1 = proc->tsal;
@@ -2985,7 +2985,7 @@ struct ProcScr CONST_DATA ProcScr_EfxElfireBGCOL[] = {
 
 void NewEfxElfireBGCOL(struct Anim *anim)
 {
-	static const u16 frame_config[] = {
+	static const i16 frame_config[] = {
 		0, 2,
 		1, 2,
 		2, 2,
@@ -3024,7 +3024,7 @@ void NewEfxElfireBGCOL(struct Anim *anim)
 
 void EfxElfireBGCOL_Loop(struct ProcEfxBGCOL *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		const u16 *pal = proc->pal;
@@ -3233,7 +3233,7 @@ void NewEfxFimbulvetrBGTR(struct Anim *anim)
 {
 	struct ProcEfxBG *proc;
 
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		 0, 3,
 		 1, 3,
 		 2, 3,
@@ -3289,7 +3289,7 @@ void NewEfxFimbulvetrBGTR(struct Anim *anim)
 
 void EfxFimbulvetrBGTR_Loop(struct ProcEfxBG *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **tsaL = proc->tsal;
@@ -3315,7 +3315,7 @@ void NewEfxFimbulvetrBG(struct Anim *anim)
 	struct ProcEfxBG *proc;
 
 	// clang-format off
-	static const u16 frames[] =
+	static const i16 frames[] =
 	{
 		 0,  1,
 		 1,  1,
@@ -3359,7 +3359,7 @@ void EfxFimbulvetrBG_Loop(struct ProcEfxBG *proc)
 {
 	int ret;
 
-	ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **tsaL = proc->tsal;
@@ -3644,7 +3644,7 @@ void EfxThunderstorm_Loop(struct ProcEfx *proc)
 void NewEfxThunderstormBG(struct Anim *anim)
 {
 	// clang-format off
-	static const u16 frames[] =
+	static const i16 frames[] =
 	{
 		 0,  2,
 		 1,  2,
@@ -3686,7 +3686,7 @@ void NewEfxThunderstormBG(struct Anim *anim)
 
 void EfxThunderstormBG_Loop(struct ProcEfxBG *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **tsaL = proc->tsal;
@@ -3931,7 +3931,7 @@ void EfxAlacalibur_Loop(struct ProcEfx *proc)
 
 void NewEfxAlacaliburBG(struct Anim *anim)
 {
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0, 2,
 		1, 9,
 		-1,
@@ -3959,7 +3959,7 @@ void NewEfxAlacaliburBG(struct Anim *anim)
 
 void EfxAlacaliburBG_Loop(struct ProcEfxBG *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **tsa = proc->tsal;
@@ -3979,7 +3979,7 @@ void EfxAlacaliburBG_Loop(struct ProcEfxBG *proc)
 
 void NewEfxAlacaliburBGCOL(struct Anim *anim)
 {
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		2, 1,
 		3, 1,
 		4, 1,
@@ -4007,7 +4007,7 @@ void NewEfxAlacaliburBGCOL(struct Anim *anim)
 
 void EfxAlacaliburBGCOL_Loop(struct ProcEfxBGCOL *proc)
 {
-	int ret = EfxAdvanceFrameLut((s16 *)&proc->timer, (s16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (s16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		const u16 *pal = proc->pal;
@@ -4258,7 +4258,7 @@ void EfxMistyrain_Loop(struct ProcEfx *proc)
 
 void NewEfxMistyrainBG1(struct Anim *anim)
 {
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		 0, 2,
 		 1, 2,
 		 2, 2,
@@ -4305,7 +4305,7 @@ void NewEfxMistyrainBG1(struct Anim *anim)
 
 void NewEfxMistyrainBG2(struct Anim *anim)
 {
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		12, 6,
 		13, 3,
 		14, 3,
@@ -4700,7 +4700,7 @@ void EfxResire_Loop(struct ProcEfx *proc)
 
 void NewEfxResireBG(struct Anim *anim, int type)
 {
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		1, 3,
 		2, 2,
 		3, 2,
@@ -4756,7 +4756,7 @@ void NewEfxResireBG(struct Anim *anim, int type)
 	}
 }
 
-const u16 FrameConf_EfxResireBG3[] = {
+const i16 FrameConf_EfxResireBG3[] = {
 	0x1C, 1,
 	0x1D, 1,
 	0x1E, 1,
@@ -4783,7 +4783,7 @@ const u16 FrameConf_EfxResireBG3[] = {
 	-1
 };
 
-const u16 FrameConf_EfxResireBG2[] = {
+const i16 FrameConf_EfxResireBG2[] = {
 	0, 90,
 	-1
 };
@@ -4818,7 +4818,7 @@ void NewEfxResireBG2(struct Anim *anim)
 
 void EfxResireBG_Loop1(struct ProcEfxBG *proc)
 {
-	int ret = EfxAdvanceFrameLut((s16 *)&proc->timer, (s16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (s16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **tsaL = proc->tsal;
@@ -4906,7 +4906,7 @@ void EfxResireBG_Loop3(struct ProcEfxBG *proc)
 
 void EfxResireBG_Loop4(struct ProcEfxBG *proc)
 {
-	int ret = EfxAdvanceFrameLut((s16 *)&proc->timer, (s16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (s16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **tsaL = proc->tsal;
@@ -4932,7 +4932,7 @@ void EfxResireBG_Loop4(struct ProcEfxBG *proc)
 
 void EfxResireBG2_Loop(struct ProcEfxBG *proc)
 {
-	int ret = EfxAdvanceFrameLut((s16 *)&proc->timer, (s16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (s16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **tsaL = proc->tsal;
@@ -5442,7 +5442,7 @@ void NewEfxLightningBG(struct Anim *anim)
 {
 	struct ProcEfxBG *proc;
 
-	static const u16 frame_config[] = {
+	static const i16 frame_config[] = {
 		0x19, 2,
 		0x1A, 2,
 		0x1B, 2,
@@ -5503,7 +5503,7 @@ void NewEfxLightningBG(struct Anim *anim)
 
 void EfxLightningBG_Loop(struct ProcEfxBG *proc)
 {
-	int ret = EfxAdvanceFrameLut((s16 *)&proc->timer, (s16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (s16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **tsaL = proc->tsal;
@@ -5627,7 +5627,7 @@ void NewEfxPurgeBG(struct Anim *anim)
 {
 	struct ProcEfxBG *proc;
 
-	static const u16 frame_config[] = {
+	static const i16 frame_config[] = {
 		0x0, 1,
 		0x1, 1,
 		0x2, 1,
@@ -5744,7 +5744,7 @@ void NewEfxPurgeBG(struct Anim *anim)
 
 void EfxPurgeBG_Loop(struct ProcEfxBG *proc)
 {
-	int ret = EfxAdvanceFrameLut((s16 *)&proc->timer, (s16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (s16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **tsaL = proc->tsal;
@@ -6031,7 +6031,7 @@ void NewEfxForblazeBG1(struct Anim *anim)
 {
 	struct ProcEfxBG *proc;
 
-	static const u16 frame_config[] = {
+	static const i16 frame_config[] = {
 		0x0, 3,
 		0x1, 3,
 		0x2, 3,
@@ -6097,7 +6097,7 @@ void NewEfxForblazeBG1(struct Anim *anim)
 
 void EfxForblazeBG1_Loop(struct ProcEfxBG *proc)
 {
-	int ret = EfxAdvanceFrameLut((s16 *)&proc->timer, (s16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (s16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 ** tsaL = proc->tsal;
@@ -6124,7 +6124,7 @@ void NewEfxForblazeBGCOL1(struct Anim *anim, int duration)
 {
 	struct ProcEfxBGCOL *proc;
 
-	static const u16 frame_config[] = {
+	static const i16 frame_config[] = {
 		0x0, 2,
 		0x1, 2,
 		0x2, 2,
@@ -6148,7 +6148,7 @@ void NewEfxForblazeBGCOL1(struct Anim *anim, int duration)
 
 void EfxForblazeBGCOL1_Loop(struct ProcEfxBGCOL *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		const u16 *pal = proc->pal;
@@ -6803,7 +6803,7 @@ void NewEfxDivineBG(struct Anim *anim)
 {
 	struct ProcEfxBG *proc;
 
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0x0, 2,
 		0x1, 2,
 		0x2, 2,
@@ -6861,7 +6861,7 @@ void NewEfxDivineBG2(struct Anim *anim)
 {
 	struct ProcEfxBG *proc;
 
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0x0, 1,
 		0x1, 1,
 		0x2, 1,
@@ -6895,7 +6895,7 @@ void NewEfxDivineBG3(struct Anim *anim)
 {
 	struct ProcEfxBG *proc;
 
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0x0, 2,
 		0x1, 2,
 		0x2, 2,
@@ -6946,7 +6946,7 @@ void NewEfxDivineBG3(struct Anim *anim)
 
 void EfxDivineBG_Loop(struct ProcEfxBG *proc)
 {
-	int ret = EfxAdvanceFrameLut((s16 *)&proc->timer, (s16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (s16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 ** tsaL = proc->tsal;
@@ -7079,7 +7079,7 @@ void NewEfxAureolaBG(struct Anim *anim)
 {
 	struct ProcEfxBG *proc;
 
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0x0, 200,
 		0x1, 2,
 		0x2, 2,
@@ -7115,7 +7115,7 @@ void NewEfxAureolaBG(struct Anim *anim)
 
 void EfxAureolaBG_Loop(struct ProcEfxBG *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **buf = proc->tsal;
@@ -7192,7 +7192,7 @@ void NewEfxAureolaBG2COL(struct Anim *anim, int duration)
 {
 	struct ProcEfxBGCOL *proc;
 
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0x0, 1,
 		0x1, 1,
 		0x2, 1,
@@ -7215,7 +7215,7 @@ void NewEfxAureolaBG2COL(struct Anim *anim, int duration)
 
 void EfxAureolaBG2COL_Loop(struct ProcEfxBGCOL *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		const u16 *pal = proc->pal;
@@ -8008,7 +8008,7 @@ void NewEfxApocalypseBGCOL2(struct Anim *anim, int duration)
 {
 	struct ProcEfxBGCOL *proc;
 
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0x0, 2,
 		0x1, 2,
 		0x2, 2,
@@ -8043,7 +8043,7 @@ void EfxApocalypseBGCOL2_Loop(struct ProcEfxBGCOL *proc)
 {
 	int ret;
 
-	ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame,
+	ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame,
 				 proc->frame_config);
 
 	if (ret >= 0)
@@ -8153,7 +8153,7 @@ void NewEfxApocalypseBG2(struct Anim *anim, int duration)
 	struct ProcEfxBG *proc;
 	struct Anim *anim_other;
 
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0x0, 3,
 		0x1, 3,
 		0x2, 3,
@@ -8198,7 +8198,7 @@ void EfxApocalypseBG2_Loop(struct ProcEfxBG *proc)
 
 	anim_other = GetAnimAnotherSide(proc->anim);
 
-	ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame,
+	ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame,
 				 proc->frame_config);
 
 	if (ret >= 0) {
@@ -8778,7 +8778,7 @@ void NewEfxHazymoonBG1(struct Anim *anim)
 {
 	struct ProcEfxEclipseBG *proc;
 
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0x0, 190,
 		-1
 	};
@@ -8804,7 +8804,7 @@ void NewEfxHazymoonBG2(struct Anim *anim)
 {
 	struct ProcEfxEclipseBG *proc;
 
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0x1, 1,
 		0x2, 1,
 		0x3, 1,
@@ -8869,7 +8869,7 @@ void NewEfxHazymoonBG3(struct Anim *anim)
 {
 	struct ProcEfxEclipseBG *proc;
 
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0xE, 3,
 		0xF, 3,
 		0x10, 3,
@@ -8903,7 +8903,7 @@ void NewEfxHazymoonBG3(struct Anim *anim)
 
 void EfxHazymoonBG_Loop(struct ProcEfxEclipseBG * proc)
 {
-	i16 ret = EfxAdvanceFrameLut((s16 *)&proc->timer, (s16 *)&proc->frame, proc->frame_config);
+	i16 ret = EfxAdvanceFrameLut(&proc->timer, (s16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **tsaL = proc->tsal;
@@ -9210,7 +9210,7 @@ void NewEfxFenrirBGCOL(struct Anim *anim, int duration)
 {
 	struct ProcEfxBGCOL *proc;
 
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0x0, 4,
 		0x1, 4,
 		0x2, 4,
@@ -9253,7 +9253,7 @@ void EfxFenrirBGCOL_Loop(struct ProcEfxBGCOL *proc)
 	int ret;
 	const u16 *pal;
 
-	ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame,
+	ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame,
 				 proc->frame_config);
 
 	if (ret >= 0) {
@@ -9301,7 +9301,7 @@ void NewEfxFenrirBG2_A(struct Anim *anim)
 {
 	struct ProcEfxBG *proc;
 
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0x0, 4,
 		0x1, 4,
 		0x2, 4,
@@ -9425,7 +9425,7 @@ void EfxFenrirBG2_Loop(struct ProcEfxBG *proc)
 	u16 **tsal;
 	u16 **tsar;
 
-	ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		tsal = proc->tsal;
@@ -9834,22 +9834,22 @@ CONST_DATA struct ProcScr ProcScr_EfxLiveOBJ[] = {
 };
 
 
-static const u16 EfxLiveBG_frames_1[] = {
+static const i16 EfxLiveBG_frames_1[] = {
 	0x0, 62,
 	-1,
 };
 
-static const u16 EfxLiveBG_frames_2[] = {
+static const i16 EfxLiveBG_frames_2[] = {
 	0x1, 62,
 	-1,
 };
 
-static const u16 EfxLiveBG_frames_3[] = {
+static const i16 EfxLiveBG_frames_3[] = {
 	0x0, 62,
 	-1,
 };
 
-static const u16 EfxLiveBG_frames_4[] = {
+static const i16 EfxLiveBG_frames_4[] = {
 	0x1, 62,
 	-1,
 };
@@ -9939,7 +9939,7 @@ void NewEfxLiveBG_B(struct Anim *anim, u32 type)
 
 void EfxLiveBG_Loop(struct ProcEfxBG *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 *tsaL = (u16 *)proc->tsal;
@@ -9962,7 +9962,7 @@ void EfxLiveBG_Loop(struct ProcEfxBG *proc)
 	Proc_Break(proc);
 }
 
-static const u16 EfxLiveBGCOL_frames_1[] = {
+static const i16 EfxLiveBGCOL_frames_1[] = {
 	0x0, 3,
 	0x1, 3,
 	0x2, 3,
@@ -9982,7 +9982,7 @@ static const u16 EfxLiveBGCOL_frames_1[] = {
 	-1,
 };
 
-static const u16 EfxLiveBGCOL_frames_2[] = {
+static const i16 EfxLiveBGCOL_frames_2[] = {
 	0xF, 5,
 	0xE, 4,
 	0xD, 4,
@@ -10002,7 +10002,7 @@ static const u16 EfxLiveBGCOL_frames_2[] = {
 	-1,
 };
 
-static const u16 EfxLiveBGCOL_frames_3[] = {
+static const i16 EfxLiveBGCOL_frames_3[] = {
 	0x0, 3,
 	0x1, 3,
 	0x2, 3,
@@ -10018,7 +10018,7 @@ static const u16 EfxLiveBGCOL_frames_3[] = {
 	-1,
 };
 
-static const u16 EfxLiveBGCOL_frames_4[] = {
+static const i16 EfxLiveBGCOL_frames_4[] = {
 	0x0, 3,
 	0x1, 3,
 	0x2, 3,
@@ -10090,7 +10090,7 @@ void NewEfxLiveBGCOL_B(struct Anim *anim, u32 type)
 
 void EfxLiveBGCOL_Loop(struct ProcEfxBGCOL *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		const u16 *pal = proc->pal;
@@ -10430,7 +10430,7 @@ void NewEfxReserveBG(struct Anim *anim)
 {
 	struct ProcEfxBG *proc;
 
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0x0, 32,
 		0x1, 32,
 		0x2, 32,
@@ -10467,7 +10467,7 @@ void EfxReserveBG_Loop(struct ProcEfxBG *proc)
 	};
 
 	struct Anim *target = GetAnimAnotherSide(proc->anim);
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **tsaL = proc->tsal;
@@ -10495,7 +10495,7 @@ void NewEfxReserveBGCOL(struct Anim *anim, u32 kind)
 {
 	struct ProcEfxBGCOL *proc;
 
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0x0, 2,
 		0x1, 2,
 		0x2, 2,
@@ -10582,7 +10582,7 @@ void EfxReserveBGCOL_Loop(struct ProcEfxBGCOL *proc)
 {
 	int ret;
 
-	ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame,
+	ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame,
 				 proc->frame_config);
 
 	if (ret >= 0) {
@@ -10599,7 +10599,7 @@ void NewEfxReserveBG2(struct Anim *anim)
 {
 	struct ProcEfxBG *proc;
 
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0x0, 220,
 		-1,
 	};
@@ -10632,7 +10632,7 @@ void EfxReserveBG2_Loop(struct ProcEfxBG *proc)
 {
 	struct Anim *target = GetAnimAnotherSide(proc->anim);
 	struct Anim *caster = proc->anim;
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame,
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame,
 				     proc->frame_config);
 
 	if (ret >= 0) {
@@ -10664,7 +10664,7 @@ void NewEfxReserveBGCOL2(struct Anim *anim, u32 kind)
 {
 	struct ProcEfxBGCOL *proc;
 
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0x0, 4,
 		0x1, 4,
 		0x2, 4,
@@ -10742,7 +10742,7 @@ void EfxReserveBGCOL2_Loop(struct ProcEfxBGCOL *proc)
 {
 	int ret;
 
-	ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame,
+	ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame,
 				 proc->frame_config);
 
 	if (ret >= 0) {
@@ -10866,7 +10866,7 @@ void NewEfxRestBG(struct Anim *anim)
 {
 	struct ProcEfxBG *proc;
 
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0x0, 4,
 		0x1, 4,
 		0x2, 4,
@@ -10898,7 +10898,7 @@ void NewEfxRestBG(struct Anim *anim)
 
 void EfxRestBG_Loop(struct ProcEfxBG *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **tsaL = proc->tsal;
@@ -11046,7 +11046,7 @@ void NewEfxSilenceBG(struct Anim *anim)
 {
 	struct ProcEfxBG *proc;
 
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0x0, 2,
 		0x1, 1,
 		0x2, 1,
@@ -11090,7 +11090,7 @@ void NewEfxSilenceBG(struct Anim *anim)
 
 void EfxSilenceBG_Loop(struct ProcEfxBG *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **tsaL = proc->tsal;
@@ -11247,7 +11247,7 @@ void NewEfxSleepBG(struct Anim *anim)
 {
 	struct ProcEfxBG *proc;
 
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0x0, 4,
 		0x1, 4,
 		0x2, 4,
@@ -11337,7 +11337,7 @@ void NewEfxSleepBG(struct Anim *anim)
 
 void EfxSleepBG_Loop(struct ProcEfxBG *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **tsaL = proc->tsal;
@@ -11520,7 +11520,7 @@ void NewEfxHammarneBG(struct Anim *anim)
 {
 	struct ProcEfxBG *proc;
 
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0x0, 4,
 		0x1, 4,
 		0x2, 4,
@@ -11552,7 +11552,7 @@ void NewEfxHammarneBG(struct Anim *anim)
 
 void EfxHammarneBG_Loop(struct ProcEfxBG *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **tsaL = proc->tsal;
@@ -12007,7 +12007,7 @@ void NewEfxMshieldBG(struct Anim *anim)
 {
 	struct ProcEfxBG *proc;
 
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0x0, 2,
 		0x1, 2,
 		0x2, 2,
@@ -12077,7 +12077,7 @@ void NewEfxMshieldBG(struct Anim *anim)
 
 void EfxMshieldBG_Loop(struct ProcEfxBG *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **tsaL = proc->tsal;

@@ -375,7 +375,7 @@ void NewEfxStatusUnit(struct Anim *anim)
 	struct Unit *unit;
 	struct ProcEfxStatusUnit *proc;
 
-	static const u16 frame_config[] = {
+	static const i16 frame_config[] = {
 		0x00, 0x14,
 		0x04, 0x06,
 		0x08, 0x05,
@@ -500,7 +500,7 @@ void EfxStatusUnit_Loop(struct ProcEfxStatusUnit *proc)
 		proc->debuf_bak = proc->debuff;
 	}
 
-	ret = EfxAdvanceFrameLut((void *)&proc->timer, (void *)&proc->frame, proc->frame_lut);
+	ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_lut);
 	if (ret >= 0) {
 		switch (proc->debuff) {
 		case UNIT_STATUS_POISON:

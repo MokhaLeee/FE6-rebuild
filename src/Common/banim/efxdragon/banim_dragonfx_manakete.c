@@ -548,7 +548,7 @@ void EkrManaketeDeamon_Loop(struct ProcEkrDragonDeamon * proc)
 		break;
 	}
 
-	ret = EfxAdvanceFrameLut((void *)&proc->timer, (void *)&proc->frame, (const i16 *)proc->conf);
+	ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->conf);
 	if (ret >= 0)
 	{
 		const u16 * pal = proc->pal;

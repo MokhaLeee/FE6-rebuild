@@ -369,12 +369,8 @@ void func_fe6_08047B6C(const u16 * src, u16 * dst, u32 a, u32 b, u32 c)
     EnablePalSync();
 }
 
-i16 EfxAdvanceFrameLut(void *_ptime, void *_pcount, const void *_lut)
+i16 EfxAdvanceFrameLut(i16 *ptime, i16 *pcount, const i16 lut[])
 {
-    i16 *ptime = _ptime;
-    i16 *pcount = _pcount;
-    const i16 *lut = _lut;
-
     u16 frame;
     u16 count;
     u16 time;

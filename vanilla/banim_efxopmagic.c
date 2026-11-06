@@ -246,7 +246,7 @@ void NewEfxopFireBG(struct Anim *anim, struct ProcEfx *parent)
 
 void EfxopFireBG_Loop(struct ProcEfxBG *proc)
 {
-	s16 ret = EfxAdvanceFrameLut((s16 *)&proc->timer, (s16 *)&proc->frame, proc->frame_config);
+	s16 ret = EfxAdvanceFrameLut(&proc->timer, (s16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **tsaL = proc->tsal;
@@ -371,7 +371,7 @@ void EfxopThunderBG_Loop(struct ProcEfxBG *proc)
 	u16 chr = 0;
 	struct EfxopMagicDesc *magicFx = GetMagicEffectBufferFor(proc->anim);
 
-	s16 ret = EfxAdvanceFrameLut((s16 *)&proc->timer, (s16 *)&proc->frame, proc->frame_config);
+	s16 ret = EfxAdvanceFrameLut(&proc->timer, (s16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **tsaL = proc->tsal;
@@ -438,7 +438,7 @@ void NewEfxopThunderBGCOL(struct Anim *anim, struct ProcEfx *unused)
 
 void EfxopThunderBGCOL_Loop(struct ProcEfxBGCOL * proc)
 {
-	s16 ret = EfxAdvanceFrameLut((s16 *)&proc->timer, (s16 *)&proc->frame, proc->frame_config);
+	s16 ret = EfxAdvanceFrameLut(&proc->timer, (s16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		const u16 *pal = proc->pal;
@@ -558,7 +558,7 @@ void NewEfxopLiveBG(struct Anim *anim, struct ProcEfx *unused)
 
 void EfxopLiveBG_Loop(struct ProcEfxBG *proc)
 {
-	s16 ret = EfxAdvanceFrameLut((s16 *)&proc->timer, (s16 *)&proc->frame, proc->frame_config);
+	s16 ret = EfxAdvanceFrameLut(&proc->timer, (s16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 ** tsaL = proc->tsal;
@@ -615,7 +615,7 @@ void NewEfxopLiveBGCOL(struct Anim *anim, struct ProcEfx *unused)
 
 void EfxopLiveBGCOL_Loop(struct ProcEfxBGCOL *proc)
 {
-	s16 ret = EfxAdvanceFrameLut((s16 *)&proc->timer, (s16 *)&proc->frame, proc->frame_config);
+	s16 ret = EfxAdvanceFrameLut(&proc->timer, (s16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		const u16 *pal = proc->pal;

@@ -223,7 +223,7 @@ void EndEkrTogiColor(void)
 
 void EkrTogiColor_Loop(struct ProcEkrTogiColor * proc)
 {
-	i16 ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_config);
+	i16 ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret > -1) {
 		const u16 **pal = proc->pal;

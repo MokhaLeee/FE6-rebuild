@@ -162,7 +162,7 @@ CONST_DATA struct ProcScr ProcScr_EfxCriricalEffectBGCOL[] = {
 
 void NewEfxCriricalEffectBGCOL(struct Anim *anim)
 {
-	static const u16 frams[] = {
+	static const i16 frams[] = {
 		0x0, 1,
 		0x1, 1,
 		0x2, 1,
@@ -194,7 +194,7 @@ void NewEfxCriricalEffectBGCOL(struct Anim *anim)
 
 void EfxCriricalEffectBGCOL_Loop(struct ProcEfxBGCOL *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, (const i16 *)proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		const u16 *pal = proc->pal;
@@ -282,7 +282,7 @@ CONST_DATA u16 *TSAs_EfxNormalEffectBG[] = {
 
 void NewEfxNormalEffectBG(struct Anim *anim)
 {
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0, 2,
 		1, 2,
 		2, 2,
@@ -320,7 +320,7 @@ void NewEfxNormalEffectBG(struct Anim *anim)
 
 void EfxNormalEffectBG_Loop(struct ProcEfxBG *proc)
 {
-	int ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, (const i16 *)proc->frame_config);
+	int ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_config);
 
 	if (ret >= 0) {
 		u16 **buf1 = proc->tsal;

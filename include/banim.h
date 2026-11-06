@@ -174,7 +174,7 @@ struct ProcEfxBG {
     /* 3C */ i16 unk3C;
     STRUCT_PAD(0x3E, 0x44);
     /* 44 */ u32 frame;
-    /* 48 */ const u16 * frame_config;
+    /* 48 */ const i16 * frame_config;
     /* 4C */ u16 ** tsal;
     /* 50 */ u16 ** tsar;
     /* 54 */ u16 ** img;
@@ -193,7 +193,7 @@ struct ProcEfxBGCOL {
     /* 32 */ i16 unk32;
     STRUCT_PAD(0x34, 0x44);
     /* 44 */ u32 frame;
-    /* 48 */ const u16 * frame_config;
+    /* 48 */ const i16 * frame_config;
     /* 4C */ const u16 * pal;
     STRUCT_PAD(0x50, 0x5C);
     /* 5C */ struct  BaSprite *anim;
@@ -603,7 +603,7 @@ struct ProcEfxHpBarColorChange {
     STRUCT_PAD(0x2E, 0x44);
 
     /* 44 */ u32 frame;
-    /* 48 */ const u16 * frame_conf;
+    /* 48 */ const i16 * frame_conf;
     /* 4C */ u32 frame_state;
     /* 50 */ int disabled;
 
@@ -639,7 +639,7 @@ struct ProcEfxStatusUnit {
     STRUCT_PAD(0x38, 0x44);
 
     /* 44 */ u32 frame;
-    /* 48 */ const u16 * frame_lut;
+    /* 48 */ const i16 * frame_lut;
     /* 4C */ int debuff, debuf_bak;
 
     STRUCT_PAD(0x54, 0x5C);
@@ -669,7 +669,7 @@ struct ProcEfxWeaponIcon {
     STRUCT_PAD(0x2E, 0x44);
 
     /* 44 */ u32 frame;
-    /* 48 */ const u16 * frame_lut;
+    /* 48 */ const i16 * frame_lut;
     /* 4C */ u32 frame_state;
     /* 50 */ u32 invalid;
     /* 54 */ int eff1, eff2;
@@ -727,7 +727,7 @@ void SpellFx_RegisterBgPal(const u16 * pal, u32 size);
 void func_fe6_08047B10(const u16 * src, u16 * dst, u32 cur, u32 len_src, u32 len_dst);
 void func_fe6_08047B3C(const u16 * src, u16 * dst, u32 cur, u32 len_src, u32 len_dst);
 void func_fe6_08047B6C(const u16 * src, u16 * dst, u32 a, u32 b, u32 c);
-i16 EfxAdvanceFrameLut(void *ptime, void *pcount, const void *lut);
+i16 EfxAdvanceFrameLut(i16 *ptime, i16 *pcount, const i16 lut[]);
 void PutEfxTerrainToLowerLayer(void);
 int EfxGetCamMovDuration(void);
 void EfxTmFillA(u32 val);
@@ -1063,7 +1063,7 @@ struct ProcEkrTogiColor {
     STRUCT_PAD(0x2E, 0x44);
 
     /* 44 */ u32 frame;
-    /* 48 */ const u16 * frame_config;
+    /* 48 */ const i16 * frame_config;
     /* 4C */ const u16 **pal;
 };
 
@@ -1236,7 +1236,7 @@ struct ProcEfxEclipseBG
     STRUCT_PAD(0x32, 0x44);
 
     /* 44 */ u32 frame;
-    /* 48 */ const u16 * frame_config;
+    /* 48 */ const i16 * frame_config;
     /* 4C */ u16 ** tsal;
     /* 50 */ u16 ** tsar;
     /* 54 */ u16 ** img;
@@ -2918,7 +2918,7 @@ extern u16 const FrameConf_EfxDarkbreathBGCOL[];
 extern u16 const FrameConf_EfxThunderBG[];
 extern u16 const FrameConf_EfxThunderBGCOL[];
 extern u16 const FrameConf_EfxFireBG[];
-extern u16 const FrameConf_EfxFireHITBG[];
+extern i16 const FrameConf_EfxFireHITBG[];
 extern u16 const FrameConf_EfxElfireBGCOL[];
 extern u16 const FrameConf_EfxFimbulvetrBGTR[];
 extern u16 const FrameConf_EfxFimbulvetrBG[];
@@ -2928,8 +2928,8 @@ extern u16 const FrameConf_EfxAlacaliburBGCOL[];
 extern u16 const FrameConf_EfxMistyrainBG1[];
 extern u16 const FrameConf_EfxMistyrainBG2[];
 extern u16 const FrameConf_EfxResireBG[];
-extern u16 const FrameConf_EfxResireBG3[];
-extern u16 const FrameConf_EfxResireBG2[];
+extern i16 const FrameConf_EfxResireBG3[];
+extern i16 const FrameConf_EfxResireBG2[];
 extern u16 const FrameConf_EfxLightningBG[];
 extern u16 const FrameConf_EfxForblazeBG1[];
 // extern ??? gUnk_0811A520
@@ -2937,7 +2937,7 @@ extern u16 const SfxArray_EfxReserveBG[];
 extern u16 const SfxLocArray_EfxReserveBG[];
 extern const u16 Frames_EfxCriricalEffectBGCOL[];
 extern const u16 FrameConf_EfxNormalEffectBG[];
-extern u16 const FrameConf_EfxMagdhisEffectBG[];
+extern i16 const FrameConf_EfxMagdhisEffectBG[];
 // extern ??? frames
 // extern ??? frames_EfxopLiveBGCOL
 extern const u8 Img_TeonoOBJ[];

@@ -958,7 +958,7 @@ CONST_DATA u16 * TsaArray_EfxMagdhisEffectBG[] = {
 	Tsa4_EfxMagdhisEffectBG
 };
 
-const u16 FrameConf_EfxMagdhisEffectBG[] = {
+const i16 FrameConf_EfxMagdhisEffectBG[] = {
 	0, 2,
 	1, 2,
 	2, 2,
@@ -999,9 +999,9 @@ void NewEfxMagdhisEffectBG(struct Anim *anim, int arg1)
 void EfxMagdhisEffectBG_Loop(struct ProcEfxBG *proc)
 {
 	i16 ret = EfxAdvanceFrameLut(
-		(void *)&proc->timer,
-		(void *)&proc->frame,
-		(const i16 *)proc->frame_config
+		&proc->timer,
+		(i16 *)&proc->frame,
+		proc->frame_config
 	);
 
 	if (ret >= 0) {

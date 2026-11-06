@@ -282,14 +282,14 @@ void NewEkrTriPegasusKnightBG(struct Anim *anim, u32 pos, u32 etype, u32 ewtype)
 	const u16 *img;
 	struct ProcEfxBG *proc;
 
-	static const u16 frame_l[0x7] = {
+	static const i16 frame_l[0x7] = {
 		0x03, 0x02,
 		0x04, 0x02,
 		0x05, 0x01,
 		-1
 	};
 
-	static const u16 frame_r[0x7] = {
+	static const i16 frame_r[0x7] = {
 		0x00, 0x02,
 		0x01, 0x02,
 		0x02, 0x01,

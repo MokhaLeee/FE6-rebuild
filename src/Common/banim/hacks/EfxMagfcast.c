@@ -5,9 +5,9 @@
 static void EfxMagfcastBG_Loop(struct ProcEfxBG *proc)
 {
 	i16 ret = EfxAdvanceFrameLut(
-		(void *)&proc->timer,
-		(void *)&proc->frame,
-		(const i16 *)proc->frame_config
+		&proc->timer,
+		(i16 *)&proc->frame,
+		proc->frame_config
 	);
 
 	if (ret >= 0) {
@@ -70,7 +70,7 @@ static CONST_DATA u16 *tsa_lut2[] = {
 
 void NewEfxMagfcastBG(struct Anim *anim, u32 type)
 {
-	static const u16 frame_conf1[] = {
+	static const i16 frame_conf1[] = {
 		0, 3,
 		1, 4,
 		2, 8,
@@ -80,13 +80,13 @@ void NewEfxMagfcastBG(struct Anim *anim, u32 type)
 		-1
 	};
 
-	static const u16 frame_conf2[] = {
+	static const i16 frame_conf2[] = {
 		5, 3,
 
 		-1
 	};
 
-	static const u16 frame_conf3[] = {
+	static const i16 frame_conf3[] = {
 		0, 7,
 		1, 7,
 		2, 8,
@@ -99,7 +99,7 @@ void NewEfxMagfcastBG(struct Anim *anim, u32 type)
 		-1
 	};
 
-	static const u16 frame_conf4[] = {
+	static const i16 frame_conf4[] = {
 		8, 3,
 		9, 23,
 		10, 4,
