@@ -36,8 +36,8 @@ Pal_MuralBackground: @ 0833BFDC
 	.incbin "fe6-base.gba", 0x33BFDC, (0x33C01C - 0x33BFDC) @ length: 0040
 
 .align 2,0
-.global Pal_0833C01C
-Pal_0833C01C: @ 0833C01C
+.global Pal_AuguryMural
+Pal_AuguryMural: @ 0833C01C
 	.incbin "fe6-base.gba", 0x33C01C, (0x33C03C - 0x33C01C) @ length: 0020
 
 .align 2,0
@@ -46,18 +46,18 @@ Pal_PlayRankTimeOBJ: @ 0833C03C
 	.incbin "fe6-base.gba", 0x33C03C, (0x33C09C - 0x33C03C) @ length: 0060
 
 .align 2,0
-.global Img_0833C09C
-Img_0833C09C: @ 0833C09C
+.global Img_AuguryUIObj
+Img_AuguryUIObj: @ 0833C09C
 	.incbin "fe6-base.gba", 0x33C09C, (0x33C1D8 - 0x33C09C) @ length: 013C
 
 .align 2,0
-.global Tsa_0833C1D8
-Tsa_0833C1D8: @ 0833C1D8
+.global Tsa_AuguryTitleFrame
+Tsa_AuguryTitleFrame: @ 0833C1D8
 	.incbin "fe6-base.gba", 0x33C1D8, (0x33C234 - 0x33C1D8) @ length: 005C
 
 .align 2,0
-.global Tsa_0833C234
-Tsa_0833C234: @ 0833C234
+.global Tsa_AuguryMenuFrame
+Tsa_AuguryMenuFrame: @ 0833C234
 	.incbin "fe6-base.gba", 0x33C234, (0x33C378 - 0x33C234) @ length: 0144
 
 .align 2,0
@@ -86,8 +86,8 @@ Img_WorldMap_PlayRank: @ 0833C984
 	.incbin "fe6-base.gba", 0x33C984, (0x340ED8 - 0x33C984) @ length: 4554
 
 .align 2,0
-.global Tsa_08340ED8
-Tsa_08340ED8: @ 08340ED8
+.global Tsa_WorldMap_PlayRank
+Tsa_WorldMap_PlayRank: @ 08340ED8
 	.incbin "fe6-base.gba", 0x340ED8, (0x34138C - 0x340ED8) @ length: 04B4
 
 .align 2,0
@@ -116,23 +116,23 @@ Img_PlayRankCharacters: @ 08342438
 	.incbin "fe6-base.gba", 0x342438, (0x342A98 - 0x342438) @ length: 0660
 
 .align 2,0
-.global Pal_08342A98
-Pal_08342A98: @ 08342A98
+.global Pal_GoldHighlight
+Pal_GoldHighlight: @ 08342A98
 	.incbin "fe6-base.gba", 0x342A98, (0x342AB8 - 0x342A98) @ length: 0020
 
 .align 2,0
-.global Pal_08342AB8
-Pal_08342AB8: @ 08342AB8
+.global Pal_PlayRankGrade
+Pal_PlayRankGrade: @ 08342AB8
 	.incbin "fe6-base.gba", 0x342AB8, (0x342AD8 - 0x342AB8) @ length: 0020
 
 .align 2,0
-.global Pal_08342AD8
-Pal_08342AD8: @ 08342AD8
+.global Pal_PlayRankSparkle
+Pal_PlayRankSparkle: @ 08342AD8
 	.incbin "fe6-base.gba", 0x342AD8, (0x342AF8 - 0x342AD8) @ length: 0020
 
 .align 2,0
-.global Tsa_08342AF8
-Tsa_08342AF8: @ 08342AF8
+.global Tsa_PlayRankPlayTimeWindow
+Tsa_PlayRankPlayTimeWindow: @ 08342AF8
 	.incbin "fe6-base.gba", 0x342AF8, (0x342B54 - 0x342AF8) @ length: 005C
 
 .align 2,0
