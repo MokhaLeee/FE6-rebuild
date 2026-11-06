@@ -56,7 +56,7 @@ struct sym_ent {
 	uint32_t addr;
 };
 
-static struct sym_ent g_syms[8192];
+static struct sym_ent g_syms[32768];
 static size_t g_nSyms;
 
 static bool loadSymFile(const char* path) {
