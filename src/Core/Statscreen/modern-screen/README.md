@@ -113,28 +113,51 @@ PutSprite(1, x + i * 8, y + 8, Sprite_8x8, oam2 + idx * 2 + 1);
 
 标题 x 跟随 `slide_l.step` / `slide_r.step`，翻页时跟面板一起飞。
 
-标题位置：Left `(8, 56)`，Right `(168, 8)`。
+> 注意：`slide_left()` 内部的 step 是**半宽（0~10）**，换算成像素要用 `step * 16`。
+> 这里之前写成 `(MSS_L_WIDTH - step) * 8`，step 走到 10 时标题还在 `x = -72`，
+> 看起来就是“切换完成后才突然出现”。正确写法：
+>
+> ```c
+> lx -= mss->slide_l.step * 16;                        // OUT
+> lx -= (MSS_L_WIDTH - mss->slide_l.step * 2) * 8;     // IN
+> ```
+
+标题位置：Left `(8, 44)`，Right `(168, 4)`。标题高 16px，会轻微压到 `Skills:` / `Str` 顶部约 4px（用户确认可以接受）。
+
+### 4.1 调色板闪烁
+
+标题使用专用 OBJ pal bank `OBPAL_MSS_TITLES = 3`。字符图主体是白色（索引 2），`mss_sprites_loop` 每帧写：
+
+```c
+gPal[(0x10 + OBPAL_MSS_TITLES) * 0x10 + 2] = s_mss_title_flash[(GetGameTime() / 2) & 7];
+EnablePalSync();
+```
+
+`s_mss_title_flash` 是 8 档颜色表，在白色和金色之间来回循环，每 2 帧换一档，周期约 0.27 秒。
+如果要做 vanilla 那种“字符内部渐变流动”，需要把字符图主体按 y 分成多个索引，再循环这些索引的颜色。
 
 ---
 
 ## 5. 当前内容布局
 
-标题占 Left/Right 顶部 2 行（16px），所以内容整体下移：
+标题是 OAM，不占 BG 内容行；面板内容保持原坐标（与加标题之前一致）：
 
 ### Page 0（PERSONAL）
 
-- Left：`Skills:` y=3，技能图标 y=5（横排，最多 3 个），`B.Magic:` y=10。
-- Right：`Str/Mag/Skl/Spd/Def/Res/Lck/Mov`，y=3,5,...,17。
+- Left：`Skills:` y=1，技能图标 y=3（横排，最多 3 个），`B.Magic:` y=8。
+- Right：`Str/Mag/Skl/Spd/Def/Res/Lck/Mov`，y=2,4,...,16。
 
 ### Page 1（ITEMS）
 
-- Left：物品行 y=3,5,7,9,11（最多 5 个）。
-- Right：`Attack/Hit/Crit/Avoid/Dodge/Silencer/Range`，y=4,6,...,16。
+- Left：物品行 y=2,4,6,8,10（最多 5 个）。
+- Right：`Attack/Hit/Crit/Avoid/Dodge/Silencer/Range`，y=3,5,...,15。
 
 ### Page 2（WEXP）
 
 - Left：目前为空（`put_lpage3` 空函数）。
-- Right：8 个武器经验条，y=3,5,...,17。
+- Right：8 个武器经验条，y=2,4,...,16。
+
+标题 sprite 的 y 比内容高（Left 44、Right 4），只压面板顶部边框/接缝，不占内容行。
 
 ---
 
@@ -270,7 +293,8 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 |---|---|
 | `bb5eb12` | 三块面板独立滑动：`MssSlideState`，各自 delay/length |
 | `b941960` | ease-out + 页码跟随 Right 面板 + 延迟切页 |
-| `d76140c` | 标题图片 + OBJ_VRAM0 + 8x8 sprite 字符 + 内容下移 |
+| `d76140c` | 标题图片 + OBJ_VRAM0 + 8x8 sprite 字符 |
+| （当前工作区） | 标题白/金闪烁、滑入偏移修复、内容恢复原位、标题位置上移 |
 
 具体：
 
@@ -278,10 +302,11 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 - 16 段 ease-out 表（`s_mss_ease_out`）。
 - 页码/箭头 OAM 按 `slide_r.step` 跟随 Right 面板。
 - `page_to_change` + `mss_apply_page`，滑出旧页、滑入新页。
-- 标题图 `ModernStatScreen_Titles.png`（8x16 字符集）。
+- 标题图 `ModernStatScreen_Titles.png`（8x16 字符集，白色主体 + 深棕描边）。
 - `Img_MssTitles` / `Pal_MssTitles`，加载到 `OBCHR_MSS_TITLES` / `OBPAL_MSS_TITLES`。
-- 每字符两个 8x8 sprite，跟随左右面板滑动。
-- Left/Right 内容下移 2 行给标题让位。
+- 每字符两个 8x8 sprite，跟随左右面板滑动（`step * 16` 修正）。
+- 标题使用专用 pal bank，白 ↔ 金每 2 帧闪烁（`s_mss_title_flash`）。
+- 面板内容恢复原坐标（不再为标题让位）；标题在 Left (8,44) / Right (168,4)。
 
 ---
 
@@ -303,7 +328,9 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 
 ### P1 装饰
 
-- 标题字体换成更 FE 风格的美术字（只改 `ModernStatScreen_Titles.png`，代码不动）。
+- 标题字体继续美化（当前是 Consolas Bold 13 二值化，可换更 FE 风格的字形）。
+- 标题内部光带/渐变：字符图主体按 y 分多个索引，循环这些索引的颜色，做 vanilla 那种金属反光。
+- 标题缩放动画：vanilla 用 `SetObjAffineAuto` 在 Y 方向压扁/展开，需要把标题改成整块图 + affine OAM。
 - 面板顶部高光 / 底部阴影（新增纯色 tile，覆盖 U2/L2/R2 首尾行）。
 - 属性行图标（8x8，Str/Mag/... 各一个）。
 - 底栏操作提示（`←→ 翻页  ↑↓ 换人  R 帮助`）。
@@ -320,8 +347,9 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 ### 已知问题
 
 - Page 2 左面板仍是空的。
-- 标题字体是 Consolas 12px 二值化生成，不是 FE 美术字。
-- 右面板 8 项已经排满，标题占 2 行后最后一项 `Mov` 的条贴底。
+- 标题字体是 Consolas Bold 13 二值化生成，不是 FE 美术字。
+- 标题会压 `Skills:` / `Str` 顶部约 4px（用户确认可接受）。
+- 没有做 vanilla 那种 Y 轴压扁/展开；当前是跟随面板水平滑入 + 调色板闪烁。
 - 没有帮助框；R 在 statscreen 内没有绑定。
 - 快速连按翻页时，标题/页码的视觉同步还没有专门测过。
 
