@@ -40,6 +40,29 @@
 
 第 5 项用固定随机种子，同样的 ROM 每次跑结果一致，所以"这次挂了、上次没挂"一定是代码改动造成的。
 
+## 状态驱动的输入
+
+固定帧号的按键脚本（`--hold-every 9500:10500:40:B:4`）在流程变化几帧后就失效。
+gbarun 可以通过 `core->busRead*` 读 GBA 内存，在"状态满足"时再按键/挂调试器：
+
+```bash
+--sym fe6re.sym                            # elf2sym 或 nm 格式的符号表
+--press-when "gBmSt+0x4:8:&16;START;5;0"   # 条件满足时按 START，按住 5 帧，只按一次
+--press-when "gPlaySt+0xE:8:=2;B;4;40"     # 条件持续满足时每 40 帧按一次 B
+--gdb-when   "gPlaySt+0xE:8:=2"            # 条件满足时挂起等 GDB（替代 --gdb-at N）
+```
+
+条件语法 `<addr>:<width>:<op><value>`：
+
+| 部分 | 取值 |
+|---|---|
+| addr | 符号名、`符号名+0xNN`、`0xNNNNNNNN` |
+| width | `8` / `16` / `32` |
+| op | `=` 相等、`&` 与后非零、`!` 不等、`>`、`<` |
+
+`--press-when` 的完整格式是 `条件;按键;按住帧数[;重复间隔]`，重复间隔省略时只触发一次。
+命中时会打印 `STATE frame=N kind=press|gdb`，方便定位首次满足的帧号。
+
 ## GDB 调试
 
 `gbarun` 内置了 mGBA 的 GDB stub（`--gdb` 立即挂起，`--gdb-at N` 跑到第 N 帧再挂起），

@@ -42,6 +42,172 @@ struct event {
 static struct event events[MAX_EVENTS];
 static size_t nEvents;
 
+/* ---- 符号表与状态条件 -------------------------------------------------
+ * --sym FILE 读 nm 风格符号表（"08075111 T BattleAIS_ExecCommands"）。
+ * 条件语法：<addr>:<width>:<op><value>
+ *   addr  = 符号名 | 符号名+0xNN | 0xNNNNNNNN
+ *   width = 8 | 16 | 32
+ *   op    = =（相等） | &（与后非零） | !（不等） | > | <
+ * 例：gPlaySt+0xE:8:=2、gBmSt+0x4:8:&16
+ */
+
+struct sym_ent {
+	char name[192];
+	uint32_t addr;
+};
+
+static struct sym_ent g_syms[8192];
+static size_t g_nSyms;
+
+static bool loadSymFile(const char* path) {
+	FILE* fp = fopen(path, "r");
+	if (!fp) {
+		fprintf(stderr, "gbarun: cannot open symbol file '%s'\n", path);
+		return false;
+	}
+	char line[512];
+	while (fgets(line, sizeof(line), fp)) {
+		char a[32], b[64], c[192];
+		int n = sscanf(line, "%31s %63s %191s", a, b, c);
+		const char* name = NULL;
+		uint32_t addr = 0;
+		if (n == 2) {
+			/* elf2sym 格式：020274DC gBmSt */
+			addr = (uint32_t) strtoul(a, NULL, 16);
+			name = b;
+		} else if (n == 3) {
+			/* nm 风格：08075111 T BattleAIS_ExecCommands */
+			addr = (uint32_t) strtoul(a, NULL, 16);
+			name = c;
+		}
+		if (name && g_nSyms < sizeof(g_syms) / sizeof(g_syms[0])) {
+			snprintf(g_syms[g_nSyms].name, sizeof(g_syms[0].name), "%s", name);
+			g_syms[g_nSyms].addr = addr;
+			g_nSyms++;
+		}
+	}
+	fclose(fp);
+	return g_nSyms > 0;
+}
+
+static bool symFind(const char* name, uint32_t* out) {
+	for (size_t i = 0; i < g_nSyms; ++i) {
+		if (!strcmp(g_syms[i].name, name)) {
+			*out = g_syms[i].addr;
+			return true;
+		}
+	}
+	return false;
+}
+
+enum { COND_OP_EQ = 0, COND_OP_MASK, COND_OP_NE, COND_OP_GT, COND_OP_LT };
+
+struct state_cond {
+	uint32_t addr;
+	int width;
+	int op;
+	uint32_t value;
+	uint32_t keys;       /* 触发后按住的键（press-when） */
+	unsigned duration;   /* 触发后按住的帧数 */
+	unsigned interval;   /* 条件持续满足时的重复间隔，0 = 只按一次 */
+	unsigned next_press;
+	unsigned press_until;
+	bool fired;
+	bool is_gdb;
+};
+
+static struct state_cond g_conds[64];
+static size_t g_nConds;
+
+/* 参数解析时符号表还没加载，条件先存原始字符串，--sym 加载完再解析 */
+static char g_condSpecs[64][256];
+static uint32_t g_condKeys[64];
+static unsigned g_condDur[64];
+static unsigned g_condInterval[64];
+static bool g_condIsGdb[64];
+static size_t g_nCondSpecs;
+
+static bool parseSymAddr(const char* spec, uint32_t* out) {
+	char buf[160];
+	snprintf(buf, sizeof(buf), "%s", spec);
+	char* plus = strchr(buf, '+');
+	uint32_t off = 0;
+	if (plus) {
+		*plus = '\0';
+		off = (uint32_t) strtoul(plus + 1, NULL, 0);
+	}
+	if (isdigit((unsigned char) buf[0])) {
+		*out = (uint32_t) strtoul(buf, NULL, 0) + off;
+		return true;
+	}
+	uint32_t base;
+	if (!symFind(buf, &base)) {
+		fprintf(stderr, "gbarun: unknown symbol '%s' in condition\n", buf);
+		return false;
+	}
+	*out = base + off;
+	return true;
+}
+
+static bool parseCond(const char* spec, struct state_cond* c) {
+	char buf[320];
+	snprintf(buf, sizeof(buf), "%s", spec);
+	char* elem[4] = {0};
+	int n = 0;
+	char* p = buf;
+	while (n < 3 && p) {
+		elem[n++] = p;
+		char* colon = strchr(p, ':');
+		if (colon) {
+			*colon = '\0';
+			p = colon + 1;
+		} else {
+			p = NULL;
+		}
+	}
+	if (n < 3) {
+		fprintf(stderr, "gbarun: bad condition '%s' (want addr:width:opvalue)\n", spec);
+		return false;
+	}
+	memset(c, 0, sizeof(*c));
+	if (!parseSymAddr(elem[0], &c->addr))
+		return false;
+	c->width = atoi(elem[1]);
+	if (c->width != 8 && c->width != 16)
+		c->width = 32;
+	const char* v = elem[2];
+	switch (*v) {
+	case '=': c->op = COND_OP_EQ; v++; break;
+	case '&': c->op = COND_OP_MASK; v++; break;
+	case '!': c->op = COND_OP_NE; v++; break;
+	case '>': c->op = COND_OP_GT; v++; break;
+	case '<': c->op = COND_OP_LT; v++; break;
+	default: c->op = COND_OP_EQ; break;
+	}
+	c->value = (uint32_t) strtoul(v, NULL, 0);
+	return true;
+}
+
+static uint32_t condRead(struct mCore* core, const struct state_cond* c) {
+	switch (c->width) {
+	case 8: return core->busRead8(core, c->addr);
+	case 16: return core->busRead16(core, c->addr);
+	default: return core->busRead32(core, c->addr);
+	}
+}
+
+static bool condMet(struct mCore* core, const struct state_cond* c) {
+	uint32_t v = condRead(core, c);
+	switch (c->op) {
+	case COND_OP_MASK: return (v & c->value) != 0;
+	case COND_OP_NE: return v != c->value;
+	case COND_OP_GT: return v > c->value;
+	case COND_OP_LT: return v < c->value;
+	default: return v == c->value;
+	}
+}
+
+
 /* 自定义日志器：--quiet 时只留 WARN 及以上，避免刷屏拖慢测试 */
 static bool g_quietLog = false;
 
@@ -221,6 +387,7 @@ int main(int argc, char** argv) {
 	bool quiet = false;
 	bool gdbEnabled = false;
 	unsigned gdbAt = 0;
+	const char* symFile = NULL;
 
 	for (int i = 2; i < argc; ++i) {
 		if (!strcmp(argv[i], "--frames") && i + 1 < argc) {
@@ -281,6 +448,31 @@ int main(int argc, char** argv) {
 		} else if (!strcmp(argv[i], "--gdb-at") && i + 1 < argc) {
 			gdbEnabled = true;
 			gdbAt = strtoul(argv[++i], NULL, 10);
+		} else if (!strcmp(argv[i], "--gdb-when") && i + 1 < argc) {
+			snprintf(g_condSpecs[g_nCondSpecs], sizeof(g_condSpecs[0]), "%s", argv[++i]);
+			g_condIsGdb[g_nCondSpecs] = true;
+			g_nCondSpecs++;
+			gdbEnabled = true;
+			gdbAt = 0xFFFFFFFFu;
+		} else if (!strcmp(argv[i], "--press-when") && i + 1 < argc) {
+			/* 形如 "gPlaySt+0xE:8:=2;A;4"：条件；按键；按住帧数 */
+			char* spec = argv[++i];
+			char* s1 = strchr(spec, ';');
+			if (!s1) { fprintf(stderr, "gbarun: bad --press-when spec\n"); return 2; }
+			*s1 = '\0';
+			char* s2 = strchr(s1 + 1, ';');
+			if (!s2) { fprintf(stderr, "gbarun: bad --press-when spec\n"); return 2; }
+			*s2 = '\0';
+			char* s3 = strchr(s2 + 1, ';');
+			if (s3) *s3 = '\0';
+			snprintf(g_condSpecs[g_nCondSpecs], sizeof(g_condSpecs[0]), "%s", spec);
+			g_condKeys[g_nCondSpecs] = parseKeys(s1 + 1);
+			g_condDur[g_nCondSpecs] = (unsigned) strtoul(s2 + 1, NULL, 10);
+			g_condInterval[g_nCondSpecs] = s3 ? (unsigned) strtoul(s3 + 1, NULL, 10) : 0;
+			g_condIsGdb[g_nCondSpecs] = false;
+			g_nCondSpecs++;
+		} else if (!strcmp(argv[i], "--sym") && i + 1 < argc) {
+			symFile = argv[++i];
 		} else {
 			fprintf(stderr, "gbarun: unknown argument '%s'\n", argv[i]);
 			return 2;
@@ -328,6 +520,20 @@ int main(int argc, char** argv) {
 	}
 	core->reset(core);
 
+	if (symFile && !loadSymFile(symFile)) {
+		return 1;
+	}
+	for (size_t i = 0; i < g_nCondSpecs; ++i) {
+		struct state_cond* c = &g_conds[g_nConds++];
+		if (!parseCond(g_condSpecs[i], c)) {
+			return 2;
+		}
+		c->keys = g_condKeys[i];
+		c->duration = g_condDur[i];
+		c->interval = g_condInterval[i];
+		c->is_gdb = g_condIsGdb[i];
+	}
+
 	struct mDebugger* debugger = NULL;
 
 	if (savPath && !mCoreLoadSaveFile(core, savPath, false)) {
@@ -352,7 +558,16 @@ int main(int argc, char** argv) {
 	for (unsigned frame = 0; frame < totalFrames; ++frame) {
 		g_currentFrame = frame;
 
-		if (gdbEnabled && !debugger && frame >= gdbAt) {
+		bool gdbTrigger = false;
+		if (gdbEnabled && !debugger) {
+			if (frame >= gdbAt)
+				gdbTrigger = true;
+			for (size_t ci = 0; ci < g_nConds && !gdbTrigger; ++ci) {
+				if (g_conds[ci].is_gdb && condMet(core, &g_conds[ci]))
+					gdbTrigger = true;
+			}
+		}
+		if (gdbTrigger) {
 			debugger = mDebuggerCreate(DEBUGGER_GDB, core);
 			if (!debugger) {
 				fprintf(stderr, "gbarun: GDB stub not available in this libmgba build\n");
@@ -367,6 +582,23 @@ int main(int argc, char** argv) {
 			struct event* ev = &events[e];
 			if (ev->type == EV_HOLD && frame >= ev->frame && frame < ev->frame + ev->duration) {
 				keys |= ev->keys;
+			}
+		}
+		for (size_t ci = 0; ci < g_nConds; ++ci) {
+			struct state_cond* c = &g_conds[ci];
+			if (c->is_gdb) {
+				continue;
+			}
+			bool met = condMet(core, c);
+			if (met && (!c->fired || (c->interval && frame >= c->next_press))) {
+				c->fired = 1;
+				c->press_until = frame + c->duration;
+				c->next_press = frame + c->duration + c->interval;
+				printf("STATE frame=%u kind=%s\n", frame, c->is_gdb ? "gdb" : "press");
+				fflush(stdout);
+			}
+			if (frame < c->press_until) {
+				keys |= c->keys;
 			}
 		}
 		if (keys != latched) {

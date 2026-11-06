@@ -156,9 +156,10 @@ fi
 echo
 echo "== 7/7 第二章准备画面（prepscreen）"
 "$RUN" "$ROM" --quiet --frames 16000 \
+	--sym "${ROM%.gba}.sym" \
 	--hold-every 720:9000:50:A:3 \
 	--hold-every 9500:10500:40:B:4 \
-	--hold 12000:START:5 --hold 12600:START:5 \
+	--press-when "gBmSt+0x4:8:&16;START;5;0" \
 	--stats 12300 --shot 12300 --out "$OUT" >"$OUT/7-prep.log" 2>&1
 assert_completed "$OUT/7-prep.log" "通关第一章后进入第二章准备画面"
 PREP_COLORS=$(field "$OUT/7-prep.log" STATS colors)
