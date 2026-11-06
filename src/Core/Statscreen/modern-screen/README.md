@@ -15,7 +15,7 @@ src/Core/Statscreen/modern-screen/
 └── README.md       本文件
 
 contents/statscreen/Modern/
-├── ModernStatScreen_UI.png       面板边框/填充 tile 图集（256x32）
+├── ModernStatScreen_UI.png       面板边框/填充 tile 图集（256x32；tile 63 为装备行深红条）
 ├── ModernStatScreen_UI2.png      statbar 图集
 ├── ModernStatScreen_Spirtes.png  页码/箭头/小图标（256x32）
 ├── ModernStatScreen_Titles.png   整词艺术字（16x384，SKILLS/ITEMS/SUPPORT/STATS/COMBAT/WEAPON）
@@ -42,7 +42,7 @@ contents/statscreen/Modern/
 每块面板有三层 TM buffer：
 
 - `TmBuff_MssU0/L0/R0` → BG0（文字）
-- `TmBuff_MssU1/L1/R1` → BG1（statbar / gauge）
+- `TmBuff_MssU1/L1/R1` → BG1（statbar / gauge；Page 1 的装备行深红条也画在这里）
 - `TmBuff_MssU2/L2/R2` → BG2（UI 边框、填充）
 
 滑动时 `slide_up/left/right` 把 buffer 的内容按列/行复制到 `gBg0Tm`/`gBg1Tm`/`gBg2Tm`。
@@ -322,6 +322,9 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 | `c90bd8c` | Page 2 左面板填充支援候选（已建立优先，未建立显示 `-`） |
 | `82f3dc3` | 标题改用 vanilla page-name 的 11 色循环窗口 |
 | `e3c2e02` | 标题改为正弦波驱动的暖金色循环渐变，去除白闪和循环停顿 |
+| `9c14d82` | 延迟 MSS 调色板/OAM，修复 playerphase 单位信息框退出残帧 |
+| `9187f10` | 标题改为整词艺术字，并保留 `CONFIG_MSS_TITLE_WHOLE_WORD` 逐字母回退 |
+| `86fd8c9` | Page 1 物品槽、装备条、Rank/Wgt/Rng 摘要与 COMBAT `AS` |
 
 具体：
 
@@ -337,6 +340,8 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 - `mss_load_gfx` 显式把 `Pal_Text` 应用到 `BGPAL_MSS_TEXT`，避免地图调色板残留把蓝色 HP 数字染成与 HP 条相同的颜色。
 - 面板内容恢复原坐标（不再为标题让位）；标题在 Left (8,44) / Right (168,4)。
 - 文本槽位改为按页重建：`Mss_InitPageText()` 在 `Mss_PreparePage()` 开头 `ResetTextFont()` 后初始化上栏 + 当前页的 text，三页不再同时占 VRAM。
+- Page 1 左面板最多 5 个物品槽；空槽灰色占位。装备物品有绿色 `E`，行底在 BG1 铺深红装备条。物品不足 5 件时最后一行显示 `Rank / Wgt / Rng`，满 5 件时五格全显示。
+- Page 1 右面板补 `AS`，整体从 y=2 开始，结束于 y=16，避免压到页码。
 
 ---
 
@@ -349,16 +354,16 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
   - B.Magic 列表（现在只有标签）。
   - 底部小表：`Cond / Affin / Con / Aid / Talk / 移动类型`。
 - **Page 1 左面板**：已完成。
-  - 物品行加图标底框、装备中 `E` 标记、空槽占位。
+  - 物品行图标 + 名字 + 耐久；空槽灰色占位，装备中 `E` 标记。
   - 装备行底部加深红装备条（复用 UI tile 63），对应 vanilla 的装备武器背景条。
   - 底部加武器摘要：`Rank / Wgt / Rng`；满 5 件物品时用五格全显示，摘要让位。
-- **Page 1 右面板**：已补 `AS`（攻击速度）到 y=17。
+- **Page 1 右面板**：已补 `AS`（攻击速度）到 y=16。
 - **Page 2 左面板**：支援候选列表（已建立优先，未建立显示 `-`）已完成。
 - **右面板**：保持 8 项；如果空间允许，补 `Con/Aid/Talk` 到左面板而不是右面板。
 
 ### P1 装饰
 
-- 标题字体继续美化（当前是 Consolas Bold 13 二值化，可换更 FE 风格的字形）。
+- 标题字体可继续微调（当前整词艺术字是 DejaVu Serif Condensed Bold Italic 二值化；逐字母回退仍保留）。
 - 标题缩放动画：vanilla 用 `SetObjAffineAuto` 在 Y 方向压扁/展开，需要把标题改成整块图 + affine OAM。
 - 面板顶部高光 / 底部阴影（新增纯色 tile，覆盖 U2/L2/R2 首尾行）。
 - 属性行图标（8x8，Str/Mag/... 各一个）。
@@ -374,9 +379,10 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 
 ### 已知问题
 
-- 标题字体是 Consolas Bold 13 二值化生成，不是 FE 美术字。
+- 整词艺术字使用 DejaVu Serif Condensed Bold Italic 二值化生成，不是 FE 原生美术字；`CONFIG_MSS_TITLE_WHOLE_WORD = 0` 可切回旧字符集。
 - 标题会压 `Skills:` / `Str` 顶部约 4px（用户确认可接受）。
-- 没有做 vanilla 那种 Y 轴压扁/展开；当前是跟随面板水平滑入 + 暖金色循环渐变。
+- 没有做 vanilla 那种 Y 轴压扁/展开；当前是跟随面板水平滑入 + vanilla 11 色循环渐变。
+- Page 1 在物品满 5 件时不显示 `Rank / Wgt / Rng` 摘要，因为 5 行物品已经占满内容区。
 - 没有帮助框；R 在 statscreen 内没有绑定。
 - 快速连按翻页时，标题/页码的视觉同步还没有专门测过。
 
