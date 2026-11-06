@@ -33,6 +33,9 @@
 | #134 | augury 命名（函数/数据/枚举/字段 + rodata 标签） | `343e44b` |
 | #135 | play rank 命名（等级枚举修正、`PlayRankSt` 字段、help info、refrank 索引） | `343e44b` |
 | 工具 | `tools/emu` 接入 mGBA GDB stub（`--gdb`/`--gdb-at`）+ banim 断点用例 | `3dfb493` |
+| 工具 | debug 章节开场接 `EvtNextChapter(CHAPTER_2)`，测试可进第二章准备画面 | `3814b4f` |
+| 工具 | `gbarun` 状态驱动输入（`--sym`/`--press-when`/`--gdb-when`/`--probe`、AND 条件） | `a4146ba` `3e4388b` |
+| 工具 | 用例 8：准备画面子菜单交互（部署 / 物品 / 存档 / 地图 / 出击） | `1a9021f` |
 
 ## 有意未同步
 
