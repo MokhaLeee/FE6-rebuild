@@ -173,8 +173,9 @@ CpuCopy16(
 
 ### Page 1（ITEMS）
 
-- Left：物品行 y=2,4,6,8,10（最多 5 个）。
-- Right：`Attack/Hit/Crit/Avoid/Dodge/Silencer/Range`，y=3,5,...,15。
+- Left：最多 5 个物品行，y=2,4,...,10；空槽显示灰色 `---` 和 `--/--`，装备中的物品右侧显示绿色 `E`，该行底部加 vanilla 风格的深红装备条。
+- 物品少于 5 件时，最后一行让给装备武器摘要：`Rank / Wgt / Rng`；满 5 件时五格全显示，不再压缩物品行。
+- Right：`Attack/Hit/Crit/Avoid/Dodge/Silencer/Range/AS`，y=2,4,...,16。
 
 ### Page 2（WEXP）
 
@@ -347,9 +348,11 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
   - 技能列表加名称（图标 + 名字），最多 6 个；空时显示 `None`。
   - B.Magic 列表（现在只有标签）。
   - 底部小表：`Cond / Affin / Con / Aid / Talk / 移动类型`。
-- **Page 1 左面板**：
+- **Page 1 左面板**：已完成。
   - 物品行加图标底框、装备中 `E` 标记、空槽占位。
-  - 底部加武器摘要：`Type / Rank / Wgt / Rng`。
+  - 装备行底部加深红装备条（复用 UI tile 63），对应 vanilla 的装备武器背景条。
+  - 底部加武器摘要：`Rank / Wgt / Rng`；满 5 件物品时用五格全显示，摘要让位。
+- **Page 1 右面板**：已补 `AS`（攻击速度）到 y=17。
 - **Page 2 左面板**：支援候选列表（已建立优先，未建立显示 `-`）已完成。
 - **右面板**：保持 8 项；如果空间允许，补 `Con/Aid/Talk` 到左面板而不是右面板。
 

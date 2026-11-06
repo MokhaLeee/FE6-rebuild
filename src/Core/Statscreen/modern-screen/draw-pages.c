@@ -183,32 +183,116 @@ static void put_rpage1()
 /**
  * page 1
  */
-static void put_lpage2(void)
+enum {
+	MSS_EQUIP_BAR_TILE = 63,
+	MSS_EQUIP_BAR_X = 1,
+	MSS_EQUIP_BAR_WIDTH = 18,
+};
+
+static void put_equip_bar(int slot)
 {
+	u16 *tm = TmBuff_MssL1 + TM_OFFSET(MSS_EQUIP_BAR_X, 3 + slot * 2);
 	int i;
-	struct Unit *unit = gMssSt.unit;
 
-	for (i = 0; i < ITEMSLOT_INV_COUNT; i++) {
-		int item = unit->items[i];
-
-		if (item == 0)
-			break;
-
-		DrawItemStatScreenLine(
-			&gMssSt.texts[MSS_TEXT_ITEM1 + i],
-			item, IsItemDisplayUsable(unit, item),
-			TmBuff_MssL0 + TM_OFFSET(2, 2 + i * 2));
+	for (i = 0; i < MSS_EQUIP_BAR_WIDTH; i++) {
+		tm[i] = TILEREF(BGCHR_MSS_UI + MSS_EQUIP_BAR_TILE, BGPAL_MSS_UI);
 	}
 }
 
+static void put_item_slot(int i, int equipped_slot)
+{
+	struct Unit *unit = gMssSt.unit;
+	struct Text *text = &gMssSt.texts[MSS_TEXT_ITEM1 + i];
+	u16 *tm = TmBuff_MssL0 + TM_OFFSET(2, 2 + i * 2);
+	int item = unit->items[i];
+
+	if (item != 0) {
+		DrawItemStatScreenLine(text, item, IsItemDisplayUsable(unit, item), tm);
+
+		if (i == equipped_slot) {
+			put_equip_bar(i);
+			PutSpecialChar(tm + 16, TEXT_COLOR_SYSTEM_GREEN, TEXT_SPECIAL_E);
+		}
+	} else {
+		ClearText(text);
+		PutDrawText(text, tm + 2, TEXT_COLOR_SYSTEM_GRAY, 0, 0, "---");
+		PutSpecialChar(tm, TEXT_COLOR_SYSTEM_GRAY, TEXT_SPECIAL_DASH);
+		PutNumberOrBlank(tm + 11, TEXT_COLOR_SYSTEM_GRAY, 0xFF);
+		PutSpecialChar(tm + 12, TEXT_COLOR_SYSTEM_GRAY, TEXT_SPECIAL_SLASH);
+		PutNumberOrBlank(tm + 14, TEXT_COLOR_SYSTEM_GRAY, 0xFF);
+	}
+}
+
+static void put_item_info(int y)
+{
+	struct Unit *unit = gMssSt.unit;
+	struct Text *text = &gMssSt.texts[MSS_TEXT_P2_ITEMINFO];
+	int item = GetUnitEquippedWeapon(unit);
+	int rank_special = -1;
+	int rank_color = TEXT_COLOR_SYSTEM_BLUE;
+
+	ClearText(text);
+
+	if (item == 0) {
+		Text_InsertDrawString(text, 0, TEXT_COLOR_SYSTEM_GRAY, "No weapon");
+	} else {
+		int kind = GetItemKind(item);
+
+		rank_special = GetWeaponLevelSpecialCharFromExp(unit->wexp[kind]);
+		rank_color = (unit->wexp[kind] >= WEXP_S)
+			? TEXT_COLOR_SYSTEM_GREEN : TEXT_COLOR_SYSTEM_BLUE;
+
+		Text_InsertDrawString(text, 0, TEXT_COLOR_SYSTEM_GOLD, "Rank");
+		Text_InsertDrawString(text, 48, TEXT_COLOR_SYSTEM_GOLD, "Wgt");
+		Text_InsertDrawNumberOrBlank(text, 72, TEXT_COLOR_SYSTEM_BLUE, GetItemWeight(item));
+		Text_InsertDrawString(text, 88, TEXT_COLOR_SYSTEM_GOLD, "Rng");
+		Text_InsertDrawString(text, 112, TEXT_COLOR_SYSTEM_BLUE, GetItemRangeString(item));
+	}
+
+	PutText(text, TmBuff_MssL0 + TM_OFFSET(1, y));
+
+	if (rank_special >= 0) {
+		PutSpecialChar(TmBuff_MssL0 + TM_OFFSET(5, y), rank_color, rank_special);
+	}
+}
+
+static void put_lpage2(void)
+{
+	int i;
+	int count = 0;
+	int equipped_slot = GetUnitEquippedWeaponSlot(gMssSt.unit);
+	bool show_info;
+	int slots;
+
+	for (i = 0; i < ITEMSLOT_INV_COUNT; i++) {
+		if (gMssSt.unit->items[i] != 0)
+			count++;
+	}
+
+	/*
+	 * Five 16px item rows already fill the content area down to the lower
+	 * border. When there is a free slot, use that last line for the
+	 * equipped weapon summary; a full inventory keeps all five item rows.
+	 */
+	show_info = count < ITEMSLOT_INV_COUNT;
+	slots = show_info ? ITEMSLOT_INV_COUNT - 1 : ITEMSLOT_INV_COUNT;
+
+	for (i = 0; i < slots; i++)
+		put_item_slot(i, equipped_slot);
+
+	if (show_info)
+		put_item_info(2 + slots * 2);
+}
+
 static struct StatScreenTextInfo const textinfo_rpage2[] = {
-	{ gMssSt.texts + MSS_TEXT_P2_ATK, TmBuff_MssR0 + TM_OFFSET(1, 3),  TEXT_COLOR_SYSTEM_GOLD, 0, "Attack" },
-	{ gMssSt.texts + MSS_TEXT_P2_HIT, TmBuff_MssR0 + TM_OFFSET(1, 5),  TEXT_COLOR_SYSTEM_GOLD, 0, "Hit" },
-	{ gMssSt.texts + MSS_TEXT_P2_CRT, TmBuff_MssR0 + TM_OFFSET(1, 7),  TEXT_COLOR_SYSTEM_GOLD, 0, "Crit" },
-	{ gMssSt.texts + MSS_TEXT_P2_AVO, TmBuff_MssR0 + TM_OFFSET(1, 9),  TEXT_COLOR_SYSTEM_GOLD, 0, "Avoid" },
-	{ gMssSt.texts + MSS_TEXT_P2_DDG, TmBuff_MssR0 + TM_OFFSET(1, 11), TEXT_COLOR_SYSTEM_GOLD, 0, "Dodge" },
-	{ gMssSt.texts + MSS_TEXT_P2_SIL, TmBuff_MssR0 + TM_OFFSET(1, 13), TEXT_COLOR_SYSTEM_GOLD, 0, "Silencer" },
-	{ gMssSt.texts + MSS_TEXT_P2_RNG, TmBuff_MssR0 + TM_OFFSET(1, 15), TEXT_COLOR_SYSTEM_GOLD, 0, "Range" },
+	{ gMssSt.texts + MSS_TEXT_P2_ATK, TmBuff_MssR0 + TM_OFFSET(1, 2),  TEXT_COLOR_SYSTEM_GOLD, 0, "Attack" },
+	{ gMssSt.texts + MSS_TEXT_P2_HIT, TmBuff_MssR0 + TM_OFFSET(1, 4),  TEXT_COLOR_SYSTEM_GOLD, 0, "Hit" },
+	{ gMssSt.texts + MSS_TEXT_P2_CRT, TmBuff_MssR0 + TM_OFFSET(1, 6),  TEXT_COLOR_SYSTEM_GOLD, 0, "Crit" },
+	{ gMssSt.texts + MSS_TEXT_P2_AVO, TmBuff_MssR0 + TM_OFFSET(1, 8),  TEXT_COLOR_SYSTEM_GOLD, 0, "Avoid" },
+	{ gMssSt.texts + MSS_TEXT_P2_DDG, TmBuff_MssR0 + TM_OFFSET(1, 10), TEXT_COLOR_SYSTEM_GOLD, 0, "Dodge" },
+	{ gMssSt.texts + MSS_TEXT_P2_SIL, TmBuff_MssR0 + TM_OFFSET(1, 12), TEXT_COLOR_SYSTEM_GOLD, 0, "Silencer" },
+	{ gMssSt.texts + MSS_TEXT_P2_RNG, TmBuff_MssR0 + TM_OFFSET(1, 14), TEXT_COLOR_SYSTEM_GOLD, 0, "Range" },
+	{ gMssSt.texts + MSS_TEXT_P2_AS,  TmBuff_MssR0 + TM_OFFSET(1, 16), TEXT_COLOR_SYSTEM_GOLD, 0, "AS" },
 	{ 0 }, // end
 };
 
@@ -218,12 +302,13 @@ static void put_rpage2()
 
 	PutStatScreenText(textinfo_rpage2);
 
-	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 3),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_attack);
-	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 5),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_hit);
-	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 7),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_crit);
-	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 9),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_avoid);
-	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 11), TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_dodge);
-	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 13), TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_silencer);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 2),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_attack);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 4),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_hit);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 6),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_crit);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 8),  TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_avoid);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 10), TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_dodge);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 12), TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_silencer);
+	PutNumberOrBlank(TmBuff_MssR0 + TM_OFFSET(8, 16), TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.battle_speed);
 
 	str = GetItemRangeString(gBattleUnitA.weapon_before);
 	Text_InsertDrawString(&gMssSt.texts[MSS_TEXT_P2_RNG], 62 - GetStringTextLen(str), TEXT_COLOR_SYSTEM_BLUE, str);

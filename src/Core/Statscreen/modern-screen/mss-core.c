@@ -91,6 +91,7 @@ static const struct TextInitInfo mss_text_init_info_page1[] = {
 	{ &gMssSt.texts[MSS_TEXT_ITEM3], 7 },
 	{ &gMssSt.texts[MSS_TEXT_ITEM4], 7 },
 	{ &gMssSt.texts[MSS_TEXT_ITEM5], 7 },
+	{ &gMssSt.texts[MSS_TEXT_P2_ITEMINFO], 19 },
 	{ &gMssSt.texts[MSS_TEXT_P2_ATK], 4 },
 	{ &gMssSt.texts[MSS_TEXT_P2_HIT], 5 },
 	{ &gMssSt.texts[MSS_TEXT_P2_CRT], 3 },
@@ -98,6 +99,7 @@ static const struct TextInitInfo mss_text_init_info_page1[] = {
 	{ &gMssSt.texts[MSS_TEXT_P2_DDG], 5 },
 	{ &gMssSt.texts[MSS_TEXT_P2_SIL], 5 },
 	{ &gMssSt.texts[MSS_TEXT_P2_RNG], 9 },
+	{ &gMssSt.texts[MSS_TEXT_P2_AS], 2 },
 
 	{}
 };
