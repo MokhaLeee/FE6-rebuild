@@ -132,6 +132,9 @@ static void unpack_msa_unit(const struct MsaPackedUnit *pack, struct Unit *unit)
 
 	for (i = 0; i < UNIT_DYNAMIC_SKILLS_COUNT; i++)
 		unit->skills[i] = pack->skills[i];
+
+	/* Game saves do not store current HP; units resume at full HP. */
+	SetUnitHp(unit, GetUnitMaxHp(unit));
 }
 
 static void Msa_SaveUnit_Ally(u8 *buf, int size)
@@ -143,7 +146,7 @@ static void Msa_SaveUnit_Ally(u8 *buf, int size)
 	for (i = 0; i < amt; i++) {
 		struct MsaPackedUnit pack;
 
-		pack_msa_unit(&gUnitArrayBlue[i + 1], &pack);
+		pack_msa_unit(&gUnitArrayBlue[i], &pack);
 		memcpy(buf, &pack, sizeof(struct MsaPackedUnit));
 		buf = buf + sizeof(struct MsaPackedUnit);
 	}
@@ -159,7 +162,7 @@ static void Msa_LoadUnit_Ally(u8 *buf, int size)
 		struct MsaPackedUnit pack;
 
 		memcpy(&pack, buf, sizeof(struct MsaPackedUnit));
-		unpack_msa_unit(&pack, &gUnitArrayBlue[i + 1]);
+		unpack_msa_unit(&pack, &gUnitArrayBlue[i]);
 		buf = buf + sizeof(struct MsaPackedUnit);
 	}
 }
@@ -566,7 +569,7 @@ static void Msu_SaveUnit_Ally(u8 *buf, int size)
 	for (i = 0; i < amt; i++) {
 		struct MsuPackedUnitAlly pack;
 
-		pack_msu_unit_ally(&gUnitArrayBlue[i + 1], &pack);
+		pack_msu_unit_ally(&gUnitArrayBlue[i], &pack);
 		memcpy(buf, &pack, sizeof(struct MsuPackedUnitAlly));
 		buf = buf + sizeof(struct MsuPackedUnitAlly);
 	}
@@ -582,7 +585,7 @@ static void Msu_LoadUnit_Ally(u8 *buf, int size)
 		struct MsuPackedUnitAlly pack;
 
 		memcpy(&pack, buf, sizeof(struct MsuPackedUnitAlly));
-		unpack_msu_unit_ally(&pack, &gUnitArrayBlue[i + 1]);
+		unpack_msu_unit_ally(&pack, &gUnitArrayBlue[i]);
 		buf = buf + sizeof(struct MsuPackedUnitAlly);
 	}
 }
@@ -596,7 +599,7 @@ static void Msu_SaveUnit_Enemy(u8 *buf, int size)
 	for (i = 0; i < amt; i++) {
 		struct MsuPackedUnitAI pack;
 
-		pack_msu_unit_ai(&gUnitArrayRed[i + 1], &pack);
+		pack_msu_unit_ai(&gUnitArrayRed[i], &pack);
 		memcpy(buf, &pack, sizeof(struct MsuPackedUnitAI));
 		buf = buf + sizeof(struct MsuPackedUnitAI);
 	}
@@ -612,7 +615,7 @@ static void Msu_LoadUnit_Enemy(u8 *buf, int size)
 		struct MsuPackedUnitAI pack;
 
 		memcpy(&pack, buf, sizeof(struct MsuPackedUnitAI));
-		unpack_msu_unit_ai(&pack, &gUnitArrayRed[i + 1]);
+		unpack_msu_unit_ai(&pack, &gUnitArrayRed[i]);
 		buf = buf + sizeof(struct MsuPackedUnitAI);
 	}
 }
@@ -626,7 +629,7 @@ static void Msu_SaveUnit_Npc(u8 *buf, int size)
 	for (i = 0; i < amt; i++) {
 		struct MsuPackedUnitAI pack;
 
-		pack_msu_unit_ai(&gUnitArrayGreen[i + 1], &pack);
+		pack_msu_unit_ai(&gUnitArrayGreen[i], &pack);
 		memcpy(buf, &pack, sizeof(struct MsuPackedUnitAI));
 		buf = buf + sizeof(struct MsuPackedUnitAI);
 	}
@@ -642,7 +645,7 @@ static void Msu_LoadUnit_Npc(u8 *buf, int size)
 		struct MsuPackedUnitAI pack;
 
 		memcpy(&pack, buf, sizeof(struct MsuPackedUnitAI));
-		unpack_msu_unit_ai(&pack, &gUnitArrayGreen[i + 1]);
+		unpack_msu_unit_ai(&pack, &gUnitArrayGreen[i]);
 		buf = buf + sizeof(struct MsuPackedUnitAI);
 	}
 }
