@@ -128,19 +128,22 @@ PutSprite(1, x + i * 8, y + 8, Sprite_8x8, oam2 + idx * 2 + 1);
 
 标题使用专用 OBJ pal bank `OBPAL_MSS_TITLES = 3`。字符图主体使用索引 `2..12`，每个字符按 y 映射成完整的 11 级纵向渐变。
 
-`mss_update_title_palette` 用 64 项正弦波驱动 11 个颜色：
+`mss_update_title_palette` 用 64 步 HSV 色轮 + 正弦亮度带来驱动 11 个颜色：
 
 ```c
 int phase = (GetGameTime() / 4) & 63;
+u16 base = s_mss_title_hues[phase];
+
 int wave = s_mss_title_wave[(phase + i * 4) & 63];
+int scale = 216 + (((255 - 216) * wave) >> 8);
 
 pal[i] = RGB(
-    21 + (((31 - 21) * wave) >> 8),
-    13 + (((30 - 13) * wave) >> 8),
-    4  + (((15 - 4)  * wave) >> 8));
+    ((base & 0x1F) * scale) >> 8,
+    (((base >> 5) & 0x1F) * scale) >> 8,
+    (((base >> 10) & 0x1F) * scale) >> 8);
 ```
 
-颜色在暖金和亮金之间连续循环，不会经过纯白；正弦波本身首尾闭合，所以循环点没有跳变或停顿。
+`s_mss_title_hues` 是饱和度 0.45 的 64 步色轮，颜色会依次经过红、黄、绿、青、蓝、紫；`scale` 保持在 216..255，保证循环中不会出现明显发暗的阶段。色轮和亮度都是闭合循环，因此没有白闪、循环停顿或跳变。
 
 ---
 
@@ -313,7 +316,7 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 - 标题图 `ModernStatScreen_Titles.png`（8x16 字符集，11 级渐变主体 + 深棕描边）。
 - `Img_MssTitles` / `Pal_MssTitles`，加载到 `OBCHR_MSS_TITLES` / `OBPAL_MSS_TITLES`。
 - 每字符两个 8x8 sprite，跟随左右面板滑动（`step * 16` 修正）。
-- 标题使用专用 pal bank，由 64 项正弦波驱动暖金→亮金的 11 色循环渐变（`mss_update_title_palette`）。
+- 标题使用专用 pal bank，由 64 步 HSV 色轮驱动红/黄/绿/青/蓝/紫循环渐变，并用正弦亮度带保持鲜艳（`mss_update_title_palette`）。
 - 面板内容恢复原坐标（不再为标题让位）；标题在 Left (8,44) / Right (168,4)。
 - 文本槽位改为按页重建：`Mss_InitPageText()` 在 `Mss_PreparePage()` 开头 `ResetTextFont()` 后初始化上栏 + 当前页的 text，三页不再同时占 VRAM。
 

@@ -272,19 +272,44 @@ static const u8 s_mss_title_wave[64] = {
 	0, 1, 2, 5, 10, 15, 21, 29, 37, 47, 57, 67, 79, 90, 103, 115,
 };
 
+/* Bright pastel HSV colour wheel, saturation 0.45. The hue advances every 4 frames. */
+static const u16 s_mss_title_hues[64] = {
+	RGB(31, 17, 17), RGB(31, 18, 17), RGB(31, 20, 17), RGB(31, 21, 17),
+	RGB(31, 22, 17), RGB(31, 24, 17), RGB(31, 25, 17), RGB(31, 26, 17),
+	RGB(31, 28, 17), RGB(31, 29, 17), RGB(31, 30, 17), RGB(31, 31, 17),
+	RGB(29, 31, 17), RGB(28, 31, 17), RGB(27, 31, 17), RGB(25, 31, 17),
+	RGB(24, 31, 17), RGB(23, 31, 17), RGB(21, 31, 17), RGB(20, 31, 17),
+	RGB(19, 31, 17), RGB(17, 31, 17), RGB(17, 31, 18), RGB(17, 31, 19),
+	RGB(17, 31, 21), RGB(17, 31, 22), RGB(17, 31, 23), RGB(17, 31, 24),
+	RGB(17, 31, 26), RGB(17, 31, 27), RGB(17, 31, 28), RGB(17, 31, 30),
+	RGB(17, 31, 31), RGB(17, 30, 31), RGB(17, 28, 31), RGB(17, 27, 31),
+	RGB(17, 26, 31), RGB(17, 24, 31), RGB(17, 23, 31), RGB(17, 22, 31),
+	RGB(17, 21, 31), RGB(17, 19, 31), RGB(17, 18, 31), RGB(17, 17, 31),
+	RGB(19, 17, 31), RGB(20, 17, 31), RGB(21, 17, 31), RGB(23, 17, 31),
+	RGB(24, 17, 31), RGB(25, 17, 31), RGB(27, 17, 31), RGB(28, 17, 31),
+	RGB(29, 17, 31), RGB(31, 17, 31), RGB(31, 17, 30), RGB(31, 17, 29),
+	RGB(31, 17, 28), RGB(31, 17, 26), RGB(31, 17, 25), RGB(31, 17, 24),
+	RGB(31, 17, 22), RGB(31, 17, 21), RGB(31, 17, 20), RGB(31, 17, 18),
+};
+
 static void mss_update_title_palette(void)
 {
 	u16 *pal = gPal + (0x10 + OBPAL_MSS_TITLES) * 0x10 + 2;
 	int phase = (GetGameTime() / 4) & 63;
+	u16 base = s_mss_title_hues[phase];
+	int base_r = base & 0x1F;
+	int base_g = (base >> 5) & 0x1F;
+	int base_b = (base >> 10) & 0x1F;
 	int i;
 
 	for (i = 0; i < 11; i++) {
 		int wave = s_mss_title_wave[(phase + i * 4) & 63];
-		int r = 21 + (((31 - 21) * wave) >> 8);
-		int g = 13 + (((30 - 13) * wave) >> 8);
-		int b = 4 + (((15 - 4) * wave) >> 8);
+		int scale = 216 + (((255 - 216) * wave) >> 8);
 
-		pal[i] = RGB(r, g, b);
+		pal[i] = RGB(
+			(base_r * scale) >> 8,
+			(base_g * scale) >> 8,
+			(base_b * scale) >> 8);
 	}
 
 	EnablePalSync();
