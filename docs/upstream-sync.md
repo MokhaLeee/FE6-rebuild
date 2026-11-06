@@ -46,6 +46,8 @@
 
 ## 有意未同步
 
+- **#118（trim-includes）**：尝试过机械应用（按 basename 把上游 `src/*.c` 映射到本仓库的 `vanilla/`、`gameinfo/`、`src/Common/`），但本仓库的文件依赖与上游不同（`opanim.c`、`worldmap.c`、`iwram-data.c` 删掉 include 就缺声明），10 轮"编译-恢复-重编"不收敛，且映射会误改 `gameinfo/chapterinfo/*` 和 `src/Core/*`。全部回退，不做这批：收益只是少 1048 行 include，不值得逐个手工验证 249 个文件。
+
 - **#119 / #133 的 matching 实现**：`FAKEMATCH`/`NAKEDFUNC`/寄存器重排等技巧只服务于「与原 ROM 字节一致」，本仓库不追求该目标，跟了只会降低可读性。
 - **#115 主体**：`asm/arm.s` → `src/armfunc.s`、`crt0`/`gbasyscall` 迁移属于上游的 asm 布局调整，本仓库的 asm 组织（`src/Common/crt0`、`*.iwram.c`）不同。
 
