@@ -124,17 +124,24 @@ PutSprite(1, x + i * 8, y + 8, Sprite_8x8, oam2 + idx * 2 + 1);
 
 标题位置：Left `(8, 44)`，Right `(168, 4)`。标题高 16px，会轻微压到 `Skills:` / `Str` 顶部约 4px（用户确认可以接受）。
 
-### 4.1 调色板闪烁
+### 4.1 调色板渐变
 
-标题使用专用 OBJ pal bank `OBPAL_MSS_TITLES = 3`。字符图主体是白色（索引 2），`mss_sprites_loop` 每帧写：
+标题使用专用 OBJ pal bank `OBPAL_MSS_TITLES = 3`。字符图主体使用索引 `2..12`，每个字符按 y 映射成完整的 11 级纵向渐变。
+
+`mss_sprites_loop` 直接复用 vanilla page name 的循环调色板窗口：
 
 ```c
-gPal[(0x10 + OBPAL_MSS_TITLES) * 0x10 + 2] = s_mss_title_flash[(GetGameTime() / 2) & 7];
+int color_num = (GetGameTime() / 4) & 0x3F;
+
+CpuCopy16(
+    gpPal_StatscreenPageNameFlashing + color_num,
+    gPal + (0x10 + OBPAL_MSS_TITLES) * 0x10 + 2,
+    sizeof(u16) * 11);
+
 EnablePalSync();
 ```
 
-`s_mss_title_flash` 是 8 档颜色表，在白色和金色之间来回循环，每 2 帧换一档，周期约 0.27 秒。
-如果要做 vanilla 那种“字符内部渐变流动”，需要把字符图主体按 y 分成多个索引，再循环这些索引的颜色。
+`gpPal_StatscreenPageNameFlashing` 是 vanilla statscreen 使用的长渐变表；窗口每 4 帧前移一格，颜色会沿着字符内部纵向流动，形成类似原版标题的金属反光。
 
 ---
 
@@ -154,7 +161,7 @@ EnablePalSync();
 
 ### Page 2（WEXP）
 
-- Left：目前为空（`put_lpage3` 空函数）。
+- Left：支援候选列表，最多 5 行；已建立支援按等级排在前面，未建立显示 `-`；没有支援信息时显示 `No supports`。
 - Right：8 个武器经验条，y=2,4,...,16。
 
 标题 sprite 的 y 比内容高（Left 44、Right 4），只压面板顶部边框/接缝，不占内容行。
@@ -294,7 +301,8 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 | `bb5eb12` | 三块面板独立滑动：`MssSlideState`，各自 delay/length |
 | `b941960` | ease-out + 页码跟随 Right 面板 + 延迟切页 |
 | `d76140c` | 标题图片 + OBJ_VRAM0 + 8x8 sprite 字符 |
-| （当前工作区） | 标题白/金闪烁、滑入偏移修复、内容恢复原位、标题位置上移 |
+| `c90bd8c` | Page 2 左面板填充支援候选（已建立优先，未建立显示 `-`） |
+| （当前工作区） | 标题改为 vanilla 式 11 色循环渐变 |
 
 具体：
 
@@ -302,10 +310,10 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 - 16 段 ease-out 表（`s_mss_ease_out`）。
 - 页码/箭头 OAM 按 `slide_r.step` 跟随 Right 面板。
 - `page_to_change` + `mss_apply_page`，滑出旧页、滑入新页。
-- 标题图 `ModernStatScreen_Titles.png`（8x16 字符集，白色主体 + 深棕描边）。
+- 标题图 `ModernStatScreen_Titles.png`（8x16 字符集，11 级渐变主体 + 深棕描边）。
 - `Img_MssTitles` / `Pal_MssTitles`，加载到 `OBCHR_MSS_TITLES` / `OBPAL_MSS_TITLES`。
 - 每字符两个 8x8 sprite，跟随左右面板滑动（`step * 16` 修正）。
-- 标题使用专用 pal bank，白 ↔ 金每 2 帧闪烁（`s_mss_title_flash`）。
+- 标题使用专用 pal bank，复用 `gpPal_StatscreenPageNameFlashing` 的 11 色窗口，每 4 帧前移一格。
 - 面板内容恢复原坐标（不再为标题让位）；标题在 Left (8,44) / Right (168,4)。
 - 文本槽位改为按页重建：`Mss_InitPageText()` 在 `Mss_PreparePage()` 开头 `ResetTextFont()` 后初始化上栏 + 当前页的 text，三页不再同时占 VRAM。
 
@@ -322,15 +330,12 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 - **Page 1 左面板**：
   - 物品行加图标底框、装备中 `E` 标记、空槽占位。
   - 底部加武器摘要：`Type / Rank / Wgt / Rng`。
-- **Page 2 左面板**：
-  - 支援列表（属性图标 + 名字 + A/B/C 等级），最多 5 行。
-  - 空时显示 `No supports`。
+- **Page 2 左面板**：支援候选列表（已建立优先，未建立显示 `-`）已完成。
 - **右面板**：保持 8 项；如果空间允许，补 `Con/Aid/Talk` 到左面板而不是右面板。
 
 ### P1 装饰
 
 - 标题字体继续美化（当前是 Consolas Bold 13 二值化，可换更 FE 风格的字形）。
-- 标题内部光带/渐变：字符图主体按 y 分多个索引，循环这些索引的颜色，做 vanilla 那种金属反光。
 - 标题缩放动画：vanilla 用 `SetObjAffineAuto` 在 Y 方向压扁/展开，需要把标题改成整块图 + affine OAM。
 - 面板顶部高光 / 底部阴影（新增纯色 tile，覆盖 U2/L2/R2 首尾行）。
 - 属性行图标（8x8，Str/Mag/... 各一个）。
@@ -343,14 +348,12 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 - 大立绘（现在只有 chibi）。
 - 物品页装备框、支援页完整布局。
 - 帮助框（接 `HelpInfo_*` 或新做一份）。
-- 页面标题的旧版华丽感（渐变色、阴影、装饰框）。
 
 ### 已知问题
 
-- Page 2 左面板仍是空的。
 - 标题字体是 Consolas Bold 13 二值化生成，不是 FE 美术字。
 - 标题会压 `Skills:` / `Str` 顶部约 4px（用户确认可接受）。
-- 没有做 vanilla 那种 Y 轴压扁/展开；当前是跟随面板水平滑入 + 调色板闪烁。
+- 没有做 vanilla 那种 Y 轴压扁/展开；当前是跟随面板水平滑入 + vanilla 式调色板渐变。
 - 没有帮助框；R 在 statscreen 内没有绑定。
 - 快速连按翻页时，标题/页码的视觉同步还没有专门测过。
 
