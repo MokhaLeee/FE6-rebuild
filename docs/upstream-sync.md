@@ -42,6 +42,7 @@
 | 工具 | `gbarun` 状态驱动输入（`--sym`/`--press-when`/`--gdb-when`/`--probe`、AND 条件） | `a4146ba` `3e4388b` |
 | 工具 | 用例 8：准备画面子菜单交互（部署 / 物品 / 存档 / 地图 / 出击） | `1a9021f` |
 | 工具 | 用例 9：帮助框（prepscreen 主菜单按 R，覆盖 `helpbox.c`/`helpbox_display.c`；`helpbox_alt` 是 dead code，`helpdialogue` 走教程路径未覆盖） | `709bece` |
+| 工具 | 用例 10：准备画面物品子菜单（交換/捨てる/輸送隊/リスト/武器屋，覆盖 #141 的 PrepItem/PrepTrade/PrepSupply 与 #142 的 PrepDisp） | `08a9e53` |
 
 ## 有意未同步
 
@@ -63,6 +64,7 @@
 - **命名欠账**：已清。58 个「上游已改名、本仓库仍用旧名」的符号中，12 个已补（`3f93473`），2 个 secretscreen 结构体已补，其余 44 个属于本仓库没有实现的模块（`secretscreen`/`xmap`/`opanim`）。
 - **缺失模块（20）**：`sio`、`sio_core`、`sio_bm`、`soundroom`、`opinfo`、`opinfo_classdemo`、`xmap`、`secretscreen`、`save_multiarena`、`banim_ekrsetup`、`ramfunc`、`armfunc.arm`，以及 `data/gamedata/{iinfo,jinfo,pinfo}.h`、`helpboxinfo_data.h`、`systemlabels_data.h`。这些要么在 `gamedata/`、`gameinfo/` 里有替代实现，要么被有意裁剪。
 - **`opanim`**：本仓库只有 113 行的精简版，上游 2034 行（完整开场动画），属于有意裁剪，不是欠账。
+- **GDB 断点在 vanilla（agbcc）函数上不生效**：mGBA stub 接受 `break/hbreak *addr`（如 `0x08022A4C`）但从不报告命中，`BattleAIS_ExecCommands`（src/ 的 Thumb）却能命中；prep/helpbox 的覆盖因此依赖截图断言。
 - **57 个大差异文件**：以本仓库的本地功能改动为主（`sio.c`、`savemenu*.c`、`statscreen.c`、`battle.c`、`unit.c` 等），不是上游遗留。
 
 ## 下次同步流程
