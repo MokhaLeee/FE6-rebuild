@@ -14,6 +14,7 @@
 #include <mgba/core/core.h>
 #include <mgba/core/config.h>
 #include <mgba/core/log.h>
+#include <mgba/debugger/debugger.h>
 #include <mgba/internal/gba/memory.h>
 
 #include <png.h>
@@ -207,7 +208,7 @@ int main(int argc, char** argv) {
 		        "usage: %s ROM [--frames N] [--shot F] [--hold F:KEYS:LEN]\n"
 		        "          [--hold-every F0:F1:STEP:KEYS:LEN] [--stats F] [--hash F]\n"
 		        "          [--hash-every N] [--out DIR] [--sav FILE] [--save-out FILE]\n"
-		        "          [--quiet]\n",
+		        "          [--quiet] [--gdb]\n",
 		        argv[0]);
 		return 2;
 	}
@@ -218,6 +219,8 @@ int main(int argc, char** argv) {
 	const char* saveOutPath = NULL;
 	unsigned hashEvery = 0;
 	bool quiet = false;
+	bool gdbEnabled = false;
+	unsigned gdbAt = 0;
 
 	for (int i = 2; i < argc; ++i) {
 		if (!strcmp(argv[i], "--frames") && i + 1 < argc) {
@@ -273,6 +276,11 @@ int main(int argc, char** argv) {
 			saveOutPath = argv[++i];
 		} else if (!strcmp(argv[i], "--quiet")) {
 			quiet = true;
+		} else if (!strcmp(argv[i], "--gdb")) {
+			gdbEnabled = true;
+		} else if (!strcmp(argv[i], "--gdb-at") && i + 1 < argc) {
+			gdbEnabled = true;
+			gdbAt = strtoul(argv[++i], NULL, 10);
 		} else {
 			fprintf(stderr, "gbarun: unknown argument '%s'\n", argv[i]);
 			return 2;
@@ -319,6 +327,9 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 	core->reset(core);
+
+	struct mDebugger* debugger = NULL;
+
 	if (savPath && !mCoreLoadSaveFile(core, savPath, false)) {
 		fprintf(stderr, "gbarun: failed to load save '%s'\n", savPath);
 		return 1;
@@ -340,6 +351,17 @@ int main(int argc, char** argv) {
 
 	for (unsigned frame = 0; frame < totalFrames; ++frame) {
 		g_currentFrame = frame;
+
+		if (gdbEnabled && !debugger && frame >= gdbAt) {
+			debugger = mDebuggerCreate(DEBUGGER_GDB, core);
+			if (!debugger) {
+				fprintf(stderr, "gbarun: GDB stub not available in this libmgba build\n");
+				return 1;
+			}
+			mDebuggerAttach(debugger, core);
+			mDebuggerEnter(debugger, DEBUGGER_ENTER_ATTACHED, NULL);
+			fprintf(stderr, "gbarun: GDB stub listening on 127.0.0.1:2345 (frame %u)\n", frame);
+		}
 		uint32_t keys = 0;
 		for (size_t e = 0; e < nEvents; ++e) {
 			struct event* ev = &events[e];
@@ -357,7 +379,11 @@ int main(int argc, char** argv) {
 			}
 		}
 
-		core->runFrame(core);
+		if (debugger) {
+			mDebuggerRunFrame(debugger);
+		} else {
+			core->runFrame(core);
+		}
 
 		unsigned shown = frame + 1;
 		for (size_t e = 0; e < nEvents; ++e) {

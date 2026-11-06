@@ -26,7 +26,7 @@
 退出码 0 = 全过，非 0 = 有失败项（会逐条列出）。截图和日志留在
 `tools/emu/.build/out/`。
 
-五个用例：
+六个用例：
 
 | 用例 | 断言 |
 |---|---|
@@ -35,8 +35,26 @@
 | 3 进章节 | 连按 A 到 12000 帧不崩溃，章节地图有内容 |
 | 4 存档 | 游戏能写出 SRAM；读回后主菜单多出「記録から始める」等选项 |
 | 5 压力 | 固定种子的随机按键跑 20000 帧不崩溃，结束时画面正常 |
+| 6 banim | 用 mGBA 的 GDB stub 在 `BattleAIS_ExecCommands` / `EfxAdvanceFrameLut` 上打断点，确认剧情战斗动画真的跑过 |
 
 第 5 项用固定随机种子，同样的 ROM 每次跑结果一致，所以"这次挂了、上次没挂"一定是代码改动造成的。
+
+## GDB 调试
+
+`gbarun` 内置了 mGBA 的 GDB stub（`--gdb` 立即挂起，`--gdb-at N` 跑到第 N 帧再挂起），
+用 devkitARM 的 `arm-none-eabi-gdb` 连 `127.0.0.1:2345`：
+
+```bash
+./tools/emu/.build/gbarun fe6re.gba --gdb-at 7000 --frames 30000 \
+    --hold-every 720:11000:50:A:3 &
+arm-none-eabi-gdb fe6re.elf \
+    -ex "target remote 127.0.0.1:2345" \
+    -ex "break BattleAIS_ExecCommands" -ex "continue" -ex "bt 3"
+```
+
+断点、寄存器、内存、调用栈都能用；`detach` 不支持（gdb 退出时打印
+`Can't detach process.` 属正常）。`tools/emu/gdb-check.sh` 就是把这套流程做成断言，
+用来验证战斗动画代码路径被覆盖——截图只能看出"画面有内容"，断点才能确认跑到哪个函数。
 
 ## 手动跑（改完代码自己验某个流程）
 

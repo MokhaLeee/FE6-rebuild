@@ -1,5 +1,6 @@
 #include "prelude.h"
 #include "ai.h"
+#include "battle.h"
 #include "faction.h"
 #include "item.h"
 #include "oam.h"
@@ -138,6 +139,8 @@ static struct UnitInfo const UnitInfo_Chapter1_RedDummy[] = {
 	{ 0 }, // end
 };
 
+extern struct BattleHit CONST_DATA FightScr_DemoScene_RoyVsMarcus[];
+
 static EventScr const EventScr_Chapter1_Opening[] = {
 	EvtUnitCameraOff
 	EvtLoadUnits(UnitInfo_Chapter1_RedA)
@@ -162,6 +165,11 @@ static EventScr const EventScr_Chapter1_Opening[] = {
 	EvtMoveWait
 	EvtFunc(setup_status)
 	EvtFunc(ApplyAllHardModeBonusLevels)
+	EvtPutCursor(1, 20)
+	EvtFightScript(PID_ROY, PID_MARCUS, FightScr_DemoScene_RoyVsMarcus, FALSE)
+	EvtFightScript(PID_ROY, PID_CHAPTER1_BANDIT, FightScr_DemoScene_RoyVsMarcus, FALSE)
+	EvtFightScript(PID_LUGH, PID_CHAPTER1_ARCHER, FightScr_DemoScene_RoyVsMarcus, FALSE)
+
 	EvtClearSkip
 	EvtEnd
 };

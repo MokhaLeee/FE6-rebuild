@@ -83,14 +83,14 @@ assert_completed() {
 }
 
 echo "== ROM: $ROM"
-echo "== 1/5 开机与标题画面"
+echo "== 1/6 开机与标题画面"
 "$RUN" "$ROM" --quiet --frames 700 --stats 240 --stats 600 --shot 600 \
 	--out "$OUT" >"$OUT/1-boot.log" 2>&1
 assert_completed "$OUT/1-boot.log" "开机 700 帧无崩溃"
 assert_visible "$OUT/1-boot.log" "标题画面有内容" 32
 sed -n 's/^DONE.*secs=\([0-9.]*\) fps=\([0-9.]*\)/    速度: \2 fps/p' "$OUT/1-boot.log"
 
-echo "== 2/5 标题 → 主菜单（按 START）"
+echo "== 2/6 标题 → 主菜单（按 START）"
 "$RUN" "$ROM" --quiet --frames 1100 --hold 700:START:6 --stats 900 --hash 900 --shot 900 \
 	--out "$OUT" >"$OUT/2-menu.log" 2>&1
 assert_completed "$OUT/2-menu.log" "主菜单流程无崩溃"
@@ -103,13 +103,13 @@ if [ "$QUICK" = "1" ]; then
 	exit 0
 fi
 
-echo "== 3/5 连按 A 进入章节地图（12000 帧）"
+echo "== 3/6 连按 A 进入章节地图（12000 帧）"
 "$RUN" "$ROM" --quiet --frames 12000 --hold-every 720:12000:50:A:3 \
 	--stats 2400 --stats 12000 --shot 12000 --out "$OUT" >"$OUT/3-chapter.log" 2>&1
 assert_completed "$OUT/3-chapter.log" "推进到章节无崩溃"
 assert_visible "$OUT/3-chapter.log" "章节地图有内容" 32
 
-echo "== 4/5 存档写入 + 读回"
+echo "== 4/6 存档写入 + 读回"
 "$RUN" "$ROM" --quiet --frames 20000 --hold-every 720:20000:50:A:3 \
 	--save-out "$OUT/game.sav" --out "$OUT" >"$OUT/4-save.log" 2>&1
 SAV_SIZE=$(stat -c %s "$OUT/game.sav" 2>/dev/null || echo 0)
@@ -132,7 +132,7 @@ else
 	bad "存档似乎没有被读取（菜单哈希未变：$H_BASE）"
 fi
 
-echo "== 5/5 随机输入压力测试（20000 帧，固定种子可复现）"
+echo "== 5/6 随机输入压力测试（20000 帧，固定种子可复现）"
 RANDOM=12345
 KEYS=(A B START SELECT UP DOWN LEFT RIGHT L R)
 HOLDS=()
@@ -143,6 +143,15 @@ done
 	--stats 20000 --shot 20000 --out "$OUT" >"$OUT/5-stress.log" 2>&1
 assert_completed "$OUT/5-stress.log" "随机输入 20000 帧无崩溃"
 assert_visible "$OUT/5-stress.log" "压力测试结束时画面正常" 8
+
+echo "== 6/6 banim 战斗动画路径（GDB 断点）"
+if ./tools/emu/gdb-check.sh "$ROM" >"$OUT/6-banim.log" 2>&1; then
+	sed 's/^/  /' "$OUT/6-banim.log"
+	ok "banim 代码路径被覆盖（BattleAIS_ExecCommands / EfxAdvanceFrameLut）"
+else
+	sed 's/^/  /' "$OUT/6-banim.log"
+	bad "banim 断点没有命中（见 $OUT/6-banim.log）"
+fi
 
 echo
 if [ ${#FAILS[@]} -eq 0 ]; then
