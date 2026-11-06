@@ -4,6 +4,8 @@
 
 - 上游基线：`977cbd5`（2026-10-31，#133 合并）
 - 本仓库在上游的最后一次整体快照：`6546afd`（#114，2026-10-30）
+- 当前跟进目标：`7927a77`（45 commits / 17 PR），分批计划见 `upstream-sync-plan-7927a77.md`；
+  已完成批 1（#144/#147/#151）与批 6（#148–#150 + LUT 强类型）
 
 ## 已同步
 
@@ -23,6 +25,12 @@
 | #128 | manim 函数/结构体/数据标签命名 | `224aa3b` |
 | 欠账补漏 | unitlistscreen 2 个 LUT、banin_ekrbattleintro 9 个函数、manim 死声明 | `3f93473` |
 | 欠账补漏 | secretscreen 2 个结构体（`SecretScreenPasswordMeta`/`SecretScreenPlayRankStats`） | 本次提交 |
+| #148/#149/#150（部分） | banim 去寄存器 pin、删 `#if !NONMATCHING` 残留（#141 的 `register` 一并清掉） | `6398971` |
+| —（配套） | frame LUT 端到端改 `i16`，`EfxAdvanceFrameLut` 强类型签名 | `8852aee` |
+| #151 | debugmenu / menuinfo 命名 | `25b50ae` |
+| #147 | prep_menuscrollbar 命名（`Sprite_MenuScroll*`、`MENUSCROLL_*`） | `25b50ae` |
+| #144 | `code_0802B814` → `commandflags`、新建头文件、`unknown_funcs.h` 清理 | `25b50ae` |
+| 工具 | `tools/emu` 接入 mGBA GDB stub（`--gdb`/`--gdb-at`）+ banim 断点用例 | `3dfb493` |
 
 ## 有意未同步
 
