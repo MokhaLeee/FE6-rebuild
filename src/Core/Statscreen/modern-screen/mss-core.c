@@ -217,9 +217,61 @@ enum mss_slide_ops {
 	MSS_SLIDE_NONE,
 };
 
-static void mss_init_slide(struct ProcMss *proc)
+static void mss_slide_init(struct MssSlideState *slide, int delay, int speed)
 {
-	proc->slide_step = 0;
+	slide->step = 0;
+	slide->delay = delay;
+	slide->speed = speed;
+}
+
+static int mss_slide_tick(struct MssSlideState *slide, int max)
+{
+	int step;
+
+	if (slide->delay > 0) {
+		slide->delay--;
+		return 0;
+	}
+
+	step = slide->step;
+	slide->step += slide->speed;
+
+	if (slide->step > max)
+		slide->step = max;
+
+	return step;
+}
+
+/*
+ * Panels slide independently: U from the top, L from the left, R from the right.
+ * OUT order is U -> R -> L, IN order is L -> U -> R, giving a wave-like feel.
+ */
+static void mss_init_slide_unit_out(struct ProcMss *proc)
+{
+	mss_slide_init(&proc->slide_u, 0, 1);
+	mss_slide_init(&proc->slide_r, 2, 1);
+	mss_slide_init(&proc->slide_l, 4, 1);
+}
+
+static void mss_init_slide_unit_in(struct ProcMss *proc)
+{
+	mss_slide_init(&proc->slide_l, 0, 1);
+	mss_slide_init(&proc->slide_u, 4, 1);
+	mss_slide_init(&proc->slide_r, 8, 1);
+}
+
+static void mss_init_slide_page_out(struct ProcMss *proc)
+{
+	mss_slide_init(&proc->slide_u, 0, 1);
+	mss_slide_init(&proc->slide_r, 2, 1);
+	mss_slide_init(&proc->slide_l, 4, 1);
+}
+
+static void mss_init_slide_page_in(struct ProcMss *proc)
+{
+	mss_slide_init(&proc->slide_l, 0, 1);
+	mss_slide_init(&proc->slide_u, 3, 1);
+	mss_slide_init(&proc->slide_r, 6, 1);
 }
 
 static void slide_up(int step, enum mss_slide_ops ops)
@@ -353,81 +405,89 @@ static void slide_right(int step, enum mss_slide_ops ops)
 
 static void mss_loop_unit_slidein(struct ProcMss *proc)
 {
-	int step = proc->slide_step;
-	int max_step = max(MSS_U_HIGHT, max(MSS_L_WIDTH / 2, MSS_R_WIDTH));
+	int u = mss_slide_tick(&proc->slide_u, MSS_U_HIGHT);
+	int l = mss_slide_tick(&proc->slide_l, MSS_L_WIDTH / 2);
+	int r = mss_slide_tick(&proc->slide_r, MSS_R_WIDTH);
 
 	TmFill(gBg0Tm, 0);
 	TmFill(gBg1Tm, 0);
 	TmFill(gBg2Tm, 0);
 
-	slide_up(step, MSS_SLIDE_IN);
-	slide_left(step, MSS_SLIDE_IN);
-	slide_right(step, MSS_SLIDE_IN);
+	slide_up(u, MSS_SLIDE_IN);
+	slide_left(l, MSS_SLIDE_IN);
+	slide_right(r, MSS_SLIDE_IN);
 
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
 
-	proc->slide_step++;
-	if (proc->slide_step > max_step)
+	if (u >= MSS_U_HIGHT
+	 && l >= MSS_L_WIDTH / 2
+	 && r >= MSS_R_WIDTH)
 		Proc_Break(proc);
 }
 
 static void mss_loop_unit_slideout(struct ProcMss *proc)
 {
-	int step = proc->slide_step;
-	int max_step = max(MSS_U_HIGHT, max(MSS_L_WIDTH / 2, MSS_R_WIDTH));
+	int u = mss_slide_tick(&proc->slide_u, MSS_U_HIGHT);
+	int l = mss_slide_tick(&proc->slide_l, MSS_L_WIDTH / 2);
+	int r = mss_slide_tick(&proc->slide_r, MSS_R_WIDTH);
 
 	TmFill(gBg0Tm, 0);
 	TmFill(gBg1Tm, 0);
 	TmFill(gBg2Tm, 0);
 
-	slide_up(step, MSS_SLIDE_OUT);
-	slide_left(step, MSS_SLIDE_OUT);
-	slide_right(step, MSS_SLIDE_OUT);
+	slide_up(u, MSS_SLIDE_OUT);
+	slide_left(l, MSS_SLIDE_OUT);
+	slide_right(r, MSS_SLIDE_OUT);
 
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
 
-	proc->slide_step++;
-	if (proc->slide_step > max_step)
+	if (u >= MSS_U_HIGHT
+	 && l >= MSS_L_WIDTH / 2
+	 && r >= MSS_R_WIDTH)
 		Proc_Break(proc);
 }
 
 static void mss_loop_page_slidein(struct ProcMss *proc)
 {
-	int step = proc->slide_step;
-	int max_step = max(MSS_U_HIGHT, max(MSS_L_WIDTH / 2, MSS_R_WIDTH));
+	int u = mss_slide_tick(&proc->slide_u, MSS_U_HIGHT);
+	int l = mss_slide_tick(&proc->slide_l, MSS_L_WIDTH / 2);
+	int r = mss_slide_tick(&proc->slide_r, MSS_R_WIDTH);
 
 	TmFill(gBg0Tm, 0);
 	TmFill(gBg1Tm, 0);
 	TmFill(gBg2Tm, 0);
 
-	slide_up(step, MSS_SLIDE_NONE);
-	slide_left(step, MSS_SLIDE_IN);
-	slide_right(step, MSS_SLIDE_IN);
+	slide_up(u, MSS_SLIDE_IN);
+	slide_left(l, MSS_SLIDE_IN);
+	slide_right(r, MSS_SLIDE_IN);
 
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
 
-	proc->slide_step++;
-	if (proc->slide_step > max_step)
+	if (u >= MSS_U_HIGHT
+	 && l >= MSS_L_WIDTH / 2
+	 && r >= MSS_R_WIDTH)
 		Proc_Break(proc);
 }
 
 static void mss_loop_page_slideout(struct ProcMss *proc)
 {
-	int step = proc->slide_step;
-	int max_step = max(MSS_U_HIGHT, max(MSS_L_WIDTH / 2, MSS_R_WIDTH));
+	int u = mss_slide_tick(&proc->slide_u, MSS_U_HIGHT);
+	int l = mss_slide_tick(&proc->slide_l, MSS_L_WIDTH / 2);
+	int r = mss_slide_tick(&proc->slide_r, MSS_R_WIDTH);
 
 	TmFill(gBg0Tm, 0);
 	TmFill(gBg1Tm, 0);
 	TmFill(gBg2Tm, 0);
 
-	slide_up(step, MSS_SLIDE_NONE);
-	slide_left(step, MSS_SLIDE_OUT);
-	slide_right(step, MSS_SLIDE_OUT);
+	slide_up(u, MSS_SLIDE_OUT);
+	slide_left(l, MSS_SLIDE_OUT);
+	slide_right(r, MSS_SLIDE_OUT);
 
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
 
-	proc->slide_step++;
-	if (proc->slide_step > max_step)
+	if (u >= MSS_U_HIGHT
+	 && l >= MSS_L_WIDTH / 2
+	 && r >= MSS_R_WIDTH)
 		Proc_Break(proc);
 }
 
@@ -472,7 +532,7 @@ PROC_LABEL(PL_MSS_START),
 PROC_LABEL(PL_MSS_SLIDE_UNIT_IN),
 	PROC_YIELD,
 	PROC_CALL(Mss_PreparePage),
-	PROC_CALL(mss_init_slide),
+	PROC_CALL(mss_init_slide_unit_in),
 	PROC_REPEAT(mss_loop_unit_slidein),
 	PROC_GOTO(PL_MSS_IDLE),
 
@@ -480,11 +540,11 @@ PROC_LABEL(PL_MSS_IDLE),
 	PROC_REPEAT(mss_main),
 
 PROC_LABEL(PL_MSS_SLIDE_PAGE),
-	PROC_CALL(mss_init_slide),
+	PROC_CALL(mss_init_slide_page_out),
 	PROC_REPEAT(mss_loop_page_slideout),
 	PROC_YIELD,
 	PROC_CALL(Mss_PreparePage),
-	PROC_CALL(mss_init_slide),
+	PROC_CALL(mss_init_slide_page_in),
 	PROC_REPEAT(mss_loop_page_slidein),
 	PROC_GOTO(PL_MSS_IDLE),
 
@@ -492,7 +552,7 @@ PROC_LABEL(PL_MSS_SLIDE_PAGEUNIT),
 	PROC_CALL(mss_unit_change_prepare),
 
 	/* common end process */
-	PROC_CALL(mss_init_slide),
+	PROC_CALL(mss_init_slide_unit_out),
 	PROC_REPEAT(mss_loop_unit_slideout),
 	PROC_CALL(mss_end),
 	PROC_YIELD,
@@ -505,7 +565,7 @@ PROC_LABEL(PL_MSS_SLIDE_PAGEUNIT),
 	PROC_GOTO(PL_MSS_START),
 
 PROC_LABEL(PL_MSS_END),
-	PROC_CALL(mss_init_slide),
+	PROC_CALL(mss_init_slide_unit_out),
 	PROC_REPEAT(mss_loop_unit_slideout),
 	PROC_CALL(mss_end),
 	PROC_YIELD,

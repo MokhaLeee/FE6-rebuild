@@ -283,12 +283,21 @@ struct ProcMssSprite {
 	i16 anim_speed_right;
 };
 
+struct MssSlideState {
+	i16 step;   // current slide step in tiles
+	i16 delay;  // frames to wait before sliding (stagger)
+	i16 speed;  // tiles per frame
+};
+
 struct ProcMss {
 	PROC_HEADER;
 	struct ProcMssSprite *proc_sprite;
 	struct Unit *unit_to_change;
 
-	int slide_step;
+	struct MssSlideState slide_u;
+	struct MssSlideState slide_l;
+	struct MssSlideState slide_r;
+
 	i8 page, page_count;
 	u16 excluded_unit_flags;
 	int timer;
