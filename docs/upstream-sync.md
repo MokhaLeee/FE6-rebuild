@@ -5,7 +5,7 @@
 - 上游基线：`977cbd5`（2026-10-31，#133 合并）
 - 本仓库在上游的最后一次整体快照：`6546afd`（#114，2026-10-30）
 - 当前跟进目标：`7927a77`（45 commits / 17 PR），分批计划见 `upstream-sync-plan-7927a77.md`；
-  已完成批 1（#144/#147/#151）、批 2（#134/#135）、批 3（#136–#138）、批 4（#141/#142）与批 6（#148–#150 + LUT 强类型）
+  已完成批 1（#144/#147/#151）、批 2（#134/#135）、批 3（#136–#138）、批 4（#141/#142）、批 6（#148–#150 + LUT 强类型）与 #140（titlescreen 命名）
 
 ## 已同步
 
@@ -37,6 +37,7 @@
 | #138 | helpbox_2 拆成 `helpbox_display.c` / `helpbox_alt.c` / `helpdialogue.c` | `46027ae` |
 | #141 | `prepscreenfx*.c` 合入 `prep_subitemscreen_disp.c`，PrepItem/PrepTrade/PrepSupply 等命名 | `2b0dc2d` |
 | #142 | prepscreen_disp 命名（`ProcPrepUpperDisp` 字段、`Sprite_Prep*`、`String_PrepItem_*`） | `2b0dc2d` |
+| #140 | titlescreen 命名（`ProcTitleDisp`、`Title*_Init/Loop`、`gTitle*`、`SpriteAnim_Title` 等） | `81a836b` |
 | 工具 | `tools/emu` 接入 mGBA GDB stub（`--gdb`/`--gdb-at`）+ banim 断点用例 | `3dfb493` |
 | 工具 | debug 章节开场接 `EvtNextChapter(CHAPTER_2)`，测试可进第二章准备画面 | `3814b4f` |
 | 工具 | `gbarun` 状态驱动输入（`--sym`/`--press-when`/`--gdb-when`/`--probe`、AND 条件） | `a4146ba` `3e4388b` |
