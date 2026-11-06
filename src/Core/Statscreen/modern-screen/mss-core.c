@@ -265,12 +265,36 @@ static void mss_put_title_sprite(const char *str, int x, int y, int oam2)
 	}
 }
 
+static const u8 s_mss_title_wave[64] = {
+	128, 140, 152, 165, 176, 188, 198, 208, 218, 226, 234, 240, 245, 250, 253, 254,
+	255, 254, 253, 250, 245, 240, 234, 226, 218, 208, 198, 188, 176, 165, 152, 140,
+	128, 115, 103, 90, 79, 67, 57, 47, 37, 29, 21, 15, 10, 5, 2, 1,
+	0, 1, 2, 5, 10, 15, 21, 29, 37, 47, 57, 67, 79, 90, 103, 115,
+};
+
+static void mss_update_title_palette(void)
+{
+	u16 *pal = gPal + (0x10 + OBPAL_MSS_TITLES) * 0x10 + 2;
+	int phase = (GetGameTime() / 4) & 63;
+	int i;
+
+	for (i = 0; i < 11; i++) {
+		int wave = s_mss_title_wave[(phase + i * 4) & 63];
+		int r = 21 + (((31 - 21) * wave) >> 8);
+		int g = 13 + (((30 - 13) * wave) >> 8);
+		int b = 4 + (((15 - 4) * wave) >> 8);
+
+		pal[i] = RGB(r, g, b);
+	}
+
+	EnablePalSync();
+}
+
 static void mss_sprites_loop(struct ProcMssSprite *proc)
 {
 	struct ProcMss *mss = proc->proc_parent;
 	int base_oam2 = OAM2_CHR(OBCHR_MSS_SPRITES) + OAM2_PAL(OBPAL_MSS_SPRITES) + OAM2_LAYER(0);
 	int page_dx = mss_page_slide_offset(mss);
-	int color_num;
 
 	proc->clock_left += proc->anim_speed_left;
 	proc->clock_right += proc->anim_speed_right;
@@ -306,15 +330,7 @@ static void mss_sprites_loop(struct ProcMssSprite *proc)
 		mss_put_title_sprite(s_left_titles[mss->page], lx, 44, title_oam2);
 		mss_put_title_sprite(s_right_titles[mss->page], rx, 4, title_oam2);
 
-		/* Same scrolling 11-colour palette window as the vanilla page name. */
-		color_num = (GetGameTime() / 4) & 0x3F;
-
-		CpuCopy16(
-			gpPal_StatscreenPageNameFlashing + color_num,
-			gPal + (0x10 + OBPAL_MSS_TITLES) * 0x10 + 2,
-			sizeof(u16) * 11);
-
-		EnablePalSync();
+		mss_update_title_palette();
 	}
 }
 

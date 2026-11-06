@@ -128,20 +128,19 @@ PutSprite(1, x + i * 8, y + 8, Sprite_8x8, oam2 + idx * 2 + 1);
 
 标题使用专用 OBJ pal bank `OBPAL_MSS_TITLES = 3`。字符图主体使用索引 `2..12`，每个字符按 y 映射成完整的 11 级纵向渐变。
 
-`mss_sprites_loop` 直接复用 vanilla page name 的循环调色板窗口：
+`mss_update_title_palette` 用 64 项正弦波驱动 11 个颜色：
 
 ```c
-int color_num = (GetGameTime() / 4) & 0x3F;
+int phase = (GetGameTime() / 4) & 63;
+int wave = s_mss_title_wave[(phase + i * 4) & 63];
 
-CpuCopy16(
-    gpPal_StatscreenPageNameFlashing + color_num,
-    gPal + (0x10 + OBPAL_MSS_TITLES) * 0x10 + 2,
-    sizeof(u16) * 11);
-
-EnablePalSync();
+pal[i] = RGB(
+    21 + (((31 - 21) * wave) >> 8),
+    13 + (((30 - 13) * wave) >> 8),
+    4  + (((15 - 4)  * wave) >> 8));
 ```
 
-`gpPal_StatscreenPageNameFlashing` 是 vanilla statscreen 使用的长渐变表；窗口每 4 帧前移一格，颜色会沿着字符内部纵向流动，形成类似原版标题的金属反光。
+颜色在暖金和亮金之间连续循环，不会经过纯白；正弦波本身首尾闭合，所以循环点没有跳变或停顿。
 
 ---
 
@@ -302,7 +301,8 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 | `b941960` | ease-out + 页码跟随 Right 面板 + 延迟切页 |
 | `d76140c` | 标题图片 + OBJ_VRAM0 + 8x8 sprite 字符 |
 | `c90bd8c` | Page 2 左面板填充支援候选（已建立优先，未建立显示 `-`） |
-| （当前工作区） | 标题改为 vanilla 式 11 色循环渐变 |
+| `82f3dc3` | 标题改用 vanilla page-name 的 11 色循环窗口 |
+| `e3c2e02` | 标题改为正弦波驱动的暖金色循环渐变，去除白闪和循环停顿 |
 
 具体：
 
@@ -313,7 +313,7 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 - 标题图 `ModernStatScreen_Titles.png`（8x16 字符集，11 级渐变主体 + 深棕描边）。
 - `Img_MssTitles` / `Pal_MssTitles`，加载到 `OBCHR_MSS_TITLES` / `OBPAL_MSS_TITLES`。
 - 每字符两个 8x8 sprite，跟随左右面板滑动（`step * 16` 修正）。
-- 标题使用专用 pal bank，复用 `gpPal_StatscreenPageNameFlashing` 的 11 色窗口，每 4 帧前移一格。
+- 标题使用专用 pal bank，由 64 项正弦波驱动暖金→亮金的 11 色循环渐变（`mss_update_title_palette`）。
 - 面板内容恢复原坐标（不再为标题让位）；标题在 Left (8,44) / Right (168,4)。
 - 文本槽位改为按页重建：`Mss_InitPageText()` 在 `Mss_PreparePage()` 开头 `ResetTextFont()` 后初始化上栏 + 当前页的 text，三页不再同时占 VRAM。
 
@@ -353,7 +353,7 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 
 - 标题字体是 Consolas Bold 13 二值化生成，不是 FE 美术字。
 - 标题会压 `Skills:` / `Str` 顶部约 4px（用户确认可接受）。
-- 没有做 vanilla 那种 Y 轴压扁/展开；当前是跟随面板水平滑入 + vanilla 式调色板渐变。
+- 没有做 vanilla 那种 Y 轴压扁/展开；当前是跟随面板水平滑入 + 暖金色循环渐变。
 - 没有帮助框；R 在 statscreen 内没有绑定。
 - 快速连按翻页时，标题/页码的视觉同步还没有专门测过。
 
