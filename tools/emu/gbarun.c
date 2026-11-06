@@ -102,11 +102,16 @@ static bool symFind(const char* name, uint32_t* out) {
 
 enum { COND_OP_EQ = 0, COND_OP_MASK, COND_OP_NE, COND_OP_GT, COND_OP_LT };
 
-struct state_cond {
+struct state_sub {
 	uint32_t addr;
 	int width;
 	int op;
 	uint32_t value;
+};
+
+struct state_cond {
+	int nsub;
+	struct state_sub sub[2];
 	uint32_t keys;       /* 触发后按住的键（press-when） */
 	unsigned duration;   /* 触发后按住的帧数 */
 	unsigned interval;   /* 条件持续满足时的重复间隔，0 = 只按一次 */
@@ -120,6 +125,11 @@ static struct state_cond g_conds[64];
 static size_t g_nConds;
 
 /* 参数解析时符号表还没加载，条件先存原始字符串，--sym 加载完再解析 */
+static struct state_cond g_probes[16];
+static size_t g_nProbes;
+static char g_probeSpecs[16][256];
+static size_t g_nProbeSpecs;
+
 static char g_condSpecs[64][256];
 static uint32_t g_condKeys[64];
 static unsigned g_condDur[64];
@@ -149,8 +159,8 @@ static bool parseSymAddr(const char* spec, uint32_t* out) {
 	return true;
 }
 
-static bool parseCond(const char* spec, struct state_cond* c) {
-	char buf[320];
+static bool parseSub(const char* spec, struct state_sub* c) {
+	char buf[200];
 	snprintf(buf, sizeof(buf), "%s", spec);
 	char* elem[4] = {0};
 	int n = 0;
@@ -169,7 +179,6 @@ static bool parseCond(const char* spec, struct state_cond* c) {
 		fprintf(stderr, "gbarun: bad condition '%s' (want addr:width:opvalue)\n", spec);
 		return false;
 	}
-	memset(c, 0, sizeof(*c));
 	if (!parseSymAddr(elem[0], &c->addr))
 		return false;
 	c->width = atoi(elem[1]);
@@ -188,23 +197,54 @@ static bool parseCond(const char* spec, struct state_cond* c) {
 	return true;
 }
 
-static uint32_t condRead(struct mCore* core, const struct state_cond* c) {
-	switch (c->width) {
-	case 8: return core->busRead8(core, c->addr);
-	case 16: return core->busRead16(core, c->addr);
-	default: return core->busRead32(core, c->addr);
+/* 条件可以用逗号连接多项，全部满足才算成立（AND） */
+static bool parseCond(const char* spec, struct state_cond* c) {
+	char buf[320];
+	snprintf(buf, sizeof(buf), "%s", spec);
+	memset(c, 0, sizeof(*c));
+	char* p = buf;
+	for (;;) {
+		char* comma = strchr(p, ',');
+		if (comma)
+			*comma = '\0';
+		if (c->nsub >= 2) {
+			fprintf(stderr, "gbarun: too many conditions in '%s'\n", spec);
+			return false;
+		}
+		if (!parseSub(p, &c->sub[c->nsub++]))
+			return false;
+		if (!comma)
+			break;
+		p = comma + 1;
+	}
+	return true;
+}
+
+static uint32_t subRead(struct mCore* core, const struct state_sub* s) {
+	switch (s->width) {
+	case 8: return core->busRead8(core, s->addr);
+	case 16: return core->busRead16(core, s->addr);
+	default: return core->busRead32(core, s->addr);
+	}
+}
+
+static bool subMet(struct mCore* core, const struct state_sub* s) {
+	uint32_t v = subRead(core, s);
+	switch (s->op) {
+	case COND_OP_MASK: return (v & s->value) != 0;
+	case COND_OP_NE: return v != s->value;
+	case COND_OP_GT: return v > s->value;
+	case COND_OP_LT: return v < s->value;
+	default: return v == s->value;
 	}
 }
 
 static bool condMet(struct mCore* core, const struct state_cond* c) {
-	uint32_t v = condRead(core, c);
-	switch (c->op) {
-	case COND_OP_MASK: return (v & c->value) != 0;
-	case COND_OP_NE: return v != c->value;
-	case COND_OP_GT: return v > c->value;
-	case COND_OP_LT: return v < c->value;
-	default: return v == c->value;
+	for (int i = 0; i < c->nsub; ++i) {
+		if (!subMet(core, &c->sub[i]))
+			return false;
 	}
+	return c->nsub > 0;
 }
 
 
@@ -471,6 +511,9 @@ int main(int argc, char** argv) {
 			g_condInterval[g_nCondSpecs] = s3 ? (unsigned) strtoul(s3 + 1, NULL, 10) : 0;
 			g_condIsGdb[g_nCondSpecs] = false;
 			g_nCondSpecs++;
+		} else if (!strcmp(argv[i], "--probe") && i + 1 < argc) {
+			snprintf(g_probeSpecs[g_nProbeSpecs], sizeof(g_probeSpecs[0]), "%s", argv[++i]);
+			g_nProbeSpecs++;
 		} else if (!strcmp(argv[i], "--sym") && i + 1 < argc) {
 			symFile = argv[++i];
 		} else {
@@ -522,6 +565,21 @@ int main(int argc, char** argv) {
 
 	if (symFile && !loadSymFile(symFile)) {
 		return 1;
+	}
+	for (size_t i = 0; i < g_nProbeSpecs; ++i) {
+		struct state_cond* c = &g_probes[g_nProbes++];
+		c->nsub = 1;
+		char buf[256];
+		snprintf(buf, sizeof(buf), "%s", g_probeSpecs[i]);
+		char* colon = strchr(buf, ':');
+		if (!colon) {
+			fprintf(stderr, "gbarun: bad --probe spec '%s'\n", g_probeSpecs[i]);
+			return 2;
+		}
+		*colon = '\0';
+		if (!parseSymAddr(buf, &c->sub[0].addr)) return 2;
+		c->sub[0].width = atoi(colon + 1);
+		if (c->sub[0].width != 8 && c->sub[0].width != 16) c->sub[0].width = 32;
 	}
 	for (size_t i = 0; i < g_nCondSpecs; ++i) {
 		struct state_cond* c = &g_conds[g_nConds++];
@@ -594,7 +652,8 @@ int main(int argc, char** argv) {
 				c->fired = 1;
 				c->press_until = frame + c->duration;
 				c->next_press = frame + c->duration + c->interval;
-				printf("STATE frame=%u kind=%s\n", frame, c->is_gdb ? "gdb" : "press");
+				printf("STATE frame=%u kind=%s addr=%08x\n", frame,
+				       c->is_gdb ? "gdb" : "press", c->sub[0].addr);
 				fflush(stdout);
 			}
 			if (frame < c->press_until) {
@@ -634,6 +693,12 @@ int main(int argc, char** argv) {
 				fflush(stdout);
 			} else if (ev->type == EV_STATS) {
 				printStats(videoBuffer, width, height, shown);
+				for (size_t pi = 0; pi < g_nProbes; ++pi) {
+					printf("PROBE frame=%u addr=%08x width=%d value=%u\n", shown,
+					       g_probes[pi].sub[0].addr, g_probes[pi].sub[0].width,
+					       subRead(core, &g_probes[pi].sub[0]));
+				}
+				fflush(stdout);
 			}
 		}
 		if (hashEvery && shown % hashEvery == 0) {

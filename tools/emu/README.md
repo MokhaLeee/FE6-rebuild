@@ -61,7 +61,25 @@ gbarun 可以通过 `core->busRead*` 读 GBA 内存，在"状态满足"时再按
 | op | `=` 相等、`&` 与后非零、`!` 不等、`>`、`<` |
 
 `--press-when` 的完整格式是 `条件;按键;按住帧数[;重复间隔]`，重复间隔省略时只触发一次。
-命中时会打印 `STATE frame=N kind=press|gdb`，方便定位首次满足的帧号。
+多个条件用逗号连接表示 AND：
+
+```bash
+--press-when "gPlaySt+0xE:8:=2,gBmSt+0x4:8:=0;B;4;40"   # 第二章 && 还没进准备阶段
+```
+
+`--probe "SYM:width"` 会在每个 `--stats` 帧打印该地址的值，用来先摸清各阶段的状态：
+
+```bash
+--probe "gPlaySt+0xE:8" --probe "gBmSt+0x4:8"
+# PROBE frame=9500 addr=0202752a width=8 value=2
+```
+
+命中时会打印 `STATE frame=N kind=press|gdb addr=...`，同时能看出是哪条条件触发。
+
+**还做不到全状态化的地方**：开机 → 章节这一段。标题画面和主菜单都是
+`chapter == 0`、地图锁为 0，内存里没有能区分两者的判据；而且从第 0 帧就开始按 A
+会把 ROM 卡死，所以用例 7 的 A/B 两个窗口仍然用帧号，只有章节切换后的
+B（存档提示）和 START（准备菜单）是状态驱动。
 
 ## GDB 调试
 
