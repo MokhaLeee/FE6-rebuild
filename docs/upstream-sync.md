@@ -65,6 +65,7 @@
 - **缺失模块（20）**：`sio`、`sio_core`、`sio_bm`、`soundroom`、`opinfo`、`opinfo_classdemo`、`xmap`、`secretscreen`、`save_multiarena`、`banim_ekrsetup`、`ramfunc`、`armfunc.arm`，以及 `data/gamedata/{iinfo,jinfo,pinfo}.h`、`helpboxinfo_data.h`、`systemlabels_data.h`。这些要么在 `gamedata/`、`gameinfo/` 里有替代实现，要么被有意裁剪。
 - **`opanim`**：本仓库只有 113 行的精简版，上游 2034 行（完整开场动画），属于有意裁剪，不是欠账。
 - **GDB 断点在 vanilla（agbcc）函数上不生效**：mGBA stub 接受 `break/hbreak *addr`（如 `0x08022A4C`）但从不报告命中，`BattleAIS_ExecCommands`（src/ 的 Thumb）却能命中；prep/helpbox 的覆盖因此依赖截图断言。
+- **PC 采样断点也试过，不可靠**：在 gbarun 里用 `core->step` + 读 `gprs[15]` 做 `--bp/--bp-at`，ARM 的 `_start` 能命中，但 Thumb 的 `AgbMain`/`PrepUpperDisp_Loop`/`PrepMenu_Init` 全部漏采样（2 帧窗口只走了 6581 步，而一帧约 7 万指令，`frameCounter` 与 step 节奏对不上），已回退。函数级覆盖若要做，只能在 `.build/mgba-0.10.5` 的 `ARMRun` 里加 PC hook 并重编，不进仓库。
 - **57 个大差异文件**：以本仓库的本地功能改动为主（`sio.c`、`savemenu*.c`、`statscreen.c`、`battle.c`、`unit.c` 等），不是上游遗留。
 
 ## 下次同步流程
