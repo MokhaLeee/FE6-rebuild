@@ -15,7 +15,7 @@ src/Core/Statscreen/modern-screen/
 └── README.md       本文件
 
 contents/statscreen/Modern/
-├── ModernStatScreen_UI.png       面板边框/填充 tile 图集（256x32；tile 63 为装备行深红条）
+├── ModernStatScreen_UI.png       面板边框/填充 tile 图集（256x32；tile 13–20 为头像相框，tile 63 为装备行深红条）
 ├── ModernStatScreen_UI2.png      statbar 图集
 ├── ModernStatScreen_Spirtes.png  页码/箭头/小图标（256x32）
 ├── ModernStatScreen_Titles.png   整词艺术字（16x384，SKILLS/ITEMS/SUPPORT/STATS/COMBAT/WEAPON）
@@ -24,7 +24,7 @@ contents/statscreen/Modern/
 ├── Tsa_Mss_Left.c                Left 面板 TSA（20x14）
 ├── Tsa_Mss_Right.c               Right 面板 TSA（10x19）
 ├── Tsa_Mss_Dual.c                DUAL 页左面板 TSA（20x20）
-└── Tsa_Mss_FaceFrame.c           头像相框 TSA（12x11，4px 渐变边框）
+└── Tsa_Mss_FaceFrame.c           头像相框 TSA（12x11，框体 6px 金色带）
 ```
 
 `Tsa_Mss_*.c` 是数据源，`make` 会把它们编成 `.dmp` 再压成 `.dmp.lz`，由 `mssfx.S`
@@ -65,10 +65,29 @@ contents/statscreen/Modern/
 
 > `TmApplyTsa()` 是**从最后一行往上画**的（见 `armfunc-asm.iwram.S`），所以 TSA 数组必须
 > 倒序存放——第 0 行对应画面最底部。写正序数组会让整个框上下颠倒、四个角错位。
->
-> 边框 4px 渐变的配色取自面板边框：`6 → 7 → 15 → 8`（深蓝紫 → 亮蓝紫 → 米白高光 →
-> 深棕）。底边和两个底角是 `8 → 15 → 7 → 6`（深棕贴着脸）。左右线画在格子的内侧半格，
-> 底线的 4px 落在格子的上半，这样四条边都能贴住立绘，不留背景缝。
+
+相框是 6px 金色带，把立绘紧紧框住；6px 带贴着立绘向内数，所以 tile 环最外侧的 2px 是透明的：
+
+```
+外 ── 0px 透明 ── 1px 暗金细线(10) ── 6px 金带 ── 立绘
+```
+
+金带从外到内的配色（UI 调色板的金色段）：
+
+| 位置 | 索引 | 颜色 |
+|---|---|---|
+| 外描边 | `8` | `#625A39` 深橄榄 |
+| 亮边 | `13` | `#FFFFB4` 亮黄 |
+| 高光 | `15` | `#FFFFCD` 米白 |
+| 金 | `12` | `#E6DEA4` |
+| 暗金 | `10` | `#B4B47B` |
+| 内描边 | `8` | 深橄榄，贴着脸 |
+
+四角各嵌一颗 5x5 菱形角花（`8` 描边、`13` 面、`15` 芯），是这一圈里唯一的"花纹"。
+四条边本身是纯渐变，花纹靠 8px 一格重复的 tile 无法做逐段变化，所以只在角 tile 上画。
+
+> 金色和面板边框的蓝紫 `6/7/15/8` 是同一套 UI 调色板，但相框整体换成金色系，
+> 让它从蓝色面板里跳出来，和标题的金色渐变呼应。
 
 ### 2.3 TM buffer
 
@@ -428,14 +447,18 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 | `9187f10` | 标题改为整词艺术字，并保留 `CONFIG_MSS_TITLE_WHOLE_WORD` 逐字母回退 |
 | `86fd8c9` | Page 1 物品槽、装备条、Rank/Wgt/Rng 摘要与 COMBAT `AS` |
 | `06a4e21` | 双面板 page 0、四页重排、每布局独立 slide proc |
-| （本次） | page 0 换成 80x72 立绘 + 12x11 相框 + 角色描述 |
+| `def581b` | page 0 换成 80x72 立绘 + 12x11 相框 + 角色描述 |
+| （本次） | 相框改成 6px 金色装饰框：外圈暗金细线 + 四角菱形角花 |
 
 具体：
 
+- （本次）相框从面板边框的蓝紫 4px 渐变改成**金色 6px 带**：外描边 `8`、亮黄 `13`、
+  高光 `15`、金 `12`、暗金 `10`、贴脸内描边 `8`；框外再留 1px 暗金细线（`10`）。
+  四角各一颗 5x5 菱形角花（`8/13/15`）。
+- （本次）相框带宽 6px，仍然只用 `Tsa_Mss_FaceFrame` 的 8 个 tile（13–20），TSA 不用改：
+  边长 12 格，每个边 tile 都是 8px 周期的重复图案，角 tile 只有 6x6 有内容。
 - page 0 的左面板改为一张 80x72 立绘（`PutFace80x72()`，与 vanilla statscreen 同源），
   外面套 12x11 相框，框下排三行角色描述；名字/职业/等级/HP/Con/Aid/技能列表暂时清空。
-- 相框的 tile 画在 `ModernStatScreen_UI.png` 的空闲位（13–20），配色沿用面板边框的
-  4px 渐变 `6/7/15/8`；底边和底角用 `8/15/7/6`，深棕贴着脸。
 - 新增 `contents/statscreen/Modern/Tsa_Mss_FaceFrame.c`（12x11，倒序存放）。
 - 立绘占 `BGCHR_MSS_FACE_BIG`（`0x4C00`，90 tile）。
 - 新增双面板布局 page 0（左 20x20 全高 + 右 10x20），原 PERSONAL / ITEMS / WEXP 后移为
@@ -508,7 +531,9 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 - 没有帮助框；R 在 statscreen 内没有绑定。
 - 快速连按翻页时，标题/页码的视觉同步还没有专门测过。
 - 双面板页（page 0）没有左侧标题，左右两侧的视觉重量略不对称。
-- 相框四角是直角色带，不是圆角；4px 线宽下做不出真正的圆角（要占满整个 8x8 tile）。
+- 相框外框是直角，不是圆角；6px 金带的角上放了菱形角花遮掩直角。边上的花纹只能做
+  8px 周期重复（TSA 每条边共用同一个 tile），想做"每条边中间再放一颗装饰"得给那几格
+  单独加 tile 编号。
 
 ---
 

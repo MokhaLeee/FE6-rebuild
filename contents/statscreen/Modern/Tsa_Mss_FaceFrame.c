@@ -1,8 +1,10 @@
 #include "prelude.h"
 
 /*
- * Portrait frame, 12x11, 4px gradient border matching the panel frame
- * (outer -> mid -> highlight -> dark inner). Stored bottom-up because
+ * Portrait frame, 12x11, 6px gold band hugging the portrait, plus a
+ * diamond stud in each corner. Band, outer -> inner: dark outline,
+ * bright yellow, cream highlight, gold, dark gold, dark inner outline.
+ * A 1px dark gold line sits outside the band. Stored bottom-up because
  * TmApplyTsa walks the tilemap from its last row towards the first.
  */
 const u16 Tsa_Mss_FaceFrame[] = {
