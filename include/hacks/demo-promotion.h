@@ -22,6 +22,8 @@ enum videoalloc_promo_ui {
 	OBPAL_UIPROMO_EKRMAGI = 15,
 };
 
+#define PROMO_CHOICE_MAX 6
+
 enum promotion_type {
 	PROMO_TYPE_BM,
 	PROMO_TYPE_PREP,
@@ -61,7 +63,12 @@ struct ProcPromoEkrFx {
 
 struct ProcPromoSel {
 	PROC_HEADER_EXT(struct ProcPromoMain);
+	u8 choice_count;
+	u8 choice_idx;
+	u8 choices[PROMO_CHOICE_MAX];
 };
+
+int GetPromoChoices(struct Unit *unit, int item, u8 *out, int max);
 
 void StartBmDemoPromotion(struct Unit *unit, int item_slot);
 void StartUnitPromotionAction(struct Unit *unit, int promo_jid, int weapon_handle);

@@ -8,10 +8,18 @@
 #include "ui.h"
 #include "mu.h"
 #include "hardware.h"
+#include "oam.h"
 #include "chapter.h"
 #include "banim.h"
+#include "banim_data.h"
 #include "statscreen.h"
 #include "sound.h"
+#include "unitsprite.h"
+#include "arena.h"
+#include "text.h"
+#include "msg.h"
+
+#include "constants/iids.h"
 #include "constants/songs.h"
 
 #include "demo-promotion.h"
@@ -33,18 +41,218 @@ EWRAM_OVERLAY_PROMOTION static u8 PromoEkrMagi_ObImgBuf[0x1000] = {};
 EWRAM_OVERLAY_PROMOTION static struct EkrTerrainfxDesc PromoEkrTerrainDesc = {};
 EWRAM_OVERLAY_PROMOTION static u8 PromoEkrTerrain_ImgBuf[0x2000] = {};
 
+/**
+ * promo-sel layout
+ */
+enum {
+	PROMO_LIST_X = 1,
+	PROMO_LIST_Y = 2,
+	PROMO_LIST_W = 8,
+	PROMO_LIST_VISIBLE = 3,
+
+	PROMO_TITLE_X = 10,
+	PROMO_TITLE_Y = 0,
+	PROMO_TITLE_W = 13,
+
+	PROMO_DESC_X = 1,
+	PROMO_DESC_Y = 14,
+	PROMO_DESC_W = 22,
+	PROMO_DESC_H = 6,
+
+	PROMO_STATS_X = 23,
+	PROMO_STATS_Y = 2,
+	PROMO_STATS_W = 7,
+	PROMO_STATS_H = 18,
+
+	PROMO_MINI_X = 152,
+	PROMO_MINI_Y = 80,
+	PROMO_TERRAIN_Y = 96,
+};
+
+/**
+ * helpers
+ */
+static struct ProcPromoHandler *Promo_GetHandler(struct ProcPromoSel *proc)
+{
+	return proc->proc_parent->proc_parent;
+}
+
+static int Promo_GetJid(struct ProcPromoSel *proc)
+{
+	return proc->choices[proc->choice_idx];
+}
+
+static int Promo_GetRowStep(struct ProcPromoSel *proc)
+{
+	/* Two entries or fewer get taller rows so the 16/32px map sprites fit. */
+	return (proc->choice_count <= 2) ? 4 : 3;
+}
+
+static int Promo_GetFirstVisible(struct ProcPromoSel *proc)
+{
+	if (proc->choice_count <= PROMO_LIST_VISIBLE)
+		return 0;
+
+	if (proc->choice_idx < PROMO_LIST_VISIBLE)
+		return 0;
+
+	return proc->choice_idx - PROMO_LIST_VISIBLE + 1;
+}
+
+static int Promo_GetVisibleCount(struct ProcPromoSel *proc)
+{
+	return (proc->choice_count < PROMO_LIST_VISIBLE)
+		? proc->choice_count
+		: PROMO_LIST_VISIBLE;
+}
+
+static int Promo_GetRepresentativeWeapon(int kind)
+{
+	switch (kind) {
+	case ITEM_KIND_SWORD:
+		return IID_IRONSWORD;
+
+	case ITEM_KIND_LANCE:
+		return IID_IRONLANCE;
+
+	case ITEM_KIND_AXE:
+		return IID_IRONAXE;
+
+	case ITEM_KIND_BOW:
+		return IID_IRONBOW;
+
+	case ITEM_KIND_ANIMA:
+		return IID_FIRE;
+
+	case ITEM_KIND_LIGHT:
+		return IID_LIGHTNING;
+
+	case ITEM_KIND_ELDER:
+		return IID_FLUX;
+
+	case ITEM_KIND_STAFF:
+	default:
+		return IID_HEALSTAFF;
+	}
+}
+
+static int Promo_GetPreviewBid(struct Unit *unit, int jid)
+{
+	struct Unit tmp;
+	struct JInfo const *jinfo = GetJInfo(jid);
+	int kind, item, bid;
+
+	if (jinfo == NULL)
+		return -1;
+
+	tmp = *unit;
+	tmp.jinfo = jinfo;
+
+	kind = ArenaGetJobWeaponKind(jinfo);
+	if (kind < 0)
+		kind = ITEM_KIND_STAFF;
+
+	item = Promo_GetRepresentativeWeapon(kind);
+	bid = GetBattleAnimationId(&tmp, jinfo->banim_info, item);
+
+	if (bid < 0 && jinfo->banim_info != NULL && jinfo->banim_info[0].wtype != 0)
+		bid = jinfo->banim_info[0].index - 1;
+
+	return bid;
+}
+
+static int Promo_DrawWrappedLine(const char *str, int len, u16 *tm, int x, int y,
+                                 int width_tiles, int color, int max_lines)
+{
+	char buf[128];
+	int line = 0;
+	int pos = 0;
+
+	while (pos < len && line < max_lines) {
+		int end = pos;
+		int last_space = -1;
+		int width = 0;
+
+		while (end < len) {
+			i32 w;
+			const char *next = GetCharTextLen(str + end, &w);
+			int step = next - (str + end);
+
+			if (step <= 0)
+				break;
+
+			if (width + w > width_tiles * 8)
+				break;
+
+			if (str[end] == ' ')
+				last_space = end;
+
+			width += w;
+			end += step;
+		}
+
+		if (end == pos)
+			end = pos + 1;
+
+		if (end < len && last_space > pos)
+			end = last_space;
+
+		if (end - pos >= (int)sizeof(buf))
+			end = pos + sizeof(buf) - 1;
+
+		memcpy(buf, str + pos, end - pos);
+		buf[end - pos] = '\0';
+
+		PutDrawText(NULL, tm + TM_OFFSET(x, y + line * 2),
+			color, 0, width_tiles, buf);
+
+		pos = end;
+		while (pos < len && str[pos] == ' ')
+			pos++;
+
+		line++;
+	}
+
+	return line;
+}
+
+static void Promo_DrawWrappedText(const char *str, u16 *tm, int x, int y,
+                                  int width_tiles, int max_lines, int color)
+{
+	int line = 0;
+
+	if (str == NULL)
+		return;
+
+	while (*str != '\0' && line < max_lines) {
+		const char *end = GetStringLineEnd(str);
+		int len = end - str;
+
+		line += Promo_DrawWrappedLine(str, len, tm, x, y + line * 2,
+			width_tiles, color, max_lines - line);
+
+		if (*end == '\0')
+			break;
+
+		str = end + 1;
+	}
+}
+
+/**
+ * ekrfx
+ */
 static void promofx_ekrmagi_callback(void)
 {
 	SetBlendConfig(1, 0x10, 0x10, 0);
 
-	SetBlendTargetA(0, 1, 0, 0, 0);
-	SetBlendTargetB(0, 0, 1, 1, 1);
+	SetBlendTargetA(0, 0, 1, 0, 0);
+	SetBlendTargetB(0, 0, 0, 1, 1);
 
 	SetWinEnable(1, 0, 0);
 	SetWin0Box(0, 0, 240, 160);
 
 	SetWin0Layers(1, 1, 1, 1, 1);
-	SetWOutLayers(1, 0, 1, 1, 1);
+	SetWOutLayers(1, 1, 0, 1, 1);
 
 	gDispIo.win_ct.win0_enable_blend = 1;
 	gDispIo.win_ct.wout_enable_blend = 0;
@@ -82,8 +290,8 @@ static void promofx_put_ekrmainmini(int bid, int char_pal, int x, int y, int rou
 	magi_desc->bgPalId = BGPAL_UIPROMO_EKRMAGI;
 	magi_desc->bgChr = BGCHR_UIPROMO_EKRMAGI;
 	magi_desc->bgPalId = BGPAL_UIPROMO_EKRMAGI;
-	magi_desc->bg = BG_1;
-	magi_desc->bgTmBuf = gBg1Tm;
+	magi_desc->bg = BG_2;
+	magi_desc->bgTmBuf = gBg2Tm;
 	magi_desc->bgImgBuf = PromoEkrMagi_BgImgBuf;
 	magi_desc->bgTsaBuf = PromoEkrMagi_BgTsaBuf;
 	magi_desc->objImgBuf = PromoEkrMagi_ObImgBuf;
@@ -114,11 +322,16 @@ static void promofx_put_ekrterrainfx(int terrain, int x, int y)
 
 static void PromoEkrFx_Init(struct ProcPromoEkrFx *proc)
 {
+	struct ProcPromoHandler *handler = proc->proc_parent->proc_parent;
+	struct Unit *unit = handler->unit;
+	int bid = Promo_GetPreviewBid(unit, unit->jinfo->id);
+
+	if (bid < 0)
+		bid = 0x10;
+
 	EndEfxAnimeDrvProc();
-	// EndEkrMainMini(&PromoEkrMiniDesc);
-	promofx_put_ekrmainmini(0x10, 0, 180, 88, ANIM_ROUND_TAKING_HIT_CLOSE);
-	// EndEkrTerrainfx(&PromoEkrTerrainDesc);
-	promofx_put_ekrterrainfx(1, 140, 104);
+	promofx_put_ekrmainmini(bid, 0, PROMO_MINI_X, PROMO_MINI_Y, ANIM_ROUND_TAKING_HIT_CLOSE);
+	promofx_put_ekrterrainfx(1, PROMO_MINI_X - 0x30, PROMO_TERRAIN_Y);
 }
 
 static void PromoEkrFx_Loop(struct ProcPromoEkrFx *proc)
@@ -143,12 +356,235 @@ static const struct ProcScr ProcScr_PromoEkrFx[] = {
 /**
  * promo-sel
  */
+static void Promo_DrawTitle(struct ProcPromoSel *proc)
+{
+	const char *str = DecodeMsg(GetJInfo(Promo_GetJid(proc))->msg_name);
+	int x = GetStringTextCenteredPos(PROMO_TITLE_W * 8, str);
+
+	/*
+	 * TODO: replace this 16px text with the FE8 class-name art font.
+	 * The reference font sheet is kept at contents/promotion/ClassNameLetters.png;
+	 * it uses the FE8 class-display glyph table (sSprite_ClassDisplay_*).
+	 */
+
+	if (x < 0)
+		x = 0;
+
+	PutDrawText(NULL,
+		gBg0Tm + TM_OFFSET(PROMO_TITLE_X, PROMO_TITLE_Y),
+		TEXT_COLOR_SYSTEM_GOLD, x, PROMO_TITLE_W, str);
+}
+
+static void Promo_DrawDesc(struct ProcPromoSel *proc)
+{
+	struct JInfo const *jinfo = GetJInfo(Promo_GetJid(proc));
+	const char *str;
+
+	if (jinfo->msg_desc == 0)
+		return;
+
+	str = DecodeMsg(jinfo->msg_desc);
+	if (str == NULL)
+		return;
+
+	Promo_DrawWrappedText(str, gBg0Tm,
+		PROMO_DESC_X + 1, PROMO_DESC_Y + 1,
+		PROMO_DESC_W - 2, 2, TEXT_COLOR_SYSTEM_WHITE);
+}
+
+static void Promo_DrawStats(struct ProcPromoSel *proc)
+{
+	static const char *const labels[8] = {
+		"HP", "Po", "Ma", "Sk", "Sp", "De", "Re", "Cn"
+	};
+
+	struct ProcPromoHandler *handler = Promo_GetHandler(proc);
+	struct Unit *unit = handler->unit;
+	struct Unit preview;
+	int deltas[8];
+	int i;
+
+	preview = *unit;
+	UnitPromote(&preview, Promo_GetJid(proc));
+
+	deltas[0] = preview.max_hp - unit->max_hp;
+	deltas[1] = preview.pow - unit->pow;
+	deltas[2] = preview.mag - unit->mag;
+	deltas[3] = preview.skl - unit->skl;
+	deltas[4] = preview.spd - unit->spd;
+	deltas[5] = preview.def - unit->def;
+	deltas[6] = preview.res - unit->res;
+	deltas[7] = UNIT_CON(&preview) - UNIT_CON(unit);
+
+	for (i = 0; i < 8; i++) {
+		int y = PROMO_STATS_Y + 1 + i * 2;
+
+		PutDrawText(NULL,
+			gBg0Tm + TM_OFFSET(PROMO_STATS_X + 1, y),
+			TEXT_COLOR_SYSTEM_GOLD, 0, 2, labels[i]);
+
+		if (deltas[i] == 0) {
+			PutDrawText(NULL,
+				gBg0Tm + TM_OFFSET(PROMO_STATS_X + 3, y),
+				TEXT_COLOR_SYSTEM_GRAY, 0, 2, "--");
+		} else {
+			PutNumberBonus(deltas[i],
+				gBg0Tm + TM_OFFSET(PROMO_STATS_X + 3, y));
+		}
+	}
+}
+
+static void Promo_DrawAll(struct ProcPromoSel *proc)
+{
+	int visible = Promo_GetVisibleCount(proc);
+
+	TmFill(gBg0Tm, 0);
+	TmFill(gBg1Tm, 0);
+
+	if (visible > 0) {
+		int step = Promo_GetRowStep(proc);
+		int list_h = 6 + (visible - 1) * step;
+
+		PutUiWindowFrame(PROMO_LIST_X, PROMO_LIST_Y - 1,
+			PROMO_LIST_W, list_h, UI_WINDOW_REGULAR);
+	}
+
+	PutUiWindowFrame(PROMO_DESC_X, PROMO_DESC_Y,
+		PROMO_DESC_W, PROMO_DESC_H, UI_WINDOW_REGULAR);
+	PutUiWindowFrame(PROMO_STATS_X, PROMO_STATS_Y,
+		PROMO_STATS_W, PROMO_STATS_H, UI_WINDOW_REGULAR);
+
+	ResetTextFont();
+
+	Promo_DrawTitle(proc);
+	Promo_DrawDesc(proc);
+	Promo_DrawStats(proc);
+
+	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT);
+}
+
+static void Promo_DrawIcons(struct ProcPromoSel *proc)
+{
+	struct ProcPromoHandler *handler = Promo_GetHandler(proc);
+	struct Unit *unit = handler->unit;
+	int first = Promo_GetFirstVisible(proc);
+	int step = Promo_GetRowStep(proc);
+	int i;
+
+	for (i = first; i < first + PROMO_LIST_VISIBLE && i < proc->choice_count; i++) {
+		struct Unit icon_unit = *unit;
+		int jid = proc->choices[i];
+		int row = i - first;
+		int row_top = (PROMO_LIST_Y + row * step) * 8;
+		int size = GetUnitSpriteInfo(GetJInfo(jid)->map_sprite).size;
+
+		icon_unit.jinfo = GetJInfo(jid);
+		icon_unit.flags &= ~UNIT_FLAG_TURN_ENDED;
+
+		if (size == UNITSPRITE_16x16) {
+			if (step == 4)
+				row_top += 8;
+		} else {
+			row_top += 16;
+		}
+
+		PutUnitSpriteExt(3, (PROMO_LIST_X + 2) * 8, row_top,
+			OAM2_LAYER(1), &icon_unit);
+	}
+
+	PutUiHand(24, (PROMO_LIST_Y + (proc->choice_idx - first) * step) * 8
+		+ (step == 4 ? 8 : 4));
+}
+
+static void Promo_UpdateMiniAnim(struct ProcPromoSel *proc)
+{
+	struct ProcPromoHandler *handler = Promo_GetHandler(proc);
+	int bid;
+
+	if (!PromoEkrMiniDesc.valid || PromoEkrMiniDesc.anim1 == NULL)
+		return;
+
+	bid = Promo_GetPreviewBid(handler->unit, Promo_GetJid(proc));
+	if (bid < 0)
+		return;
+
+	PromoEkrMiniDesc.img_sheet = NULL;
+	EkrMainMini_ChangeAnim(&PromoEkrMiniDesc, bid);
+}
+
 static void PromoSel_Init(struct ProcPromoSel *proc)
 {
+	struct ProcPromoHandler *handler = Promo_GetHandler(proc);
+	struct Unit *unit = handler->unit;
+	int item = unit->items[handler->item_slot];
+	int i;
+
+	proc->choice_count = GetPromoChoices(unit, item,
+		proc->choices, PROMO_CHOICE_MAX);
+	proc->choice_idx = 0;
+
+	if (proc->choice_count == 0) {
+		handler->action_type = PROMO_ACT_CANCEL;
+		Proc_Break(proc->proc_parent);
+		Proc_End(proc);
+		return;
+	}
+
+	ResetText();
+	ApplySystemObjectsGraphics();
+	ApplyUnitSpritePalettes();
+	ResetUnitSprites();
+
+	for (i = 0; i < proc->choice_count; i++)
+		UseUnitSprite(GetJInfo(proc->choices[i])->map_sprite);
+
+	Promo_DrawAll(proc);
+	Promo_UpdateMiniAnim(proc);
 }
 
 static void PromoSel_Loop(struct ProcPromoSel *proc)
-{}
+{
+	struct ProcPromoHandler *handler = Promo_GetHandler(proc);
+	int old_idx = proc->choice_idx;
+
+	if (gKeySt->pressed & KEY_DPAD_UP) {
+		if (proc->choice_idx == 0)
+			proc->choice_idx = proc->choice_count - 1;
+		else
+			proc->choice_idx--;
+	} else if (gKeySt->pressed & KEY_DPAD_DOWN) {
+		if (proc->choice_idx + 1 >= proc->choice_count)
+			proc->choice_idx = 0;
+		else
+			proc->choice_idx++;
+	}
+
+	if (proc->choice_idx != old_idx) {
+		PlaySe(SONG_6A);
+		Promo_DrawAll(proc);
+		Promo_UpdateMiniAnim(proc);
+	}
+
+	if (gKeySt->pressed & KEY_BUTTON_A) {
+		handler->jid_promo = proc->choices[proc->choice_idx];
+		handler->action_type = PROMO_ACT_PROMO;
+		PlaySe(SONG_6A);
+		Proc_Break(proc->proc_parent);
+		Proc_Break(proc);
+		return;
+	}
+
+	if (gKeySt->pressed & KEY_BUTTON_B) {
+		handler->action_type = PROMO_ACT_CANCEL;
+		PlaySe(SONG_6B);
+		Proc_Break(proc->proc_parent);
+		Proc_Break(proc);
+		return;
+	}
+
+	SyncUnitSpriteSheet();
+	Promo_DrawIcons(proc);
+}
 
 static void PromoSel_End(struct ProcPromoSel *proc)
 {}
@@ -159,7 +595,7 @@ static const struct ProcScr ProcScr_PromoSel[] = {
 	PROC_CALL(PromoSel_Init),
 	PROC_YIELD,
 	PROC_REPEAT(PromoSel_Loop),
-	PROC_BLOCK, PROC_END
+	PROC_END
 };
 
 /**
@@ -199,12 +635,7 @@ static void PromoMain_Init(struct ProcPromoMain *proc)
 }
 
 static void PromoMain_Loop(struct ProcPromoMain *proc)
-{
-	if (gKeySt->pressed & KEY_BUTTON_B) {
-		PlaySe(SONG_6B);
-		Proc_Break(proc);
-	}
-}
+{}
 
 static void PromoMain_End(struct ProcPromoMain *proc)
 {
@@ -251,8 +682,10 @@ static void PromoHandle_StartSelect(struct ProcPromoHandler *proc)
 static void PromoHandle_ExecAnim(struct ProcPromoHandler *proc)
 {
 	if (proc->action_type == PROMO_ACT_PROMO) {
+		int item = proc->unit->items[proc->item_slot];
+
 		UnitUpdateUsedItem(proc->unit, proc->item_slot);
-		StartUnitPromotionAction(proc->unit, proc->jid_promo, proc->unit->items[proc->item_slot]);
+		StartUnitPromotionAction(proc->unit, proc->jid_promo, item);
 	}
 }
 

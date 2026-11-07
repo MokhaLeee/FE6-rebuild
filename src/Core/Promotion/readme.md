@@ -1,13 +1,116 @@
 # promotion-UI
 
+使用 promotion item 后先进入的转职选择界面。
+
 ```
 tree3
 └─ PromoHandler
-   └─ PromoMain
-      ├─ fx
-      │  ├─ PromoEkrfx
-      │  └─ ...
-      └─ ctrl
-         ├─ PromoSel
-         └─ ...
+   └─ PromoMain                     // 背景 + 布局
+      ├─ PromoEkrFx                 // ekrmini 角色动画 + 地形
+      └─ PromoSel                   // 职业图标列表 / 输入 / 预览
 ```
+
+## 流程
+
+1. `DoItemPromoteAction()` → `StartBmDemoPromotion()`。
+2. `PromoHandle_StartSelect` 起 `PromoMain`，等它结束。
+3. `PromoSel` 用 `GetPromoChoices()` 取候选职业：
+   - A：`handler->jid_promo = choices[idx]`，关闭界面；
+   - B：`handler->action_type = PROMO_ACT_CANCEL`，关闭界面，不消耗道具、不转职。
+4. `PromoHandle_ExecAnim`：
+   - 转职：先记下道具，再 `UnitUpdateUsedItem()`，最后
+     `StartUnitPromotionAction(unit, jid_promo, item)`；
+   - 取消：直接跳过。
+
+## 候选职业表
+
+`PromotionData.c` 的 `sPromoChoiceDefs`：
+
+```c
+{ JID_MAGE, { JID_SAGE, JID_BISHOP, JID_NONE, JID_NONE, JID_NONE, JID_NONE } },
+```
+
+按基础职业（`unit->jinfo->id`）查表；查不到时回退到
+`jinfo->jid_promote` 的单目标。道具是否可用仍由
+`CanUnitUsePromotionItem()` 决定，这张表只决定“转成什么”。
+每个职业最多 6 个候选（`PROMO_CHOICE_MAX`）。
+
+## 界面布局
+
+参考图的结构：左上图标框、上方职业名、中右角色动画、底部 desc、
+最右数值栏。
+
+| 区域 | tile / 像素 |
+| --- | --- |
+| 职业图标框 | `(1,1)`，宽 8；1～2 个候选高 10，3 个以上高 12 |
+| 职业图标 | `x=16`，从 tile y=2 开始；1～2 个候选每行 4 tile，3 个以上每行 3 tile，最多同时显示 3 个，选中项自动滚动 |
+| 职业名 | `(10,0)`，宽 13，金色居中（暂用 16px 普通文字） |
+| 职业 desc | `(1,14)`，22×6，自动按宽度折行，最多 2 行 |
+| 数值变更 | `(23,2)`，7×18，HP/Po/Ma/Sk/Sp/De/Re/Cn |
+| ekrmini | 像素 `(152,80)`，地形 `(104,96)` |
+
+渲染层：
+
+- BG0：文字；BG1：`PutUiWindowFrame` 窗口框；BG2：ekrmini 的魔法背景；
+  BG3：壁画；OBJ：ekrmini、地形、职业图标、手形光标。
+- 职业图标直接用 unit sprite（`UseUnitSprite` + `PutUnitSpriteExt`），
+  和 prep unit screen 一样；图标 OAM 优先级设为 1，显示在窗口填充之上、
+  BG0 文字之下。选中行用 `PutUiHand` 画手形光标。
+- ekrmini 的魔法背景从 BG1 移到 BG2，`promofx_ekrmagi_callback` 的混合目标
+  同步调整，BG1 留给窗口框。
+
+## 数值预览
+
+`Promo_DrawStats()` 复制一份 `struct Unit`，对它调用
+`UnitPromote(&preview, jid)`，再和原 unit 做差。这样预览会和实际转职
+完全一致（包括上限、等级 1、武器经验等）。
+
+## 构建与测试
+
+```bash
+export DEVKITPRO=/opt/devkitpro
+export DEVKITARM=/opt/devkitpro/devkitARM
+cd /home/mokha/FE6-rebuild
+
+make -j16 fe6re.elf
+arm-none-eabi-objcopy --strip-debug -O binary fe6re.elf fe6re.gba
+gbafix fe6re.gba -tfe6re -c0000 -m00
+python3 tools/scripts/elf2sym.py fe6re.elf | python3 tools/scripts/sym_modify.py > fe6re.sym
+```
+
+回归：
+
+```bash
+./tools/emu/run-tests.sh --quick   # 4 项
+./tools/emu/run-tests.sh           # 26 项
+```
+
+手动测试：让等级 ≥10 的 Mage/Mage_F 使用 Guiding Ring，应进入本界面；
+上下切换候选时图标、职业名、ekrmini、desc、右侧数值同步变化；A 转职，
+B 取消且不消耗道具。
+
+## 后续工作
+
+### 职业名艺术字（暂缓）
+
+目标：把上方职业名从现有 16px 金色文字换成参考图那种 serif 艺术字。
+
+- 参考资源已保存：`contents/promotion/ClassNameLetters.png`（256×80 4bpp 字形图集）。
+- 字形数据来自 FE8 的 `classdisplayfont.c`（`sSprite_ClassDisplay_*` + `gClassDisplayFontData`），
+  每个字符由若干 8×8 OAM 拼成，字体调色板单独加载。
+- 目前 `Promo_DrawTitle()` 仍是普通文字，代码里留了 TODO；这次不做。
+- 注意 OBJ VRAM：完整图集需要 0x140 tile，和现在的 map sprite 图标区（0x80～0x180）
+  以及 ekrmini 区重叠，正式接入时需要先把字体 tile 缓存到空闲 VRAM，或调整
+  OBJ VRAM 布局。
+
+### 其他
+
+- 3 个以上候选目前一次显示 3 个并滚动；参考图那种一次列 6 行需要更小的图标或两列布局。
+- B 键的取消还是简化版，后续可以改成回物品菜单的完整取消流程。
+- 长职业名（如 Falcon Knight）在 13 tile 宽度内会被截断。
+
+## 已知限制
+
+- 3 个以上候选时每行 3 tile，32×32 的 unit sprite 会和相邻行重叠 8px。
+- 职业名标题用现有 16px 字体，不是参考图的大号装饰字。
+- B 键不消耗道具、不转职，但角色移动已经结算。
