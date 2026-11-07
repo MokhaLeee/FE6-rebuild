@@ -52,7 +52,7 @@ enum {
 	PROMO_LIST_W = 8,
 	PROMO_LIST_VISIBLE = 3,
 
-	PROMO_TITLE_X = 10,
+	PROMO_TITLE_X = 9,
 	PROMO_TITLE_Y = 0,
 	PROMO_TITLE_W = 13,
 
@@ -382,6 +382,10 @@ static void PromoEkrFx_Init(struct ProcPromoEkrFx *proc)
 		ANIM_ROUND_TAKING_HIT_CLOSE);
 	promofx_put_ekrterrainfx(1,
 		PROMO_TERRAIN_X + PROMO_FX_OFFSET, PROMO_TERRAIN_Y);
+
+	/* The magi setup shares OBJ VRAM with the title cache. */
+	if (proc->proc_parent->proc_sel != NULL)
+		proc->proc_parent->proc_sel->title_needs_reload = 1;
 }
 
 static void PromoEkrFx_Loop(struct ProcPromoEkrFx *proc)
@@ -455,23 +459,136 @@ static const struct ProcScr ProcScr_PromoEkrFx[] = {
 /**
  * promo-sel
  */
-static void Promo_DrawTitle(struct ProcPromoSel *proc)
+static const u16 sPromoClassNameOam[4] = {
+	1, OAM0_SHAPE_8x8, OAM1_SIZE_8x8, 0,
+};
+
+static const struct PromoClassNameGlyph *Promo_FindClassNameGlyph(u8 ch)
+{
+	int i;
+
+	for (i = 0; i < PromoClassNameGlyphCount; i++) {
+		if (PromoClassNameGlyphs[i].ch == ch)
+			return &PromoClassNameGlyphs[i];
+	}
+
+	return NULL;
+}
+
+static void Promo_BuildTitle(struct ProcPromoSel *proc)
 {
 	const char *str = DecodeMsg(GetJInfo(Promo_GetJid(proc))->msg_name);
-	int x = GetStringTextCenteredPos(PROMO_TITLE_W * 8, str);
+	const struct PromoClassNameGlyph *glyph;
+	u8 loaded_chars[PROMO_TITLE_MAX_GLYPHS];
+	u8 loaded_bases[PROMO_TITLE_MAX_GLYPHS];
+	int loaded_count = 0;
+	int cache_tiles = 0;
+	int x = 0;
+	int i, j;
 
-	/*
-	 * TODO: replace this 16px text with the FE8 class-name art font.
-	 * The reference font sheet is kept at contents/promotion/ClassNameLetters.png;
-	 * it uses the FE8 class-display glyph table (sSprite_ClassDisplay_*).
-	 */
+	proc->title_glyph_count = 0;
+	proc->title_needs_reload = 0;
+	proc->title_start_x = PROMO_TITLE_X * 8;
 
-	if (x < 0)
-		x = 0;
+	if (str == NULL)
+		return;
 
-	PutDrawText(NULL,
-		gBg0Tm + TM_OFFSET(PROMO_TITLE_X, PROMO_TITLE_Y),
-		TEXT_COLOR_SYSTEM_GOLD, x, PROMO_TITLE_W, str);
+	for (i = 0; str[i] != '\0'; i++) {
+		u8 ch = str[i];
+		int base = -1;
+
+		if (ch == ' ') {
+			x += 6;
+			continue;
+		}
+
+		glyph = Promo_FindClassNameGlyph(ch);
+		if (glyph == NULL) {
+			x += 4;
+			continue;
+		}
+
+		if (x + glyph->width > PROMO_TITLE_W * 8)
+			break;
+
+		if (proc->title_glyph_count >= PROMO_TITLE_MAX_GLYPHS)
+			break;
+
+		for (j = 0; j < loaded_count; j++) {
+			if (loaded_chars[j] == ch) {
+				base = loaded_bases[j];
+				break;
+			}
+		}
+
+		if (base < 0) {
+			int tiles = glyph->tiles_w * glyph->tiles_h;
+
+			if (cache_tiles + tiles > PROMO_CLASSNAME_MAX_TILES)
+				break;
+
+			CpuFastCopy(PromoClassNameFontTiles + glyph->tile_offset * 0x20,
+				(u8 *)OBJ_VRAM0 + (OBCHR_UIPROMO_CLASSNAME + cache_tiles) * 0x20,
+				tiles * 0x20);
+
+			loaded_chars[loaded_count] = ch;
+			loaded_bases[loaded_count] = cache_tiles;
+			base = cache_tiles;
+			cache_tiles += tiles;
+			loaded_count++;
+		}
+
+		{
+			struct PromoTitleGlyph *g = &proc->title_glyphs[proc->title_glyph_count++];
+
+			g->tile_base = base;
+			g->x = x;
+
+			if (ch == 'g' || ch == 'p' || ch == 'q' || ch == 'y')
+				g->y = 12;
+			else if (ch == 'j')
+				g->y = 7;
+			else
+				g->y = 24 - glyph->height;
+
+			g->tiles_w = glyph->tiles_w;
+			g->tiles_h = glyph->tiles_h;
+		}
+
+		x += glyph->advance;
+	}
+
+	if (x > PROMO_TITLE_W * 8)
+		x = PROMO_TITLE_W * 8;
+
+	proc->title_start_x = PROMO_TITLE_X * 8 + (PROMO_TITLE_W * 8 - x) / 2;
+}
+
+static void Promo_DrawTitleOam(struct ProcPromoSel *proc)
+{
+	int i, tx, ty;
+
+	if (proc->title_hidden)
+		return;
+
+	for (i = 0; i < proc->title_glyph_count; i++) {
+		struct PromoTitleGlyph *g = &proc->title_glyphs[i];
+
+		for (ty = 0; ty < g->tiles_h; ty++) {
+			for (tx = 0; tx < g->tiles_w; tx++) {
+				PutOamHi(proc->title_start_x + g->x + tx * 8,
+					PROMO_TITLE_Y * 8 + g->y + ty * 8 - 4,
+					sPromoClassNameOam,
+					(OBPAL_UIPROMO_CLASSNAME << 12) |
+					(OBCHR_UIPROMO_CLASSNAME + g->tile_base + ty * g->tiles_w + tx));
+			}
+		}
+	}
+}
+
+static void Promo_DrawTitle(struct ProcPromoSel *proc)
+{
+	Promo_BuildTitle(proc);
 }
 
 static void Promo_DrawDesc(struct ProcPromoSel *proc)
@@ -700,6 +817,10 @@ static void PromoSel_Init(struct ProcPromoSel *proc)
 	ApplyUnitSpritePalettes();
 	ResetUnitSprites();
 
+	CpuFastCopy(PromoClassNamePalette,
+		gPal + OBPAL_UIPROMO_CLASSNAME * 16, 32);
+	EnablePalSync();
+
 	/* Solid + rounded-corner tiles for the semi-transparent stats block. */
 	Promo_LoadStatsTiles();
 
@@ -765,6 +886,20 @@ static void PromoSel_Loop(struct ProcPromoSel *proc)
 
 	SyncUnitSpriteSheet();
 	Promo_DrawIcons(proc);
+
+	if (gpActiveClassReelSpellProc != NULL) {
+		proc->title_hidden = 1;
+	} else {
+		if (proc->title_hidden) {
+			proc->title_hidden = 0;
+			proc->title_needs_reload = 1;
+		}
+
+		if (proc->title_needs_reload)
+			Promo_BuildTitle(proc);
+
+		Promo_DrawTitleOam(proc);
+	}
 }
 
 static void PromoSel_End(struct ProcPromoSel *proc)

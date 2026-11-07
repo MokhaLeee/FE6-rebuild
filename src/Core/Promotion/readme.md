@@ -44,7 +44,7 @@ tree3
 | --- | --- |
 | 职业图标框 | `(1,1)`，宽 8；1～2 个候选高 10，3 个以上高 12 |
 | 职业图标 | `x=16`，从 tile y=2 开始；1～2 个候选每行 4 tile，3 个以上每行 3 tile，最多同时显示 3 个，选中项自动滚动 |
-| 职业名 | `(10,0)`，宽 13，金色居中（暂用 16px 普通文字） |
+| 职业名 | `(9,0)`，宽 13 tile，艺术字 OAM，按字符宽度居中；行高 24px，整体上移 4px |
 | 职业 desc | `(1,14)`，28×6，占满整个下边栏，自动按宽度折行，最多 2 行 |
 | 数值变更 | `(22,0)`，7×14，HP/Po/Ma/Sk/Sp/De/Re（无 Con）；单色半透明圆角块，无边框 |
 | ekrmini | 像素 `(152,80)`，地形 `(104,96)` |
@@ -73,6 +73,8 @@ tree3
   `promofx_ekrmagi_callback` 的混合配置。
 - ekrmini 的魔法背景从 BG1 移到 BG2，`promofx_ekrmagi_callback` 的混合目标
   同步调整，BG1 留给窗口框。
+- 职业名用 OBJ 8×8 拼字，调色板 13；tile 缓存在 OBJ `0x280`（与 magi 对象图
+  共用）。播放 class reel 魔法时隐藏标题，结束后重建缓存。
 
 ### 动画进出
 
@@ -120,26 +122,30 @@ B 取消且不消耗道具。
 
 ## 后续工作
 
-### 职业名艺术字（暂缓）
+### 职业名艺术字
 
-目标：把上方职业名从现有 16px 金色文字换成参考图那种 serif 艺术字。
+已实现。标题是 OBJ sprite 拼出的艺术字，不再使用 16px 普通文字。
 
-- 参考资源已保存：`contents/promotion/ClassNameLetters.png`（256×80 4bpp 字形图集）。
-- 字形数据来自 FE8 的 `classdisplayfont.c`（`sSprite_ClassDisplay_*` + `gClassDisplayFontData`），
-  每个字符由若干 8×8 OAM 拼成，字体调色板单独加载。
-- 目前 `Promo_DrawTitle()` 仍是普通文字，代码里留了 TODO；这次不做。
-- 注意 OBJ VRAM：完整图集需要 0x140 tile，和现在的 map sprite 图标区（0x80～0x180）
-  以及 ekrmini 区重叠，正式接入时需要先把字体 tile 缓存到空闲 VRAM，或调整
-  OBJ VRAM 布局。
+- 源图：`contents/promotion/ClassNameLetters.png`。
+- 生成脚本：`tools/scripts/gen_promo_classname_font.py`，按字符手工切矩形
+  （合并在一起的 `IL`、`ST`、`ce`、`su`、`lP`、`rt` 在脚本里拆开）；
+  生成 `src/Core/Promotion/PromotionClassNameFont.c`。
+- 每个字符保存 4bpp tile、实际宽高、tile 宽高和 advance；标题按字符实际宽度
+  累加并居中，超出 13 tile 时截断。
+- 字体使用 OBJ 调色板 13；tile 缓存上限 0x50，放在 `OBCHR_UIPROMO_CLASSNAME`
+  （`0x280`，与 magi 对象图共用）。magi 播放期间隐藏标题，结束后重新
+  `Promo_BuildTitle()`。
+- 字形底边对齐到 24px 行高；`p` 由 `q` 水平翻转生成，避免图集里没有小写 p；
+  带 descender 的 g/p/q/y 会沉到 baseline 下方，标题整体再上移 4px。
 
 ### 其他
 
 - 3 个以上候选目前一次显示 3 个并滚动；参考图那种一次列 6 行需要更小的图标或两列布局。
 - B 键的取消还是简化版，后续可以改成回物品菜单的完整取消流程。
-- 长职业名（如 Falcon Knight）在 13 tile 宽度内会被截断。
+- 长职业名（如 Falcon Knight）在 13 tile / 0x50 tile 缓存上限内会被截断。
 
 ## 已知限制
 
 - 3 个以上候选时每行 3 tile，32×32 的 unit sprite 会和相邻行重叠 8px。
-- 职业名标题用现有 16px 字体，不是参考图的大号装饰字。
+- 艺术字标题最多 13 tile 宽、0x50 tile 缓存；长职业名会被截断。
 - B 键不消耗道具、不转职，但角色移动已经结算。

@@ -14,14 +14,39 @@ enum videoalloc_promo_ui {
 
 	OBCHR_UIPROMO_EKRMINI = 0x180,
 	OBCHR_UIPROMO_EKRMAGI = 0x280,
+	/* Shared with the magi object image; the title is rebuilt after a spell. */
+	OBCHR_UIPROMO_CLASSNAME = 0x280,
 	OBCHR_UIPROMO_EKRTERRAIN_L = 0x380,
 	OBCHR_UIPROMO_EKRTERRAIN_R = 0x3C0,
 
 	OBPAL_UIPROMO_EKRMINI = 2,
 	OBPAL_UIPROMO_EKRTERRAIN_L = 10,
 	OBPAL_UIPROMO_EKRTERRAIN_R = 11,
+	OBPAL_UIPROMO_CLASSNAME = 13,
 	OBPAL_UIPROMO_EKRMAGI = 15,
 };
+
+#define PROMO_CLASSNAME_MAX_TILES 0x50
+#define PROMO_TITLE_MAX_GLYPHS 16
+
+struct PromoClassNameGlyph {
+	u8 ch;
+	u8 width, height;
+	u8 tiles_w, tiles_h;
+	u8 advance;
+	u16 tile_offset;
+};
+
+struct PromoTitleGlyph {
+	u16 tile_base;
+	u8 x, y;
+	u8 tiles_w, tiles_h;
+};
+
+extern const u8 PromoClassNameFontTiles[];
+extern const u16 PromoClassNamePalette[16];
+extern const struct PromoClassNameGlyph PromoClassNameGlyphs[];
+extern const int PromoClassNameGlyphCount;
 
 #define PROMO_CHOICE_MAX 6
 
@@ -71,7 +96,12 @@ struct ProcPromoSel {
 	u8 choice_count;
 	u8 choice_idx;
 	u8 ui_dirty;
+	u8 title_needs_reload;
+	u8 title_hidden;
+	u8 title_glyph_count;
+	u8 title_start_x;
 	u8 choices[PROMO_CHOICE_MAX];
+	struct PromoTitleGlyph title_glyphs[PROMO_TITLE_MAX_GLYPHS];
 };
 
 int GetPromoChoices(struct Unit *unit, int item, u8 *out, int max);
