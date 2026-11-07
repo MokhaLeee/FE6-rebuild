@@ -127,11 +127,14 @@ static const struct TextInitInfo mss_text_init_info_page2[] = {
 };
 
 /*
- * Page 0 is the two-panel layout. It only needs the same attribute labels the
- * three-panel PERSONAL page uses; identity text comes from the shared upper
- * list.
+ * Page 0 is the two-panel layout. It currently only draws the portrait frame,
+ * so the only text slots it needs are the attribute labels for the right
+ * column.
  */
 static const struct TextInitInfo mss_text_init_info_dual[] = {
+	{ &gMssSt.texts[MSS_TEXT_DUAL_DESC1], 19 },
+	{ &gMssSt.texts[MSS_TEXT_DUAL_DESC2], 19 },
+	{ &gMssSt.texts[MSS_TEXT_DUAL_DESC3], 19 },
 	{ &gMssSt.texts[MSS_TEXT_POW], 3 },
 	{ &gMssSt.texts[MSS_TEXT_MAG], 5 },
 	{ &gMssSt.texts[MSS_TEXT_SKL], 3 },

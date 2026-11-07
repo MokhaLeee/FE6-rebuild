@@ -67,7 +67,6 @@ static void put_upage(void)
 /**
  * page 0
  */
-_UNUSED
 static void put_multi_line_text(const char *str, struct Text *texts, u16 *tm, int max_line)
 {
 	int i;
@@ -460,57 +459,38 @@ static void put_rpage3(void)
 /**
  * page 0: two-panel layout
  *
- * The left panel is full height and carries the unit's identity, level, HP and
- * skill icons. The right panel is the same attribute column the PERSONAL page
- * uses, so it just calls put_rpage1().
+ * Only the portrait frame is drawn for now; the rest of the left panel is
+ * intentionally left empty while the contents are being decided.
  */
 static void put_dual_page(void)
 {
-	int i, x_text;
-	char *str;
+	int msg;
 	struct Unit *unit = gMssSt.unit;
-	struct SkillList *slist = GetSkillList(unit);
 
-	PutFaceChibi(GetUnitChibiId(unit),
-		TmBuff_MssD0 + TM_OFFSET(1, 1),
-		BGCHR_MSS_FACE, BGPAL_MSS_FACE, FALSE);
+	/*
+	 * The frame goes on BG0 and the portrait on BG1. BG0 wins the priority
+	 * comparison, so the bottom border sits on the portrait's last scanline
+	 * instead of being covered by it.
+	 */
+	Decompress(Tsa_Mss_FaceFrame, gBuf);
+	TmApplyTsa(TmBuff_MssD0 + TM_OFFSET(1, 1), gBuf, TILEREF(BGCHR_MSS_UI, BGPAL_MSS_UI));
 
-	str = DecodeMsg(unit->pinfo->msg_name);
-	x_text = GetStringTextCenteredPos(8 * 10, str);
+	PutFace80x72(TmBuff_MssD1 + TM_OFFSET(2, 2),
+		GetUnitFid(unit),
+		BGCHR_MSS_FACE_BIG, BGPAL_MSS_FACE);
 
-	PutDrawText(
-		&gMssSt.texts[MSS_TEXT_PNAME],
-		TmBuff_MssD0 + TM_OFFSET(9, 2),
-		TEXT_COLOR_SYSTEM_WHITE,
-		x_text, 0, str);
+	/* character description, three lines under the frame */
+	msg = unit->pinfo->msg_desc;
 
-	str = DecodeMsg(unit->jinfo->msg_name);
-	x_text = GetStringTextCenteredPos(8 * 10, str);
+	if (msg == 0)
+		msg = unit->jinfo->msg_desc;
 
-	PutDrawText(
-		&gMssSt.texts[MSS_TEXT_JNAME],
-		TmBuff_MssD0 + TM_OFFSET(9, 4),
-		TEXT_COLOR_SYSTEM_WHITE,
-		x_text, 0, str);
-
-	/* level & exp */
-	PutTwoSpecialChar(TmBuff_MssD0 + TM_OFFSET(1, 8), TEXT_COLOR_SYSTEM_GOLD, TEXT_SPECIAL_LV_A, TEXT_SPECIAL_LV_B);
-	PutNumberOrBlank(TmBuff_MssD0 + TM_OFFSET(4, 8), TEXT_COLOR_SYSTEM_BLUE, unit->level);
-	PutSpecialChar(TmBuff_MssD0 + TM_OFFSET(5, 8), TEXT_COLOR_SYSTEM_GOLD, TEXT_SPECIAL_EXP_E);
-	PutNumberOrBlank(TmBuff_MssD0 + TM_OFFSET(7, 8), TEXT_COLOR_SYSTEM_BLUE, unit->exp);
-
-	/* HP */
-	PutTwoSpecialChar(TmBuff_MssD0 + TM_OFFSET(1, 10), TEXT_COLOR_SYSTEM_GOLD, TEXT_SPECIAL_HP_A, TEXT_SPECIAL_HP_B);
-	PutNumberOrBlank(TmBuff_MssD0 + TM_OFFSET(4, 10), TEXT_COLOR_SYSTEM_BLUE, GetUnitCurrentHp(unit));
-	PutSpecialChar(TmBuff_MssD0 + TM_OFFSET(5, 10), TEXT_COLOR_SYSTEM_GOLD, TEXT_SPECIAL_SLASH);
-	PutNumberOrBlank(TmBuff_MssD0 + TM_OFFSET(7, 10), TEXT_COLOR_SYSTEM_BLUE, GetUnitMaxHp(unit));
-
-	/* skill icons, two tiles apart so they never overlap */
-	for (i = 0; i < slist->amt && i < 8; i++) {
-		PutIcon(
-			TmBuff_MssD0 + TM_OFFSET(1 + i * 2, 14),
-			SKILL_ICON(slist->sid[i]),
-			TILEREF(0, BGPAL_MSS_ICON0));
+	if (msg != 0) {
+		put_multi_line_text(
+			DecodeMsg(msg),
+			&gMssSt.texts[MSS_TEXT_DUAL_DESC1],
+			TmBuff_MssD0 + TM_OFFSET(1, 12),
+			3);
 	}
 
 	put_rpage1();

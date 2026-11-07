@@ -245,9 +245,21 @@ void InstallExpandedTextPal(void);
 enum videoalloc_mss {
 	BGCHR_MSS_TEXT = 2,
 	BGCHR_MSS_FACE = 0x3000 / 0x20,
+
+	/*
+	 * Both UI sheets are 256x32 4bpp = 128 tiles each, so each needs 0x80
+	 * of tile space. The modern face-frame tiles live in UI tiles 64..127,
+	 * so UI2 has to start after the full UI sheet.
+	 */
 	BGCHR_MSS_UI = 0x3400 / 0x20,
 	BGCHR_MSS_UI2 = 0x3C00 / 0x20,
-	BGCHR_MSS_STATBAR = 0x4400 / 0x20,
+
+	/* statbar lives inside the UI2 sheet, not in its own block */
+	BGCHR_MSS_STATBAR = BGCHR_MSS_UI2 + 0x40,
+
+	/* 80x72 portrait tiles (90), after the icons' region starts at 0x280 but
+	 * still below the map tileset at 0x400 */
+	BGCHR_MSS_FACE_BIG = 0x4C00 / 0x20,
 
 	BGPAL_MSS_TEXT = 0,
 	BGPAL_MSS_UI = 1, // .. 2
@@ -360,6 +372,17 @@ enum mss_text_index {
 	MSS_TEXT_SUPPORT5,
 	MSS_TEXT_NOSUPPORT,
 
+	/* page 0 (two-panel) only */
+	MSS_TEXT_DUAL_SKILLS,
+	MSS_TEXT_DUAL_SKILL1,
+	MSS_TEXT_DUAL_SKILL2,
+	MSS_TEXT_DUAL_SKILL3,
+	MSS_TEXT_DUAL_CON,
+	MSS_TEXT_DUAL_AID,
+	MSS_TEXT_DUAL_DESC1,
+	MSS_TEXT_DUAL_DESC2,
+	MSS_TEXT_DUAL_DESC3,
+
 	MSS_TEXT_MAX,
 };
 
@@ -416,6 +439,7 @@ extern const u16 Tsa_Mss_Upper[];
 extern const u16 Tsa_Mss_Left[];
 extern const u16 Tsa_Mss_Right[];
 extern const u16 Tsa_Mss_Dual[];
+extern const u16 Tsa_Mss_FaceFrame[];
 extern const u8 Img_MssUI[];
 extern const u16 Pal_MssUI[0x10];
 extern const u8 Img_MssUI2[];

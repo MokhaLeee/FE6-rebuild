@@ -23,7 +23,8 @@ contents/statscreen/Modern/
 ├── Tsa_Mss_Upper.c               Upper 面板 TSA（20x6）
 ├── Tsa_Mss_Left.c                Left 面板 TSA（20x14）
 ├── Tsa_Mss_Right.c               Right 面板 TSA（10x19）
-└── Tsa_Mss_Dual.c                DUAL 页左面板 TSA（20x20）
+├── Tsa_Mss_Dual.c                DUAL 页左面板 TSA（20x20）
+└── Tsa_Mss_FaceFrame.c           头像相框 TSA（12x11，4px 渐变边框）
 ```
 
 `Tsa_Mss_*.c` 是数据源，`make` 会把它们编成 `.dmp` 再压成 `.dmp.lz`，由 `mssfx.S`
@@ -48,12 +49,26 @@ contents/statscreen/Modern/
 
 ### 2.2 双面板布局（page 0）
 
-没有 Upper，Left 拉满整个画面高度：
+没有 Upper，Left 拉满整个画面高度。左面板目前只放一张 80x72 的立绘，外面套一圈
+相框，框下面再排角色描述：
 
 | 面板 | 尺寸 | 位置 | 内容 |
 |---|---|---|---|
-| Left (Dual) | 20 x 20 | (0,0) | 头像、名字/职业、LV/HP、技能图标 |
+| Left (Dual) | 20 x 20 | (0,0) | 80x72 立绘 + 12x11 相框 + 描述 |
 | Right | 10 x 20 | (20,0) | Str/Mag/... |
+
+立绘用 `PutFace80x72()`（和 vanilla statscreen 同一个函数，自带 `Decompress` 和
+`ApplyPalette`），画在 `(2,2)`，占 10x9 tile。
+
+相框用 `Tsa_Mss_FaceFrame`，12x11，画在 `(1,1)`，**框在 BG0、立绘在 BG1**：BG0 优先级
+更高，所以边框线会压在立绘最外 2px 上，而不是被立绘盖掉。
+
+> `TmApplyTsa()` 是**从最后一行往上画**的（见 `armfunc-asm.iwram.S`），所以 TSA 数组必须
+> 倒序存放——第 0 行对应画面最底部。写正序数组会让整个框上下颠倒、四个角错位。
+>
+> 边框 4px 渐变的配色取自面板边框：`6 → 7 → 15 → 8`（深蓝紫 → 亮蓝紫 → 米白高光 →
+> 深棕）。底边和两个底角是 `8 → 15 → 7 → 6`（深棕贴着脸）。左右线画在格子的内侧半格，
+> 底线的 4px 落在格子的上半，这样四条边都能贴住立绘，不留背景缝。
 
 ### 2.3 TM buffer
 
@@ -62,7 +77,11 @@ contents/statscreen/Modern/
 - `TmBuff_MssU0/L0/R0` → BG0（文字）
 - `TmBuff_MssU1/L1/R1` → BG1（statbar / gauge；ITEMS 页的装备行深红条也画在这里）
 - `TmBuff_MssU2/L2/R2` → BG2（UI 边框、填充）
-- `TmBuff_MssD0/D1/D2` → 双面板页的 Left；20 行，比三面板的 Left 高
+- `TmBuff_MssD0/D1/D2` → 双面板页的 Left；20 行，比三面板的 Left 高。D0 放相框和描述文字，
+  D1 放立绘（框压着立绘的边缘），D2 目前空着
+
+双面板页的 BG VRAM：立绘占 `BGCHR_MSS_FACE_BIG` 那块 90 tile（`0x4C00`），相框的 8 个 tile
+画在 UI 图集的空闲位（tile 13–20）。
 
 滑动时 `slide_up/left/right`（三面板）或 `slide_dual_left` + `slide_right`（双面板）
 把 buffer 的内容按列/行复制到 `gBg0Tm`/`gBg1Tm`/`gBg2Tm`。
@@ -241,7 +260,10 @@ CpuCopy16(
 
 ### Page 0（DUAL，双面板）
 
-- Left（20x20）：chibi 头像 (1,1)；名字 (9,2)、职业 (9,4)，居中在 10 格宽的区域里；`LV n` / `EXP n` 在 y=8；`HP a/b` 在 y=10；技能图标 y=14，横排最多 8 个。
+- Left（20x20）：80x72 立绘在 `(2,2)`，外面 12x11 相框在 `(1,1)`；框下面排三行角色
+  描述（`pinfo->msg_desc`，为 0 时回退 `jinfo->msg_desc`），y=12/14/16，每行 19 字符，
+  文本里的换行符由 `put_multi_line_text()` 切分。
+- 名字、职业、LV/HP、Con/Aid、技能列表等内容**暂时都清空了**，等确定放什么再加。
 - Right：`Str/Mag/Skl/Spd/Def/Res/Lck/Mov`，y=2,4,...,16（与 PERSONAL 页共用同一段绘制）。
 - 这一页**不放左侧标题**：左面板顶到画面最上沿，标题会压内容；只有右侧 `STATS`。
 
@@ -405,10 +427,17 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 | `9c14d82` | 延迟 MSS 调色板/OAM，修复 playerphase 单位信息框退出残帧 |
 | `9187f10` | 标题改为整词艺术字，并保留 `CONFIG_MSS_TITLE_WHOLE_WORD` 逐字母回退 |
 | `86fd8c9` | Page 1 物品槽、装备条、Rank/Wgt/Rng 摘要与 COMBAT `AS` |
-| （本次） | 双面板 page 0、四页重排、每布局独立 slide proc |
+| `06a4e21` | 双面板 page 0、四页重排、每布局独立 slide proc |
+| （本次） | page 0 换成 80x72 立绘 + 12x11 相框 + 角色描述 |
 
 具体：
 
+- page 0 的左面板改为一张 80x72 立绘（`PutFace80x72()`，与 vanilla statscreen 同源），
+  外面套 12x11 相框，框下排三行角色描述；名字/职业/等级/HP/Con/Aid/技能列表暂时清空。
+- 相框的 tile 画在 `ModernStatScreen_UI.png` 的空闲位（13–20），配色沿用面板边框的
+  4px 渐变 `6/7/15/8`；底边和底角用 `8/15/7/6`，深棕贴着脸。
+- 新增 `contents/statscreen/Modern/Tsa_Mss_FaceFrame.c`（12x11，倒序存放）。
+- 立绘占 `BGCHR_MSS_FACE_BIG`（`0x4C00`，90 tile）。
 - 新增双面板布局 page 0（左 20x20 全高 + 右 10x20），原 PERSONAL / ITEMS / WEXP 后移为
   page 1 / 2 / 3，`page_count = 4`。
 - slide 流程从主 proc 内联改为**每个布局一个 `ProcScr`**，主 proc 用 `SpawnProcLocking()`
@@ -449,8 +478,9 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
   - 底部加武器摘要：`Rank / Wgt / Rng`；满 5 件物品时用五格全显示，摘要让位。
 - **Page 2（ITEMS）右面板**：已补 `AS`（攻击速度）到 y=16。
 - **Page 3（WEXP）左面板**：支援候选列表（已建立优先，未建立显示 `-`）已完成。
-- **Page 0（DUAL）**：左面板 y=16..19 还空着，可以补支援摘要或 `Con/Aid/Talk`；
-  名字目前居中在 10 格宽的区域里，位置偏右。
+- **Page 0（DUAL）**：左面板目前只有立绘 + 相框 + 三行描述，其余内容待定。候选：名字/职业、
+  `LV/HP`、`Con/Aid`、技能列表、支援摘要。描述数据源 `texts/gamedata/character_desc.txt`
+  现在 527 行全是占位符 `YOU KNOW WHO`，要真正显示角色介绍得先写文本。
 - **右面板**：保持 8 项；如果空间允许，补 `Con/Aid/Talk` 到左面板而不是右面板。
 
 ### P1 装饰
@@ -478,6 +508,7 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 - 没有帮助框；R 在 statscreen 内没有绑定。
 - 快速连按翻页时，标题/页码的视觉同步还没有专门测过。
 - 双面板页（page 0）没有左侧标题，左右两侧的视觉重量略不对称。
+- 相框四角是直角色带，不是圆角；4px 线宽下做不出真正的圆角（要占满整个 8x8 tile）。
 
 ---
 
