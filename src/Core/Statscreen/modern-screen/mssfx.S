@@ -16,6 +16,11 @@ Tsa_Mss_Right:
 	.incbin "contents/statscreen/Modern/Tsa_Mss_Right.dmp.lz"
 
 .align 2, 0
+.global Tsa_Mss_Dual
+Tsa_Mss_Dual:
+	.incbin "contents/statscreen/Modern/Tsa_Mss_Dual.dmp.lz"
+
+.align 2, 0
 .global Img_MssUI
 Img_MssUI:
 	.incbin "contents/statscreen/Modern/ModernStatScreen_UI.4bpp.lz"

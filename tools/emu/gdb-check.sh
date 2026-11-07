@@ -21,7 +21,11 @@ GDBLOG="$BUILD/out/gdb-check.log"
 PORT=2345
 
 GDB=${GDB:-arm-none-eabi-gdb}
-command -v "$GDB" >/dev/null 2>&1 || GDB=/opt/devkitpro/devkitARM/bin/arm-none-eabi-gdb
+if command -v "$GDB" >/dev/null 2>&1; then
+	GDB=$(command -v "$GDB")
+else
+	GDB=/opt/devkitpro/devkitARM/bin/arm-none-eabi-gdb
+fi
 [ -x "$GDB" ] || { echo "找不到 arm-none-eabi-gdb" >&2; exit 1; }
 [ -x "$RUN" ] || { echo "先运行 ./tools/emu/build.sh" >&2; exit 1; }
 [ -f "$ROM" ] || { echo "找不到 ROM: $ROM" >&2; exit 1; }

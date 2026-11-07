@@ -457,6 +457,78 @@ static void put_rpage3(void)
 /**
  * total
  */
+/**
+ * page 0: two-panel layout
+ *
+ * The left panel is full height and carries the unit's identity, level, HP and
+ * skill icons. The right panel is the same attribute column the PERSONAL page
+ * uses, so it just calls put_rpage1().
+ */
+static void put_dual_page(void)
+{
+	int i, x_text;
+	char *str;
+	struct Unit *unit = gMssSt.unit;
+	struct SkillList *slist = GetSkillList(unit);
+
+	PutFaceChibi(GetUnitChibiId(unit),
+		TmBuff_MssD0 + TM_OFFSET(1, 1),
+		BGCHR_MSS_FACE, BGPAL_MSS_FACE, FALSE);
+
+	str = DecodeMsg(unit->pinfo->msg_name);
+	x_text = GetStringTextCenteredPos(8 * 10, str);
+
+	PutDrawText(
+		&gMssSt.texts[MSS_TEXT_PNAME],
+		TmBuff_MssD0 + TM_OFFSET(9, 2),
+		TEXT_COLOR_SYSTEM_WHITE,
+		x_text, 0, str);
+
+	str = DecodeMsg(unit->jinfo->msg_name);
+	x_text = GetStringTextCenteredPos(8 * 10, str);
+
+	PutDrawText(
+		&gMssSt.texts[MSS_TEXT_JNAME],
+		TmBuff_MssD0 + TM_OFFSET(9, 4),
+		TEXT_COLOR_SYSTEM_WHITE,
+		x_text, 0, str);
+
+	/* level & exp */
+	PutTwoSpecialChar(TmBuff_MssD0 + TM_OFFSET(1, 8), TEXT_COLOR_SYSTEM_GOLD, TEXT_SPECIAL_LV_A, TEXT_SPECIAL_LV_B);
+	PutNumberOrBlank(TmBuff_MssD0 + TM_OFFSET(4, 8), TEXT_COLOR_SYSTEM_BLUE, unit->level);
+	PutSpecialChar(TmBuff_MssD0 + TM_OFFSET(5, 8), TEXT_COLOR_SYSTEM_GOLD, TEXT_SPECIAL_EXP_E);
+	PutNumberOrBlank(TmBuff_MssD0 + TM_OFFSET(7, 8), TEXT_COLOR_SYSTEM_BLUE, unit->exp);
+
+	/* HP */
+	PutTwoSpecialChar(TmBuff_MssD0 + TM_OFFSET(1, 10), TEXT_COLOR_SYSTEM_GOLD, TEXT_SPECIAL_HP_A, TEXT_SPECIAL_HP_B);
+	PutNumberOrBlank(TmBuff_MssD0 + TM_OFFSET(4, 10), TEXT_COLOR_SYSTEM_BLUE, GetUnitCurrentHp(unit));
+	PutSpecialChar(TmBuff_MssD0 + TM_OFFSET(5, 10), TEXT_COLOR_SYSTEM_GOLD, TEXT_SPECIAL_SLASH);
+	PutNumberOrBlank(TmBuff_MssD0 + TM_OFFSET(7, 10), TEXT_COLOR_SYSTEM_BLUE, GetUnitMaxHp(unit));
+
+	/* skill icons, two tiles apart so they never overlap */
+	for (i = 0; i < slist->amt && i < 8; i++) {
+		PutIcon(
+			TmBuff_MssD0 + TM_OFFSET(1 + i * 2, 14),
+			SKILL_ICON(slist->sid[i]),
+			TILEREF(0, BGPAL_MSS_ICON0));
+	}
+
+	put_rpage1();
+}
+
+/* Default frame TSA: the three-panel layout that pages 1..3 share. */
+static void put_default_frames(void)
+{
+	Decompress(Tsa_Mss_Upper, gBuf);
+	TmApplyTsa(TmBuff_MssU2, gBuf, TILEREF(BGCHR_MSS_UI, BGPAL_MSS_UI));
+
+	Decompress(Tsa_Mss_Right, gBuf);
+	TmApplyTsa(TmBuff_MssR2, gBuf, TILEREF(BGCHR_MSS_UI, BGPAL_MSS_UI));
+
+	Decompress(Tsa_Mss_Left, gBuf);
+	TmApplyTsa(TmBuff_MssL2, gBuf, TILEREF(BGCHR_MSS_UI, BGPAL_MSS_UI));
+}
+
 void Mss_PreparePage(struct ProcMss *proc)
 {
 	ClearIcons();
@@ -473,34 +545,41 @@ void Mss_PreparePage(struct ProcMss *proc)
 	CpuFastFill(0, TmBuff_MssR1, sizeof(TmBuff_MssR1));
 	CpuFastFill(0, TmBuff_MssR2, sizeof(TmBuff_MssR2));
 
-	Decompress(Tsa_Mss_Upper, gBuf);
-	TmApplyTsa(TmBuff_MssU2, gBuf, TILEREF(BGCHR_MSS_UI, BGPAL_MSS_UI));
-
-	Decompress(Tsa_Mss_Right, gBuf);
-	TmApplyTsa(TmBuff_MssR2, gBuf, TILEREF(BGCHR_MSS_UI, BGPAL_MSS_UI));
-
-	Decompress(Tsa_Mss_Left, gBuf);
-	TmApplyTsa(TmBuff_MssL2, gBuf, TILEREF(BGCHR_MSS_UI, BGPAL_MSS_UI));
-
-	put_upage();
+	CpuFastFill(0, TmBuff_MssD0, sizeof(TmBuff_MssD0));
+	CpuFastFill(0, TmBuff_MssD1, sizeof(TmBuff_MssD1));
+	CpuFastFill(0, TmBuff_MssD2, sizeof(TmBuff_MssD2));
 
 	switch (proc->page) {
 	case 0:
+		/* two-panel layout: full-height left panel, no upper */
+		Decompress(Tsa_Mss_Dual, gBuf);
+		TmApplyTsa(TmBuff_MssD2, gBuf, TILEREF(BGCHR_MSS_UI, BGPAL_MSS_UI));
+
+		Decompress(Tsa_Mss_Right, gBuf);
+		TmApplyTsa(TmBuff_MssR2, gBuf, TILEREF(BGCHR_MSS_UI, BGPAL_MSS_UI));
+
+		put_dual_page();
+		break;
+
+	case 1:
+		put_default_frames();
+		put_upage();
 		put_lpage1();
 		put_rpage1();
 		break;
 
-	case 1:
+	case 2:
+		put_default_frames();
+		put_upage();
 		put_lpage2();
 		put_rpage2();
 		break;
 
-	case 2:
+	case 3:
+		put_default_frames();
+		put_upage();
 		put_lpage3();
 		put_rpage3();
-		break;
-
-	case 3:
 		break;
 
 	default:

@@ -9,8 +9,8 @@
 
 ```
 src/Core/Statscreen/modern-screen/
-├── mss-core.c      入口 proc、初始化、滑动循环、sprites（页码/箭头/标题）
-├── draw-pages.c    三页内容绘制（PERSONAL / ITEMS / WEXP）
+├── mss-core.c      入口 proc、初始化、每页独立的滑动 proc、sprites（页码/箭头/标题）
+├── draw-pages.c    四页内容绘制（DUAL / PERSONAL / ITEMS / WEXP）+ 每页边框
 ├── mssfx.S         图形资源 incbin（TSA、UI 图、标题图、sprites 图）
 └── README.md       本文件
 
@@ -20,18 +20,25 @@ contents/statscreen/Modern/
 ├── ModernStatScreen_Spirtes.png  页码/箭头/小图标（256x32）
 ├── ModernStatScreen_Titles.png   整词艺术字（16x384，SKILLS/ITEMS/SUPPORT/STATS/COMBAT/WEAPON）
 ├── ModernStatScreen_TitleLetters.png  旧版 8x16 字符集（A-Z + space），config=0 时使用
-├── Tsa_Mss_Upper.c               Upper 面板 TSA
-├── Tsa_Mss_Left.c                Left 面板 TSA
-└── Tsa_Mss_Right.c               Right 面板 TSA
+├── Tsa_Mss_Upper.c               Upper 面板 TSA（20x6）
+├── Tsa_Mss_Left.c                Left 面板 TSA（20x14）
+├── Tsa_Mss_Right.c               Right 面板 TSA（10x19）
+└── Tsa_Mss_Dual.c                DUAL 页左面板 TSA（20x20）
 ```
 
-关键头文件：`include/statscreen.h`（`ProcMss`、`MssSlideState`、videoalloc 常量、文本索引）。
+`Tsa_Mss_*.c` 是数据源，`make` 会把它们编成 `.dmp` 再压成 `.dmp.lz`，由 `mssfx.S`
+`.incbin` 进来。`.dmp*` 被 `contents/.gitignore` 忽略，Makefile 里给 `mssfx.o` 加了
+对 `Tsa_Mss_*.c` 的生成依赖，clean 后能自动重建。
+
+关键头文件：`include/statscreen.h`（`ProcMss`、`MssSlideState`、`TmBuff_Mss*`、videoalloc 常量、文本索引）。
 
 ---
 
 ## 2. 布局与渲染层
 
-面板分为三块，坐标单位是 tile（8x8）：
+坐标单位是 tile（8x8）。有**两种布局**，每个页面选一种：
+
+### 2.1 三面板布局（page 1..3）
 
 | 面板 | 尺寸 | 位置 | 内容 |
 |---|---|---|---|
@@ -39,13 +46,26 @@ contents/statscreen/Modern/
 | Left | 20 x 14 | (0,6) | 技能、魔法、物品、支援（按页变化） |
 | Right | 10 x 20 | (20,0) | Str/Mag/... 或战斗数值、武器经验 |
 
-每块面板有三层 TM buffer：
+### 2.2 双面板布局（page 0）
+
+没有 Upper，Left 拉满整个画面高度：
+
+| 面板 | 尺寸 | 位置 | 内容 |
+|---|---|---|---|
+| Left (Dual) | 20 x 20 | (0,0) | 头像、名字/职业、LV/HP、技能图标 |
+| Right | 10 x 20 | (20,0) | Str/Mag/... |
+
+### 2.3 TM buffer
+
+每块面板三层 TM buffer：
 
 - `TmBuff_MssU0/L0/R0` → BG0（文字）
-- `TmBuff_MssU1/L1/R1` → BG1（statbar / gauge；Page 1 的装备行深红条也画在这里）
+- `TmBuff_MssU1/L1/R1` → BG1（statbar / gauge；ITEMS 页的装备行深红条也画在这里）
 - `TmBuff_MssU2/L2/R2` → BG2（UI 边框、填充）
+- `TmBuff_MssD0/D1/D2` → 双面板页的 Left；20 行，比三面板的 Left 高
 
-滑动时 `slide_up/left/right` 把 buffer 的内容按列/行复制到 `gBg0Tm`/`gBg1Tm`/`gBg2Tm`。
+滑动时 `slide_up/left/right`（三面板）或 `slide_dual_left` + `slide_right`（双面板）
+把 buffer 的内容按列/行复制到 `gBg0Tm`/`gBg1Tm`/`gBg2Tm`。
 
 OBJ 资源加载到 `OBJ_VRAM0`：
 
@@ -55,6 +75,52 @@ OBJ 资源加载到 `OBJ_VRAM0`：
 ---
 
 ## 3. 滑动动画
+
+### 3.1 每个布局一个 slide proc
+
+slide 流程不在主 proc 里内联，而是**每个布局各自一个 proc**：
+
+```c
+static const struct ProcScr ProcScr_mss_slide_in[] = {
+	PROC_CALL(mss_init_slide_unit_in),
+	PROC_REPEAT(mss_loop_unit_slidein),
+	PROC_END,
+};
+```
+
+主 proc 只做「按当前 page 选 proc → 起进程 → 等它结束」：
+
+```c
+PROC_LABEL(PL_MSS_SLIDE_PAGE),
+	PROC_CALL(mss_spawn_slide_out),
+	PROC_YIELD,          /* SpawnProcLocking 下一帧才生效，这里必须停一帧 */
+	PROC_CALL(mss_apply_page),
+	PROC_CALL(Mss_PreparePage),
+	PROC_CALL(mss_spawn_slide_in_page),
+	PROC_YIELD,
+	PROC_GOTO(PL_MSS_IDLE),
+```
+
+`mss_spawn_slide_*()` 用 `SpawnProcLocking()`：它给子 proc 打 blocking 标记、给父 proc
+`proc_lock_cnt++`，子 proc `Proc_End` 时自动 `--`，父 proc 的脚本在这期间完全停摆。
+
+> `PROC_CALL(spawn)` 之后**必须**跟一个 `PROC_YIELD`。`StepProcScr` 在 `PROC_CALL`
+> 之后不会停，会在同一帧继续执行下一条命令；少了 YIELD 就会在滑出刚开始时把
+> `mss_end()` / `mss_slide_idle()` 提前跑掉，表现为换人时面板丢失混合、背景变成一块纯色。
+
+选哪个 proc 由三个函数决定：
+
+```c
+if (proc->page == 0)
+	return ProcScr_mss_slide_dual_in;   /* 双面板：只驱动左右两块 */
+
+return ProcScr_mss_slide_in;            /* 三面板 */
+```
+
+加新布局时：写自己的 ProcScr + init/loop，在这三个函数里按 page 返回即可，
+不用动主流程。
+
+### 3.2 时序
 
 `struct MssSlideState`（`include/statscreen.h`）保存每块面板自己的状态：
 
@@ -74,6 +140,13 @@ i16 length;  // total slide duration in frames
 | unit in | 4 / 8 | 8 / 10 | 0 / 12 |
 | page out | 0 / 8 | 2 / 10 | 4 / 12 |
 | page in | 3 / 8 | 6 / 10 | 0 / 12 |
+
+双面板（page 0）只列左右两块：
+
+| 场景 | Right | Left (Dual) |
+|---|---|---|
+| out | 2 / 10 | 0 / 12 |
+| in | 6 / 10 | 0 / 12 |
 
 方向：Upper 从上、Left 从左、Right 从右；OUT 时反向飞出。
 
@@ -166,18 +239,25 @@ CpuCopy16(
 
 标题是 OAM，不占 BG 内容行；面板内容保持原坐标（与加标题之前一致）：
 
-### Page 0（PERSONAL）
+### Page 0（DUAL，双面板）
 
+- Left（20x20）：chibi 头像 (1,1)；名字 (9,2)、职业 (9,4)，居中在 10 格宽的区域里；`LV n` / `EXP n` 在 y=8；`HP a/b` 在 y=10；技能图标 y=14，横排最多 8 个。
+- Right：`Str/Mag/Skl/Spd/Def/Res/Lck/Mov`，y=2,4,...,16（与 PERSONAL 页共用同一段绘制）。
+- 这一页**不放左侧标题**：左面板顶到画面最上沿，标题会压内容；只有右侧 `STATS`。
+
+### Page 1（PERSONAL，三面板）
+
+- Upper：chibi、`LV n EXP n`、`HP a/b`、名字/职业。
 - Left：`Skills:` y=1，技能图标 y=3（横排，最多 3 个），`B.Magic:` y=8。
 - Right：`Str/Mag/Skl/Spd/Def/Res/Lck/Mov`，y=2,4,...,16。
 
-### Page 1（ITEMS）
+### Page 2（ITEMS）
 
 - Left：最多 5 个物品行，y=2,4,...,10；空槽显示灰色 `---` 和 `--/--`，装备中的物品右侧显示绿色 `E`，该行底部加 vanilla 风格的深红装备条。
 - 物品少于 5 件时，最后一行让给装备武器摘要：`Rank / Wgt / Rng`；满 5 件时五格全显示，不再压缩物品行。
 - Right：`Attack/Hit/Crit/Avoid/Dodge/Silencer/Range/AS`，y=2,4,...,16。
 
-### Page 2（WEXP）
+### Page 3（WEXP）
 
 - Left：支援候选列表，最多 5 行；已建立支援按等级排在前面，未建立显示 `-`；没有支援信息时显示 `No supports`。
 - Right：8 个武器经验条，y=2,4,...,16。
@@ -325,9 +405,19 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 | `9c14d82` | 延迟 MSS 调色板/OAM，修复 playerphase 单位信息框退出残帧 |
 | `9187f10` | 标题改为整词艺术字，并保留 `CONFIG_MSS_TITLE_WHOLE_WORD` 逐字母回退 |
 | `86fd8c9` | Page 1 物品槽、装备条、Rank/Wgt/Rng 摘要与 COMBAT `AS` |
+| （本次） | 双面板 page 0、四页重排、每布局独立 slide proc |
 
 具体：
 
+- 新增双面板布局 page 0（左 20x20 全高 + 右 10x20），原 PERSONAL / ITEMS / WEXP 后移为
+  page 1 / 2 / 3，`page_count = 4`。
+- slide 流程从主 proc 内联改为**每个布局一个 `ProcScr`**，主 proc 用 `SpawnProcLocking()`
+  起子进程并等它 `Proc_End`；`mss_spawn_slide_*()` 里按 `page` 选 proc。
+- 新增 `TmBuff_MssD0/D1/D2`（20 行）与 `slide_dual_left()`，右面板继续复用 `slide_right()`。
+- 新增 `contents/statscreen/Modern/Tsa_Mss_Dual.c`（20x20 边框），由 `mssfx.S` `.incbin`。
+- `Mss_PreparePage()` 统一成一个 `switch`，每页一个 case；三面板边框抽成 `put_default_frames()`。
+- Makefile 给 `mssfx.o` 补了对 `Tsa_Mss_*.dmp.lz` 的生成依赖（`.incbin` 对 make 不可见，
+  而这些 blob 被 gitignore），clean 后能重建。
 - 三块面板独立 tick，`MssSlideState` 每块一份。
 - 16 段 ease-out 表（`s_mss_ease_out`）。
 - 页码/箭头 OAM 按 `slide_r.step` 跟随 Right 面板。
@@ -349,16 +439,18 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 
 ### P0 内容填充（纯代码，优先）
 
-- **Page 0 左面板**：
+- **Page 1（PERSONAL）左面板**：
   - 技能列表加名称（图标 + 名字），最多 6 个；空时显示 `None`。
   - B.Magic 列表（现在只有标签）。
   - 底部小表：`Cond / Affin / Con / Aid / Talk / 移动类型`。
-- **Page 1 左面板**：已完成。
+- **Page 2（ITEMS）左面板**：已完成。
   - 物品行图标 + 名字 + 耐久；空槽灰色占位，装备中 `E` 标记。
   - 装备行底部加深红装备条（复用 UI tile 63），对应 vanilla 的装备武器背景条。
   - 底部加武器摘要：`Rank / Wgt / Rng`；满 5 件物品时用五格全显示，摘要让位。
-- **Page 1 右面板**：已补 `AS`（攻击速度）到 y=16。
-- **Page 2 左面板**：支援候选列表（已建立优先，未建立显示 `-`）已完成。
+- **Page 2（ITEMS）右面板**：已补 `AS`（攻击速度）到 y=16。
+- **Page 3（WEXP）左面板**：支援候选列表（已建立优先，未建立显示 `-`）已完成。
+- **Page 0（DUAL）**：左面板 y=16..19 还空着，可以补支援摘要或 `Con/Aid/Talk`；
+  名字目前居中在 10 格宽的区域里，位置偏右。
 - **右面板**：保持 8 项；如果空间允许，补 `Con/Aid/Talk` 到左面板而不是右面板。
 
 ### P1 装饰
@@ -382,9 +474,10 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 - 整词艺术字使用 DejaVu Serif Condensed Bold Italic 二值化生成，不是 FE 原生美术字；`CONFIG_MSS_TITLE_WHOLE_WORD = 0` 可切回旧字符集。
 - 标题会压 `Skills:` / `Str` 顶部约 4px（用户确认可接受）。
 - 没有做 vanilla 那种 Y 轴压扁/展开；当前是跟随面板水平滑入 + vanilla 11 色循环渐变。
-- Page 1 在物品满 5 件时不显示 `Rank / Wgt / Rng` 摘要，因为 5 行物品已经占满内容区。
+- Page 2 在物品满 5 件时不显示 `Rank / Wgt / Rng` 摘要，因为 5 行物品已经占满内容区。
 - 没有帮助框；R 在 statscreen 内没有绑定。
 - 快速连按翻页时，标题/页码的视觉同步还没有专门测过。
+- 双面板页（page 0）没有左侧标题，左右两侧的视觉重量略不对称。
 
 ---
 
@@ -392,6 +485,13 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 
 - 注释用英文；用户明确要求过。
 - 缩进用 tab（与目录内现有文件一致）。
+- 新增页面时：
+  - 在 `draw-pages.c` 写 `put_<name>_page()`，在 `Mss_PreparePage()` 的 `switch` 里加 case；
+  - 加对应的 `mss_text_init_info_*` 表，按 page 号放进 `mss_text_init_info_pages[]`；
+  - 面板数量/尺寸跟三面板不同时，写自己的 `ProcScr` + init/loop，并在
+    `mss_slide_in_proc()` / `mss_slide_in_page_proc()` / `mss_spawn_slide_out()` 里按 page 返回；
+  - 新增 TSA 放 `contents/statscreen/Modern/Tsa_Mss_*.c`，再在 `mssfx.S` 里 `.incbin` 它的
+    `.dmp.lz`（Makefile 已按 `Tsa_Mss_*.c` 自动补生成依赖）。
 - 新增文本索引加到 `enum mss_text_index`，并在 `mss_text_init_info_upper`（上栏共用）或对应页的 `mss_text_init_info_pageN` 里注册。
 - `Mss_InitPageText()` 在每次 `Mss_PreparePage()` 开头按当前页重建文本槽位（`ResetTextFont()` + 逐页 `InitTextList()`），所以每页只占用该页实际需要的 VRAM。新增文本时不要改回启动时一次性 `InitTextList()`。
 - 新增 OBJ 资源：

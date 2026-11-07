@@ -31,6 +31,9 @@ EWRAM_OVERLAY(0) u16 TmBuff_MssL1[MSS_L_HIGHT * 0x20] = {}; // 18 * 14
 EWRAM_OVERLAY(0) u16 TmBuff_MssR0[MSS_R_HIGHT * 0x20] = {}; // 16 * 32
 EWRAM_OVERLAY(0) u16 TmBuff_MssR1[MSS_R_HIGHT * 0x20] = {}; // 16 * 32
 EWRAM_OVERLAY(0) u16 TmBuff_MssR2[MSS_R_HIGHT * 0x20] = {}; // 18 * 32
+EWRAM_OVERLAY(0) u16 TmBuff_MssD0[MSS_DUAL_HIGHT * 0x20] = {}; // 20 * 32
+EWRAM_OVERLAY(0) u16 TmBuff_MssD1[MSS_DUAL_HIGHT * 0x20] = {}; // 20 * 32
+EWRAM_OVERLAY(0) u16 TmBuff_MssD2[MSS_DUAL_HIGHT * 0x20] = {}; // 20 * 32
 EWRAM_OVERLAY(0) struct ModStatScreenSt gMssSt = {};
 
 enum mss_slide_ops {
@@ -123,10 +126,29 @@ static const struct TextInitInfo mss_text_init_info_page2[] = {
 	{}
 };
 
+/*
+ * Page 0 is the two-panel layout. It only needs the same attribute labels the
+ * three-panel PERSONAL page uses; identity text comes from the shared upper
+ * list.
+ */
+static const struct TextInitInfo mss_text_init_info_dual[] = {
+	{ &gMssSt.texts[MSS_TEXT_POW], 3 },
+	{ &gMssSt.texts[MSS_TEXT_MAG], 5 },
+	{ &gMssSt.texts[MSS_TEXT_SKL], 3 },
+	{ &gMssSt.texts[MSS_TEXT_SPD], 3 },
+	{ &gMssSt.texts[MSS_TEXT_LCK], 3 },
+	{ &gMssSt.texts[MSS_TEXT_DEF], 3 },
+	{ &gMssSt.texts[MSS_TEXT_RES], 3 },
+	{ &gMssSt.texts[MSS_TEXT_MOV], 3 },
+
+	{}
+};
+
 static const struct TextInitInfo *const mss_text_init_info_pages[] = {
-	mss_text_init_info_page0,
-	mss_text_init_info_page1,
-	mss_text_init_info_page2,
+	mss_text_init_info_dual,  /* page 0: two-panel */
+	mss_text_init_info_page0, /* page 1: PERSONAL */
+	mss_text_init_info_page1, /* page 2: ITEMS */
+	mss_text_init_info_page2, /* page 3: WEXP */
 };
 
 void Mss_InitPageText(int page)
@@ -357,7 +379,7 @@ static void mss_sprites_loop(struct ProcMssSprite *proc)
 	/**
 	 * panel titles
 	 */
-	if (mss->page >= 0 && mss->page < 3) {
+	{
 		int title_oam2 = OAM2_CHR(OBCHR_MSS_TITLES) + OAM2_PAL(OBPAL_MSS_TITLES) + OAM2_LAYER(1);
 		int lx = 8, rx = 168;
 
@@ -369,8 +391,15 @@ static void mss_sprites_loop(struct ProcMssSprite *proc)
 			rx += (MSS_R_WIDTH - mss->slide_r.step) * 8;
 		}
 
-		mss_put_title_word(mss->page, lx, 44, title_oam2);
-		mss_put_title_word(3 + mss->page, rx, 4, title_oam2);
+		if (mss->page == 0) {
+			/* two-panel page: the right panel keeps its title */
+			mss_put_title_word(3, rx, 4, title_oam2);
+		} else if (mss->page >= 1 && mss->page <= 3) {
+			int p = mss->page - 1;
+
+			mss_put_title_word(p, lx, 44, title_oam2);
+			mss_put_title_word(3 + p, rx, 4, title_oam2);
+		}
 
 		mss_update_title_palette();
 	}
@@ -442,19 +471,29 @@ static void mss_init_slide_unit_in(struct ProcMss *proc)
 	mss_slide_init(&proc->slide_r, 8, 10);
 }
 
-static void mss_init_slide_page_out(struct ProcMss *proc)
-{
-	proc->slide_mode = MSS_SLIDE_OUT;
-	mss_slide_init(&proc->slide_u, 0, 8);
-	mss_slide_init(&proc->slide_r, 2, 10);
-	mss_slide_init(&proc->slide_l, 4, 12);
-}
-
 static void mss_init_slide_page_in(struct ProcMss *proc)
 {
 	proc->slide_mode = MSS_SLIDE_IN;
 	mss_slide_init(&proc->slide_l, 0, 12);
 	mss_slide_init(&proc->slide_u, 3, 8);
+	mss_slide_init(&proc->slide_r, 6, 10);
+}
+
+/*
+ * Two-panel layout: only the left and right panels take part, so the timing
+ * table lists just those two.
+ */
+static void mss_init_slide_dual_out(struct ProcMss *proc)
+{
+	proc->slide_mode = MSS_SLIDE_OUT;
+	mss_slide_init(&proc->slide_l, 0, 12);
+	mss_slide_init(&proc->slide_r, 2, 10);
+}
+
+static void mss_init_slide_dual_in(struct ProcMss *proc)
+{
+	proc->slide_mode = MSS_SLIDE_IN;
+	mss_slide_init(&proc->slide_l, 0, 12);
 	mss_slide_init(&proc->slide_r, 6, 10);
 }
 
@@ -597,6 +636,57 @@ static void slide_right(int step, enum mss_slide_ops ops)
 		len, MSS_R_HIGHT);
 }
 
+/*
+ * Two-panel layout: the left panel spans the full height, so it needs its own
+ * buffer set and its own blit. The right panel is the same as in the
+ * three-panel layout, so it reuses slide_right().
+ */
+static void slide_dual_left(int step, enum mss_slide_ops ops)
+{
+	int len, src_off, dst_off;
+
+	step = step * 2;
+
+	if (step > MSS_DUAL_WIDTH)
+		step = MSS_DUAL_WIDTH;
+
+	switch (ops) {
+	case MSS_SLIDE_IN:
+		src_off = MSS_DUAL_WIDTH - step;
+		dst_off = 0;
+		len = MSS_DUAL_WIDTH - src_off;
+		break;
+
+	case MSS_SLIDE_OUT:
+		src_off = step;
+		dst_off = 0;
+		len = MSS_DUAL_WIDTH - src_off;
+		break;
+
+	case MSS_SLIDE_NONE:
+	default:
+		src_off = 0;
+		dst_off = 0;
+		len = MSS_DUAL_WIDTH;
+		break;
+	}
+
+	TmCopyRect(
+		TmBuff_MssD0 + TM_OFFSET(src_off, 0),
+		gBg0Tm + TM_OFFSET(MSS_DUAL_X + dst_off, MSS_DUAL_Y),
+		len, MSS_DUAL_HIGHT);
+
+	TmCopyRect(
+		TmBuff_MssD1 + TM_OFFSET(src_off, 0),
+		gBg1Tm + TM_OFFSET(MSS_DUAL_X + dst_off, MSS_DUAL_Y),
+		len, MSS_DUAL_HIGHT);
+
+	TmCopyRect(
+		TmBuff_MssD2 + TM_OFFSET(src_off, 0),
+		gBg2Tm + TM_OFFSET(MSS_DUAL_X + dst_off, MSS_DUAL_Y),
+		len, MSS_DUAL_HIGHT);
+}
+
 static void mss_loop_unit_slidein(struct ProcMss *proc)
 {
 	int u = mss_slide_tick(&proc->slide_u, MSS_U_HIGHT);
@@ -663,24 +753,40 @@ static void mss_loop_page_slidein(struct ProcMss *proc)
 		Proc_Break(proc);
 }
 
-static void mss_loop_page_slideout(struct ProcMss *proc)
+static void mss_loop_dual_slidein(struct ProcMss *proc)
 {
-	int u = mss_slide_tick(&proc->slide_u, MSS_U_HIGHT);
-	int l = mss_slide_tick(&proc->slide_l, MSS_L_WIDTH / 2);
+	int l = mss_slide_tick(&proc->slide_l, MSS_DUAL_WIDTH / 2);
 	int r = mss_slide_tick(&proc->slide_r, MSS_R_WIDTH);
 
 	TmFill(gBg0Tm, 0);
 	TmFill(gBg1Tm, 0);
 	TmFill(gBg2Tm, 0);
 
-	slide_up(u, MSS_SLIDE_OUT);
-	slide_left(l, MSS_SLIDE_OUT);
+	slide_dual_left(l, MSS_SLIDE_IN);
+	slide_right(r, MSS_SLIDE_IN);
+
+	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
+
+	if (proc->slide_l.clock >= proc->slide_l.length
+	 && proc->slide_r.clock >= proc->slide_r.length)
+		Proc_Break(proc);
+}
+
+static void mss_loop_dual_slideout(struct ProcMss *proc)
+{
+	int l = mss_slide_tick(&proc->slide_l, MSS_DUAL_WIDTH / 2);
+	int r = mss_slide_tick(&proc->slide_r, MSS_R_WIDTH);
+
+	TmFill(gBg0Tm, 0);
+	TmFill(gBg1Tm, 0);
+	TmFill(gBg2Tm, 0);
+
+	slide_dual_left(l, MSS_SLIDE_OUT);
 	slide_right(r, MSS_SLIDE_OUT);
 
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
 
-	if (proc->slide_u.clock >= proc->slide_u.length
-	 && proc->slide_l.clock >= proc->slide_l.length
+	if (proc->slide_l.clock >= proc->slide_l.length
 	 && proc->slide_r.clock >= proc->slide_r.length)
 		Proc_Break(proc);
 }
@@ -714,6 +820,85 @@ static void mss_unit_change_wait_cursor(struct ProcMss *proc)
 }
 
 /**
+ * slide procs
+ *
+ * Each layout owns the proc that performs its own slide, so a layout with a
+ * different set of panels brings its own flow instead of sharing this one.
+ * The core process only starts the proc that matches the current page and
+ * waits for it to end: SpawnProcLocking() blocks the parent until the child
+ * is done, which is exactly the wait we need.
+ */
+static const struct ProcScr ProcScr_mss_slide_in[] = {
+	PROC_CALL(mss_init_slide_unit_in),
+	PROC_REPEAT(mss_loop_unit_slidein),
+	PROC_END,
+};
+
+static const struct ProcScr ProcScr_mss_slide_in_page[] = {
+	PROC_CALL(mss_init_slide_page_in),
+	PROC_REPEAT(mss_loop_page_slidein),
+	PROC_END,
+};
+
+/* Page and unit transitions share the same slide-out timing. */
+static const struct ProcScr ProcScr_mss_slide_out[] = {
+	PROC_CALL(mss_init_slide_unit_out),
+	PROC_REPEAT(mss_loop_unit_slideout),
+	PROC_END,
+};
+
+/* Two-panel layout: left and right only. */
+static const struct ProcScr ProcScr_mss_slide_dual_in[] = {
+	PROC_CALL(mss_init_slide_dual_in),
+	PROC_REPEAT(mss_loop_dual_slidein),
+	PROC_END,
+};
+
+static const struct ProcScr ProcScr_mss_slide_dual_out[] = {
+	PROC_CALL(mss_init_slide_dual_out),
+	PROC_REPEAT(mss_loop_dual_slideout),
+	PROC_END,
+};
+
+/*
+ * Select the slide proc for the current page. Page 0 is the two-panel layout;
+ * pages 1..3 use the three-panel layout.
+ */
+static const struct ProcScr *mss_slide_in_proc(struct ProcMss *proc)
+{
+	if (proc->page == 0)
+		return ProcScr_mss_slide_dual_in;
+
+	return ProcScr_mss_slide_in;
+}
+
+static const struct ProcScr *mss_slide_in_page_proc(struct ProcMss *proc)
+{
+	if (proc->page == 0)
+		return ProcScr_mss_slide_dual_in;
+
+	return ProcScr_mss_slide_in_page;
+}
+
+static void mss_spawn_slide_in(struct ProcMss *proc)
+{
+	SpawnProcLocking(mss_slide_in_proc(proc), proc);
+}
+
+static void mss_spawn_slide_in_page(struct ProcMss *proc)
+{
+	SpawnProcLocking(mss_slide_in_page_proc(proc), proc);
+}
+
+static void mss_spawn_slide_out(struct ProcMss *proc)
+{
+	if (proc->page == 0)
+		SpawnProcLocking(ProcScr_mss_slide_dual_out, proc);
+	else
+		SpawnProcLocking(ProcScr_mss_slide_out, proc);
+}
+
+/**
  * main
  */
 static const struct ProcScr ProcScr_modern_statscreen[] = {
@@ -729,8 +914,8 @@ PROC_LABEL(PL_MSS_SLIDE_UNIT_IN),
 	PROC_CALL(mss_load_gfx),
 	PROC_CALL(mss_apply_page),
 	PROC_CALL(Mss_PreparePage),
-	PROC_CALL(mss_init_slide_unit_in),
-	PROC_REPEAT(mss_loop_unit_slidein),
+	PROC_CALL(mss_spawn_slide_in),
+	PROC_YIELD,
 	PROC_GOTO(PL_MSS_IDLE),
 
 PROC_LABEL(PL_MSS_IDLE),
@@ -738,21 +923,25 @@ PROC_LABEL(PL_MSS_IDLE),
 	PROC_REPEAT(mss_main),
 
 PROC_LABEL(PL_MSS_SLIDE_PAGE),
-	PROC_CALL(mss_init_slide_page_out),
-	PROC_REPEAT(mss_loop_page_slideout),
+	/*
+	 * SpawnProcLocking() only takes effect from the next frame, so the parent
+	 * must stop here; that frame also stands in for the blank frame the old
+	 * REPEAT-based flow left between the slide-out and the redraw.
+	 */
+	PROC_CALL(mss_spawn_slide_out),
 	PROC_YIELD,
 	PROC_CALL(mss_apply_page),
 	PROC_CALL(Mss_PreparePage),
-	PROC_CALL(mss_init_slide_page_in),
-	PROC_REPEAT(mss_loop_page_slidein),
+	PROC_CALL(mss_spawn_slide_in_page),
+	PROC_YIELD,
 	PROC_GOTO(PL_MSS_IDLE),
 
 PROC_LABEL(PL_MSS_SLIDE_PAGEUNIT),
 	PROC_CALL(mss_unit_change_prepare),
 
 	/* common end process */
-	PROC_CALL(mss_init_slide_unit_out),
-	PROC_REPEAT(mss_loop_unit_slideout),
+	PROC_CALL(mss_spawn_slide_out),
+	PROC_YIELD,
 	PROC_CALL(mss_end),
 	PROC_YIELD,
 	PROC_CALL(EndGreenText),
@@ -764,8 +953,8 @@ PROC_LABEL(PL_MSS_SLIDE_PAGEUNIT),
 	PROC_GOTO(PL_MSS_START),
 
 PROC_LABEL(PL_MSS_END),
-	PROC_CALL(mss_init_slide_unit_out),
-	PROC_REPEAT(mss_loop_unit_slideout),
+	PROC_CALL(mss_spawn_slide_out),
+	PROC_YIELD,
 	PROC_CALL(mss_end),
 	PROC_YIELD,
 	// PROC_CALL(UnlockBmDisplay),
@@ -789,6 +978,6 @@ void StartModernStatScreen(struct Unit *unit, ProcPtr parent)
 
 	proc = SpawnProcLocking(ProcScr_modern_statscreen, parent);
 	proc->page = 0;
-	proc->page_count = 3;
+	proc->page_count = 4;
 	proc->page_to_change = 0;
 }

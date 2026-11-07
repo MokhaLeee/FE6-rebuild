@@ -384,6 +384,12 @@ $(CACHE_DIR)/%.d: %.S
 C_OBJS := $(VANILLA_SRCS:%.c=%.o) $(C_SRCS:%.c=%.o)
 ASM_OBJS := $(ASM_SRCS:%.s=%.o) $(S_SRCS:%.S=%.o)
 
+# mssfx.S .incbin's the compressed TSA blobs, which make cannot see on its own.
+# They are gitignored build products, so give the assembler an explicit
+# dependency or a clean tree would fail on a missing .dmp.lz.
+MSS_TSA_LZ := $(patsubst %.c,%.dmp.lz,$(wildcard contents/statscreen/Modern/Tsa_Mss_*.c))
+$(S_SRCS:.S=.o): $(MSS_TSA_LZ)
+
 ALL_OBJS := $(C_OBJS) $(ASM_OBJS)
 ALL_DEPS := $(ALL_OBJS:%.o=$(CACHE_DIR)/%.d)
 

@@ -385,6 +385,12 @@ enum mss_rect {
 	MSS_R_HIGHT = 20,
 	MSS_R_X = 20,
 	MSS_R_Y = 0,
+
+	/* two-panel layout: left panel spans the full height, no upper panel */
+	MSS_DUAL_WIDTH = 20,
+	MSS_DUAL_HIGHT = 20,
+	MSS_DUAL_X = 0,
+	MSS_DUAL_Y = 0,
 };
 
 extern EWRAM_OVERLAY(0) u16 TmBuff_MssU0[MSS_U_HIGHT * 0x20];
@@ -398,6 +404,10 @@ extern EWRAM_OVERLAY(0) u16 TmBuff_MssR0[MSS_R_HIGHT * 0x20];
 extern EWRAM_OVERLAY(0) u16 TmBuff_MssR1[MSS_R_HIGHT * 0x20];
 extern EWRAM_OVERLAY(0) u16 TmBuff_MssR2[MSS_R_HIGHT * 0x20];
 
+extern EWRAM_OVERLAY(0) u16 TmBuff_MssD0[MSS_DUAL_HIGHT * 0x20];
+extern EWRAM_OVERLAY(0) u16 TmBuff_MssD1[MSS_DUAL_HIGHT * 0x20];
+extern EWRAM_OVERLAY(0) u16 TmBuff_MssD2[MSS_DUAL_HIGHT * 0x20];
+
 #define gUiTmScratchA TmBuff_MssR0
 #define gUiTmScratchB TmBuff_MssR1
 #define gUiTmScratchC TmBuff_MssR2
@@ -405,6 +415,7 @@ extern EWRAM_OVERLAY(0) u16 TmBuff_MssR2[MSS_R_HIGHT * 0x20];
 extern const u16 Tsa_Mss_Upper[];
 extern const u16 Tsa_Mss_Left[];
 extern const u16 Tsa_Mss_Right[];
+extern const u16 Tsa_Mss_Dual[];
 extern const u8 Img_MssUI[];
 extern const u16 Pal_MssUI[0x10];
 extern const u8 Img_MssUI2[];
