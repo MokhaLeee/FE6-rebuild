@@ -5,6 +5,7 @@
 #include "action.h"
 #include "bmio.h"
 #include "util.h"
+#include "armfunc.h"
 #include "ui.h"
 #include "mu.h"
 #include "hardware.h"
@@ -41,6 +42,7 @@ EWRAM_OVERLAY_PROMOTION static u8 PromoEkrMagi_ObImgBuf[0x1000] = {};
 EWRAM_OVERLAY_PROMOTION static struct EkrTerrainfxDesc PromoEkrTerrainDesc = {};
 EWRAM_OVERLAY_PROMOTION static u8 PromoEkrTerrain_ImgBuf[0x2000] = {};
 
+
 /**
  * promo-sel layout
  */
@@ -56,11 +58,11 @@ enum {
 
 	PROMO_DESC_X = 1,
 	PROMO_DESC_Y = 14,
-	PROMO_DESC_W = 22,
+	PROMO_DESC_W = 21,
 	PROMO_DESC_H = 6,
 
-	PROMO_STATS_X = 23,
-	PROMO_STATS_Y = 2,
+	PROMO_STATS_X = 22,
+	PROMO_STATS_Y = 1,
 	PROMO_STATS_W = 7,
 	PROMO_STATS_H = 18,
 
@@ -254,6 +256,8 @@ static void Promo_DrawWrappedText(const char *str, u16 *tm, int x, int y,
  */
 static void promofx_ekrmagi_callback(void)
 {
+	gDispIo.bg2_ct.priority = 2;
+
 	SetBlendConfig(1, 0x10, 0x10, 0);
 
 	SetBlendTargetA(0, 0, 1, 0, 0);
@@ -529,6 +533,58 @@ static void Promo_DrawStats(struct ProcPromoSel *proc)
 	}
 }
 
+static void Promo_SetStatsBlend(void)
+{
+	gDispIo.bg2_ct.priority = 1;
+
+	SetBlendAlpha(8, 8);
+	SetBlendTargetA(0, 0, 1, 0, 0);
+	SetBlendTargetB(0, 0, 0, 1, 1);
+	SetBlendBackdropA(0);
+	SetBlendBackdropB(0);
+}
+
+static void Promo_LoadStatsTiles(void)
+{
+	static const u8 mask[8] = { 0xF8, 0xFC, 0xFE, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+	int corner, x, y;
+	u8 tile[0x20];
+
+	for (corner = 0; corner < 5; corner++) {
+		for (y = 0; y < 8; y++) {
+			for (x = 0; x < 8; x++) {
+				int sx = (corner == 2 || corner == 4) ? 7 - x : x;
+				int sy = (corner == 3 || corner == 4) ? 7 - y : y;
+				int solid = (corner == 0) ? 1 : ((mask[sy] >> sx) & 1);
+				u8 color = solid ? 8 : 0;
+				int idx = y * 4 + (x >> 1);
+
+				if (x & 1)
+					tile[idx] = (tile[idx] & 0x0F) | (color << 4);
+				else
+					tile[idx] = (tile[idx] & 0xF0) | color;
+			}
+		}
+
+		CpuFastCopy(tile,
+			(u8 *)VRAM + (BGCHR_UIPROMO_STATSBLOCK + corner) * CHR_SIZE,
+			sizeof(tile));
+	}
+}
+
+static void Promo_DrawStatsBackdrop(void)
+{
+	u16 *tm = gBg2Tm + TM_OFFSET(PROMO_STATS_X, PROMO_STATS_Y);
+	u16 solid = TILEREF(BGCHR_UIPROMO_STATSBLOCK, BGPAL_WINDOWFRAME);
+
+	TmFillRect(tm, PROMO_STATS_W - 1, PROMO_STATS_H - 1, solid);
+
+	tm[0x00] = TILEREF(BGCHR_UIPROMO_STATSBLOCK + 1, BGPAL_WINDOWFRAME);
+	tm[PROMO_STATS_W - 1] = TILEREF(BGCHR_UIPROMO_STATSBLOCK + 2, BGPAL_WINDOWFRAME);
+	tm[(PROMO_STATS_H - 1) * 0x20] = TILEREF(BGCHR_UIPROMO_STATSBLOCK + 3, BGPAL_WINDOWFRAME);
+	tm[(PROMO_STATS_H - 1) * 0x20 + PROMO_STATS_W - 1] = TILEREF(BGCHR_UIPROMO_STATSBLOCK + 4, BGPAL_WINDOWFRAME);
+}
+
 static void Promo_DrawAll(struct ProcPromoSel *proc)
 {
 	int visible = Promo_GetVisibleCount(proc);
@@ -546,8 +602,9 @@ static void Promo_DrawAll(struct ProcPromoSel *proc)
 
 	PutUiWindowFrame(PROMO_DESC_X, PROMO_DESC_Y,
 		PROMO_DESC_W, PROMO_DESC_H, UI_WINDOW_REGULAR);
-	PutUiWindowFrame(PROMO_STATS_X, PROMO_STATS_Y,
-		PROMO_STATS_W, PROMO_STATS_H, UI_WINDOW_FILL);
+
+	/* The stats panel is a borderless semi-transparent rounded block on BG2. */
+	Promo_DrawStatsBackdrop();
 
 	ResetTextFont();
 
@@ -555,7 +612,7 @@ static void Promo_DrawAll(struct ProcPromoSel *proc)
 	Promo_DrawDesc(proc);
 	Promo_DrawStats(proc);
 
-	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT);
+	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
 }
 
 static void Promo_DrawIcons(struct ProcPromoSel *proc)
@@ -643,11 +700,11 @@ static void PromoSel_Init(struct ProcPromoSel *proc)
 	ApplyUnitSpritePalettes();
 	ResetUnitSprites();
 
-	/* Keep OBJ (unit sprite, terrain, hand) out of the stats panel area. */
-	SetWinEnable(0, 1, 0);
-	SetWin1Box(0, 0, PROMO_STATS_X * 8, 160);
-	SetWin1Layers(1, 1, 1, 1, 1);
-	SetWOutLayers(1, 1, 1, 1, 0);
+	/* Solid + rounded-corner tiles for the semi-transparent stats block. */
+	Promo_LoadStatsTiles();
+
+	/* Alpha-blend the stats panel fill (BG2) with the mural (BG3). */
+	Promo_SetStatsBlend();
 
 	for (i = 0; i < proc->choice_count; i++)
 		UseUnitSprite(GetJInfo(proc->choices[i])->map_sprite);
@@ -659,6 +716,10 @@ static void PromoSel_Loop(struct ProcPromoSel *proc)
 {
 	struct ProcPromoHandler *handler = Promo_GetHandler(proc);
 	int old_idx = proc->choice_idx;
+
+	if (proc->proc_parent->proc_ekrfx != NULL &&
+	    gpActiveClassReelSpellProc == NULL)
+		Promo_SetStatsBlend();
 
 	if (!PromoEkrFx_IsBusy(proc)) {
 		if (gKeySt->pressed & KEY_DPAD_UP) {
@@ -756,6 +817,7 @@ static void PromoMain_Init(struct ProcPromoMain *proc)
 
 static void PromoMain_StartFx(struct ProcPromoMain *proc)
 {
+	Promo_SetStatsBlend();
 	proc->proc_ekrfx = SpawnProc(ProcScr_PromoEkrFx, proc);
 }
 
@@ -764,6 +826,7 @@ static void PromoMain_Loop(struct ProcPromoMain *proc)
 
 static void PromoMain_End(struct ProcPromoMain *proc)
 {
+	SetBlendNone();
 	SetWinEnable(0, 0, 0);
 	SetWOutLayers(1, 1, 1, 1, 1);
 	EndMuralBackground();

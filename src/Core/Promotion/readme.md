@@ -45,17 +45,32 @@ tree3
 | 职业图标框 | `(1,1)`，宽 8；1～2 个候选高 10，3 个以上高 12 |
 | 职业图标 | `x=16`，从 tile y=2 开始；1～2 个候选每行 4 tile，3 个以上每行 3 tile，最多同时显示 3 个，选中项自动滚动 |
 | 职业名 | `(10,0)`，宽 13，金色居中（暂用 16px 普通文字） |
-| 职业 desc | `(1,14)`，22×6，自动按宽度折行，最多 2 行 |
-| 数值变更 | `(23,2)`，7×18，HP/Po/Ma/Sk/Sp/De/Re/Cn |
+| 职业 desc | `(1,14)`，21×6，自动按宽度折行，最多 2 行 |
+| 数值变更 | `(22,1)`，7×18，HP/Po/Ma/Sk/Sp/De/Re/Cn；单色半透明圆角块，无边框 |
 | ekrmini | 像素 `(152,80)`，地形 `(104,96)` |
 
 渲染层：
 
-- BG0：文字；BG1：`PutUiWindowFrame` 窗口框；BG2：ekrmini 的魔法背景；
-  BG3：壁画；OBJ：ekrmini、地形、职业图标、手形光标。
+- BG0：文字；BG1：`PutUiWindowFrame` 窗口边框（desc/图标框）；BG2：数值栏
+  单色半透明圆角块 + ekrmini 的魔法背景；BG3：壁画；OBJ：ekrmini、地形、
+  职业图标、手形光标。
 - 职业图标直接用 unit sprite（`UseUnitSprite` + `PutUnitSpriteExt`），
   和 prep unit screen 一样；图标 OAM 优先级设为 1，显示在窗口填充之上、
   BG0 文字之下。选中行用 `PutUiHand` 画手形光标。
+- 数值栏参考 vanilla statscreen 左下角，但**没有窗口边框**：BG2 直接用
+  5 个 tile 铺一个单色半透明圆角块：
+  - `BGCHR_UIPROMO_STATSBLOCK + 0`：纯色；
+  - `+1 ~ +4`：左上/右上/左下/右下圆角，外侧像素透明；
+  - 位置 `(22,1)`，7×18。
+  注意项目里的 `TmFillRect()` 实际会填 `width+1` / `height+1` 格，所以这里传
+  `PROMO_STATS_W - 1` / `PROMO_STATS_H - 1`；否则会多铺一格到右边/下面，
+  看起来像一直延伸到屏幕边缘。
+  `SetBlendTargetA(BG2)`、`SetBlendTargetB(BG3+OBJ)`、`SetBlendAlpha(8,8)`。
+  BG2 优先级设为 1，压在 OBJ 动画之上；OBJ 也在混合目标里，所以动画滑到块
+  下方时会以半透明透出来，而不是被裁掉或完全遮住。文字仍在 BG0，不受混合影响。
+- 地图淡入会留下 darken 混合，所以 `PromoSel_Loop` 在 `PromoEkrFx` 存在后每帧
+  重设一次 alpha；如果正在播放 class reel 魔法，就让位给
+  `promofx_ekrmagi_callback` 的混合配置。
 - ekrmini 的魔法背景从 BG1 移到 BG2，`promofx_ekrmagi_callback` 的混合目标
   同步调整，BG1 留给窗口框。
 
@@ -67,7 +82,8 @@ tree3
   `EkrMainMini_ChangeAnim()` 换成新职业，再 8 帧滑入。
 - 滑动期间输入锁定；职业名/desc/数值用 `ui_dirty` 延迟到换动画的那一帧才重绘，
   避免“新文字配旧动画”。
-- 用 WIN1 把 OBJ 裁在数值栏左侧（`x < 184`），避免滑动时角色/地形盖住数值栏；
+- 数值框在 BG2 上、优先级 1，压在 OBJ 动画之上；混合目标 B 包含 OBJ，
+  所以动画滑到框下方时仍能看到半透明图像。没有 WIN1 裁剪。
   `PromoMain_End` 里关闭窗口并恢复 WINOUT，退出后不影响地图上的单位/OBJ。
 
 ## 数值预览
