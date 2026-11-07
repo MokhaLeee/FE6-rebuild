@@ -37,8 +37,8 @@ tree3
 
 ## 界面布局
 
-参考图的结构：左上图标框、上方职业名、中右角色动画、底部 desc、
-最右数值栏。
+参考图的结构：左上图标框、上方职业名、中右角色动画、底部整条 desc、
+最右侧 7 项数值栏。
 
 | 区域 | tile / 像素 |
 | --- | --- |
@@ -82,15 +82,17 @@ tree3
   `EkrMainMini_ChangeAnim()` 换成新职业，再 8 帧滑入。
 - 滑动期间输入锁定；职业名/desc/数值用 `ui_dirty` 延迟到换动画的那一帧才重绘，
   避免“新文字配旧动画”。
-- 数值框在 BG2 上、优先级 1，压在 OBJ 动画之上；混合目标 B 包含 OBJ，
-  所以动画滑到框下方时仍能看到半透明图像。没有 WIN1 裁剪。
-  `PromoMain_End` 里关闭窗口并恢复 WINOUT，退出后不影响地图上的单位/OBJ。
+- 数值块在 BG2 上、优先级 1，压在 OBJ 动画之上；混合目标 B 包含 OBJ，
+  所以动画滑到块下方时仍能看到半透明图像。没有 WIN1 裁剪。
+  `PromoMain_End` 里清理窗口/混合状态（`SetWinEnable` / `SetWOutLayers` /
+  `SetBlendNone`），退出后不影响地图上的单位/OBJ。
 
 ## 数值预览
 
 `Promo_DrawStats()` 复制一份 `struct Unit`，对它调用
 `UnitPromote(&preview, jid)`，再和原 unit 做差。这样预览会和实际转职
-完全一致（包括上限、等级 1、武器经验等）。
+完全一致（包括上限、等级 1、武器经验等）。当前只显示
+HP/Po/Ma/Sk/Sp/De/Re 7 项，Con 不显示。
 
 ## 构建与测试
 
@@ -113,7 +115,7 @@ python3 tools/scripts/elf2sym.py fe6re.elf | python3 tools/scripts/sym_modify.py
 ```
 
 手动测试：让等级 ≥10 的 Mage/Mage_F 使用 Guiding Ring，应进入本界面；
-上下切换候选时图标、职业名、ekrmini、desc、右侧数值同步变化；A 转职，
+上下切换候选时图标、职业名、ekrmini、整条 desc、右侧 7 项数值同步变化；A 转职，
 B 取消且不消耗道具。
 
 ## 后续工作
