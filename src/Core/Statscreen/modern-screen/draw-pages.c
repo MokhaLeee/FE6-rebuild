@@ -183,19 +183,23 @@ static void put_rpage1()
  * page 1
  */
 enum {
-	MSS_EQUIP_BAR_TILE = 63,
-	MSS_EQUIP_BAR_X = 1,
-	MSS_EQUIP_BAR_WIDTH = 18,
+	MSS_EQUIP_LINE = 25,
+	MSS_EQUIP_LINE_END = 26,
+	MSS_EQUIP_LINE_X = 1,
+	MSS_EQUIP_LINE_WIDTH = 17,
 };
 
-static void put_equip_bar(int slot)
+static void put_equip_line(int slot)
 {
-	u16 *tm = TmBuff_MssL1 + TM_OFFSET(MSS_EQUIP_BAR_X, 3 + slot * 2);
+	u16 *tm = TmBuff_MssL1 + TM_OFFSET(MSS_EQUIP_LINE_X, 3 + slot * 2);
 	int i;
 
-	for (i = 0; i < MSS_EQUIP_BAR_WIDTH; i++) {
-		tm[i] = TILEREF(BGCHR_MSS_UI + MSS_EQUIP_BAR_TILE, BGPAL_MSS_UI);
+	/* thin underline under the equipped item, fading out under the "E" */
+	for (i = 0; i < MSS_EQUIP_LINE_WIDTH - 1; i++) {
+		tm[i] = TILEREF(BGCHR_MSS_UI + MSS_EQUIP_LINE, BGPAL_MSS_UI);
 	}
+
+	tm[MSS_EQUIP_LINE_WIDTH - 1] = TILEREF(BGCHR_MSS_UI + MSS_EQUIP_LINE_END, BGPAL_MSS_UI);
 }
 
 static void put_item_slot(int i, int equipped_slot)
@@ -209,8 +213,8 @@ static void put_item_slot(int i, int equipped_slot)
 		DrawItemStatScreenLine(text, item, IsItemDisplayUsable(unit, item), tm);
 
 		if (i == equipped_slot) {
-			put_equip_bar(i);
-			PutSpecialChar(tm + 16, TEXT_COLOR_SYSTEM_GREEN, TEXT_SPECIAL_E);
+			put_equip_line(i);
+			PutSpecialChar(tm + 15, TEXT_COLOR_SYSTEM_WHITE, TEXT_SPECIAL_E);
 		}
 	} else {
 		ClearText(text);

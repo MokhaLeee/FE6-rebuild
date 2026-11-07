@@ -46,13 +46,24 @@ enum mss_slide_ops {
  * The page label and arrows sit on top of the right panel, so they follow its
  * horizontal slide: off-screen while the panel is out, then back in with it.
  */
+/*
+ * Slide state lives in file scope: the slide procs are spawned children, and a
+ * child's PROC_CALL only sees its own proc, not the parent that owns the
+ * on-screen state. Keeping it global lets the sprite proc and the slide procs
+ * read/write the same values.
+ */
+static struct MssSlideState s_mss_slide_u;
+static struct MssSlideState s_mss_slide_l;
+static struct MssSlideState s_mss_slide_r;
+static int s_mss_slide_mode;
+
 static int mss_page_slide_offset(struct ProcMss *mss)
 {
-	if (mss->slide_mode == MSS_SLIDE_OUT)
-		return mss->slide_r.step * 8;
+	if (s_mss_slide_mode == MSS_SLIDE_OUT)
+		return s_mss_slide_r.step * 8;
 
-	if (mss->slide_mode == MSS_SLIDE_IN)
-		return (MSS_R_WIDTH - mss->slide_r.step) * 8;
+	if (s_mss_slide_mode == MSS_SLIDE_IN)
+		return (MSS_R_WIDTH - s_mss_slide_r.step) * 8;
 
 	return 0;
 }
@@ -228,10 +239,10 @@ static void mss_init(struct ProcMss *proc)
 {
 	struct Unit *unit = gMssSt.unit;
 
-	proc->slide_mode = MSS_SLIDE_IN;
-	proc->slide_u.step = 0;
-	proc->slide_l.step = 0;
-	proc->slide_r.step = 0;
+	s_mss_slide_mode = MSS_SLIDE_IN;
+	s_mss_slide_u.step = 0;
+	s_mss_slide_l.step = 0;
+	s_mss_slide_r.step = 0;
 
 	gDispIo.bg0_ct.priority = 0;
 	gDispIo.bg1_ct.priority = 1;
@@ -385,12 +396,12 @@ static void mss_sprites_loop(struct ProcMssSprite *proc)
 		int title_oam2 = OAM2_CHR(OBCHR_MSS_TITLES) + OAM2_PAL(OBPAL_MSS_TITLES) + OAM2_LAYER(1);
 		int lx = 8, rx = 168;
 
-		if (mss->slide_mode == MSS_SLIDE_OUT) {
-			lx -= mss->slide_l.step * 16;
-			rx += mss->slide_r.step * 8;
-		} else if (mss->slide_mode == MSS_SLIDE_IN) {
-			lx -= (MSS_L_WIDTH - mss->slide_l.step * 2) * 8;
-			rx += (MSS_R_WIDTH - mss->slide_r.step) * 8;
+		if (s_mss_slide_mode == MSS_SLIDE_OUT) {
+			lx -= s_mss_slide_l.step * 16;
+			rx += s_mss_slide_r.step * 8;
+		} else if (s_mss_slide_mode == MSS_SLIDE_IN) {
+			lx -= (MSS_L_WIDTH - s_mss_slide_l.step * 2) * 8;
+			rx += (MSS_R_WIDTH - s_mss_slide_r.step) * 8;
 		}
 
 		if (mss->page == 0) {
@@ -459,26 +470,26 @@ static int mss_slide_tick(struct MssSlideState *slide, int max)
  */
 static void mss_init_slide_unit_out(struct ProcMss *proc)
 {
-	proc->slide_mode = MSS_SLIDE_OUT;
-	mss_slide_init(&proc->slide_u, 0, 8);
-	mss_slide_init(&proc->slide_r, 2, 10);
-	mss_slide_init(&proc->slide_l, 4, 12);
+	s_mss_slide_mode = MSS_SLIDE_OUT;
+	mss_slide_init(&s_mss_slide_u, 0, 8);
+	mss_slide_init(&s_mss_slide_r, 2, 10);
+	mss_slide_init(&s_mss_slide_l, 4, 12);
 }
 
 static void mss_init_slide_unit_in(struct ProcMss *proc)
 {
-	proc->slide_mode = MSS_SLIDE_IN;
-	mss_slide_init(&proc->slide_l, 0, 12);
-	mss_slide_init(&proc->slide_u, 4, 8);
-	mss_slide_init(&proc->slide_r, 8, 10);
+	s_mss_slide_mode = MSS_SLIDE_IN;
+	mss_slide_init(&s_mss_slide_l, 0, 12);
+	mss_slide_init(&s_mss_slide_u, 4, 8);
+	mss_slide_init(&s_mss_slide_r, 8, 10);
 }
 
 static void mss_init_slide_page_in(struct ProcMss *proc)
 {
-	proc->slide_mode = MSS_SLIDE_IN;
-	mss_slide_init(&proc->slide_l, 0, 12);
-	mss_slide_init(&proc->slide_u, 3, 8);
-	mss_slide_init(&proc->slide_r, 6, 10);
+	s_mss_slide_mode = MSS_SLIDE_IN;
+	mss_slide_init(&s_mss_slide_l, 0, 12);
+	mss_slide_init(&s_mss_slide_u, 3, 8);
+	mss_slide_init(&s_mss_slide_r, 6, 10);
 }
 
 /*
@@ -487,21 +498,21 @@ static void mss_init_slide_page_in(struct ProcMss *proc)
  */
 static void mss_init_slide_dual_out(struct ProcMss *proc)
 {
-	proc->slide_mode = MSS_SLIDE_OUT;
-	mss_slide_init(&proc->slide_l, 0, 12);
-	mss_slide_init(&proc->slide_r, 2, 10);
+	s_mss_slide_mode = MSS_SLIDE_OUT;
+	mss_slide_init(&s_mss_slide_l, 0, 12);
+	mss_slide_init(&s_mss_slide_r, 2, 10);
 }
 
 static void mss_init_slide_dual_in(struct ProcMss *proc)
 {
-	proc->slide_mode = MSS_SLIDE_IN;
-	mss_slide_init(&proc->slide_l, 0, 12);
-	mss_slide_init(&proc->slide_r, 6, 10);
+	s_mss_slide_mode = MSS_SLIDE_IN;
+	mss_slide_init(&s_mss_slide_l, 0, 12);
+	mss_slide_init(&s_mss_slide_r, 6, 10);
 }
 
 static void mss_slide_idle(struct ProcMss *proc)
 {
-	proc->slide_mode = MSS_SLIDE_NONE;
+	s_mss_slide_mode = MSS_SLIDE_NONE;
 }
 
 static void mss_apply_page(struct ProcMss *proc)
@@ -691,9 +702,9 @@ static void slide_dual_left(int step, enum mss_slide_ops ops)
 
 static void mss_loop_unit_slidein(struct ProcMss *proc)
 {
-	int u = mss_slide_tick(&proc->slide_u, MSS_U_HIGHT);
-	int l = mss_slide_tick(&proc->slide_l, MSS_L_WIDTH / 2);
-	int r = mss_slide_tick(&proc->slide_r, MSS_R_WIDTH);
+	int u = mss_slide_tick(&s_mss_slide_u, MSS_U_HIGHT);
+	int l = mss_slide_tick(&s_mss_slide_l, MSS_L_WIDTH / 2);
+	int r = mss_slide_tick(&s_mss_slide_r, MSS_R_WIDTH);
 
 	TmFill(gBg0Tm, 0);
 	TmFill(gBg1Tm, 0);
@@ -705,17 +716,17 @@ static void mss_loop_unit_slidein(struct ProcMss *proc)
 
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
 
-	if (proc->slide_u.clock >= proc->slide_u.length
-	 && proc->slide_l.clock >= proc->slide_l.length
-	 && proc->slide_r.clock >= proc->slide_r.length)
+	if (s_mss_slide_u.clock >= s_mss_slide_u.length
+	 && s_mss_slide_l.clock >= s_mss_slide_l.length
+	 && s_mss_slide_r.clock >= s_mss_slide_r.length)
 		Proc_Break(proc);
 }
 
 static void mss_loop_unit_slideout(struct ProcMss *proc)
 {
-	int u = mss_slide_tick(&proc->slide_u, MSS_U_HIGHT);
-	int l = mss_slide_tick(&proc->slide_l, MSS_L_WIDTH / 2);
-	int r = mss_slide_tick(&proc->slide_r, MSS_R_WIDTH);
+	int u = mss_slide_tick(&s_mss_slide_u, MSS_U_HIGHT);
+	int l = mss_slide_tick(&s_mss_slide_l, MSS_L_WIDTH / 2);
+	int r = mss_slide_tick(&s_mss_slide_r, MSS_R_WIDTH);
 
 	TmFill(gBg0Tm, 0);
 	TmFill(gBg1Tm, 0);
@@ -727,17 +738,17 @@ static void mss_loop_unit_slideout(struct ProcMss *proc)
 
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
 
-	if (proc->slide_u.clock >= proc->slide_u.length
-	 && proc->slide_l.clock >= proc->slide_l.length
-	 && proc->slide_r.clock >= proc->slide_r.length)
+	if (s_mss_slide_u.clock >= s_mss_slide_u.length
+	 && s_mss_slide_l.clock >= s_mss_slide_l.length
+	 && s_mss_slide_r.clock >= s_mss_slide_r.length)
 		Proc_Break(proc);
 }
 
 static void mss_loop_page_slidein(struct ProcMss *proc)
 {
-	int u = mss_slide_tick(&proc->slide_u, MSS_U_HIGHT);
-	int l = mss_slide_tick(&proc->slide_l, MSS_L_WIDTH / 2);
-	int r = mss_slide_tick(&proc->slide_r, MSS_R_WIDTH);
+	int u = mss_slide_tick(&s_mss_slide_u, MSS_U_HIGHT);
+	int l = mss_slide_tick(&s_mss_slide_l, MSS_L_WIDTH / 2);
+	int r = mss_slide_tick(&s_mss_slide_r, MSS_R_WIDTH);
 
 	TmFill(gBg0Tm, 0);
 	TmFill(gBg1Tm, 0);
@@ -749,16 +760,16 @@ static void mss_loop_page_slidein(struct ProcMss *proc)
 
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
 
-	if (proc->slide_u.clock >= proc->slide_u.length
-	 && proc->slide_l.clock >= proc->slide_l.length
-	 && proc->slide_r.clock >= proc->slide_r.length)
+	if (s_mss_slide_u.clock >= s_mss_slide_u.length
+	 && s_mss_slide_l.clock >= s_mss_slide_l.length
+	 && s_mss_slide_r.clock >= s_mss_slide_r.length)
 		Proc_Break(proc);
 }
 
 static void mss_loop_dual_slidein(struct ProcMss *proc)
 {
-	int l = mss_slide_tick(&proc->slide_l, MSS_DUAL_WIDTH / 2);
-	int r = mss_slide_tick(&proc->slide_r, MSS_R_WIDTH);
+	int l = mss_slide_tick(&s_mss_slide_l, MSS_DUAL_WIDTH / 2);
+	int r = mss_slide_tick(&s_mss_slide_r, MSS_R_WIDTH);
 
 	TmFill(gBg0Tm, 0);
 	TmFill(gBg1Tm, 0);
@@ -769,15 +780,15 @@ static void mss_loop_dual_slidein(struct ProcMss *proc)
 
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
 
-	if (proc->slide_l.clock >= proc->slide_l.length
-	 && proc->slide_r.clock >= proc->slide_r.length)
+	if (s_mss_slide_l.clock >= s_mss_slide_l.length
+	 && s_mss_slide_r.clock >= s_mss_slide_r.length)
 		Proc_Break(proc);
 }
 
 static void mss_loop_dual_slideout(struct ProcMss *proc)
 {
-	int l = mss_slide_tick(&proc->slide_l, MSS_DUAL_WIDTH / 2);
-	int r = mss_slide_tick(&proc->slide_r, MSS_R_WIDTH);
+	int l = mss_slide_tick(&s_mss_slide_l, MSS_DUAL_WIDTH / 2);
+	int r = mss_slide_tick(&s_mss_slide_r, MSS_R_WIDTH);
 
 	TmFill(gBg0Tm, 0);
 	TmFill(gBg1Tm, 0);
@@ -788,8 +799,8 @@ static void mss_loop_dual_slideout(struct ProcMss *proc)
 
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
 
-	if (proc->slide_l.clock >= proc->slide_l.length
-	 && proc->slide_r.clock >= proc->slide_r.length)
+	if (s_mss_slide_l.clock >= s_mss_slide_l.length
+	 && s_mss_slide_r.clock >= s_mss_slide_r.length)
 		Proc_Break(proc);
 }
 
