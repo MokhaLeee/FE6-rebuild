@@ -66,7 +66,18 @@ enum {
 
 	PROMO_MINI_X = 152,
 	PROMO_MINI_Y = 80,
+	PROMO_TERRAIN_X = PROMO_MINI_X - 0x30,
 	PROMO_TERRAIN_Y = 96,
+
+	PROMO_FX_IDLE,
+	PROMO_FX_WAIT,
+	PROMO_FX_OUT,
+	PROMO_FX_IN,
+
+	PROMO_FX_OFFSET = 0x60,
+	PROMO_FX_WAIT_FRAMES = 4,
+	PROMO_FX_OUT_FRAMES = 8,
+	PROMO_FX_IN_FRAMES = 8,
 };
 
 /**
@@ -320,22 +331,106 @@ static void promofx_put_ekrterrainfx(int terrain, int x, int y)
 	EkrTerrainfx_SetPosition(desc, x, y, x + 0x60, y);
 }
 
+static void PromoEkrFx_SetPos(int offset)
+{
+	EkrMainMini_SetAnimPosition(&PromoEkrMiniDesc,
+		PROMO_MINI_X + offset, PROMO_MINI_Y);
+
+	EkrTerrainfx_SetPosition(&PromoEkrTerrainDesc,
+		PROMO_TERRAIN_X + offset, PROMO_TERRAIN_Y,
+		PROMO_TERRAIN_X + offset + 0x60, PROMO_TERRAIN_Y);
+}
+
+static void PromoEkrFx_ChangeJid(struct ProcPromoHandler *handler, int jid)
+{
+	int bid = Promo_GetPreviewBid(handler->unit, jid);
+
+	if (bid < 0)
+		return;
+
+	PromoEkrMiniDesc.img_sheet = NULL;
+	EkrMainMini_ChangeAnim(&PromoEkrMiniDesc, bid);
+}
+
 static void PromoEkrFx_Init(struct ProcPromoEkrFx *proc)
 {
 	struct ProcPromoHandler *handler = proc->proc_parent->proc_parent;
 	struct Unit *unit = handler->unit;
-	int bid = Promo_GetPreviewBid(unit, unit->jinfo->id);
+	u8 choices[PROMO_CHOICE_MAX];
+	int count, jid, bid;
 
+	count = GetPromoChoices(unit, unit->items[handler->item_slot],
+		choices, PROMO_CHOICE_MAX);
+	jid = (count > 0) ? choices[0] : unit->jinfo->id;
+
+	bid = Promo_GetPreviewBid(unit, jid);
 	if (bid < 0)
 		bid = 0x10;
 
+	proc->state = PROMO_FX_WAIT;
+	proc->timer = 0;
+	proc->jid = jid;
+	proc->current_jid = jid;
+
 	EndEfxAnimeDrvProc();
-	promofx_put_ekrmainmini(bid, 0, PROMO_MINI_X, PROMO_MINI_Y, ANIM_ROUND_TAKING_HIT_CLOSE);
-	promofx_put_ekrterrainfx(1, PROMO_MINI_X - 0x30, PROMO_TERRAIN_Y);
+	promofx_put_ekrmainmini(bid, 0,
+		PROMO_MINI_X + PROMO_FX_OFFSET, PROMO_MINI_Y,
+		ANIM_ROUND_TAKING_HIT_CLOSE);
+	promofx_put_ekrterrainfx(1,
+		PROMO_TERRAIN_X + PROMO_FX_OFFSET, PROMO_TERRAIN_Y);
 }
 
 static void PromoEkrFx_Loop(struct ProcPromoEkrFx *proc)
-{}
+{
+	struct ProcPromoHandler *handler = proc->proc_parent->proc_parent;
+	int offset;
+
+	switch (proc->state) {
+	case PROMO_FX_WAIT:
+		proc->timer++;
+
+		if (proc->timer >= PROMO_FX_WAIT_FRAMES) {
+			PromoEkrFx_SetPos(PROMO_FX_OFFSET);
+			proc->state = PROMO_FX_IN;
+			proc->timer = 0;
+		}
+		break;
+
+	case PROMO_FX_OUT:
+		proc->timer++;
+
+		if (proc->timer >= PROMO_FX_OUT_FRAMES) {
+			offset = PROMO_FX_OFFSET;
+			PromoEkrFx_SetPos(offset);
+			PromoEkrFx_ChangeJid(handler, proc->jid);
+			proc->current_jid = proc->jid;
+			proc->state = PROMO_FX_IN;
+			proc->timer = 0;
+			break;
+		}
+
+		offset = (proc->timer * PROMO_FX_OFFSET) / PROMO_FX_OUT_FRAMES;
+		PromoEkrFx_SetPos(offset);
+		break;
+
+	case PROMO_FX_IN:
+		proc->timer++;
+
+		if (proc->timer >= PROMO_FX_IN_FRAMES) {
+			PromoEkrFx_SetPos(0);
+			proc->state = PROMO_FX_IDLE;
+			proc->timer = 0;
+			break;
+		}
+
+		offset = PROMO_FX_OFFSET - (proc->timer * PROMO_FX_OFFSET) / PROMO_FX_IN_FRAMES;
+		PromoEkrFx_SetPos(offset);
+		break;
+
+	default:
+		break;
+	}
+}
 
 static void PromoEkrFx_End(struct ProcPromoEkrFx *proc)
 {
@@ -452,7 +547,7 @@ static void Promo_DrawAll(struct ProcPromoSel *proc)
 	PutUiWindowFrame(PROMO_DESC_X, PROMO_DESC_Y,
 		PROMO_DESC_W, PROMO_DESC_H, UI_WINDOW_REGULAR);
 	PutUiWindowFrame(PROMO_STATS_X, PROMO_STATS_Y,
-		PROMO_STATS_W, PROMO_STATS_H, UI_WINDOW_REGULAR);
+		PROMO_STATS_W, PROMO_STATS_H, UI_WINDOW_FILL);
 
 	ResetTextFont();
 
@@ -496,20 +591,33 @@ static void Promo_DrawIcons(struct ProcPromoSel *proc)
 		+ (step == 4 ? 8 : 4));
 }
 
-static void Promo_UpdateMiniAnim(struct ProcPromoSel *proc)
+static bool PromoEkrFx_IsBusy(struct ProcPromoSel *proc)
 {
-	struct ProcPromoHandler *handler = Promo_GetHandler(proc);
-	int bid;
+	struct ProcPromoEkrFx *fx = proc->proc_parent->proc_ekrfx;
 
-	if (!PromoEkrMiniDesc.valid || PromoEkrMiniDesc.anim1 == NULL)
+	if (fx == NULL)
+		return TRUE;
+
+	return fx->state != PROMO_FX_IDLE;
+}
+
+static int PromoEkrFx_GetState(struct ProcPromoSel *proc)
+{
+	struct ProcPromoEkrFx *fx = proc->proc_parent->proc_ekrfx;
+
+	return (fx != NULL) ? fx->state : PROMO_FX_IDLE;
+}
+
+static void PromoEkrFx_RequestJid(struct ProcPromoSel *proc, int jid)
+{
+	struct ProcPromoEkrFx *fx = proc->proc_parent->proc_ekrfx;
+
+	if (fx == NULL || fx->state != PROMO_FX_IDLE || jid == fx->current_jid)
 		return;
 
-	bid = Promo_GetPreviewBid(handler->unit, Promo_GetJid(proc));
-	if (bid < 0)
-		return;
-
-	PromoEkrMiniDesc.img_sheet = NULL;
-	EkrMainMini_ChangeAnim(&PromoEkrMiniDesc, bid);
+	fx->jid = jid;
+	fx->state = PROMO_FX_OUT;
+	fx->timer = 0;
 }
 
 static void PromoSel_Init(struct ProcPromoSel *proc)
@@ -535,11 +643,16 @@ static void PromoSel_Init(struct ProcPromoSel *proc)
 	ApplyUnitSpritePalettes();
 	ResetUnitSprites();
 
+	/* Keep OBJ (unit sprite, terrain, hand) out of the stats panel area. */
+	SetWinEnable(0, 1, 0);
+	SetWin1Box(0, 0, PROMO_STATS_X * 8, 160);
+	SetWin1Layers(1, 1, 1, 1, 1);
+	SetWOutLayers(1, 1, 1, 1, 0);
+
 	for (i = 0; i < proc->choice_count; i++)
 		UseUnitSprite(GetJInfo(proc->choices[i])->map_sprite);
 
 	Promo_DrawAll(proc);
-	Promo_UpdateMiniAnim(proc);
 }
 
 static void PromoSel_Loop(struct ProcPromoSel *proc)
@@ -547,39 +660,46 @@ static void PromoSel_Loop(struct ProcPromoSel *proc)
 	struct ProcPromoHandler *handler = Promo_GetHandler(proc);
 	int old_idx = proc->choice_idx;
 
-	if (gKeySt->pressed & KEY_DPAD_UP) {
-		if (proc->choice_idx == 0)
-			proc->choice_idx = proc->choice_count - 1;
-		else
-			proc->choice_idx--;
-	} else if (gKeySt->pressed & KEY_DPAD_DOWN) {
-		if (proc->choice_idx + 1 >= proc->choice_count)
-			proc->choice_idx = 0;
-		else
-			proc->choice_idx++;
+	if (!PromoEkrFx_IsBusy(proc)) {
+		if (gKeySt->pressed & KEY_DPAD_UP) {
+			if (proc->choice_idx == 0)
+				proc->choice_idx = proc->choice_count - 1;
+			else
+				proc->choice_idx--;
+		} else if (gKeySt->pressed & KEY_DPAD_DOWN) {
+			if (proc->choice_idx + 1 >= proc->choice_count)
+				proc->choice_idx = 0;
+			else
+				proc->choice_idx++;
+		}
+
+		if (proc->choice_idx != old_idx) {
+			PlaySe(SONG_6A);
+			proc->ui_dirty = 1;
+			PromoEkrFx_RequestJid(proc, Promo_GetJid(proc));
+		}
+
+		if (gKeySt->pressed & KEY_BUTTON_A) {
+			handler->jid_promo = proc->choices[proc->choice_idx];
+			handler->action_type = PROMO_ACT_PROMO;
+			PlaySe(SONG_6A);
+			Proc_Break(proc->proc_parent);
+			Proc_Break(proc);
+			return;
+		}
+
+		if (gKeySt->pressed & KEY_BUTTON_B) {
+			handler->action_type = PROMO_ACT_CANCEL;
+			PlaySe(SONG_6B);
+			Proc_Break(proc->proc_parent);
+			Proc_Break(proc);
+			return;
+		}
 	}
 
-	if (proc->choice_idx != old_idx) {
-		PlaySe(SONG_6A);
+	if (proc->ui_dirty && PromoEkrFx_GetState(proc) != PROMO_FX_OUT) {
 		Promo_DrawAll(proc);
-		Promo_UpdateMiniAnim(proc);
-	}
-
-	if (gKeySt->pressed & KEY_BUTTON_A) {
-		handler->jid_promo = proc->choices[proc->choice_idx];
-		handler->action_type = PROMO_ACT_PROMO;
-		PlaySe(SONG_6A);
-		Proc_Break(proc->proc_parent);
-		Proc_Break(proc);
-		return;
-	}
-
-	if (gKeySt->pressed & KEY_BUTTON_B) {
-		handler->action_type = PROMO_ACT_CANCEL;
-		PlaySe(SONG_6B);
-		Proc_Break(proc->proc_parent);
-		Proc_Break(proc);
-		return;
+		proc->ui_dirty = 0;
 	}
 
 	SyncUnitSpriteSheet();
@@ -630,8 +750,13 @@ static void PromoMain_Init(struct ProcPromoMain *proc)
 	StartMuralBackground(proc, NULL, -1);
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT | BG3_SYNC_BIT);
 
-	proc->proc_ekrfx = SpawnProc(ProcScr_PromoEkrFx,  proc);
+	proc->proc_ekrfx = NULL;
 	proc->proc_sel = SpawnProc(ProcScr_PromoSel, proc);
+}
+
+static void PromoMain_StartFx(struct ProcPromoMain *proc)
+{
+	proc->proc_ekrfx = SpawnProc(ProcScr_PromoEkrFx, proc);
 }
 
 static void PromoMain_Loop(struct ProcPromoMain *proc)
@@ -639,6 +764,8 @@ static void PromoMain_Loop(struct ProcPromoMain *proc)
 
 static void PromoMain_End(struct ProcPromoMain *proc)
 {
+	SetWinEnable(0, 0, 0);
+	SetWOutLayers(1, 1, 1, 1, 1);
 	EndMuralBackground();
 }
 
@@ -653,6 +780,8 @@ static const struct ProcScr ProcScr_PromoMainBM[] = {
 	PROC_YIELD,
 	PROC_CALL(StartFastFadeFromBlack),
 	PROC_REPEAT(WhileFadeExists),
+	PROC_CALL(PromoMain_StartFx),
+	PROC_YIELD,
 	PROC_REPEAT(PromoMain_Loop),
 	PROC_YIELD,
 	PROC_CALL(StartFastFadeToBlack),

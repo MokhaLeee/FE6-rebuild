@@ -59,6 +59,17 @@ tree3
 - ekrmini 的魔法背景从 BG1 移到 BG2，`promofx_ekrmagi_callback` 的混合目标
   同步调整，BG1 留给窗口框。
 
+### 动画进出
+
+- 进场：等 `StartFastFadeFromBlack` 结束后才起 `PromoEkrFx`。角色和地形先放在
+  屏幕右侧外（`PROMO_MINI_X + 0x60`），停 4 帧后 8 帧滑入到 `(152,80)`。
+- 切换：选中职业变化时，角色 + 地形先 8 帧向右滑出到 `x + 0x60`，在屏幕外
+  `EkrMainMini_ChangeAnim()` 换成新职业，再 8 帧滑入。
+- 滑动期间输入锁定；职业名/desc/数值用 `ui_dirty` 延迟到换动画的那一帧才重绘，
+  避免“新文字配旧动画”。
+- 用 WIN1 把 OBJ 裁在数值栏左侧（`x < 184`），避免滑动时角色/地形盖住数值栏；
+  `PromoMain_End` 里关闭窗口并恢复 WINOUT，退出后不影响地图上的单位/OBJ。
+
 ## 数值预览
 
 `Promo_DrawStats()` 复制一份 `struct Unit`，对它调用

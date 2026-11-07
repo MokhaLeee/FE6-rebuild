@@ -59,12 +59,17 @@ struct ProcPromoMain {
 
 struct ProcPromoEkrFx {
 	PROC_HEADER_EXT(struct ProcPromoMain);
+	u8 state;
+	u8 timer;
+	int jid;
+	int current_jid;
 };
 
 struct ProcPromoSel {
 	PROC_HEADER_EXT(struct ProcPromoMain);
 	u8 choice_count;
 	u8 choice_idx;
+	u8 ui_dirty;
 	u8 choices[PROMO_CHOICE_MAX];
 };
 
