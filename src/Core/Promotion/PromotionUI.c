@@ -58,13 +58,13 @@ enum {
 
 	PROMO_DESC_X = 1,
 	PROMO_DESC_Y = 14,
-	PROMO_DESC_W = 21,
+	PROMO_DESC_W = 28,
 	PROMO_DESC_H = 6,
 
 	PROMO_STATS_X = 22,
-	PROMO_STATS_Y = 1,
+	PROMO_STATS_Y = 0,
 	PROMO_STATS_W = 7,
-	PROMO_STATS_H = 18,
+	PROMO_STATS_H = 14,
 
 	PROMO_MINI_X = 152,
 	PROMO_MINI_Y = 80,
@@ -493,8 +493,8 @@ static void Promo_DrawDesc(struct ProcPromoSel *proc)
 
 static void Promo_DrawStats(struct ProcPromoSel *proc)
 {
-	static const char *const labels[8] = {
-		"HP", "Po", "Ma", "Sk", "Sp", "De", "Re", "Cn"
+	static const char *const labels[7] = {
+		"HP", "Po", "Ma", "Sk", "Sp", "De", "Re"
 	};
 
 	struct ProcPromoHandler *handler = Promo_GetHandler(proc);
@@ -515,8 +515,8 @@ static void Promo_DrawStats(struct ProcPromoSel *proc)
 	deltas[6] = preview.res - unit->res;
 	deltas[7] = UNIT_CON(&preview) - UNIT_CON(unit);
 
-	for (i = 0; i < 8; i++) {
-		int y = PROMO_STATS_Y + 1 + i * 2;
+	for (i = 0; i < 7; i++) {
+		int y = PROMO_STATS_Y + i * 2;
 
 		PutDrawText(NULL,
 			gBg0Tm + TM_OFFSET(PROMO_STATS_X + 1, y),
