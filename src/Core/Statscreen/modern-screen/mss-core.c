@@ -127,9 +127,8 @@ static const struct TextInitInfo mss_text_init_info_page2[] = {
 };
 
 /*
- * Page 0 is the two-panel layout. It currently only draws the portrait frame,
- * so the only text slots it needs are the attribute labels for the right
- * column.
+ * Page 0 is the two-panel layout: the description printed under the portrait
+ * plus the attribute labels for the right column.
  */
 static const struct TextInitInfo mss_text_init_info_dual[] = {
 	{ &gMssSt.texts[MSS_TEXT_DUAL_DESC1], 19 },

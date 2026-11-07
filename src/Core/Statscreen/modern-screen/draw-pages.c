@@ -456,16 +456,42 @@ static void put_rpage3(void)
 /**
  * total
  */
-/**
- * page 0: two-panel layout
- *
- * Only the portrait frame is drawn for now; the rest of the left panel is
- * intentionally left empty while the contents are being decided.
+
+/*
+ * page 0: the area under the portrait gets a pale pinstriped matting. It is
+ * painted only inside the frame's opening (the portrait's 10x9 tile block)
+ * and shows through the transparent parts of the portrait art; the rest of
+ * the panel keeps the default dark fill painted by Tsa_Mss_Dual.
  */
+enum {
+	MSS_MATTING_TILE = 21,
+	MSS_MATTING_X = 2,
+	MSS_MATTING_Y = 2,
+	MSS_MATTING_W = 10,
+	MSS_MATTING_H = 9,
+};
+
+static void put_dual_backdrop(void)
+{
+	static const u8 pattern[2][2] = {
+		{ MSS_MATTING_TILE + 0, MSS_MATTING_TILE + 1 },
+		{ MSS_MATTING_TILE + 2, MSS_MATTING_TILE + 3 },
+	};
+	int x, y;
+
+	for (y = 0; y < MSS_MATTING_H; y++) {
+		for (x = 0; x < MSS_MATTING_W; x++)
+			TmBuff_MssD2[TM_OFFSET(MSS_MATTING_X + x, MSS_MATTING_Y + y)] =
+				TILEREF(BGCHR_MSS_UI + pattern[y & 1][x & 1], BGPAL_MSS_UI);
+	}
+}
+
 static void put_dual_page(void)
 {
 	int msg;
 	struct Unit *unit = gMssSt.unit;
+
+	put_dual_backdrop();
 
 	/*
 	 * The frame goes on BG0 and the portrait on BG1. BG0 wins the priority

@@ -15,7 +15,7 @@ src/Core/Statscreen/modern-screen/
 └── README.md       本文件
 
 contents/statscreen/Modern/
-├── ModernStatScreen_UI.png       面板边框/填充 tile 图集（256x32；tile 13–20 为头像相框，tile 63 为装备行深红条）
+├── ModernStatScreen_UI.png       面板边框/填充 tile 图集（256x32；tile 13–20 为头像相框，21–24 为相框内卡纸，tile 63 为装备行深红条）
 ├── ModernStatScreen_UI2.png      statbar 图集
 ├── ModernStatScreen_Spirtes.png  页码/箭头/小图标（256x32）
 ├── ModernStatScreen_Titles.png   整词艺术字（16x384，SKILLS/ITEMS/SUPPORT/STATS/COMBAT/WEAPON）
@@ -24,7 +24,7 @@ contents/statscreen/Modern/
 ├── Tsa_Mss_Left.c                Left 面板 TSA（20x14）
 ├── Tsa_Mss_Right.c               Right 面板 TSA（10x19）
 ├── Tsa_Mss_Dual.c                DUAL 页左面板 TSA（20x20）
-└── Tsa_Mss_FaceFrame.c           头像相框 TSA（12x11，框体 6px 金色带）
+└── Tsa_Mss_FaceFrame.c           头像相框 TSA（12x11，框体 8px 金色带）
 ```
 
 `Tsa_Mss_*.c` 是数据源，`make` 会把它们编成 `.dmp` 再压成 `.dmp.lz`，由 `mssfx.S`
@@ -61,33 +61,36 @@ contents/statscreen/Modern/
 `ApplyPalette`），画在 `(2,2)`，占 10x9 tile。
 
 相框用 `Tsa_Mss_FaceFrame`，12x11，画在 `(1,1)`，**框在 BG0、立绘在 BG1**：BG0 优先级
-更高，所以边框线会压在立绘最外 2px 上，而不是被立绘盖掉。
+更高，框带盖住立绘边界外侧的像素，不会压到人物。
 
 > `TmApplyTsa()` 是**从最后一行往上画**的（见 `armfunc-asm.iwram.S`），所以 TSA 数组必须
 > 倒序存放——第 0 行对应画面最底部。写正序数组会让整个框上下颠倒、四个角错位。
 
-相框是 6px 金色带，把立绘紧紧框住；6px 带贴着立绘向内数，所以 tile 环最外侧的 2px 是透明的：
-
-```
-外 ── 0px 透明 ── 1px 暗金细线(10) ── 6px 金带 ── 立绘
-```
-
-金带从外到内的配色（UI 调色板的金色段）：
+相框是 8px 金色带，正好占满整圈 tile：内缘落在立绘边界上，**贴着立绘的下、左、右**，
+不留缝。金带从外到内的配色（UI 调色板的金色段）：
 
 | 位置 | 索引 | 颜色 |
 |---|---|---|
 | 外描边 | `8` | `#625A39` 深橄榄 |
-| 亮边 | `13` | `#FFFFB4` 亮黄 |
 | 高光 | `15` | `#FFFFCD` 米白 |
+| 亮边 | `13` | `#FFFFB4` 亮黄 |
 | 金 | `12` | `#E6DEA4` |
-| 暗金 | `10` | `#B4B47B` |
-| 内描边 | `8` | 深橄榄，贴着脸 |
+| 暗金 | `11` / `10` / `9` | 渐暗 |
+| 内描边 | `8` | 深橄榄，贴着立绘 |
 
-四角各嵌一颗 5x5 菱形角花（`8` 描边、`13` 面、`15` 芯），是这一圈里唯一的"花纹"。
-四条边本身是纯渐变，花纹靠 8px 一格重复的 tile 无法做逐段变化，所以只在角 tile 上画。
+立绘是透明的 80x72 图，人物之外的像素会透出下面的卡纸。卡纸在 `put_dual_backdrop()`
+里铺 tile 21–24（16x16 周期的浅色斜纹），**只铺立绘那 10x9 tile**，
+框外的面板保持 `Tsa_Mss_Dual` 的深蓝填充。
+
+> 框带宽度是被 tile 网格锁死的：立绘 80x72 必须落在 8px 网格上、框是 12x11，
+> 所以框带只能是 8px（贴住立绘）。想让框和立绘之间再留一圈卡纸，就得把框放大到
+> 14x13，但垂直方向放不下（描述行会顶到面板底边框）。
 
 > 金色和面板边框的蓝紫 `6/7/15/8` 是同一套 UI 调色板，但相框整体换成金色系，
 > 让它从蓝色面板里跳出来，和标题的金色渐变呼应。
+
+卡纸是**浅色斜纹**：底色 `1`（`#D5DEFF`），斜线 `2`（`#A4A4FF`），16x16 一个周期
+（tile 21–24 拼 2x2）。卡纸铺在 D2，相框、立绘、描述分别压在 D0/D1 上。
 
 ### 2.3 TM buffer
 
@@ -97,10 +100,10 @@ contents/statscreen/Modern/
 - `TmBuff_MssU1/L1/R1` → BG1（statbar / gauge；ITEMS 页的装备行深红条也画在这里）
 - `TmBuff_MssU2/L2/R2` → BG2（UI 边框、填充）
 - `TmBuff_MssD0/D1/D2` → 双面板页的 Left；20 行，比三面板的 Left 高。D0 放相框和描述文字，
-  D1 放立绘（框压着立绘的边缘），D2 目前空着
+  D1 放立绘，D2 只在立绘下面铺卡纸（透过立绘透明区显示）
 
 双面板页的 BG VRAM：立绘占 `BGCHR_MSS_FACE_BIG` 那块 90 tile（`0x4C00`），相框的 8 个 tile
-画在 UI 图集的空闲位（tile 13–20）。
+画在 UI 图集的空闲位（tile 13–20），卡纸的 4 个 tile 用 tile 21–24。
 
 滑动时 `slide_up/left/right`（三面板）或 `slide_dual_left` + `slide_right`（双面板）
 把 buffer 的内容按列/行复制到 `gBg0Tm`/`gBg1Tm`/`gBg2Tm`。
@@ -279,9 +282,11 @@ CpuCopy16(
 
 ### Page 0（DUAL，双面板）
 
-- Left（20x20）：80x72 立绘在 `(2,2)`，外面 12x11 相框在 `(1,1)`；框下面排三行角色
-  描述（`pinfo->msg_desc`，为 0 时回退 `jinfo->msg_desc`），y=12/14/16，每行 19 字符，
-  文本里的换行符由 `put_multi_line_text()` 切分。
+- Left（20x20）：80x72 立绘在 `(2,2)`，外面 12x11 相框在 `(1,1)`；相框与立绘之间是
+  浅色斜纹卡纸（16x16 周期，tile 21–24，只铺在立绘那 10x9 tile 下面；人物之外的透明像素
+  会透出卡纸）。框带 8px，内缘正好贴在立绘边界上，框外面板保持深蓝。
+  框下面排三行角色描述（`pinfo->msg_desc`，为 0 时回退 `jinfo->msg_desc`），
+  y=12/14/16，每行 19 字符，文本里的换行符由 `put_multi_line_text()` 切分。
 - 名字、职业、LV/HP、Con/Aid、技能列表等内容**暂时都清空了**，等确定放什么再加。
 - Right：`Str/Mag/Skl/Spd/Def/Res/Lck/Mov`，y=2,4,...,16（与 PERSONAL 页共用同一段绘制）。
 - 这一页**不放左侧标题**：左面板顶到画面最上沿，标题会压内容；只有右侧 `STATS`。
@@ -448,15 +453,20 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 | `86fd8c9` | Page 1 物品槽、装备条、Rank/Wgt/Rng 摘要与 COMBAT `AS` |
 | `06a4e21` | 双面板 page 0、四页重排、每布局独立 slide proc |
 | `def581b` | page 0 换成 80x72 立绘 + 12x11 相框 + 角色描述 |
-| （本次） | 相框改成 6px 金色装饰框：外圈暗金细线 + 四角菱形角花 |
+| `9f9583c` | 相框改成 6px 金色装饰框：外圈暗金细线 + 四角菱形角花 |
+| （本次） | 相框内加浅色斜纹卡纸，框带加宽到 8px 贴住立绘，面板背景恢复原样 |
 
 具体：
 
-- （本次）相框从面板边框的蓝紫 4px 渐变改成**金色 6px 带**：外描边 `8`、亮黄 `13`、
-  高光 `15`、金 `12`、暗金 `10`、贴脸内描边 `8`；框外再留 1px 暗金细线（`10`）。
-  四角各一颗 5x5 菱形角花（`8/13/15`）。
-- （本次）相框带宽 6px，仍然只用 `Tsa_Mss_FaceFrame` 的 8 个 tile（13–20），TSA 不用改：
-  边长 12 格，每个边 tile 都是 8px 周期的重复图案，角 tile 只有 6x6 有内容。
+- （本次）page 0 的相框内铺 **浅色斜纹卡纸**（底 `1`/`#D5DEFF`，斜线 `2`/`#A4A4FF`，
+  16x16 周期，tile 21–24）。`put_dual_backdrop()` 只铺立绘那 10x9 tile，
+  人物之外的透明像素透出卡纸；框外面板保持 `Tsa_Mss_Dual` 的深蓝填充。
+- （本次）框带加宽到 **8px**（`8/15/13/12/11/10/9/8`），填满整圈 tile，内缘正好落在
+  立绘边界上，下/左/右都贴住，不留缝。
+- （本次）描述文字恢复白色——卡纸只在框内，描述仍压在深蓝面板上。
+- 相框从面板边框的蓝紫 4px 渐变改成**金色带**。
+- 相框仍然只用 `Tsa_Mss_FaceFrame` 的 8 个 tile（13–20），TSA 不用改：
+  边长 12 格，每个 tile 都是 8px 周期的重复图案。
 - page 0 的左面板改为一张 80x72 立绘（`PutFace80x72()`，与 vanilla statscreen 同源），
   外面套 12x11 相框，框下排三行角色描述；名字/职业/等级/HP/Con/Aid/技能列表暂时清空。
 - 新增 `contents/statscreen/Modern/Tsa_Mss_FaceFrame.c`（12x11，倒序存放）。
@@ -531,9 +541,11 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 - 没有帮助框；R 在 statscreen 内没有绑定。
 - 快速连按翻页时，标题/页码的视觉同步还没有专门测过。
 - 双面板页（page 0）没有左侧标题，左右两侧的视觉重量略不对称。
-- 相框外框是直角，不是圆角；6px 金带的角上放了菱形角花遮掩直角。边上的花纹只能做
-  8px 周期重复（TSA 每条边共用同一个 tile），想做"每条边中间再放一颗装饰"得给那几格
-  单独加 tile 编号。
+- 相框外框是直角，不是圆角；8px 带填满整圈 tile，塞不进角花，四角是干净直角。
+- 卡纸只从立绘的透明像素透出来，人物轮廓因角色而异；想要"框和卡纸之间再留一圈"得把框
+  放大到 14x13，垂直方向放不下（描述行会顶到面板底边框）。
+- 卡纸花纹是 16px 周期的固定斜纹，调色板只有 `#D5DEFF` / `#A4A4FF` 两级浅色可挑，
+  线条浓淡调不了。
 
 ---
 
@@ -541,6 +553,8 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 
 - 注释用英文；用户明确要求过。
 - 缩进用 tab（与目录内现有文件一致）。
+- C 代码按 Linux kernel style：控制语句的左大括号跟语句同行（`for (...) {`），
+  单条语句不加大括号；函数定义的大括号独占一行。
 - 新增页面时：
   - 在 `draw-pages.c` 写 `put_<name>_page()`，在 `Mss_PreparePage()` 的 `switch` 里加 case；
   - 加对应的 `mss_text_init_info_*` 表，按 page 号放进 `mss_text_init_info_pages[]`；
