@@ -40,7 +40,13 @@ static void LockSetAnimState(struct Anim *anim)
 	}
 
 	if (anim2) {
-		anim2->flags3 |= ANIM_BIT3_BLOCKING;
+		/**
+		 * Freeze the back layer, but do not set BLOCKING on it.
+		 *
+		 * FE6 back-layer scripts may be reset before they reach C07, in
+		 * which case the eager BLOCKING flag would never be consumed by
+		 * Banim_C07() and would stay set across rounds.
+		 */
 		anim2->flags |= BAS_BIT_FROZEN;
 	}
 }

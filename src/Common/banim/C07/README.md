@@ -317,7 +317,8 @@ kernel 的 `GetActorEfxSkill()` / `GetTargetEfxSkill()` 依赖 `RegisterActorEfx
 `RegisterTargetEfxSkill()` 在战斗计算时把技能 ID 写入 `sEfxSkillRoundData[round]`。
 FE6-rebuild 目前：
 
-- `src/Core/SkillSys/EfxSkkill.c` 的 `GetActor/TargetEfxSkill()` 恒返回 0；
+- `src/Core/SkillSys/EfxSkkill.c` 已实现 `Register*` / `Get*`，但目前没有注册调用者，
+  所以 `GetActor/TargetEfxSkill()` 恒为 0；
 - `src/SkillEffects/BattleSkills/AttackerSkills.c` / `DefenderSkills.c` 只处理 pre-battle 属性，没有注册 Efx；
 - 没有 `GetEfxSkillPriority()`。
 
@@ -668,22 +669,22 @@ contents/skillsys/EfxSkillBox/
 改动：
 
 1. `src/Core/SkillSys/EfxSkkill.c`：
-   - `struct EfxSkillRoundData { u16 sid_actor, sid_target; };`
-   - `EWRAM_DATA static struct EfxSkillRoundData sEfxSkillRoundData[BATTLE_HIT_MAX];`
-     （`BATTLE_HIT_MAX` 目前是 `battle.c` 里的私有 enum，需要提到 `include/battle.h` 或在此定义 20）
-   - `InitEfxSkillRoundData()`：`CpuFill16(0, ...)`；
+   - `struct BattleHitExpa { u16 sid_actor, sid_target; };`（定义在 `include/battle.h`）
+   - `gBattleHitExpa` 定义在 `src/Core/BattleSys/Source/battle.c`（`battle.h` 里 extern）
    - `RegisterActorEfxSkill(round, sid)` / `RegisterTargetEfxSkill(round, sid)`：
      先比较优先级（`GetEfxSkillPriority(sid_old) > GetEfxSkillPriority(sid)` 则忽略），再写入；
-   - `GetActorEfxSkill(round)` / `GetTargetEfxSkill(round)`：`round < BATTLE_HIT_MAX` 时返回，否则 0；
+   - `GetActorEfxSkill(round)` / `GetTargetEfxSkill(round)`：`round < 0 || round >= BATTLE_HIT_MAX`
+     时返回 0；
    - `GetEfxSkillPriority(sid)`：先返回 0，后续可加 `u8` 表。
-2. `src/Core/BattleSys/Source/battle.c` 的 `ClearBattleHits()` 里调用 `InitEfxSkillRoundData();`。
+2. `src/Core/BattleSys/Source/battle.c` 的 `ClearBattleHits()` 里直接
+   `memset(gBattleHitExpa, 0, sizeof(gBattleHitExpa));`，不再有单独的
+   `InitEfxSkillRoundData()`。
 3. 在技能发动处注册：
    - 现有 FE6 技能多为 pre-battle（Blow 系），可以在 `PreBattleCalc_AttackerSkills()` 里对触发技能
      注册一个“本轮”或“首轮”的 Efx；
    - 更准确的做法是仿 kernel，在 `BattleGenerateHitAttributes()` / 伤害计算里按
      `GetBattleHitRound(gBattleHitIt)` 注册；
-   - 先做最小可用：在 `UnitToBattle_SetupSkillList()` 或 `BattleUnwind()` 开始时，
-     把双方技能列表的第一个有效 SID 注册到 round 0，用于验证数据流；之后再按技能逐个接。
+   - **当前阶段先不实现 `SetupEfxSkillRoundData()`**，只保留 `Register*` 接口，等注册策略确定。
 4. `GetEfxSkillPriority()` 表可仿 kernel 的 `Data/SkillSys/Source/SkillAnimInfo.c`，
    只给少数技能配置 `EFX_PRIORITY_LOW/NORMAL/HIGH`，其余 0。
 
@@ -693,6 +694,53 @@ contents/skillsys/EfxSkillBox/
 - 不同技能显示不同图标/名字（如果 `gpEfxSkillAnims` 已按 SID 分配）；
 - 多轮战斗（追击、反击）中技能动画按轮次出现；
 - 无技能时不播动画，不阻塞。
+
+#### Phase 4 实施记录（2026-11-08）
+
+本轮只保留数据基础设施，**自动注册策略暂不实现**（后续讨论）。
+
+已实现：
+
+- `include/battle.h`
+  - 公开 `#define BATTLE_HIT_MAX 20`；
+  - 新增 `struct BattleHitExpa { u16 sid_actor, sid_target; };`
+  - `extern struct BattleHitExpa gBattleHitExpa[BATTLE_HIT_MAX];`
+- `src/Core/BattleSys/Source/battle.c`
+  - 在 `gBattleHits` 旁边定义 `gBattleHitExpa`；
+  - `ClearBattleHits()` 里 `memset(gBattleHitExpa, 0, sizeof(gBattleHitExpa));`
+  - `BattleUnwind()` 只调用 `ClearBattleHits()`；
+  - `BeginBattleAnimations()` 不 setup / clear。
+- `src/Core/SkillSys/EfxSkkill.c`
+  - 不再定义自己的数组，直接使用 `extern gBattleHitExpa`；
+  - 只保留 `RegisterActorEfxSkill()` / `RegisterTargetEfxSkill()` /
+    `GetActorEfxSkill()` / `GetTargetEfxSkill()`；
+  - `GetActorEfxSkill()` / `GetTargetEfxSkill()` 带 `round < 0 || round >= BATTLE_HIT_MAX` 保护；
+  - `GetEfxSkillPriority()` 暂返回 0；
+  - `InitEfxSkillRoundData()` / `SetupEfxSkillRoundData()` 都已删除。
+- `src/Core/SkillSys/SkillList.c`
+  - 不再在 `UnitToBattle_SetupSkillList()` 里清 EfxSkill。
+- `include/hacks/skill-sys.h`
+  - 只保留 `Register*EfxSkill()` / `Get*EfxSkill()` 原型。
+
+当前行为：
+
+- 正常 ROM 不会自动播放技能动画，因为没有任何 `Register*EfxSkill()` 调用，
+  `GetActorEfxSkill()` / `GetTargetEfxSkill()` 恒为 0；
+- 需要看画面时仍可用 `CONFIG_DEBUG_EFXSKILL 1`（Phase 2 的 debug 路径）；
+- 后续确定注册策略后，在战斗 hit 生成/伤害计算里调用 `Register*EfxSkill()` 即可。
+
+验证结果：
+
+- `make all -j8`：通过；
+- `./tools/emu/run-tests.sh --quick`：4 / 4 通过；
+- `./tools/emu/run-tests.sh`：26 / 26 通过；
+- 由于没有注册，正常 ROM 下 GDB 不会命中 `NewEfxSkill`，这是预期行为。
+
+注意：
+
+- `ClearBattleHits()` 现在也会清空 `BattleHitExpa`。`vanilla/event.c` 剧情战斗的第二次
+  `ClearBattleHits()` 会清空 per-round 数据；后续讨论注册策略时，需要决定 event 路径是
+  在覆盖 hits 前保存/复制，还是在覆盖后重新注册。
 
 ### Phase 5：清理与回归
 

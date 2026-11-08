@@ -218,7 +218,15 @@ struct BattleHit {
 	i8 damage;
 };
 
+#define BATTLE_HIT_MAX 20
+
+struct BattleHitExpa {
+	u16 sid_actor;
+	u16 sid_target;
+};
+
 extern struct BattleHit gBattleHits[];
+extern struct BattleHitExpa gBattleHitExpa[BATTLE_HIT_MAX];
 extern struct BattleHit *gBattleHitIt;
 
 void BattleHitAdvance(void);

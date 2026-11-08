@@ -102,6 +102,10 @@ ASM_SRCS     := $(call find-src,$(VANILLA_DIR) $(HACK_DIRS),*.s)
 SRC_DIRS := $(VANILLA_DIR) $(HACK_DIRS)
 LIB_DIRS := $(DEVKITPRO)/libgba $(AGBCC_HOME)
 
+# The C dependency generator is disabled (see CDEPFLAGS), so make config
+# toggles explicitly rebuild hack C sources.
+$(C_SRCS:%.c=%.o): include/configs/configs.h $(wildcard include/configs/configs/*.h)
+
 # =========
 # = Texts =
 # =========

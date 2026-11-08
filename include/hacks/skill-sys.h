@@ -70,6 +70,8 @@ bool JudgeSkillInBattle(struct BattleUnit *bu, int sid);
  */
 u16 GetActorEfxSkill(int round);
 u16 GetTargetEfxSkill(int round);
+void RegisterActorEfxSkill(int round, const u16 sid);
+void RegisterTargetEfxSkill(int round, const u16 sid);
 
 void NewEkrSkill(struct Anim *anim);
 bool EkrSkillExists(void);

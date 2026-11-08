@@ -26,7 +26,6 @@
 #include "constants/jids.h"
 #include "constants/terrains.h"
 
-enum { BATTLE_HIT_MAX = 20 };
 enum { BATTLE_MAX_DAMAGE = 99 };
 
 struct WeaponTriangleRule {
@@ -64,6 +63,7 @@ struct BattleUnit EWRAM_DATA gBattleUnitA = {};
 struct BattleUnit EWRAM_DATA gBattleUnitB = {};
 
 struct BattleHit EWRAM_DATA gBattleHits[BATTLE_HIT_MAX] = {};
+struct BattleHitExpa EWRAM_DATA gBattleHitExpa[BATTLE_HIT_MAX] = {};
 struct BattleHit *EWRAM_DATA gBattleHitIt = NULL;
 
 void BattleGenerateSimulationInternal(struct Unit *instigator, struct Unit *target, int x, int y, int item_slot)
@@ -420,6 +420,8 @@ void ClearBattleHits(void)
 	}
 
 	gBattleHitIt = gBattleHits;
+
+	memset(gBattleHitExpa, 0, sizeof(gBattleHitExpa));
 }
 
 void BattleUnwind(void)
