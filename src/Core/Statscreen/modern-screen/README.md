@@ -120,9 +120,9 @@ OBJ 资源加载到 `OBJ_VRAM0`：
 
 ## 3. 滑动动画
 
-### 3.1 每个布局一个 slide proc
+### 3.1 slide proc
 
-slide 流程不在主 proc 里内联，而是**每个布局各自一个 proc**：
+slide 流程不在主 proc 里内联，而是**每个布局各自一个 proc**（进入、换人、退出走这套）：
 
 ```c
 static const struct ProcScr ProcScr_mss_slide_in[] = {
@@ -132,15 +132,19 @@ static const struct ProcScr ProcScr_mss_slide_in[] = {
 };
 ```
 
+**翻页**用的是另一对 proc（`ProcScr_mss_slide_page_in/out`），因为翻页不换布局、
+只换内容，四页可以共用同一套流程（见 3.3）。
+
 主 proc 只做「按当前 page 选 proc → 起进程 → 等它结束」：
 
 ```c
 PROC_LABEL(PL_MSS_SLIDE_PAGE),
-	PROC_CALL(mss_spawn_slide_out),
+	PROC_CALL(mss_begin_page_slide),      /* 决定哪些面板参与 */
+	PROC_CALL(mss_spawn_page_slide_out),
 	PROC_YIELD,          /* SpawnProcLocking 下一帧才生效，这里必须停一帧 */
 	PROC_CALL(mss_apply_page),
 	PROC_CALL(Mss_PreparePage),
-	PROC_CALL(mss_spawn_slide_in_page),
+	PROC_CALL(mss_spawn_page_slide_in),
 	PROC_YIELD,
 	PROC_GOTO(PL_MSS_IDLE),
 ```
@@ -152,7 +156,7 @@ PROC_LABEL(PL_MSS_SLIDE_PAGE),
 > 之后不会停，会在同一帧继续执行下一条命令；少了 YIELD 就会在滑出刚开始时把
 > `mss_end()` / `mss_slide_idle()` 提前跑掉，表现为换人时面板丢失混合、背景变成一块纯色。
 
-选哪个 proc 由三个函数决定：
+进入 / 换人 / 退出时按 `proc->page` 选 proc：
 
 ```c
 if (proc->page == 0)
@@ -161,7 +165,7 @@ if (proc->page == 0)
 return ProcScr_mss_slide_in;            /* 三面板 */
 ```
 
-加新布局时：写自己的 ProcScr + init/loop，在这三个函数里按 page 返回即可，
+加新布局时：写自己的 ProcScr + init/loop，在这几个函数里按 page 返回即可，
 不用动主流程。
 
 ### 3.2 时序
@@ -180,10 +184,10 @@ i16 length;  // total slide duration in frames
 
 | 场景 | Upper | Right | Left |
 |---|---|---|---|
-| unit out | 0 / 8 | 2 / 10 | 4 / 12 |
-| unit in | 4 / 8 | 8 / 10 | 0 / 12 |
-| page out | 0 / 8 | 2 / 10 | 4 / 12 |
-| page in | 3 / 8 | 6 / 10 | 0 / 12 |
+| unit / entry out | 0 / 8 | 2 / 10 | 4 / 12 |
+| unit / entry in | 4 / 8 | 8 / 10 | 0 / 12 |
+| page out | — | 2 / 10 | 4 / 12 |
+| page in | — | 6 / 10 | 0 / 12 |
 
 双面板（page 0）只列左右两块：
 
@@ -194,7 +198,54 @@ i16 length;  // total slide duration in frames
 
 方向：Upper 从上、Left 从左、Right 从右；OUT 时反向飞出。
 
+翻页时 Upper 不再单独参与：page 1..3 之间它是同一个东西，直接原地重画；
+page 0 没有 Upper，它和 Left 一起作为整块左半屏滑动（见 3.3）。
+
 滑出结束后才调用 `Mss_PreparePage()` 生成新页，再滑入。
+
+### 3.3 翻页只动「内容真的变了」的面板
+
+四页的面板结构其实只有两处差异：
+
+| | 左半屏（x 0..159） | 右栏（x 160..239） |
+|---|---|---|
+| page 0 | 一块 20x20（立绘） | Str/Mag/... |
+| page 1 | Upper 20x6 + Left 20x14 | Str/Mag/... |
+| page 2 | Upper 20x6 + Left 20x14 | 战斗数值 |
+| page 3 | Upper 20x6 + Left 20x14 | 武器经验 |
+
+所以翻页时：
+
+- **右栏**只有内容变了才滑：page 0 和 page 1 都是 `put_rpage1()`，`0 <-> 1` 时右栏原地不动
+  （页码/箭头/STATS 标题也跟着不动，页码在换页那一帧直接跳）。
+  `mss_right_panel_kind()` 给每页一个「右栏内容种类」，两边种类相同就不滑。
+- **Upper** 只出现在 page 1..3，且三页完全一样，所以 `1 <-> 2 <-> 3` 之间 Upper 原地重画。
+- **左半屏**每页都不同，永远滑。只要换页涉及 page 0，就用 `slide_upper_left()` /
+  `slide_dual_left()` 把上栏+左栏（或 page 0 的整块立绘）当成一个 20x20 的整块一起滑，
+  避免上栏和左栏各飞各的。
+- 不滑的面板每帧照常 `TmFill` + 按 `MSS_SLIDE_NONE` 原地重画（`mss_page_slide_frame()`）。
+
+`mss_begin_page_slide()` 在起滑出 proc 之前根据 `page` / `page_to_change` 设置
+`s_mss_left_block`、`s_mss_right_slides`，OBJ（页码、箭头、标题）的偏移也读这两个标记：
+右栏不动时 `mss_page_slide_offset()` 返回 0，标题的 `rx` 不加偏移。
+
+> 右栏不再滑出以后，准备新页那一帧（`Mss_PreparePage()` 里的 `ResetTextFont()` +
+> `InitTextList()`）会清掉字形槽，所以做了三件事：
+>
+> - **每页 text 列表总格数固定**（`MSS_TEXT_PAGE_SLOTS = 90`，加上上栏共用的 14 格 = 104）。
+>   特殊字符（数字、LV/HP 图标等）是「首次用到时才编号」，编号从最后一个预留槽开始，
+>   所以只要总格数一致，上栏和右栏的标签/数字在每一页都落在相同的字形槽里。各页末尾用
+>   `MSS_TEXT_PAD` 补齐到 90 格；page 0 和 page 1 还要求 8 个属性标签排在最前面、顺序和
+>   宽度完全一致（page 0 的 3 行描述放在标签后面）。
+> - page 0 虽然不画上栏，仍在 `put_dual_page()` 里调一次 `put_upage()`（画进不用的 U
+>   buffer），让特殊字符的「首次使用」顺序和 page 1 一致。
+> - `Mss_PreparePage()` 在 `Mss_InitPageText()` 之后立刻重画共用面板（右栏标签、上栏
+>   文字），并且 `put_upage()` 把最慢的 chibi 解压放到最后，把「清空 → 重画」的窗口压到
+>   最小。
+>
+> 即使这样，GBA 的扫描线仍可能在极端情况下撞进这个窗口：换页那一帧偶发一个 8x16 的
+> 字形没来及重画（例如职业名 `Lord` 少两个字）。这是同帧内改字形 VRAM 的固有限制，
+> 只有把准备过程挪进 VBlank 才能彻底消掉（代价是整帧停顿）。
 
 ### 页码跟随
 
@@ -202,6 +253,7 @@ i16 length;  // total slide duration in frames
 
 - OUT：`slide_r.step * 8`（向右飞出）
 - IN：`(MSS_R_WIDTH - slide_r.step) * 8`（从右侧飞入）
+- 右栏不滑（`0 <-> 1`，`s_mss_right_slides == 0`）：恒为 0，原地显示
 
 `ProcMss.page_to_change` 记录目标页，滑出结束、重画之前由 `mss_apply_page()` 才真正写回 `page`。
 所以滑出阶段显示旧页码，滑入阶段显示新页码。
@@ -457,10 +509,23 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 | `06a4e21` | 双面板 page 0、四页重排、每布局独立 slide proc |
 | `def581b` | page 0 换成 80x72 立绘 + 12x11 相框 + 角色描述 |
 | `9f9583c` | 相框改成 6px 金色装饰框：外圈暗金细线 + 四角菱形角花 |
-| （本次） | 相框内浅色菱格卡纸 + 8px 编织框带；装备条改成金色下划线 + 末尾白 E；修复翻页时标题不跟随 |
+| （本次） | 翻页只滑「内容真的变了」的面板：`0<->1` 右栏不动、`1/2/3` 上栏不动；page 0 的整块左半屏和 page 1..3 的「上栏+左栏」作为一个 20x20 整块滑动 |
 
 具体：
 
+- （本次）翻页改成**只滑内容变化的面板**：右栏在 page 0/1 是同一段 `put_rpage1()`，
+  `0 <-> 1` 原地不动；上栏只存在于 page 1..3 且三页相同，`1 <-> 2 <-> 3` 原地重画。
+  不滑的面板每帧照常 `TmFill` + `MSS_SLIDE_NONE` 原地重画，页码/箭头/右标题的偏移
+  在 `s_mss_right_slides == 0` 时归零（页码在换页那一帧直接跳）。
+- （本次）换页涉及 page 0 时，`slide_upper_left()` 把 Upper + Left 用同一个列偏移一起
+  拷到 BG，page 0 的 20x20 立绘块也走 `slide_dual_left()`，整个左半屏作为一个整块滑，
+  不再上栏/左栏各飞各的。
+- （本次）翻页改用一对共用 proc（`ProcScr_mss_slide_page_in/out` + `mss_page_slide_frame()`），
+  不再按布局选 proc；进入 / 换人 / 退出仍然走每布局自己的 proc。
+- （本次）对齐 page 0 与 page 1 的文字字形槽：8 个属性标签挪到两个列表最前面且顺序一致，
+  page 1 末尾用 `MSS_TEXT_PAD`（47 格）补齐总格数；page 0 额外调一次 `put_upage()` 画进
+  不用的 U buffer，让特殊字符（数字、LV/HP）的首次使用顺序一致；`Mss_PreparePage()` 在
+  `Mss_InitPageText()` 之后立刻重画右栏标签。否则右栏静止时翻页那一帧字母/数字会闪。
 - （本次）修复翻页/换人时标题和页码不跟面板滑动：slide 子进程是 `SpawnProcLocking()`
   出来的，`PROC_CALL` 里拿到的是**子进程自己**，原来的 `proc->slide_*` 全写进了子进程的
   越界内存，父进程（sprite proc 读的地方）一直读到 0。现在 slide 状态改成文件级静态变量
@@ -569,11 +634,14 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
   - 在 `draw-pages.c` 写 `put_<name>_page()`，在 `Mss_PreparePage()` 的 `switch` 里加 case；
   - 加对应的 `mss_text_init_info_*` 表，按 page 号放进 `mss_text_init_info_pages[]`；
   - 面板数量/尺寸跟三面板不同时，写自己的 `ProcScr` + init/loop，并在
-    `mss_slide_in_proc()` / `mss_slide_in_page_proc()` / `mss_spawn_slide_out()` 里按 page 返回；
+    `mss_slide_in_proc()` / `mss_spawn_slide_out()` 里按 page 返回（翻页共用
+    `ProcScr_mss_slide_page_in/out`，新布局若也要参与翻页，在 `mss_begin_page_slide()`
+    / `mss_page_slide_frame()` 里加分支）；
   - 新增 TSA 放 `contents/statscreen/Modern/Tsa_Mss_*.c`，再在 `mssfx.S` 里 `.incbin` 它的
     `.dmp.lz`（Makefile 已按 `Tsa_Mss_*.c` 自动补生成依赖）。
 - 新增文本索引加到 `enum mss_text_index`，并在 `mss_text_init_info_upper`（上栏共用）或对应页的 `mss_text_init_info_pageN` 里注册。
 - `Mss_InitPageText()` 在每次 `Mss_PreparePage()` 开头按当前页重建文本槽位（`ResetTextFont()` + 逐页 `InitTextList()`），所以每页只占用该页实际需要的 VRAM。新增文本时不要改回启动时一次性 `InitTextList()`。
+- 翻页时「不滑」的面板要靠文字字形槽对齐：如果两页共用一个面板，把它们的 text 放在列表同一位置、总格数保持一致（见 page 0/1 的 `MSS_TEXT_PAD`），否则换页那一帧字形会闪。
 - 新增 OBJ 资源：
   - 在 `mssfx.S` 加 `Img_*` / `Pal_*`；
   - 在 `include/statscreen.h` 加 `OBCHR_*` / `OBPAL_*` 和 `extern`；

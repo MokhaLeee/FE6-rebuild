@@ -383,6 +383,9 @@ enum mss_text_index {
 	MSS_TEXT_DUAL_DESC2,
 	MSS_TEXT_DUAL_DESC3,
 
+	/* unused text slot, only reserved to line up page 0/1 glyph positions */
+	MSS_TEXT_PAD,
+
 	MSS_TEXT_MAX,
 };
 

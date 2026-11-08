@@ -24,10 +24,6 @@ static void put_upage(void)
 	char *str;
 	struct Unit *unit = gMssSt.unit;
 
-	PutFaceChibi(GetUnitChibiId(unit),
-		TmBuff_MssU0 + TM_OFFSET(1, 1),
-		BGCHR_MSS_FACE, BGPAL_MSS_FACE, FALSE);
-
 	/* level & exp */
 	x_offset = 5;
 
@@ -62,6 +58,17 @@ static void put_upage(void)
 		TmBuff_MssU0 + TM_OFFSET(x_offset, 3),
 		TEXT_COLOR_SYSTEM_WHITE,
 		x_text, 0, str);
+
+	/*
+	 * The chibi goes last: it is the only slow part (it decompresses into
+	 * CHR VRAM), and this function is also called early by Mss_PreparePage()
+	 * to rotate the shared panel glyphs back in. Doing the text first keeps
+	 * that rewrite just a few hundred cycles after the glyph slots were
+	 * cleared, instead of after a decompression that the scanout could catch.
+	 */
+	PutFaceChibi(GetUnitChibiId(unit),
+		TmBuff_MssU0 + TM_OFFSET(1, 1),
+		BGCHR_MSS_FACE, BGPAL_MSS_FACE, FALSE);
 }
 
 /**
@@ -163,11 +170,14 @@ static struct StatScreenTextInfo const textinfo_rpage1[] = {
 	{ 0 }, // end
 };
 
-static void put_rpage1()
+static void put_rpage1_labels(void)
+{
+	PutStatScreenText(textinfo_rpage1);
+}
+
+static void put_rpage1_stats(void)
 {
 	struct Unit *unit = gMssSt.unit;
-
-	PutStatScreenText(textinfo_rpage1);
 
 	mss_put_stat(0, 5, 2,  unit->pow, GetUnitPower(unit), GetUnitMaxStatusPow(unit));
 	mss_put_stat(1, 5, 4,  unit->mag, GetUnitMagic(unit), GetUnitMaxStatusMag(unit));
@@ -177,6 +187,12 @@ static void put_rpage1()
 	mss_put_stat(5, 5, 12, unit->res, GetUnitResistance(unit), GetUnitMaxStatusRes(unit));
 	mss_put_stat(6, 5, 14, unit->lck, GetUnitLuck(unit), GetUnitMaxStatusLck(unit));
 	mss_put_stat(7, 5, 16, UNIT_MOV_BASE(unit), GetUnitMovement(unit), GetUnitMaxStatusMov(unit));
+}
+
+static void put_rpage1()
+{
+	put_rpage1_labels();
+	put_rpage1_stats();
 }
 
 /**
@@ -495,6 +511,24 @@ static void put_dual_page(void)
 	int msg;
 	struct Unit *unit = gMssSt.unit;
 
+	/*
+	 * Mss_PreparePage() already rewrote these glyphs right after
+	 * Mss_InitPageText(), so the scanout never sees blank slots. This call is
+	 * the one that puts the labels into the R0 buffer that actually gets
+	 * blitted (the earlier copy was wiped by the CpuFastFill above it).
+	 */
+	put_rpage1_labels();
+
+	/*
+	 * Page 0 has no upper panel, but special chars (numbers, LV/HP icons) are
+	 * drawn into glyph slots on first use. Drawing the upper into the unused U
+	 * buffers keeps that first-use order identical to page 1, so 0 <-> 1 does
+	 * not get stale digits while the right panel stays on screen.
+	 */
+	put_upage();
+
+	put_rpage1_stats();
+
 	put_dual_backdrop();
 
 	/*
@@ -522,8 +556,6 @@ static void put_dual_page(void)
 			TmBuff_MssD0 + TM_OFFSET(1, 12),
 			3);
 	}
-
-	put_rpage1();
 }
 
 /* Default frame TSA: the three-panel layout that pages 1..3 share. */
@@ -543,6 +575,18 @@ void Mss_PreparePage(struct ProcMss *proc)
 {
 	ClearIcons();
 	Mss_InitPageText(proc->page);
+
+	/*
+	 * 0 <-> 1 keeps the right panel on screen and 1 <-> 2/3 keeps the upper
+	 * panel on screen while the page is prepared, so the scanout can catch
+	 * their glyph slots between InitPageText() clearing them and the page draw
+	 * rewriting them. Redrawing them here, before the rest of the preparation,
+	 * closes that window.
+	 */
+	if (proc->page <= 1)
+		put_rpage1_labels();
+	if (proc->page != 0)
+		put_upage();
 
 	CpuFastFill(0, TmBuff_MssU0, sizeof(TmBuff_MssU0));
 	CpuFastFill(0, TmBuff_MssU2, sizeof(TmBuff_MssU2));
