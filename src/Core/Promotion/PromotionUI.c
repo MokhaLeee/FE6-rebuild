@@ -54,8 +54,15 @@ enum {
 	PROMO_LIST_PITCH = 3,
 	/* Left padding so the hand cursor fits inside the panel without covering icons. */
 	PROMO_LIST_INSET = 8,
-	PROMO_LIST_W = PROMO_LIST_COLS * PROMO_LIST_PITCH + 1,
+	PROMO_LIST_W = PROMO_LIST_COLS * PROMO_LIST_PITCH + 2,
 	PROMO_LIST_H = PROMO_LIST_ROWS * PROMO_LIST_PITCH + 1,
+
+	/* Scrollbar column on the right edge of the icon panel. */
+	PROMO_SCROLL_X = 11,
+	PROMO_SCROLL_UP_Y = 2,
+	PROMO_SCROLL_DOWN_Y = 11,
+	PROMO_SCROLL_TRACK_Y = 3,
+	PROMO_SCROLL_H = 8,
 
 	PROMO_TITLE_X = 9,
 	PROMO_TITLE_Y = 0,
@@ -694,6 +701,123 @@ static void Promo_DrawListBackdrop(void)
 	Promo_DrawRoundedBlock(PROMO_LIST_X, PROMO_LIST_Y, PROMO_LIST_W, PROMO_LIST_H);
 }
 
+static void Promo_GridPos(int idx, int *col, int *row);
+
+/* Subtractive division: the GBA build links no libgcc division helpers. */
+static int Promo_Div(int a, int b)
+{
+	int q = 0;
+
+	if (b <= 0)
+		return 0;
+
+	while (a >= b) {
+		a -= b;
+		q++;
+	}
+
+	return q;
+}
+
+static void Promo_SetTilePixel(u8 *tile, int x, int y, int color)
+{
+	int idx = y * 4 + (x >> 1);
+
+	if (x & 1)
+		tile[idx] = (tile[idx] & 0x0F) | (color << 4);
+	else
+		tile[idx] = (tile[idx] & 0xF0) | color;
+}
+
+static void Promo_LoadScrollTiles(void)
+{
+	u8 tile[0x20];
+	int x, y;
+
+	/* Up arrow: small solid triangle. */
+	for (y = 0; y < 0x20; y++)
+		tile[y] = 0;
+
+	for (y = 0; y < 4; y++) {
+		for (x = 3 - y; x <= 4 + y; x++)
+			Promo_SetTilePixel(tile, x, y, 7);
+	}
+	CpuFastCopy(tile, (u8 *)VRAM + BGCHR_UIPROMO_SCROLL_UP * CHR_SIZE, sizeof(tile));
+
+	/* Down arrow: the same triangle, flipped. */
+	for (y = 0; y < 0x20; y++)
+		tile[y] = 0;
+
+	for (y = 0; y < 4; y++) {
+		for (x = 3 - y; x <= 4 + y; x++)
+			Promo_SetTilePixel(tile, x, 7 - y, 7);
+	}
+	CpuFastCopy(tile, (u8 *)VRAM + BGCHR_UIPROMO_SCROLL_DOWN * CHR_SIZE, sizeof(tile));
+
+	/* Track: thin vertical groove. */
+	for (y = 0; y < 0x20; y++)
+		tile[y] = 0;
+
+	for (y = 0; y < 8; y++) {
+		Promo_SetTilePixel(tile, 3, y, 1);
+		Promo_SetTilePixel(tile, 4, y, 1);
+	}
+	CpuFastCopy(tile, (u8 *)VRAM + BGCHR_UIPROMO_SCROLL_TRACK * CHR_SIZE, sizeof(tile));
+
+	/* Thumb: thicker bar. */
+	for (y = 0; y < 0x20; y++)
+		tile[y] = 0;
+
+	for (y = 0; y < 8; y++) {
+		for (x = 2; x <= 5; x++)
+			Promo_SetTilePixel(tile, x, y, 7);
+	}
+	CpuFastCopy(tile, (u8 *)VRAM + BGCHR_UIPROMO_SCROLL_THUMB * CHR_SIZE, sizeof(tile));
+}
+
+static void Promo_DrawScrollbar(struct ProcPromoSel *proc)
+{
+	/* BG1 is not a blend target, so the bar stays opaque over the translucent panel. */
+	u16 *tm = gBg1Tm;
+	int col, row;
+	int total_rows, thumb_h, scroll_max, thumb_y;
+	int i;
+
+	Promo_GridPos(proc->choice_count - 1, &col, &row);
+	total_rows = row + 1;
+
+	if (total_rows <= PROMO_LIST_ROWS)
+		return;
+
+	if (proc->scroll_row > 0) {
+		tm[TM_OFFSET(PROMO_SCROLL_X, PROMO_SCROLL_UP_Y)] =
+			TILEREF(BGCHR_UIPROMO_SCROLL_UP, BGPAL_WINDOWFRAME);
+	}
+
+	if (proc->scroll_row + PROMO_LIST_ROWS < total_rows) {
+		tm[TM_OFFSET(PROMO_SCROLL_X, PROMO_SCROLL_DOWN_Y)] =
+			TILEREF(BGCHR_UIPROMO_SCROLL_DOWN, BGPAL_WINDOWFRAME);
+	}
+
+	for (i = 0; i < PROMO_SCROLL_H; i++) {
+		tm[TM_OFFSET(PROMO_SCROLL_X, PROMO_SCROLL_TRACK_Y + i)] =
+			TILEREF(BGCHR_UIPROMO_SCROLL_TRACK, BGPAL_WINDOWFRAME);
+	}
+
+	thumb_h = Promo_Div(PROMO_SCROLL_H * PROMO_LIST_ROWS, total_rows);
+	if (thumb_h < 1)
+		thumb_h = 1;
+
+	scroll_max = total_rows - PROMO_LIST_ROWS;
+	thumb_y = PROMO_SCROLL_TRACK_Y +
+		Promo_Div((PROMO_SCROLL_H - thumb_h) * proc->scroll_row, scroll_max);
+
+	for (i = 0; i < thumb_h; i++) {
+		tm[TM_OFFSET(PROMO_SCROLL_X, thumb_y + i)] =
+			TILEREF(BGCHR_UIPROMO_SCROLL_THUMB, BGPAL_WINDOWFRAME);
+	}
+}
+
 static void Promo_DrawAll(struct ProcPromoSel *proc)
 {
 	TmFill(gBg0Tm, 0);
@@ -704,8 +828,8 @@ static void Promo_DrawAll(struct ProcPromoSel *proc)
 
 	/* Both panels are borderless semi-transparent rounded blocks on BG2. */
 	Promo_DrawListBackdrop();
+	Promo_DrawScrollbar(proc);
 	Promo_DrawStatsBackdrop();
-
 	ResetTextFont();
 
 	Promo_DrawTitle(proc);
@@ -777,10 +901,13 @@ static void Promo_ScrollIntoView(struct ProcPromoSel *proc)
 
 	Promo_GridPos(proc->choice_idx, &col, &row);
 
-	if (row < proc->scroll_row)
+	if (row < proc->scroll_row) {
 		proc->scroll_row = row;
-	else if (row >= proc->scroll_row + PROMO_LIST_ROWS)
+		proc->ui_dirty = 1;
+	} else if (row >= proc->scroll_row + PROMO_LIST_ROWS) {
 		proc->scroll_row = row - PROMO_LIST_ROWS + 1;
+		proc->ui_dirty = 1;
+	}
 }
 
 static void Promo_GetCellPos(int idx, int first_row, int *x, int *y)
@@ -907,6 +1034,7 @@ static void PromoSel_Init(struct ProcPromoSel *proc)
 
 	/* Solid + rounded-corner tiles for the semi-transparent stats block. */
 	Promo_LoadStatsTiles();
+	Promo_LoadScrollTiles();
 
 	/* Alpha-blend the stats panel fill (BG2) with the mural (BG3). */
 	Promo_SetStatsBlend();
