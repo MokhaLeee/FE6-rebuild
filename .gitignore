@@ -83,6 +83,10 @@ tools/agbcc
 *.script.bin
 *.stripped
 
+# EfxSkill generated
+*.feimg1.bin
+*.fetsa1.bin
+
 # =========================
 # Dump Scripts Output
 # =========================

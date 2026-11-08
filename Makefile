@@ -201,6 +201,26 @@ GFX_TSA_SRC  := $(shell find $(CONTENTS_DIR) -type f -name '*.c')
 GFX_TSA_OBJ  := $(GFX_TSA_ASM:%.s=%.o) $(GFX_TSA_SRC:%.c=%.o)
 CLEAN_FILES2 += $(GFX_TSA_OBJ) $(GFX_TSA_OBJ:%.o=%.dmp) $(GFX_TSA_OBJ:%.o=%.dmp.lz)
 
+# ==================
+# = EfxSkill gfx =
+# ==================
+EFXSKILL_DIR  := contents/skillsys/EfxSkill
+EFXSKILL_PNGS := $(sort $(wildcard $(EFXSKILL_DIR)/efxskill_*.png))
+EFXSKILL_IMGS := $(EFXSKILL_PNGS:%.png=%.feimg1.bin)
+EFXSKILL_TSAS := $(EFXSKILL_PNGS:%.png=%.fetsa1.bin)
+EFXSKILL_LZ   := $(EFXSKILL_IMGS:%=%.lz) $(EFXSKILL_TSAS:%=%.lz)
+EFXSKILL_PALS := $(EFXSKILL_PNGS:%.png=%.gbapal)
+
+# FE8 vanilla efxskill asset: a 240x160 PNG becomes a padded 0x2000-byte
+# image + a 30x20 TSA, exactly what SpellFx_RegisterBgGfx / WriteBgMap want.
+%.feimg1.bin %.fetsa1.bin &: %.png
+	@echo "[GEN]	$@"
+	@python3 tools/scripts/gfxtools/tsa_generator.py $< $*.feimg1.bin $*.fetsa1.bin
+
+gamedata/skill-sys/EfxSkill.o: $(EFXSKILL_LZ) $(EFXSKILL_PALS)
+
+CLEAN_FILES2 += $(EFXSKILL_IMGS) $(EFXSKILL_TSAS) $(EFXSKILL_LZ)
+
 # ==============
 # = Banim data =
 # ==============

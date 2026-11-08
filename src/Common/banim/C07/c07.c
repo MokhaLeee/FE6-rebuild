@@ -185,24 +185,6 @@ bool EkrSkillExists(void)
 }
 
 /**
- * Phase 1 placeholders.
- *
- * Phase 2 replaces these with the real EfxSkill.c implementation
- * (BG frame animation + EfxSkillBox).  They are kept here so the C07 ->
- * EkrSkill chain can be linked and tested independently.
- */
-void NewEfxSkill(struct Anim *anim, int sid)
-{
-	(void)anim;
-	(void)sid;
-}
-
-bool EfxSkillExists(void)
-{
-	return false;
-}
-
-/**
  * C07: skill animation trigger
  *
  * FE6's vanilla banim scripts already contain ANIMSCR_CMD 0x07 at the start

@@ -468,14 +468,14 @@ contents/skillsys/EfxSkillBox/
 
 1. 从 `~/fireemblem8u/graphics/efxskill/efxskill_1..16.png` 复制 16 张 240x160 PNG 到
    `contents/skillsys/EfxSkill/`。
-2. 用 `~/fireemblem8u/scripts/gfxtools/tsa_generator.py` 生成：
+2. 用 `tools/scripts/gfxtools/tsa_generator.py`（从 FE8 仓库 vendored）生成：
    - `efxskill_N.feimg1.bin`（固定 0x2000 字节）
    - `efxskill_N.fetsa1.bin`（1200 字节）
 3. 用 `tools/gbagfx` 压成 `.lz`（参考 FE6 现有 `contents/banims/*.4bpp.lz`）。
 4. 用 `tools/gbagfx` 或 `grit` 生成 `efxskill_N.gbapal`（0x20 字节）。
-5. 新增 `contents/skillsys/EfxSkill/EfxSkill.s`，用 `.incbin` 定义：
+5. 新增 `gamedata/skill-sys/EfxSkill.S`，用 `.incbin` 定义：
    ```asm
-   .section .content_data
+   .section .content_data.skillsys
    .global Img_EfxSkill1
    Img_EfxSkill1: .incbin "contents/skillsys/EfxSkill/efxskill_1.feimg1.bin.lz"
    ...
@@ -483,7 +483,9 @@ contents/skillsys/EfxSkillBox/
    Tsa_EfxSkill1: .incbin "contents/skillsys/EfxSkill/efxskill_1.fetsa1.bin.lz"
    ...
    ```
-   注意：如果提交 `.lz` 文件，就不需要改 Makefile；如果希望构建时生成，再补规则。
+6. `Makefile` 增加 `%.feimg1.bin %.fetsa1.bin &: %.png` 规则（GNU Make 4.3 grouped
+   target）和 `gamedata/skill-sys/EfxSkill.o` 对生成文件的依赖；`*.feimg1.bin` /
+   `*.fetsa1.bin` 加到 `.gitignore`。
 
 代码：
 
@@ -574,6 +576,51 @@ contents/skillsys/EfxSkillBox/
 - GDB 命中 `NewEfxSkill` / `EfxAdvanceFrameLut`；
 - 技能动画结束后，后续攻击帧正常，无残留 BG；
 - 截图对比：C07 前 / 中 / 后画面 hash 不同，且中段颜色数明显增加。
+
+#### Phase 2 实施记录（2026-11-08）
+
+已实现：
+
+- 新增资源：
+  - `contents/skillsys/EfxSkill/efxskill_1..16.png`（FE8 原版 240x160 技能光效）；
+  - `tools/scripts/gfxtools/tsa_generator.py` + `tsa2.py`（从 FE8 仓库 vendored）；
+  - `gamedata/skill-sys/EfxSkill.S`（48 个 `.incbin` 符号）。
+- `Makefile`：
+  - `%.feimg1.bin %.fetsa1.bin &: %.png` grouped target；
+  - `gamedata/skill-sys/EfxSkill.o` 依赖 `.feimg1.bin.lz` / `.fetsa1.bin.lz` / `.gbapal`；
+  - 生成文件加入 `CLEAN_FILES2`，`.gitignore` 忽略 `.feimg1.bin` / `.fetsa1.bin`。
+- 新增 `include/efx-skill.h`：`struct EfxAnimConf`、`gpEfxSkillAnims`、`EfxSkillVanilla`。
+- 新增 `src/Common/banim/C07/efxskill-data.c`：16 帧 FrameLut、Tsa/Img/Pal LUT、
+  `gpEfxSkillAnims[0 ... MAX_SKILL_NUM] = &EfxSkillVanilla`。
+- 新增 `src/Common/banim/C07/efxskill.c`：`NewEfxSkill()` / `ProcScr_EfxSkill` /
+  `EfxSkillMain()` / `EfxSkillOnEnd()` / `EfxSkillExists()`；
+  - `SpellFx_Begin()` + `gEfxBgSemaphore++`；
+  - 每帧 `SpellFx_WriteBgMap` / `RegisterBgGfx` / `RegisterBgPal`；
+  - 清理 `gBg1Tm` 右侧两列；
+  - 结束时 `SpellFx_ClearBG1` / `ClearBG1Position` / `ClearColorEffects` /
+    `gEfxBgSemaphore--` / `SpellFx_Finish`。
+- `c07.c` 删除 Phase 1 的 `NewEfxSkill` / `EfxSkillExists` 占位。
+
+验证结果：
+
+- `make all -j8`：通过；
+- `./tools/emu/run-tests.sh --quick`：4 项全过；
+- `./tools/emu/run-tests.sh`（`CONFIG_DEBUG_EFXSKILL 0`）：26 项全过；
+- `CONFIG_DEBUG_EFXSKILL 1` 时：
+  - GDB 命中 `NewEfxSkill`（sid=9）、`EfxSkillMain` 33 帧、`EfxSkillOnEnd`；
+  - `gEkrDebugTimer` 从 45 到 79，动画约 33 帧；
+  - 截图在 8440–8490 看到蓝色/白色光球按帧变化，8490 后消失；
+    ![Phase 2 skill effect](efxskill_phase2.png)
+  - 状态检查：`gBg1Tm[0]=0x110F`（tile 0x10F + palette 1）、
+    `gPal[0x20]=0x5355`、VRAM `0x060021E0` 有图像数据；
+  - `gEfxBgSemaphore=1`、`gEfxSpellAnimExists=1` 在动画期间正确置位。
+
+已知限制：
+
+- `CONFIG_DEBUG_EFXSKILL` 默认 0；真实技能注册在 Phase 4，所以在正常流程里
+  暂时还不会自动触发（Phase 2 用 debug 模式验证画面）。
+- `sfx` 先设为 0；FE6 没有 0x3D1，等选定 SE 后再填。
+- 还没有技能图标/名字框（Phase 3）。
 
 ### Phase 3：技能图标 + 技能名框
 
