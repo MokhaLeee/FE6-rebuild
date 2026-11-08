@@ -48,9 +48,14 @@ EWRAM_OVERLAY_PROMOTION static u8 PromoEkrTerrain_ImgBuf[0x2000] = {};
  */
 enum {
 	PROMO_LIST_X = 1,
-	PROMO_LIST_Y = 2,
-	PROMO_LIST_W = 8,
-	PROMO_LIST_VISIBLE = 3,
+	PROMO_LIST_Y = 1,
+	PROMO_LIST_COLS = 3,
+	PROMO_LIST_ROWS = 4,
+	PROMO_LIST_PITCH = 3,
+	/* Left padding so the hand cursor fits inside the panel without covering icons. */
+	PROMO_LIST_INSET = 8,
+	PROMO_LIST_W = PROMO_LIST_COLS * PROMO_LIST_PITCH + 1,
+	PROMO_LIST_H = PROMO_LIST_ROWS * PROMO_LIST_PITCH + 1,
 
 	PROMO_TITLE_X = 9,
 	PROMO_TITLE_Y = 0,
@@ -93,30 +98,6 @@ static struct ProcPromoHandler *Promo_GetHandler(struct ProcPromoSel *proc)
 static int Promo_GetJid(struct ProcPromoSel *proc)
 {
 	return proc->choices[proc->choice_idx];
-}
-
-static int Promo_GetRowStep(struct ProcPromoSel *proc)
-{
-	/* Two entries or fewer get taller rows so the 16/32px map sprites fit. */
-	return (proc->choice_count <= 2) ? 4 : 3;
-}
-
-static int Promo_GetFirstVisible(struct ProcPromoSel *proc)
-{
-	if (proc->choice_count <= PROMO_LIST_VISIBLE)
-		return 0;
-
-	if (proc->choice_idx < PROMO_LIST_VISIBLE)
-		return 0;
-
-	return proc->choice_idx - PROMO_LIST_VISIBLE + 1;
-}
-
-static int Promo_GetVisibleCount(struct ProcPromoSel *proc)
-{
-	return (proc->choice_count < PROMO_LIST_VISIBLE)
-		? proc->choice_count
-		: PROMO_LIST_VISIBLE;
 }
 
 static int Promo_GetRepresentativeWeapon(int kind)
@@ -689,38 +670,40 @@ static void Promo_LoadStatsTiles(void)
 	}
 }
 
-static void Promo_DrawStatsBackdrop(void)
+/* Borderless semi-transparent rounded block, shared by the list and stats panels. */
+static void Promo_DrawRoundedBlock(int x, int y, int w, int h)
 {
-	u16 *tm = gBg2Tm + TM_OFFSET(PROMO_STATS_X, PROMO_STATS_Y);
+	u16 *tm = gBg2Tm + TM_OFFSET(x, y);
 	u16 solid = TILEREF(BGCHR_UIPROMO_STATSBLOCK, BGPAL_WINDOWFRAME);
 
-	TmFillRect(tm, PROMO_STATS_W - 1, PROMO_STATS_H - 1, solid);
+	TmFillRect(tm, w - 1, h - 1, solid);
 
 	tm[0x00] = TILEREF(BGCHR_UIPROMO_STATSBLOCK + 1, BGPAL_WINDOWFRAME);
-	tm[PROMO_STATS_W - 1] = TILEREF(BGCHR_UIPROMO_STATSBLOCK + 2, BGPAL_WINDOWFRAME);
-	tm[(PROMO_STATS_H - 1) * 0x20] = TILEREF(BGCHR_UIPROMO_STATSBLOCK + 3, BGPAL_WINDOWFRAME);
-	tm[(PROMO_STATS_H - 1) * 0x20 + PROMO_STATS_W - 1] = TILEREF(BGCHR_UIPROMO_STATSBLOCK + 4, BGPAL_WINDOWFRAME);
+	tm[w - 1] = TILEREF(BGCHR_UIPROMO_STATSBLOCK + 2, BGPAL_WINDOWFRAME);
+	tm[(h - 1) * 0x20] = TILEREF(BGCHR_UIPROMO_STATSBLOCK + 3, BGPAL_WINDOWFRAME);
+	tm[(h - 1) * 0x20 + w - 1] = TILEREF(BGCHR_UIPROMO_STATSBLOCK + 4, BGPAL_WINDOWFRAME);
+}
+
+static void Promo_DrawStatsBackdrop(void)
+{
+	Promo_DrawRoundedBlock(PROMO_STATS_X, PROMO_STATS_Y, PROMO_STATS_W, PROMO_STATS_H);
+}
+
+static void Promo_DrawListBackdrop(void)
+{
+	Promo_DrawRoundedBlock(PROMO_LIST_X, PROMO_LIST_Y, PROMO_LIST_W, PROMO_LIST_H);
 }
 
 static void Promo_DrawAll(struct ProcPromoSel *proc)
 {
-	int visible = Promo_GetVisibleCount(proc);
-
 	TmFill(gBg0Tm, 0);
 	TmFill(gBg1Tm, 0);
-
-	if (visible > 0) {
-		int step = Promo_GetRowStep(proc);
-		int list_h = 6 + (visible - 1) * step;
-
-		PutUiWindowFrame(PROMO_LIST_X, PROMO_LIST_Y - 1,
-			PROMO_LIST_W, list_h, UI_WINDOW_REGULAR);
-	}
 
 	PutUiWindowFrame(PROMO_DESC_X, PROMO_DESC_Y,
 		PROMO_DESC_W, PROMO_DESC_H, UI_WINDOW_REGULAR);
 
-	/* The stats panel is a borderless semi-transparent rounded block on BG2. */
+	/* Both panels are borderless semi-transparent rounded blocks on BG2. */
+	Promo_DrawListBackdrop();
 	Promo_DrawStatsBackdrop();
 
 	ResetTextFont();
@@ -732,37 +715,116 @@ static void Promo_DrawAll(struct ProcPromoSel *proc)
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
 }
 
+static void Promo_GridPos(int idx, int *col, int *row)
+{
+	*col = idx;
+	*row = 0;
+
+	while (*col >= PROMO_LIST_COLS) {
+		*col -= PROMO_LIST_COLS;
+		(*row)++;
+	}
+}
+
+/* Centre of the sprite's non-transparent pixels, in the sprite's own frame. */
+EWRAM_OVERLAY_PROMOTION static u8 sPromoIconCx[PROMO_CHOICE_MAX] = {};
+EWRAM_OVERLAY_PROMOTION static u8 sPromoIconCy[PROMO_CHOICE_MAX] = {};
+
+static void Promo_MeasureIcon(int size, u8 *cx, u8 *cy)
+{
+	u8 const *buf = UnitSpriteUnpackBuf;
+	int w = (size == UNITSPRITE_32x32) ? 32 : 16;
+	int h = (size == UNITSPRITE_16x16) ? 16 : 32;
+	int tiles_w = w >> 3;
+	int minx = w, maxx = -1;
+	int miny = h, maxy = -1;
+	int px, py;
+
+	for (py = 0; py < h; py++) {
+		for (px = 0; px < w; px++) {
+			int tile = (py >> 3) * tiles_w + (px >> 3);
+			u8 b = buf[tile * 0x20 + (py & 7) * 4 + ((px & 7) >> 1)];
+			int c = (px & 1) ? (b >> 4) : (b & 0xF);
+
+			if (c != 0) {
+				if (px < minx)
+					minx = px;
+				if (px > maxx)
+					maxx = px;
+				if (py < miny)
+					miny = py;
+				if (py > maxy)
+					maxy = py;
+			}
+		}
+	}
+
+	if (maxx < 0) {
+		*cx = w / 2;
+		*cy = h / 2;
+		return;
+	}
+
+	*cx = (minx + maxx + 1) / 2;
+	*cy = (miny + maxy + 1) / 2;
+}
+
+static void Promo_GetCellPos(int idx, int *x, int *y)
+{
+	int col, row;
+
+	Promo_GridPos(idx, &col, &row);
+
+	*x = PROMO_LIST_X * 8 + PROMO_LIST_INSET + col * PROMO_LIST_PITCH * 8;
+	*y = (PROMO_LIST_Y + row * PROMO_LIST_PITCH) * 8;
+}
+
 static void Promo_DrawIcons(struct ProcPromoSel *proc)
 {
 	struct ProcPromoHandler *handler = Promo_GetHandler(proc);
 	struct Unit *unit = handler->unit;
-	int first = Promo_GetFirstVisible(proc);
-	int step = Promo_GetRowStep(proc);
+	int cx, cy;
 	int i;
 
-	for (i = first; i < first + PROMO_LIST_VISIBLE && i < proc->choice_count; i++) {
+	for (i = 0; i < proc->choice_count; i++) {
 		struct Unit icon_unit = *unit;
 		int jid = proc->choices[i];
-		int row = i - first;
-		int row_top = (PROMO_LIST_Y + row * step) * 8;
 		int size = GetUnitSpriteInfo(GetJInfo(jid)->map_sprite).size;
+		int left, top, x, y;
 
 		icon_unit.jinfo = GetJInfo(jid);
 		icon_unit.flags &= ~UNIT_FLAG_TURN_ENDED;
 
-		if (size == UNITSPRITE_16x16) {
-			if (step == 4)
-				row_top += 8;
-		} else {
-			row_top += 16;
+		Promo_GetCellPos(i, &cx, &cy);
+
+		/* Centre the visible artwork inside the 24x24 cell, not the frame. */
+		left = cx + 12 - sPromoIconCx[i];
+		top = cy + 12 - sPromoIconCy[i];
+
+		switch (size) {
+		case UNITSPRITE_16x16:
+			x = left;
+			y = top;
+			break;
+
+		case UNITSPRITE_16x32:
+			x = left;
+			y = top + 16;
+			break;
+
+		default:
+			/* 32x32 sprites are anchored at their centre. */
+			x = left + 8;
+			y = top + 16;
+			break;
 		}
 
-		PutUnitSpriteExt(3, (PROMO_LIST_X + 2) * 8, row_top,
-			OAM2_LAYER(1), &icon_unit);
+		PutUnitSpriteExt(3, x, y, OAM2_LAYER(1), &icon_unit);
 	}
 
-	PutUiHand(24, (PROMO_LIST_Y + (proc->choice_idx - first) * step) * 8
-		+ (step == 4 ? 8 : 4));
+	Promo_GetCellPos(proc->choice_idx, &cx, &cy);
+	/* The hand sprite is drawn 14px left of its anchor; it only clips the icon edge. */
+	PutUiHand(cx + 6, cy + 8);
 }
 
 static bool PromoEkrFx_IsBusy(struct ProcPromoSel *proc)
@@ -827,8 +889,15 @@ static void PromoSel_Init(struct ProcPromoSel *proc)
 	/* Alpha-blend the stats panel fill (BG2) with the mural (BG3). */
 	Promo_SetStatsBlend();
 
-	for (i = 0; i < proc->choice_count; i++)
-		UseUnitSprite(GetJInfo(proc->choices[i])->map_sprite);
+	for (i = 0; i < proc->choice_count; i++) {
+		int map_sprite = GetJInfo(proc->choices[i])->map_sprite;
+
+		UseUnitSprite(map_sprite);
+
+		/* UseUnitSprite just unpacked this frame, so measure its artwork here. */
+		Promo_MeasureIcon(GetUnitSpriteInfo(map_sprite).size,
+			&sPromoIconCx[i], &sPromoIconCy[i]);
+	}
 
 	Promo_DrawAll(proc);
 }
@@ -843,17 +912,31 @@ static void PromoSel_Loop(struct ProcPromoSel *proc)
 		Promo_SetStatsBlend();
 
 	if (!PromoEkrFx_IsBusy(proc)) {
-		if (gKeySt->pressed & KEY_DPAD_UP) {
-			if (proc->choice_idx == 0)
-				proc->choice_idx = proc->choice_count - 1;
-			else
-				proc->choice_idx--;
+		int col, row;
+		int idx = proc->choice_idx;
+
+		Promo_GridPos(idx, &col, &row);
+
+		if (gKeySt->pressed & KEY_DPAD_LEFT) {
+			if (col > 0)
+				idx--;
+		} else if (gKeySt->pressed & KEY_DPAD_RIGHT) {
+			if (col + 1 < PROMO_LIST_COLS && idx + 1 < proc->choice_count)
+				idx++;
+		} else if (gKeySt->pressed & KEY_DPAD_UP) {
+			if (idx >= PROMO_LIST_COLS)
+				idx -= PROMO_LIST_COLS;
 		} else if (gKeySt->pressed & KEY_DPAD_DOWN) {
-			if (proc->choice_idx + 1 >= proc->choice_count)
-				proc->choice_idx = 0;
-			else
-				proc->choice_idx++;
+			if (idx + PROMO_LIST_COLS < proc->choice_count) {
+				idx += PROMO_LIST_COLS;
+			} else if (idx < proc->choice_count - 1 &&
+				idx - col + PROMO_LIST_COLS < proc->choice_count) {
+				/* Partial last row: step to its last entry instead of stopping. */
+				idx = proc->choice_count - 1;
+			}
 		}
+
+		proc->choice_idx = idx;
 
 		if (proc->choice_idx != old_idx) {
 			PlaySe(SONG_6A);

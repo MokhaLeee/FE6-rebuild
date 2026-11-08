@@ -18,8 +18,8 @@ struct PromoChoiceDef {
 };
 
 static const struct PromoChoiceDef sPromoChoiceDefs[] = {
-	{ JID_MAGE,   { JID_SAGE,   JID_BISHOP,   JID_NONE, JID_NONE, JID_NONE, JID_NONE } },
-	{ JID_MAGE_F, { JID_SAGE_F, JID_BISHOP_F, JID_NONE, JID_NONE, JID_NONE, JID_NONE } },
+	{ JID_MAGE,   { JID_SAGE, JID_BISHOP, JID_DRUID, JID_VALKYRIE, JID_NONE, JID_NONE } },
+	{ JID_MAGE_F, { JID_SAGE_F, JID_BISHOP_F, JID_DRUID_F, JID_VALKYRIE, JID_NONE, JID_NONE } },
 
 	{ JID_NONE }
 };
