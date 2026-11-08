@@ -25,11 +25,23 @@ struct ProcEfxSkill {
 	const s16 *frames;
 };
 
-static void EfxSkillOnEnd(struct ProcEfxSkill *proc)
+static void EfxSkillBGEnd(ProcPtr proc)
 {
+	(void)proc;
+
 	SpellFx_ClearBG1();
 	SpellFx_ClearBG1Position();
 	SpellFx_ClearColorEffects();
+}
+
+static void EfxSkillOnInit(struct ProcEfxSkill *proc)
+{
+	NewEfxSkillBox(proc->anim, proc->sid);
+}
+
+static void EfxSkillOnEnd(struct ProcEfxSkill *proc)
+{
+	EfxSkillBGEnd(proc);
 	gEfxBgSemaphore--;
 	SpellFx_Finish();
 }
@@ -61,7 +73,11 @@ static const struct ProcScr ProcScr_EfxSkill[] = {
 	PROC_NAME_DEBUG("EfxSkill"),
 	PROC_ONEND(EfxSkillOnEnd),
 	PROC_YIELD,
+	PROC_CALL(EfxSkillOnInit),
 	PROC_REPEAT(EfxSkillMain),
+	PROC_CALL(EfxSkillBGEnd),
+	PROC_SLEEP(0x10),
+	PROC_WHILE(EfxSkillBoxExists),
 	PROC_END
 };
 

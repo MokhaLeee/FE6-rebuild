@@ -180,8 +180,8 @@ void NewEkrSkill(struct Anim *anim)
 	}
 
 #if defined(CONFIG_USE_DEBUG) && CONFIG_DEBUG_EFXSKILL
-	proc->sid_atk = SID_BlowDarting;
-	proc->sid_def = SID_BlowDeath;
+	proc->sid_atk = SID_PowBonus;
+	proc->sid_def = SID_MagBonus;
 #endif
 }
 

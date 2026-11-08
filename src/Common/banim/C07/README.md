@@ -90,7 +90,7 @@
 | `EkrSkillExists()` | 给 C07 handler 轮询 | `return Proc_Exists(ProcScr_EkrSkill);` |
 | `COMMON_SKILL_VALID(sid)` | 技能 ID 有效性 | `SKILL_IS_VALID(sid)`（`include/hacks/skill-sys.h`） |
 | `LTRACEF(...)` | 调试日志 | 删除，或换成 FE6 的 `Printf`/`DebugPrintf`（如有） |
-| `#if defined(CONFIG_USE_DEBUG) && defined(CONFIG_DEBUG_EFXSKILL)` | debug 固定技能 | 新增 `CONFIG_DEBUG_EFXSKILL`，固定 `sid_atk = SID_BlowDarting` 便于验证 |
+| `#if defined(CONFIG_USE_DEBUG) && defined(CONFIG_DEBUG_EFXSKILL)` | debug 固定技能 | 新增 `CONFIG_DEBUG_EFXSKILL`，固定 `sid_atk = SID_PowBonus` / `sid_def = SID_MagBonus` 便于验证 |
 
 ### 1.4 C07 handler 逐项对照
 
@@ -175,7 +175,7 @@ void Banim_C07(struct Anim *anim)
 | `InitSpriteTextFont()` / `InitSpriteText()` / `Text_InsertDrawString()` | 已有：`vanilla/text.c` |
 | `GetStringTextCenteredPos()` | 已有 |
 | `SetTextFontGlyphs(TEXT_GLYPHS_SYSTEM)` | 已有 |
-| `SpriteText_Clear()` | **缺**；用 `ClearTextPart(&text, 0, 6)` 或 `CpuFastFill16` |
+| `SpriteText_Clear()` | **缺**；用两段 `CpuFastFill16` 清 2D OBJ 的两行（各 `0x180`） |
 | `GetSkillNameStr()` | 已有：`src/Core/SkillSys/SkillInfo.c` |
 | `GetStringFromIndex()` / `GetCombatArtName()` | combat art 部分删除 |
 | `GetIconGfx()` | 已有但是 `static`（`src/Common/icon/icon.c`）；需要导出或改用 `PutIconObjImg()` |
@@ -415,8 +415,8 @@ contents/skillsys/EfxSkillBox/
 4. debug 模式：
    ```c
    #if defined(CONFIG_USE_DEBUG) && defined(CONFIG_DEBUG_EFXSKILL)
-       proc->sid_atk = SID_BlowDarting;
-       proc->sid_def = SID_BlowDeath;
+       proc->sid_atk = SID_PowBonus;
+       proc->sid_def = SID_MagBonus;
    #endif
    ```
    `CONFIG_DEBUG_EFXSKILL` 加到 `include/configs/`（先不默认开启）。
@@ -611,7 +611,6 @@ contents/skillsys/EfxSkillBox/
   - GDB 命中 `NewEfxSkill`（sid=9）、`EfxSkillMain` 33 帧、`EfxSkillOnEnd`；
   - `gEkrDebugTimer` 从 45 到 79，动画约 33 帧；
   - 截图在 8440–8490 看到蓝色/白色光球按帧变化，8490 后消失；
-    ![Phase 2 skill effect](efxskill_phase2.png)
   - 状态检查：`gBg1Tm[0]=0x110F`（tile 0x10F + palette 1）、
     `gPal[0x20]=0x5355`、VRAM `0x060021E0` 有图像数据；
   - `gEfxBgSemaphore=1`、`gEfxSpellAnimExists=1` 在动画期间正确置位。
@@ -632,7 +631,7 @@ contents/skillsys/EfxSkillBox/
 1. 复制 `Data/SkillSys/EfxSkill/EfxSkillBoxBG.png`（48x16）到
    `contents/skillsys/EfxSkillBox/`，生成 `.4bpp.lz`。
 2. 复制 `Data/SkillSys/EfxSkill/EfxSkillBoxfx.s` 到 `src/Common/banim/C07/efxskillboxfx.s`：
-   - 把 `.section .rodata` 改为 `.section .content_data`（与 FE6 其他资源一致）；
+   - 把 `.section .rodata` 改为 `.section .content_data.skillsys`（与 FE6 其他资源一致）；
    - `.include "animscr.inc"` / `.include "gba_sprites.inc"` 已存在；
    - 宏 `ANIM_SPRITE` / `ANIMSCR_FORCE_SPRITE` 与 kernel 兼容，基本可直接用；
    - 把 `sprite_right_*` 之类标签重命名，避免和现有符号冲突。
@@ -645,14 +644,14 @@ contents/skillsys/EfxSkillBox/
      并在 `include/icon.h` 声明；或者直接改用 `PutIconObjImg(SKILL_ICON(sid), ICON_OBJ_CHR)`。
    - `LoadIconPalette` → `ApplyIconPalette(0, 0x10 + ICON_OBJ_PAL)`；
    - `ApplyPalette(Pal_Text, 0x10 + TEXT_OBJ_PAL)` → `ApplyObPalette(Pal_Text, TEXT_OBJ_PAL)`；
-   - `SpriteText_Clear` → `ClearTextPart(&proc->text, 0, 6)`；
+   - `SpriteText_Clear` → 两段 `CpuFastFill16`：第一行 `TEXT_OBJ_CHR`，第二行 `TEXT_OBJ_CHR + 0x20`（各 `0x180`）；
    - `AnimCreate(scr, 0x95)` → `BasCreate(scr, 0x95)`；
    - `anim->oam2Base` → `anim->oam2`；
    - `Decompress(gpImg_EfxSkillBoxBG, gGenericBuffer)` → `Decompress(gpImg_EfxSkillBoxBG, gBuf)`；
    - `GetAnimPosition(...) == EKR_POS_L` → `== POS_L`。
 2. `EfxSkillBoxIdle()` 里 `anim->state != 0` → `anim->flags != 0`。
-3. `EfxSkillOnInit()` 调用 `NewEfxSkillBox(proc->anim, 0, icon, proc->sid, EFX_SKILL_BOX_SKILL)`；
-   `NewEfxSkill()` 结束前等待 `EfxSkillBoxExists()`（kernel 的 `PROC_WHILE(EfxSkillBoxExists)`）。
+3. `EfxSkillOnInit()` 调用 `NewEfxSkillBox(proc->anim, proc->sid)`；
+   `EfxSkill` proc 在 BG 结束后 `PROC_SLEEP(0x10)` + `PROC_WHILE(EfxSkillBoxExists)`。
 4. 名字文本：FE6 的 `GetSkillNameStr()` 可用，desc 里含 `:`，`GetSkillNameStrFormDesc()` 能截出名字。
 
 验收：
@@ -661,6 +660,67 @@ contents/skillsys/EfxSkillBox/
 - 名字不超框，UTF-8 / narrow font 正常；
 - 技能框结束后 sprite 全部消失，无残留 OAM/VRAM 花屏；
 - 截图对比左右站位、远/近距离。
+
+#### Phase 3 实施记录（2026-11-08）
+
+已实现：
+
+- 资源
+  - `contents/skillsys/EfxSkillBox/EfxSkillBoxBG.png`（kernel 的 48x16 名字框底图）；
+  - `src/Common/banim/C07/efxskillboxfx.s`：从 kernel 移植的 icon/name 滑入 AnimScr；
+    去掉 `macros.inc`，`ANIMSCR_END` 改为 FE6 的 `ANIMSCR_DISABLED`；
+  - `gamedata/skill-sys/EfxSkillBox.S`：`Img_EfxSkillBoxBG`（`.4bpp.lz`）；
+  - `Makefile`：`EfxSkillBox.o` 依赖 `EfxSkillBoxBG.4bpp.lz`。
+- `src/Common/banim/C07/efxskillbox.c`
+  - `NewEfxSkillBox()` / `EfxSkillBoxExists()` / `ProcScr_EfxSkillBox`；
+  - icon 用 `PutIconObjImg(SKILL_ICON(sid), ICON_OBJ_CHR)`；
+  - 名字用 `GetSkillNameStr()` + `Text_InsertDrawString()`；
+  - 文字区清两段：`TEXT_OBJ_CHR` 与 `TEXT_OBJ_CHR + 0x20`，各 `0x180`；
+  - VRAM：icon `0x40`、text `0x44`、text BG `0x50`；palette icon `2`、text `0xF`；
+  - `BOX_Y = 0x5C`：kernel 用 `0x5D`，但 FE6 的 HIT/DMG/CRT 面板位置更高
+    （约 y=100）；`0x5C` 让名字框底部贴住面板上沿，又不压住面板文字。
+- `include/efx-skill.h`
+  - `NewEfxSkillBox()` / `EfxSkillBoxExists()` 原型。
+- `src/Common/banim/C07/efxskill.c`
+  - `EfxSkillOnInit()` 创建 box；
+  - `EfxSkillBGEnd()` 在 BG 帧结束后清理 BG；
+  - proc 末尾 `PROC_SLEEP(0x10)` + `PROC_WHILE(EfxSkillBoxExists)` 等 box 结束；
+  - `PROC_ONEND(EfxSkillOnEnd)` 负责兜底清理 + semaphore/SpellFx_Finish。
+
+验证结果（`CONFIG_DEBUG_EFXSKILL 1`，强制 sid 1/2，对应 kernel 的调试技能）：
+
+- 右侧 `Str+2`、左侧 `Mag+2` 的 icon + 名字框都正常；
+- 名字框从屏幕边缘滑入，结束后 sprite 消失；
+- 测试截图已清理；
+- `CONFIG_DEBUG_EFXSKILL 0` 时没有自动注册，box 不会触发（符合当前设计）；
+- `run-tests.sh --quick`：4/4；`run-tests.sh`：26/26。
+
+已知限制：
+
+- 名字框宽度沿用 kernel 的 `0x30`（6 tiles）；很长的技能名可能被裁切；
+- 目前只在 debug 模式验证，正常触发要等 Phase 4 注册策略；
+- icon 使用现有 skill icon sheet，combat art 没有。
+
+与 FE8 kernel 的差异（已对照 `fe8-kernel-dev.gba`）：
+
+- FE8 kernel 调试时 `sid_atk=1` / `sid_def=2`，显示 `Hp+5` / 短名；
+  FE6 现在同样用 `SID_PowBonus` / `SID_MagBonus`（1/2），显示 `Str+2` / `Mag+2`。
+- FE8 名字框 `y=0x5D`；FE6 因为 HIT/DMG/CRT 面板更高，改为 `y=0x5C`。
+- VRAM：FE8 icon `0x40`、text `0x42`、text BG `0x00`；
+  FE6 用 icon `0x40`、text `0x44`、text BG `0x50`，避免和 icon/banim 槽重叠。
+- FE8 用 `SpriteText_Clear()`；FE6 用两段 `CpuFastFill16` 清 2D OBJ 的两行。
+- FE8 有 combat art 分支；FE6 只显示 skill。
+- 名字框宽度都是 `0x30`；长名字仍可能裁切。
+
+文字显示修复：
+
+- FE6 的 `DrawSpriteTextGlyph()` 在 2D OBJ mapping 下把字形的第二个 8px 行写到
+  `+0x20` tiles（不是相邻 tile）；
+- kernel 的 `SpriteText_Clear()` 会清 `0x800` 字节，覆盖这个 16px 字形的两行；
+- 移植时最初只清了第一行 `0x180` 字节，第二行直接 OR 到旧 tile 上，
+  所以看起来文字下半截被裁/花；
+- 现在同时清 `TEXT_OBJ_CHR` 和 `TEXT_OBJ_CHR + 0x20` 两段，文字完整。
+  FE6 的 icon/text BG 也通过 `Copy2dChr()` 按 2D 行距写入，已确认无重叠。
 
 ### Phase 4：真实技能注册
 

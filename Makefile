@@ -222,6 +222,7 @@ EFXSKILL_PALS := $(EFXSKILL_PNGS:%.png=%.gbapal)
 	@python3 tools/scripts/gfxtools/tsa_generator.py $< $*.feimg1.bin $*.fetsa1.bin
 
 gamedata/skill-sys/EfxSkill.o: $(EFXSKILL_LZ) $(EFXSKILL_PALS)
+gamedata/skill-sys/EfxSkillBox.o: contents/skillsys/EfxSkillBox/EfxSkillBoxBG.4bpp.lz
 
 CLEAN_FILES2 += $(EFXSKILL_IMGS) $(EFXSKILL_TSAS) $(EFXSKILL_LZ)
 

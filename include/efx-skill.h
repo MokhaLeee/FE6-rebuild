@@ -21,3 +21,6 @@ extern struct EfxAnimConf const *const gpEfxSkillAnims[MAX_SKILL_NUM + 1];
 
 void NewEfxSkill(struct Anim *anim, int sid);
 bool EfxSkillExists(void);
+
+void NewEfxSkillBox(struct Anim *anim, u16 sid);
+bool EfxSkillBoxExists(void);
