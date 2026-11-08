@@ -769,20 +769,35 @@ static void Promo_MeasureIcon(int size, u8 *cx, u8 *cy)
 	*cy = (miny + maxy + 1) / 2;
 }
 
-static void Promo_GetCellPos(int idx, int *x, int *y)
+/* First visible row: keep the selection on screen, scrolling one row at a time. */
+/* Scroll only when the cursor leaves the visible window, not while moving inside it. */
+static void Promo_ScrollIntoView(struct ProcPromoSel *proc)
+{
+	int col, row;
+
+	Promo_GridPos(proc->choice_idx, &col, &row);
+
+	if (row < proc->scroll_row)
+		proc->scroll_row = row;
+	else if (row >= proc->scroll_row + PROMO_LIST_ROWS)
+		proc->scroll_row = row - PROMO_LIST_ROWS + 1;
+}
+
+static void Promo_GetCellPos(int idx, int first_row, int *x, int *y)
 {
 	int col, row;
 
 	Promo_GridPos(idx, &col, &row);
 
 	*x = PROMO_LIST_X * 8 + PROMO_LIST_INSET + col * PROMO_LIST_PITCH * 8;
-	*y = (PROMO_LIST_Y + row * PROMO_LIST_PITCH) * 8;
+	*y = PROMO_LIST_Y * 8 + (row - first_row) * PROMO_LIST_PITCH * 8;
 }
 
 static void Promo_DrawIcons(struct ProcPromoSel *proc)
 {
 	struct ProcPromoHandler *handler = Promo_GetHandler(proc);
 	struct Unit *unit = handler->unit;
+	int first = proc->scroll_row;
 	int cx, cy;
 	int i;
 
@@ -791,11 +806,17 @@ static void Promo_DrawIcons(struct ProcPromoSel *proc)
 		int jid = proc->choices[i];
 		int size = GetUnitSpriteInfo(GetJInfo(jid)->map_sprite).size;
 		int left, top, x, y;
+		int col, row;
+
+		Promo_GridPos(i, &col, &row);
+
+		if (row < first || row >= first + PROMO_LIST_ROWS)
+			continue;
 
 		icon_unit.jinfo = GetJInfo(jid);
 		icon_unit.flags &= ~UNIT_FLAG_TURN_ENDED;
 
-		Promo_GetCellPos(i, &cx, &cy);
+		Promo_GetCellPos(i, first, &cx, &cy);
 
 		/* Centre the visible artwork inside the 24x24 cell, not the frame. */
 		left = cx + 12 - sPromoIconCx[i];
@@ -822,7 +843,7 @@ static void Promo_DrawIcons(struct ProcPromoSel *proc)
 		PutUnitSpriteExt(3, x, y, OAM2_LAYER(1), &icon_unit);
 	}
 
-	Promo_GetCellPos(proc->choice_idx, &cx, &cy);
+	Promo_GetCellPos(proc->choice_idx, first, &cx, &cy);
 	/* The hand sprite is drawn 14px left of its anchor; it only clips the icon edge. */
 	PutUiHand(cx + 6, cy + 8);
 }
@@ -866,6 +887,7 @@ static void PromoSel_Init(struct ProcPromoSel *proc)
 	proc->choice_count = GetPromoChoices(unit, item,
 		proc->choices, PROMO_CHOICE_MAX);
 	proc->choice_idx = 0;
+	proc->scroll_row = 0;
 
 	if (proc->choice_count == 0) {
 		handler->action_type = PROMO_ACT_CANCEL;
@@ -894,7 +916,10 @@ static void PromoSel_Init(struct ProcPromoSel *proc)
 
 		UseUnitSprite(map_sprite);
 
-		/* UseUnitSprite just unpacked this frame, so measure its artwork here. */
+		/* UseUnitSprite only unpacks on first use, so repeated classes would
+		   otherwise measure whichever sprite happened to be unpacked last. */
+		Decompress(GetUnitSpriteInfo(map_sprite).img, UnitSpriteUnpackBuf);
+
 		Promo_MeasureIcon(GetUnitSpriteInfo(map_sprite).size,
 			&sPromoIconCx[i], &sPromoIconCy[i]);
 	}
@@ -940,6 +965,7 @@ static void PromoSel_Loop(struct ProcPromoSel *proc)
 
 		if (proc->choice_idx != old_idx) {
 			PlaySe(SONG_6A);
+			Promo_ScrollIntoView(proc);
 			proc->ui_dirty = 1;
 			PromoEkrFx_RequestJid(proc, Promo_GetJid(proc));
 		}

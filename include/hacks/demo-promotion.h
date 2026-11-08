@@ -48,7 +48,7 @@ extern const u16 PromoClassNamePalette[16];
 extern const struct PromoClassNameGlyph PromoClassNameGlyphs[];
 extern const int PromoClassNameGlyphCount;
 
-#define PROMO_CHOICE_MAX 12
+#define PROMO_CHOICE_MAX 24
 
 enum promotion_type {
 	PROMO_TYPE_BM,
@@ -95,6 +95,7 @@ struct ProcPromoSel {
 	PROC_HEADER_EXT(struct ProcPromoMain);
 	u8 choice_count;
 	u8 choice_idx;
+	u8 scroll_row;
 	u8 ui_dirty;
 	u8 title_needs_reload;
 	u8 title_hidden;
