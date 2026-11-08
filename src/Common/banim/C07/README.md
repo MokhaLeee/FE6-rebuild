@@ -1,5 +1,7 @@
 # FE6-rebuild 技能战斗动画移植计划
 
+> Critical cut-in 的独立说明见 [README-critcutin.md](README-critcutin.md)。
+
 > 目标：把 `~/fe8u-cskillsys-kernel` 的 C07 / EkrSkill / EfxSkill 链路移植到 FE6-rebuild，
 > 让战斗动画（banim）里可以显示技能图标、技能名和技能 BG 动画。
 >
@@ -326,17 +328,21 @@ Phase 1–3 用 debug 模式固定技能，先验证画面；Phase 4 再补真�
 
 ### 2.8 资源格式
 
-FE8 原版技能 BG 资源是 240x160 PNG，经 `scripts/gfxtools/tsa_generator.py`（method 1）生成：
+FE8 原版技能 BG 资源是 240x160 PNG，实际实现直接用 **GRIT** 生成：
 
 ```
-*.feimg1.bin   固定 0x2000 字节（0x100 tiles，含 padding）
-*.fetsa1.bin   30x20 TSA，1200 字节
-*.gbapal       0x20 字节
+*.img.bin   LZ77 压缩的 0x2000 tile atlas（GRIT map 模式会去重 tile）
+*.map.bin   LZ77 压缩的 30x20 TSA
+*.pal.bin   0x20 字节 palette
 ```
 
 这与 FE6 的 `SpellFx_RegisterBgGfx(..., 0x2000)` / `SpellFx_WriteBgMap(..., 30, 20, ...)` /
 `SpellFx_RegisterBgPal(..., 0x20)` **完全匹配**。所以优先移植 FE8 原版 16 帧资源，
 而不是用 FE6 的 `EfxMagfcast` 占位。
+
+> 早期计划曾用 `tsa_generator.py` 生成 `.feimg1.bin/.fetsa1.bin`；
+> 后来确认 FE8 kernel 的 `EfxSkillVanilla.efx.event` 就是用 GRIT 的
+> `.img.bin/.map.bin/.pal.bin`，因此已统一改为 GRIT。
 
 ---
 
@@ -364,9 +370,9 @@ include/
 
 contents/skillsys/EfxSkill/
 ├── efxskill_1.png ... efxskill_16.png
-├── efxskill_*.feimg1.bin.lz
-├── efxskill_*.fetsa1.bin.lz
-└── efxskill_*.gbapal
+├── efxskill_*.img.bin
+├── efxskill_*.map.bin
+└── efxskill_*.pal.bin
 
 contents/skillsys/EfxSkillBox/
 └── EfxSkillBoxBG.png -> .4bpp.lz
@@ -469,24 +475,22 @@ contents/skillsys/EfxSkillBox/
 
 1. 从 `~/fireemblem8u/graphics/efxskill/efxskill_1..16.png` 复制 16 张 240x160 PNG 到
    `contents/skillsys/EfxSkill/`。
-2. 用 `tools/scripts/gfxtools/tsa_generator.py`（从 FE8 仓库 vendored）生成：
-   - `efxskill_N.feimg1.bin`（固定 0x2000 字节）
-   - `efxskill_N.fetsa1.bin`（1200 字节）
-3. 用 `tools/gbagfx` 压成 `.lz`（参考 FE6 现有 `contents/banims/*.4bpp.lz`）。
-4. 用 `tools/gbagfx` 或 `grit` 生成 `efxskill_N.gbapal`（0x20 字节）。
-5. 新增 `gamedata/skill-sys/EfxSkill.S`，用 `.incbin` 定义：
+2. 用仓库已有的 GRIT 规则生成：
+   - `efxskill_N.img.bin`（LZ77，0x2000 tile atlas）
+   - `efxskill_N.map.bin`（LZ77，30x20 TSA）
+   - `efxskill_N.pal.bin`（0x20 字节）
+3. 新增 `gamedata/skill-sys/EfxSkill.S`，用 `.incbin` 定义：
    ```asm
    .section .content_data.skillsys
    .global Img_EfxSkill1
-   Img_EfxSkill1: .incbin "contents/skillsys/EfxSkill/efxskill_1.feimg1.bin.lz"
+   Img_EfxSkill1: .incbin "contents/skillsys/EfxSkill/efxskill_1.img.bin"
    ...
    .global Tsa_EfxSkill1
-   Tsa_EfxSkill1: .incbin "contents/skillsys/EfxSkill/efxskill_1.fetsa1.bin.lz"
+   Tsa_EfxSkill1: .incbin "contents/skillsys/EfxSkill/efxskill_1.map.bin"
    ...
    ```
-6. `Makefile` 增加 `%.feimg1.bin %.fetsa1.bin &: %.png` 规则（GNU Make 4.3 grouped
-   target）和 `gamedata/skill-sys/EfxSkill.o` 对生成文件的依赖；`*.feimg1.bin` /
-   `*.fetsa1.bin` 加到 `.gitignore`。
+4. `Makefile` 的 `EFXSKILL_*` 依赖 `.img.bin` / `.map.bin` / `.pal.bin`；
+   `.gitignore` 忽略这些 GRIT 生成物。
 
 代码：
 
@@ -584,12 +588,11 @@ contents/skillsys/EfxSkillBox/
 
 - 新增资源：
   - `contents/skillsys/EfxSkill/efxskill_1..16.png`（FE8 原版 240x160 技能光效）；
-  - `tools/scripts/gfxtools/tsa_generator.py` + `tsa2.py`（从 FE8 仓库 vendored）；
   - `gamedata/skill-sys/EfxSkill.S`（48 个 `.incbin` 符号）。
 - `Makefile`：
-  - `%.feimg1.bin %.fetsa1.bin &: %.png` grouped target；
-  - `gamedata/skill-sys/EfxSkill.o` 依赖 `.feimg1.bin.lz` / `.fetsa1.bin.lz` / `.gbapal`；
-  - 生成文件加入 `CLEAN_FILES2`，`.gitignore` 忽略 `.feimg1.bin` / `.fetsa1.bin`。
+  - 使用已有的 GRIT 规则 `%.img.bin %.map.bin %.pal.bin &: %.png`；
+  - `gamedata/skill-sys/EfxSkill.o` 依赖 `.img.bin` / `.map.bin` / `.pal.bin`；
+  - `.gitignore` 忽略 GRIT 生成物。
 - 新增 `include/efx-skill.h`：`struct EfxAnimConf`、`gpEfxSkillAnims`、`EfxSkillVanilla`。
 - 新增 `src/Common/banim/C07/efxskill-data.c`：16 帧 FrameLut、Tsa/Img/Pal LUT、
   `gpEfxSkillAnims[0 ... MAX_SKILL_NUM] = &EfxSkillVanilla`。
@@ -817,7 +820,7 @@ contents/skillsys/EfxSkillBox/
 
 ### 方案 A（推荐）：移植 FE8 原版 `graphics/efxskill/*.png`
 
-- 16 张 240x160 PNG，`tsa_generator.py` + `gbagfx` 生成 `.feimg1.bin.lz` / `.fetsa1.bin.lz` / `.gbapal`；
+- 16 张 240x160 PNG，GRIT 生成 `.img.bin` / `.map.bin` / `.pal.bin`；
 - 与 FE6 `SpellFx_*` 的 `0x2000` / 30x20 / `0x20` 参数完全匹配；
 - 效果就是 FE8 原版的技能光效，最接近 kernel；
 - 工作量：一次性生成 48 个文件 + 一个 `.s` + 一份数据表。

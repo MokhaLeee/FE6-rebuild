@@ -3,6 +3,9 @@
 #include "banim.h"
 #include "skill-sys.h"
 
+extern void NewCritCutin(struct Anim *anim);
+extern bool CritCutinExists(void);
+
 #if defined(CONFIG_USE_DEBUG) && CONFIG_DEBUG_EFXSKILL
 #include "constants/skills.h"
 #endif
@@ -87,6 +90,11 @@ static void C07Handler_End(struct ProcC07Handler *proc)
 	UnlockAnimState(proc->anim);
 }
 
+static void C07Handler_CritCutin(struct ProcC07Handler *proc)
+{
+	NewCritCutin(proc->anim);
+}
+
 static const struct ProcScr ProcScr_BanimC07Handler[] = {
 	PROC_NAME_DEBUG("C07Handler"),
 	PROC_YIELD,
@@ -99,6 +107,12 @@ static const struct ProcScr ProcScr_BanimC07Handler[] = {
 	PROC_CALL(C07Handler_EkrSkill),
 	PROC_YIELD,
 	PROC_WHILE(EkrSkillExists),
+
+	/**
+	 * Critical cut-in
+	 */
+	PROC_CALL(C07Handler_CritCutin),
+	PROC_WHILE(CritCutinExists),
 
 	PROC_YIELD,
 	PROC_CALL(C07Handler_End),

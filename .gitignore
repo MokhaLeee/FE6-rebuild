@@ -87,6 +87,11 @@ tools/agbcc
 *.feimg1.bin
 *.fetsa1.bin
 
+# GRIT generated (CritCutin etc.)
+*.img.bin
+*.map.bin
+*.pal.bin
+
 # =========================
 # Dump Scripts Output
 # =========================
