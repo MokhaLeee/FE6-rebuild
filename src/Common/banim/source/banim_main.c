@@ -5,6 +5,8 @@
 #include "banim.h"
 #include "banim_data.h"
 
+extern bool Banim_C07(struct Anim *anim);
+
 static void AnimMoveBackToCommand(struct Anim *anim, int cmd)
 {
 	const u32 *history;
@@ -321,6 +323,13 @@ void BattleAIS_ExecCommands(void)
 				 */
 				case BAS_CMD(0x06):
 					Banim_C06_StartOpponentNextRound(anim);
+					break;
+
+				/**
+				 * C07 ekrskill
+				 */
+				case BAS_CMD(0x07):
+					Banim_C07(anim);
 					break;
 
 				/**

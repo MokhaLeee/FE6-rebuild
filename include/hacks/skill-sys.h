@@ -1,6 +1,7 @@
 #pragma once
 
 #include "prelude.h"
+#include "banim_sprite.h"
 #include "unit.h"
 
 #define MAX_SKILL_NUM 0x400
@@ -69,6 +70,13 @@ bool JudgeSkillInBattle(struct BattleUnit *bu, int sid);
  */
 u16 GetActorEfxSkill(int round);
 u16 GetTargetEfxSkill(int round);
+
+void NewEkrSkill(struct Anim *anim);
+bool EkrSkillExists(void);
+
+void NewEfxSkill(struct Anim *anim, int sid);
+bool EfxSkillExists(void);
+
 bool MapAnimRoundAnim_DisplaySkillIcon(ProcPtr parent);
 void NewSkillMapAnimMini(int x, int y, u16 sid, ProcPtr parent);
 bool SkillMapAnimMiniExists(void);
