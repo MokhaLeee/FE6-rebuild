@@ -374,7 +374,7 @@ PROBE frame=200 addr=... width=8  value=<TEST_MENU_STATE_MENU>
 
 ## 6. 测试脚本
 
-当前入口是 `tools/emu/testmenu-tests.sh`，已经覆盖七个 case：
+当前入口是 `tools/emu/testmenu-tests.sh`，已经覆盖十三个 case：
 
 ```
 case 1: 开机 → 顶层 testmenu（Roy/Lilina）→ Start Game → 章节
@@ -384,6 +384,12 @@ case 4: 开机 → 顶层 → Test → Save → Write + Load
 case 5: 跨进程：Write + --save-out → 重启 --sav → Load
 case 6: 顶层 → Test → Battle → Test Battle，GDB 检查 banim
 case 7: 顶层 → Test → Prep → Test Prep 准备画面（CHAPTER_TEST_PREP）
+case 8: Test Prep → Unit Select → Item Edit → 返回准备菜单
+case 9: Test Prep → ゲームを始める → 地图
+case 10: Prep 菜单按 R → 帮助框
+case 11: Unit Select → R → Statscreen
+case 12: Sortie → Map R → MSS
+case 13: Prep → 記録する / マップを見る
 ```
 
 case 1 会断言：
@@ -449,6 +455,55 @@ gPlaySt.flags & PLAY_FLAG_PREP
 gPlaySt.chapter == 46 (CHAPTER_TEST_PREP)
 ```
 
+case 8 会断言：
+
+```
+gPrepMenuItemCnt == 10（进入/退出子菜单后仍是 10）
+gPrepUnitCount   == 9
+Unit Select / Item Edit / 返回准备菜单 三个画面都有内容
+```
+
+case 9 会断言：
+
+```
+gPlaySt.flags & PLAY_FLAG_PREP == 0
+gBmSt.flags & BM_FLAG_PREP == 0
+gPlaySt.chapter == 46
+地图画面有内容
+```
+
+case 10 会断言：
+
+```
+gPrepMenuItemCnt == 10
+帮助框画面颜色数在 160–200
+```
+
+case 11 会断言：
+
+```
+gStatScreenSt.page == 0
+gStatScreenSt.unit != NULL
+gPrepMenuItemCnt == 10
+Statscreen 画面有内容
+```
+
+case 12 会断言：
+
+```
+gMssSt.unit != NULL
+gStatScreenSt.unit == 0
+MSS 画面有内容
+```
+
+case 13 会断言：
+
+```
+gPrepMenuItemCnt == 10
+gPlaySt.flags & PLAY_FLAG_PREP
+記録する / マップを見る 两个子界面有内容
+```
+
 脚本已经分层：
 
 ```
@@ -464,14 +519,20 @@ tools/emu/
 │       ├── 04-save-write-load.sh
 │       ├── 05-save-cross-run.sh
 │       ├── 06-battle-banim.sh
-│       └── 07-prep-screen.sh
+│       ├── 07-prep-screen.sh
+│       ├── 08-prep-menu.sh
+│       ├── 09-prep-sortie.sh
+│       ├── 10-prep-helpbox.sh
+│       ├── 11-prep-statscreen.sh
+│       ├── 12-mss-statscreen.sh
+│       └── 13-prep-save-map.sh
 └── legacy/                    # 旧 run-tests.sh / gdb-check.sh / 文档
 ```
 
 ```bash
 ./tools/emu/testmenu-tests.sh             # 全部
 ./tools/emu/testmenu-tests.sh --list      # 列出 case
-./tools/emu/testmenu-tests.sh --case 7    # 只跑 case 7
+./tools/emu/testmenu-tests.sh --case 13   # 只跑 case 13
 ./tools/emu/testmenu-tests.sh --clean     # 清输出
 ```
 
@@ -497,7 +558,13 @@ tools/emu/
 8. ✅ Save 增加单位哨兵（level/exp/item）和跨进程 `Write` / `Load` case。
 9. ✅ 加 `Battle` 分类和 `Test Battle` case，GDB 检查 banim 断点。
 10. ✅ 加 `Prep` 分类和 `Test Prep` case，验证准备画面初始化（正式 test chapter，不依赖 Chapter 2）。
-11. ⏳ 继续加其他领域（ui / system）。
+11. ✅ 加 Prep 子菜单 smoke（Unit Select / Item Edit）。
+12. ✅ 加 Prep 出撃 case，验证离开准备画面后 prep 状态清理。
+13. ✅ 加 Prep helpbox case（R）。
+14. ✅ 加 Prep statscreen case（Unit Select → R）。
+15. ⏳ MSS statscreen case 已加，按用户要求先挂起。
+16. ✅ 加 Prep 存档/地图子界面 case。
+17. ⏳ 继续加其他领域（ui / system）。
 11. ⏳ 按需求把旧 `run-tests.sh` 的用例迁进 `testmenu-tests.sh`。
 
 ## 9. 待定

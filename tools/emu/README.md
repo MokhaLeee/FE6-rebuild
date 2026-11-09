@@ -51,6 +51,12 @@ tools/emu/
 | 5 Save cross-run | 第一次运行 Write + `--save-out`，第二次 `--sav` 启动后 Load；检查单位哨兵和章节，证明跨进程持久化 |
 | 6 battle banim | 顶层 → Test → Battle → Test Battle；GDB 断点命中 `BattleAIS_ExecCommands` / `EfxAdvanceFrameLut` |
 | 7 prep | 顶层 → Test → Prep → Test Prep；test-only ChapterInfo/Event，`gPrepMenuItemCnt == 10`，`gPrepUnitCount == 9`，first red unit exists，`gPlaySt.flags & PLAY_FLAG_PREP`，chapter=46 |
+| 8 prep menu | Test Prep → Unit Select → Item Edit → 返回准备菜单；`gPrepMenuItemCnt == 10`，`gPrepUnitCount == 9`，画面有内容 |
+| 9 prep sortie | Test Prep → ゲームを始める → 地图；`PLAY_FLAG_PREP=0`，`BM_FLAG_PREP=0`，chapter=46 |
+| 10 prep helpbox | Prep 菜单按 R；`gPrepMenuItemCnt == 10`，帮助框颜色数 160–200 |
+| 11 prep statscreen | Unit Select → R；`gStatScreenSt.unit` 非空，page=0，画面有内容 |
+| 12 mss statscreen | Sortie → Map R；`gMssSt.unit` 非空，vanilla statscreen 未打开 |
+| 13 prep save/map | Prep → 記録する / マップを見る；prep 状态保持，两个子界面有内容 |
 
 脚本设计和新增 case 的方法见 [testmenu/README.md](testmenu/README.md)。
 测试项目录和 EWRAM 探针方案见 [../../src/Test/README.md](../../src/Test/README.md)。

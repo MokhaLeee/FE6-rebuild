@@ -6,7 +6,7 @@ case_07_prep_screen() {
 	local prep_menu prep_state prep_category prep_case_id
 	local prep_count prep_flags prep_chapter prep_unit_count prep_red prep_colors
 
-	echo "== 7/7 testmenu: 顶层 → Test → Prep → Test Prep 准备画面"
+	echo "== 7/13 testmenu: 顶层 → Test → Prep → Test Prep 准备画面"
 
 	# TestRoot 顺序：Game / Save / Battle / Prep / Back。
 	# 选 Prep -> Test Prep 后，test-only ChapterInfo 打开 has_prep，

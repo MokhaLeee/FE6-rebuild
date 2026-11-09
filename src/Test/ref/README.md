@@ -238,6 +238,14 @@ constants/videoalloc_global.h constants/chapters.h constants/faces.h
   `BattleAIS_ExecCommands` / `EfxAdvanceFrameLut`。
 - case 7：顶层 → `Test` → `Prep` → `Test Prep`，`gPrepMenuItemCnt == 10`，
   `PLAY_FLAG_PREP` 置位，`gPrepUnitCount == 9`，chapter=46（`CHAPTER_TEST_PREP`）。
+- case 8：`Test Prep` → Unit Select → Item Edit → 返回准备菜单，
+  `gPrepMenuItemCnt == 10`、`gPrepUnitCount == 9`。
+- case 9：`Test Prep` → ゲームを始める → 地图，`PLAY_FLAG_PREP` 和
+  `BM_FLAG_PREP` 清零。
+- case 10：Prep 菜单按 R，帮助框出现且颜色数在 160–200。
+- case 11：Unit Select 按 R，`gStatScreenSt.unit` 非空且 page=0。
+- case 12：Sortie 后地图按 R，`gMssSt.unit` 非空，vanilla statscreen 未打开。
+- case 13：Prep → 記録する / マップを見る，两个子界面有内容。
 
 旧的 `legacy/run-tests.sh` 仍假设开机到标题，正在按需求把用例迁进 `testmenu-tests.sh`。
 

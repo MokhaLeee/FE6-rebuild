@@ -17,7 +17,13 @@ tools/emu/
 │   │   ├── 04-save-write-load.sh
 │   │   ├── 05-save-cross-run.sh
 │   │   ├── 06-battle-banim.sh
-│   │   └── 07-prep-screen.sh
+│   │   ├── 07-prep-screen.sh
+│   │   ├── 08-prep-menu.sh
+│   │   ├── 09-prep-sortie.sh
+│   │   ├── 10-prep-helpbox.sh
+│   │   ├── 11-prep-statscreen.sh
+│   │   ├── 12-mss-statscreen.sh
+│   │   └── 13-prep-save-map.sh
 │   └── README.md              # 本文件
 └── legacy/                    # 旧 run-tests.sh / gdb-check.sh / 文档
 ```
