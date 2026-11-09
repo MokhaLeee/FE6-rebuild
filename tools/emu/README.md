@@ -50,6 +50,7 @@ tools/emu/
 | 4 Save write/load | 顶层 → Test → Save → Write + Load；`IsSaveValid()` 校验 magic+checksum，读回盘上 chapter=1/turn=7，清 RAM 后重新加载，检查 turn 和单位 level/exp/item 哨兵，导出 32KB SRAM，并确认进入章节后 BG3 滚动已停 |
 | 5 Save cross-run | 第一次运行 Write + `--save-out`，第二次 `--sav` 启动后 Load；检查单位哨兵和章节，证明跨进程持久化 |
 | 6 battle banim | 顶层 → Test → Battle → Test Battle；GDB 断点命中 `BattleAIS_ExecCommands` / `EfxAdvanceFrameLut` |
+| 7 prep | 顶层 → Test → Prep → Test Prep；test-only ChapterInfo/Event，`gPrepMenuItemCnt == 10`，`gPrepUnitCount == 9`，first red unit exists，`gPlaySt.flags & PLAY_FLAG_PREP`，chapter=46 |
 
 脚本设计和新增 case 的方法见 [testmenu/README.md](testmenu/README.md)。
 测试项目录和 EWRAM 探针方案见 [../../src/Test/README.md](../../src/Test/README.md)。
@@ -60,17 +61,19 @@ debug 构建（`CONFIG_TEST_MENU=1`）开机直接进入 `StartGame_TestMenu()`�
 
 ```
 顶层:  Start Game / Test
-Test:   Game / Save / Battle / Back
+Test:   Game / Save / Battle / Prep / Back
 Game:   Chapter 1 / Back
 Save:   Write + Load / Write / Load / Back
 Battle: Test Battle / Back
+Prep:   Test Prep / Back
 ```
 
 - 两侧头像：Roy（左）、Lilina（右）
 - `Start Game` → `StartGame()`，之后按 START / A 进入章节
 - `Game → Chapter 1` 直接启动第 1 章
 - `Save → Write + Load` 写 `SAVE_GAME0`、校验 checksum、读回 playstate、清 RAM 后再加载
-- `Battle → Test Battle` 用 test-only `ChapterEventInfo_TestBattle` 在第一章地图上启动独立测试事件，不影响 debug 第一章和正常章节
+- `Battle → Test Battle` 启动注册在 `ChapterInfoTable` 的 `CHAPTER_TEST_BATTLE`，不影响 debug 第一章和正常章节
+- `Prep → Test Prep` 启动注册在 `ChapterInfoTable` 的 `CHAPTER_TEST_PREP`（`has_prep=true`），不依赖 Chapter 2
 
 debug menu 已不参与编译（`CONFIG_DEBUG_MENU=0`），源码只作为参考留在
 `src/Test/ref/`。旧的 `SELECT+START` / `章開始` 入口说明已过时。

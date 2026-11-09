@@ -16,7 +16,8 @@ tools/emu/
 │   │   ├── 03-game-chapter1.sh
 │   │   ├── 04-save-write-load.sh
 │   │   ├── 05-save-cross-run.sh
-│   │   └── 06-battle-banim.sh
+│   │   ├── 06-battle-banim.sh
+│   │   └── 07-prep-screen.sh
 │   └── README.md              # 本文件
 └── legacy/                    # 旧 run-tests.sh / gdb-check.sh / 文档
 ```
@@ -39,8 +40,8 @@ tools/emu/
 2. 定义一个函数，例如：
    ```bash
    case_05_battle_smoke() {
-       local log="$OUT/5-battle.log"
-       echo "== 5/5 testmenu: ..."
+       local log="$OUT/NN-battle.log"
+       echo "== NN/NN testmenu: ..."
        "$RUN" "$ROM" --quiet --frames ... --sym "$SYM" ... >"$log" 2>&1
        assert_completed "$log" "..."
        # 用 colors_at / probe_n_at 断言

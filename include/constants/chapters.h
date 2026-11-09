@@ -1,5 +1,7 @@
 #pragma once
 
+#include "configs/configs.h"
+
 enum
 {
     CHAPTER_TUTORIAL = 0x00,
@@ -48,7 +50,13 @@ enum
     CHAPTER_TRIAL_D = 0x2B,
     CHAPTER_TRIAL_E = 0x2C,
 
+#if CONFIG_TEST_MENU
+    CHAPTER_TEST_BATTLE = 0x2D,
+    CHAPTER_TEST_PREP = 0x2E,
+    CHAPTER_COUNT = 0x2F,
+#else
     CHAPTER_COUNT = 0x2D,
+#endif
 
     TALK_CHAPTER_ANY = CHAPTER_COUNT
 };

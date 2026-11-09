@@ -9,7 +9,7 @@ case_04_save_write_load() {
 	local disk_chapter disk_turn loaded_turn chapter
 	local bg3_900 bg3_1000 save_bytes
 
-	echo "== 4/6 testmenu: 顶层 → Test → Save → Write + Load"
+	echo "== 4/7 testmenu: 顶层 → Test → Save → Write + Load"
 
 	# --probe 顺序：1 magic, 2 menu, 3 state, 4 category, 5 case_id,
 	#              6 value0(valid), 7 value1(saved chapter), 8 value2(saved turn),

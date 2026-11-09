@@ -22,8 +22,9 @@ ROOT=$(cd "$HERE/../.." && pwd)
 . "$HERE/testmenu/cases/04-save-write-load.sh"
 . "$HERE/testmenu/cases/05-save-cross-run.sh"
 . "$HERE/testmenu/cases/06-battle-banim.sh"
+. "$HERE/testmenu/cases/07-prep-screen.sh"
 
-CASE_KEYS=(1 2 3 4 5 6)
+CASE_KEYS=(1 2 3 4 5 6 7)
 CASE_FUNCS=(
 	case_01_start_game
 	case_02_test_root
@@ -31,6 +32,7 @@ CASE_FUNCS=(
 	case_04_save_write_load
 	case_05_save_cross_run
 	case_06_battle_banim
+	case_07_prep_screen
 )
 CASE_TITLES=(
 	"start-game         开机 → Start Game → 章节"
@@ -39,6 +41,7 @@ CASE_TITLES=(
 	"save-write-load    顶层 → Test → Save → Write + Load"
 	"save-cross-run     跨进程 Write → 重启 → Load"
 	"battle-banim       Battle → Test Battle → banim GDB 断点"
+	"prep-screen        Prep → Test Prep 准备画面"
 )
 
 usage() {

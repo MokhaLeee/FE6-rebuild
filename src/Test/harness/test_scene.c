@@ -12,6 +12,7 @@
 #include "statscreen.h"
 #include "unit.h"
 
+#include "constants/chapters.h"
 #include "constants/iids.h"
 #include "constants/jids.h"
 #include "constants/pids.h"
@@ -37,15 +38,23 @@ static void test_scene_start_chapter_impl(int chapter)
 
 void test_scene_start_chapter(int chapter)
 {
-	test_chapter_clear_event();
 	test_scene_start_chapter_impl(chapter);
 }
 
-void test_scene_start_chapter_with_event(int chapter,
-					 struct ChapterEventInfo const *event)
+void test_scene_start_prep(void)
 {
-	test_chapter_set_event(event);
-	test_scene_start_chapter_impl(chapter);
+	RandInit(GetGameTime());
+
+	InitUnits();
+
+	WriteNewGameSave(SAVE_GAME0, FALSE);
+	BatchCreateUnits(UnitInfo_TestPrep_Blue);
+
+	gPlaySt.chapter = CHAPTER_TEST_PREP;
+	gPlaySt.turn = 1;
+	WriteGameSave(SAVE_GAME0);
+
+	test_scene_restart_game_and_chapter();
 }
 
 void test_scene_restart_game_and_chapter(void)
@@ -57,8 +66,6 @@ void test_scene_restart_game_and_chapter(void)
 void test_scene_write_chapter_save(int save_id, int chapter)
 {
 	struct Unit *roy;
-
-	test_chapter_clear_event();
 
 	RandInit(GetGameTime());
 
@@ -84,7 +91,6 @@ void test_scene_write_chapter_save(int save_id, int chapter)
 
 void test_scene_load_chapter_save(int save_id)
 {
-	test_chapter_clear_event();
 	ReadGameSave(save_id);
 	test_scene_restart_game_and_chapter();
 }

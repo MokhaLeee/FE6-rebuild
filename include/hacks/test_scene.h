@@ -13,8 +13,7 @@ enum {
 };
 
 void test_scene_start_chapter(int chapter);
-void test_scene_start_chapter_with_event(int chapter,
-					 struct ChapterEventInfo const *event);
+void test_scene_start_prep(void);
 void test_scene_write_chapter_save(int save_id, int chapter);
 void test_scene_load_chapter_save(int save_id);
 void test_scene_restart_game_and_chapter(void);

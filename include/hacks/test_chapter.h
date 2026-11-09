@@ -6,8 +6,7 @@
 #if CONFIG_TEST_MENU
 
 extern struct ChapterEventInfo const ChapterEventInfo_TestBattle;
-
-void test_chapter_set_event(struct ChapterEventInfo const *event);
-void test_chapter_clear_event(void);
+extern struct ChapterEventInfo const ChapterEventInfo_TestPrep;
+extern struct UnitInfo const UnitInfo_TestPrep_Blue[];
 
 #endif /* CONFIG_TEST_MENU */

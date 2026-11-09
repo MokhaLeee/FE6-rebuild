@@ -6,7 +6,6 @@
 #include "constants/chapters.h"
 
 #include "test_cases.h"
-#include "test_chapter.h"
 #include "test_probe.h"
 #include "test_scene.h"
 #include "testmenu_common.h"
@@ -50,7 +49,7 @@ static fu8 battle_on_init(struct MenuProc *menu)
 static fu8 battle_on_select_chapter1(struct MenuProc *menu, struct MenuEntProc *ent)
 {
 	test_probe_set_case(TEST_CATEGORY_BATTLE, TEST_CASE_BATTLE_CHAPTER1);
-	test_scene_start_chapter_with_event(CHAPTER_1, &ChapterEventInfo_TestBattle);
+	test_scene_start_chapter(CHAPTER_TEST_BATTLE);
 
 	return MENU_ACTION_NOCURSOR | MENU_ACTION_END | MENU_ACTION_SE_6A;
 }

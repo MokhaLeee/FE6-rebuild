@@ -3,6 +3,10 @@
 #include "bmio.h"
 #include "constants/chapterassets.h"
 
+#if CONFIG_TEST_MENU
+#include "test_chapter.h"
+#endif
+
 GAMEINFO_DATA void const *const ChapterAssets[] = {
 	[PLIST_0] = NULL,
 
@@ -302,4 +306,8 @@ GAMEINFO_DATA void const *const ChapterAssets[] = {
 	[PLIST_XMAP4_EVENT] = &ChapterEventInfo_Xmap4,
 	[PLIST_XMAP5_MAP] = MapTsa_Xmap5,
 	[PLIST_XMAP5_EVENT] = &ChapterEventInfo_Xmap5,
+#if CONFIG_TEST_MENU
+	[PLIST_TEST_BATTLE_EVENT] = &ChapterEventInfo_TestBattle,
+	[PLIST_TEST_PREP_EVENT] = &ChapterEventInfo_TestPrep,
+#endif
 };

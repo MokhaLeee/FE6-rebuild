@@ -217,7 +217,7 @@ constants/videoalloc_global.h constants/chapters.h constants/faces.h
 | 条目 | 行为 |
 |---|---|
 | `Start Game` | `StartGame()`，之后正常进标题 / 主菜单 / 章节 |
-| `Test` | 打开第二层 `MenuInfo_TestRoot`（`Game` / `Save` / `Battle` / `Back`） |
+| `Test` | 打开第二层 `MenuInfo_TestRoot`（`Game` / `Save` / `Battle` / `Prep` / `Back`） |
 
 ### 2.1 测试入口
 
@@ -236,6 +236,8 @@ constants/videoalloc_global.h constants/chapters.h constants/faces.h
   验证单位 level/exp/item 哨兵和章节跨进程恢复。
 - case 6：顶层 → `Test` → `Battle` → `Test Battle`，GDB 命中
   `BattleAIS_ExecCommands` / `EfxAdvanceFrameLut`。
+- case 7：顶层 → `Test` → `Prep` → `Test Prep`，`gPrepMenuItemCnt == 10`，
+  `PLAY_FLAG_PREP` 置位，`gPrepUnitCount == 9`，chapter=46（`CHAPTER_TEST_PREP`）。
 
 旧的 `legacy/run-tests.sh` 仍假设开机到标题，正在按需求把用例迁进 `testmenu-tests.sh`。
 

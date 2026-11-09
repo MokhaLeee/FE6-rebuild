@@ -9,7 +9,7 @@ case_06_battle_banim() {
 	local runpid
 	local gdbrc=0
 
-	echo "== 6/6 testmenu: Battle → Test Battle → banim GDB 断点"
+	echo "== 6/7 testmenu: Battle → Test Battle → banim GDB 断点"
 
 	if command -v "${GDB:-arm-none-eabi-gdb}" >/dev/null 2>&1; then
 		gdb=$(command -v "${GDB:-arm-none-eabi-gdb}")

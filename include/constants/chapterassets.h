@@ -1,5 +1,7 @@
 #pragma once
 
+#include "configs/configs.h"
+
 #define CHAPTER_ASSET(x) (x)
 
 enum chapter_assets_index {
@@ -299,4 +301,8 @@ enum chapter_assets_index {
 
 	PLIST_XMAP5_MAP,
 	PLIST_XMAP5_EVENT,
+#if CONFIG_TEST_MENU
+	PLIST_TEST_BATTLE_EVENT,
+	PLIST_TEST_PREP_EVENT,
+#endif
 };
