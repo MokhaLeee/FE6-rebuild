@@ -246,6 +246,7 @@ constants/videoalloc_global.h constants/chapters.h constants/faces.h
 - case 11：Unit Select 按 R，`gStatScreenSt.unit` 非空且 page=0。
 - case 12：Sortie 后地图按 R，`gMssSt.unit` 非空，vanilla statscreen 未打开。
 - case 13：Prep → 記録する / マップを見る，两个子界面有内容。
+- case 14：Game → Chapter 2，chapter=2 且画面有内容。
 
 旧的 `legacy/run-tests.sh` 仍假设开机到标题，正在按需求把用例迁进 `testmenu-tests.sh`。
 

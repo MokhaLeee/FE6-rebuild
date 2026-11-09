@@ -3,7 +3,7 @@
 > 状态：**Phase 1–4 已实施**，Phase 5 已开始：
 > 已加 `Game` / `Save` / `Battle` / `Prep` 分类。
 > 当前顶层是 `Start Game` / `Test`；Test 第二层有 `Game` / `Save` / `Battle` /
-> `Prep` / `Back`；Game 第二层有 `Chapter 1` / `Back`；Save 第二层有
+> `Prep` / `Back`；Game 第二层有 `Chapter 1` / `Chapter 2` / `Back`；Save 第二层有
 > `Write + Load` / `Write` / `Load` / `Back`；Battle 第二层有 `Test Battle` /
 > `Back`；Prep 第二层有 `Test Prep` / `Back`。其余领域按需求继续。
 
@@ -144,6 +144,7 @@ src/Test/cases/prep/
 | 条目 | 行为 |
 |---|---|
 | `Chapter 1` | `test_probe_set_case(TEST_CATEGORY_GAME, TEST_CASE_GAME_CHAPTER_1)`，然后 `test_scene_start_chapter(CHAPTER_1)` |
+| `Chapter 2` | `test_probe_set_case(TEST_CATEGORY_GAME, TEST_CASE_GAME_CHAPTER_2)`，然后 `test_scene_start_chapter(CHAPTER_2)` |
 | `Back` | 返回 `MenuInfo_TestRoot` |
 
 `MenuInfo_TestSave` 目前有：
@@ -374,7 +375,7 @@ PROBE frame=200 addr=... width=8  value=<TEST_MENU_STATE_MENU>
 
 ## 6. 测试脚本
 
-当前入口是 `tools/emu/testmenu-tests.sh`，已经覆盖十三个 case：
+当前入口是 `tools/emu/testmenu-tests.sh`，已经覆盖十四个 case：
 
 ```
 case 1: 开机 → 顶层 testmenu（Roy/Lilina）→ Start Game → 章节
@@ -390,6 +391,7 @@ case 10: Prep 菜单按 R → 帮助框
 case 11: Unit Select → R → Statscreen
 case 12: Sortie → Map R → MSS
 case 13: Prep → 記録する / マップを見る
+case 14: Game → Chapter 2
 ```
 
 case 1 会断言：
@@ -504,6 +506,15 @@ gPlaySt.flags & PLAY_FLAG_PREP
 記録する / マップを見る 两个子界面有内容
 ```
 
+case 14 会断言：
+
+```
+category == TEST_CATEGORY_GAME
+case_id  == TEST_CASE_GAME_CHAPTER_2
+gPlaySt.chapter == 2
+Chapter 2 画面有内容
+```
+
 脚本已经分层：
 
 ```
@@ -525,14 +536,15 @@ tools/emu/
 │       ├── 10-prep-helpbox.sh
 │       ├── 11-prep-statscreen.sh
 │       ├── 12-mss-statscreen.sh
-│       └── 13-prep-save-map.sh
+│       ├── 13-prep-save-map.sh
+│       └── 14-game-chapter2.sh
 └── legacy/                    # 旧 run-tests.sh / gdb-check.sh / 文档
 ```
 
 ```bash
 ./tools/emu/testmenu-tests.sh             # 全部
 ./tools/emu/testmenu-tests.sh --list      # 列出 case
-./tools/emu/testmenu-tests.sh --case 13   # 只跑 case 13
+./tools/emu/testmenu-tests.sh --case 14   # 只跑 case 14
 ./tools/emu/testmenu-tests.sh --clean     # 清输出
 ```
 
@@ -564,7 +576,8 @@ tools/emu/
 14. ✅ 加 Prep statscreen case（Unit Select → R）。
 15. ⏳ MSS statscreen case 已加，按用户要求先挂起。
 16. ✅ 加 Prep 存档/地图子界面 case。
-17. ⏳ 继续加其他领域（ui / system）。
+17. ✅ 加 Game Chapter 2 case。
+18. ⏳ 继续加其他领域（ui / system）。
 11. ⏳ 按需求把旧 `run-tests.sh` 的用例迁进 `testmenu-tests.sh`。
 
 ## 9. 待定

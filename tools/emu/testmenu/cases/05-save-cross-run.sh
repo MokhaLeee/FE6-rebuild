@@ -10,7 +10,7 @@ case_05_save_cross_run() {
 	local load_state load_case load_flags load_valid load_chapter_on_disk
 	local load_turn_on_disk load_turn_loaded load_chapter
 
-	echo "== 5/13 testmenu: Save 跨进程 Write → Load"
+	echo "== 5/14 testmenu: Save 跨进程 Write → Load"
 
 	# Run 1: top -> Test -> Save -> Write
 	# --probe 顺序：1 state, 2 case_id, 3 flags, 4 value0(valid),
@@ -43,7 +43,7 @@ case_05_save_cross_run() {
 	write_turn=$(probe_n_at "$log_write" 900 6)
 	save_bytes=$(stat -c %s "$save_file" 2>/dev/null || echo 0)
 
-	if [ "$write_state" = "3" ] && [ "$write_case" = "3" ] &&
+	if [ "$write_state" = "3" ] && [ "$write_case" = "4" ] &&
 	   [ "$write_flags" = "0" ] && [ "$write_valid" = "1" ] &&
 	   [ "$write_chapter" = "1" ] && [ "$write_turn" = "7" ] &&
 	   [ "$save_bytes" -gt 0 ]; then
@@ -88,7 +88,7 @@ case_05_save_cross_run() {
 	load_turn_loaded=$(probe_n_at "$log_load" 1100 7)
 	load_chapter=$(probe_n_at "$log_load" 1100 8)
 
-	if [ "$load_state" = "3" ] && [ "$load_case" = "4" ] &&
+	if [ "$load_state" = "3" ] && [ "$load_case" = "5" ] &&
 	   [ "$load_flags" = "7" ] && [ "$load_valid" = "1" ] &&
 	   [ "$load_chapter_on_disk" = "1" ] && [ "$load_turn_on_disk" = "7" ] &&
 	   [ "$load_turn_loaded" = "7" ] &&

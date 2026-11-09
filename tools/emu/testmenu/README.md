@@ -23,7 +23,8 @@ tools/emu/
 │   │   ├── 10-prep-helpbox.sh
 │   │   ├── 11-prep-statscreen.sh
 │   │   ├── 12-mss-statscreen.sh
-│   │   └── 13-prep-save-map.sh
+│   │   ├── 13-prep-save-map.sh
+│   │   └── 14-game-chapter2.sh
 │   └── README.md              # 本文件
 └── legacy/                    # 旧 run-tests.sh / gdb-check.sh / 文档
 ```

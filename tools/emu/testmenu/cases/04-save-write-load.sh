@@ -9,7 +9,7 @@ case_04_save_write_load() {
 	local disk_chapter disk_turn loaded_turn chapter
 	local bg3_900 bg3_1000 save_bytes
 
-	echo "== 4/13 testmenu: 顶层 → Test → Save → Write + Load"
+	echo "== 4/14 testmenu: 顶层 → Test → Save → Write + Load"
 
 	# --probe 顺序：1 magic, 2 menu, 3 state, 4 category, 5 case_id,
 	#              6 value0(valid), 7 value1(saved chapter), 8 value2(saved turn),
@@ -56,7 +56,7 @@ case_04_save_write_load() {
 
 	if [ "$root_menu" = "2" ] && [ "$save_menu" = "3" ] &&
 	   [ "$case_menu" = "4" ] && [ "$save_state" = "3" ] &&
-	   [ "$save_category" = "2" ] && [ "$save_case_id" = "2" ] &&
+	   [ "$save_category" = "2" ] && [ "$save_case_id" = "3" ] &&
 	   [ "$save_valid" = "1" ] && [ "$disk_chapter" = "1" ] &&
 	   [ "$disk_turn" = "7" ] && [ "$loaded_turn" = "7" ] &&
 	   [ -n "$chapter" ] && [ "$chapter" -ge 1 ] &&

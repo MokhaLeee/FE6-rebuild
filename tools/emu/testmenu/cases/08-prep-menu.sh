@@ -7,7 +7,7 @@ case_08_prep_menu() {
 	local count_11000 count_12000 count_14500
 	local colors_11000 colors_12000 colors_14500
 
-	echo "== 8/13 testmenu: Prep 子菜单 smoke（Unit Select / Item Edit）"
+	echo "== 8/14 testmenu: Prep 子菜单 smoke（Unit Select / Item Edit）"
 
 	# 准备画面在 10000 帧前就绪；之后：
 	# 10000 A -> Unit Select，11000 B -> 准备菜单

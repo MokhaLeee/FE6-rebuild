@@ -57,6 +57,7 @@ tools/emu/
 | 11 prep statscreen | Unit Select → R；`gStatScreenSt.unit` 非空，page=0，画面有内容 |
 | 12 mss statscreen | Sortie → Map R；`gMssSt.unit` 非空，vanilla statscreen 未打开 |
 | 13 prep save/map | Prep → 記録する / マップを見る；prep 状态保持，两个子界面有内容 |
+| 14 game chapter 2 | 顶层 → Test → Game → Chapter 2；chapter=2，case=CHAPTER_2，画面有内容 |
 
 脚本设计和新增 case 的方法见 [testmenu/README.md](testmenu/README.md)。
 测试项目录和 EWRAM 探针方案见 [../../src/Test/README.md](../../src/Test/README.md)。
@@ -68,7 +69,7 @@ debug 构建（`CONFIG_TEST_MENU=1`）开机直接进入 `StartGame_TestMenu()`�
 ```
 顶层:  Start Game / Test
 Test:   Game / Save / Battle / Prep / Back
-Game:   Chapter 1 / Back
+Game:   Chapter 1 / Chapter 2 / Back
 Save:   Write + Load / Write / Load / Back
 Battle: Test Battle / Back
 Prep:   Test Prep / Back

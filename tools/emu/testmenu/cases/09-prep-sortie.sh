@@ -5,7 +5,7 @@ case_09_prep_sortie() {
 	local log="$OUT/9-prep-sortie.log"
 	local play_flags bm_flags chapter sortie_colors
 
-	echo "== 9/13 testmenu: Test Prep → 出撃 → 地图"
+	echo "== 9/14 testmenu: Test Prep → 出撃 → 地图"
 
 	# 准备菜单在 10000 帧就绪；光标从「ユニット選択」DOWN 4 次到
 	# 「ゲームを始める」，A 确认后进入地图。

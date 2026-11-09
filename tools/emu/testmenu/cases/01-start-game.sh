@@ -7,7 +7,7 @@ case_01_start_game() {
 	local game_colors game_menu game_state game_chapter
 	local chapter_colors chapter
 
-	echo "== 1/13 testmenu: 开机 → Start Game → 章节"
+	echo "== 1/14 testmenu: 开机 → Start Game → 章节"
 
 	# gPlaySt.chapter 在 struct PlaySt 的 +0x0E，1 字节有符号。
 	# --probe 顺序：1 magic, 2 menu, 3 state, 4 chapter
