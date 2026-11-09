@@ -27,6 +27,7 @@ static struct MenuEntInfo CONST_DATA battle_entries[] = {
 	{
 		.label = " Back",
 		.available = MenuEntryEnabled,
+		.text_color = TEXT_COLOR_SYSTEM_GREEN,
 		.on_select = battle_on_select_back,
 	},
 	{ 0 }, /* end */

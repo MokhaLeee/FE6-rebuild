@@ -41,6 +41,7 @@ static struct MenuEntInfo CONST_DATA game_entries[] = {
 	{
 		.label = " Back",
 		.available = MenuEntryEnabled,
+		.text_color = TEXT_COLOR_SYSTEM_GREEN,
 		.on_select = game_on_select_back,
 	},
 	{ 0 }, /* end */

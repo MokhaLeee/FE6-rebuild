@@ -39,6 +39,7 @@ static struct MenuEntInfo CONST_DATA test_menu_entries[] = {
 	{
 		.label = " Test",
 		.available = MenuEntryEnabled,
+		.text_color = TEXT_COLOR_SYSTEM_GREEN,
 		.on_select = testmenu_on_select_test,
 	},
 	{ 0 }, /* end */
