@@ -49,18 +49,18 @@ tools/emu/
 | 3 Game → Chapter 1 | 顶层 → Test → Game → Chapter 1；探针 `menu` 按 `TEST_ROOT → CATEGORY → CASE` 变化，`category/case_id/chapter` 正确 |
 | 4 Save write/load | 顶层 → Test → Save → Write + Load；`IsSaveValid()` 校验 magic+checksum，读回盘上 chapter=1/turn=7，清 RAM 后重新加载，检查 turn 和单位 level/exp/item 哨兵，导出 32KB SRAM，并确认进入章节后 BG3 滚动已停 |
 | 5 Save cross-run | 第一次运行 Write + `--save-out`，第二次 `--sav` 启动后 Load；检查单位哨兵和章节，证明跨进程持久化 |
-| 6 battle banim | 顶层 → Test → Battle → Test Battle；GDB 断点命中 `BattleAIS_ExecCommands` / `EfxAdvanceFrameLut` |
-| 7 prep | 顶层 → Test → Prep → Test Prep；test-only ChapterInfo/Event，`gPrepMenuItemCnt == 10`，`gPrepUnitCount == 9`，first red unit exists，`gPlaySt.flags & PLAY_FLAG_PREP`，chapter=46 |
-| 8 prep menu | Test Prep → Unit Select → Item Edit → 返回准备菜单；`gPrepMenuItemCnt == 10`，`gPrepUnitCount == 9`，画面有内容 |
-| 9 prep sortie | Test Prep → ゲームを始める → 地图；`PLAY_FLAG_PREP=0`，`BM_FLAG_PREP=0`，chapter=46 |
-| 10 prep helpbox | Prep 菜单按 R；`gPrepMenuItemCnt == 10`，帮助框颜色数 160–200 |
+| 6 battle banim | 顶层 → Test → Test Chapter（准备 → 出撃）；GDB 断点命中 `BattleAIS_ExecCommands` / `EfxAdvanceFrameLut` |
+| 7 prep | 顶层 → Test → Test Chapter（准备画面）；test-only ChapterInfo/Event，`gPrepMenuItemCnt == 10`，`gPrepUnitCount == 9`，first red unit exists，`gPlaySt.flags & PLAY_FLAG_PREP`，chapter=46 |
+| 8 prep menu | Test Chapter → Unit Select → Item Edit → 返回准备菜单；`gPrepMenuItemCnt == 10`，`gPrepUnitCount == 9`，画面有内容 |
+| 9 prep sortie | Test Chapter → ゲームを始める → 地图；`PLAY_FLAG_PREP=0`，`BM_FLAG_PREP=0`，chapter=46 |
+| 10 prep helpbox | 准备菜单按 R；`gPrepMenuItemCnt == 10`，帮助框颜色数 160–200 |
 | 11 prep statscreen | Unit Select → R；`gStatScreenSt.unit` 非空，page=0，画面有内容 |
 | 12 mss statscreen | Sortie → Map R；`gMssSt.unit` 非空，vanilla statscreen 未打开 |
-| 13 prep save/map | Prep → 記録する / マップを見る；prep 状态保持，两个子界面有内容 |
+| 13 prep save/map | Test Chapter → 記録する / マップを見る；prep 状态保持，两个子界面有内容 |
 | 14 game chapter 2 | 顶层 → Test → Game → Chapter 2；chapter=2，case=CHAPTER_2，画面有内容 |
 | 15 save corrupt | Save → Corrupt Check；写有效存档后改坏一个字节，`IsSaveValid()` 从 1 变 0 |
 | 16 level cap | System → Level Cap；98→99 封顶、99 级不再升级、20/99 级转职保留等级、竞技场等级夹取、Devil 反伤率、promoted 自动等级 19、99 级存档往返 |
-| 17 level map | System → Map Test；test event 把 Roy 设为 98 级/99 经验并放在 99 级 1 HP 敌人旁；shell 真实按键「选人 → 攻撃 → 战斗预测 → 开战 → 升级」；断言 level=99/exp=0xFF；同时验证地图上 20 级转职保留等级、`ArenaGenOpponentUnit()` 生成 99 级不被截断 |
+| 17 level map | Test Chapter → 出撃 → Map Test；test event 把 Roy 设为 98 级/99 经验并放在 99 级 1 HP 敌人旁；shell 真实按键「选人 → 攻撃 → 战斗预测 → 开战 → 升级」；断言 level=99/exp=0xFF；同时验证地图上 20 级转职保留等级、`ArenaGenOpponentUnit()` 生成 99 级不被截断 |
 
 脚本设计和新增 case 的方法见 [testmenu/README.md](testmenu/README.md)。
 测试项目录和 EWRAM 探针方案见 [../../src/Test/README.md](../../src/Test/README.md)。
@@ -72,18 +72,16 @@ debug 构建（`CONFIG_TEST_MENU=1`）开机直接进入 `StartGame_TestMenu()`�
 
 ```
 顶层:  Start Game / Test
-Test:   Game / Save / Battle / Prep / Back
+Test:   Game / Save / Test Chapter / System / Back
 Game:   Chapter 1 / Chapter 2 / Back
 Save:   Write + Load / Write / Load / Back
-Battle: Test Battle / Back
-Prep:   Test Prep / Back
 ```
 
 - 两侧头像：Roy（左）、Lilina（右）
 - `Start Game` → `StartGame()`，之后按 START / A 进入章节
 - `Game → Chapter 1` 直接启动第 1 章
 - `Save → Write + Load` 写 `SAVE_GAME0`、校验 checksum、读回 playstate、清 RAM 后再加载
-- `Battle → Test Battle` / `Prep → Test Prep` / `System → Map Test` 都启动注册在 `ChapterInfoTable` 的唯一测试章节 `CHAPTER_TEST`（`has_prep=true`）；Battle/Map 通过 `gTestSkipPrep` 直接进地图，不影响 debug 第一章和正常章节
+- `Test Chapter` 启动注册在 `ChapterInfoTable` 的唯一测试章节 `CHAPTER_TEST`（`has_prep=true`）；准备画面直接检查，Battle/Map 由脚本出撃后继续，不影响 debug 第一章和正常章节
 
 debug menu 已不参与编译（`CONFIG_DEBUG_MENU=0`），源码只作为参考留在
 `src/Test/ref/`。旧的 `SELECT+START` / `章開始` 入口说明已过时。

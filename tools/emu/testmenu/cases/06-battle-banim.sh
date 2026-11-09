@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 6/6: GDB banim check: testmenu -> Battle -> Chapter 1, then breakpoints.
+# 6/6: GDB banim check: testmenu -> Test Chapter -> sortie -> battle, then breakpoints.
 
 case_06_battle_banim() {
 	local runlog="$OUT/6-banim-run.log"
@@ -9,7 +9,7 @@ case_06_battle_banim() {
 	local runpid
 	local gdbrc=0
 
-	echo "== 6 testmenu: Battle → Test Battle → banim GDB 断点"
+	echo "== 6 testmenu: Test Chapter → 出撃 → battle → banim GDB 断点"
 
 	if command -v "${GDB:-arm-none-eabi-gdb}" >/dev/null 2>&1; then
 		gdb=$(command -v "${GDB:-arm-none-eabi-gdb}")
@@ -33,13 +33,18 @@ case_06_battle_banim() {
 		--hold 500:DOWN:5 \
 		--hold 600:DOWN:5 \
 		--hold 700:A:5 \
-		--hold 800:A:5 \
+		--hold 10000:DOWN:5 \
+		--hold 10200:DOWN:5 \
+		--hold 10400:DOWN:5 \
+		--hold 10600:DOWN:5 \
+		--hold 10800:A:5 \
 		--hold 12000:A:5 \
-		--hold 12500:A:5 \
-		--hold 13000:A:5 \
-		--hold 13500:A:5 \
-		--hold 14000:A:5 \
-		--hold-every 14500:25000:60:A:4 \
+		--hold 16000:A:5 \
+		--hold 16500:A:5 \
+		--hold 17000:A:5 \
+		--hold 17500:A:5 \
+		--hold 18000:A:5 \
+		--hold-every 18500:28000:60:A:4 \
 		--out "$OUT" >"$runlog" 2>&1 &
 	runpid=$!
 	trap 'kill "$runpid" 2>/dev/null' EXIT

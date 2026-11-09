@@ -15,9 +15,7 @@ case_10_prep_helpbox() {
 		--hold 400:A:5 \
 		--hold 500:DOWN:5 \
 		--hold 600:DOWN:5 \
-		--hold 700:DOWN:5 \
-		--hold 800:A:5 \
-		--hold 900:A:5 \
+		--hold 700:A:5 \
 		--press-when "gPlaySt+0xE:8:=46,gPrepMenuItemCnt:8:=0;A;3;30" \
 		--hold 10000:R:5 \
 		--probe "gPrepMenuItemCnt:8" \

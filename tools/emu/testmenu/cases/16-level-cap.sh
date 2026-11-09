@@ -18,9 +18,8 @@ case_16_level_cap() {
 		--hold 500:DOWN:5 \
 		--hold 600:DOWN:5 \
 		--hold 700:DOWN:5 \
-		--hold 800:DOWN:5 \
-		--hold 900:A:5 \
-		--hold 1100:A:5 \
+		--hold 800:A:5 \
+		--hold 1000:A:5 \
 		--probe "gTestMenuProbe+0x05:8" \
 		--probe "gTestMenuProbe+0x0A:16" \
 		--probe "gTestMenuProbe+0x0C:32" \

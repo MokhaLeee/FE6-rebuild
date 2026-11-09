@@ -6,7 +6,7 @@ case_07_prep_screen() {
 	local prep_menu prep_state prep_category prep_case_id
 	local prep_count prep_flags prep_chapter prep_unit_count prep_red prep_colors
 
-	echo "== 7 testmenu: 顶层 → Test → Prep → Test Prep 准备画面"
+	echo "== 7 testmenu: 顶层 → Test → Test Chapter 准备画面"
 
 	# TestRoot 顺序：Game / Save / Battle / Prep / Back。
 	# 选 Prep -> Test Prep 后，test-only ChapterInfo 打开 has_prep，
@@ -20,9 +20,7 @@ case_07_prep_screen() {
 		--hold 400:A:5 \
 		--hold 500:DOWN:5 \
 		--hold 600:DOWN:5 \
-		--hold 700:DOWN:5 \
-		--hold 800:A:5 \
-		--hold 900:A:5 \
+		--hold 700:A:5 \
 		--press-when "gPlaySt+0xE:8:=1,gPrepMenuItemCnt:8:=0;A;3;30" \
 		--probe "gTestMenuProbe+0x04:8" \
 		--probe "gTestMenuProbe+0x05:8" \
@@ -51,7 +49,7 @@ case_07_prep_screen() {
 	prep_colors=$(colors_at "$log" 10000)
 
 	if [ "$prep_menu" = "4" ] && [ "$prep_state" = "2" ] &&
-	   [ "$prep_category" = "4" ] && [ "$prep_case_id" = "7" ] &&
+	   [ "$prep_category" = "4" ] && [ "$prep_case_id" = "11" ] &&
 	   [ "$prep_count" = "10" ] && [ -n "$prep_flags" ] &&
 	   [ "$((prep_flags & 16))" = "16" ] && [ "$prep_chapter" = "46" ] &&
 	   [ "$prep_unit_count" = "9" ] && [ -n "$prep_red" ] && [ "$prep_red" != "0" ]; then

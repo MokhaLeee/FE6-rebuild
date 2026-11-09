@@ -221,8 +221,6 @@ static u16 level_test_save(u32 *out_level, u32 *out_exp)
 static fu8 system_on_init(struct MenuProc *menu);
 static fu8 system_on_select_level_cap(struct MenuProc *menu,
 				      struct MenuEntProc *ent);
-static fu8 system_on_select_level_map(struct MenuProc *menu,
-				      struct MenuEntProc *ent);
 static fu8 system_on_select_back(struct MenuProc *menu, struct MenuEntProc *ent);
 
 static struct MenuEntInfo CONST_DATA system_entries[] = {
@@ -230,11 +228,6 @@ static struct MenuEntInfo CONST_DATA system_entries[] = {
 		.label = " Level Cap",
 		.available = MenuEntryEnabled,
 		.on_select = system_on_select_level_cap,
-	},
-	{
-		.label = " Map Test",
-		.available = MenuEntryEnabled,
-		.on_select = system_on_select_level_map,
 	},
 	{
 		.label = " Back",
@@ -292,15 +285,6 @@ static fu8 system_on_select_level_cap(struct MenuProc *menu,
 	test_probe_finish(pass);
 
 	return 0;
-}
-
-static fu8 system_on_select_level_map(struct MenuProc *menu,
-				      struct MenuEntProc *ent)
-{
-	test_probe_set_case(TEST_CATEGORY_SYSTEM, TEST_CASE_LEVEL_MAP);
-	test_scene_start_chapter(CHAPTER_TEST);
-
-	return MENU_ACTION_NOCURSOR | MENU_ACTION_END | MENU_ACTION_SE_6A;
 }
 
 static fu8 system_on_select_back(struct MenuProc *menu, struct MenuEntProc *ent)

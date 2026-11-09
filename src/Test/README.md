@@ -1,12 +1,11 @@
 # src/Test —— testmenu 与测试项组织方案
 
 > 状态：**Phase 1–4 已实施**，Phase 5 已开始：
-> 已加 `Game` / `Save` / `Battle` / `Prep` / `System` 分类。
-> 当前顶层是 `Start Game` / `Test`；Test 第二层有 `Game` / `Save` / `Battle` /
-> `Prep` / `System` / `Back`；Game 第二层有 `Chapter 1` / `Chapter 2` / `Back`；
+> 已加 `Game` / `Save` / `Test Chapter` / `System` 分类。
+> 当前顶层是 `Start Game` / `Test`；Test 第二层有 `Game` / `Save` / `Test Chapter` /
+> `System` / `Back`；Game 第二层有 `Chapter 1` / `Chapter 2` / `Back`；
 > Save 第二层有 `Write + Load` / `Write` / `Load` / `Corrupt Check` / `Back`；
-> Battle 第二层有 `Test Battle` / `Back`；Prep 第二层有 `Test Prep` / `Back`；
-> System 第二层有 `Level Cap` / `Map Test` / `Back`。其余领域按需求继续。
+> System 第二层有 `Level Cap` / `Back`。其余领域按需求继续。
 >
 > 路线图、测试收敛方案和 MSS 计划见
 > [docs/testmenu-roadmap.md](../../docs/testmenu-roadmap.md)。
@@ -34,7 +33,7 @@ src/Test/
 │   ├── test_probe.c              # EWRAM 探针定义
 │   └── test_scene.c              # 开章节、写/读章节存档
 ├── fixtures/                     # test-only 章节事件/单位
-│   └── test-chapter.c            # ChapterEventInfo_TestBattle
+│   └── test-chapter.c            # ChapterEventInfo_Test
 ├── cases/                        # 测试项，按领域分
 │   ├── game/                     # 开始游戏、跳章、跳过事件
 │   ├── battle/                   # 战斗、banim
@@ -123,7 +122,7 @@ static struct MenuEntInfo CONST_DATA test_root_entries[] = {
 
 ### 3.3 第三层：领域用例
 
-当前已实现 `Game`、`Save`、`Battle`、`Prep` 领域：
+当前已实现 `Game`、`Save`、`Test Chapter`、`System` 领域：
 
 ```
 src/Test/cases/game/
@@ -161,18 +160,11 @@ src/Test/cases/prep/
 | `Corrupt Check` | 写有效存档后改坏 payload 一个字节，`IsSaveValid()` 必须从 true 变 false |
 | `Back` | 返回 `MenuInfo_TestRoot` |
 
-`MenuInfo_TestBattle` 目前有：
+`Test Chapter` 入口目前有：
 
 | 条目 | 行为 |
 |---|---|
-| `Test Battle` | 启动 `CHAPTER_TEST`；这是 `ChapterInfoTable` 里唯一的 test chapter，事件来自 `ChapterEventInfo_Test`；`test_scene_start_chapter()` 会跳过准备画面 |
-| `Back` | 返回 `MenuInfo_TestRoot` |
-
-`MenuInfo_TestPrep` 目前有：
-
-| 条目 | 行为 |
-|---|---|
-| `Test Prep` | 启动 `CHAPTER_TEST`；`has_prep=true`，事件来自 `ChapterEventInfo_Test`；`test_scene_start_prep()` 正常进入准备画面 |
+| `Test Chapter` | 启动统一测试章节 `CHAPTER_TEST`；默认进入准备画面；脚本按 出撃 进入地图 |
 | `Back` | 返回 `MenuInfo_TestRoot` |
 
 后续领域照这个模式加 `cases/<domain>/<domain>_cases.c/h`，并在
@@ -180,7 +172,7 @@ src/Test/cases/prep/
 
 ### 3.4 test chapter 注册
 
-Battle / Prep / Map Test 共用同一个正式 test chapter，注册方式和 `CHAPTER_TUTORIAL` 一样，
+Test Chapter 共用同一个正式 test chapter，注册方式和 `CHAPTER_TUTORIAL` 一样，
 不靠 `GetChapterInfo()` 的全局 override：
 
 - `include/constants/chapters.h`：
@@ -202,7 +194,7 @@ Battle / Prep / Map Test 共用同一个正式 test chapter，注册方式和 `C
   - `test_scene_start_chapter()` 设置 `gTestSkipPrep = true`，直接进地图
   - `test_scene_start_prep()` 设置 `gTestSkipPrep = false`，正常打开准备画面
 - `vanilla/prepphase.c` 在 `CONFIG_TEST_MENU` 下检查 `gTestSkipPrep`，仅用于测试跳过
-- testmenu 的 Battle / Prep / Map Test 都启动 `CHAPTER_TEST`
+- testmenu 的 Test Chapter 启动 `CHAPTER_TEST`
 
 因此：
 
@@ -221,8 +213,8 @@ Battle / Prep / Map Test 共用同一个正式 test chapter，注册方式和 `C
 
 - 用 `PROC_TREE_3` 作为 parent 启动 mural，让滚动 proc 独立于菜单 proc；
 - 所有“离开 testmenu 进入游戏”的路径（`Start Game`、`Chapter 1`、
-  `Test Battle`、`Test Prep`、`Write + Load`）都先 `EndMuralBackground()`；
-- `Game` / `Save` / `Battle` 这类走 `RestartGameAndChapter()` 的路径统一调用
+  `Test Chapter`、`Write + Load`）都先 `EndMuralBackground()`；
+- `Game` / `Save` / `Test Chapter` 这类走 `RestartGameAndChapter()` 的路径统一调用
   `test_scene_restart_game_and_chapter()`，不要直接调 `RestartGameAndChapter()`；
 - 子菜单切换不要结束/重启 mural；返回顶层时它仍在跑。
 
@@ -241,7 +233,7 @@ BG3 HOFS 在 900/1000 帧保持不变（滚动 proc 已停）。
 | `include/hacks/test_probe.h` | 探针结构体、`gTestMenuProbe`、接口声明 |
 | `src/Test/harness/test_scene.c` | 场景辅助：开章节、写/读章节存档、启动 test chapter |
 | `include/hacks/test_scene.h` | 场景辅助接口 |
-| `src/Test/fixtures/test-chapter.c` | test-only `ChapterEventInfo_TestBattle/TestPrep`、单位和事件脚本 |
+| `src/Test/fixtures/test-chapter.c` | test-only `ChapterEventInfo_Test`、单位和事件脚本 |
 | `include/hacks/test_chapter.h` | test event / 单位 extern 声明 |
 | `include/constants/chapters.h` | test chapter id 与 `CHAPTER_COUNT` |
 | `gameinfo/chapterinfo/chapterinfo_data.c` | `ChapterInfoTable` 里的 test chapter 条目 |
@@ -388,14 +380,14 @@ case 2: 开机 → 顶层 → Test 子菜单 → Back → 顶层
 case 3: 开机 → 顶层 → Test → Game → Chapter 1
 case 4: 开机 → 顶层 → Test → Save → Write + Load
 case 5: 跨进程：Write + --save-out → 重启 --sav → Load
-case 6: 顶层 → Test → Battle → Test Battle，GDB 检查 banim
-case 7: 顶层 → Test → Prep → Test Prep 准备画面（CHAPTER_TEST_PREP）
-case 8: Test Prep → Unit Select → Item Edit → 返回准备菜单
-case 9: Test Prep → ゲームを始める → 地图
-case 10: Prep 菜单按 R → 帮助框
+case 6: 顶层 → Test → Test Chapter（出撃后战斗），GDB 检查 banim
+case 7: 顶层 → Test → Test Chapter 准备画面（CHAPTER_TEST）
+case 8: Test Chapter → Unit Select → Item Edit → 返回准备菜单
+case 9: Test Chapter → ゲームを始める → 地图
+case 10: 准备菜单按 R → 帮助框
 case 11: Unit Select → R → Statscreen
 case 12: Sortie → Map R → MSS
-case 13: Prep → 記録する / マップを見る
+case 13: Test Chapter → 記録する / マップを見る
 case 14: Game → Chapter 2
 case 15: Save → Corrupt Check
 ```

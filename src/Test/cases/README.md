@@ -29,10 +29,9 @@
 ## 当前状态
 
 - 顶层：`Start Game` / `Test`
-- `Test` 第二层：`Game` / `Save` / `Battle` / `Prep` / `System` / `Back`
+- `Test` 第二层：`Game` / `Save` / `Test Chapter` / `System` / `Back`
 - `Game` 第二层：`Chapter 1` / `Chapter 2` / `Back`
 - `Save` 第二层：`Write + Load` / `Write` / `Load` / `Corrupt Check` / `Back`
-- `Battle` 第二层：`Test Battle` / `Back`
-- `Prep` 第二层：`Test Prep` / `Back`
-- `System` 第二层：`Level Cap` / `Map Test` / `Back`
+- `Test Chapter`：统一测试章节 `CHAPTER_TEST`（准备画面 → 出撃）
+- `System` 第二层：`Level Cap` / `Back`
 - 其它领域待定
