@@ -30,8 +30,9 @@ ROOT=$(cd "$HERE/../.." && pwd)
 . "$HERE/testmenu/cases/12-mss-statscreen.sh"
 . "$HERE/testmenu/cases/13-prep-save-map.sh"
 . "$HERE/testmenu/cases/14-game-chapter2.sh"
+. "$HERE/testmenu/cases/15-save-corrupt.sh"
 
-CASE_KEYS=(1 2 3 4 5 6 7 8 9 10 11 12 13 14)
+CASE_KEYS=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15)
 CASE_FUNCS=(
 	case_01_start_game
 	case_02_test_root
@@ -47,6 +48,7 @@ CASE_FUNCS=(
 	case_12_mss_statscreen
 	case_13_prep_save_map
 	case_14_game_chapter2
+	case_15_save_corrupt
 )
 CASE_TITLES=(
 	"start-game         开机 → Start Game → 章节"
@@ -63,6 +65,7 @@ CASE_TITLES=(
 	"mss-statscreen     Sortie → Map R → MSS"
 	"prep-save-map      Prep → 記録する / マップを見る"
 	"game-chapter2      Game → Chapter 2"
+	"save-corrupt       Save Corrupt Check"
 )
 
 usage() {

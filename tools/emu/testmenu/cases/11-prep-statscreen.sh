@@ -5,7 +5,7 @@ case_11_prep_statscreen() {
 	local log="$OUT/11-prep-statscreen.log"
 	local page unit_ptr count screen_colors
 
-	echo "== 11/14 testmenu: Unit Select → R → Statscreen"
+	echo "== 11/15 testmenu: Unit Select → R → Statscreen"
 
 	# 准备菜单就绪后 A 进 Unit Select，再按 R 打开当前单位的 statscreen。
 	# --probe 顺序：1 gStatScreenSt.page, 2 gStatScreenSt.unit, 3 gPrepMenuItemCnt

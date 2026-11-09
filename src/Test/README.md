@@ -4,8 +4,11 @@
 > 已加 `Game` / `Save` / `Battle` / `Prep` 分类。
 > 当前顶层是 `Start Game` / `Test`；Test 第二层有 `Game` / `Save` / `Battle` /
 > `Prep` / `Back`；Game 第二层有 `Chapter 1` / `Chapter 2` / `Back`；Save 第二层有
-> `Write + Load` / `Write` / `Load` / `Back`；Battle 第二层有 `Test Battle` /
-> `Back`；Prep 第二层有 `Test Prep` / `Back`。其余领域按需求继续。
+> `Write + Load` / `Write` / `Load` / `Corrupt Check` / `Back`；Battle 第二层有
+> `Test Battle` / `Back`；Prep 第二层有 `Test Prep` / `Back`。其余领域按需求继续。
+>
+> 路线图、测试收敛方案和 MSS 计划见
+> [docs/testmenu-roadmap.md](../../docs/testmenu-roadmap.md)。
 
 ## 1. 目标
 
@@ -154,6 +157,7 @@ src/Test/cases/prep/
 | `Write + Load` | 写 `SAVE_GAME0`（chapter 1，turn=7，Roy level/exp/item 哨兵）；`IsSaveValid()` + `ReadGameSavePlaySt()` 校验；清 RAM 后 `ReadGameSave()` 确认 turn 和单位哨兵恢复；最后 `RestartGameAndChapter()` |
 | `Write` | 写 `SAVE_GAME0` 并校验 checksum/playstate，留在 Save 菜单，供跨进程测试导出 `.sav` |
 | `Load` | `ReadGameSave(SAVE_GAME0)`，校验 turn + 单位哨兵，然后重启章节；供第二次进程读回 |
+| `Corrupt Check` | 写有效存档后改坏 payload 一个字节，`IsSaveValid()` 必须从 true 变 false |
 | `Back` | 返回 `MenuInfo_TestRoot` |
 
 `MenuInfo_TestBattle` 目前有：
@@ -375,7 +379,7 @@ PROBE frame=200 addr=... width=8  value=<TEST_MENU_STATE_MENU>
 
 ## 6. 测试脚本
 
-当前入口是 `tools/emu/testmenu-tests.sh`，已经覆盖十四个 case：
+当前入口是 `tools/emu/testmenu-tests.sh`，已经覆盖十五个 case：
 
 ```
 case 1: 开机 → 顶层 testmenu（Roy/Lilina）→ Start Game → 章节
@@ -392,6 +396,7 @@ case 11: Unit Select → R → Statscreen
 case 12: Sortie → Map R → MSS
 case 13: Prep → 記録する / マップを見る
 case 14: Game → Chapter 2
+case 15: Save → Corrupt Check
 ```
 
 case 1 会断言：
@@ -515,6 +520,14 @@ gPlaySt.chapter == 2
 Chapter 2 画面有内容
 ```
 
+case 15 会断言：
+
+```
+value[0] == 1   # 原始存档 IsSaveValid
+value[1] == 0   # 改坏一个字节后 IsSaveValid
+state    == CASE_DONE
+```
+
 脚本已经分层：
 
 ```
@@ -537,14 +550,15 @@ tools/emu/
 │       ├── 11-prep-statscreen.sh
 │       ├── 12-mss-statscreen.sh
 │       ├── 13-prep-save-map.sh
-│       └── 14-game-chapter2.sh
+│       ├── 14-game-chapter2.sh
+│       └── 15-save-corrupt.sh
 └── legacy/                    # 旧 run-tests.sh / gdb-check.sh / 文档
 ```
 
 ```bash
 ./tools/emu/testmenu-tests.sh             # 全部
 ./tools/emu/testmenu-tests.sh --list      # 列出 case
-./tools/emu/testmenu-tests.sh --case 14   # 只跑 case 14
+./tools/emu/testmenu-tests.sh --case 15   # 只跑 case 15
 ./tools/emu/testmenu-tests.sh --clean     # 清输出
 ```
 
@@ -577,7 +591,8 @@ tools/emu/
 15. ⏳ MSS statscreen case 已加，按用户要求先挂起。
 16. ✅ 加 Prep 存档/地图子界面 case。
 17. ✅ 加 Game Chapter 2 case。
-18. ⏳ 继续加其他领域（ui / system）。
+18. ✅ 加 Save 负向 checksum 测试（Corrupt Check）。
+19. ⏳ 继续加其他领域（ui / system）。
 11. ⏳ 按需求把旧 `run-tests.sh` 的用例迁进 `testmenu-tests.sh`。
 
 ## 9. 待定

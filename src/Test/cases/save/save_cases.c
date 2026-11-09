@@ -11,7 +11,10 @@
 #include "constants/pids.h"
 
 #include "save.h"
+#include "save_core.h"
 #include "save_game.h"
+
+#include "hacks/save-hw.h"
 #include "test_cases.h"
 #include "test_probe.h"
 #include "test_scene.h"
@@ -25,6 +28,37 @@ static fu8 save_on_init(struct MenuProc *menu);
 static fu8 save_on_select_write_load(struct MenuProc *menu, struct MenuEntProc *ent);
 static fu8 save_on_select_write(struct MenuProc *menu, struct MenuEntProc *ent);
 static fu8 save_on_select_load(struct MenuProc *menu, struct MenuEntProc *ent);
+static fu8 save_on_select_corrupt(struct MenuProc *menu, struct MenuEntProc *ent);
+static fu8 save_on_select_corrupt(struct MenuProc *menu,
+				  struct MenuEntProc *ent)
+{
+	u8 *addr;
+	u8 byte;
+	bool valid;
+	bool corrupt_valid;
+	bool pass;
+
+	test_probe_set_case(TEST_CATEGORY_SAVE, TEST_CASE_SAVE_CORRUPT);
+
+	test_scene_write_chapter_save(SAVE_GAME0, CHAPTER_1);
+	valid = IsSaveValid(SAVE_GAME0);
+
+	addr = GetSaveReadAddr(SAVE_GAME0);
+	ReadSave(addr, &byte, 1);
+	byte ^= 0xFF;
+	WriteSave(&byte, addr, 1);
+
+	corrupt_valid = IsSaveValid(SAVE_GAME0);
+	pass = valid && !corrupt_valid;
+
+	test_probe_set_value(0, valid);
+	test_probe_set_value(1, corrupt_valid);
+	test_probe_set_flags(0);
+	test_probe_finish(pass);
+
+	return 0;
+}
+
 static fu8 save_on_select_back(struct MenuProc *menu, struct MenuEntProc *ent);
 
 static struct MenuEntInfo CONST_DATA save_entries[] = {
@@ -42,6 +76,11 @@ static struct MenuEntInfo CONST_DATA save_entries[] = {
 		.label = " Load",
 		.available = MenuEntryEnabled,
 		.on_select = save_on_select_load,
+	},
+	{
+		.label = " Corrupt Check",
+		.available = MenuEntryEnabled,
+		.on_select = save_on_select_corrupt,
 	},
 	{
 		.label = " Back",

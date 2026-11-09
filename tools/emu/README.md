@@ -58,9 +58,11 @@ tools/emu/
 | 12 mss statscreen | Sortie → Map R；`gMssSt.unit` 非空，vanilla statscreen 未打开 |
 | 13 prep save/map | Prep → 記録する / マップを見る；prep 状态保持，两个子界面有内容 |
 | 14 game chapter 2 | 顶层 → Test → Game → Chapter 2；chapter=2，case=CHAPTER_2，画面有内容 |
+| 15 save corrupt | Save → Corrupt Check；写有效存档后改坏一个字节，`IsSaveValid()` 从 1 变 0 |
 
 脚本设计和新增 case 的方法见 [testmenu/README.md](testmenu/README.md)。
 测试项目录和 EWRAM 探针方案见 [../../src/Test/README.md](../../src/Test/README.md)。
+测试收敛和 MSS 计划见 [../../docs/testmenu-roadmap.md](../../docs/testmenu-roadmap.md)。
 
 ## testmenu 入口
 

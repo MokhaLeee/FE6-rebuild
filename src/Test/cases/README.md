@@ -31,7 +31,7 @@
 - 顶层：`Start Game` / `Test`
 - `Test` 第二层：`Game` / `Save` / `Battle` / `Prep` / `Back`
 - `Game` 第二层：`Chapter 1` / `Chapter 2` / `Back`
-- `Save` 第二层：`Write + Load` / `Write` / `Load` / `Back`
+- `Save` 第二层：`Write + Load` / `Write` / `Load` / `Corrupt Check` / `Back`
 - `Battle` 第二层：`Test Battle` / `Back`
 - `Prep` 第二层：`Test Prep` / `Back`
 - 其它领域待定

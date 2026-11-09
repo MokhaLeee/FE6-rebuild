@@ -5,7 +5,7 @@ case_12_mss_statscreen() {
 	local log="$OUT/12-mss-statscreen.log"
 	local mss_unit vanilla_unit chapter mss_colors
 
-	echo "== 12/14 testmenu: MSS Statscreen（地图 R）"
+	echo "== 12/15 testmenu: MSS Statscreen（地图 R）"
 
 	# 先走 Prep 出撃到地图，再在地图上按 R 打开 modern statscreen。
 	# --probe 顺序：1 gMssSt.unit, 2 gStatScreenSt.unit, 3 gPlaySt.chapter

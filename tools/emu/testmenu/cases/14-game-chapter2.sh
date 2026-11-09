@@ -5,7 +5,7 @@ case_14_game_chapter2() {
 	local log="$OUT/14-game-chapter2.log"
 	local category case_id chapter colors
 
-	echo "== 14/14 testmenu: 顶层 → Test → Game → Chapter 2"
+	echo "== 14/15 testmenu: 顶层 → Test → Game → Chapter 2"
 
 	# TestRoot 默认 Game，A 进 Game 菜单；DOWN 到 Chapter 2，A 启动。
 	# --probe 顺序：1 category, 2 case_id, 3 gPlaySt.chapter
