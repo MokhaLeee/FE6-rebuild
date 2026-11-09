@@ -60,7 +60,7 @@ tools/emu/
 | 14 game chapter 2 | 顶层 → Test → Game → Chapter 2；chapter=2，case=CHAPTER_2，画面有内容 |
 | 15 save corrupt | Save → Corrupt Check；写有效存档后改坏一个字节，`IsSaveValid()` 从 1 变 0 |
 | 16 level cap | System → Level Cap；98→99 封顶、99 级不再升级、20/99 级转职保留等级、竞技场等级夹取、Devil 反伤率、promoted 自动等级 19、99 级存档往返 |
-| 17 level map | Test Chapter → 出撃 → Map Test；test event 把 Roy 设为 98 级/99 经验并放在 99 级 1 HP 敌人旁；shell 真实按键「选人 → 攻撃 → 战斗预测 → 开战 → 升级」；断言 level=99/exp=0xFF；同时验证地图上 20 级转职保留等级、`ArenaGenOpponentUnit()` 生成 99 级不被截断 |
+| 17 level map | Test Chapter → 出撃 → Map Test；test event 把 Roy 设为 98 级/99 经验并放在 99 级 1 HP 敌人旁；shell 真实按键「选人 → 攻撃 → 战斗预测 → 开战 → 升级」；断言 level=99/exp=0xFF；同时验证地图上 20 级转职保留等级 |
 
 脚本设计和新增 case 的方法见 [testmenu/README.md](testmenu/README.md)。
 测试项目录和 EWRAM 探针方案见 [../../src/Test/README.md](../../src/Test/README.md)。

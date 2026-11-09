@@ -13,7 +13,7 @@
 - Save：`Write + Load` / `Write` / `Load` / `Corrupt Check`
 - Battle：`Test Battle`，GDB 检查 `BattleAIS_ExecCommands` / `EfxAdvanceFrameLut`
 - Prep：
-  - `CHAPTER_TEST_PREP`（`has_prep=true`）
+  - `CHAPTER_TEST`（`has_prep=true`）
   - 9 个蓝方单位、8 个红方单位
   - Unit Select、Item Edit、Sortie、Helpbox、Statscreen、Save/Map
 - MSS：能通过 Sortie → 地图 R 打开，case 先挂起
@@ -143,9 +143,9 @@ UI 菜单项只负责启动对应场景，按键步骤放到测试脚本里。
 
 ### P2
 
-- [ ] Testmenu 分类定稿（Game / Save / Battle / Prep / UI / System）
+- [ ] Testmenu 分类定稿（Game / Save / Test Chapter / System）
 - [ ] Game 章节按需扩展
-- [ ] Battle 场景按需扩展
+- [ ] Test Chapter 场景按需扩展
 - [ ] 旧 debugmenu / legacy 文档收尾
 
 ## 6. 约定

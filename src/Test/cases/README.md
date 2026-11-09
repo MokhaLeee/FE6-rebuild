@@ -24,6 +24,9 @@
 - 开章节/放单位/给道具等公共逻辑放 `src/Test/harness/`，不要复制。
 - 测试状态只写 `gTestMenuProbe`，不要再新增分散的全局变量。
 - 所有实现文件用 `#if CONFIG_TEST_MENU` 包住。
+- 涉及地图的测试优先复用 `CHAPTER_TEST` 和同一张测试地图，不按 case 新建章节。
+- 准备画面类 case 停在 prep；地图/战斗类 case 从 prep 出撃后继续，由脚本输入区分。
+- 地图单位放在 Plains（terrain=1），避免 water/cliff 和同格重叠。
 - 新增/改动代码遵循 Linux kernel style（见仓库根 `AGENTS.md` §0）。
 
 ## 当前状态

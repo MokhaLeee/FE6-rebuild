@@ -217,7 +217,7 @@ constants/videoalloc_global.h constants/chapters.h constants/faces.h
 | 条目 | 行为 |
 |---|---|
 | `Start Game` | `StartGame()`，之后正常进标题 / 主菜单 / 章节 |
-| `Test` | 打开第二层 `MenuInfo_TestRoot`（`Game` / `Save` / `Battle` / `Prep` / `Back`） |
+| `Test` | 打开第二层 `MenuInfo_TestRoot`（`Game` / `Save` / `Test Chapter` / `System` / `Back`） |
 
 ### 2.1 测试入口
 
@@ -234,18 +234,18 @@ constants/videoalloc_global.h constants/chapters.h constants/faces.h
   再进入章节，并导出 32KB SRAM；同时确认 BG3 滚动已停。
 - case 5：第一次运行 `Write` + `--save-out`，第二次 `--sav` 启动后 `Load`，
   验证单位 level/exp/item 哨兵和章节跨进程恢复。
-- case 6：顶层 → `Test` → `Battle` → `Test Battle`，GDB 命中
+- case 6：顶层 → `Test` → `Test Chapter`，GDB 命中
   `BattleAIS_ExecCommands` / `EfxAdvanceFrameLut`。
-- case 7：顶层 → `Test` → `Prep` → `Test Prep`，`gPrepMenuItemCnt == 10`，
-  `PLAY_FLAG_PREP` 置位，`gPrepUnitCount == 9`，chapter=46（`CHAPTER_TEST_PREP`）。
-- case 8：`Test Prep` → Unit Select → Item Edit → 返回准备菜单，
+- case 7：顶层 → `Test` → `Test Chapter`，`gPrepMenuItemCnt == 10`，
+  `PLAY_FLAG_PREP` 置位，`gPrepUnitCount == 9`，chapter=46（`CHAPTER_TEST`）。
+- case 8：`Test Chapter` → Unit Select → Item Edit → 返回准备菜单，
   `gPrepMenuItemCnt == 10`、`gPrepUnitCount == 9`。
-- case 9：`Test Prep` → ゲームを始める → 地图，`PLAY_FLAG_PREP` 和
+- case 9：`Test Chapter` → ゲームを始める → 地图，`PLAY_FLAG_PREP` 和
   `BM_FLAG_PREP` 清零。
-- case 10：Prep 菜单按 R，帮助框出现且颜色数在 160–200。
+- case 10：准备菜单按 R，帮助框出现且颜色数在 160–200。
 - case 11：Unit Select 按 R，`gStatScreenSt.unit` 非空且 page=0。
 - case 12：Sortie 后地图按 R，`gMssSt.unit` 非空，vanilla statscreen 未打开。
-- case 13：Prep → 記録する / マップを見る，两个子界面有内容。
+- case 13：Test Chapter → 記録する / マップを見る，两个子界面有内容。
 - case 14：Game → Chapter 2，chapter=2 且画面有内容。
 - case 15：Save → Corrupt Check，有效存档 1，改坏一个字节后 0。
 

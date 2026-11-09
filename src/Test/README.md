@@ -241,8 +241,7 @@ BG3 HOFS 在 900/1000 帧保持不变（滚动 proc 已停）。
 | `include/hacks/test_cases.h` | `TestCategoryId` / `TestCaseId` |
 | `src/Test/cases/game/` | `MenuInfo_TestGame`、Chapter 1 case |
 | `src/Test/cases/save/` | `MenuInfo_TestSave`、Write/Load case |
-| `src/Test/cases/battle/` | `MenuInfo_TestBattle`、Test Battle case |
-| `src/Test/cases/prep/` | `MenuInfo_TestPrep`、Test Prep case |
+| `src/Test/cases/system/` | `MenuInfo_TestSystem`、Level Cap 自检 |
 | `src/Test/cases/<domain>/` | 其它领域测试项，本地头文件也放这里 |
 | `include/hacks/testmenu.h` | testmenu 公开入口 |
 
@@ -452,7 +451,7 @@ gPrepMenuItemCnt == 10
 gPrepUnitCount == 9        # 蓝方 9 人（红方另有 8 人）
 gUnitArrayRed 红单位存在
 gPlaySt.flags & PLAY_FLAG_PREP
-gPlaySt.chapter == 46 (CHAPTER_TEST_PREP)
+gPlaySt.chapter == 46 (CHAPTER_TEST)
 ```
 
 case 8 会断言：
@@ -593,3 +592,10 @@ tools/emu/
 - 分类的最终命名和顺序。
 - `value[4]` / `flags` 的跨 case 约定，是否按领域再细分。
 - case 是否需要统一的 `struct TestCase` 描述符，还是直接写 `MenuEntInfo`。
+
+## 10. 后续地图测试约定（2026-11-09）
+
+- 涉及地图的测试尽量复用同一个测试章节 `CHAPTER_TEST` 和同一张测试地图，不为单个 case 新增 `ChapterInfo` / `ChapterAssets` 条目。
+- 用 test event 摆位、用 shell 输入驱动不同场景：需要准备画面就停在 prep；需要地图就从 prep 出撃后继续按键。
+- 测试单位优先放在 Plains（`gMapTerrain[y][x] == 1`），避免 water / cliff / 同格重叠；必要时用 GDB dump `gMapTerrain` 确认。
+- 新增地图场景优先在 `src/Test/fixtures/test-chapter.c` 里加单位/事件步骤，而不是新开测试章节。

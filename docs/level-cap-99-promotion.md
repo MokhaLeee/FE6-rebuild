@@ -302,7 +302,7 @@ level != UNIT_LEVEL_MAX
 
 | 文件 | 改动 |
 | --- | --- |
-| `src/Test/cases/system/system_cases.c` / `.h` | 新增 `System → Level Cap` 自检 + `Map Test` 入口 |
+| `src/Test/cases/system/system_cases.c` / `.h` | 新增 `System → Level Cap` 自检 |
 | `src/Test/fixtures/test-chapter.c` | 统一到 `CHAPTER_TEST`（原 test battle + test prep 合并），加入 level 测试单位和事件 |
 | `src/Test/testmenu/testmenu_test.c` | TestRoot 新增 `System` 入口 |
 | `include/hacks/test_cases.h` | 新增 `TEST_CATEGORY_SYSTEM`、`TEST_CASE_LEVEL_CAP`、`TEST_CASE_LEVEL_MAP` |
@@ -364,7 +364,7 @@ make all
 - `./tools/emu/testmenu-tests.sh`：17 个 case、39 项断言全部通过（case 16 `System → Level Cap` 自检 + case 17 `Test Chapter → 出撃 → Map Test` 真实按键战斗升级）。
 - 99 级存档往返：临时把 `include/hacks/test_scene.h` 的 `TEST_SCENE_SAVE_LEVEL` 从 9 改成 99，重跑 case 4/5 均通过；随后恢复为 9 并重新构建。正式用例里已由 case 16 直接写读 99 级。
 - 已自动化：98→99、99 级封顶、20/99 级转职、Devil 反伤率、竞技场等级夹取、promoted 自动等级 19、99 级存档往返。
-- case 17 `Test Chapter → 出撃 → Map Test`：真实按键控制 Roy 攻击敌人并升级（level 99 / exp 0xFF），同时在地图上验证 20 级转职保留等级和 `ArenaGenOpponentUnit()` 生成 99 级不被截断。
+- case 17 `Test Chapter → 出撃 → Map Test`：真实按键控制 Roy 攻击敌人并升级（level 99 / exp 0xFF），同时在地图上验证 20 级转职保留等级。
 - 仍建议手工确认：转职动画的等级显示、状态/准备/部队列表的 99 级排版。
 
 ---
@@ -615,10 +615,9 @@ shell 侧断言：`state == 3`、`flags == 255`、`value0 == 99`、`value1 == 25
 
 - 事件 `TestLevelCap_SetupBattle()` 把 Roy 设为 98 级 / 99 经验，旁边放一个 99 级、1 HP 的敌人；同时在地图上验证：
   - 20 级 Alen 转职后仍为 20 级、`exp = 0`、职业变 Paladin；
-  - `ArenaGenOpponentUnit()` 生成 99 级对手不被 5-bit 截断、也不被旧的 20 级 clamp 压回。
 - 事件结束后，shell 用 `--hold` 真实按键：
   `A` 选 Roy → `A` 开行动菜单 → `A` 选「攻撃」 → `A` 确认战斗预测 → `A` 开战 → 每 60 帧 `A` 推进战斗/升级画面。
-- 断言 `gUnitArrayBlue+0x08`（level）= 99、`+0x09`（exp）= 255，并检查 `gTestMenuProbe.value[2]`（转职等级）= 20、`value[3]`（竞技场等级）= 99。
+- 断言 `gUnitArrayBlue+0x08`（level）= 99、`+0x09`（exp）= 255，并检查 `gTestMenuProbe.value[2]`（转职等级）= 20。
 
 这条 case 走的是真实的地图输入、行动菜单、战斗和升级流程，不再是直接调用 `CheckBattleUnitLevelUp()`。
 

@@ -283,7 +283,7 @@ shell 断言：`state == 3`、`flags == 255`、`value0 == 99`、`value1 == 255`�
 ./tools/emu/testmenu-tests.sh --case 16
 ```
 
-实际输入序列（见 `16-level-cap.sh`）：顶层 DOWN/A → TestRoot DOWN×4/A → System A。
+实际输入序列（见 `16-level-cap.sh`）：顶层 DOWN/A → TestRoot DOWN×3/A → System A。
 
 ### 7.4 可测试性改动（已完成）
 
@@ -298,7 +298,7 @@ shell 断言：`state == 3`、`flags == 255`、`value0 == 99`、`value1 == 255`�
 - test event `TestLevelCap_SetupBattle()` 把 Roy 设为 98 级/99 经验，旁边放 99 级 1 HP 敌人。
 - shell 通过 `--hold` 真实按键：选 Roy → 行动菜单 → 攻撃 → 战斗预测 → 开战 → 每 60 帧 A 推进。
 - 断言地图单位 `level == 99`、`exp == 0xFF`。
-- 同一个事件里还验证：地图上 20 级转职保留等级、`ArenaGenOpponentUnit()` 生成 99 级不被截断。
+- 同一个事件里还验证：地图上 20 级转职保留等级。
 
 ## 8. 手工验证清单
 
@@ -375,7 +375,7 @@ shell 断言：`state == 3`、`flags == 255`、`value0 == 99`、`value1 == 255`�
 | `make all` | 通过 |
 | `testmenu-tests.sh` | 17 case / 39 断言全过 |
 | case 16 `System → Level Cap` | 通过（98→99、99 封顶、20/99 转职、竞技场夹取、Devil 概率、自动等级 19、99 级存档） |
-| case 17 `Test Chapter → 出撃 → Map Test` | 通过（事件摆位 → shell 真实按键攻击 → 战斗中升级；同时验证地图上 20 级转职、`ArenaGenOpponentUnit()` 99 级） |
+| case 17 `Test Chapter → 出撃 → Map Test` | 通过（事件摆位 → shell 真实按键攻击 → 战斗中升级；同时验证地图上 20 级转职） |
 | 99 级存档（临时改 `TEST_SCENE_SAVE_LEVEL=99`，case 4/5） | 通过；正式用例已由 case 16 覆盖 |
 | 转职动画、状态/准备/部队列表 99 级排版 | **手工项，待执行** |
 | AUT-01 与旧 ROM 完整基线对比 | **未自动化**；case 16 已覆盖“19 级路径”的行为一致性，但未做整章敌人对比 |
