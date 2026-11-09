@@ -36,7 +36,7 @@
 | 4 存档 | 游戏能写出 SRAM；读回后主菜单多出「記録から始める」等选项 |
 | 5 压力 | 固定种子的随机按键跑 20000 帧不崩溃，结束时画面正常 |
 | 6 banim | 用 mGBA 的 GDB stub 在 `BattleAIS_ExecCommands` / `EfxAdvanceFrameLut` 上打断点，确认剧情战斗动画真的跑过 |
-| 7 prepscreen | debug 章节开场自动 `EvtNextChapter(CHAPTER_2)` 通关第一章；B 过存档提示、START 打开第二章的 MENU SELECT 准备画面 |
+| 7 prepscreen | debug 章节开场自动 `EvtNextChapter(CHAPTER_2)` 通关第一章；B 过存档提示、继续按 A 推进第二章开场事件，等 `gPrepMenuItemCnt` 变成 10（准备菜单已初始化）再断言 MENU SELECT 画面 |
 | 8 prep menu | 准备画面里依次进出部署、物品整理、存档、地图、出击五个子界面，断言不崩且画面正常 |
 | 9 helpbox | 准备画面主菜单按 R 弹出菜单项帮助框，断言画面哈希变化且颜色数在 170–190 |
 | 10 prep items | 准备画面「アイテム整理」里的五个子界面（交換/捨てる/輸送隊/リスト/武器屋）逐个进出，断言画面有内容 |
@@ -81,8 +81,9 @@ gbarun 可以通过 `core->busRead*` 读 GBA 内存，在"状态满足"时再按
 
 **还做不到全状态化的地方**：开机 → 章节这一段。标题画面和主菜单都是
 `chapter == 0`、地图锁为 0，内存里没有能区分两者的判据；而且从第 0 帧就开始按 A
-会把 ROM 卡死，所以用例 7 的 A/B 两个窗口仍然用帧号，只有章节切换后的
-B（存档提示）和 START（准备菜单）是状态驱动。
+会把 ROM 卡死，所以用例 7–9 的 A/B 推进窗口仍然用帧号。进入准备画面后改用
+`gPrepMenuItemCnt`（准备菜单初始化后为 10）判断“准备画面已就绪”，不再靠
+`BM_FLAG_PREP`——这个标志在第二章开场事件期间也会置位。
 
 ## GDB 调试
 

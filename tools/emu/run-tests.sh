@@ -155,48 +155,61 @@ fi
 
 echo
 echo "== 7/10 第二章准备画面（prepscreen）"
-"$RUN" "$ROM" --quiet --frames 16000 \
+# 第一章 debug 开场会自动 EvtNextChapter(CHAPTER_2)，B 过存档提示后，
+# 第二章开场事件还要继续按 A 推进。gPrepMenuItemCnt 在地图菜单初始化后
+# 变成 10，用它当“准备画面已就绪”的判据，不再靠帧号猜 START 的时机。
+"$RUN" "$ROM" --quiet --frames 12000 \
 	--sym "${ROM%.gba}.sym" \
 	--hold-every 720:9000:50:A:3 \
 	--hold-every 9500:10500:40:B:4 \
-	--press-when "gBmSt+0x4:8:&16;START;5;0" \
-	--stats 12300 --shot 12300 --out "$OUT" >"$OUT/7-prep.log" 2>&1
+	--hold-every 10600:10850:40:A:3 \
+	--probe "gPrepMenuItemCnt:8" \
+	--stats 11000 --shot 11000 --out "$OUT" >"$OUT/7-prep.log" 2>&1
 assert_completed "$OUT/7-prep.log" "通关第一章后进入第二章准备画面"
 PREP_COLORS=$(field "$OUT/7-prep.log" STATS colors)
-if [ -n "$PREP_COLORS" ] && [ "$PREP_COLORS" -ge 150 ] && [ "$PREP_COLORS" -le 200 ]; then
-	ok "准备画面菜单已显示（$PREP_COLORS 种颜色）"
+PREP_ITEMS=$(field "$OUT/7-prep.log" PROBE value)
+if [ -n "$PREP_COLORS" ] && [ "$PREP_COLORS" -ge 150 ] && [ "$PREP_COLORS" -le 200 ] && [ "$PREP_ITEMS" = "10" ]; then
+	ok "准备画面菜单已显示（$PREP_COLORS 种颜色，gPrepMenuItemCnt=$PREP_ITEMS）"
 else
-	bad "准备画面菜单没有出现（colors=${PREP_COLORS:-?}）"
+	bad "准备画面菜单没有出现（colors=${PREP_COLORS:-?}, gPrepMenuItemCnt=${PREP_ITEMS:-?}）"
 fi
 
 echo "== 8/10 准备画面子菜单交互（部署 / 物品 / 存档 / 地图 / 出击）"
-"$RUN" "$ROM" --quiet --frames 17000 \
+# 准备画面（MENU SELECT）在 11000 帧左右已经就绪，菜单默认停在“ユニット選択”。
+# 下面按 部署 → 物品整理 → 記録する → マップを見る → ゲームを始める 的顺序
+# 逐个进出，帧号按新流程重新标定。
+"$RUN" "$ROM" --quiet --frames 16500 \
 	--sym "${ROM%.gba}.sym" \
 	--hold-every 720:9000:50:A:3 \
 	--hold-every 9500:10500:40:B:4 \
-	--press-when "gBmSt+0x4:8:&16;START;5;0" \
-	--hold 10650:A:5 --hold 10900:B:5 --hold 11100:DOWN:5 --hold 11200:A:5 \
-	--hold 11500:B:5 --hold 11700:DOWN:5 --hold 11800:A:5 --hold 12100:B:5 \
-	--hold 12300:DOWN:5 --hold 12400:A:5 --hold 12700:B:5 --hold 12900:DOWN:5 \
-	--hold 13000:A:5 \
-	--stats 10800 --stats 11400 --stats 12000 --stats 12600 --stats 13300 --stats 15000 \
-	--probe "gBmSt+0x4:8" \
-	--shot 10800 --shot 12000 --shot 13300 \
+	--hold-every 10600:10850:40:A:3 \
+	--hold 11100:A:5 --hold 11800:B:5 --hold 12000:DOWN:5 --hold 12100:A:5 \
+	--hold 12700:B:5 --hold 12900:DOWN:5 --hold 13000:A:5 --hold 13600:B:5 \
+	--hold 13800:DOWN:5 --hold 13900:A:5 --hold 14500:B:5 --hold 14700:DOWN:5 \
+	--hold 14800:A:5 \
+	--stats 11400 --stats 12400 --stats 13300 --stats 14200 --stats 16000 \
+	--shot 11400 --shot 12400 --shot 13300 --shot 16000 \
 	--out "$OUT" >"$OUT/8-prepmenu.log" 2>&1
 assert_completed "$OUT/8-prepmenu.log" "准备画面子菜单交互无崩溃"
-DEPLOY_COLORS=$(grep "STATS frame=10800" "$OUT/8-prepmenu.log" | sed -n 's/.*colors=\([0-9]*\).*/\1/p')
-SAVE_COLORS=$(grep "STATS frame=12000" "$OUT/8-prepmenu.log" | sed -n 's/.*colors=\([0-9]*\).*/\1/p')
+DEPLOY_COLORS=$(grep "STATS frame=11400" "$OUT/8-prepmenu.log" | sed -n 's/.*colors=\([0-9]*\).*/\1/p')
+ITEM_COLORS=$(grep "STATS frame=12400" "$OUT/8-prepmenu.log" | sed -n 's/.*colors=\([0-9]*\).*/\1/p')
+SAVE_COLORS=$(grep "STATS frame=13300" "$OUT/8-prepmenu.log" | sed -n 's/.*colors=\([0-9]*\).*/\1/p')
+MAP_COLORS=$(grep "STATS frame=16000" "$OUT/8-prepmenu.log" | sed -n 's/.*colors=\([0-9]*\).*/\1/p')
 if [ -n "$DEPLOY_COLORS" ] && [ "$DEPLOY_COLORS" -ge 100 ]; then
 	ok "单位部署子界面有内容（$DEPLOY_COLORS 种颜色）"
 else
 	bad "单位部署子界面异常（colors=${DEPLOY_COLORS:-?}）"
+fi
+if [ -n "$ITEM_COLORS" ] && [ "$ITEM_COLORS" -ge 100 ]; then
+	ok "物品整理子界面有内容（$ITEM_COLORS 种颜色）"
+else
+	bad "物品整理子界面异常（colors=${ITEM_COLORS:-?}）"
 fi
 if [ -n "$SAVE_COLORS" ] && [ "$SAVE_COLORS" -ge 300 ]; then
 	ok "存档子界面有内容（$SAVE_COLORS 种颜色）"
 else
 	bad "存档子界面异常（colors=${SAVE_COLORS:-?}）"
 fi
-MAP_COLORS=$(grep "STATS frame=15000" "$OUT/8-prepmenu.log" | sed -n 's/.*colors=\([0-9]*\).*/\1/p')
 if [ -n "$MAP_COLORS" ] && [ "$MAP_COLORS" -ge 60 ] && [ "$MAP_COLORS" -le 200 ]; then
 	ok "出击后进入地图画面（$MAP_COLORS 种颜色）"
 else
@@ -208,16 +221,16 @@ echo "== 9/10 帮助框（prepscreen 主菜单按 R）"
 	--sym "${ROM%.gba}.sym" \
 	--hold-every 720:9000:50:A:3 \
 	--hold-every 9500:10500:40:B:4 \
-	--press-when "gBmSt+0x4:8:&16;START;5;0" \
-	--hold 10650:R:5 \
-	--stats 10600 --stats 10700 \
-	--hash 10600 --hash 10700 \
-	--shot 10700 \
+	--hold-every 10600:10850:40:A:3 \
+	--hold 11200:R:5 \
+	--stats 11100 --stats 11300 \
+	--hash 11100 --hash 11300 \
+	--shot 11300 \
 	--out "$OUT" >"$OUT/9-helpbox.log" 2>&1
 assert_completed "$OUT/9-helpbox.log" "帮助框交互无崩溃"
-HELP_COLORS=$(grep "STATS frame=10700" "$OUT/9-helpbox.log" | sed -n 's/.*colors=\([0-9]*\).*/\1/p')
-H_BEFORE=$(sed -n 's/^HASH frame=10600 \([0-9a-f]*\)/\1/p' "$OUT/9-helpbox.log" | head -1)
-H_HELP=$(sed -n 's/^HASH frame=10700 \([0-9a-f]*\)/\1/p' "$OUT/9-helpbox.log" | head -1)
+HELP_COLORS=$(grep "STATS frame=11300" "$OUT/9-helpbox.log" | sed -n 's/.*colors=\([0-9]*\).*/\1/p')
+H_BEFORE=$(sed -n 's/^HASH frame=11100 \([0-9a-f]*\)/\1/p' "$OUT/9-helpbox.log" | head -1)
+H_HELP=$(sed -n 's/^HASH frame=11300 \([0-9a-f]*\)/\1/p' "$OUT/9-helpbox.log" | head -1)
 if [ -n "$H_BEFORE" ] && [ -n "$H_HELP" ] && [ "$H_BEFORE" != "$H_HELP" ]; then
 	ok "按 R 后画面出现帮助框（hash $H_BEFORE → $H_HELP）"
 else
