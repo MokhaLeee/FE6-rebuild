@@ -81,6 +81,8 @@ void StartTestMenuTop(void)
 static fu8 testmenu_on_select_start_game(struct MenuProc *menu,
 					 struct MenuEntProc *ent)
 {
+	/* The mural proc is a root proc; stop it before the game controller takes over. */
+	EndMuralBackground();
 	test_probe_set_menu(TEST_MENU_ID_NONE, TEST_MENU_STATE_NONE);
 	StartGame();
 
@@ -106,7 +108,9 @@ void StartGame_TestMenu(void)
 	InitBmDisplay();
 	DebugInitBg(BG_2, 0);
 
-	StartMuralBackground(StartMenu(&test_menu_info),
+	StartMenu(&test_menu_info);
+	/* Root proc: keep the mural scrolling when a submenu replaces the top menu. */
+	StartMuralBackground(PROC_TREE_3,
 			     (u8 *)BG_VRAM + CHR_SIZE * BGCHR_TESTMENU_MURAL,
 			     -1);
 

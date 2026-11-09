@@ -119,6 +119,21 @@ src/Test/cases/battle/
 
 第二层的 `Battle` 项只负责 `StartMenu(&MenuInfo_TestBattle)`。
 
+### 3.4 mural 滚动 proc
+
+`StartMuralBackground()` 会 `SpawnProc(ProcScr_BackgroundSlide, parent)`。
+如果 parent 是顶层菜单 proc，打开 Test 子菜单时顶层菜单 `EndMenu` 会把这个
+滚动 proc 一起结束，BG3 就停在最后的位置，看起来就是“子菜单里背景不动了”。
+
+因此 testmenu 里必须：
+
+- 用 `PROC_TREE_3` 作为 parent 启动 mural，让滚动 proc 独立于菜单 proc；
+- 选 `Start Game`、把控制权交给 game controller 之前调用 `EndMuralBackground()`；
+- 子菜单切换不要结束/重启 mural；返回顶层时它仍在跑。
+
+回归测试：`testmenu-tests.sh` case 2 在子菜单里读 `gDispIo+0x28`
+（BG3 HOFS 的 shadow）并断言两帧之间在增加。
+
 ## 4. 文件职责
 
 | 路径 | 职责 |

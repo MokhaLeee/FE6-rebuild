@@ -110,7 +110,7 @@ fi
 
 echo "== 2/2 testmenu: 顶层 → Test 子菜单 → Back 返回"
 
-# --probe 顺序：1 magic, 2 menu, 3 state
+# --probe 顺序：1 magic, 2 menu, 3 state, 4 BG3 HOFS
 "$RUN" "$ROM" --quiet --frames 1200 \
 	--sym "$SYM" \
 	--hold 300:DOWN:5 \
@@ -119,7 +119,8 @@ echo "== 2/2 testmenu: 顶层 → Test 子菜单 → Back 返回"
 	--probe "gTestMenuProbe+0x00:32" \
 	--probe "gTestMenuProbe+0x04:8" \
 	--probe "gTestMenuProbe+0x05:8" \
-	--stats 200 --stats 500 --stats 900 \
+	--probe "gDispIo+0x28:16" \
+	--stats 200 --stats 500 --stats 540 --stats 900 \
 	--shot 200 --shot 500 --shot 900 \
 	--out "$OUT" >"$OUT/2-test-root.log" 2>&1
 
@@ -132,6 +133,8 @@ TOP_MENU=$(probe_n_at "$OUT/2-test-root.log" 200 2)
 ROOT_MENU=$(probe_n_at "$OUT/2-test-root.log" 500 2)
 BACK_MENU=$(probe_n_at "$OUT/2-test-root.log" 900 2)
 ROOT_STATE=$(probe_n_at "$OUT/2-test-root.log" 500 3)
+SCROLL_A=$(probe_n_at "$OUT/2-test-root.log" 500 4)
+SCROLL_B=$(probe_n_at "$OUT/2-test-root.log" 540 4)
 
 if [ -n "$TOP_COLORS" ] && [ "$TOP_COLORS" -ge 40 ] &&
    [ -n "$ROOT_COLORS" ] && [ "$ROOT_COLORS" -le 40 ] &&
@@ -141,6 +144,12 @@ if [ -n "$TOP_COLORS" ] && [ "$TOP_COLORS" -ge 40 ] &&
 	ok "Test 子菜单进入/返回正确（menu $TOP_MENU → $ROOT_MENU → $BACK_MENU）"
 else
 	bad "Test 子菜单状态不对（colors=${TOP_COLORS:-?}/${ROOT_COLORS:-?}/${BACK_COLORS:-?}, menu=${TOP_MENU:-?}/${ROOT_MENU:-?}/${BACK_MENU:-?}）"
+fi
+
+if [ -n "$SCROLL_A" ] && [ -n "$SCROLL_B" ] && [ "$SCROLL_B" -gt "$SCROLL_A" ]; then
+	ok "子菜单里 mural 继续滚动（BG3 HOFS $SCROLL_A → $SCROLL_B）"
+else
+	bad "子菜单里 mural 停止滚动（BG3 HOFS ${SCROLL_A:-?} → ${SCROLL_B:-?}）"
 fi
 
 echo
