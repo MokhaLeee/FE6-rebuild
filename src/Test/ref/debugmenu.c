@@ -13,7 +13,7 @@
 #include "bmio.h"
 #include "chapter.h"
 #include "chapterinfo.h"
-#include "menuinfo.h"
+#include "menuinfo_debug.h"
 #include "ui.h"
 #include "menu.h"
 #include "statscreen.h" // StartMuralBackground
@@ -28,6 +28,8 @@
 
 #include "save-hw.h"
 
+#if CONFIG_DEBUG_MENU
+
 enum
 {
     DEBUG_WEATHER_NONE,
@@ -40,6 +42,19 @@ enum
 
     DEBUG_WEATHER_COUNT,
 };
+
+// 原实现用 weather % DEBUG_WEATHER_COUNT；GCC 会为此生成 __aeabi_idivmod，
+// 而本工程链接的库不提供该符号，所以改成等价的减法取模。
+static int DebugWeatherIndex(int weather)
+{
+    while (weather >= DEBUG_WEATHER_COUNT)
+        weather -= DEBUG_WEATHER_COUNT;
+
+    while (weather < 0)
+        weather += DEBUG_WEATHER_COUNT;
+
+    return weather;
+}
 
 // in main.c
 extern void PutBuildInfo(u16 * tm);
@@ -129,9 +144,7 @@ fu8 DebugMenu_Idle_Map(struct MenuProc * menu, struct MenuEntProc * ent)
         EnableBgSync(BG0_SYNC_BIT);
     }
 
-#if BUGFIX
     return 0;
-#endif
 }
 
 fu8 DebugMenu_OnSelect_Map(struct MenuProc * menu, struct MenuEntProc * ent)
@@ -172,9 +185,7 @@ u32 DebugMenu_Display_DebugInfo(struct MenuProc * menu, struct MenuEntProc * ent
 
     PutText(&ent->text, gBg0Tm + TM_OFFSET(ent->x, ent->y));
 
-#if BUGFIX
     return 0;
-#endif
 }
 
 fu8 DebugMenu_Idle_DebugInfo(struct MenuProc * menu, struct MenuEntProc * ent)
@@ -189,9 +200,7 @@ fu8 DebugMenu_Idle_DebugInfo(struct MenuProc * menu, struct MenuEntProc * ent)
         DebugInitObj(-1, 9);
     }
 
-#if BUGFIX
     return 0;
-#endif
 }
 
 fu8 DebugMenu_OnSelect_DebugInfo(struct MenuProc * menu, struct MenuEntProc * ent)
@@ -217,13 +226,11 @@ u32 DebugMenu_Display_Weather(struct MenuProc * menu, struct MenuEntProc * ent)
     ClearText(&ent->text);
 
     Text_InsertDrawString(&ent->text, 8,  TEXT_COLOR_SYSTEM_WHITE, TEXT("天気", "Weather"));
-    Text_InsertDrawString(&ent->text, 64, TEXT_COLOR_SYSTEM_BLUE, weatherNames[proc->weather % DEBUG_WEATHER_COUNT]);
+    Text_InsertDrawString(&ent->text, 64, TEXT_COLOR_SYSTEM_BLUE, weatherNames[DebugWeatherIndex(proc->weather)]);
 
     PutText(&ent->text, gBg0Tm + TM_OFFSET(ent->x, ent->y));
 
-#if BUGFIX
     return 0;
-#endif
 }
 
 fu8 DebugMenu_Idle_Weather(struct MenuProc * menu, struct MenuEntProc * ent)
@@ -235,7 +242,7 @@ fu8 DebugMenu_Idle_Weather(struct MenuProc * menu, struct MenuEntProc * ent)
         proc->weather++;
         DebugMenu_Display_Weather(menu, ent);
 
-        switch (proc->weather % DEBUG_WEATHER_COUNT)
+        switch (DebugWeatherIndex(proc->weather))
         {
 
         case DEBUG_WEATHER_NONE:
@@ -269,9 +276,7 @@ fu8 DebugMenu_Idle_Weather(struct MenuProc * menu, struct MenuEntProc * ent)
         }
     }
 
-#if BUGFIX
     return 0;
-#endif
 }
 
 fu8 DebugMenu_OnSelect_Weather(struct MenuProc * menu, struct MenuEntProc * ent)
@@ -289,9 +294,7 @@ u32 DebugMenu_Display_Playthroughs(struct MenuProc * menu, struct MenuEntProc * 
 
     PutText(&ent->text, gBg0Tm + TM_OFFSET(ent->x, ent->y));
 
-#if BUGFIX
     return 0;
-#endif
 }
 
 
@@ -346,9 +349,7 @@ fu8 DebugMenu_Idle_Playthroughs(struct MenuProc * menu, struct MenuEntProc * ent
 
     DebugMenu_Display_Playthroughs(menu, ent);
 
-#if BUGFIX
     return 0;
-#endif
 }
 
 fu8 DebugMenu_OnSelect_Playthroughs(struct MenuProc * menu, struct MenuEntProc * ent)
@@ -369,6 +370,8 @@ fu8 DebugClearFileMenu_OnSelect_Confirm(struct MenuProc * menu, struct MenuEntPr
     // required for a match
     u32 unused[4];
 
+    (void) unused;
+
     // required for a match
     if (gPlaySt.playthrough_id != 0) {}
 
@@ -381,9 +384,7 @@ fu8 DebugClearFileMenu_OnSelect_Confirm(struct MenuProc * menu, struct MenuEntPr
 
     SoftReset(GBA_RESET_ALL);
 
-#if BUGFIX
     return 0;
-#endif
 }
 
 fu8 DebugMenu_OnInit_Main(struct MenuProc * menu)
@@ -391,9 +392,7 @@ fu8 DebugMenu_OnInit_Main(struct MenuProc * menu)
     DebugPutStr(gBg0Tm + TM_OFFSET(7, 3), GetChapterInfo(CHAPTER_1)->debug_name);
     EnableBgSync(BG0_SYNC_BIT);
 
-#if BUGFIX
     return 0;
-#endif
 }
 
 void StartDebugMenu_LoadGame(void)
@@ -446,9 +445,7 @@ fu8 DebugMenu_OnEnd_LoadGame(struct MenuProc * menu)
     SetDispEnable(0, 0, 0, 0, 0);
     SetBackdropColor(0);
 
-#if BUGFIX
     return 0;
-#endif
 }
 
 fu8 DebugMenu_Idle_StartChapter(struct MenuProc * menu, struct MenuEntProc * ent)
@@ -476,9 +473,7 @@ fu8 DebugMenu_Idle_StartChapter(struct MenuProc * menu, struct MenuEntProc * ent
         EnableBgSync(BG0_SYNC_BIT);
     }
 
-#if BUGFIX
     return 0;
-#endif
 }
 
 fu8 DebugMenu_OnSelect_StartChapter(struct MenuProc * menu, struct MenuEntProc * ent)
@@ -584,9 +579,7 @@ u32 DebugMenu_Display_Fog(struct MenuProc * menu, struct MenuEntProc * ent)
 
     PutText(&ent->text, gBg0Tm + TM_OFFSET(ent->x, ent->y));
 
-#if BUGFIX
     return 0;
-#endif
 }
 
 fu8 DebugMenu_Idle_Fog(struct MenuProc * menu, struct MenuEntProc * ent)
@@ -604,9 +597,7 @@ fu8 DebugMenu_Idle_Fog(struct MenuProc * menu, struct MenuEntProc * ent)
         DebugMenu_Display_Fog(menu, ent);
     }
 
-#if BUGFIX
     return 0;
-#endif
 }
 
 fu8 DebugMenu_OnSelect_Fog(struct MenuProc * menu, struct MenuEntProc * ent)
@@ -693,7 +684,7 @@ fu8 DebugMenu_OnSelect_SramReset(struct MenuProc * menu, struct MenuEntProc * en
     RestartGameAndChapter();
     Proc_Goto(FindProc(ProcScr_GameController), L_GAMECTRL_SRAMRESET);
 
-#if BUGFIX
     return 0;
-#endif
 }
+
+#endif /* CONFIG_DEBUG_MENU */

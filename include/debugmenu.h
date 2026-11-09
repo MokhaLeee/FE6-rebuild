@@ -4,6 +4,8 @@
 #include "proc.h"
 #include "menu.h"
 
+#if CONFIG_DEBUG_MENU
+
 enum
 {
     BGCHR_DEBUGMENU_MURAL = 0x580,
@@ -87,3 +89,5 @@ fu8 DebugCpControlMenu_Entry_Idle(struct MenuProc * menu, struct MenuEntProc * e
 fu8 DebugMenu_OnSelect_SramReset(struct MenuProc * menu, struct MenuEntProc * ent);
 
 extern struct ProcScr CONST_DATA ProcScr_DebugMonitor[];
+
+#endif /* CONFIG_DEBUG_MENU */

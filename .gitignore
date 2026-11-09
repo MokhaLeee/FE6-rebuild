@@ -71,6 +71,9 @@ tools/agbcc
 *.lz
 *.fk
 
+# keep the reference debug font under the test/ref tree
+!src/Test/ref/data/debug_text/Img_DebugFont.4bpp
+
 # ==================
 # Banim generated
 # ==================

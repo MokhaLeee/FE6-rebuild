@@ -1,0 +1,43 @@
+// 摘自 src/Common/crt0/main.c（HEAD 0413799）。
+// 这是 debug menu 在当前树里的唯一入口：debug 构建把开机流程直接改成
+// StartDebugMenu_LoadGame()，不再走 StartGame()。
+//
+// 注意：tools/emu/README.md 和 promo-test-design.md 里写的
+// “开机按住 SELECT+START 才进入”是上一版方案；当前代码是无条件进入。
+
+#include "debugmenu.h"
+
+void AgbMain(void)
+{
+    // ... 省略 io/save/proc/m4a 初始化 ...
+
+    m4aSoundInit();
+    SetOnVBlank(OnVBlank);
+
+#if CONFIG_DEBUG_MENU
+    StartDebugMenu_LoadGame();
+#else
+    StartGame();
+#endif
+
+    while (TRUE) {
+        RunMainFunc();
+        SoftResetIfKeyCombo();
+    }
+}
+
+// 如果要做成自己的 testmenu，建议改成显式入口，例如：
+//
+// #if CONFIG_DEBUG_MENU
+//     RefreshKeySt(gKeySt);
+//     if ((gKeySt->held & (KEY_BUTTON_SELECT | KEY_BUTTON_START)) ==
+//         (KEY_BUTTON_SELECT | KEY_BUTTON_START))
+//         StartMyTestMenu();
+//     else
+//         StartGame();
+// #else
+//     StartGame();
+// #endif
+//
+// 但必须先 ReadGlobalSaveInfo/InitProcs 等初始化完成，且最好在
+// game controller 启动之前进入，避免 RestartGameAndChapter() 把菜单 proc 一起结束。

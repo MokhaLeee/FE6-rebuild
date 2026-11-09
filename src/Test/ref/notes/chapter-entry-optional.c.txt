@@ -1,0 +1,35 @@
+// 可选：恢复 debug load game 菜单的第 4 项「章開始」。
+//
+// 当前 HEAD（0413799）的 MenuEntInfo_Debug_LoadGame 只有 3 项；
+// 但 DebugMenu_OnInit_LoadGame() 里仍保留：
+//
+//     menu->entries[3]->id = CHAPTER_1;
+//
+// 这是给被移除的「章開始」项留的槽位。条目不存在时 entries[3] 没有对应的
+// MenuEntProc，这行会写到空指针（GBA 上通常写进 BIOS/无效区，被忽略）。
+//
+// tools/emu/promo-test-design.md 记录过恢复方案：在 MenuEntInfo_Debug_LoadGame
+// 的第 3 项（手再開）之后追加下面一项。DebugMenu_Idle_StartChapter /
+// DebugMenu_OnSelect_StartChapter 在 debugmenu.c 中已经存在。
+//
+//     {
+//         .label = JTEXT("　章開始"),
+//         .available = MenuEntryEnabled,
+//         .on_select = DebugMenu_OnSelect_StartChapter,
+//         .on_idle = DebugMenu_Idle_StartChapter,
+//     },
+//
+// 恢复后：
+// - LEFT/RIGHT 选择章节（CHAPTER_1 .. CHAPTER_COUNT-1）；
+// - A → DebugMenu_OnSelect_StartChapter()：
+//       RandInit(GetGameTime());
+//       InitUnits();
+//       WriteNewGameSave(SAVE_GAME0, FALSE);
+//       gPlaySt.chapter = ent->id;
+//       WriteGameSave(SAVE_GAME0);
+//       CleanupUnitsBeforeChapter();
+//       RestartGameAndChapter();
+// - 会覆盖 SAVE_GAME0，仅适合 debug/test 构建。
+//
+// 自己的 testmenu 不一定要复用这个入口；更干净的做法是单独做一个
+// MenuInfo_TestMain，而不是往原版 debug load game 菜单里塞测试项。

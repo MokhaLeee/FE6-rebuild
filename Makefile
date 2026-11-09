@@ -91,11 +91,15 @@ VANILLA_DIR := vanilla
 HACK_SRC  := src
 HACK_DIRS := $(HACK_SRC) gamedata gameinfo
 
-# find $(1) for name $(2), skip */unused/*
-find-src = $(shell find $(1) -name '$(2)' -not -path '*/unused/*')
+# find $(1) for name $(2), skip */unused/* and the reference-only test tree
+find-src = $(shell find $(1) -name '$(2)' -not -path '*/unused/*' -not -path '$(HACK_SRC)/Test/ref/*')
 
 VANILLA_SRCS := $(call find-src,$(VANILLA_DIR),*.c)
 C_SRCS       := $(call find-src,$(HACK_DIRS),*.c)
+
+# Debug menu implementation lives in the test/reference tree and is excluded from
+# find-src above. Add it explicitly; the sources are guarded by CONFIG_DEBUG_MENU.
+C_SRCS += $(HACK_SRC)/Test/ref/debugmenu.c $(HACK_SRC)/Test/ref/menuinfo_debug.c
 S_SRCS       := $(call find-src,$(HACK_DIRS),*.S)
 ASM_SRCS     := $(call find-src,$(VANILLA_DIR) $(HACK_DIRS),*.s)
 
@@ -192,12 +196,12 @@ GBAGFX := tools/gbagfx/gbagfx$(EXE)
 
 CONTENTS_DIR := contents
 
-PNG_FILES := $(shell find $(SRC_DIRS) $(CONTENTS_DIR) -type f -name '*.png')
+PNG_FILES := $(shell find $(SRC_DIRS) $(CONTENTS_DIR) -type f -name '*.png' -not -path '$(HACK_SRC)/Test/ref/*')
 CLEAN_FILES2 += $(PNG_FILES:%.png=%.4bpp) $(PNG_FILES:%.png=%.4bpp.lz) $(PNG_FILES:%.png=%.4bpp.lz.o)
 CLEAN_FILES2 += $(PNG_FILES:%.png=%.gbapal) $(PNG_FILES:%.png=%.gbapal.lz)
 CLEAN_FILES2 += $(PNG_FILES:%.png=%.img.bin) $(PNG_FILES:%.png=%.map.bin) $(PNG_FILES:%.png=%.pal.bin)
 
-TSA_FILES := $(shell find $(SRC_DIRS) $(CONTENTS_DIR) -type f -name '*.tsa')
+TSA_FILES := $(shell find $(SRC_DIRS) $(CONTENTS_DIR) -type f -name '*.tsa' -not -path '$(HACK_SRC)/Test/ref/*')
 CLEAN_FILES2 += $(TSA_FILES:%.tsa=%.tsa.lz)
 
 GFX_TSA_ASM  := $(shell find $(CONTENTS_DIR) -type f -name '*.s')

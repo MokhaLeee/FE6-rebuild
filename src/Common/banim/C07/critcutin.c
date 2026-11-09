@@ -254,10 +254,6 @@ void NewCritCutin(struct Anim *anim)
 {
 	struct ProcCritCutin *proc;
 
-#if !defined(CONFIG_CRIT_CUTIN) || !CONFIG_CRIT_CUTIN
-	return;
-#endif
-
 	if (!anim)
 		return;
 

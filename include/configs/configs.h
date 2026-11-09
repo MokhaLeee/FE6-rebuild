@@ -38,6 +38,14 @@
 /* banim command misc fix */
 #define CONFIG_BANIM_ENTRY_FIX 1
 
+/* dprintf log level */
+#define CONFIG_DEBUG_LEVEL 2
+
+/* debug config */
+#define CONFIG_USE_DEBUG 1
+
+#if CONFIG_USE_DEBUG
 #include "configs/config-debug.h"
+#endif
 
 #endif

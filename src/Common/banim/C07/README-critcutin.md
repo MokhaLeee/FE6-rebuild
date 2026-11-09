@@ -24,7 +24,6 @@ C07Handler_End         // 解锁，继续攻击
 
 `NewCritCutin()` 的触发条件：
 
-- `CONFIG_CRIT_CUTIN == 1`；
 - `gEkrDistanceType != EKR_DISTANCE_FARFAR`；
 - 当前 round 的 `gBattleHits[round].attributes` 带 `BATTLE_HIT_ATTR_CRIT`；
 - 攻击者有独立头像（`gpEkrBattleUnitLeft/Right->unit.pinfo->fid != 0`）。
@@ -153,7 +152,6 @@ SetFaceConfig(NULL);
 `include/configs/configs/config-debug.h`：
 
 ```c
-#define CONFIG_CRIT_CUTIN 1
 #define CONFIG_DEBUG_CRIT_CUTIN 0
 ```
 
