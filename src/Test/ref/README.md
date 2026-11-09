@@ -217,7 +217,7 @@ constants/videoalloc_global.h constants/chapters.h constants/faces.h
 | 条目 | 行为 |
 |---|---|
 | `Start Game` | `StartGame()`，之后正常进标题 / 主菜单 / 章节 |
-| `Test` | 打开第二层 `MenuInfo_TestRoot`（`Game` / `Back`） |
+| `Test` | 打开第二层 `MenuInfo_TestRoot`（`Game` / `Save` / `Back`） |
 
 ### 2.1 测试入口
 
@@ -229,8 +229,11 @@ constants/videoalloc_global.h constants/chapters.h constants/faces.h
   `TOP → TEST_ROOT → TOP` 变化。
 - case 3：顶层 → `Test` → `Game` → `Chapter 1`，探针 `menu` 按
   `TEST_ROOT → CATEGORY → CASE` 变化，`category/case_id/chapter` 正确。
+- case 4：顶层 → `Test` → `Save` → `Write + Load`，`IsSaveValid()` 校验
+  magic+checksum，读回盘上 chapter=1/turn=7，清 RAM 后重新加载 turn=7，
+  再进入章节，并导出 32KB SRAM；同时确认 BG3 滚动已停。
 
-旧的 `run-tests.sh` 仍假设开机到标题，正在按需求把用例迁进 `testmenu-tests.sh`。
+旧的 `legacy/run-tests.sh` 仍假设开机到标题，正在按需求把用例迁进 `testmenu-tests.sh`。
 
 ### 2.2 已知的坑（来自 `promo-test-design.md`）
 
@@ -293,6 +296,6 @@ make all
 
 - `HEAD 0413799`：`debug: boot into the debug load game menu`
 - `25b50ae`：debugmenu/menuinfo 命名同步（#151）
-- `tools/emu/promo-test-design.md`：debug menu 入口/锁/场景的实测记录
+- `tools/emu/legacy/promo-test-design.md`：debug menu 入口/锁/场景的实测记录
 - 更早历史：`bdd7ac6` 首次加入，`7a1daa8` 曾整体移除，后续重新同步
 

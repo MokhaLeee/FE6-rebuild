@@ -1,19 +1,20 @@
 #!/usr/bin/env bash
-# fe6-rebuild 的无头模拟器测试：启动 → 标题 → 菜单 → 进章节 → 存档往返 → 随机压力。
+# [归档] fe6-rebuild 旧的无头模拟器测试：启动 → 标题 → 菜单 → 进章节 → 存档往返 → 随机压力。
+# 这套脚本假设“开机直接到标题”，与当前 testmenu 入口不一致，只作为迁移参考保留。
 #
-#   ./tools/emu/run-tests.sh                # 测 fe6re.gba
-#   ./tools/emu/run-tests.sh path/to.gba    # 测指定 ROM
-#   ./tools/emu/run-tests.sh --quick        # 只跑启动 + 菜单（约 1 秒）
-#   ./tools/emu/run-tests.sh --clean        # 只清掉测试输出，不跑测试
+#   ./tools/emu/legacy/run-tests.sh                # 测 fe6re.gba
+#   ./tools/emu/legacy/run-tests.sh path/to.gba    # 测指定 ROM
+#   ./tools/emu/legacy/run-tests.sh --quick        # 只跑启动 + 菜单（约 1 秒）
+#   ./tools/emu/legacy/run-tests.sh --clean        # 只清掉测试输出，不跑测试
 #
 # 退出码 0 = 全过；非 0 = 有用例失败（会在最后列出）。
 # 截图和日志保留在 tools/emu/.build/out/。
 set -uo pipefail
 
 HERE=$(cd "$(dirname "$0")" && pwd)
-BUILD="$HERE/.build"
+BUILD="$HERE/../.build"
 RUN="$BUILD/gbarun"
-ROOT=$(cd "$HERE/../.." && pwd)
+ROOT=$(cd "$HERE/../../.." && pwd)
 
 QUICK=0
 CLEAN_ONLY=0
@@ -145,7 +146,7 @@ assert_completed "$OUT/5-stress.log" "随机输入 20000 帧无崩溃"
 assert_visible "$OUT/5-stress.log" "压力测试结束时画面正常" 8
 
 echo "== 6/10 banim 战斗动画路径（GDB 断点）"
-if ./tools/emu/gdb-check.sh "$ROM" >"$OUT/6-banim.log" 2>&1; then
+if "$HERE/gdb-check.sh" "$ROM" >"$OUT/6-banim.log" 2>&1; then
 	sed 's/^/  /' "$OUT/6-banim.log"
 	ok "banim 代码路径被覆盖（BattleAIS_ExecCommands / EfxAdvanceFrameLut）"
 else

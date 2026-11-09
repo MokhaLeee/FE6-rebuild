@@ -168,8 +168,8 @@ export DEVKITARM=$HOME/devkitpro/devkitARM
 make all -j8
 ./tools/emu/testmenu-tests.sh
 # 旧套件（迁移中）：
-# ./tools/emu/run-tests.sh --quick
-# ./tools/emu/run-tests.sh
+# ./tools/emu/legacy/run-tests.sh --quick
+# ./tools/emu/legacy/run-tests.sh
 ```
 
 测试暴击时，可以临时用 GDB 强制当前 round 为 CRIT：

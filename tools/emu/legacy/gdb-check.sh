@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# 用 mGBA 的 GDB stub 验证 banim（战斗动画）代码路径被真正走到。
+# [归档] 用 mGBA 的 GDB stub 验证 banim（战斗动画）代码路径被真正走到。
 #
-#   ./tools/emu/gdb-check.sh [ROM]
+#   ./tools/emu/legacy/gdb-check.sh [ROM]
 #
 # 第一章的 debug 事件（src/Debugs/debug-event.c）会在章节开场播放几场剧情战斗，
 # 这里在 BattleAIS_ExecCommands / EfxAdvanceFrameLut 上打断点，确认战斗动画的主循环
@@ -11,8 +11,8 @@
 set -uo pipefail
 
 HERE=$(cd "$(dirname "$0")" && pwd)
-BUILD="$HERE/.build"
-ROOT=$(cd "$HERE/../.." && pwd)
+BUILD="$HERE/../.build"
+ROOT=$(cd "$HERE/../../.." && pwd)
 RUN="$BUILD/gbarun"
 ROM=${1:-$ROOT/fe6re.gba}
 ELF=${ROM%.gba}.elf

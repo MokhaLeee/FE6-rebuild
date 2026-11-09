@@ -69,7 +69,7 @@ git switch -c sync/7927a77
 make clean && make all                      # 确认基线可构建、无新增 warning
 sha1sum fe6re.gba > /tmp/base.sha1          # 改前 ROM 指纹
 cp fe6re.sym /tmp/base.sym 2>/dev/null      # 若产物存在
-./tools/emu/run-tests.sh                    # 全量 5 个用例
+./tools/emu/legacy/run-tests.sh                    # 全量 5 个用例
 ```
 
 ### 批 1 —— 零依赖小模块（约 1h）
@@ -163,7 +163,7 @@ CLEAN_FILES2 += $(patsubst %.pal,%.gbapal,$(wildcard $(PORTRAIT_DIR)/*.pal))
 5. 校验：
    - `make clean && make all` 无新增 warning；
    - 改前/改后 `.sym` 对比：只允许「旧名消失、新名出现」，同名符号地址必须全部不变；
-   - `./tools/emu/run-tests.sh --quick`（每批），提交前跑全量；
+   - `./tools/emu/legacy/run-tests.sh --quick`（每批），提交前跑全量；
 6. 提交信息沿用现有风格：`Rebuild: sync upstream <module> (fe6 #NNN)`；
 7. 每批完成后在 `docs/upstream-sync.md` 的「已同步」表里加一行。
 

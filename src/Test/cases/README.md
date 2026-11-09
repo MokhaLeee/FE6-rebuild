@@ -15,7 +15,7 @@
 5. 在 `include/hacks/test_cases.h` 里加 `TEST_CATEGORY_<DOMAIN>` 和 `TEST_CASE_<DOMAIN>_<CASE>`。
 6. 在 `tools/emu/testmenu-tests.sh` 里加对应脚本 case。
 
-可以参考 `cases/game/` 的实现。
+可以参考 `cases/game/` 和 `cases/save/` 的实现。
 
 ## 约定
 
@@ -29,6 +29,7 @@
 ## 当前状态
 
 - 顶层：`Start Game` / `Test`
-- `Test` 第二层：`Game` / `Back`
+- `Test` 第二层：`Game` / `Save` / `Back`
 - `Game` 第二层：`Chapter 1` / `Back`
+- `Save` 第二层：`Write + Load` / `Back`
 - 其它领域待定

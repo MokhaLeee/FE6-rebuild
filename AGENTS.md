@@ -65,7 +65,7 @@
 - 涉及 ROM 行为的改动，优先用 `tools/emu` 验证：
   - **新入口**：`./tools/emu/testmenu-tests.sh`（debug 构建从 testmenu 启动；
     当前覆盖 testmenu → Start Game → 章节，后续按需求把旧用例逐步迁进来）。
-  - **旧套件**：`./tools/emu/run-tests.sh` 仍假设开机直接到标题，正在迁移；
+  - **旧套件**：`./tools/emu/legacy/run-tests.sh` 仍假设开机直接到标题，正在迁移；
     不要把它当作新测试的默认入口。
   - 首次使用需 `./tools/emu/build.sh`。
 - 只改文档/脚本、不影响 ROM 时，可以说明未跑构建。

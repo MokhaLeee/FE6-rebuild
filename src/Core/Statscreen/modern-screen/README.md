@@ -391,7 +391,7 @@ PNG → `.4bpp` / `.gbapal` / `.lz` 由 Makefile 自动生成，不要提交这�
 ```bash
 ./tools/emu/testmenu-tests.sh
 # 旧套件（迁移中）：
-# ./tools/emu/run-tests.sh --quick
+# ./tools/emu/legacy/run-tests.sh --quick
 ```
 
 ---

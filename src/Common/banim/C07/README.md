@@ -36,7 +36,7 @@
 
 4. **实测确认 C07 路径已经在跑。**
    在第一章 debug 事件触发的剧情战斗里，GDB 断点 `Banim_C07` 命中，
-   调用栈为 `BattleAIS_ExecCommands() -> Banim_C07()`。因此 Phase 1 可以直接用现有 `tools/emu/gdb-check.sh` 扩展验证。
+   调用栈为 `BattleAIS_ExecCommands() -> Banim_C07()`。因此 Phase 1 可以直接用现有 `tools/emu/legacy/gdb-check.sh` 扩展验证。
 
 ---
 
@@ -387,7 +387,7 @@ contents/skillsys/EfxSkillBox/
 ### Phase 0：基线与保护
 
 - [x] 当前 `make all` 通过（已确认）。
-- [x] `./tools/emu/run-tests.sh --quick` 通过（已确认）。
+- [x] `./tools/emu/legacy/run-tests.sh --quick` 通过（已确认）。
 - [x] GDB 确认第一章 debug 战斗命中 `Banim_C07`（已确认）。
 - 保留现有未提交改动：
   - `src/Common/banim/source/banim_main.c` 的 C07 分发；
@@ -430,7 +430,7 @@ contents/skillsys/EfxSkillBox/
 验收：
 
 - `make all` 通过；
-- `./tools/emu/run-tests.sh --quick` 通过；
+- `./tools/emu/legacy/run-tests.sh --quick` 通过；
 - `gdb-check.sh` 增加 `break Banim_C07` / `break NewEkrSkill`，两者命中；
 - 第一章 debug 战斗能正常结束，不会卡在 C07（用 `--frames` / 自动跑图验证）。
 
@@ -452,8 +452,8 @@ contents/skillsys/EfxSkillBox/
 验证结果：
 
 - `make all -j8`：通过；
-- `./tools/emu/run-tests.sh --quick`：4 项全过；
-- `./tools/emu/run-tests.sh`：26 项全过；
+- `./tools/emu/legacy/run-tests.sh --quick`：4 项全过；
+- `./tools/emu/legacy/run-tests.sh`：26 项全过；
 - 30,000 帧 debug 战斗长跑：`DONE`，无 `CRASH`；
 - GDB 断点（第一章 debug 战斗）：
   - `Banim_C07`、`NewEkrSkill`、`C07Handler_End` 均命中；
@@ -608,8 +608,8 @@ contents/skillsys/EfxSkillBox/
 验证结果：
 
 - `make all -j8`：通过；
-- `./tools/emu/run-tests.sh --quick`：4 项全过；
-- `./tools/emu/run-tests.sh`（`CONFIG_DEBUG_EFXSKILL 0`）：26 项全过；
+- `./tools/emu/legacy/run-tests.sh --quick`：4 项全过；
+- `./tools/emu/legacy/run-tests.sh`（`CONFIG_DEBUG_EFXSKILL 0`）：26 项全过；
 - `CONFIG_DEBUG_EFXSKILL 1` 时：
   - GDB 命中 `NewEfxSkill`（sid=9）、`EfxSkillMain` 33 帧、`EfxSkillOnEnd`；
   - `gEkrDebugTimer` 从 45 到 79，动画约 33 帧；
@@ -795,8 +795,8 @@ contents/skillsys/EfxSkillBox/
 验证结果：
 
 - `make all -j8`：通过；
-- `./tools/emu/run-tests.sh --quick`：4 / 4 通过；
-- `./tools/emu/run-tests.sh`：26 / 26 通过；
+- `./tools/emu/legacy/run-tests.sh --quick`：4 / 4 通过；
+- `./tools/emu/legacy/run-tests.sh`：26 / 26 通过；
 - 由于没有注册，正常 ROM 下 GDB 不会命中 `NewEfxSkill`，这是预期行为。
 
 注意：
@@ -811,7 +811,7 @@ contents/skillsys/EfxSkillBox/
 - 确认 `EfxSkkill.c` 命名是否改为 `EfxSkill.c`（当前是拼写错误，但改名会影响 include/构建，
   建议单独一次改动）；
 - 资源整理：`.lz` / `.bin` 是否提交、生成脚本是否放在 `tools/scripts/`；
-- 全量 `./tools/emu/run-tests.sh`；
+- 全量 `./tools/emu/legacy/run-tests.sh`；
 - 手动/截图检查：普通物理、魔法、远程、MISS、暴击、追击、死亡、FARFAR。
 
 ---
@@ -855,13 +855,13 @@ make all -j8
 ```bash
 ./tools/emu/testmenu-tests.sh
 # 旧套件（迁移中）：
-# ./tools/emu/run-tests.sh --quick
-# ./tools/emu/run-tests.sh
+# ./tools/emu/legacy/run-tests.sh --quick
+# ./tools/emu/legacy/run-tests.sh
 ```
 
 ### 6.3 GDB 断点
 
-在 `tools/emu/gdb-check.sh` 里增加：
+在 `tools/emu/legacy/gdb-check.sh` 里增加：
 
 ```gdb
 break Banim_C07

@@ -21,7 +21,7 @@
 | `vanilla/debugtext_img.s` | `debugtext_img.s` | 参考副本 |
 | `vanilla/data/debug_text/Img_DebugFont.4bpp` | `data/debug_text/Img_DebugFont.4bpp` | 参考副本 |
 | `vanilla/data/debug_text/Img_DebugFont.png` | `data/debug_text/Img_DebugFont.png` | 参考副本 |
-| `tools/emu/promo-test-design.md` | `notes/promo-test-design.md` | 历史文档副本 |
+| `tools/emu/legacy/promo-test-design.md` | `notes/promo-test-design.md` | 历史文档副本 |
 
 ## 2. 相关但未复制的文件（按需查阅原路径）
 

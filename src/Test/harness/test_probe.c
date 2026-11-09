@@ -38,4 +38,17 @@ void test_probe_set_state(u8 state)
 	gTestMenuProbe.frame = GetGameTime();
 }
 
+void test_probe_set_value(int index, u32 value)
+{
+	if (index >= 0 && index < 4)
+		gTestMenuProbe.value[index] = value;
+}
+
+void test_probe_finish(bool pass)
+{
+	gTestMenuProbe.state = pass ? TEST_MENU_STATE_CASE_DONE
+				    : TEST_MENU_STATE_CASE_FAILED;
+	gTestMenuProbe.frame = GetGameTime();
+}
+
 #endif /* CONFIG_TEST_MENU */
