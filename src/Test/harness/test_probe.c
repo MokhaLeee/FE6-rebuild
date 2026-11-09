@@ -24,6 +24,7 @@ void test_probe_set_menu(u8 menu, u8 state)
 
 void test_probe_set_case(u8 category, u8 case_id)
 {
+	gTestMenuProbe.menu = TEST_MENU_ID_CASE;
 	gTestMenuProbe.category = category;
 	gTestMenuProbe.case_id = case_id;
 	gTestMenuProbe.step = 0;

@@ -217,7 +217,7 @@ constants/videoalloc_global.h constants/chapters.h constants/faces.h
 | 条目 | 行为 |
 |---|---|
 | `Start Game` | `StartGame()`，之后正常进标题 / 主菜单 / 章节 |
-| `Test` | 打开第二层 `MenuInfo_TestRoot`；目前只有 `Back` |
+| `Test` | 打开第二层 `MenuInfo_TestRoot`（`Game` / `Back`） |
 
 ### 2.1 测试入口
 
@@ -227,6 +227,8 @@ constants/videoalloc_global.h constants/chapters.h constants/faces.h
   选 `Start Game` → 进入章节（`gPlaySt.chapter >= 1`）。
 - case 2：顶层 → `Test` 子菜单 → `Back` → 顶层，探针 `menu` 按
   `TOP → TEST_ROOT → TOP` 变化。
+- case 3：顶层 → `Test` → `Game` → `Chapter 1`，探针 `menu` 按
+  `TEST_ROOT → CATEGORY → CASE` 变化，`category/case_id/chapter` 正确。
 
 旧的 `run-tests.sh` 仍假设开机到标题，正在按需求把用例迁进 `testmenu-tests.sh`。
 

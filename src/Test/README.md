@@ -1,9 +1,9 @@
 # src/Test —— testmenu 与测试项组织方案
 
-> 状态：**Phase 1–4 已实施**（EWRAM 探针、顶层 `Start Game` / `Test`、
-> Test 子菜单、探针测试、`cases/` 目录说明）。Phase 5（按领域加 case、
-> 迁移旧测试）后续按需求继续。
-> 当前顶层是 `Start Game` / `Test`；Test 第二层暂时只有 `Back`。
+> 状态：**Phase 1–4 已实施**，Phase 5 已开始：
+> 已加 `Game` 分类和 `Chapter 1` case。
+> 当前顶层是 `Start Game` / `Test`；Test 第二层有 `Game` / `Back`；
+> Game 第二层有 `Chapter 1` / `Back`。其余领域按需求继续。
 
 ## 1. 目标
 
@@ -87,37 +87,50 @@ static struct MenuEntInfo CONST_DATA test_top_entries[] = {
 
 ### 3.2 第二层：`MenuInfo_TestRoot`
 
-第二层先只放占位，不急着定义分类：
+第二层是测试入口列表，目前有 `Game` / `Back`：
 
 ```c
 static struct MenuEntInfo CONST_DATA test_root_entries[] = {
 	{
+		.label = " Game",
+		.available = MenuEntryEnabled,
+		.on_select = testmenu_test_on_select_game,
+	},
+	{
 		.label = " Back",
 		.available = MenuEntryEnabled,
-		.on_select = testmenu_on_select_back,
+		.on_select = testmenu_test_on_back,
 	},
 	{ 0 }, /* end */
 };
 ```
 
-- `Back` 返回顶层菜单。
-- B 键也返回顶层：通过一个延迟 reopen proc，等当前菜单 proc 结束后再
-  `StartMenu(&MenuInfo_TestTop)`，避免在回调里直接重入菜单。
+- `TestRoot` 的 `Back` / B 返回顶层；`Game` 的 `Back` / B 返回 TestRoot。
+- 返回都通过延迟 reopen proc：等当前菜单 proc 结束后再 `StartMenu`，避免在回调里
+  直接重入菜单。
 - 分类确定后，把 `Back` 前后的位置换成 `Battle` / `Prep` / `Save` / `UI` 等类别入口。
 - 每个子菜单控制在 8–10 项以内：`include/menu.h` 的 `MENU_MAX_ENTRIES = 11`，
   屏幕高度也放不下更多。
 
 ### 3.3 第三层：领域用例
 
-每个领域一个 `MenuInfo_Test<Domain>`，例如：
+当前已实现 `Game` 领域：
 
 ```
-src/Test/cases/battle/
-├── battle_cases.c      # MenuEntInfo_TestBattle[] + 各 case 回调
-└── battle_cases.h      # extern MenuInfo_TestBattle
+src/Test/cases/game/
+├── game_cases.c      # MenuEntInfo_TestGame[] + Chapter 1 回调
+└── game_cases.h      # extern MenuInfo_TestGame
 ```
 
-第二层的 `Battle` 项只负责 `StartMenu(&MenuInfo_TestBattle)`。
+`MenuInfo_TestGame` 目前有：
+
+| 条目 | 行为 |
+|---|---|
+| `Chapter 1` | `test_probe_set_case(TEST_CATEGORY_GAME, TEST_CASE_GAME_CHAPTER_1)`，然后 `test_scene_start_chapter(CHAPTER_1)` |
+| `Back` | 返回 `MenuInfo_TestRoot` |
+
+后续领域照这个模式加 `cases/<domain>/<domain>_cases.c/h`，并在
+`MenuInfo_TestRoot` 里加类别入口。
 
 ### 3.4 mural 滚动 proc
 
@@ -139,14 +152,15 @@ src/Test/cases/battle/
 | 路径 | 职责 |
 |---|---|
 | `src/Test/testmenu/testmenu.c` | `StartGame_TestMenu()`、顶层菜单、Roy/Lilina 头像 |
-| `src/Test/testmenu/testmenu_test.c` | `MenuInfo_TestRoot`、分类入口、返回顶层 |
-| `src/Test/testmenu/testmenu_common.c` | 子菜单打开/关闭、返回顶层、公共 UI |
+| `src/Test/testmenu/testmenu_test.c` | `MenuInfo_TestRoot`、Game 类别入口、返回逻辑 |
 | `include/hacks/testmenu_common.h` | 菜单公共接口 |
 | `src/Test/harness/test_probe.c` | EWRAM 探针定义 |
 | `include/hacks/test_probe.h` | 探针结构体、`gTestMenuProbe`、接口声明 |
-| `src/Test/harness/test_scene.c` | 以后：开章节、放单位、给道具、跳过事件 |
+| `src/Test/harness/test_scene.c` | 场景辅助：`test_scene_start_chapter()` |
 | `include/hacks/test_scene.h` | 场景辅助接口 |
-| `src/Test/cases/<domain>/` | 各领域测试项，本地头文件也放这里 |
+| `include/hacks/test_cases.h` | `TestCategoryId` / `TestCaseId` |
+| `src/Test/cases/game/` | `MenuInfo_TestGame`、Chapter 1 case |
+| `src/Test/cases/<domain>/` | 其它领域测试项，本地头文件也放这里 |
 | `include/hacks/testmenu.h` | testmenu 公开入口 |
 
 ## 5. EWRAM 探针
@@ -168,6 +182,7 @@ enum TestMenuId {
 	TEST_MENU_ID_NONE,
 	TEST_MENU_ID_TOP,
 	TEST_MENU_ID_TEST_ROOT,
+	TEST_MENU_ID_CATEGORY,
 	TEST_MENU_ID_CASE,
 };
 
@@ -211,7 +226,7 @@ extern struct TestMenuProbe EWRAM_DATA gTestMenuProbe;
 | 偏移 | 类型 | 字段 | 用途 |
 |---|---|---|---|
 | `0x00` | `u32` | `magic` | 固定 `0x54535450`，确认探针已初始化 |
-| `0x04` | `u8` | `menu` | 当前菜单：TOP / TEST_ROOT / CASE |
+| `0x04` | `u8` | `menu` | 当前菜单：TOP / TEST_ROOT / CATEGORY / CASE |
 | `0x05` | `u8` | `state` | 菜单或 case 状态 |
 | `0x06` | `u8` | `category` | 领域 id |
 | `0x07` | `u8` | `case_id` | 领域内 case id |
@@ -272,11 +287,12 @@ PROBE frame=200 addr=... width=8  value=<TEST_MENU_STATE_MENU>
 
 ## 6. 测试脚本
 
-当前入口是 `tools/emu/testmenu-tests.sh`，已经覆盖两个 case：
+当前入口是 `tools/emu/testmenu-tests.sh`，已经覆盖三个 case：
 
 ```
 case 1: 开机 → 顶层 testmenu（Roy/Lilina）→ Start Game → 章节
 case 2: 开机 → 顶层 → Test 子菜单 → Back → 顶层
+case 3: 开机 → 顶层 → Test → Game → Chapter 1
 ```
 
 case 1 会断言：
@@ -290,12 +306,16 @@ gPlaySt.chapter >= 1
 ```
 
 case 2 会断言 `menu` 按 `TOP → TEST_ROOT → TOP` 变化，并检查两张脸在
-Test 子菜单里消失、返回顶层后恢复。
+Test 子菜单里消失、返回顶层后恢复，以及子菜单里 BG3 mural 继续滚动。
 
-后续加分类后，case 3 再走：
+case 3 会断言：
 
 ```
-开机 → 顶层 → Test → TestRoot → 某个分类 → 某个 case
+menu:     TEST_ROOT → CATEGORY → CASE
+state:    CASE_RUNNING
+category: TEST_CATEGORY_GAME
+case_id:  TEST_CASE_GAME_CHAPTER_1
+chapter:  >= 1
 ```
 
 脚本目录等 case 超过 5 个再拆：
@@ -324,12 +344,13 @@ tools/emu/
 ## 8. 实施进度
 
 1. ✅ 加 `src/Test/harness/test_probe.c/h`，定义结构体、`gTestMenuProbe` 和 reset。
-2. ✅ 顶层菜单把 `Dummy` 改成 `Test`；新增 `MenuInfo_TestRoot`，先放 `Back`。
+2. ✅ 顶层菜单把 `Dummy` 改成 `Test`；新增 `MenuInfo_TestRoot`。
 3. ✅ `StartGame_TestMenu()` 调 `test_probe_reset()`；各菜单 `on_init` 更新探针。
 4. ✅ 更新 `testmenu-tests.sh`，加入探针断言和 Test 子菜单 case。
-5. ✅ 加 `src/Test/cases/README.md`，说明以后如何按领域加 case（当前不预建分类）。
-6. ⏳ 确定分类后，在 `src/Test/cases/<domain>/` 加领域菜单和 case。
-7. ⏳ 按需求把旧 `run-tests.sh` 的用例迁进 `testmenu-tests.sh`。
+5. ✅ 加 `src/Test/cases/README.md`，说明如何按领域加 case。
+6. ✅ 加 `Game` 分类、`Chapter 1` case 和 `test_scene_start_chapter()`。
+7. ⏳ 继续加其他领域（save / battle / prep / ui / system）。
+8. ⏳ 按需求把旧 `run-tests.sh` 的用例迁进 `testmenu-tests.sh`。
 
 ## 9. 待定
 

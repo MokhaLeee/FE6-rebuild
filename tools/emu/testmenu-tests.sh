@@ -55,7 +55,7 @@ assert_completed() {
 }
 
 echo "== ROM: $ROM"
-echo "== 1/2 testmenu: 开机 → Start Game → 章节"
+echo "== 1/3 testmenu: 开机 → Start Game → 章节"
 
 # gPlaySt.chapter 在 struct PlaySt 的 +0x0E，1 字节有符号。
 # --probe 顺序：1 magic, 2 menu, 3 state, 4 chapter
@@ -108,7 +108,7 @@ else
 	bad "没有进入章节（gPlaySt.chapter=${CHAPTER:-?}）"
 fi
 
-echo "== 2/2 testmenu: 顶层 → Test 子菜单 → Back 返回"
+echo "== 2/3 testmenu: 顶层 → Test 子菜单 → Back 返回"
 
 # --probe 顺序：1 magic, 2 menu, 3 state, 4 BG3 HOFS
 "$RUN" "$ROM" --quiet --frames 1200 \
@@ -150,6 +150,44 @@ if [ -n "$SCROLL_A" ] && [ -n "$SCROLL_B" ] && [ "$SCROLL_B" -gt "$SCROLL_A" ]; 
 	ok "子菜单里 mural 继续滚动（BG3 HOFS $SCROLL_A → $SCROLL_B）"
 else
 	bad "子菜单里 mural 停止滚动（BG3 HOFS ${SCROLL_A:-?} → ${SCROLL_B:-?}）"
+fi
+
+echo "== 3/3 testmenu: 顶层 → Test → Game → Chapter 1"
+
+# --probe 顺序：1 magic, 2 menu, 3 state, 4 category, 5 case_id, 6 chapter
+"$RUN" "$ROM" --quiet --frames 1200 \
+	--sym "$SYM" \
+	--hold 300:DOWN:5 \
+	--hold 400:A:5 \
+	--hold 600:A:5 \
+	--hold 700:A:5 \
+	--probe "gTestMenuProbe+0x00:32" \
+	--probe "gTestMenuProbe+0x04:8" \
+	--probe "gTestMenuProbe+0x05:8" \
+	--probe "gTestMenuProbe+0x06:8" \
+	--probe "gTestMenuProbe+0x07:8" \
+	--probe "gPlaySt+0xE:8" \
+	--stats 200 --stats 500 --stats 650 --stats 900 \
+	--shot 500 --shot 650 --shot 900 \
+	--out "$OUT" >"$OUT/3-game-chapter1.log" 2>&1
+
+assert_completed "$OUT/3-game-chapter1.log" "Game → Chapter 1 流程无崩溃"
+
+ROOT_MENU2=$(probe_n_at "$OUT/3-game-chapter1.log" 500 2)
+GAME_MENU=$(probe_n_at "$OUT/3-game-chapter1.log" 650 2)
+CASE_MENU=$(probe_n_at "$OUT/3-game-chapter1.log" 900 2)
+CASE_STATE=$(probe_n_at "$OUT/3-game-chapter1.log" 900 3)
+CASE_CATEGORY=$(probe_n_at "$OUT/3-game-chapter1.log" 900 4)
+CASE_ID=$(probe_n_at "$OUT/3-game-chapter1.log" 900 5)
+CASE_CHAPTER=$(probe_n_at "$OUT/3-game-chapter1.log" 900 6)
+
+if [ "$ROOT_MENU2" = "2" ] && [ "$GAME_MENU" = "3" ] &&
+   [ "$CASE_MENU" = "4" ] && [ "$CASE_STATE" = "2" ] &&
+   [ "$CASE_CATEGORY" = "1" ] && [ "$CASE_ID" = "1" ] &&
+   [ -n "$CASE_CHAPTER" ] && [ "$CASE_CHAPTER" -ge 1 ]; then
+	ok "Game → Chapter 1 探针正确（menu $ROOT_MENU2 → $GAME_MENU → $CASE_MENU, category=$CASE_CATEGORY, case=$CASE_ID, chapter=$CASE_CHAPTER）"
+else
+	bad "Game → Chapter 1 状态不对（menu=${ROOT_MENU2:-?}/${GAME_MENU:-?}/${CASE_MENU:-?}, state=${CASE_STATE:-?}, category=${CASE_CATEGORY:-?}, case=${CASE_ID:-?}, chapter=${CASE_CHAPTER:-?}）"
 fi
 
 echo

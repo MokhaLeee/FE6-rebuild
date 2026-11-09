@@ -1,6 +1,6 @@
 # src/Test/cases
 
-测试项按领域放这里。**当前不预建分类目录**：等第一个领域确定后，再建
+测试项按领域放这里。第一个领域 `game/` 已经有了；其它领域等确定后再建
 `cases/<domain>/`，避免先造一堆空目录。
 
 ## 添加一个领域
@@ -12,8 +12,10 @@
    - 各 case 回调 `test_<domain>_<case>()`
 3. `<domain>_cases.h` 里声明 `MenuInfo_Test<Domain>`（领域本地头可以放在同目录）。
 4. 在 `src/Test/testmenu/testmenu_test.c` 的 `MenuInfo_TestRoot` 里加一个类别入口。
-5. 给该领域分配 `category` id；领域内 `case_id` 从 1 开始。
+5. 在 `include/hacks/test_cases.h` 里加 `TEST_CATEGORY_<DOMAIN>` 和 `TEST_CASE_<DOMAIN>_<CASE>`。
 6. 在 `tools/emu/testmenu-tests.sh` 里加对应脚本 case。
+
+可以参考 `cases/game/` 的实现。
 
 ## 约定
 
@@ -27,5 +29,6 @@
 ## 当前状态
 
 - 顶层：`Start Game` / `Test`
-- `Test` 第二层：暂时只有 `Back`
-- 第一个领域和分类列表待定
+- `Test` 第二层：`Game` / `Back`
+- `Game` 第二层：`Chapter 1` / `Back`
+- 其它领域待定

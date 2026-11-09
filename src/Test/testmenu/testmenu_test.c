@@ -6,13 +6,23 @@
 #include "test_probe.h"
 #include "testmenu_common.h"
 
+#include "../cases/game/game_cases.h"
+
 #if CONFIG_TEST_MENU
 
 static fu8 testmenu_test_on_init(struct MenuProc *menu);
+static fu8 testmenu_test_on_select_game(struct MenuProc *menu,
+					struct MenuEntProc *ent);
 static fu8 testmenu_test_on_back(struct MenuProc *menu, struct MenuEntProc *ent);
 static void testmenu_test_reopen_top(struct Proc *proc);
+static void testmenu_test_reopen_root(struct Proc *proc);
 
 static struct MenuEntInfo CONST_DATA test_root_entries[] = {
+	{
+		.label = " Game",
+		.available = MenuEntryEnabled,
+		.on_select = testmenu_test_on_select_game,
+	},
 	{
 		.label = " Back",
 		.available = MenuEntryEnabled,
@@ -24,6 +34,12 @@ static struct MenuEntInfo CONST_DATA test_root_entries[] = {
 static struct ProcScr CONST_DATA ProcScr_TestMenuReopen[] = {
 	PROC_WHILE_EXISTS(ProcScr_Menu),
 	PROC_CALL(testmenu_test_reopen_top),
+	PROC_END,
+};
+
+static struct ProcScr CONST_DATA ProcScr_TestMenuReopenRoot[] = {
+	PROC_WHILE_EXISTS(ProcScr_Menu),
+	PROC_CALL(testmenu_test_reopen_root),
 	PROC_END,
 };
 
@@ -41,6 +57,15 @@ static fu8 testmenu_test_on_init(struct MenuProc *menu)
 	return 0;
 }
 
+static fu8 testmenu_test_on_select_game(struct MenuProc *menu,
+					struct MenuEntProc *ent)
+{
+	ClearUi();
+	StartMenu(&MenuInfo_TestGame);
+
+	return MENU_ACTION_NOCURSOR | MENU_ACTION_END | MENU_ACTION_SE_6A;
+}
+
 static fu8 testmenu_test_on_back(struct MenuProc *menu, struct MenuEntProc *ent)
 {
 	SpawnProc(ProcScr_TestMenuReopen, PROC_TREE_3);
@@ -49,10 +74,22 @@ static fu8 testmenu_test_on_back(struct MenuProc *menu, struct MenuEntProc *ent)
 	       MENU_ACTION_SE_6B;
 }
 
+void StartTestMenuTestRoot(void)
+{
+	SpawnProc(ProcScr_TestMenuReopenRoot, PROC_TREE_3);
+}
+
 static void testmenu_test_reopen_top(struct Proc *proc)
 {
 	test_probe_set_menu(TEST_MENU_ID_TOP, TEST_MENU_STATE_MENU);
 	StartTestMenuTop();
+}
+
+static void testmenu_test_reopen_root(struct Proc *proc)
+{
+	test_probe_set_menu(TEST_MENU_ID_TEST_ROOT, TEST_MENU_STATE_MENU);
+	ClearUi();
+	StartMenu(&MenuInfo_TestRoot);
 }
 
 #endif /* CONFIG_TEST_MENU */
