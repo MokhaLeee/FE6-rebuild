@@ -13,6 +13,7 @@
 
 #include "constants/faces.h"
 
+#include "test_probe.h"
 #include "testmenu.h"
 
 #if CONFIG_TEST_MENU
@@ -54,6 +55,8 @@ static fu8 testmenu_on_init(struct MenuProc *menu)
 	int left_disp = FACE_DISP_KIND(FACE_96x80_FLIPPED) | FACE_DISP_HLAYER(4);
 	int right_disp = FACE_DISP_KIND(FACE_96x80) | FACE_DISP_HLAYER(4);
 
+	test_probe_set_menu(TEST_MENU_ID_TOP, TEST_MENU_STATE_MENU);
+
 	StartFace(0, FID_ROY, 32, 80, left_disp);
 	StartFace(1, FID_LILINA, DISPLAY_WIDTH - 32, 80, right_disp);
 
@@ -62,6 +65,8 @@ static fu8 testmenu_on_init(struct MenuProc *menu)
 
 static fu8 testmenu_on_end(struct MenuProc *menu)
 {
+	test_probe_set_menu(TEST_MENU_ID_NONE, TEST_MENU_STATE_NONE);
+
 	EndFaceById(0);
 	EndFaceById(1);
 
@@ -74,6 +79,7 @@ static fu8 testmenu_on_end(struct MenuProc *menu)
 static fu8 testmenu_on_select_start_game(struct MenuProc *menu,
 					 struct MenuEntProc *ent)
 {
+	test_probe_set_menu(TEST_MENU_ID_NONE, TEST_MENU_STATE_NONE);
 	StartGame();
 
 	return MENU_ACTION_NOCURSOR | MENU_ACTION_END | MENU_ACTION_SE_6A;
@@ -90,6 +96,8 @@ void StartGame_TestMenu(void)
 {
 	SetMainFunc(OnMain);
 	SetOnVBlank(OnVBlank);
+
+	test_probe_reset();
 
 	InitBmDisplay();
 	DebugInitBg(BG_2, 0);
