@@ -6,7 +6,7 @@ case_03_game_chapter1() {
 	local root_menu game_menu case_menu case_state
 	local case_category case_id case_chapter
 
-	echo "== 3/4 testmenu: 顶层 → Test → Game → Chapter 1"
+	echo "== 3/6 testmenu: 顶层 → Test → Game → Chapter 1"
 
 	# --probe 顺序：1 magic, 2 menu, 3 state, 4 category, 5 case_id, 6 chapter
 	"$RUN" "$ROM" --quiet --frames 1200 \

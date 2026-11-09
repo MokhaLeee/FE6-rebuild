@@ -44,6 +44,11 @@ void test_probe_set_value(int index, u32 value)
 		gTestMenuProbe.value[index] = value;
 }
 
+void test_probe_set_flags(u16 flags)
+{
+	gTestMenuProbe.flags = flags;
+}
+
 void test_probe_finish(bool pass)
 {
 	gTestMenuProbe.state = pass ? TEST_MENU_STATE_CASE_DONE

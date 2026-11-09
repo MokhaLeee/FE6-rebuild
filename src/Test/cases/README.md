@@ -29,7 +29,8 @@
 ## 当前状态
 
 - 顶层：`Start Game` / `Test`
-- `Test` 第二层：`Game` / `Save` / `Back`
+- `Test` 第二层：`Game` / `Save` / `Battle` / `Back`
 - `Game` 第二层：`Chapter 1` / `Back`
-- `Save` 第二层：`Write + Load` / `Back`
+- `Save` 第二层：`Write + Load` / `Write` / `Load` / `Back`
+- `Battle` 第二层：`Test Battle` / `Back`
 - 其它领域待定

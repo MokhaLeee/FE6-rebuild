@@ -2,9 +2,9 @@
 
 > 状态：**Phase 1–4 已实施**，Phase 5 已开始：
 > 已加 `Game` / `Save` 分类，以及 `Chapter 1`、`Write + Load` case。
-> 当前顶层是 `Start Game` / `Test`；Test 第二层有 `Game` / `Save` / `Back`；
-> Game 第二层有 `Chapter 1` / `Back`；Save 第二层有 `Write + Load` / `Back`。
-> 其余领域按需求继续。
+> 当前顶层是 `Start Game` / `Test`；Test 第二层有 `Game` / `Save` / `Battle` / `Back`；
+> Game 第二层有 `Chapter 1` / `Back`；Save 第二层有 `Write + Load` / `Write` /
+> `Load` / `Back`；Battle 第二层有 `Test Battle` / `Back`。其余领域按需求继续。
 
 ## 1. 目标
 
@@ -27,10 +27,12 @@ src/Test/
 │   └── testmenu_common.c         # 打开子菜单/返回顶层等公共逻辑
 ├── harness/                      # 测试基础设施
 │   ├── test_probe.c              # EWRAM 探针定义
-│   └── test_scene.c              # 以后：开章节、放单位、给道具
-├── cases/                        # 测试项（以后按领域分）
+│   └── test_scene.c              # 开章节、写/读章节存档
+├── fixtures/                     # test-only 章节事件/单位
+│   └── test-chapter.c            # ChapterEventInfo_TestBattle
+├── cases/                        # 测试项，按领域分
 │   ├── game/                     # 开始游戏、跳章、跳过事件
-│   ├── battle/                   # 战斗、banim、技能、必杀
+│   ├── battle/                   # 战斗、banim
 │   ├── prep/                     # 准备画面、部署、物品
 │   ├── save/                     # 存档、读档、中断
 │   ├── ui/                       # statscreen、helpbox、菜单、字体
@@ -42,7 +44,8 @@ include/hacks/
 ├── testmenu.h                    # testmenu 公开入口
 ├── testmenu_common.h             # 菜单公共接口
 ├── test_probe.h                  # 探针结构体与 gTestMenuProbe
-└── test_scene.h                  # 场景辅助接口
+├── test_scene.h                  # 场景辅助接口
+└── test_chapter.h                # test-only 章节事件 override
 ```
 
 原则：
@@ -115,7 +118,7 @@ static struct MenuEntInfo CONST_DATA test_root_entries[] = {
 
 ### 3.3 第三层：领域用例
 
-当前已实现 `Game` 和 `Save` 领域：
+当前已实现 `Game`、`Save`、`Battle` 领域：
 
 ```
 src/Test/cases/game/
@@ -123,8 +126,12 @@ src/Test/cases/game/
 └── game_cases.h
 
 src/Test/cases/save/
-├── save_cases.c      # MenuEntInfo_TestSave[] + Write + Load 回调
+├── save_cases.c      # MenuEntInfo_TestSave[] + Write/Load 回调
 └── save_cases.h
+
+src/Test/cases/battle/
+├── battle_cases.c    # MenuEntInfo_TestBattle[] + Test Battle 回调
+└── battle_cases.h
 ```
 
 `MenuInfo_TestGame` 目前有：
@@ -138,13 +145,39 @@ src/Test/cases/save/
 
 | 条目 | 行为 |
 |---|---|
-| `Write + Load` | 写 `SAVE_GAME0`（chapter 1，turn=7）；`IsSaveValid()` + `ReadGameSavePlaySt()` 校验；清 RAM 后 `ReadGameSave()` 确认 turn 哨兵恢复；最后 `RestartGameAndChapter()` |
+| `Write + Load` | 写 `SAVE_GAME0`（chapter 1，turn=7，Roy level/exp/item 哨兵）；`IsSaveValid()` + `ReadGameSavePlaySt()` 校验；清 RAM 后 `ReadGameSave()` 确认 turn 和单位哨兵恢复；最后 `RestartGameAndChapter()` |
+| `Write` | 写 `SAVE_GAME0` 并校验 checksum/playstate，留在 Save 菜单，供跨进程测试导出 `.sav` |
+| `Load` | `ReadGameSave(SAVE_GAME0)`，校验 turn + 单位哨兵，然后重启章节；供第二次进程读回 |
+| `Back` | 返回 `MenuInfo_TestRoot` |
+
+`MenuInfo_TestBattle` 目前有：
+
+| 条目 | 行为 |
+|---|---|
+| `Test Battle` | 通过 `test_chapter_set_event()` 把第一章事件临时替换为 `ChapterEventInfo_TestBattle`，然后启动 `CHAPTER_1`；只影响 testmenu |
 | `Back` | 返回 `MenuInfo_TestRoot` |
 
 后续领域照这个模式加 `cases/<domain>/<domain>_cases.c/h`，并在
 `MenuInfo_TestRoot` 里加类别入口。
 
-### 3.4 mural 滚动 proc
+### 3.4 test chapter / event override
+
+Battle 测试不使用正常第一章事件，也不新增 chapter id，而是：
+
+- `GetChapterEventInfo()` 在 `CONFIG_TEST_MENU` 下检查 `gTestChapterEventInfo`；
+- `test_chapter_set_event(&ChapterEventInfo_TestBattle)` 后启动 `CHAPTER_1`；
+- 地图/资产复用第一章，单位/事件来自
+  `src/Test/fixtures/test-chapter.c`；
+- 正常 `Start Game` / `Game` / `Save` 路径会 `test_chapter_clear_event()`。
+
+因此：
+
+- `src/Debugs/debug-event.c` 的第一章可以自由改，不影响 Battle 测试；
+- `ChapterEventInfo_TestBattle` 只在 testmenu 里生效，不会出现在正常游玩；
+- 新增测试场景时，在 `fixtures/` 加新的 `ChapterEventInfo`，用
+  `test_scene_start_chapter_with_event()` 启动即可。
+
+### 3.5 mural 滚动 proc
 
 `StartMuralBackground()` 会 `SpawnProc(ProcScr_BackgroundSlide, parent)`。
 如果 parent 是顶层菜单 proc，打开 Test 子菜单时顶层菜单 `EndMenu` 会把这个
@@ -154,8 +187,8 @@ src/Test/cases/save/
 
 - 用 `PROC_TREE_3` 作为 parent 启动 mural，让滚动 proc 独立于菜单 proc；
 - 所有“离开 testmenu 进入游戏”的路径（`Start Game`、`Chapter 1`、
-  `Write + Load`）都先 `EndMuralBackground()`；
-- `Game` / `Save` 这类走 `RestartGameAndChapter()` 的路径统一调用
+  `Test Battle`、`Write + Load`）都先 `EndMuralBackground()`；
+- `Game` / `Save` / `Battle` 这类走 `RestartGameAndChapter()` 的路径统一调用
   `test_scene_restart_game_and_chapter()`，不要直接调 `RestartGameAndChapter()`；
 - 子菜单切换不要结束/重启 mural；返回顶层时它仍在跑。
 
@@ -168,15 +201,19 @@ BG3 HOFS 在 900/1000 帧保持不变（滚动 proc 已停）。
 | 路径 | 职责 |
 |---|---|
 | `src/Test/testmenu/testmenu.c` | `StartGame_TestMenu()`、顶层菜单、Roy/Lilina 头像 |
-| `src/Test/testmenu/testmenu_test.c` | `MenuInfo_TestRoot`、Game/Save 类别入口、返回逻辑 |
+| `src/Test/testmenu/testmenu_test.c` | `MenuInfo_TestRoot`、Game/Save/Battle 类别入口、返回逻辑 |
 | `include/hacks/testmenu_common.h` | 菜单公共接口 |
 | `src/Test/harness/test_probe.c` | EWRAM 探针定义 |
 | `include/hacks/test_probe.h` | 探针结构体、`gTestMenuProbe`、接口声明 |
-| `src/Test/harness/test_scene.c` | 场景辅助：开章节、写/读章节存档 |
+| `src/Test/harness/test_scene.c` | 场景辅助：开章节、写/读章节存档、test event 启动 |
 | `include/hacks/test_scene.h` | 场景辅助接口 |
+| `src/Test/fixtures/test-chapter.c` | test-only `ChapterEventInfo_TestBattle`、单位和事件脚本 |
+| `include/hacks/test_chapter.h` | `test_chapter_set_event()` / `test_chapter_clear_event()` |
+| `vanilla/chapterinfo.c` | `GetChapterEventInfo()` 的 `CONFIG_TEST_MENU` override hook |
 | `include/hacks/test_cases.h` | `TestCategoryId` / `TestCaseId` |
 | `src/Test/cases/game/` | `MenuInfo_TestGame`、Chapter 1 case |
-| `src/Test/cases/save/` | `MenuInfo_TestSave`、Write + Load case |
+| `src/Test/cases/save/` | `MenuInfo_TestSave`、Write/Load case |
+| `src/Test/cases/battle/` | `MenuInfo_TestBattle`、Test Battle case |
 | `src/Test/cases/<domain>/` | 其它领域测试项，本地头文件也放这里 |
 | `include/hacks/testmenu.h` | testmenu 公开入口 |
 
@@ -306,13 +343,15 @@ PROBE frame=200 addr=... width=8  value=<TEST_MENU_STATE_MENU>
 
 ## 6. 测试脚本
 
-当前入口是 `tools/emu/testmenu-tests.sh`，已经覆盖四个 case：
+当前入口是 `tools/emu/testmenu-tests.sh`，已经覆盖六个 case：
 
 ```
 case 1: 开机 → 顶层 testmenu（Roy/Lilina）→ Start Game → 章节
 case 2: 开机 → 顶层 → Test 子菜单 → Back → 顶层
 case 3: 开机 → 顶层 → Test → Game → Chapter 1
 case 4: 开机 → 顶层 → Test → Save → Write + Load
+case 5: 跨进程：Write + --save-out → 重启 --sav → Load
+case 6: 顶层 → Test → Battle → Test Battle，GDB 检查 banim
 ```
 
 case 1 会断言：
@@ -346,9 +385,26 @@ value[0]: IsSaveValid() = 1（magic + checksum 通过）
 value[1]: 盘上 chapter = 1
 value[2]: 盘上 turn = 7
 value[3]: 清 RAM 后重新加载的 turn = 7
+flags:    7（Roy level/exp/item 三项哨兵都恢复）
 chapter:  1
 sram:     32768 bytes
 BG3 HOFS: 900/1000 帧相同（mural 滚动已停）
+```
+
+case 5 会断言：
+
+```
+run 1: Write + --save-out
+run 2: --sav 启动 → Load
+flags:  7（单位哨兵）
+chapter: 1
+```
+
+case 6 会断言：
+
+```
+GDB 命中 BattleAIS_ExecCommands
+GDB 命中 EfxAdvanceFrameLut
 ```
 
 脚本已经分层：
@@ -363,14 +419,16 @@ tools/emu/
 │       ├── 01-start-game.sh
 │       ├── 02-test-root.sh
 │       ├── 03-game-chapter1.sh
-│       └── 04-save-write-load.sh
+│       ├── 04-save-write-load.sh
+│       ├── 05-save-cross-run.sh
+│       └── 06-battle-banim.sh
 └── legacy/                    # 旧 run-tests.sh / gdb-check.sh / 文档
 ```
 
 ```bash
 ./tools/emu/testmenu-tests.sh             # 全部
 ./tools/emu/testmenu-tests.sh --list      # 列出 case
-./tools/emu/testmenu-tests.sh --case 4    # 只跑 case 4
+./tools/emu/testmenu-tests.sh --case 6    # 只跑 case 6
 ./tools/emu/testmenu-tests.sh --clean     # 清输出
 ```
 
@@ -393,8 +451,10 @@ tools/emu/
 5. ✅ 加 `src/Test/cases/README.md`，说明如何按领域加 case。
 6. ✅ 加 `Game` 分类、`Chapter 1` case 和 `test_scene_start_chapter()`。
 7. ✅ 加 `Save` 分类和 `Write + Load` case（`test_scene_write/load_chapter_save()`）。
-8. ⏳ 继续加其他领域（battle / prep / ui / system）。
-9. ⏳ 按需求把旧 `run-tests.sh` 的用例迁进 `testmenu-tests.sh`。
+8. ✅ Save 增加单位哨兵（level/exp/item）和跨进程 `Write` / `Load` case。
+9. ✅ 加 `Battle` 分类和 `Test Battle` case，GDB 检查 banim 断点。
+10. ⏳ 继续加其他领域（prep / ui / system）。
+11. ⏳ 按需求把旧 `run-tests.sh` 的用例迁进 `testmenu-tests.sh`。
 
 ## 9. 待定
 

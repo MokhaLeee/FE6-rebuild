@@ -217,7 +217,7 @@ constants/videoalloc_global.h constants/chapters.h constants/faces.h
 | 条目 | 行为 |
 |---|---|
 | `Start Game` | `StartGame()`，之后正常进标题 / 主菜单 / 章节 |
-| `Test` | 打开第二层 `MenuInfo_TestRoot`（`Game` / `Save` / `Back`） |
+| `Test` | 打开第二层 `MenuInfo_TestRoot`（`Game` / `Save` / `Battle` / `Back`） |
 
 ### 2.1 测试入口
 
@@ -232,6 +232,10 @@ constants/videoalloc_global.h constants/chapters.h constants/faces.h
 - case 4：顶层 → `Test` → `Save` → `Write + Load`，`IsSaveValid()` 校验
   magic+checksum，读回盘上 chapter=1/turn=7，清 RAM 后重新加载 turn=7，
   再进入章节，并导出 32KB SRAM；同时确认 BG3 滚动已停。
+- case 5：第一次运行 `Write` + `--save-out`，第二次 `--sav` 启动后 `Load`，
+  验证单位 level/exp/item 哨兵和章节跨进程恢复。
+- case 6：顶层 → `Test` → `Battle` → `Test Battle`，GDB 命中
+  `BattleAIS_ExecCommands` / `EfxAdvanceFrameLut`。
 
 旧的 `legacy/run-tests.sh` 仍假设开机到标题，正在按需求把用例迁进 `testmenu-tests.sh`。
 

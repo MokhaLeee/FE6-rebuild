@@ -14,7 +14,9 @@ tools/emu/
 │   │   ├── 01-start-game.sh
 │   │   ├── 02-test-root.sh
 │   │   ├── 03-game-chapter1.sh
-│   │   └── 04-save-write-load.sh
+│   │   ├── 04-save-write-load.sh
+│   │   ├── 05-save-cross-run.sh
+│   │   └── 06-battle-banim.sh
 │   └── README.md              # 本文件
 └── legacy/                    # 旧 run-tests.sh / gdb-check.sh / 文档
 ```

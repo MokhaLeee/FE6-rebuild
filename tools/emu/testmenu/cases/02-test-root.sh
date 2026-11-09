@@ -6,7 +6,7 @@ case_02_test_root() {
 	local top_colors root_colors back_colors
 	local top_menu root_menu back_menu root_state scroll_a scroll_b
 
-	echo "== 2/4 testmenu: 顶层 → Test 子菜单 → Back 返回"
+	echo "== 2/6 testmenu: 顶层 → Test 子菜单 → Back 返回"
 
 	# --probe 顺序：1 magic, 2 menu, 3 state, 4 BG3 HOFS
 	"$RUN" "$ROM" --quiet --frames 1200 \

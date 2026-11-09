@@ -5,6 +5,10 @@
 #include "save_xmap.h"
 #include "gbasram.h"
 
+#if CONFIG_TEST_MENU
+extern struct ChapterEventInfo const *gTestChapterEventInfo;
+#endif
+
 struct ChapterInfo const * GetChapterInfo(int chapter)
 {
 	if (chapter < 0)
@@ -31,6 +35,11 @@ struct MapChangeInfo const * GetChapterMapChanges(int chapter)
 
 struct ChapterEventInfo const * GetChapterEventInfo(int chapter)
 {
+#if CONFIG_TEST_MENU
+	if (gTestChapterEventInfo != NULL)
+		return gTestChapterEventInfo;
+#endif
+
 	if (chapter >= 0)
 		return gpChapterAssets[GetChapterInfo(chapter)->asset_event_info];
 

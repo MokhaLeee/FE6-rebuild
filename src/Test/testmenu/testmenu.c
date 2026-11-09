@@ -14,6 +14,7 @@
 #include "constants/faces.h"
 
 #include "test_probe.h"
+#include "test_chapter.h"
 #include "testmenu_common.h"
 #include "testmenu.h"
 
@@ -81,8 +82,9 @@ void StartTestMenuTop(void)
 static fu8 testmenu_on_select_start_game(struct MenuProc *menu,
 					 struct MenuEntProc *ent)
 {
-	/* The mural proc is a root proc; stop it before the game controller takes over. */
+	/* Stop the root mural proc before the game controller takes over. */
 	EndMuralBackground();
+	test_chapter_clear_event();
 	test_probe_set_menu(TEST_MENU_ID_NONE, TEST_MENU_STATE_NONE);
 	StartGame();
 

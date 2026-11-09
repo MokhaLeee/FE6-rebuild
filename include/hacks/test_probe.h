@@ -43,6 +43,7 @@ void test_probe_set_menu(u8 menu, u8 state);
 void test_probe_set_case(u8 category, u8 case_id);
 void test_probe_set_state(u8 state);
 void test_probe_set_value(int index, u32 value);
+void test_probe_set_flags(u16 flags);
 void test_probe_finish(bool pass);
 
 #endif /* CONFIG_TEST_MENU */
