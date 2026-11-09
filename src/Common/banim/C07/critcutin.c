@@ -9,12 +9,6 @@
 
 #include "constants/videoalloc_banim.h"
 
-/**
- * Jester-style critical cut-in:
- * a horizontal electric band across the middle of the screen, with the
- * attacker's portrait over it. Started from C07 after the skill box.
- */
-
 extern u16 const Img_CritCutinOpen0[];
 extern u16 const Img_CritCutinOpen1[];
 extern u16 const Img_CritCutinOpen2[];
@@ -59,8 +53,6 @@ struct ProcCritCutin {
 	int clock;
 	u16 hidden_anims;
 	u16 face_pal[0x10];
-	u8 face_slot;
-	u16 old_face_palid;
 };
 
 /* open0..2, loop0..5 x4, close0..1; each frame lasts 2 ticks. */
@@ -145,17 +137,10 @@ static void CritCutin_ShowAnims(struct ProcCritCutin *proc)
 
 static void CritCutin_StartFace(struct ProcCritCutin *proc)
 {
-	int slot, disp, x, fid;
+	int disp, x, fid;
 
 	fid = CritCutinPortrait(proc->anim);
 	if (!fid)
-		return;
-
-	for (slot = 0; slot < FACE_SLOT_COUNT; slot++)
-		if (!gFaces[slot])
-			break;
-
-	if (slot == FACE_SLOT_COUNT)
 		return;
 
 	x = proc->anim->xPosition;
@@ -173,12 +158,12 @@ static void CritCutin_StartFace(struct ProcCritCutin *proc)
 	if (x > 184)
 		x = 184;
 
-	proc->face_slot = slot;
-	proc->old_face_palid = gFaceConfig[slot].palid;
-	gFaceConfig[slot].palid = OBPAL_EFX_FACE;
-	proc->face = StartFace(slot, fid, x, 15, disp);
+	/* The level-up face config places the face at OBJ VRAM base 0x06010000
+	   with palette 0xF, away from the unit animation regions. */
+	SetFaceConfig(FaceConfig_EkrLevelup);
+	proc->face = StartFace(0, fid, x, 15, disp);
 	if (!proc->face)
-		gFaceConfig[slot].palid = proc->old_face_palid;
+		SetFaceConfig(NULL);
 }
 
 static void CritCutin_OnInit(struct ProcCritCutin *proc)
@@ -193,7 +178,7 @@ static void CritCutin_OnInit(struct ProcCritCutin *proc)
 	CritCutin_HideAnims(proc);
 
 	CpuCopy16(
-		gPal + 0x100 + 0x10 * OBPAL_EFX_FACE,
+		gPal + 0x100 + 0x10 * FaceConfig_EkrLevelup[0].palid,
 		proc->face_pal,
 		sizeof(proc->face_pal));
 
@@ -238,12 +223,12 @@ static void CritCutin_OnEnd(struct ProcCritCutin *proc)
 {
 	if (proc->face) {
 		EndFace(proc->face);
-		gFaceConfig[proc->face_slot].palid = proc->old_face_palid;
+		SetFaceConfig(NULL);
 	}
 
 	CpuCopy16(
 		proc->face_pal,
-		gPal + 0x100 + 0x10 * OBPAL_EFX_FACE,
+		gPal + 0x100 + 0x10 * FaceConfig_EkrLevelup[0].palid,
 		sizeof(proc->face_pal));
 	EnablePalSync();
 

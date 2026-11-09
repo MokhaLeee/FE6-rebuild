@@ -121,23 +121,32 @@ gamedata/skill-sys/CritCutin.S
 - x 以攻击者 `anim->xPosition` 为基准，向攻击者一侧偏 8；
 - 左侧 `FACE_DISP_FLIPPED`；
 - x clamp 在 `56..184`，y = 15；
-- 找第一个空闲 `gFaces[]` slot；
-- 启动前把 `gFaceConfig[slot].palid` 临时改成 `OBPAL_EFX_FACE`（OBJ3）；
-- `StartFace()` 结束后在 `OnEnd` 恢复原 palid。
+- 使用和升级界面相同的 face 配置：
 
-### 为什么不能用默认 OBJ6
+```c
+SetFaceConfig(FaceConfig_EkrLevelup);
+proc->face = StartFace(0, fid, x, 15,
+    FACE_DISP_KIND(FACE_96x80) | FACE_DISP_HLAYER(FACE_HLAYER_0));
+```
 
-FE6 `DefaultFaceConfig[0].palid = OBPAL_FACE_DEFAULT0 = 6`。
+`FaceConfig_EkrLevelup[0]` 是：
 
-如果不改：
+```c
+{ chr_off = 0, palid = 0xF }
+```
 
-- `StartFace()` 会把头像 palette 写到 OBJ6；
-- FE6 右侧 HIT/DMG/CRT 面板正好用 OBJ6；
-- 右侧 HIT 面板颜色/背景会被头像 palette 污染，看起来像位置异常。
+所以头像放在 OBJ VRAM 起始的 `0x06010000`，用 OBJ palette 15；
+这个区域避开了单位动画使用的 `0x06014000` / `0x06016000`，
+也不会碰左右 HIT 面板使用的 OBJ5/OBJ6。
 
-也试过 OBJ5：左侧 HIT 面板会花。
+结束后：
 
-所以 cut-in 头像固定用 `OBPAL_EFX_FACE = 3`，并备份/恢复它；OBJ5/OBJ6 留给左右 HUD。
+```c
+EndFace(proc->face);
+SetFaceConfig(NULL);
+```
+
+并备份/恢复 OBJ15 的 palette。
 
 ## 5. 配置
 
