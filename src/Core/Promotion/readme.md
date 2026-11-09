@@ -18,11 +18,17 @@ tree3
    - A：`handler->jid_promo = choices[idx]`，置 `ending` 并 break `PromoMain`；
    - B：`handler->action_type = PROMO_ACT_CANCEL`，同样置 `ending` 并 break `PromoMain`。
    两种情况下 `PromoSel` 都**不立刻结束**，而是继续绘制到父进程淡出完成。
-4. 淡出黑屏后 `PromoMain_End` 结束 `PromoSel`/`PromoEkrFx`：
-   - 转职：保持黑场，`PromoMain_AfterEnd` 只解锁 BM display 并用 `InitBmDisplay`
-     重建地图图块；handler 的 `PromoHandle_ExecAnim` 再
+4. 淡出黑屏后 `PromoMain_End` 结束 `PromoSel`/`PromoEkrFx`；`PromoMain_AfterEnd`
+   解锁 BM display、`InitBmDisplay` 重建地图图块，并 `StartFastFadeFromBlack`
+   让地图从黑色淡入：
+   - 转职：地图淡入结束后 handler 的 `PromoHandle_ExecAnim` 再
      `UnitUpdateUsedItem()` + `StartUnitPromotionAction(unit, jid_promo, item)`；
-   - 取消：`UnlockBmDisplay` + `InitBmDisplay` 后淡入地图，不消耗道具、不转职。
+     如果新职业用不了当前装备武器（例如 Mage 拿 Fire 转 Hero/General），
+     `StartUnitPromotionAction()` 会把 `gBattleUnitA.weapon` 换成新职业的代表武器
+     （`ArenaGetJobWeaponKind()` + `Promo_GetRepresentativeWeapon()`）再进 banim，
+     否则 `GetBattleAnimationId()` 返回 -1、`_SetupBanim()` 判失败，转职动画会被
+     地图动画替代；
+   - 取消：地图淡入后不消耗道具、不转职。
 
 ## 候选职业表
 

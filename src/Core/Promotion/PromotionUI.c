@@ -141,7 +141,8 @@ static int Promo_GetPreviewBid(struct Unit *unit, int jid)
 {
 	struct Unit tmp;
 	struct JInfo const *jinfo = GetJInfo(jid);
-	int kind, item, bid;
+	int kind, item;
+	i16 bid;
 
 	if (jinfo == NULL)
 		return -1;
@@ -1438,6 +1439,9 @@ void StartBmDemoPromotion(struct Unit *unit, int item_slot)
 
 void StartUnitPromotionAction(struct Unit *unit, int promo_jid, int weapon_handle)
 {
+	i16 bid;
+	int kind;
+
 	gBattleUnitA.weapon_before = weapon_handle;
 	gBattleUnitB.weapon_before = gBattleUnitA.weapon_before;
 
@@ -1450,6 +1454,29 @@ void StartUnitPromotionAction(struct Unit *unit, int promo_jid, int weapon_handl
 
 	/* post-promote battle unit */
 	InitBattleUnitWithoutBonuses(&gBattleUnitA, unit);
+
+	/*
+	 * The class-change animation is picked from the equipped weapon. If
+	 * the promoted class cannot use it (e.g. a Mage holding a Fire tome
+	 * promoting to Hero/General), _SetupBanim() rejects the animation and
+	 * the game falls back to the map animation. Use a representative
+	 * weapon of the new class for the animation instead.
+	 */
+	if (unit->jinfo->banim_info != NULL) {
+		bid = GetBattleAnimationId(&gBattleUnitA.unit,
+		                           unit->jinfo->banim_info,
+		                           gBattleUnitA.weapon);
+
+		if (bid < 0) {
+			kind = ArenaGetJobWeaponKind(unit->jinfo);
+
+			if (kind < 0)
+				kind = ITEM_KIND_STAFF;
+
+			gBattleUnitA.weapon = Promo_GetRepresentativeWeapon(kind);
+		}
+	}
+
 	GenerateBattleUnitStatGainsComparatively(&gBattleUnitA, &gBattleUnitB.unit);
 
 	SetBattleUnitTerrainBonusesAuto(&gBattleUnitA);
@@ -1465,9 +1492,3 @@ void StartUnitPromotionAction(struct Unit *unit, int promo_jid, int weapon_handl
 
 	BeginBattleAnimations();
 }
-
-
-
-
-
-
