@@ -14,6 +14,7 @@
 #include "constants/faces.h"
 
 #include "test_probe.h"
+#include "testmenu_common.h"
 #include "testmenu.h"
 
 #if CONFIG_TEST_MENU
@@ -26,8 +27,8 @@ static fu8 testmenu_on_init(struct MenuProc *menu);
 static fu8 testmenu_on_end(struct MenuProc *menu);
 static fu8 testmenu_on_select_start_game(struct MenuProc *menu,
 					 struct MenuEntProc *ent);
-static fu8 testmenu_on_select_dummy(struct MenuProc *menu,
-				    struct MenuEntProc *ent);
+static fu8 testmenu_on_select_test(struct MenuProc *menu,
+				   struct MenuEntProc *ent);
 
 static struct MenuEntInfo CONST_DATA test_menu_entries[] = {
 	{
@@ -36,9 +37,9 @@ static struct MenuEntInfo CONST_DATA test_menu_entries[] = {
 		.on_select = testmenu_on_select_start_game,
 	},
 	{
-		.label = " Dummy",
+		.label = " Test",
 		.available = MenuEntryEnabled,
-		.on_select = testmenu_on_select_dummy,
+		.on_select = testmenu_on_select_test,
 	},
 	{ 0 }, /* end */
 };
@@ -65,15 +66,16 @@ static fu8 testmenu_on_init(struct MenuProc *menu)
 
 static fu8 testmenu_on_end(struct MenuProc *menu)
 {
-	test_probe_set_menu(TEST_MENU_ID_NONE, TEST_MENU_STATE_NONE);
-
 	EndFaceById(0);
 	EndFaceById(1);
 
-	SetDispEnable(0, 0, 0, 0, 0);
-	SetBackdropColor(0);
-
 	return 0;
+}
+
+void StartTestMenuTop(void)
+{
+	ClearUi();
+	StartMenu(&test_menu_info);
 }
 
 static fu8 testmenu_on_select_start_game(struct MenuProc *menu,
@@ -85,11 +87,13 @@ static fu8 testmenu_on_select_start_game(struct MenuProc *menu,
 	return MENU_ACTION_NOCURSOR | MENU_ACTION_END | MENU_ACTION_SE_6A;
 }
 
-static fu8 testmenu_on_select_dummy(struct MenuProc *menu,
-				    struct MenuEntProc *ent)
+static fu8 testmenu_on_select_test(struct MenuProc *menu,
+				   struct MenuEntProc *ent)
 {
-	/* TODO: replace with the next test menu entry. */
-	return 0;
+	ClearUi();
+	StartMenu(&MenuInfo_TestRoot);
+
+	return MENU_ACTION_NOCURSOR | MENU_ACTION_END | MENU_ACTION_SE_6A;
 }
 
 void StartGame_TestMenu(void)
