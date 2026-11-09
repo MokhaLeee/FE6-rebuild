@@ -6,7 +6,7 @@
 
 #if CONFIG_TEST_MENU
 
-struct TestMenuProbe EWRAM_DATA gTestMenuProbe = {};
+struct TestMenuProbe EWRAM_DATA gTestMenuProbe;
 
 void test_probe_reset(void)
 {
