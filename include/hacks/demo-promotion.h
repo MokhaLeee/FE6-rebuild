@@ -105,6 +105,9 @@ struct ProcPromoSel {
 	u8 title_hidden;
 	u8 title_glyph_count;
 	u8 title_start_x;
+	/* Selection confirmed/cancelled: keep drawing the UI while the parent
+	   fades the screen out, but ignore further input. */
+	u8 ending;
 	u8 choices[PROMO_CHOICE_MAX];
 	struct PromoTitleGlyph title_glyphs[PROMO_TITLE_MAX_GLYPHS];
 };

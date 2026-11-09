@@ -1015,6 +1015,7 @@ static void PromoSel_Init(struct ProcPromoSel *proc)
 		proc->choices, PROMO_CHOICE_MAX);
 	proc->choice_idx = 0;
 	proc->scroll_row = 0;
+	proc->ending = 0;
 
 	if (proc->choice_count == 0) {
 		handler->action_type = PROMO_ACT_CANCEL;
@@ -1036,8 +1037,10 @@ static void PromoSel_Init(struct ProcPromoSel *proc)
 	Promo_LoadStatsTiles();
 	Promo_LoadScrollTiles();
 
-	/* Alpha-blend the stats panel fill (BG2) with the mural (BG3). */
-	Promo_SetStatsBlend();
+	/* Do NOT touch the blend here: the screen is still covered by the
+	   fade-to-black. Changing it to the stats alpha would expose the freshly
+	   built UI for one frame before the fade-in starts. PromoMain_StartFx
+	   applies the stats blend once the fade-in is done. */
 
 	for (i = 0; i < proc->choice_count; i++) {
 		int map_sprite = GetJInfo(proc->choices[i])->map_sprite;
@@ -1052,6 +1055,11 @@ static void PromoSel_Init(struct ProcPromoSel *proc)
 			&sPromoIconCx[i], &sPromoIconCy[i]);
 	}
 
+	/* UseUnitSprite only fills the EWRAM sheet; without this the first frames
+	   still show the map's unit sprite sheet in OBJ VRAM (the map's army
+	   sprites) until SyncUnitSpriteSheet happens to reach an upload frame. */
+	ForceSyncUnitSpriteSheet();
+
 	Promo_DrawAll(proc);
 }
 
@@ -1060,11 +1068,14 @@ static void PromoSel_Loop(struct ProcPromoSel *proc)
 	struct ProcPromoHandler *handler = Promo_GetHandler(proc);
 	int old_idx = proc->choice_idx;
 
-	if (proc->proc_parent->proc_ekrfx != NULL &&
+	/* Keep the panel alpha alive while the palette fade runs, but do not touch
+	   the blend once the fade-out has installed its black cover. */
+	if (!proc->ending &&
+	    proc->proc_parent->proc_ekrfx != NULL &&
 	    gpActiveClassReelSpellProc == NULL)
 		Promo_SetStatsBlend();
 
-	if (!PromoEkrFx_IsBusy(proc)) {
+	if (!proc->ending && !PromoEkrFx_IsBusy(proc)) {
 		int col, row;
 		int idx = proc->choice_idx;
 
@@ -1102,19 +1113,24 @@ static void PromoSel_Loop(struct ProcPromoSel *proc)
 			handler->jid_promo = proc->choices[proc->choice_idx];
 			handler->action_type = PROMO_ACT_PROMO;
 			PlaySe(SONG_6A);
+			proc->ending = 1;
+			/* A class reel spell keeps rewriting the blend config; stop it
+			   so the parent's fade-to-black is not overwritten every frame. */
+			EndActiveClassReelSpell();
+			EndActiveClassReelBgColorProc();
 			Proc_Break(proc->proc_parent);
-			Proc_Break(proc);
-			return;
-		}
-
-		if (gKeySt->pressed & KEY_BUTTON_B) {
+		} else if (gKeySt->pressed & KEY_BUTTON_B) {
 			handler->action_type = PROMO_ACT_CANCEL;
 			PlaySe(SONG_6B);
+			proc->ending = 1;
+			EndActiveClassReelSpell();
+			EndActiveClassReelBgColorProc();
 			Proc_Break(proc->proc_parent);
-			Proc_Break(proc);
-			return;
 		}
 	}
+
+	/* Stay on screen while the parent fades out: tearing this proc down as
+	   soon as A/B is pressed leaves a blank icon panel on the fade frames. */
 
 	if (proc->ui_dirty && PromoEkrFx_GetState(proc) != PROMO_FX_OUT) {
 		Promo_DrawAll(proc);
@@ -1193,15 +1209,160 @@ static void PromoMain_StartFx(struct ProcPromoMain *proc)
 	proc->proc_ekrfx = SpawnProc(ProcScr_PromoEkrFx, proc);
 }
 
+/**
+ * palette fade
+ *
+ * The panels are translucent through the global alpha blend, which uses the
+ * same BLDCNTR/BLDY registers as a hardware darken fade. Fading the palette
+ * instead lets the panels keep their translucency while the whole screen
+ * fades in/out.
+ */
+enum {
+	PROMO_FADE_IN,
+	PROMO_FADE_OUT,
+	PROMO_FADE_FRAMES = 4,
+};
+
+struct ProcPromoFade {
+	PROC_HEADER;
+	u8 mode;
+	u8 timer;
+};
+
+EWRAM_OVERLAY_PROMOTION static u16 PromoFade_Pal[0x200] = {};
+static u8 sPromoFadeMode;
+
+static void PromoFade_Apply(int scale)
+{
+	int i;
+
+	for (i = 0; i < 0x200; i++) {
+		u16 c = PromoFade_Pal[i];
+		int r = (c & 0x1F) * scale >> 4;
+		int g = ((c >> 5) & 0x1F) * scale >> 4;
+		int b = ((c >> 10) & 0x1F) * scale >> 4;
+
+		gPal[i] = r | (g << 5) | (b << 10);
+	}
+
+	EnablePalSync();
+}
+
+static void PromoFade_Restore(void)
+{
+	CpuFastCopy(PromoFade_Pal, gPal, sizeof(PromoFade_Pal));
+	EnablePalSync();
+}
+
+static void PromoFade_Init(struct ProcPromoFade *proc)
+{
+	int i;
+
+	for (i = 0; i < 0x200; i++)
+		PromoFade_Pal[i] = gPal[i];
+
+	proc->mode = sPromoFadeMode;
+	proc->timer = 0;
+
+	if (proc->mode == PROMO_FADE_IN) {
+		/* Swap the fade darken for the panel alpha while the palette is
+		   black; both land on the same VBlank. */
+		Promo_SetStatsBlend();
+		PromoFade_Apply(0);
+	}
+}
+
+static void PromoFade_Loop(struct ProcPromoFade *proc)
+{
+	int scale;
+
+	proc->timer++;
+
+	if (proc->mode == PROMO_FADE_IN)
+		scale = (proc->timer * 0x10) / PROMO_FADE_FRAMES;
+	else
+		scale = 0x10 - (proc->timer * 0x10) / PROMO_FADE_FRAMES;
+
+	if (proc->timer < PROMO_FADE_FRAMES) {
+		PromoFade_Apply(scale);
+		return;
+	}
+
+	PromoFade_Restore();
+
+	if (proc->mode == PROMO_FADE_OUT) {
+		/* Restore the palette for the map/banim but keep the screen black
+		   with the blend cover. */
+		SetBlendDarken(0x10);
+		SetBlendTargetA(1, 1, 1, 1, 1);
+		SetBlendTargetB(0, 0, 0, 0, 0);
+		SetBlendBackdropA(1);
+		SetBlendBackdropB(0);
+	}
+
+	Proc_End(proc);
+}
+
+static const struct ProcScr ProcScr_PromoFade[] = {
+	PROC_CALL(PromoFade_Init),
+	PROC_REPEAT(PromoFade_Loop),
+	PROC_END
+};
+
+static void PromoMain_StartFadeIn(struct ProcPromoMain *proc)
+{
+	sPromoFadeMode = PROMO_FADE_IN;
+	SpawnProc(ProcScr_PromoFade, proc);
+}
+
+static void PromoMain_StartFadeOut(struct ProcPromoMain *proc)
+{
+	sPromoFadeMode = PROMO_FADE_OUT;
+	SpawnProc(ProcScr_PromoFade, proc);
+}
+
+static void PromoFade_Wait(ProcPtr proc)
+{
+	if (!Proc_Exists(ProcScr_PromoFade))
+		Proc_Break(proc);
+}
+
 static void PromoMain_Loop(struct ProcPromoMain *proc)
 {}
 
 static void PromoMain_End(struct ProcPromoMain *proc)
 {
-	SetBlendNone();
+	/* Tearing the OAM layers down as soon as A/B is pressed leaves an empty
+	   icon panel over the fade-out. Keep them until the screen is black
+	   (vanilla blackens instantly before ending its class-change procs). */
+	Proc_EndEach(ProcScr_PromoSel);
+	Proc_EndEach(ProcScr_PromoEkrFx);
+	proc->proc_sel = NULL;
+	proc->proc_ekrfx = NULL;
+
 	SetWinEnable(0, 0, 0);
 	SetWOutLayers(1, 1, 1, 1, 1);
 	EndMuralBackground();
+
+	/* Keep the screen black. For a promotion the battle animation takes over
+	   from here (like ExecClassChgReal in the vanilla flow); the cancel path
+	   rebuilds the map and fades it back in from PromoMain_AfterEnd. */
+	SetBlendDarken(0x10);
+	SetBlendTargetA(1, 1, 1, 1, 1);
+	SetBlendTargetB(0, 0, 0, 0, 0);
+	SetBlendBackdropA(1);
+	SetBlendBackdropB(0);
+}
+
+/* The class selection UI changed the BG/OBJ/VRAM layout; rebuild the map
+   layers, then fade the map back in from black. The promotion animation is
+   started by the handler after this proc ends, so the map is already visible
+   (and fades in) when the banim intro takes over. */
+static void PromoMain_AfterEnd(struct ProcPromoMain *proc)
+{
+	UnlockBmDisplay();
+	InitBmDisplay();
+	StartFastFadeFromBlack();
 }
 
 static const struct ProcScr ProcScr_PromoMainBM[] = {
@@ -1213,21 +1374,19 @@ static const struct ProcScr ProcScr_PromoMainBM[] = {
 	PROC_YIELD,
 	PROC_CALL(PromoMain_Init),
 	PROC_YIELD,
-	PROC_CALL(StartFastFadeFromBlack),
-	PROC_REPEAT(WhileFadeExists),
+	PROC_CALL(PromoMain_StartFadeIn),
+	PROC_REPEAT(PromoFade_Wait),
 	PROC_CALL(PromoMain_StartFx),
 	PROC_YIELD,
 	PROC_REPEAT(PromoMain_Loop),
 	PROC_YIELD,
-	PROC_CALL(StartFastFadeToBlack),
-	PROC_REPEAT(WhileFadeExists),
+	PROC_CALL(PromoMain_StartFadeOut),
+	PROC_REPEAT(PromoFade_Wait),
 	PROC_CALL(PromoMain_End),
 	PROC_YIELD,
 
 	/* end */
-	PROC_CALL(UnlockBmDisplay),
-	PROC_CALL(InitBmDisplay),
-	PROC_CALL(StartFastFadeFromBlack),
+	PROC_CALL(PromoMain_AfterEnd),
 	PROC_REPEAT(WhileFadeExists),
 	PROC_END
 };
@@ -1306,3 +1465,9 @@ void StartUnitPromotionAction(struct Unit *unit, int promo_jid, int weapon_handl
 
 	BeginBattleAnimations();
 }
+
+
+
+
+
+

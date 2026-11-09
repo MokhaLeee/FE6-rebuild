@@ -15,12 +15,14 @@ tree3
 1. `DoItemPromoteAction()` → `StartBmDemoPromotion()`。
 2. `PromoHandle_StartSelect` 起 `PromoMain`，等它结束。
 3. `PromoSel` 用 `GetPromoChoices()` 取候选职业：
-   - A：`handler->jid_promo = choices[idx]`，关闭界面；
-   - B：`handler->action_type = PROMO_ACT_CANCEL`，关闭界面，不消耗道具、不转职。
-4. `PromoHandle_ExecAnim`：
-   - 转职：先记下道具，再 `UnitUpdateUsedItem()`，最后
-     `StartUnitPromotionAction(unit, jid_promo, item)`；
-   - 取消：直接跳过。
+   - A：`handler->jid_promo = choices[idx]`，置 `ending` 并 break `PromoMain`；
+   - B：`handler->action_type = PROMO_ACT_CANCEL`，同样置 `ending` 并 break `PromoMain`。
+   两种情况下 `PromoSel` 都**不立刻结束**，而是继续绘制到父进程淡出完成。
+4. 淡出黑屏后 `PromoMain_End` 结束 `PromoSel`/`PromoEkrFx`：
+   - 转职：保持黑场，`PromoMain_AfterEnd` 只解锁 BM display 并用 `InitBmDisplay`
+     重建地图图块；handler 的 `PromoHandle_ExecAnim` 再
+     `UnitUpdateUsedItem()` + `StartUnitPromotionAction(unit, jid_promo, item)`；
+   - 取消：`UnlockBmDisplay` + `InitBmDisplay` 后淡入地图，不消耗道具、不转职。
 
 ## 候选职业表
 
@@ -99,16 +101,48 @@ tree3
 
 ### 动画进出
 
-- 进场：等 `StartFastFadeFromBlack` 结束后才起 `PromoEkrFx`。角色和地形先放在
-  屏幕右侧外（`PROMO_MINI_X + 0x60`），停 4 帧后 8 帧滑入到 `(152,80)`。
+- 图标：`PromoSel_Init` 载入候选职业的 unit sprite 后要调一次
+  `ForceSyncUnitSpriteSheet()`。`UseUnitSprite()` 只往 EWRAM 的
+  `gUnitSpriteBuf` 里填数据，真正上传 OBJ VRAM 要等 `SyncUnitSpriteSheet()`
+  走到 `GetGameTime() % 72` 的特定帧；不强制同步的话，进场最初几十帧
+  OBJ VRAM 里还是地图部队的 sprite sheet，图标会显示成我方部队的兵种图，
+  直到自然同步到才变回职业图标。
+- 进场：`PromoMain_StartFadeIn` 起 `ProcScr_PromoFade`（palette fade）做淡入，
+  淡入结束后才起 `PromoEkrFx`。角色和地形先放在屏幕右侧外
+  （`PROMO_MINI_X + 0x60`），停 4 帧后 8 帧滑入到 `(152,80)`。
+- 淡入/淡出走**调色板缩放**而不是 `StartFastFadeFromBlack`/`ToBlack`：
+  左右两块面板的半透明靠全局 alpha 混合（BG2 ↔ BG3+OBJ），而硬件
+  darken fade 和 alpha 共用 `BLDCNTR`/`BLDY`，两者不能同时成立。
+  用调色板缩放（`PromoFade_Apply()`：把 `gPal` 所有颜色乘 `scale/16`）
+  就能在整个淡入/淡出过程中保持面板半透明；淡出结束时恢复调色板，
+  再用 `SetBlendDarken(0x10)` 压黑，交给 banim/地图重建。
+- `PromoSel_Init` **不能**改混合配置：此时屏幕仍被 map→promo 的
+  `StartFastFadeToBlack` 压黑；palette fade 的 `PromoFade_Init` 在
+  调色板仍是黑色时把混合切成面板 alpha，两项同时生效，不会闪。
 - 切换：选中职业变化时，角色 + 地形先 8 帧向右滑出到 `x + 0x60`，在屏幕外
   `EkrMainMini_ChangeAnim()` 换成新职业，再 8 帧滑入。
 - 滑动期间输入锁定；职业名/desc/数值用 `ui_dirty` 延迟到换动画的那一帧才重绘，
   避免“新文字配旧动画”。
 - 数值块在 BG2 上、优先级 1，压在 OBJ 动画之上；混合目标 B 包含 OBJ，
   所以动画滑到块下方时仍能看到半透明图像。没有 WIN1 裁剪。
-  `PromoMain_End` 里清理窗口/混合状态（`SetWinEnable` / `SetWOutLayers` /
-  `SetBlendNone`），退出后不影响地图上的单位/OBJ。
+- 确认/取消：A/B 只置 `PromoSel.ending` 并 break `PromoMain`，**不结束** `PromoSel`。
+  父进程开始 palette fade-out 时图标、手形光标、职业名、desc、数值、ekrmini
+  都还在画；黑屏后才在 `PromoMain_End` 里用 `Proc_EndEach` 收掉
+  `PromoSel`/`PromoEkrFx`。这样不会出现“图标和职业名先消失、空面板和文字
+  留在屏幕上”的过渡帧。
+  `ending` 后 `PromoSel_Loop` 不再每帧重设混合，避免它在 palette fade-out
+  结束后把 black cover 又换回 alpha（会闪一帧）；palette fade 本身不动混合。
+  A/B 时还会 `EndActiveClassReelSpell()` / `EndActiveClassReelBgColorProc()`，
+  防止正在播放的 class reel 魔法继续改写混合/调色板。
+- 退场：palette fade-out 结束后恢复调色板并保持 darken 黑场，`PromoMain_End`
+  收掉 `PromoSel`/`PromoEkrFx`；`PromoMain_AfterEnd` 再 `UnlockBmDisplay` +
+  `InitBmDisplay` 重建地图图块，并 `StartFastFadeFromBlack` 让地图**从黑色淡入**。
+  `PromoMain` 等淡入结束后才结束，handler 随后
+  `StartUnitPromotionAction()` → `BeginBattleAnimations()`，banim intro 接着
+  在已经淡入的地图上做窗口收缩转场。
+  注意这里会先看到旧职业站在地图上淡入；这是道具使用流程的正常过渡，
+  转职结果由随后的转职动画展示，动画结束后由 banim 的 ending 恢复地图显示。
+- 取消路径同样 `UnlockBmDisplay` + `InitBmDisplay` + 淡入地图。
 
 ## 数值预览
 
