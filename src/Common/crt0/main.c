@@ -15,6 +15,9 @@
 
 #include "save-hw.h"
 #include "debug.h"
+#if CONFIG_TEST_MENU
+#include "testmenu.h"
+#endif
 #if CONFIG_DEBUG_MENU
 #include "debugmenu.h"
 #endif
@@ -61,7 +64,9 @@ void AgbMain(void)
 	m4aSoundInit();
 	SetOnVBlank(OnVBlank);
 
-#if CONFIG_DEBUG_MENU
+#if CONFIG_TEST_MENU
+	StartGame_TestMenu();
+#elif CONFIG_DEBUG_MENU
 	StartDebugMenu_LoadGame();
 #else
 	StartGame();

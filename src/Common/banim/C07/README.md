@@ -853,8 +853,10 @@ make all -j8
 ### 6.2 冒烟 / 全量
 
 ```bash
-./tools/emu/run-tests.sh --quick
-./tools/emu/run-tests.sh
+./tools/emu/testmenu-tests.sh
+# 旧套件（迁移中）：
+# ./tools/emu/run-tests.sh --quick
+# ./tools/emu/run-tests.sh
 ```
 
 ### 6.3 GDB 断点

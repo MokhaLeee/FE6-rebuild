@@ -1,32 +1,36 @@
-# debug menu 代码（src/Test/ref）
+# debug menu 参考代码（src/Test/ref）
 
-`vanilla/debugmenu.c` 只有 `AgbMain()` 一个调用者，因此已整体迁到本目录；
-debug 菜单的 5 张 `MenuInfo` / `MenuEntInfo` 表也从 `vanilla/menuinfo.c`、
-`include/menuinfo.h` 摘出，和实现放在一起。
+> **现状（2026-11）**：测试入口已经迁到 `src/Test/testmenu/testmenu.c`
+> （`CONFIG_TEST_MENU=1`）；`CONFIG_DEBUG_MENU=0`，本目录的 debugmenu 不再参与
+> ROM 行为，只作为参考/回退。新测试见 `tools/emu/testmenu-tests.sh`。
 
-- `debugmenu.c`、`menuinfo_debug.c` 是**真实参与构建**的实现，由 `CONFIG_DEBUG_MENU`
-  宏控制：宏为 1 时编译，否则是空翻译单元（不产生任何符号）。
-- `include/debugmenu.h` 仍是唯一的公开接口头（`AgbMain()` 调用
-  `StartDebugMenu_LoadGame()`），内容同样受 `CONFIG_DEBUG_MENU` 保护。
-- 本目录其余文件（`debugtext.c/h`、字体资源、`notes/`）仍是参考副本，**不参与构建**。
+本目录保留 debug menu 的完整参考实现：`vanilla/debugmenu.c` 只有 `AgbMain()`
+一个调用者，因此整体迁到这里；debug 菜单的 5 张 `MenuInfo` / `MenuEntInfo` 表也
+从 `vanilla/menuinfo.c`、`include/menuinfo.h` 摘出，和实现放在一起。
+
+- `debugmenu.c`、`menuinfo_debug.c` 仍被 `Makefile` 加入 `C_SRCS`，但
+  `CONFIG_DEBUG_MENU=0` 时整体包在 `#if CONFIG_DEBUG_MENU` 里，编译成空目标文件。
+- `include/debugmenu.h` 仍是 debug menu 的公开接口头，内容同样受宏保护；当前为空。
+- 本目录其余文件（`debugtext.c/h`、字体资源、`notes/`）是参考副本，**不参与构建**。
   `debugtext` 因为还被 `talk.c` / `worldmapfx.c` 的调试 UI 使用，正本仍在
   `vanilla/debugtext.c`。
 
-宏定义在 `include/configs/configs/config-debug.h`：
+当前配置（`include/configs/configs/config-debug.h`）：
 
 ```c
-#ifndef CONFIG_DEBUG_MENU
-#define CONFIG_DEBUG_MENU CONFIG_USE_DEBUG
-#endif
+#define CONFIG_TEST_MENU 1
+#define CONFIG_DEBUG_MENU 0
 ```
 
 ## 目录结构
 
+当前 testmenu 在同级 `src/Test/testmenu/`，不在本目录；这里只保留 debug menu 参考。
+
 ```
 src/Test/ref/
 ├── README.md                         # 本文件
-├── debugmenu.c                       # debug 菜单全部逻辑（构建：CONFIG_DEBUG_MENU）
-├── menuinfo_debug.c                  # 5 张 debug 菜单表（构建：CONFIG_DEBUG_MENU）
+├── debugmenu.c                       # debug 菜单全部逻辑（回退构建；当前宏 0）
+├── menuinfo_debug.c                  # 5 张 debug 菜单表（回退构建；当前宏 0）
 ├── menuinfo_debug.h                  # 菜单表 extern 声明
 ├── debugtext.c                       # debug 字体 BG/OBJ 渲染（参考副本，不构建）
 ├── debugtext.h                       # 同上
@@ -36,9 +40,9 @@ src/Test/ref/
 │   └── Img_DebugFont.png             # 预览图
 └── notes/
     ├── inventory.md                  # 全量清单：相关文件、调用关系、死代码提示
-    ├── entry-main.c.txt              # 当前开机入口（main.c 摘录 + 改造建议）
+    ├── entry-main.c.txt              # 当前开机入口（testmenu 优先）
     ├── chapter-entry-optional.c.txt  # 可选：恢复「章開始」第 4 项
-    ├── emu-debug-menu.md             # tools/emu/README.md 的入口说明摘录
+    ├── emu-debug-menu.md             # 旧 debug menu 入口说明（历史）
     ├── manim-debug.c.txt             # 附录：已删除的地图动画调试 UI 源码
     ├── manim-debug.h.txt             # 附录：上面那套 UI 的枚举/结构体
     └── promo-test-design.md          # 上一版 testmenu/promo 测试设计全文
@@ -153,18 +157,23 @@ BGPAL_DEBUGTEXT = 0,
 
 ### 1.4 入口：`src/Common/crt0/main.c`
 
-当前入口是**无条件**的（只受 `CONFIG_DEBUG_MENU` 控制）：
+当前入口顺序是 testmenu 优先：
 
 ```c
-#if CONFIG_DEBUG_MENU
+#if CONFIG_TEST_MENU
+    StartGame_TestMenu();
+#elif CONFIG_DEBUG_MENU
     StartDebugMenu_LoadGame();
 #else
     StartGame();
 #endif
 ```
 
-`tools/emu/README.md` / `promo-test-design.md` 里写的“开机按住 `SELECT+START`”
-是上一版方案，代码已经改成直接进入。详见 `notes/entry-main.c.txt`。
+当前配置 `CONFIG_TEST_MENU=1`、`CONFIG_DEBUG_MENU=0`，所以 debug 构建实际进入
+testmenu；debug menu 只作为关掉 testmenu 后的回退分支保留。
+
+旧文档里“开机按住 `SELECT+START`”的说法早已过时，详见
+`notes/entry-main.c.txt`。
 
 ### 1.5 依赖
 
@@ -187,108 +196,44 @@ constants/videoalloc_global.h constants/chapters.h constants/faces.h
 - `gPlaySt.debug_control_red/green` 是 `struct PlaySt` 里的 2-bit 位域（`include/bm.h`），
   章节初始化时在 `vanilla/chapter.c` 清零。
 
-## 2. 重做自己的 testmenu：建议路线
+## 2. 当前 testmenu
 
-### 2.1 不要直接改 `MenuInfo_DebugMain`
+新测试菜单已经落在：
 
-最干净的做法是新建一套独立符号，避免和 `vanilla/` 重名：
+- `src/Test/testmenu/testmenu.c`
+- `include/hacks/testmenu.h`
+- 入口：`AgbMain()` 在 `CONFIG_TEST_MENU=1` 时调用 `StartGame_TestMenu()`；
+  `CONFIG_DEBUG_MENU` 只作为回退分支。
 
-```
-src/Test/testmenu.c          # MenuInfo_TestMain + 回调 + 场景分发
-src/Test/testmenu.h          # 自己的声明
-```
+界面沿用 debugmenu 的框架：mural 背景 + debug 字体 + `MenuInfo` / `MenuEntInfo`，
+并加了两张脸：
 
-`MenuInfo_TestMain` 可以照抄 `MenuInfo_DebugMain` 的写法，但：
+- 左：Roy（`FID_ROY`）
+- 右：Lilina（`FID_LILINA`）
 
-- 条目表用 `MenuEntInfo_TestMain[]`；
-- 回调用 `TestMenu_*` 前缀；
-- 测试项按场景拆成独立函数，例如 `TestMenu_StartChapterSelect()`、
-  `TestMenu_RunPromoCase(id)`；
-- 用 `CONFIG_TEST_MENU` 包住整个文件（不要复用 `CONFIG_DEBUG_MENU`，否则测试菜单
-  会和原版 debug menu 绑死），正常构建不编译。
+当前菜单项：
 
-### 2.2 入口
+| 条目 | 行为 |
+|---|---|
+| `Start Game` | `StartGame()`，之后正常进标题 / 主菜单 / 章节 |
+| `Dummy` | 占位，返回菜单，后续接测试场景 |
 
-在 `AgbMain()` 的 `StartGame()` 之前插入，且要满足：
+### 2.1 测试入口
 
-1. `InitProcs()` / `InitKeySt()` / `ReadGlobalSaveInfo()` 已完成；
-2. 还没有 game controller（否则 `RestartGameAndChapter()` 会连带结束菜单）；
-3. 入口用显式按键组合或独立 config，不要默认接管开机流程。
+`tools/emu/testmenu-tests.sh` 从 testmenu 启动，当前 case 1 覆盖：
 
-示例（详见 `notes/entry-main.c.txt`）：
+开机进 testmenu（含 Roy/Lilina 两张脸）→ 选 `Start Game` → 进入章节
+（`gPlaySt.chapter >= 1`）。
 
-```c
-#if CONFIG_TEST_MENU
-    RefreshKeySt(gKeySt);
-    if ((gKeySt->held & (KEY_BUTTON_SELECT | KEY_BUTTON_START)) ==
-        (KEY_BUTTON_SELECT | KEY_BUTTON_START))
-        StartTestMenu();
-    else
-        StartGame();
-#else
-    StartGame();
-#endif
-```
+旧的 `run-tests.sh` 仍假设开机到标题，正在按需求把用例迁进 `testmenu-tests.sh`。
 
-### 2.3 菜单打开后
-
-参考 `StartDebugMenu_LoadGame()`：
-
-```c
-void StartTestMenu(void)
-{
-    SetMainFunc(OnMain);
-    SetOnVBlank(OnVBlank);
-
-    InitBmDisplay();
-    DebugInitBg(BG_2, 0);                 // 可选：复用 debug 字体
-
-    StartMuralBackground(StartMenu(&MenuInfo_TestMain),
-        (u8 *) BG_VRAM + CHR_SIZE * BGCHR_DEBUGMENU_MURAL, -1);
-}
-```
-
-`StartMenu()` 会自己 `LockGame()`；如果从已有 proc 里打开，用
-`StartLockingMenu(&MenuInfo_TestMain, parent)` 挂到父 proc 上，避免游戏逻辑继续跑。
-
-### 2.4 子菜单/场景切换
-
-参考 `DebugMenu_OnSelect_ClearFile()`：
-
-```c
-fu8 TestMenu_OnSelect_SubMenu(struct MenuProc * menu, struct MenuEntProc * ent)
-{
-    ClearUi();
-    StartMenu(&MenuInfo_TestSub);
-
-    return MENU_ACTION_NOCURSOR | MENU_ACTION_END | MENU_ACTION_SE_6A;
-}
-```
-
-要点：
-
-- 切子菜单前 `ClearUi()`，否则旧窗口残留；
-- 需要保留父菜单时不要返回 `MENU_ACTION_END`；
-- 场景执行完用 `MENU_ACTION_CLEAR` 清屏；
-- `on_idle` 里读 `gKeySt->pressed/repeated`，不要自己轮询按键。
-
-### 2.5 测试场景的两种落点
-
-参考上一版 `promo-test-design.md` 的经验：
-
-- **开机入口直接跑**：不需要进入地图，适合纯 UI/资源测试；
-- **章開始 → 地图 → testmenu**：适合需要单位/地图/战斗的测试。
-  但 `章開始` 会覆盖 `SAVE_GAME0`，且当前 `MenuInfo_Debug_LoadGame` 只有 3 项，
-  第 4 项已被移除（见 `notes/chapter-entry-optional.c.txt`）。
-
-### 2.6 已知的坑（来自 `promo-test-design.md`）
+### 2.2 已知的坑（来自 `promo-test-design.md`）
 
 - 菜单 proc 是 game controller 的子进程时，`RestartGameAndChapter()` 会把它一起结束。
 - `ProcScr_Menu` 会等 `ProcScr_CamMove`；事件/相机移动期间打开会延迟。
 - 子菜单切换前要 `ClearUi()`。
 - 菜单 DOWN 到底部会回绕；自动化测试用 UP 从第一项绕到最后一项。
-- 从标题/主菜单进入 debug menu 会因标题淡出/调色板黑场而黑屏；开机入口没有这个问题。
-- `章開始` 会写 `SAVE_GAME0`，仅 debug 使用。
+- `章開始` 会写 `SAVE_GAME0`，仅 debug 使用；原 debug menu 的 load game 入口已不再编译。
 
 ## 3. 附录：另一套已删除的调试 UI（地图动画）
 
@@ -308,7 +253,7 @@ fu8 TestMenu_OnSelect_SubMenu(struct MenuProc * menu, struct MenuEntProc * ent)
 ## 4. 构建集成
 
 `Makefile` 的 `find-src` 排除 `src/Test/ref/*`，避免把参考副本（`debugtext.c` 等）
-打进构建；然后显式加入两个真实实现：
+打进构建；然后显式加入两个 debugmenu 源文件：
 
 ```make
 C_SRCS += $(HACK_SRC)/Test/ref/debugmenu.c $(HACK_SRC)/Test/ref/menuinfo_debug.c
@@ -316,8 +261,12 @@ C_SRCS += $(HACK_SRC)/Test/ref/debugmenu.c $(HACK_SRC)/Test/ref/menuinfo_debug.c
 
 两个 `.c` 的内容整体包在 `#if CONFIG_DEBUG_MENU` 里：
 
-- `CONFIG_DEBUG_MENU=1`（debug）：正常编译，符号和原来一致；
-- `CONFIG_DEBUG_MENU=0`：编译成空目标文件，不产生任何符号，`AgbMain()` 走 `StartGame()`。
+- `CONFIG_DEBUG_MENU=1`：作为回退菜单正常编译，符号和原来一致；
+- `CONFIG_DEBUG_MENU=0`（当前）：编译成空目标文件，不产生任何 debugmenu 符号，
+  `AgbMain()` 走 `StartGame_TestMenu()`（`CONFIG_TEST_MENU=1`）。
+
+新的 testmenu 源文件在 `src/Test/testmenu/`，不在 `ref/` 排除范围内，由
+`find-src` 自动加入构建。
 
 `PNG_FILES` / `TSA_FILES` 也排除了 `src/Test/ref/*`，避免 `make clean` 把参考用的
 `Img_DebugFont.4bpp` 当成生成物删掉。
@@ -329,11 +278,11 @@ C_SRCS += $(HACK_SRC)/Test/ref/debugmenu.c $(HACK_SRC)/Test/ref/menuinfo_debug.c
 
 ```bash
 make all
-./tools/emu/run-tests.sh --quick
+./tools/emu/testmenu-tests.sh
 ```
 
-应看到 `src/Test/ref/debugmenu.c`、`src/Test/ref/menuinfo_debug.c` 被编译，
-链接无重复符号；debug 构建开机进入 debug load game 菜单，行为不变。
+当前预期：debugmenu 不产生符号，开机进入 testmenu（Roy/Lilina 两张脸），
+选 `Start Game` 后能进入章节（`gPlaySt.chapter >= 1`）。
 
 ## 6. 来源
 

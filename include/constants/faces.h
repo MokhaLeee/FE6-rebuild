@@ -242,6 +242,7 @@ enum
     FID_ROY = FID_02,
     FID_CLARINE = FID_03,
     FID_FAE = FID_04,
+    FID_LILINA = FID_22,
 };
 
 enum

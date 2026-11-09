@@ -15,18 +15,39 @@
 产物都在 `tools/emu/.build/`（已 gitignore），之后 `build.sh` 只重编 `gbarun`，
 耗时 1 秒左右。依赖：`gcc cmake ninja curl zlib1g-dev libpng-dev libelf-dev`。
 
-## 跑测试
+## 跑测试（新 testmenu）
 
 ```bash
-./tools/emu/run-tests.sh              # 全量：约 30 秒（5 个用例）
-./tools/emu/run-tests.sh --quick      # 只测开机 + 主菜单：约 1 秒
-./tools/emu/run-tests.sh other.gba    # 测别的 ROM
+./tools/emu/testmenu-tests.sh          # 当前 1 个 case
+./tools/emu/testmenu-tests.sh other.gba
 ```
 
 退出码 0 = 全过，非 0 = 有失败项（会逐条列出）。截图和日志留在
+`tools/emu/.build/out-testmenu/`。
+
+新测试统一从 testmenu 启动，不再依赖标题画面。当前 case：
+
+| case | 断言 |
+|---|---|
+| 1 testmenu → chapter | 开机进入 testmenu（Roy/Lilina 两张脸、约 58 色）；选 Start Game 离开菜单；`gPlaySt.chapter >= 1` |
+
+后续会把旧套件的章节、存档、banim、准备画面等用例按需求迁到 `testmenu-tests.sh`。
+
+## 旧套件（迁移中）
+
+`run-tests.sh` 仍假设“开机直接到标题”，与当前 testmenu 入口不一致。
+保留它是为了逐项迁移，**不要把它当作新测试入口**：
+
+```bash
+./tools/emu/run-tests.sh              # 旧套件：约 30 秒
+./tools/emu/run-tests.sh --quick      # 旧套件冒烟
+./tools/emu/run-tests.sh other.gba
+```
+
+退出码 0 = 全过，非 0 = 有失败项。截图和日志留在
 `tools/emu/.build/out/`。
 
-十个用例：
+旧套件十个用例（供迁移参考）：
 
 | 用例 | 断言 |
 |---|---|
@@ -43,14 +64,19 @@
 
 第 5 项用固定随机种子，同样的 ROM 每次跑结果一致，所以"这次挂了、上次没挂"一定是代码改动造成的。
 
-## debug menu 入口
+## testmenu 入口
 
-- **开机隐藏入口**：按住 `SELECT+START` 开机 → `StartDebugMenu_LoadGame()` 的 debug load game 菜单：
-  `リリースエントリ` / `どこでも再開` / `手再開` / `章開始`。
-  `章開始` 用 LEFT/RIGHT 选章，A 开始新游戏（写 `SAVE_GAME0`，仅 debug）。
-- promo UI 的固定测试菜单目前**未部署**；设计草案见
-  [promo-test-design.md](promo-test-design.md)。之前的 `SELECT+START` 地图入口/`テスト`
-  子菜单已退回。
+debug 构建（`CONFIG_TEST_MENU=1`）开机直接进入 `StartGame_TestMenu()`：
+
+- 菜单项：`Start Game` / `Dummy`
+- 两侧头像：Roy（左）、Lilina（右）
+- `Start Game` → `StartGame()`，之后按 START / A 进入章节
+- `Dummy` 目前只占位，按 A 返回菜单
+
+debug menu 已不参与编译（`CONFIG_DEBUG_MENU=0`），源码只作为参考留在
+`src/Test/ref/`。旧的 `SELECT+START` / `章開始` 入口说明已过时。
+promo UI 的固定测试菜单仍未部署；历史设计见
+[promo-test-design.md](promo-test-design.md)。
 
 ## 状态驱动的输入
 
@@ -163,8 +189,9 @@ $GB fe6re.gba --quiet --frames 3000 --hash-every 60
 ## 清理
 
 ```bash
-./tools/emu/run-tests.sh --clean     # 只删测试输出（截图、日志、存档）
-./tools/emu/build.sh clean           # 删掉整个 .build：mGBA 源码 + 核心库 + gbarun（约 130MB）
+./tools/emu/run-tests.sh --clean       # 旧套件输出
+rm -rf tools/emu/.build/out-testmenu   # 新 testmenu 输出
+./tools/emu/build.sh clean             # 删掉整个 .build：mGBA 源码 + 核心库 + gbarun（约 130MB）
 ```
 
 注意 `make clean` **不会**动 `tools/emu/.build`，两者互不影响；下次要用再跑一次
@@ -179,8 +206,10 @@ $GB fe6re.gba --quiet --frames 3000 --hash-every 60
 
 ## 自检
 
-`run-tests.sh` 做过负向验证：把 ROM 入口改成死循环（`b .`）后，6 项断言报 FAIL、退出码为 1，
-说明黑屏、流程中断、存档异常都能被这套测试抓到。
+旧 `run-tests.sh` 做过负向验证：把 ROM 入口改成死循环（`b .`）后，6 项断言报 FAIL、退出码为 1，
+说明黑屏、流程中断、存档异常都能被那套测试抓到。
 
-日常用法建议：改完代码 `make` 之后跑一次 `./tools/emu/run-tests.sh`；
-只想快速确认没搞崩启动，就用 `--quick`（1 秒）。
+新的 `testmenu-tests.sh` 同样以退出码表示结果：启动、菜单、章节任一断言失败都会返回非 0。
+
+日常用法：改完代码 `make` 之后跑一次 `./tools/emu/testmenu-tests.sh`；
+旧套件只在迁移对应用例时参考。

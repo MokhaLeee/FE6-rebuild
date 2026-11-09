@@ -4,6 +4,10 @@
 > 相关 promo 测试夹具/脚本已从工作区退回；后续重新设计 debug menu 测试项时再按本文部署。
 > 当前保留的 debug menu 功能：开机隐藏入口 `StartDebugMenu_LoadGame`、debug load game 菜单的
 > `章開始` 项。
+>
+> **更新（2026-11）**：入口已由 `src/Test/testmenu/testmenu.c` 接管
+> （`CONFIG_TEST_MENU=1`，`CONFIG_DEBUG_MENU=0`）；本文的 debug menu 入口/脚本部分
+> 仅作历史参考，当前测试入口见 `tools/emu/testmenu-tests.sh`。
 
 ## 1. 目标
 

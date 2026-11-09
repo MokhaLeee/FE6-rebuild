@@ -173,8 +173,8 @@ python3 tools/scripts/elf2sym.py fe6re.elf | python3 tools/scripts/sym_modify.py
 回归：
 
 ```bash
-./tools/emu/run-tests.sh --quick   # 4 项
-./tools/emu/run-tests.sh           # 26 项
+./tools/emu/testmenu-tests.sh      # 新入口：testmenu → 章节
+./tools/emu/run-tests.sh           # 旧套件，迁移中
 ```
 
 手动测试：让等级 ≥10 的 Mage/Mage_F 使用 Guiding Ring，应进入本界面；

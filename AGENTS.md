@@ -24,6 +24,19 @@
 - 判断口诀：**2 的幂常量 → 直接写；其余一律 k_udiv / k_umod（10 用 k_udiv10）。**
 - 自查：改动后确认 `arm-none-eabi-nm fe6re.elf | grep '__aeabi_.*div'` 无输出。
 - 范围：适用于新增代码和改动过的代码；不要求批量重写未触及的既有代码。
+- **代码风格采用 Linux kernel style**：以 Linux 内核
+  `Documentation/process/coding-style.rst` 为准，重点：
+  - 缩进一律用 Tab（8 列），不要用空格缩进；续行也用 Tab 对齐。
+  - 大括号 K&R：函数左大括号独占一行；`if` / `for` / `while` / `switch`
+    的左大括号与语句同行，`} else {` 写在同一行；`switch` 的 `case`
+    与 `switch` 对齐，case 体再缩进一层。
+  - 指针星号贴近变量名（`struct Foo *bar`），运算符两侧留空格。
+  - 单条语句不加多余大括号；一行只做一件事；行宽尽量不超过 80 列。
+  - 注释优先 `/* ... */`；新增内部符号用 `lower_snake_case`，调用既有
+    `CamelCase` API 时保持原名。
+  - 字符串和代码里不要使用日文全角空格（U+3000）；需要空格时用
+    ASCII 空格。
+  - 范围：适用于新增代码和改动过的代码；不要求批量重排未触及的既有代码。
 
 ## 1. 思考与表达
 
@@ -50,8 +63,10 @@
 
 - 环境需要 `DEVKITPRO` / `DEVKITARM` 已导出；构建入口 `make all`（产物 `fe6re.gba` / `.elf` / `.sym` / `.map`，均被 gitignore）。
 - 涉及 ROM 行为的改动，优先用 `tools/emu` 验证：
-  - 冒烟：`./tools/emu/run-tests.sh --quick`（开机 + 主菜单，约 1 秒）
-  - 全量：`./tools/emu/run-tests.sh`（约 30 秒，覆盖章节、存档、banim、准备画面等）
+  - **新入口**：`./tools/emu/testmenu-tests.sh`（debug 构建从 testmenu 启动；
+    当前覆盖 testmenu → Start Game → 章节，后续按需求把旧用例逐步迁进来）。
+  - **旧套件**：`./tools/emu/run-tests.sh` 仍假设开机直接到标题，正在迁移；
+    不要把它当作新测试的默认入口。
   - 首次使用需 `./tools/emu/build.sh`。
 - 只改文档/脚本、不影响 ROM 时，可以说明未跑构建。
 - 汇报时写清楚：跑了什么、结果如何、没跑什么及原因。
