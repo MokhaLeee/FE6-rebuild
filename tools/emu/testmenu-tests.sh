@@ -31,8 +31,10 @@ ROOT=$(cd "$HERE/../.." && pwd)
 . "$HERE/testmenu/cases/13-prep-save-map.sh"
 . "$HERE/testmenu/cases/14-game-chapter2.sh"
 . "$HERE/testmenu/cases/15-save-corrupt.sh"
+. "$HERE/testmenu/cases/16-level-cap.sh"
+. "$HERE/testmenu/cases/17-level-map.sh"
 
-CASE_KEYS=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15)
+CASE_KEYS=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17)
 CASE_FUNCS=(
 	case_01_start_game
 	case_02_test_root
@@ -49,6 +51,8 @@ CASE_FUNCS=(
 	case_13_prep_save_map
 	case_14_game_chapter2
 	case_15_save_corrupt
+	case_16_level_cap
+	case_17_level_map
 )
 CASE_TITLES=(
 	"start-game         开机 → Start Game → 章节"
@@ -66,6 +70,8 @@ CASE_TITLES=(
 	"prep-save-map      Prep → 記録する / マップを見る"
 	"game-chapter2      Game → Chapter 2"
 	"save-corrupt       Save Corrupt Check"
+	"level-cap          System → Level Cap 自检"
+	"level-map          System → Map Test（真实按键攻击 → 升级）"
 )
 
 usage() {
@@ -73,7 +79,7 @@ usage() {
 用法: $0 [--list] [--case N] [--clean] [ROM]
 
   --list       列出 case
-  --case N     只跑第 N 个 case（1-4）
+  --case N     只跑第 N 个 case（用 --list 查看）
   --clean      只清掉 $OUT
   ROM          默认 fe6re.gba
 EOF

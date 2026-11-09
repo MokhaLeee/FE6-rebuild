@@ -223,6 +223,16 @@ static void PrepPhase_InitCameraLoop(struct Proc * proc)
 
 static void PrepPhase_Init(struct Proc * proc)
 {
+#if CONFIG_TEST_MENU
+    extern bool gTestSkipPrep;
+
+    if (gTestSkipPrep)
+    {
+        Proc_End(proc);
+        return;
+    }
+#endif
+
     if (!GetChapterInfo(gPlaySt.chapter)->has_prep)
     {
         Proc_End(proc);

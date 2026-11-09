@@ -7,7 +7,12 @@
 #define UNIT_WEAPON_EXP_COUNT 8
 #define UNIT_SUPPORT_COUNT 10
 #define UNIT_DYNAMIC_SKILLS_COUNT 4
-#define UNIT_LEVEL_MAX 20
+#define UNIT_LEVEL_MAX 99
+
+// Number of levels a promoted unit is assumed to have gained in its
+// pre-promotion class when autoleveling. Kept at the original 20-level cap so
+// existing enemy stats do not change now that UNIT_LEVEL_MAX is higher.
+#define UNIT_PROMOTED_AUTOLEVEL_LEVELS 19
 #define UNIT_TORCH_MAX 4
 #define UNIT_BARRIER_MAX 7
 

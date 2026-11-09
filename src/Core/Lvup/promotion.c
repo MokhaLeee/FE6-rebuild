@@ -50,8 +50,10 @@ void UnitPromote(struct Unit * unit, int jid)
 
 	UnitCheckStatOverflow(unit);
 
-	unit->level = 1;
-	unit->exp = 0;
+	/* Promotion keeps the unit's total level; only the exp counter is reset.
+	 * At the level cap, keep the "no exp" sentinel so promotion cannot push
+	 * the unit past the cap on its next battle. */
+	unit->exp = (unit->level >= UNIT_LEVEL_MAX) ? 0xFF : 0;
 }
 
 void GenerateBattleUnitStatGainsComparatively(struct BattleUnit *bu, struct Unit *unit)

@@ -59,6 +59,8 @@ tools/emu/
 | 13 prep save/map | Prep → 記録する / マップを見る；prep 状态保持，两个子界面有内容 |
 | 14 game chapter 2 | 顶层 → Test → Game → Chapter 2；chapter=2，case=CHAPTER_2，画面有内容 |
 | 15 save corrupt | Save → Corrupt Check；写有效存档后改坏一个字节，`IsSaveValid()` 从 1 变 0 |
+| 16 level cap | System → Level Cap；98→99 封顶、99 级不再升级、20/99 级转职保留等级、竞技场等级夹取、Devil 反伤率、promoted 自动等级 19、99 级存档往返 |
+| 17 level map | System → Map Test；test event 把 Roy 设为 98 级/99 经验并放在 99 级 1 HP 敌人旁；shell 真实按键「选人 → 攻撃 → 战斗预测 → 开战 → 升级」；断言 level=99/exp=0xFF；同时验证地图上 20 级转职保留等级、`ArenaGenOpponentUnit()` 生成 99 级不被截断 |
 
 脚本设计和新增 case 的方法见 [testmenu/README.md](testmenu/README.md)。
 测试项目录和 EWRAM 探针方案见 [../../src/Test/README.md](../../src/Test/README.md)。
@@ -81,8 +83,7 @@ Prep:   Test Prep / Back
 - `Start Game` → `StartGame()`，之后按 START / A 进入章节
 - `Game → Chapter 1` 直接启动第 1 章
 - `Save → Write + Load` 写 `SAVE_GAME0`、校验 checksum、读回 playstate、清 RAM 后再加载
-- `Battle → Test Battle` 启动注册在 `ChapterInfoTable` 的 `CHAPTER_TEST_BATTLE`，不影响 debug 第一章和正常章节
-- `Prep → Test Prep` 启动注册在 `ChapterInfoTable` 的 `CHAPTER_TEST_PREP`（`has_prep=true`），不依赖 Chapter 2
+- `Battle → Test Battle` / `Prep → Test Prep` / `System → Map Test` 都启动注册在 `ChapterInfoTable` 的唯一测试章节 `CHAPTER_TEST`（`has_prep=true`）；Battle/Map 通过 `gTestSkipPrep` 直接进地图，不影响 debug 第一章和正常章节
 
 debug menu 已不参与编译（`CONFIG_DEBUG_MENU=0`），源码只作为参考留在
 `src/Test/ref/`。旧的 `SELECT+START` / `章開始` 入口说明已过时。

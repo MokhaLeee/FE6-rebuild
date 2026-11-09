@@ -76,7 +76,7 @@ void EkrLvup_InitStatusText(struct ProcEkrlvup *proc)
 		gEkrLvupBaseStatus[EKRLVUP_STAT_SPD] = unit->spd;
 		gEkrLvupBaseStatus[EKRLVUP_STAT_DEF] = unit->def;
 		gEkrLvupBaseStatus[EKRLVUP_STAT_RES] = unit->res;
-		gEkrLvupPostLevel = 1;
+		gEkrLvupPostLevel = unit->level;
 
 		gEkrLvupPostStatus[EKRLVUP_STAT_HP] = bunit->unit.max_hp;
 		gEkrLvupPostStatus[EKRLVUP_STAT_POW] = bunit->unit.pow;

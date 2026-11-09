@@ -22,9 +22,13 @@
 
 #if CONFIG_TEST_MENU
 
+bool gTestSkipPrep;
+
 static void test_scene_start_chapter_impl(int chapter)
 {
 	RandInit(GetGameTime());
+
+	gTestSkipPrep = true;
 
 	InitUnits();
 
@@ -45,12 +49,14 @@ void test_scene_start_prep(void)
 {
 	RandInit(GetGameTime());
 
+	gTestSkipPrep = false;
+
 	InitUnits();
 
 	WriteNewGameSave(SAVE_GAME0, FALSE);
 	BatchCreateUnits(UnitInfo_TestPrep_Blue);
 
-	gPlaySt.chapter = CHAPTER_TEST_PREP;
+	gPlaySt.chapter = CHAPTER_TEST;
 	gPlaySt.turn = 1;
 	WriteGameSave(SAVE_GAME0);
 

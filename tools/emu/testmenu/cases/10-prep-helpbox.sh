@@ -5,7 +5,7 @@ case_10_prep_helpbox() {
 	local log="$OUT/10-prep-helpbox.log"
 	local count flags chapter help_colors
 
-	echo "== 10/15 testmenu: Prep helpbox（R）"
+	echo "== 10 testmenu: Prep helpbox（R）"
 
 	# 准备菜单在 10000 帧就绪，按 R 打开菜单项帮助框。
 	# --probe 顺序：1 gPrepMenuItemCnt, 2 gPlaySt.flags, 3 gPlaySt.chapter

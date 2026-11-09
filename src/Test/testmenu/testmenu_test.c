@@ -10,6 +10,7 @@
 #include "../cases/battle/battle_cases.h"
 #include "../cases/save/save_cases.h"
 #include "../cases/game/game_cases.h"
+#include "../cases/system/system_cases.h"
 
 #if CONFIG_TEST_MENU
 
@@ -22,6 +23,8 @@ static fu8 testmenu_test_on_select_battle(struct MenuProc *menu,
 					  struct MenuEntProc *ent);
 static fu8 testmenu_test_on_select_prep(struct MenuProc *menu,
 					struct MenuEntProc *ent);
+static fu8 testmenu_test_on_select_system(struct MenuProc *menu,
+					  struct MenuEntProc *ent);
 static fu8 testmenu_test_on_back(struct MenuProc *menu, struct MenuEntProc *ent);
 static void testmenu_test_reopen_top(struct Proc *proc);
 static void testmenu_test_reopen_root(struct Proc *proc);
@@ -46,6 +49,11 @@ static struct MenuEntInfo CONST_DATA test_root_entries[] = {
 		.label = " Prep",
 		.available = MenuEntryEnabled,
 		.on_select = testmenu_test_on_select_prep,
+	},
+	{
+		.label = " System",
+		.available = MenuEntryEnabled,
+		.on_select = testmenu_test_on_select_system,
 	},
 	{
 		.label = " Back",
@@ -114,6 +122,15 @@ static fu8 testmenu_test_on_select_prep(struct MenuProc *menu,
 {
 	ClearUi();
 	StartMenu(&MenuInfo_TestPrep);
+
+	return MENU_ACTION_NOCURSOR | MENU_ACTION_END | MENU_ACTION_SE_6A;
+}
+
+static fu8 testmenu_test_on_select_system(struct MenuProc *menu,
+					  struct MenuEntProc *ent)
+{
+	ClearUi();
+	StartMenu(&MenuInfo_TestSystem);
 
 	return MENU_ACTION_NOCURSOR | MENU_ACTION_END | MENU_ACTION_SE_6A;
 }

@@ -5,7 +5,7 @@ case_13_prep_save_map() {
 	local log="$OUT/13-prep-save-map.log"
 	local count flags chapter save_colors map_colors
 
-	echo "== 13/15 testmenu: Prep → 記録する / マップを見る"
+	echo "== 13 testmenu: Prep → 記録する / マップを見る"
 
 	# 准备菜单就绪后：
 	# 10000/10200 DOWN 到 記録する，10400 A 打开存档界面，12000 B 返回

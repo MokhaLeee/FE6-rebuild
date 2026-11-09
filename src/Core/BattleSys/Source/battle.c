@@ -631,9 +631,26 @@ void BattleGenerateHitTriangleAttack(struct BattleUnit *attacker, struct BattleU
 	gBattleSt.hit  = 100;
 }
 
+/* Devil-weapon reversal rate in percent. The vanilla formula is 21 - level;
+ * at high levels it becomes negative, so clamp it to the 1% floor instead of
+ * letting it wrap to a huge u16 threshold. */
+int GetDevilReversalChance(int level)
+{
+	int chance = 21 - level;
+
+	if (chance < 1)
+		chance = 1;
+
+	return chance;
+}
+
 void BattleGenerateHitEffects(struct BattleUnit *attacker, struct BattleUnit *defender)
 {
+	int devil_chance;
+
 	attacker->wexp_gain++;
+
+	devil_chance = GetDevilReversalChance(attacker->unit.level);
 
 	if (!(gBattleHitIt->attributes & BATTLE_HIT_ATTR_MISS)) {
 		switch (GetItemWeaponEffect(attacker->weapon)) {
@@ -648,7 +665,7 @@ void BattleGenerateHitEffects(struct BattleUnit *attacker, struct BattleUnit *de
 			break;
 		}
 
-		if (GetItemWeaponEffect(attacker->weapon) == WEAPON_EFFECT_DEVIL && (BattleRandRoll(21 - attacker->unit.level, FALSE))) {
+		if (GetItemWeaponEffect(attacker->weapon) == WEAPON_EFFECT_DEVIL && (BattleRandRoll(devil_chance, FALSE))) {
 			gBattleHitIt->attributes |= BATTLE_HIT_ATTR_DEVIL;
 
 			attacker->unit.hp -= gBattleSt.damage;

@@ -10,7 +10,7 @@ case_05_save_cross_run() {
 	local load_state load_case load_flags load_valid load_chapter_on_disk
 	local load_turn_on_disk load_turn_loaded load_chapter
 
-	echo "== 5/15 testmenu: Save 跨进程 Write → Load"
+	echo "== 5 testmenu: Save 跨进程 Write → Load"
 
 	# Run 1: top -> Test -> Save -> Write
 	# --probe 顺序：1 state, 2 case_id, 3 flags, 4 value0(valid),

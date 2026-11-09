@@ -211,6 +211,9 @@ int ArenaGetOpposingLevel(int level)
     if (result < 1)
         result = 1;
 
+    if (result > UNIT_LEVEL_MAX)
+        result = UNIT_LEVEL_MAX;
+
     return result;
 }
 
@@ -247,7 +250,9 @@ void ArenaGenOpponentUnit(void)
     info.pid = PID_ARENA_OPPONENT;
     info.jid = gArenaSt.opponent_jid;
     info.faction_id = 0;
-    info.level = gArenaSt.opponent_level;
+    /* UnitInfo::level is only 5 bits wide, so do not feed high arena levels
+       through it; the real level is restored on the unit right after init. */
+    info.level = 1;
     info.autolevel = TRUE;
     info.items[0] = 0;
     info.items[1] = 0;
@@ -264,6 +269,7 @@ void ArenaGenOpponentUnit(void)
 
     UnitInitFromInfo(unit, &info);
     UnitInitStats(unit, unit->pinfo);
+    unit->level = gArenaSt.opponent_level;
 
     level = unit->level;
 
@@ -275,8 +281,8 @@ void ArenaGenOpponentUnit(void)
     if (unit->level < 1)
         unit->level = 1;
 
-    if (unit->level > 20)
-        unit->level = 20;
+    if (unit->level > UNIT_LEVEL_MAX)
+        unit->level = UNIT_LEVEL_MAX;
 
     UnitCheckStatOverflow(unit);
     SetUnitHp(unit, GetUnitMaxHp(unit));

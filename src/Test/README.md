@@ -1,11 +1,12 @@
 # src/Test —— testmenu 与测试项组织方案
 
 > 状态：**Phase 1–4 已实施**，Phase 5 已开始：
-> 已加 `Game` / `Save` / `Battle` / `Prep` 分类。
+> 已加 `Game` / `Save` / `Battle` / `Prep` / `System` 分类。
 > 当前顶层是 `Start Game` / `Test`；Test 第二层有 `Game` / `Save` / `Battle` /
-> `Prep` / `Back`；Game 第二层有 `Chapter 1` / `Chapter 2` / `Back`；Save 第二层有
-> `Write + Load` / `Write` / `Load` / `Corrupt Check` / `Back`；Battle 第二层有
-> `Test Battle` / `Back`；Prep 第二层有 `Test Prep` / `Back`。其余领域按需求继续。
+> `Prep` / `System` / `Back`；Game 第二层有 `Chapter 1` / `Chapter 2` / `Back`；
+> Save 第二层有 `Write + Load` / `Write` / `Load` / `Corrupt Check` / `Back`；
+> Battle 第二层有 `Test Battle` / `Back`；Prep 第二层有 `Test Prep` / `Back`；
+> System 第二层有 `Level Cap` / `Map Test` / `Back`。其余领域按需求继续。
 >
 > 路线图、测试收敛方案和 MSS 计划见
 > [docs/testmenu-roadmap.md](../../docs/testmenu-roadmap.md)。
@@ -164,14 +165,14 @@ src/Test/cases/prep/
 
 | 条目 | 行为 |
 |---|---|
-| `Test Battle` | 启动 `CHAPTER_TEST_BATTLE`；这是 `ChapterInfoTable` 里的正式 test chapter，事件来自 `ChapterEventInfo_TestBattle` |
+| `Test Battle` | 启动 `CHAPTER_TEST`；这是 `ChapterInfoTable` 里唯一的 test chapter，事件来自 `ChapterEventInfo_Test`；`test_scene_start_chapter()` 会跳过准备画面 |
 | `Back` | 返回 `MenuInfo_TestRoot` |
 
 `MenuInfo_TestPrep` 目前有：
 
 | 条目 | 行为 |
 |---|---|
-| `Test Prep` | 启动 `CHAPTER_TEST_PREP`；`ChapterInfoTable` 里 `has_prep=true`，事件来自 `ChapterEventInfo_TestPrep`，带 9 蓝 + 8 红单位，直接打开准备画面 |
+| `Test Prep` | 启动 `CHAPTER_TEST`；`has_prep=true`，事件来自 `ChapterEventInfo_Test`；`test_scene_start_prep()` 正常进入准备画面 |
 | `Back` | 返回 `MenuInfo_TestRoot` |
 
 后续领域照这个模式加 `cases/<domain>/<domain>_cases.c/h`，并在
@@ -179,29 +180,29 @@ src/Test/cases/prep/
 
 ### 3.4 test chapter 注册
 
-Battle / Prep 使用正式的 test chapter，注册方式和 `CHAPTER_TUTORIAL` 一样，
+Battle / Prep / Map Test 共用同一个正式 test chapter，注册方式和 `CHAPTER_TUTORIAL` 一样，
 不靠 `GetChapterInfo()` 的全局 override：
 
 - `include/constants/chapters.h`：
   ```c
   #if CONFIG_TEST_MENU
-      CHAPTER_TEST_BATTLE = 0x2D,
-      CHAPTER_TEST_PREP = 0x2E,
+      CHAPTER_TEST = 0x2E,
       CHAPTER_COUNT = 0x2F,
   #else
       CHAPTER_COUNT = 0x2D,
   #endif
   ```
 - `gameinfo/chapterinfo/chapterinfo_data.c` 的 `ChapterInfoTable`：
-  - `[CHAPTER_TEST_BATTLE]`：复用第一章地图，`has_prep=false`
-  - `[CHAPTER_TEST_PREP]`：复用第一章地图，`has_prep=true`
-  - 两者的 `asset_event_info` 指向 test event
+  - `[CHAPTER_TEST]`：复用第一章地图，`has_prep=true`
+  - `asset_event_info` 指向统一的 test event
 - `gameinfo/chapterinfo/chapterinfo_assets.c` 的 `ChapterAssets`：
-  - `PLIST_TEST_BATTLE_EVENT -> &ChapterEventInfo_TestBattle`
-  - `PLIST_TEST_PREP_EVENT -> &ChapterEventInfo_TestPrep`
-- `src/Test/fixtures/test-chapter.c` 只放 test event 的单位/脚本
-- `GetChapterInfo()` / `GetChapterEventInfo()` 保持正常查表，没有 override hook
-- testmenu 直接启动 `CHAPTER_TEST_BATTLE` / `CHAPTER_TEST_PREP`
+  - `PLIST_TEST_EVENT -> &ChapterEventInfo_Test`
+- `src/Test/fixtures/test-chapter.c`：一个 `ChapterEventInfo_Test`，包含 level 测试单位/事件和 prep 的 9 蓝单位
+- `src/Test/harness/test_scene.c`：
+  - `test_scene_start_chapter()` 设置 `gTestSkipPrep = true`，直接进地图
+  - `test_scene_start_prep()` 设置 `gTestSkipPrep = false`，正常打开准备画面
+- `vanilla/prepphase.c` 在 `CONFIG_TEST_MENU` 下检查 `gTestSkipPrep`，仅用于测试跳过
+- testmenu 的 Battle / Prep / Map Test 都启动 `CHAPTER_TEST`
 
 因此：
 

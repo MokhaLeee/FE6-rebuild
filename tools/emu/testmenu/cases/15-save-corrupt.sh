@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# 15/15: save negative test: corrupt one payload byte and expect invalid.
+# 16/16: save negative test: corrupt one payload byte and expect invalid.
 
 case_15_save_corrupt() {
 	local log="$OUT/15-save-corrupt.log"
 	local state case_id valid corrupt_valid
 
-	echo "== 15/15 testmenu: Save Corrupt Check"
+	echo "== 15 testmenu: Save Corrupt Check"
 
 	# Save 菜单顺序：Write + Load / Write / Load / Corrupt Check / Back。
 	# --probe 顺序：1 state, 2 case_id, 3 value0(valid), 4 value1(corrupt_valid)

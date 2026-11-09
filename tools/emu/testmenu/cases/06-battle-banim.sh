@@ -9,7 +9,7 @@ case_06_battle_banim() {
 	local runpid
 	local gdbrc=0
 
-	echo "== 6/15 testmenu: Battle → Test Battle → banim GDB 断点"
+	echo "== 6 testmenu: Battle → Test Battle → banim GDB 断点"
 
 	if command -v "${GDB:-arm-none-eabi-gdb}" >/dev/null 2>&1; then
 		gdb=$(command -v "${GDB:-arm-none-eabi-gdb}")
@@ -25,8 +25,8 @@ case_06_battle_banim() {
 		return
 	fi
 
-	# 第 1200 帧挂起：此时 testmenu 已经选完 Battle -> Chapter 1，
-	# 后续 A 推进会触发第一章 debug 事件的剧情战斗。
+	# 第 1200 帧挂起：此时 testmenu 已经选完 Battle -> Test Battle。
+	# 后续用真实按键选 Roy/攻击，触发战斗后命中 banim 断点。
 	"$RUN" "$ROM" --quiet --gdb-at 1200 --frames 30000 \
 		--hold 300:DOWN:5 \
 		--hold 400:A:5 \
@@ -34,7 +34,12 @@ case_06_battle_banim() {
 		--hold 600:DOWN:5 \
 		--hold 700:A:5 \
 		--hold 800:A:5 \
-		--hold-every 1000:25000:50:A:3 \
+		--hold 12000:A:5 \
+		--hold 12500:A:5 \
+		--hold 13000:A:5 \
+		--hold 13500:A:5 \
+		--hold 14000:A:5 \
+		--hold-every 14500:25000:60:A:4 \
 		--out "$OUT" >"$runlog" 2>&1 &
 	runpid=$!
 	trap 'kill "$runpid" 2>/dev/null' EXIT

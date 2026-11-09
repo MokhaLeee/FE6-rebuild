@@ -25,7 +25,9 @@ tools/emu/
 │   │   ├── 12-mss-statscreen.sh
 │   │   ├── 13-prep-save-map.sh
 │   │   ├── 14-game-chapter2.sh
-│   │   └── 15-save-corrupt.sh
+│   │   ├── 15-save-corrupt.sh
+│   │   ├── 16-level-cap.sh
+│   │   └── 17-level-map.sh
 │   └── README.md              # 本文件
 └── legacy/                    # 旧 run-tests.sh / gdb-check.sh / 文档
 ```

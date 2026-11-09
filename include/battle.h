@@ -123,6 +123,7 @@ void BattleGenerate(struct Unit *instigator, struct Unit *target);
 void BattleGenerateDisplayStats(struct Unit *unit, i8 item_slot);
 bool BattleRandRoll(u16 threshold, bool simResult);
 bool BattleRandRoll2Rn(u16 threshold, bool simResult);
+int GetDevilReversalChance(int level);
 void InitBattleUnit(struct BattleUnit *bu, struct Unit *unit);
 void InitBattleUnitWithoutBonuses(struct BattleUnit *bu, struct Unit *unit);
 void SetBattleUnitTerrainBonuses(struct BattleUnit *bu, int terrain);

@@ -141,14 +141,22 @@ void CheckBattleUnitLevelUp(struct BattleUnit *bu)
 
 	if (bu->unit.exp >= 100) {
 		bu->unit.exp -= 100;
-		bu->unit.level++;
 
-		if (bu->unit.level == UNIT_LEVEL_MAX) {
+		if (bu->unit.level < UNIT_LEVEL_MAX) {
+			bu->unit.level++;
+
+			if (bu->unit.level == UNIT_LEVEL_MAX) {
+				bu->exp_gain -= bu->unit.exp;
+				bu->unit.exp = 0xFF;
+			}
+
+			UnitLvupCore(bu, 0);
+			CheckBattleUnitStatCaps(GetUnit(bu->unit.id), bu);
+		} else {
+			/* Safety net: never allow a unit already at the cap to level
+			 * past it (e.g. a promotion that reset exp at the cap). */
 			bu->exp_gain -= bu->unit.exp;
 			bu->unit.exp = 0xFF;
 		}
-
-		UnitLvupCore(bu, 0);
-		CheckBattleUnitStatCaps(GetUnit(bu->unit.id), bu);
 	}
 }

@@ -533,7 +533,7 @@ void UnitApplyBonusLevels(struct Unit *unit, int levelCount)
 void UnitAutolevel(struct Unit *unit)
 {
 	if (UNIT_ATTRIBUTES(unit) & UNIT_ATTR_PROMOTED)
-		UnitAutolevelCore(unit, unit->jinfo->jid_promote, UNIT_LEVEL_MAX - 1);
+		UnitAutolevelCore(unit, unit->jinfo->jid_promote, UNIT_PROMOTED_AUTOLEVEL_LEVELS);
 
 	UnitAutolevelCore(unit, unit->jinfo->id, unit->level - 1);
 }

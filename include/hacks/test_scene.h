@@ -12,6 +12,8 @@ enum {
 	TEST_SCENE_SAVE_ITEM_USES = 3,
 };
 
+extern bool gTestSkipPrep;
+
 void test_scene_start_chapter(int chapter);
 void test_scene_start_prep(void);
 void test_scene_write_chapter_save(int save_id, int chapter);
