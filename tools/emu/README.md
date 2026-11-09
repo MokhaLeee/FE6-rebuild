@@ -43,6 +43,15 @@
 
 第 5 项用固定随机种子，同样的 ROM 每次跑结果一致，所以"这次挂了、上次没挂"一定是代码改动造成的。
 
+## debug menu 入口
+
+- **开机隐藏入口**：按住 `SELECT+START` 开机 → `StartDebugMenu_LoadGame()` 的 debug load game 菜单：
+  `リリースエントリ` / `どこでも再開` / `手再開` / `章開始`。
+  `章開始` 用 LEFT/RIGHT 选章，A 开始新游戏（写 `SAVE_GAME0`，仅 debug）。
+- promo UI 的固定测试菜单目前**未部署**；设计草案见
+  [promo-test-design.md](promo-test-design.md)。之前的 `SELECT+START` 地图入口/`テスト`
+  子菜单已退回。
+
 ## 状态驱动的输入
 
 固定帧号的按键脚本（`--hold-every 9500:10500:40:B:4`）在流程变化几帧后就失效。
