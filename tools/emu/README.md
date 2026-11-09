@@ -18,7 +18,7 @@
 ## 跑测试（新 testmenu）
 
 ```bash
-./tools/emu/testmenu-tests.sh          # 当前 1 个 case
+./tools/emu/testmenu-tests.sh          # 当前 2 个 case
 ./tools/emu/testmenu-tests.sh other.gba
 ```
 
@@ -29,9 +29,11 @@
 
 | case | 断言 |
 |---|---|
-| 1 testmenu → chapter | 开机进入 testmenu（Roy/Lilina 两张脸、约 58 色）；选 Start Game 离开菜单；`gPlaySt.chapter >= 1` |
+| 1 start game | 开机进入 testmenu（Roy/Lilina 两张脸、约 58 色）；探针 magic/menu/state 正确；选 Start Game 后探针清零；`gPlaySt.chapter >= 1` |
+| 2 Test submenu | 顶层 → Test 子菜单 → Back → 顶层；探针 `menu` 按 `TOP → TEST_ROOT → TOP` 变化 |
 
 后续会把旧套件的章节、存档、banim、准备画面等用例按需求迁到 `testmenu-tests.sh`。
+测试项目录与探针结构体的方案见 [src/Test/README.md](../../src/Test/README.md)。
 
 ## 旧套件（迁移中）
 

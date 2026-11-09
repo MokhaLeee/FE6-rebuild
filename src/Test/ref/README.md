@@ -3,6 +3,7 @@
 > **现状（2026-11）**：测试入口已经迁到 `src/Test/testmenu/testmenu.c`
 > （`CONFIG_TEST_MENU=1`）；`CONFIG_DEBUG_MENU=0`，本目录的 debugmenu 不再参与
 > ROM 行为，只作为参考/回退。新测试见 `tools/emu/testmenu-tests.sh`。
+> 新 testmenu 的目录分层和 EWRAM 探针方案见 [../README.md](../README.md)。
 
 本目录保留 debug menu 的完整参考实现：`vanilla/debugmenu.c` 只有 `AgbMain()`
 一个调用者，因此整体迁到这里；debug 菜单的 5 张 `MenuInfo` / `MenuEntInfo` 表也
@@ -216,14 +217,16 @@ constants/videoalloc_global.h constants/chapters.h constants/faces.h
 | 条目 | 行为 |
 |---|---|
 | `Start Game` | `StartGame()`，之后正常进标题 / 主菜单 / 章节 |
-| `Dummy` | 占位，返回菜单，后续接测试场景 |
+| `Test` | 打开第二层 `MenuInfo_TestRoot`；目前只有 `Back` |
 
 ### 2.1 测试入口
 
-`tools/emu/testmenu-tests.sh` 从 testmenu 启动，当前 case 1 覆盖：
+`tools/emu/testmenu-tests.sh` 从 testmenu 启动，当前覆盖：
 
-开机进 testmenu（含 Roy/Lilina 两张脸）→ 选 `Start Game` → 进入章节
-（`gPlaySt.chapter >= 1`）。
+- case 1：开机进 testmenu（含 Roy/Lilina 两张脸）→ 探针 magic/menu/state →
+  选 `Start Game` → 进入章节（`gPlaySt.chapter >= 1`）。
+- case 2：顶层 → `Test` 子菜单 → `Back` → 顶层，探针 `menu` 按
+  `TOP → TEST_ROOT → TOP` 变化。
 
 旧的 `run-tests.sh` 仍假设开机到标题，正在按需求把用例迁进 `testmenu-tests.sh`。
 
