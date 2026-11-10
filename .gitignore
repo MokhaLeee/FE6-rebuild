@@ -953,3 +953,6 @@ MigrationBackup/
 
 # tools/emu 的模拟器构建产物（mGBA 核心库、gbarun、测试输出）
 tools/emu/.build/
+
+# contents/maps/*.c 生成的中间文件
+contents/maps/*.dmp

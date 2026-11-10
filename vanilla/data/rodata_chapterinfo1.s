@@ -156,10 +156,6 @@ MapAsset02_TsaConf:	@ 0x082384F8
 	.incbin "fe6-base.gba", 0x2384F8, 0x23956C - 0x2384F8
 
 .align 2,0
-.global MapAsset01_TsaConf
-MapAsset01_TsaConf:	@ 0x0823956C
-	.incbin "vanilla/data/mapassets/MapAsset01_TsaConf.tsa.lz"
-
 .align 2,0
 .global MapAsset4d_ImgAnims
 MapAsset4d_ImgAnims:	@ 0x0823AB80
@@ -502,10 +498,6 @@ MapTsa_Ch2:	@ 0x08247230
 	.incbin "fe6-base.gba", 0x247230, 0x2474C8 - 0x247230
 
 .align 2,0
-.global MapTsa_Ch1
-MapTsa_Ch1:	@ 0x082474C8
-	.incbin "fe6-base.gba", 0x2474C8, 0x247718 - 0x2474C8
-
 .align 2,0
 .global MapTsa_Chapter0
 MapTsa_Chapter0:	@ 0x08247718
