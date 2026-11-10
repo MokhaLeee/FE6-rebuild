@@ -202,9 +202,6 @@ MapAsset13_Pal:	@ 0x0823B580
 	.incbin "fe6-base.gba", 0x23B580, 0x23B6C0 - 0x23B580
 
 .align 2,0
-.global MapAsset01_NightPal
-MapAsset01_NightPal:	@ 0x0823B6C0
-	.incbin "vanilla/data/mapassets/MapAsset01_Pal2_ConfImg.gbapal", 0, 0x140
 
 .align 2,0
 .global MapAsset12_Pal
@@ -278,9 +275,6 @@ MapAsset02_Pal:	@ 0x0823C840
 	@.incbin "vanilla/data/mapassets/MapAsset02_ConfImg.gbapal", 0, 0x140
 
 .align 2,0
-.global MapAsset01_Pal
-MapAsset01_Pal:	@ 0x0823C980
-	.incbin "vanilla/data/mapassets/MapAsset01_ConfImg.gbapal", 0, 0x140
 
 .align 2,0
 .global MapTsa_Xmap5
@@ -504,9 +498,6 @@ MapTsa_Chapter0:	@ 0x08247718
 	.incbin "vanilla/data/mapassets/MapTsa_Chapter0.tsa.lz"
 
 .align 2,0
-.global MapAsset01_Img1
-MapAsset01_Img1:	@ 0x082478F0
-	.incbin "vanilla/data/mapassets/MapAsset01_Img1.4bpp.lz"
 
 .align 2,0
 .global MapAsset01B_Img2
@@ -514,6 +505,3 @@ MapAsset01B_Img2:	@ 0x0824B0B8
 	.incbin "fe6-base.gba", 0x24B0B8, 0x24D240 - 0x24B0B8
 
 .align 2,0
-.global MapAsset01_Img2
-MapAsset01_Img2:	@ 0x0824D240
-	.incbin "vanilla/data/mapassets/MapAsset01_Img2.4bpp.lz"

@@ -1,97 +1,67 @@
-# contents/maps + gamedata/maps
+# 地图数据组织
 
-地图相关的可编辑数据源，以及对应的 incbin 打包流程。
+按“共享 tileset”和“单章数据”分开。
 
-## 文件分工
-
-| 路径 | 内容 |
-|---|---|
-| `contents/maps/MapTsa_Ch1.c` | 第 1 章地图布局（15x21 个格子） |
-| `contents/maps/MapAsset01_TsaConf.c` | MapAsset01 的 1024 个 metatile 定义 + 地形 LUT |
-| `contents/maps/MapTsa_Ch1.dmp` / `.dmp.lz` | 构建产物（632 / 592 字节） |
-| `contents/maps/MapAsset01_TsaConf.dmp` / `.dmp.lz` | 构建产物（9216 / 5652 字节） |
-| `gamedata/maps/maps.S` | 两个数据符号 + incbin |
-| `gamedata/maps/MapTsa_Ch1.png` | 用 MapAsset01 离线渲染的参考图 |
-
-`contents/maps/*.dmp` 在 `.gitignore` 里；`.o`、`.lz` 由现有规则忽略。
-
-## MapTsa_Ch1.c：地图布局
-
-```c
-struct MapTsa_Ch1_map {
-	u8 width;        /* 15 */
-	u8 height;       /* 21 */
-	u16 cells[315];  /* 每格 = metatile 号 * 4 */
-};
-```
-
-每个数组行对应地图的一行，行尾注释是该行各格的 metatile 号。
-
-## MapAsset01_TsaConf.c：metatile 定义
-
-```c
-struct MapAsset01_TsaConf {
-	u16 tiles[1024][4];  /* 每个 metatile 的 4 个 tile 引用 */
-	u8 terrain[1024];    /* 每个 metatile 的 terrain id */
-};
-```
-
-`tiles` 里每一项用 `include/hardware.h` 的宏写成：
-
-```c
-/* 0 */ { TILEREF(479, 0), TILEREF(479, 0) | TILE_HFLIP,
-          TILEREF(511, 0), TILEREF(511, 0) | TILE_HFLIP },
-```
-
-- `TILEREF(tile, pal)`：tile 号 0..1023、调色板组 0..4；
-- `| TILE_HFLIP` / `| TILE_VFLIP`：水平 / 垂直翻转；
-- 4 个引用依次是左上、右上、左下、右下。
-
-`terrain` 是 1024 个 terrain id（见 `include/constants/terrains.h`），
-决定移动消耗、地形加成等，和图形无关。
-
-## gamedata/maps/maps.S
-
-```asm
-.section .content_data.map
-
-.align 2, 0
-.global MapTsa_Ch1
-MapTsa_Ch1:
-	.incbin "contents/maps/MapTsa_Ch1.dmp.lz"
-
-.align 2, 0
-.global MapAsset01_TsaConf
-MapAsset01_TsaConf:
-	.incbin "contents/maps/MapAsset01_TsaConf.dmp.lz"
-```
-
-## 构建
+## 目录
 
 ```
-contents/maps/*.c
-  → [CC ]  %.o: %.c
-  → [OCP]  %.dmp: %.o        (objcopy -S -O binary)
-  → [LZ ]  %.lz: %           (gbagfx)
-  → [AS ]  gamedata/maps/maps.S (.incbin)
-  → [LD ]  fe6re.gba
+contents/
+├── tileset/MapAsset01/       # 共享 tileset 的源数据
+│   ├── TsaConf.c             # 1024 metatile 定义 + 地形 LUT
+│   ├── Img1.png / Img2.png   # tile 图集（各 512 个 8x8）
+│   ├── ConfImg.png           # metatile 展开图 / 调色板源
+│   └── Pal2_ConfImg.png      # 夜间调色板版本
+└── maps/Chapter01/           # 第 1 章专属
+    ├── MapTsa_Ch1.c          # 15x21 地图布局
+    └── MapTsa_Ch1.png        # 参考渲染图
+
+gamedata/
+├── tileset/MapAsset01.S      # 共享 tileset 的 5 个符号 + incbin
+├── tileset/MapAsset01_Anims.c # tile 动画数组（需链接）
+├── maps/Chapter01.S          # MapTsa_Ch1 符号 + incbin
+└── maps/Chapter01_MapChange.c # 地图变更（需链接）
 ```
 
-`vanilla/data/rodata_chapterinfo1.s` 里原来对 `MapTsa_Ch1` 和
-`MapAsset01_TsaConf` 的 incbin 定义已移除，符号改由 `maps.S` 提供。
-不需要改 Makefile。
+## 共享 tileset：MapAsset01
 
-## 来源
+被序章、第 1/2/4/5 章等共用。
 
-- `MapTsa_Ch1`：从 `fe6-base.gba` 的 `0x2474C8` 解压（LZ77，632 字节）。
-- `MapAsset01_TsaConf`：`vanilla/data/mapassets/MapAsset01_TsaConf.tsa`
-  的 9216 字节（8192 TSA + 1024 地形 LUT）。
+| 符号 | 来源 | 说明 |
+|---|---|---|
+| `MapAsset01_TsaConf` | `tileset/MapAsset01/TsaConf.c` | metatile 4 个 tile 引用 + 地形 LUT |
+| `MapAsset01_Img1` | `Img1.png` | tile 0..511 |
+| `MapAsset01_Img2` | `Img2.png` | tile 512..1023 |
+| `MapAsset01_Pal` | `ConfImg.png` 的调色板 | 10 组，取前 0x140 字节 |
+| `MapAsset01_NightPal` | `Pal2_ConfImg.png` 的调色板 | 夜间版 |
+| `MapAsset01_Anims` | `MapAsset01_Anims.c` | `TsImgAnim` 数组 |
 
-两者都与原数据逐字节核对过。
+改这里会影响所有使用 MapAsset01 的章节。
+
+## 单章：Chapter01
+
+| 符号 | 来源 | 说明 |
+|---|---|---|
+| `MapTsa_Ch1` | `maps/Chapter01/MapTsa_Ch1.c` | 15x21，每格 metatile 号 * 4 |
+| `MapChange_Ch1` | `maps/Chapter01_MapChange.c` | 4 条变更（村庄关闭、建筑变废墟） |
+
+加新章节时，复制一套 `contents/maps/ChapterNN/` + `gamedata/maps/ChapterNN.S`
+即可；如果该章用别的 tileset，再建一套 `contents/tileset/MapAssetNN/`。
+
+## 构建链
+
+```
+.c   -> .o -> .dmp（objcopy）-> .dmp.lz（gbagfx）
+.png -> .4bpp / .gbapal（gbagfx）-> .lz
+.S   -> incbin 上述产物 -> 链接
+```
+
+`vanilla/data/rodata_chapterinfo1.s` 里原来的相关符号定义都已移除，
+`MapAsset01_Anims` 从 `vanilla/data/tileset/anims.h` 抽出，
+`MapChange_Ch1` 从 `gameinfo/chapterinfo/map_changes.c` 抽出。
+Makefile 不需要改。
 
 ## 注意
 
-- `cells` 的值必须是 4 的倍数；低 2 位非 0 会读到错误的 metatile。
-- `MapAsset01_TsaConf` 被序章、第 1/2/4/5 章等共用，改它会影响所有这些章节。
-- 地形不需要单独改：由 metatile 在 LUT 里的值决定。
-- 完整机制见 `docs/map-rendering.md`。
+- `cells` 的值必须是 4 的倍数。
+- 地形由 metatile 在 LUT 里的值决定，不需要单独改。
+- 完整渲染机制见 `docs/map-rendering.md`。
