@@ -9,4 +9,6 @@
 
 #define CONFIG_DEBUG_CRIT_CUTIN 0
 
+#define CONFIG_DEBUG_CH0_EVENT 0
+
 #endif
