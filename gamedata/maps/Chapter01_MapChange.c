@@ -26,7 +26,7 @@ static const u16 Tiles_MapChange_Ch1_3[] = {
 const struct MapChangeInfo MapChange_Ch1[] = {
 	{
 		.id = 0,
-		.x = 11,
+		.x = 14,
 		.y = 17,
 		.width = 3,
 		.height = 3,
@@ -34,7 +34,7 @@ const struct MapChangeInfo MapChange_Ch1[] = {
 	},
 	{
 		.id = 1,
-		.x = 3,
+		.x = 6,
 		.y = 7,
 		.width = 3,
 		.height = 3,
@@ -42,7 +42,7 @@ const struct MapChangeInfo MapChange_Ch1[] = {
 	},
 	{
 		.id = 2,
-		.x = 12,
+		.x = 15,
 		.y = 19,
 		.width = 1,
 		.height = 1,
@@ -50,7 +50,7 @@ const struct MapChangeInfo MapChange_Ch1[] = {
 	},
 	{
 		.id = 3,
-		.x = 4,
+		.x = 7,
 		.y = 9,
 		.width = 1,
 		.height = 1,

@@ -29,50 +29,50 @@ static void setup_status(void)
 
 static struct UnitInfo const UnitInfo_Chapter1_BlueA[] =
 {
-	{ PID_ROY, 0, 0, FALSE, FACTION_ID_BLUE, 1, 1, 20, 2, 18, { IID_RAPIER, IID_VULNERARY }, { 0 } },
-	{ PID_MARCUS, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 2, 20, 1, 17, { IID_IRONSWORD, IID_SILVERLANCE }, { 0 } },
+	{ PID_ROY, 0, 0, FALSE, FACTION_ID_BLUE, 1, 4, 20, 5, 18, { IID_RAPIER, IID_VULNERARY }, { 0 } },
+	{ PID_MARCUS, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 5, 20, 4, 17, { IID_IRONSWORD, IID_SILVERLANCE }, { 0 } },
 	{ 0 }, // end
 };
 
 static struct UnitInfo const UnitInfo_Chapter1_BlueB[] =
 {
-	{ PID_ALEN, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 0, 20, 3, 17, { IID_IRONSWORD, IID_IRONLANCE }, { 0 } },
-	{ PID_BORS, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 1, 20, 3, 19, { IID_IRONLANCE, IID_VULNERARY }, { 0 } },
-	{ PID_WOLT, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 2, 20, 2, 16, { IID_IRONBOW, IID_VULNERARY, IID_BALLISTA }, { 0 } },
+	{ PID_ALEN, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 3, 20, 6, 17, { IID_IRONSWORD, IID_IRONLANCE }, { 0 } },
+	{ PID_BORS, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 4, 20, 6, 19, { IID_IRONLANCE, IID_VULNERARY }, { 0 } },
+	{ PID_WOLT, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 5, 20, 5, 16, { IID_IRONBOW, IID_VULNERARY, IID_BALLISTA }, { 0 } },
 	{ 0 }, // end
 };
 
 static struct UnitInfo const UnitInfo_Chapter1_Lance[] =
 {
-	{ PID_LANCE, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 10, 9, 2, 17, { IID_IRONSWORD, IID_JAVELIN, IID_VULNERARY }, { 0 } },
+	{ PID_LANCE, 0, PID_ROY, FALSE, FACTION_ID_BLUE, 1, 13, 9, 5, 17, { IID_IRONSWORD, IID_JAVELIN, IID_VULNERARY }, { 0 } },
 	{ 0 }, // end
 };
 
 static struct UnitInfo const UnitInfo_Chapter1_RedA[] =
 {
-	{ PID_CHAPTER1_ARCHER, JID_ARCHER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 1, 0, 1, 2, { IID_IRONBOW }, { AI_A_00, AI_B_06, 0x29, 0x00 } },
-	{ PID_CHAPTER1_4A, JID_FIGHTER, 0, FALSE, FACTION_ID_RED, 5, 5, 0, 5, 6, { IID_STEELAXE }, { AI_A_03, AI_B_03, 0x09, 0x20 } },
-	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 2, 6, 1, 3, { IID_IRONAXE }, { AI_A_00, AI_B_06, 0x09, 0x00 } },
-	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 3, 10, 4, 5, { IID_IRONAXE }, { AI_A_00, AI_B_03, 0x09, 0x00 } },
-	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 12, 10, 6, 5, { IID_IRONAXE }, { AI_A_00, AI_B_03, 0x09, 0x00 } },
+	{ PID_CHAPTER1_ARCHER, JID_ARCHER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 4, 0, 4, 2, { IID_IRONBOW }, { AI_A_00, AI_B_06, 0x29, 0x00 } },
+	{ PID_CHAPTER1_4A, JID_FIGHTER, 0, FALSE, FACTION_ID_RED, 5, 8, 0, 8, 6, { IID_STEELAXE }, { AI_A_03, AI_B_03, 0x09, 0x20 } },
+	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 5, 6, 4, 3, { IID_IRONAXE }, { AI_A_00, AI_B_06, 0x09, 0x00 } },
+	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 6, 10, 7, 5, { IID_IRONAXE }, { AI_A_00, AI_B_03, 0x09, 0x00 } },
+	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 15, 10, 9, 5, { IID_IRONAXE }, { AI_A_00, AI_B_03, 0x09, 0x00 } },
 	{ 0 }, // end
 };
 
 static struct UnitInfo const UnitInfo_Chapter1_RedB[] =
 {
-	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 8, 4, 8, 9, { IID_IRONAXE }, { AI_A_00, AI_B_03, 0x09, 0x00 } },
-	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 9, 4, 9, 9, { IID_IRONAXE }, { AI_A_00, AI_B_03, 0x09, 0x00 } },
-	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 7, 2, 11, 7, { IID_IRONAXE }, { AI_A_00, AI_B_03, 0x09, 0x00 } },
-	{ PID_CHAPTER1_ARCHER, JID_ARCHER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 7, 3, 10, 10, { IID_IRONBOW }, { AI_A_00, AI_B_00, 0x29, 0x00 } },
+	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 11, 4, 11, 9, { IID_IRONAXE }, { AI_A_00, AI_B_03, 0x09, 0x00 } },
+	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 12, 4, 12, 9, { IID_IRONAXE }, { AI_A_00, AI_B_03, 0x09, 0x00 } },
+	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 10, 2, 14, 7, { IID_IRONAXE }, { AI_A_00, AI_B_03, 0x09, 0x00 } },
+	{ PID_CHAPTER1_ARCHER, JID_ARCHER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 10, 3, 13, 10, { IID_IRONBOW }, { AI_A_00, AI_B_00, 0x29, 0x00 } },
 	{ 0 }, // end
 };
 
 static struct UnitInfo const UnitInfo_Chapter1_RedC[] =
 {
-	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 12, 7, 7, 15, { IID_IRONAXE }, { AI_A_00, AI_B_00, 0x09, 0x00 } },
-	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 12, 8, 8, 14, { IID_IRONAXE }, { AI_A_00, AI_B_00, 0x09, 0x00 } },
-	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 3, 8, 12, 13, { IID_IRONAXE }, { AI_A_00, AI_B_00, 0x09, 0x00 } },
-	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 4, 8, 8, 18, { IID_IRONAXE }, { AI_A_00, AI_B_00, 0x09, 0x00 } },
+	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 15, 7, 10, 15, { IID_IRONAXE }, { AI_A_00, AI_B_00, 0x09, 0x00 } },
+	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 15, 8, 11, 14, { IID_IRONAXE }, { AI_A_00, AI_B_00, 0x09, 0x00 } },
+	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 6, 8, 15, 13, { IID_IRONAXE }, { AI_A_00, AI_B_00, 0x09, 0x00 } },
+	{ PID_CHAPTER1_BANDIT, JID_FIGHTER, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 7, 8, 11, 18, { IID_IRONAXE }, { AI_A_00, AI_B_00, 0x09, 0x00 } },
 	{ 0 }, // end
 };
 
@@ -81,18 +81,19 @@ static struct UnitInfo const UnitInfo_Chapter1_RedDummy[] =
 	{ 0 }, // end
 };
 
+static struct UnitInfo const UnitInfo_Chapter1_Pillager[] =
+{
+	{ PID_CHAPTER1_PILLAGER, 0, PID_CHAPTER1_4A, FALSE, FACTION_ID_RED, 1, 10, 4, 10, 7, { IID_IRONAXE }, { AI_A_00, AI_B_04, 0x09, 0x00 } },
+	{ 0 }, // end
+};
+
 static EventScr const EventScr_Chapter1_Opening[] =
 {
 	EvtUnitCameraOff
 	EvtLoadUnits(UnitInfo_Chapter1_RedA)
 	EvtMoveWait
-	EvtCamera(8, 12)
+	EvtCamera(11, 12)
 	EvtUnitCameraOff
-	EvtSleep(16)
-	EvtLoadUnits(UnitInfo_Chapter1_RedB)
-	EvtCamera(8, 17)
-	EvtLoadUnits(UnitInfo_Chapter1_RedC)
-	EvtMoveWait
 	EvtSleep(16)
 	EvtLoadUnits(UnitInfo_Chapter1_BlueA)
 	EvtMoveWait
@@ -100,7 +101,7 @@ static EventScr const EventScr_Chapter1_Opening[] =
 	EvtMoveWait
 	EvtLoadUnits(UnitInfo_Chapter1_Lance)
 	EvtMoveWait
-	EvtMoveUnit(PID_LANCE, 4, 18)
+	EvtMoveUnit(PID_LANCE, 7, 18)
 	EvtMoveWait
 	EvtFunc(setup_status)
 	EvtFunc(ApplyAllHardModeBonusLevels)
@@ -108,12 +109,34 @@ static EventScr const EventScr_Chapter1_Opening[] =
 	EvtEnd
 };
 
+static EventScr const EventScr_Chapter1_Thief[] =
+{
+	EvtLoadUnits(UnitInfo_Chapter1_Pillager)
+	EvtMoveWait
+	EvtEnd
+};
+
+static EventScr const EventScr_Chapter1_ReinforceB[] =
+{
+	EvtCamera(11, 5)
+	EvtLoadUnits(UnitInfo_Chapter1_RedB)
+	EvtMoveWait
+	EvtMoveUnit(PID_CHAPTER1_4A, 8, 4)
+	EvtMoveWait
+	EvtEnd
+};
+
+static EventScr const EventScr_Chapter1_ReinforceC[] =
+{
+	EvtLoadUnits(UnitInfo_Chapter1_RedC)
+	EvtMoveWait
+	EvtEnd
+};
+
 static CONTENT_DATA EventScr const EventScr_Chapter1_FirstRedTurn[] =
 {
 	// EvtSetBgm(SONG_02)
-	EvtCamera(5, 3)
-	EvtMoveWait
-	EvtMoveUnit(PID_CHAPTER1_4A, 5, 4)
+	EvtCamera(8, 3)
 	EvtMoveWait
 	EvtSleep(16)
 	EvtTalk(MSG_008)
@@ -134,7 +157,7 @@ static EventScr const EventScr_Chapter1_Village[] =
 	EvtClearTalk
 	EvtRaiseBgmVolume
 	EvtNoSkip
-	EvtGiveMoney(5000)
+	EvtGiveItem(IID_REDGEM)
 	EvtClearSkip
 	EvtEnd
 };
@@ -142,7 +165,7 @@ static EventScr const EventScr_Chapter1_Village[] =
 static EventScr const EventScr_Chapter1_TopVillageDummy[] =
 {
 	EvtNoSkip
-	EvtGiveMoney(5000)
+	EvtGiveItem(IID_IRONSWORD)
 	EvtClearSkip
 	EvtEnd
 };
@@ -224,6 +247,9 @@ static EventListScr const EventListScr_Chapter1_Turn[] =
 {
 	EvtListTurn(0, EventScr_Chapter1_Opening, 1, 0, FACTION_BLUE)
 	EvtListTurn(FLAG_CHAPTER1_TURN1, EventScr_Chapter1_FirstRedTurn, 1, 0, FACTION_RED)
+	EvtListTurn(0, EventScr_Chapter1_Thief, 2, 0, FACTION_RED)
+	EvtListTurn(0, EventScr_Chapter1_ReinforceB, 3, 0, FACTION_RED)
+	EvtListTurn(0, EventScr_Chapter1_ReinforceC, 5, 0, FACTION_RED)
 	EvtListEnd
 };
 
@@ -234,14 +260,15 @@ static EventListScr const EventListScr_Chapter1_Talk[] =
 
 static EventListScr const EventListScr_Chapter1_Tile[] =
 {
-	EvtListTileMapChange(FLAG_CHAPTER1_VILLAGE, EventScr_Chapter1_Village, 12, 19, TILE_COMMAND_VISIT)
-	EvtListTile(FLAG_CHAPTER1_VILLAGE, EVENT_NOSCRIPT, 12, 18, TILE_COMMAND_PILLAGE)
-	EvtListTileMapChange(FLAG_CHAPTER1_TOPVILLAGE, EventScr_Chapter1_TopVillageDummy, 4, 9, TILE_COMMAND_VISIT)
-	EvtListTile(FLAG_CHAPTER1_TOPVILLAGE, EVENT_NOSCRIPT, 4, 8, TILE_COMMAND_PILLAGE)
-	EvtListTile(0, EventScr_Chapter1_HouseA, 12, 15, TILE_COMMAND_VISIT)
-	EvtListTile(0, EventScr_Chapter1_HouseB, 9, 16, TILE_COMMAND_VISIT)
-	EvtListTile(0, EventScr_Chapter1_HouseC, 9, 19, TILE_COMMAND_VISIT)
-	EvtListTile(FLAG_3, EVENT_NOSCRIPT, 5, 4, TILE_COMMAND_SEIZE)
+	EvtListTileMapChange(FLAG_CHAPTER1_VILLAGE, EventScr_Chapter1_Village, 15, 19, TILE_COMMAND_VISIT)
+	EvtListTile(FLAG_CHAPTER1_VILLAGE, EVENT_NOSCRIPT, 15, 18, TILE_COMMAND_PILLAGE)
+	EvtListTileMapChange(FLAG_CHAPTER1_TOPVILLAGE, EventScr_Chapter1_TopVillageDummy, 7, 9, TILE_COMMAND_VISIT)
+	EvtListTile(FLAG_CHAPTER1_TOPVILLAGE, EVENT_NOSCRIPT, 7, 8, TILE_COMMAND_PILLAGE)
+	EvtListTile(0, EventScr_Chapter1_HouseA, 15, 15, TILE_COMMAND_VISIT)
+	EvtListTile(0, EventScr_Chapter1_HouseB, 12, 16, TILE_COMMAND_VISIT)
+	EvtListTile(0, EventScr_Chapter1_HouseC, 12, 19, TILE_COMMAND_VISIT)
+	EvtListChest(0, IID_VULNERARY, 0, 16, 16, TILE_COMMAND_CHEST)
+	EvtListTile(FLAG_3, EVENT_NOSCRIPT, 8, 4, TILE_COMMAND_SEIZE)
 	EvtListEnd
 };
 
