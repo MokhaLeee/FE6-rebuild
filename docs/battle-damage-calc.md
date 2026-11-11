@@ -133,7 +133,7 @@ ref[r] = (0x100 * r + (100 - r) / 2) / (100 - r)     (r = 0..99)
 | `BattleRoll1RN` / `BattleRoll2RN` | `BattleRandRoll()` / `BattleRandRoll2Rn()` | simulate 下直接返回 `simulationResult` |
 | `gpKernelBattleDesignerConfig` | 无 | FE6 侧没有 designer config 机制，先用 `CONFIG_*` 宏 |
 | `COMMON_SKILL_VALID()` + `#if defined(SID_x)` | 不需要 | FE6 的 `SID_*` 是 `enum`，不存在 `defined()` 判断；直接 `case SID_x:` |
-| `BattleFastSkillTester`（plist/jlist/dynamic） | `SkillFastTester()` | 见 4.3，**不要**误用 `BattleSkillTester` |
+| `BattleFastSkillTester`（plist/jlist/dynamic） | `SkillFastTester()` | 语义对齐；但伤害流程按 4.3 的三档选择，战斗内优先 `BattleSkillTester()` |
 | `Div()` / `Div10()` | `k_udiv()` / `k_udiv10()` | 本仓库禁止裸 `/`（见 AGENTS.md 宪法） |
 | `.lyn.event` + `POIN` 钩子表 | 普通 C 常量函数指针数组 | 不用重定位 |
 
@@ -246,8 +246,15 @@ int CalcBattleRealDamage(struct BattleUnit *attacker,
 	const BattleRealDamageCalcFunc *it;
 	int damage = 0;
 
+	/*
+	 * 快照未建立时不参与计算：状态画面会留下 pinfo/jinfo 不完整的
+	 * 空壳 B，`UNIT_IS_VALID()` 只看 pinfo，这里必须连 jinfo 一起判。
+	 */
+	if (!UNIT_IS_VALID(&attacker->unit) || attacker->unit.jinfo == NULL)
+		return 0;
+
 	/* 真伤技能示例（SID 需先加进 constants/skills.h 的 enum）：
-	 * if (SkillFastTester(&attacker->unit, SID_RuinedBlade))
+	 * if (BattleSkillTester(attacker, SID_RuinedBlade))
 	 *	damage += SKILL_EFF2(SID_RuinedBlade);
 	 */
 
@@ -421,6 +428,11 @@ void BattleGenerateHitAttributes(struct BattleUnit *attacker,
 顺序很关键：后续战前技能要往 `GetBaseDmg(attacker)->increase/decrease` 上累加，
 必须初始化在前。
 
+此时 `BattleGenerate*` 入口已经建好技能快照（4.3），所以 `CalcBattleRealDamage()`
+里可以安全地用 `BattleSkillTester()`，Nihil 也会自动生效。唯一例外是
+`BattleGenerateDisplayStats()` 的单角色快照路径，B 是空壳——`CalcBattleRealDamage()`
+开头的 `UNIT_IS_VALID() && jinfo != NULL` 保护就是为它准备的。
+
 **(5) `src/Core/BattleSys/Source/battlepreview.c`**
 
 短版预览把
@@ -441,7 +453,8 @@ void BattleGenerateHitAttributes(struct BattleUnit *attacker,
 - 逐次命中、依赖 RN：新建 `src/SkillEffects/BattleSkills/BattleDamage.c`，
   按 fe8 `Misc/SkillEffects/BattleDamage/*.c` 的写法写成
   `BattleDamageCalc_AttackerSkills/DefenderSkills`，再把函数名加进
-  `gpBattleDamageCalcFuncs[]`。
+  `gpBattleDamageCalcFuncs[]`。循环用 `GetSkillList(&bu->unit)`：列表已在
+  快照层处理过 Nihil，也包含 `AppendSkillListInBattle()` 在战斗期追加的技能。
 
 ### 3.5 为什么预览不照抄 `ModifyBattleStatusForUI()`
 
@@ -563,14 +576,34 @@ case SID_Multiscale:
 - simulate 模式下 `BattleRandRoll` 直接返回传入的 `simulationResult`，
   不消耗 RN，这点和 fe8 一致，不需要额外处理。
 
-### 4.3 技能检测用 `SkillFastTester`，不是 `BattleSkillTester`
+### 4.3 技能检测：三档选择与快照边界
 
-`BattleSkillTester()` 查的是 `BattleUnit::skills_bitfile`，是 O(1) 位图查询，
-刻意保持最简（战斗中会被反复调用），所以这里不做惰性重建或 Nihil 动态判断。
+技能系统现在有三条查询路径，伤害流程必须按场景选对，否则会绕过
+Nihil、或者在状态画面的空壳单位上读到脏数据。
 
-bitfile 的时序已经在本轮单独修复（见本小节末尾），当前约定：
+| 查询 | 依赖 | 是否受 Nihil 影响 | 适用场景 |
+|---|---|---|---|
+| `SkillTester(unit, sid)` | 列表缓存（`GetSkillList()`） | 是（列表被快照层清空） | 通用；需要「当前战斗是否真的生效」 |
+| `SkillFastTester(unit, sid)` | P/J 表 + `unit->skills[]` | 否 | 只问「这个单位有没有这个技能」，不需要战斗上下文 |
+| `BattleSkillTester(bu, sid)` | `skills_bitfile` 一位 | 是（位图被快照层清空） | 战斗中反复查询单个技能，O(1) |
 
-快照拆成两层，避免「逐角色初始化」和「Nihil 需要双方」的耦合：
+按伤害流程的两个阶段划分：
+
+- **战前 base dmg（`CalcBattleRealDamage()`）**：用 `BattleSkillTester()`。
+  它在 `ComputeBattleUnitStats()` 里执行，此时 `BattleGenerate*` 入口已经建好
+  快照，位图可用；好处是天然尊重 Nihil。但状态画面只建 A 的单角色快照，
+  B 是 `pinfo != NULL && jinfo == NULL` 的空壳，所以进入前必须先判
+  `UNIT_IS_VALID(&bu->unit) && bu->unit.jinfo != NULL`，否则会读到残留位图。
+- **逐次命中（`BattleDamageCalc_*`）**：沿用现有 `GetSkillList()` 循环写法
+  （与 `PreBattleCalc_AttackerSkills` 一致）。列表已由快照层处理过 Nihil，
+  临时追加也走 `AppendSkillListInBattle()`，列表与位图同步。
+
+`SkillFastTester()` 只留给「与战斗状态无关」的判定（例如战前检查某单位是否
+天生拥有某技能）。它不读位图，也不看 Nihil。
+
+#### 快照层（已完成）
+
+bitfile 的时序已经单独修复，伤害方案直接建立在这套契约上：
 
 ```c
 /* 单角色：只依赖自己，可在任何上下文中调用 */
@@ -583,7 +616,7 @@ void SetupBattleSkillList(void);
 - `SetupBattleUnitSkillList()` 只构建传入角色自己的列表和 bitfile，不碰对手；
 - `SetupBattleSkillList()` = 两次单角色构建 + 两条对称的 Nihil 判定
   （读对方 `SkillFastTester(..., SID_Nihil)`，命中则清空自己的列表和 bitfile）；
-- `InitBattleUnit()` 恢复成纯初始化，不再有任何跨角色副作用；
+- `InitBattleUnit()` 是纯初始化，不再有跨角色副作用；
 - `InitBattleUnitVanilla()` 会把 bitfile 清零，任何"忘记重建"的路径退化为
   「无技能生效」，而不是沿用上一次战斗的残留；
 - `BattleSkillTester` 本身仍然只有 `check_bit` 一行。
@@ -598,12 +631,14 @@ void SetupBattleSkillList(void);
 | `BattleGenerateDisplayStats`（只有 A 是真实单位，B 是空壳） | 单角色 A |
 | `BattleInitItemEffect`（只有使用者 A 就绪） | 单角色 A |
 
-即便如此，本方案的真伤/战前 base dmg 仍用 `SkillFastTester()`
-（查 P/J 表 + `unit->skills[]`），理由是对齐 fe8 的 `BattleFastSkillTester()`
-语义：不受 `SID_Nihil` 影响，也不绑定快照时序。
+对伤害流程的直接含义：
 
-逐次命中的 `BattleDamageCalc_*` 沿用现有 `GetSkillList()` 写法即可
-（和当前 `PreBattleCalc_AttackerSkills` 一致）。
+- `PreBattleCalcInit_BaseDamage()` 可以在 `ComputeBattleUnitStats()` 里放心调用，
+  快照一定早于它；
+- 但 `BattleGenerateDisplayStats()` 走的是单角色快照，任何以 B 为 attacker
+  的计算都要走「空壳保护」（4.3 开头那条判断）；
+- 预览路径（`BattleGenerateSimulationInternal`）也建过快照，所以
+  `BattleCalcSimulateDamage()` 读到的 base dmg 是有效的。
 
 #### bitfile 快照时序修复（已完成）
 
@@ -615,7 +650,7 @@ void SetupBattleSkillList(void);
 |---|---|---|
 | 障碍物战斗（`mapmenu.c:667` + `InitObstacleBattleUnit`） | `GetUnit(0)` 为 NULL，`InitBattleUnit(B, NULL)` 提前返回，B 的 bitfile 沿用上一场 | 入口处整场快照，B 按 `PID_WALL`/`JID_OBSTACLE` 得到空表 |
 | 转职（`PromotionUI.c:1455`） | 先初始化 B、后初始化 A，A 的 bitfile 是转职前快照 | 不再有隐式重建；转职路径 bitfile 为 0（保守） |
-| 状态画面（`BattleGenerateDisplayStats`） | 只初始化 A，且 B 的 `jinfo` 被置 NULL，`GetSkillList(&B.unit)` 在 `UNIT_JID()` 处读空指针 | 只建 A 的单角色快照；`setup_skill_list()` 增加 `jinfo != NULL` 判断，空壳单位得到空表 |
+| 状态画面（`BattleGenerateDisplayStats`） | 只初始化 A，且 B 的 `jinfo` 被置 NULL，`GetSkillList(&B.unit)` 在 `UNIT_JID()` 处读空指针 | 只建 A 的单角色快照；`setup_skill_list()` 与 `JudgeSkillFast()` 都判 `jinfo != NULL`，空壳单位得到空表 |
 
 另外 `spawn_list_buffer()` 的归属判断从「按 `unit->id` 比较」改成
 「按 `&gBattleUnitA.unit` / `&gBattleUnitB.unit` 指针比较」：状态画面的空壳 B
@@ -649,7 +684,7 @@ void SetupBattleSkillList(void);
 
 | 位置 | 现状 | 影响 |
 |---|---|---|
-| `battlepreview.c` 短版 | 自己算 `atk - def` | **必须改**，否则预览和实际不符 |
+| `battlepreview.c` 短版 | 自己算 `atk - def` | **必须改**，否则预览和实际不符；模拟路径已建过快照，`BattleCalcSimulateDamage()` 可直接用 |
 | `banim_setup.c` 伤害仪表 | `battle_attack - battle_defense` | 不致命，仪表可能偏低；建议后续用 `BattleCalcSimulateDamage()` |
 | `vanilla/arena.c` | 用 `atk - def` 判断 `maxHP/6` | 只影响斗技场 AI 决策，可后续再改 |
 | `ai_battle.c` | 用 `atk - def` 做评分 | 同上，属于 AI 调优范围 |
@@ -669,6 +704,8 @@ void SetupBattleSkillList(void);
 
 ## 5. 落地顺序（每步都能单独编译/验证）
 
+0. **前置（已完成）**：SkillSys 快照的两层拆分（`SetupBattleUnitSkillList()` /
+   `SetupBattleSkillList()`）已经落地，本方案直接依赖它的时序契约，见 4.3。
 1. **骨架 + 常量**：新增 `battle-damage.h`、`BattleDamage.c`（只有
    `gDmg`/`BaseDmg`/查表/`GetMaxDamage`/`BattleCalcSimulateDamage`），
    `configs.h` 加两个宏，`battle.c` 的 `BATTLE_MAX_DAMAGE` 改为引用宏。
@@ -677,7 +714,9 @@ void SetupBattleSkillList(void);
    改 `BattleGenerateHitAttributes` 签名；`battle.c` 调 `BattleHit_CalcDamage()`。
    此时公式等价于原版（`increase=100`、`decrease=0x100`、`crit=300`）。
    → 用原版对照测试确认伤害/暴击数字不变。
-3. **战前 base dmg**：`PreBattleCalc.c` 调 `PreBattleCalcInit_BaseDamage()`。
+3. **战前 base dmg**：`PreBattleCalc.c` 在 vanilla 统计之后、技能循环之前调
+   `PreBattleCalcInit_BaseDamage()`（gate 在 `attacker == &gBattleUnitA`）。
+   此时快照已由 `BattleGenerate*` 入口建好，`BattleSkillTester()` 可用。
    → 仍无行为变化（没有技能写 base dmg）。
 4. **预览**：`battlepreview.c` 改用 `BattleCalcSimulateDamage()`。
    → 行为仍等价，但为后续技能铺好路。

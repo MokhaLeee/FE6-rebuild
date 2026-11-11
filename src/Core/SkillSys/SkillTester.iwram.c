@@ -15,6 +15,8 @@ bool JudgeSkillFast(struct Unit *unit, int sid)
 		return false;
 	if (unlikely(unit->pinfo == NULL))
 		return false;
+	if (unlikely(unit->jinfo == NULL))
+		return false;
 
 	pid = UNIT_PID(unit);
 	if (unlikely(gpSkillPTable[pid].sid[0] == sid))
