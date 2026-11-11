@@ -34,7 +34,8 @@ struct SkillList {
 };
 
 struct SkillList *GetSkillList(struct Unit *unit);
-void UnitToBattle_SetupSkillList(const struct BattleUnit *bu);
+void SetupBattleUnitSkillList(struct BattleUnit *bu);
+void SetupBattleSkillList(void);
 void AppendSkillListInBattle(struct BattleUnit *bu, int sid);
 bool PostAction_ResetSkillList(ProcPtr proc);
 

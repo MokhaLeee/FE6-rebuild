@@ -59,7 +59,7 @@ static void setup_skill_list(struct SkillList *list, const struct Unit *unit)
 
 	list->amt = 0;
 
-	if (UNIT_IS_VALID(unit)) {
+	if (UNIT_IS_VALID(unit) && unit->jinfo != NULL) {
 		int pid = UNIT_PID(unit);
 		int jid = UNIT_JID(unit);
 
@@ -85,14 +85,17 @@ static struct SkillList *spawn_list_buffer(const struct Unit *unit)
 {
 	int i;
 	struct SkillList *slist;
-	i8 uid = unit->id;
-
-	if (likely(uid == gBattleUnitA.unit.id)) {
+	/*
+	 * Match by address, not by unit id: ids can repeat (the empty target
+	 * used by the stat screen, the promotion copies, ...), and an id match
+	 * would let that unit overwrite the actor list.
+	 */
+	if (likely(unit == &gBattleUnitA.unit)) {
 		slist = BattleSkillListA;
 		goto check_list;
 	}
 
-	if (likely(uid == gBattleUnitB.unit.id)) {
+	if (likely(unit == &gBattleUnitB.unit)) {
 		slist = BattleSkillListB;
 		goto check_list;
 	}
@@ -122,61 +125,57 @@ struct SkillList *GetSkillList(struct Unit *unit)
 	return spawn_list_buffer(unit);
 }
 
-/**
- * battle skill list
+/*
+ * Build the skill snapshot of a single BattleUnit. It depends on that unit
+ * only and never touches the opponent, so contexts that own just one
+ * character (stat screen, item user) can call it safely, and initializing A
+ * never wastes work on a stale B.
  */
-static void modify_battle_skill_list(void)
+void SetupBattleUnitSkillList(struct BattleUnit *bu)
 {
-	bool nihil_a = SkillTester(&gBattleUnitA.unit, SID_Nihil);
-	bool nihil_b = SkillTester(&gBattleUnitB.unit, SID_Nihil);
-
-	if (nihil_a)
-		BattleSkillListB->amt = 0;
-
-	if (nihil_b)
-		BattleSkillListA->amt = 0;
-}
-
-static void setup_battle_skill_list(void)
-{
-	u32 i;
-	struct BattleUnit *bu;
 	struct SkillList *list;
+	u32 i;
 
-	setup_skill_list(BattleSkillListA,  &gBattleUnitA.unit);
-	setup_skill_list(BattleSkillListB, &gBattleUnitB.unit);
+	if (bu == &gBattleUnitA) {
+		list = BattleSkillListA;
+	} else if (bu == &gBattleUnitB) {
+		list = BattleSkillListB;
+	} else {
+		return;
+	}
 
-	/* nihil, etc */
-	modify_battle_skill_list();
-
-	/* actor */
-	bu = &gBattleUnitA;
-	list = BattleSkillListA;
-
-	memset(bu->skills_bitfile, 0, sizeof(bu->skills_bitfile));
-	for (i = 0; i < list->amt; i++)
-		set_bit(bu->skills_bitfile, list->sid[i]);
-
-	/* target */
-	bu = &gBattleUnitB;
-	list = BattleSkillListB;
+	setup_skill_list(list, &bu->unit);
 
 	memset(bu->skills_bitfile, 0, sizeof(bu->skills_bitfile));
 	for (i = 0; i < list->amt; i++)
 		set_bit(bu->skills_bitfile, list->sid[i]);
 }
 
-void UnitToBattle_SetupSkillList(const struct BattleUnit *bu)
+/*
+ * Build the skill snapshot for a whole battle. Callers must have finished
+ * InitBattleUnit() for both A and B, and must call this before the first
+ * skill query (e.g. SetBattleUnitWeapon()).
+ *
+ * Nihil needs the final state of both sides, so it can only be resolved at
+ * this level; the per-unit snapshot does not include it.
+ */
+void SetupBattleSkillList(void)
 {
-	/**
-	 * Here we hold 3 assumption:
-	 *
-	 * 1. UnitToBattle routine stands at the very beginning of battle-generate
-	 * 2. Battle target initialization is behind actor.
-	 * 3. No skill activcated before during function: InitBattleUnit()
-	 */
-	if (bu == &gBattleUnitB)
-		setup_battle_skill_list();
+	SetupBattleUnitSkillList(&gBattleUnitA);
+	SetupBattleUnitSkillList(&gBattleUnitB);
+
+	/* The opponent's Nihil disables every skill on this side. */
+	if (SkillFastTester(&gBattleUnitB.unit, SID_Nihil)) {
+		BattleSkillListA->amt = 0;
+		memset(gBattleUnitA.skills_bitfile, 0,
+		       sizeof(gBattleUnitA.skills_bitfile));
+	}
+
+	if (SkillFastTester(&gBattleUnitA.unit, SID_Nihil)) {
+		BattleSkillListB->amt = 0;
+		memset(gBattleUnitB.skills_bitfile, 0,
+		       sizeof(gBattleUnitB.skills_bitfile));
+	}
 }
 
 bool PostAction_ResetSkillList(ProcPtr proc)

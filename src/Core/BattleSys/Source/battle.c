@@ -21,6 +21,7 @@
 #include "save_game.h"
 
 #include "klib.h"
+#include "skill-sys.h"
 
 #include "constants/pids.h"
 #include "constants/jids.h"
@@ -71,6 +72,12 @@ void BattleGenerateSimulationInternal(struct Unit *instigator, struct Unit *targ
 	InitBattleUnit(&gBattleUnitA, instigator);
 	InitBattleUnit(&gBattleUnitB, target);
 
+	/*
+	 * Both battle units are ready; take the skill snapshot (Nihil included)
+	 * before SetBattleUnitWeapon(), which may query skills.
+	 */
+	SetupBattleSkillList();
+
 	gBattleUnitA.unit.x = x;
 	gBattleUnitA.unit.y = y;
 
@@ -98,6 +105,12 @@ void BattleGenerateRealInternal(struct Unit *instigator, struct Unit *target)
 {
 	InitBattleUnit(&gBattleUnitA, instigator);
 	InitBattleUnit(&gBattleUnitB, target);
+
+	/*
+	 * Both battle units are ready; take the skill snapshot (Nihil included)
+	 * before SetBattleUnitWeapon(), which may query skills.
+	 */
+	SetupBattleSkillList();
 
 	gBattleSt.range = RECT_DISTANCE(
 		gBattleUnitA.unit.x, gBattleUnitA.unit.y,
@@ -196,6 +209,12 @@ void BattleGenerateDisplayStats(struct Unit *unit, i8 item_slot)
 	gBattleUnitA.advantage_bonus_damage = 0;
 
 	InitBattleUnit(&gBattleUnitA, unit);
+
+	/*
+	 * The stat screen has no opponent, so build the actor snapshot only and
+	 * skip the Nihil pass.
+	 */
+	SetupBattleUnitSkillList(&gBattleUnitA);
 
 	SetBattleUnitTerrainBonusesAuto(&gBattleUnitA);
 
@@ -1230,6 +1249,12 @@ void BattleInitItemEffect(struct Unit *unit, int item_slot)
 
 	InitBattleUnit(&gBattleUnitA, unit);
 
+	/*
+	 * Only the user is initialized here; the target is added by
+	 * BattleInitItemEffectTarget().
+	 */
+	SetupBattleUnitSkillList(&gBattleUnitA);
+
 	SetBattleUnitTerrainBonusesAuto(&gBattleUnitA);
 	ComputeBattleUnitBaseDefense(&gBattleUnitA);
 	ComputeBattleUnitSupportBonuses(&gBattleUnitA, NULL);
@@ -1256,6 +1281,9 @@ void BattleInitItemEffect(struct Unit *unit, int item_slot)
 void BattleInitItemEffectTarget(struct Unit *unit)
 {
 	InitBattleUnit(&gBattleUnitB, unit);
+
+	/* User and target are both ready now; complete the snapshot. */
+	SetupBattleSkillList();
 
 	SetBattleUnitTerrainBonusesAuto(&gBattleUnitB);
 	ComputeBattleUnitBaseDefense(&gBattleUnitB);
@@ -1351,6 +1379,9 @@ void BattleGenerateArena(struct Unit *unit)
 
 	gBattleUnitB.unit.x = gBattleUnitA.unit.x + gArenaSt.range;
 	gBattleUnitB.unit.y = gBattleUnitA.unit.y;
+
+	/* Both sides are ready; take the skill snapshot (Nihil included). */
+	SetupBattleSkillList();
 
 	SetBattleUnitWeapon(&gBattleUnitA, ITEMSLOT_ARENA_PLAYER);
 	SetBattleUnitWeapon(&gBattleUnitB, ITEMSLOT_ARENA_OPPONENT);

@@ -9,9 +9,6 @@ static void unit_to_battle_hook(struct BattleUnit * bu, struct Unit * unit)
 	/* str-mag */
 	bu->unit.mag = GetUnitMagic(unit);
 	bu->change_mag = 0;
-
-	/* skill */
-	UnitToBattle_SetupSkillList(bu);
 }
 
 static void battle_to_unit_hook(struct Unit *unit, struct BattleUnit *bu)
@@ -64,6 +61,13 @@ static void InitBattleUnitVanilla(struct BattleUnit *bu, struct Unit *unit)
 
 	gBattleUnitA.exp_gain = 0;
 	gBattleUnitB.exp_gain = 0;
+
+	/*
+	 * skills_bitfile is a per-battle snapshot. Unless SetupBattleUnitSkillList()
+	 * runs for this unit it must read as "no skill active", instead of keeping
+	 * whatever the previous battle left behind.
+	 */
+	memset(bu->skills_bitfile, 0, sizeof(bu->skills_bitfile));
 }
 
 void InitBattleUnit(struct BattleUnit * bu, struct Unit * unit)
