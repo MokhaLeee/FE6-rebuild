@@ -12,6 +12,7 @@
 	.equiv NUM_TRACKS_SE7_EVT, 2
 
 	.bss
+	.balign 4
 
 	.global gMPlayTrack_BGM1
 gMPlayTrack_BGM1:
