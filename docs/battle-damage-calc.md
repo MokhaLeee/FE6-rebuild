@@ -623,13 +623,8 @@ void SetupBattleSkillList(void);
 
 **踩坑记录**：`setup_skill_list()` 的去重缓冲原本借用 `gBuf`，不要改成
 独立的 static 位图。实测在干净基线上只把那 128 字节换成 static 数组，
-`testmenu` case 14（Game → Chapter 2）就会从 `colors=317` 翻成失败——
-`gBuf` 的清零副作用被热路径依赖，且新增 IWRAM 数据会影响该场景的
-帧内时序。当前实现保持 `gBuf` 不变。
-
-**已知遗留**：`testmenu` case 14（Game → Chapter 2，20000 帧时断言
-`colors >= 200`）对 ROM 二进制布局敏感：让它失败/通过的差异可以小到
-「在从不执行的函数里加两行计数器」。该项暂不作为回归判据，待单独处理。
+即使逻辑等价也会改变既有场景的帧内时序——`gBuf` 的清零副作用被热路径依赖。
+当前实现保持 `gBuf` 不变。
 
 ### 4.4 数值范围与溢出
 
