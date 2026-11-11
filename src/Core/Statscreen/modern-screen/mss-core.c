@@ -523,13 +523,14 @@ static void mss_init_slide_unit_in(struct ProcMss *proc)
 }
 
 /*
- * Page changes keep the same stagger as before, minus the upper panel: on
- * pages 1..3 that panel is identical on both sides, and on page 0 it is part
- * of the left block that slides as a whole.
+ * Page changes keep the same stagger as before. The upper panel takes part
+ * only when page 0 is on one side of the change: pages 1..3 all show the same
+ * upper panel, and page 0 has none at all (see mss_page_slide_frame()).
  */
 static void mss_init_page_slide_out(struct ProcMss *proc)
 {
 	s_mss_slide_mode = MSS_SLIDE_OUT;
+	mss_slide_init(&s_mss_slide_u, 0, 8);
 	mss_slide_init(&s_mss_slide_l, 4, 12);
 	mss_slide_init(&s_mss_slide_r, 2, 10);
 }
@@ -537,6 +538,7 @@ static void mss_init_page_slide_out(struct ProcMss *proc)
 static void mss_init_page_slide_in(struct ProcMss *proc)
 {
 	s_mss_slide_mode = MSS_SLIDE_IN;
+	mss_slide_init(&s_mss_slide_u, 4, 8);
 	mss_slide_init(&s_mss_slide_l, 0, 12);
 	mss_slide_init(&s_mss_slide_r, 6, 10);
 }
@@ -751,68 +753,6 @@ static void slide_dual_left(int step, enum mss_slide_ops ops)
 		len, MSS_DUAL_HIGHT);
 }
 
-/*
- * Pages 1..3 stack the upper panel on top of the left panel, together covering
- * exactly the area page 0's full-height panel covers. Giving both the same
- * column offset makes the whole left half of the screen slide as one block, so
- * a page change that involves page 0 does not need two separate motions.
- */
-static void slide_upper_left(int step, enum mss_slide_ops ops)
-{
-	int len, src_off, dst_off;
-
-	step = step * 2;
-
-	if (step > MSS_L_WIDTH)
-		step = MSS_L_WIDTH;
-
-	switch (ops) {
-	case MSS_SLIDE_IN:
-		src_off = MSS_L_WIDTH - step;
-		dst_off = 0;
-		len = MSS_L_WIDTH - src_off;
-		break;
-
-	case MSS_SLIDE_OUT:
-		src_off = step;
-		dst_off = 0;
-		len = MSS_L_WIDTH - src_off;
-		break;
-
-	case MSS_SLIDE_NONE:
-	default:
-		src_off = 0;
-		dst_off = 0;
-		len = MSS_L_WIDTH;
-		break;
-	}
-
-	TmCopyRect(
-		TmBuff_MssU0 + TM_OFFSET(src_off, 0),
-		gBg0Tm + TM_OFFSET(MSS_U_X + dst_off, MSS_U_Y),
-		len, MSS_U_HIGHT);
-
-	TmCopyRect(
-		TmBuff_MssU2 + TM_OFFSET(src_off, 0),
-		gBg2Tm + TM_OFFSET(MSS_U_X + dst_off, MSS_U_Y),
-		len, MSS_U_HIGHT);
-
-	TmCopyRect(
-		TmBuff_MssL0 + TM_OFFSET(src_off, 0),
-		gBg0Tm + TM_OFFSET(MSS_L_X + dst_off, MSS_L_Y),
-		len, MSS_L_HIGHT);
-
-	TmCopyRect(
-		TmBuff_MssL1 + TM_OFFSET(src_off, 0),
-		gBg1Tm + TM_OFFSET(MSS_L_X + dst_off, MSS_L_Y),
-		len, MSS_L_HIGHT);
-
-	TmCopyRect(
-		TmBuff_MssL2 + TM_OFFSET(src_off, 0),
-		gBg2Tm + TM_OFFSET(MSS_L_X + dst_off, MSS_L_Y),
-		len, MSS_L_HIGHT);
-}
-
 static void mss_loop_unit_slidein(struct ProcMss *proc)
 {
 	int u = mss_slide_tick(&s_mss_slide_u, MSS_U_HIGHT);
@@ -862,13 +802,22 @@ static void mss_loop_unit_slideout(struct ProcMss *proc)
  * every page; the right panel and the upper panel only take part when their
  * content changes (see mss_begin_page_slide()). A panel that stays is simply
  * redrawn in place on every frame, since the BG is cleared before each blit.
+ *
+ * The upper panel slides vertically (down on entry, back up on exit) and only
+ * when page 0 is on one side of the change: pages 1..3 all show the same upper
+ * panel, and page 0 has none.
  */
 static void mss_page_slide_frame(struct ProcMss *proc, bool out)
 {
 	struct ProcMss *mss = proc->proc_parent;
 	enum mss_slide_ops ops = out ? MSS_SLIDE_OUT : MSS_SLIDE_IN;
+	bool upper_slides = s_mss_left_block && mss->page != 0;
 	int l = mss_slide_tick(&s_mss_slide_l, MSS_L_WIDTH / 2);
+	int u = 0;
 	int r = 0;
+
+	if (upper_slides)
+		u = mss_slide_tick(&s_mss_slide_u, MSS_U_HIGHT);
 
 	if (s_mss_right_slides)
 		r = mss_slide_tick(&s_mss_slide_r, MSS_R_WIDTH);
@@ -877,14 +826,15 @@ static void mss_page_slide_frame(struct ProcMss *proc, bool out)
 	TmFill(gBg1Tm, 0);
 	TmFill(gBg2Tm, 0);
 
-	if (s_mss_left_block) {
-		if (mss->page == 0)
-			slide_dual_left(l, ops);   /* page 0: one 20x20 panel */
-		else
-			slide_upper_left(l, ops);  /* pages 1..3: upper + left */
+	if (mss->page == 0) {
+		/* page 0 has no upper panel: one 20x20 block slides in from the left */
+		slide_dual_left(l, ops);
 	} else {
-		/* pages 1..3 <-> pages 1..3: the upper panel is identical */
-		slide_up(0, MSS_SLIDE_NONE);
+		if (upper_slides)
+			slide_up(u, ops);           /* pages 1..3: upper drops in from above */
+		else
+			slide_up(0, MSS_SLIDE_NONE); /* pages 1..3 <-> pages 1..3 */
+
 		slide_left(l, ops);
 	}
 
@@ -896,6 +846,7 @@ static void mss_page_slide_frame(struct ProcMss *proc, bool out)
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
 
 	if (s_mss_slide_l.clock >= s_mss_slide_l.length
+	 && (!upper_slides || s_mss_slide_u.clock >= s_mss_slide_u.length)
 	 && (!s_mss_right_slides || s_mss_slide_r.clock >= s_mss_slide_r.length))
 		Proc_Break(proc);
 }
@@ -1011,7 +962,10 @@ static int mss_right_panel_kind(int page)
 
 /*
  * Decide which panels take part in a page change:
- *  - the left half always slides, as one 20x20 block when page 0 is involved;
+ *  - the left half always slides; s_mss_left_block marks the changes that
+ *    involve page 0, whose full-height panel has no upper panel above it;
+ *  - the upper panel slides vertically only for those same changes, because
+ *    it is identical on pages 1..3 and absent on page 0;
  *  - the right panel slides only when its content differs.
  */
 static void mss_begin_page_slide(struct ProcMss *proc)

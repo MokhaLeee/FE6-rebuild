@@ -186,8 +186,10 @@ i16 length;  // total slide duration in frames
 |---|---|---|---|
 | unit / entry out | 0 / 8 | 2 / 10 | 4 / 12 |
 | unit / entry in | 4 / 8 | 8 / 10 | 0 / 12 |
-| page out | — | 2 / 10 | 4 / 12 |
-| page in | — | 6 / 10 | 0 / 12 |
+| page out | 0 / 8 | 2 / 10 | 4 / 12 |
+| page in | 4 / 8 | 6 / 10 | 0 / 12 |
+
+（翻页时 Upper 只在换页涉及 page 0 时参与，见 3.3。）
 
 双面板（page 0）只列左右两块：
 
@@ -198,8 +200,9 @@ i16 length;  // total slide duration in frames
 
 方向：Upper 从上、Left 从左、Right 从右；OUT 时反向飞出。
 
-翻页时 Upper 不再单独参与：page 1..3 之间它是同一个东西，直接原地重画；
-page 0 没有 Upper，它和 Left 一起作为整块左半屏滑动（见 3.3）。
+翻页时 Upper 只在换页涉及 page 0 时参与：page 1..3 之间它是同一个东西，直接原地重画；
+page 0 没有 Upper。涉及 page 0 时 Upper 单独垂直滑（`0 -> 1` 从上落下、`1 -> 0` 向上飞出），
+Left 仍水平滑，两者各飞各的，不合成整块（见 3.3）。
 
 滑出结束后才调用 `Mss_PreparePage()` 生成新页，再滑入。
 
@@ -220,14 +223,15 @@ page 0 没有 Upper，它和 Left 一起作为整块左半屏滑动（见 3.3）
   （页码/箭头/STATS 标题也跟着不动，页码在换页那一帧直接跳）。
   `mss_right_panel_kind()` 给每页一个「右栏内容种类」，两边种类相同就不滑。
 - **Upper** 只出现在 page 1..3，且三页完全一样，所以 `1 <-> 2 <-> 3` 之间 Upper 原地重画。
-- **左半屏**每页都不同，永远滑。只要换页涉及 page 0，就用 `slide_upper_left()` /
-  `slide_dual_left()` 把上栏+左栏（或 page 0 的整块立绘）当成一个 20x20 的整块一起滑，
-  避免上栏和左栏各飞各的。
+  换页涉及 page 0 时必须滑：`0 -> 1` 从上往下落入，`1 -> 0` 向上飞出（`slide_up()`）。
+- **左半屏**每页都不同，永远滑。page 0 用 `slide_dual_left()` 把 20x20 立绘块水平滑；
+  page 1..3 用 `slide_left()` 滑 20x14 左栏。Upper 不参与，两块各自独立飞。
 - 不滑的面板每帧照常 `TmFill` + 按 `MSS_SLIDE_NONE` 原地重画（`mss_page_slide_frame()`）。
 
 `mss_begin_page_slide()` 在起滑出 proc 之前根据 `page` / `page_to_change` 设置
-`s_mss_left_block`、`s_mss_right_slides`，OBJ（页码、箭头、标题）的偏移也读这两个标记：
-右栏不动时 `mss_page_slide_offset()` 返回 0，标题的 `rx` 不加偏移。
+`s_mss_left_block` 和 `s_mss_right_slides`；`mss_page_slide_frame()` 再按
+`s_mss_left_block && page != 0` 决定 Upper 是否参与。OBJ（页码、箭头、标题）的偏移也读
+`s_mss_right_slides`：右栏不动时 `mss_page_slide_offset()` 返回 0，标题的 `rx` 不加偏移。
 
 > 右栏不再滑出以后，准备新页那一帧（`Mss_PreparePage()` 里的 `ResetTextFont()` +
 > `InitTextList()`）会清掉字形槽，所以做了三件事：
@@ -511,24 +515,26 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 | `06a4e21` | 双面板 page 0、四页重排、每布局独立 slide proc |
 | `def581b` | page 0 换成 80x72 立绘 + 12x11 相框 + 角色描述 |
 | `9f9583c` | 相框改成 6px 金色装饰框：外圈暗金细线 + 四角菱形角花 |
-| （本次） | 翻页只滑「内容真的变了」的面板：`0<->1` 右栏不动、`1/2/3` 上栏不动；page 0 的整块左半屏和 page 1..3 的「上栏+左栏」作为一个 20x20 整块滑动 |
+| `fd14dd6` | 翻页只滑「内容真的变了」的面板：`0<->1` 右栏不动、`1/2/3` 上栏不动 |
+| （本次） | 翻页涉及 page 0 时 Upper 改回单独垂直滑：`0 -> 1` 从上落下、`1 -> 0` 向上飞出，不再和 Left 合成整块水平滑 |
 
 具体：
 
-- （本次）翻页改成**只滑内容变化的面板**：右栏在 page 0/1 是同一段 `put_rpage1()`，
+- `fd14dd6` 翻页改成**只滑内容变化的面板**：右栏在 page 0/1 是同一段 `put_rpage1()`，
   `0 <-> 1` 原地不动；上栏只存在于 page 1..3 且三页相同，`1 <-> 2 <-> 3` 原地重画。
   不滑的面板每帧照常 `TmFill` + `MSS_SLIDE_NONE` 原地重画，页码/箭头/右标题的偏移
   在 `s_mss_right_slides == 0` 时归零（页码在换页那一帧直接跳）。
-- （本次）换页涉及 page 0 时，`slide_upper_left()` 把 Upper + Left 用同一个列偏移一起
-  拷到 BG，page 0 的 20x20 立绘块也走 `slide_dual_left()`，整个左半屏作为一个整块滑，
-  不再上栏/左栏各飞各的。
-- （本次）翻页改用一对共用 proc（`ProcScr_mss_slide_page_in/out` + `mss_page_slide_frame()`），
+- （本次）翻页涉及 page 0 时 Upper 改回**单独垂直滑**：`0 -> 1` 上栏从上往下落入，
+  `1 -> 0` 向上飞出；Left 仍水平滑，两块不再合成 20x20 整块。`slide_upper_left()` 删除，
+  `mss_init_page_slide_in/out()` 重新初始化 `s_mss_slide_u`，`mss_page_slide_frame()` 里
+  Upper 的 tick / 结束条件按 `upper_slides` 开关。
+- `fd14dd6` 翻页改用一对共用 proc（`ProcScr_mss_slide_page_in/out` + `mss_page_slide_frame()`），
   不再按布局选 proc；进入 / 换人 / 退出仍然走每布局自己的 proc。
-- （本次）对齐 page 0 与 page 1 的文字字形槽：8 个属性标签挪到两个列表最前面且顺序一致，
+- `fd14dd6` 对齐 page 0 与 page 1 的文字字形槽：8 个属性标签挪到两个列表最前面且顺序一致，
   page 1 末尾用 `MSS_TEXT_PAD`（47 格）补齐总格数；page 0 额外调一次 `put_upage()` 画进
   不用的 U buffer，让特殊字符（数字、LV/HP）的首次使用顺序一致；`Mss_PreparePage()` 在
   `Mss_InitPageText()` 之后立刻重画右栏标签。否则右栏静止时翻页那一帧字母/数字会闪。
-- （本次）修复翻页/换人时标题和页码不跟面板滑动：slide 子进程是 `SpawnProcLocking()`
+- `c76effa` 修复翻页/换人时标题和页码不跟面板滑动：slide 子进程是 `SpawnProcLocking()`
   出来的，`PROC_CALL` 里拿到的是**子进程自己**，原来的 `proc->slide_*` 全写进了子进程的
   越界内存，父进程（sprite proc 读的地方）一直读到 0。现在 slide 状态改成文件级静态变量
   （`s_mss_slide_u/l/r/mode`），sprite proc 和 slide proc 共用同一份。
