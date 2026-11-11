@@ -17,6 +17,7 @@
 #include "ui.h"
 #include "helpbox.h"
 #include "statscreen.h"
+#include "battle-damage.h"
 
 #include "constants/videoalloc_global.h"
 #include "constants/msg.h"
@@ -207,10 +208,7 @@ static void DrawBattlePreviewContentsShort(struct BattlePreviewProc *proc)
 		gBattleUnitB.battle_effective_hit = 0xFF;
 		gBattleUnitB.battle_effective_crit = 0xFF;
 	} else {
-		damage = gBattleUnitB.battle_attack - gBattleUnitA.battle_defense;
-
-		if (damage < 0)
-			damage = 0;
+		damage = BattleCalcSimulateDamage(&gBattleUnitB, &gBattleUnitA);
 	}
 
 	PutNumberTwoChr(gUiTmScratchA + TM_OFFSET(2, 3), TEXT_COLOR_SYSTEM_BLUE, gBattleUnitB.previous_hp);
@@ -218,10 +216,7 @@ static void DrawBattlePreviewContentsShort(struct BattlePreviewProc *proc)
 	PutNumberTwoChr(gUiTmScratchA + TM_OFFSET(2, 7), TEXT_COLOR_SYSTEM_BLUE, gBattleUnitB.battle_effective_hit);
 	PutNumberTwoChr(gUiTmScratchA + TM_OFFSET(2, 9), TEXT_COLOR_SYSTEM_BLUE, gBattleUnitB.battle_effective_crit);
 
-	damage = gBattleUnitA.battle_attack - gBattleUnitB.battle_defense;
-
-	if (damage < 0)
-		damage = 0;
+	damage = BattleCalcSimulateDamage(&gBattleUnitA, &gBattleUnitB);
 
 	PutNumberTwoChr(gUiTmScratchA + TM_OFFSET(8, 3), TEXT_COLOR_SYSTEM_BLUE, gBattleUnitA.previous_hp);
 	PutNumberTwoChr(gUiTmScratchA + TM_OFFSET(8, 5), TEXT_COLOR_SYSTEM_BLUE, damage);

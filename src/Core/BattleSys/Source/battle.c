@@ -22,12 +22,11 @@
 
 #include "klib.h"
 #include "skill-sys.h"
+#include "battle-damage.h"
 
 #include "constants/pids.h"
 #include "constants/jids.h"
 #include "constants/terrains.h"
-
-enum { BATTLE_MAX_DAMAGE = 99 };
 
 struct WeaponTriangleRule {
 	i8 attackerKind;
@@ -598,7 +597,7 @@ void BattleUpdateBattleStats(struct BattleUnit *attacker, struct BattleUnit *def
 	gBattleSt.crit = attacker->battle_effective_crit;
 }
 
-void BattleGenerateHitAttributes(struct BattleUnit *attacker)
+void BattleGenerateHitAttributes(struct BattleUnit *attacker, struct BattleUnit *defender)
 {
 	gBattleSt.damage = 0;
 
@@ -607,18 +606,7 @@ void BattleGenerateHitAttributes(struct BattleUnit *attacker)
 		return;
 	}
 
-	gBattleSt.damage = gBattleSt.attack - gBattleSt.defense;
-
-	if (BattleRandRoll(gBattleSt.crit, FALSE) == TRUE) {
-		gBattleHitIt->attributes |= BATTLE_HIT_ATTR_CRIT;
-		gBattleSt.damage = gBattleSt.damage * 3;
-	}
-
-	if (gBattleSt.damage > BATTLE_MAX_DAMAGE)
-		gBattleSt.damage = BATTLE_MAX_DAMAGE;
-
-	if (gBattleSt.damage < 0)
-		gBattleSt.damage = 0;
+	gBattleSt.damage = BattleHit_CalcDamage(attacker, defender);
 
 	if (gBattleSt.damage != 0)
 		attacker->dealt_damage = TRUE;
@@ -729,7 +717,7 @@ bool BattleGenerateHit(struct BattleUnit *attacker, struct BattleUnit *defender)
 	BattleUpdateBattleStats(attacker, defender);
 
 	BattleGenerateHitTriangleAttack(attacker, defender);
-	BattleGenerateHitAttributes(attacker);
+	BattleGenerateHitAttributes(attacker, defender);
 	BattleGenerateHitEffects(attacker, defender);
 
 	if (attacker->unit.hp == 0 || defender->unit.hp == 0) {

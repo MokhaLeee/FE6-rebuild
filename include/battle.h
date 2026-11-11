@@ -30,6 +30,7 @@ enum {
 	BATTLE_HIT_ATTR_HPSTEAL   = (1 << 8),
 	BATTLE_HIT_ATTR_ECLIPSE   = (1 << 9),
 	BATTLE_HIT_ATTR_TRIANGLE_ATTACK = (1 << 10),
+	BATTLE_HIT_ATTR_GREATSHLD = (1 << 11),
 };
 
 // BattleHit::info
@@ -146,7 +147,7 @@ int GetBattleUnitHitCount(struct BattleUnit *attacker);
 int BattleCheckBraveEffect(struct BattleUnit *attacker);
 bool BattleCheckTriangleAttack(struct BattleUnit *attacker, struct BattleUnit *defender);
 void BattleUpdateBattleStats(struct BattleUnit *attacker, struct BattleUnit *defender);
-void BattleGenerateHitAttributes(struct BattleUnit *attacker);
+void BattleGenerateHitAttributes(struct BattleUnit *attacker, struct BattleUnit *defender);
 void BattleGenerateHitTriangleAttack(struct BattleUnit *attacker, struct BattleUnit *defender);
 void BattleGenerateHitEffects(struct BattleUnit *attacker, struct BattleUnit *defender);
 bool BattleGenerateHit(struct BattleUnit *attacker, struct BattleUnit *defender);

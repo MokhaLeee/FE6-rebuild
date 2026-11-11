@@ -6,6 +6,7 @@
 #include "klib.h"
 #include "str-mag.h"
 #include "skill-sys.h"
+#include "battle-damage.h"
 
 static void ComputeBattleUnitDefense(struct BattleUnit *attacker, struct BattleUnit *defender)
 {
@@ -140,6 +141,13 @@ void ComputeBattleUnitStats(struct BattleUnit *attacker, struct BattleUnit *defe
 	ComputeBattleUnitCritRate(attacker);
 	ComputeBattleUnitDodgeRate(attacker);
 	ComputeBattleUnitSilencerRate(attacker);
+
+	/*
+	 * Base damage is initialized once for both directions, and must happen
+	 * before the skill loops below start adding to GetBaseDmg().
+	 */
+	if (attacker == &gBattleUnitA)
+		PreBattleCalcInit_BaseDamage(attacker, defender);
 
 	/* calc loop */
 	PreBattleCalc_AttackerSkills(attacker, defender);

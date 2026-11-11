@@ -1,6 +1,7 @@
 # FE6 技能系统：伤害计算流程移植方案
 
-> 状态：方案稿，未改动任何代码。
+> 状态：第 5 节的 0..4 步已落地（框架 + 公式接入 + 战前 base dmg + 预览），
+> 技能端口（第 5 步）尚未开始。
 > 参考：`~/fe8u-cskillsys-kernel` 的 `docs/BattleSystem.md`（Damage calc formula）与
 > `Kernel/Wizardry/Core/BattleSys/Source/BattleDamage.c`。
 > 目标：把「基础伤害 + 增伤 + 暴击倍率 + 减伤 + 真伤」这套流程接到 fe6-rebuild 的战斗流程里，
@@ -9,7 +10,7 @@
 ## 0. 结论
 
 - 可移植，而且比 fe8 简单：本仓库是全量 C 重构，**不需要** kernel 那套 `.lyn.event` +
-  `POIN` 重定位补丁；fe8 里靠 linker event 拼的钩子表，在这里直接用 C 常量函数指针数组即可。
+  `POIN` 重定位补丁；fe8 里靠 linker event 拼的钩子表，在这里直接写成普通的 C 函数即可。
 - 公式本体只有约 60 行，落地成本主要在三处「接缝」：
   1. `BattleGenerateHitAttributes()`（逐次命中伤害，替换 `atk - def` 和 `*3` 暴击）；
   2. `ComputeBattleUnitStats()`（战前一次性算好 base 增/减伤与真伤）；
@@ -31,7 +32,7 @@
   其中 `PreBattleCalcInit_BaseDamage()` 把「非随机」的增伤/减伤/真伤算好存进
   `gActorBaseDmg` / `gTargetBaseDmg`。
 - 逐次命中（每一下）：`BattleGenerateHit` → `BattleGenerateHitAttributes`
-  → `BattleHit_CalcDamage()`，这里再做**依赖 RN 的**部分（暴击、必杀、技能发动）
+  → `BattleHit_CalcDamage()`，这里再做**依赖 RN 的**部分（暴击、技能发动）
   并合成最终伤害。
 
 `BattleHit.c` 里 `BattleGenerateHitAttributes()` 只剩三件事：命中判定、调
@@ -48,6 +49,11 @@
 | `gpBattleDamageCalcFuncs[]` | kernel event | 逐次命中的技能钩子表（RN 相关） |
 | `gpBattleRealDamageCalcFuncs[]` | kernel event | 真伤技能钩子表 |
 
+fe8 用两张函数指针表做扩展点；FE6 这边不需要这套间接层，直接在
+`BattleDamage.c` 里留两个 `static` 的 hook 函数
+（`battle_damage_calc_hook()` / `battle_real_damage_calc_hook()`），
+技能代码写进函数体即可。
+
 关键约定：`increase` / `crit_correction` 是**百分数**（100 = x1.00），
 `decrease` 是 **0x100 基准**（0x100 = x1.00，半伤 = 256）。
 
@@ -63,10 +69,10 @@ result = ([atk + correction - def]) * (100% + increase%) * (100% + crit_correcti
 1. 重置 `gDmg`，`crit_correction` 取 designer config（fe8 = 200），
    `increase/decrease/real_damage` 从 `GetBaseDmg(attacker)` 灌入；
 2. 单 RN 判暴击：命中则置 `BATTLE_HIT_ATTR_CRIT`、`gDmg.crit_atk = true`；
-   暴击后**再**单 RN 判必杀（silencer），命中直接返回 `max_damage`；
-3. 跑 `gpBattleDamageCalcFuncs[]`（技能在这里改 `gBattleStats.attack/defense`、
+   fe8 在这里还会再掷一次必杀（silencer），FE6 暂不移植，见 4.2；
+3. 跑 `battle_damage_calc_hook()`（技能在这里改 `gBattleStats.attack/defense`、
    `gDmg.correction/increase/decrease/crit_correction`，或直接置属性位）；
-4. 属性位短路：`SILENCER` → 返回 `max_damage`；`GREATSHLD` → 返回 0；
+4. 属性位短路：`GREATSHLD` → 返回 0；
 5. `base_damage = attack + correction - defense`，负数归零；
    `base_damage == 0 && real_damage <= 0` → 直接 0；
 6. `crit_correction = crit_atk ? gDmg.crit_correction : 100`；
@@ -76,8 +82,8 @@ result = ([atk + correction - def]) * (100% + increase%) * (100% + crit_correcti
 9. `result == 0 && base_damage > 0` → 至少 1 点；
 10. `result += real_damage`，最后再按 `max_damage` 钳一次，写回 `gDmg.result`。
 
-真伤由 `CalcBattleRealDamage()` 算：技能固定值 + `gpBattleRealDamageCalcFuncs[]`
-的 `damage = (*it)(damage, attacker, defender)` 链式累加。
+真伤由 `CalcBattleRealDamage()` 算，内部调 `battle_real_damage_calc_hook()`，
+由它把各技能的固定值累加后返回。
 
 ### 1.4 减伤参考值表
 
@@ -116,17 +122,17 @@ ref[r] = (0x100 * r + (100 - r) / 2) / (100 - r)     (r = 0..99)
 | `BattleHit.c::BattleGenerateHitAttributes` | 用 `BattleHit_CalcDamage()` 取代 `atk - def`、`*3`、`BATTLE_MAX_DAMAGE` 钳制 |
 | `PreBattleCalc.c::PreBattleCalcInit` | 调 `PreBattleCalcInit_BaseDamage()` 初始化**两个方向**的 base dmg（只在 `attacker == &gBattleActor` 时执行） |
 | `BattleGenerate.c::BattleGenerate` | 末尾调 `ModifyBattleStatusForUI()` |
-| `Misc/SkillEffects/BattleDamage/{Attacker,Defender}Skills.c` | 逐次命中的技能实现，注册进 `BattleDamageCalcFuncs` |
+| `Misc/SkillEffects/BattleDamage/{Attacker,Defender}Skills.c` | 逐次命中的技能实现（FE6 侧改为写进 `battle_damage_calc_hook()`） |
 
 ## 2. FE6 现状对照
 
 | fe8 cskillsys | fe6-rebuild | 备注 |
 |---|---|---|
 | `gBattleActor` / `gBattleTarget` | `gBattleUnitA` / `gBattleUnitB`（`IsBattleActor()`） | 命名不同，语义一致 |
-| `gBattleStats.attack/defense/hitRate/critRate` | `gBattleSt.attack/defense/hit/crit` | FE6 的 `BattleSt` 没有 `silencer`，需要补字段 |
+| `gBattleStats.attack/defense/hitRate/critRate` | `gBattleSt.attack/defense/hit/crit` | FE6 的 `BattleSt` 没有 silencer 字段，暂不需要 |
 | `BattleHit::hpChange` | `BattleHit::damage` | FE6 只有 `damage` |
 | `struct BattleHit gBattleHitArrayRe[]` | `gBattleHits[BATTLE_HIT_MAX]` | 命中上限 20 |
-| `BattleHit::attributes` | 同名，位定义见 `include/battle.h` | 缺 `SILENCER` / `GREATSHLD` 两位 |
+| `BattleHit::attributes` | 同名，位定义见 `include/battle.h` | 缺 `GREATSHLD` 一位（已补） |
 | `unit.curHP/maxHP` | `unit.hp/max_hp` | 移植技能代码时注意 |
 | `battleAttack/battleDefense/...` | `battle_attack/battle_defense/...` | snake_case |
 | `BATTLE_CONFIG_*` | `gBattleSt.flags` + `BATTLE_FLAG_*` | `SIMULATE/REAL/ARENA/BALLISTA/STATSONLY` |
@@ -135,7 +141,7 @@ ref[r] = (0x100 * r + (100 - r) / 2) / (100 - r)     (r = 0..99)
 | `COMMON_SKILL_VALID()` + `#if defined(SID_x)` | 不需要 | FE6 的 `SID_*` 是 `enum`，不存在 `defined()` 判断；直接 `case SID_x:` |
 | `BattleFastSkillTester`（plist/jlist/dynamic） | `SkillFastTester()` | 语义对齐；但伤害流程按 4.3 的三档选择，战斗内优先 `BattleSkillTester()` |
 | `Div()` / `Div10()` | `k_udiv()` / `k_udiv10()` | 本仓库禁止裸 `/`（见 AGENTS.md 宪法） |
-| `.lyn.event` + `POIN` 钩子表 | 普通 C 常量函数指针数组 | 不用重定位 |
+| `.lyn.event` + `POIN` 钩子表 | 普通 C 函数 | 不用重定位，也不需要函数指针表 |
 
 FE6 里已有的、和这套流程对接的现成代码：
 
@@ -154,7 +160,7 @@ FE6 里已有的、和这套流程对接的现成代码：
 
 | 文件 | 内容 |
 |---|---|
-| `include/hacks/battle-damage.h` | `struct Dmg` / `struct BaseDmg` / `GetBaseDmg()` / `DAMAGE_DECREASE()` / 钩子表与 API 声明 |
+| `include/hacks/battle-damage.h` | `struct Dmg` / `struct BaseDmg` / `GetBaseDmg()` / `DAMAGE_DECREASE()` / API 声明 |
 | `src/Core/BattleSys/BattleDamage.c` | `gDmg`、两个 `BaseDmg`、`_DmgDecreaseRef[100]`、`GetMaxDamage()`、`CalcBattleRealDamage()`、`PreBattleCalcInit_BaseDamage()`、`BattleHit_CalcDamage()`、`BattleCalcSimulateDamage()` |
 
 放在 `src/Core/BattleSys/`（和 `PreBattleCalc.c` 同级），`Makefile` 的
@@ -198,14 +204,6 @@ static inline struct BaseDmg *GetBaseDmg(struct BattleUnit *bu)
 extern const u16 _DmgDecreaseRef[100];
 #define DAMAGE_DECREASE(rate) (_DmgDecreaseRef[rate])
 
-typedef void (*BattleDamageCalcFunc)(struct BattleUnit *attacker,
-				     struct BattleUnit *defender);
-typedef int (*BattleRealDamageCalcFunc)(int old, struct BattleUnit *attacker,
-					struct BattleUnit *defender);
-
-extern BattleDamageCalcFunc const gpBattleDamageCalcFuncs[];
-extern BattleRealDamageCalcFunc const gpBattleRealDamageCalcFuncs[];
-
 int GetMaxDamage(struct BattleUnit *attacker, struct BattleUnit *defender);
 int CalcBattleRealDamage(struct BattleUnit *attacker,
 			 struct BattleUnit *defender);
@@ -231,9 +229,22 @@ const u16 _DmgDecreaseRef[100] = {
 	[99] = 25344,
 };
 
-/* 端口顺序：技能实现后往表里加一项，末尾保持 NULL */
-BattleDamageCalcFunc const gpBattleDamageCalcFuncs[] = { NULL };
-BattleRealDamageCalcFunc const gpBattleRealDamageCalcFuncs[] = { NULL };
+/*
+ * 逐次命中的技能入口。移植技能时把逻辑写进函数体：
+ * 可改 gBattleSt.attack/defense、gDmg.* 或直接置命中属性位。
+ */
+static void battle_damage_calc_hook(struct BattleUnit *attacker,
+				    struct BattleUnit *defender)
+{
+}
+
+/* 真伤技能入口，累加后返回。 */
+static int battle_real_damage_calc_hook(int damage,
+					struct BattleUnit *attacker,
+					struct BattleUnit *defender)
+{
+	return damage;
+}
 
 int GetMaxDamage(struct BattleUnit *attacker, struct BattleUnit *defender)
 {
@@ -243,9 +254,6 @@ int GetMaxDamage(struct BattleUnit *attacker, struct BattleUnit *defender)
 int CalcBattleRealDamage(struct BattleUnit *attacker,
 			 struct BattleUnit *defender)
 {
-	const BattleRealDamageCalcFunc *it;
-	int damage = 0;
-
 	/*
 	 * 快照未建立时不参与计算：状态画面会留下 pinfo/jinfo 不完整的
 	 * 空壳 B，`UNIT_IS_VALID()` 只看 pinfo，这里必须连 jinfo 一起判。
@@ -253,15 +261,7 @@ int CalcBattleRealDamage(struct BattleUnit *attacker,
 	if (!UNIT_IS_VALID(&attacker->unit) || attacker->unit.jinfo == NULL)
 		return 0;
 
-	/* 真伤技能示例（SID 需先加进 constants/skills.h 的 enum）：
-	 * if (BattleSkillTester(attacker, SID_RuinedBlade))
-	 *	damage += SKILL_EFF2(SID_RuinedBlade);
-	 */
-
-	for (it = gpBattleRealDamageCalcFuncs; *it; it++)
-		damage = (*it)(damage, attacker, defender);
-
-	return damage;
+	return battle_real_damage_calc_hook(0, attacker, defender);
 }
 
 void PreBattleCalcInit_BaseDamage(struct BattleUnit *attacker,
@@ -281,7 +281,6 @@ void PreBattleCalcInit_BaseDamage(struct BattleUnit *attacker,
 int BattleHit_CalcDamage(struct BattleUnit *attacker,
 			 struct BattleUnit *defender)
 {
-	const BattleDamageCalcFunc *it;
 	struct BaseDmg *base_dmg = GetBaseDmg(attacker);
 	int max_damage = GetMaxDamage(attacker, defender);
 	int base_damage, crit_correction, result, dividend;
@@ -293,29 +292,13 @@ int BattleHit_CalcDamage(struct BattleUnit *attacker,
 	gDmg.decrease = base_dmg->decrease;
 	gDmg.real_damage = base_dmg->real_damage;
 
-	/* 暴击 / 必杀判定 */
 	if (BattleRandRoll(gBattleSt.crit, false)) {
 		gBattleHitIt->attributes |= BATTLE_HIT_ATTR_CRIT;
 		gDmg.crit_atk = true;
-
-		/* FE6 的 battle_silencer 目前恒为 0；为 0 时不掷骰，
-		 * 避免改变原版 RN 序列（见 4.2） */
-		if (gBattleSt.silencer > 0 &&
-		    BattleRandRoll(gBattleSt.silencer, false)) {
-			gBattleHitIt->attributes |= BATTLE_HIT_ATTR_SILENCER;
-			gDmg.result = max_damage;
-			return max_damage;
-		}
 	}
 
-	/* 逐次命中的技能钩子 */
-	for (it = gpBattleDamageCalcFuncs; *it; it++)
-		(*it)(attacker, defender);
-
-	if (gBattleHitIt->attributes & BATTLE_HIT_ATTR_SILENCER) {
-		gDmg.result = max_damage;
-		return max_damage;
-	}
+	/* 逐次命中的技能 */
+	battle_damage_calc_hook(attacker, defender);
 
 	if (gBattleHitIt->attributes & BATTLE_HIT_ATTR_GREATSHLD) {
 		gDmg.result = 0;
@@ -371,24 +354,15 @@ int BattleHit_CalcDamage(struct BattleUnit *attacker,
 
 **(2) `include/battle.h`**
 
-- 新增两个命中属性位（`attributes` 是 `u16`，0..10 已占用）：
-
-```c
-	BATTLE_HIT_ATTR_SILENCER   = (1 << 11),
-	BATTLE_HIT_ATTR_GREATSHLD  = (1 << 12),
-```
-
-- `struct BattleSt` 末尾追加 `i16 silencer;`（当前结构 0x14 字节，
-  追加只影响尾部，不改变既有字段偏移）。
+- 新增命中属性位 `BATTLE_HIT_ATTR_GREATSHLD = (1 << 11)`（`attributes` 是
+  `u16`，0..10 已占用）。必杀相关的位暂不加，见 4.2。
 - 修改声明：`void BattleGenerateHitAttributes(struct BattleUnit *attacker,
   struct BattleUnit *defender);`（现有只有 `attacker`，新公式需要防御方）；
   仓库内没有别的调用点，改签名不会波及其它文件。
 
 **(3) `src/Core/BattleSys/Source/battle.c`**
 
-- `BattleUpdateBattleStats()` 末尾补 `gBattleSt.silencer = ...`，
-  并把 `battle_silencer` 钳到 0..100（对齐 fe8 的 `LIMIT_AREA`；注意
-  `LIMIT_AREA` 宏展开不是 `do { } while (0)`，不要直接塞进 `if` 当单语句）。
+- `BattleUpdateBattleStats()` 不变（silencer 暂时不用）。
 - `BattleGenerateHitAttributes()` 改成：
 
 ```c
@@ -450,11 +424,10 @@ void BattleGenerateHitAttributes(struct BattleUnit *attacker,
 
 - 战前、非随机：加进 `src/SkillEffects/BattleSkills/AttackerSkills.c` /
   `DefenderSkills.c` 的 switch，写 `GetBaseDmg(attacker)->increase/decrease`。
-- 逐次命中、依赖 RN：新建 `src/SkillEffects/BattleSkills/BattleDamage.c`，
-  按 fe8 `Misc/SkillEffects/BattleDamage/*.c` 的写法写成
-  `BattleDamageCalc_AttackerSkills/DefenderSkills`，再把函数名加进
-  `gpBattleDamageCalcFuncs[]`。循环用 `GetSkillList(&bu->unit)`：列表已在
-  快照层处理过 Nihil，也包含 `AppendSkillListInBattle()` 在战斗期追加的技能。
+- 逐次命中、依赖 RN：直接写进 `src/Core/BattleSys/BattleDamage.c` 里的
+  `battle_damage_calc_hook()` / `battle_real_damage_calc_hook()`。循环用
+  `GetSkillList(&bu->unit)`：列表已在快照层处理过 Nihil，也包含
+  `AppendSkillListInBattle()` 在战斗期追加的技能。
 
 ### 3.5 为什么预览不照抄 `ModifyBattleStatusForUI()`
 
@@ -570,9 +543,10 @@ case SID_Multiscale:
 
 - 原版每次命中：命中判定 2RN（`BattleRandRoll2Rn`），暴击判定 1RN
   （`BattleRandRoll(gBattleSt.crit, false)`，simulate 下不消耗）。新流程在这一处保持不变。
-- 必杀（silencer）是 fe8 新增的第二次掷骰。FE6 的 `battle_silencer` 目前恒为 0，
-  若照抄 fe8 每次都掷，会白白多消耗 RN、改变后续随机序列。
-  所以加 `gBattleSt.silencer > 0 &&` 前置条件，默认行为与现在完全一致。
+- 必杀（silencer）是 fe8 新增的第二次掷骰，本轮**不移植**：FE6 没有对应机制
+  （`battle_silencer` 恒为 0，也没有表现支持），贸然加一次掷骰只会多消耗 RN、
+  改变后续随机序列。等真的要做时再补，届时需要同时补 `BattleSt` 字段、
+  `BATTLE_HIT_ATTR_SILENCER` 位和 banim 表现。
 - simulate 模式下 `BattleRandRoll` 直接返回传入的 `simulationResult`，
   不消耗 RN，这点和 fe8 一致，不需要额外处理。
 
@@ -706,24 +680,20 @@ void SetupBattleSkillList(void);
 
 0. **前置（已完成）**：SkillSys 快照的两层拆分（`SetupBattleUnitSkillList()` /
    `SetupBattleSkillList()`）已经落地，本方案直接依赖它的时序契约，见 4.3。
-1. **骨架 + 常量**：新增 `battle-damage.h`、`BattleDamage.c`（只有
-   `gDmg`/`BaseDmg`/查表/`GetMaxDamage`/`BattleCalcSimulateDamage`），
-   `configs.h` 加两个宏，`battle.c` 的 `BATTLE_MAX_DAMAGE` 改为引用宏。
-   → `make all` 通过，行为零变化。
-2. **接入公式**：`battle.h` 加两个属性位 + `BattleSt.silencer` +
-   改 `BattleGenerateHitAttributes` 签名；`battle.c` 调 `BattleHit_CalcDamage()`。
-   此时公式等价于原版（`increase=100`、`decrease=0x100`、`crit=300`）。
-   → 用原版对照测试确认伤害/暴击数字不变。
-3. **战前 base dmg**：`PreBattleCalc.c` 在 vanilla 统计之后、技能循环之前调
-   `PreBattleCalcInit_BaseDamage()`（gate 在 `attacker == &gBattleUnitA`）。
-   此时快照已由 `BattleGenerate*` 入口建好，`BattleSkillTester()` 可用。
-   → 仍无行为变化（没有技能写 base dmg）。
-4. **预览**：`battlepreview.c` 改用 `BattleCalcSimulateDamage()`。
-   → 行为仍等价，但为后续技能铺好路。
-5. **技能端口**：先加 1 个纯数值增益（如 `+10% 伤害`）和 1 个纯数值减伤，
-   再核对预览/实战一致，然后才批量搬 fe8 的技能。
+1. **骨架 + 常量（已完成）**：`battle-damage.h`、`BattleDamage.c`、`configs.h`
+   的 `CONFIG_BATTLE_MAX_DAMAGE` / `CONFIG_BATTLE_CRIT_CORRECTION`。
+2. **接入公式（已完成）**：`battle.h` 加 `GREATSHLD` 属性位，
+   `BattleGenerateHitAttributes()` 改签名并调用
+   `BattleHit_CalcDamage()`。
+3. **战前 base dmg（已完成）**：`PreBattleCalc.c` 在 vanilla 统计之后、技能循环
+   之前调 `PreBattleCalcInit_BaseDamage()`（gate 在 `attacker == &gBattleUnitA`）。
+4. **预览（已完成）**：`battlepreview.c` 短版改用 `BattleCalcSimulateDamage()`。
+5. **技能端口（未开始）**：先加 1 个纯数值增益（如 `+10% 伤害`）和 1 个纯数值
+   减伤，再核对预览/实战一致，然后才批量搬 fe8 的技能。
 
-推荐先只做 1..4 作为一次提交，技能单独提交，便于回归。
+等价性验证（第 2..4 步）：同一输入下把 `gBattleHits` 与 HEAD 构建逐字节对比，
+战斗记录完全相同（`attributes`/`info`/`damage` 一致），说明在
+`increase=100`、`decrease=0x100`、`crit=300` 的默认值下与原版行为等价。
 
 ## 6. 验证
 
@@ -751,6 +721,6 @@ arm-none-eabi-nm fe6re.elf | grep '__aeabi_.*div'   # 期望无输出
 
 - Hp drain / Hp cost（`ExtBattleHit`、`TryBattleHpCost`、`AddBattleHpCost`、
   `ParseBattleHitToBanimCmd` 的 HP 槽位）；
-- 必杀（silencer）的 banim/manim 表现（FE6 无此机制，属性位先占位）；
+- 必杀（silencer）：字段、属性位、掷骰与 banim/manim 表现都不做，见 4.2；
 - `BattleStatusBackup`、回合命中计数、`CheckBattleSkillActivate` 等技能基础设施；
 - combat art、武器槽扩展、`ModifyBattleStatusForUI` 式的长版预览改写。

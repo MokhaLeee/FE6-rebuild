@@ -41,6 +41,10 @@
 /* dprintf log level */
 #define CONFIG_DEBUG_LEVEL 2
 
+/* battle damage calc */
+#define CONFIG_BATTLE_MAX_DAMAGE 99
+#define CONFIG_BATTLE_CRIT_CORRECTION 300
+
 /* debug config */
 #define CONFIG_USE_DEBUG 1
 
