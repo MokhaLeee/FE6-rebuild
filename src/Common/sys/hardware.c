@@ -1,5 +1,7 @@
 #include "prelude.h"
 #include "hardware.h"
+#include "oam.h"
+#include "bm.h"
 
 SECTION(".ewram.hardware") u16 gBg0Tm[0x400] = { 0 };
 SECTION(".ewram.hardware") u16 gBg1Tm[0x400] = { 0 };
@@ -163,3 +165,54 @@ u16 *GetBgTilemap(int bg)
 	return lut[bg];
 }
 
+void InitBgs(u16 const *config)
+{
+	static const u16 default_config[] = {
+		// tile offset  map offset  size id
+		0x0000,         0x6000,     BG_SIZE_256x256, // BG 0
+		0x0000,         0x6800,     BG_SIZE_256x256, // BG 1
+		0x0000,         0x7000,     BG_SIZE_256x256, // BG 2
+		0x8000,         0x7800,     BG_SIZE_256x256, // BG 3
+	};
+
+	int i;
+
+	if (config == NULL)
+		config = default_config;
+
+#if 1
+	gDispIo.bg0_ct = (struct BgCnt){ 0 };
+	gDispIo.bg1_ct = (struct BgCnt){ 0 };
+	gDispIo.bg2_ct = (struct BgCnt){ 0 };
+	gDispIo.bg3_ct = (struct BgCnt){ 0 };
+#else
+	*(u16 *) &gDispIo.bg0_ct = 0;
+	*(u16 *) &gDispIo.bg1_ct = 0;
+	*(u16 *) &gDispIo.bg2_ct = 0;
+	*(u16 *) &gDispIo.bg3_ct = 0;
+#endif
+
+	gDispIo.disp_ct.forced_blank = FALSE;
+	gDispIo.disp_ct.mode = 0;
+
+	SetDispEnable(1, 1, 1, 1, 1);
+	SetWinEnable(0, 0, 0);
+
+	for (i = 0; i < 4; i++) {
+		SetBgChrOffset(i, *config++);
+		SetBgTilemapOffset(i, *config++);
+		SetBgScreenSize(i, *config++);
+
+		SetBgOffset(i, 0, 0);
+		TmFill(GetBgTilemap(i), 0);
+	}
+
+	InitBmBgLayers();
+
+	EnableBgSync(BG0_SYNC_BIT + BG1_SYNC_BIT + BG2_SYNC_BIT + BG3_SYNC_BIT);
+
+	InitOam(0);
+
+	PAL_COLOR(0, 0) = 0;
+	EnablePalSync();
+}

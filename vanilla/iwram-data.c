@@ -22,8 +22,6 @@ IWRAM_DATA u8 SoundMainRam[0x400] = {};
 #endif
 
 IWRAM_DATA u16 *gOamLoPutIt = NULL;
-IWRAM_DATA struct DispIo gDispIo = {};
-
 
 /**
  * OAM
