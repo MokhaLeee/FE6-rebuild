@@ -10,6 +10,7 @@
 
 #include "../cases/save/save_cases.h"
 #include "../cases/game/game_cases.h"
+#include "../cases/ending/ending_cases.h"
 #include "../cases/system/system_cases.h"
 
 #if CONFIG_TEST_MENU
@@ -21,6 +22,8 @@ static fu8 testmenu_test_on_select_save(struct MenuProc *menu,
 					struct MenuEntProc *ent);
 static fu8 testmenu_test_on_select_test_chapter(struct MenuProc *menu,
 						struct MenuEntProc *ent);
+static fu8 testmenu_test_on_select_ending(struct MenuProc *menu,
+					  struct MenuEntProc *ent);
 static fu8 testmenu_test_on_select_system(struct MenuProc *menu,
 					  struct MenuEntProc *ent);
 static fu8 testmenu_test_on_back(struct MenuProc *menu, struct MenuEntProc *ent);
@@ -42,6 +45,11 @@ static struct MenuEntInfo CONST_DATA test_root_entries[] = {
 		.label = " Test Chapter",
 		.available = MenuEntryEnabled,
 		.on_select = testmenu_test_on_select_test_chapter,
+	},
+	{
+		.label = " Ending",
+		.available = MenuEntryEnabled,
+		.on_select = testmenu_test_on_select_ending,
 	},
 	{
 		.label = " System",
@@ -106,6 +114,15 @@ static fu8 testmenu_test_on_select_test_chapter(struct MenuProc *menu,
 {
 	test_probe_set_case(TEST_CATEGORY_PREP, TEST_CASE_TEST_CHAPTER);
 	test_scene_start_prep();
+
+	return MENU_ACTION_NOCURSOR | MENU_ACTION_END | MENU_ACTION_SE_6A;
+}
+
+static fu8 testmenu_test_on_select_ending(struct MenuProc *menu,
+					  struct MenuEntProc *ent)
+{
+	ClearUi();
+	StartMenu(&MenuInfo_TestEnding);
 
 	return MENU_ACTION_NOCURSOR | MENU_ACTION_END | MENU_ACTION_SE_6A;
 }

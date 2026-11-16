@@ -72,7 +72,7 @@ debug 构建（`CONFIG_TEST_MENU=1`）开机直接进入 `StartGame_TestMenu()`�
 
 ```
 顶层:  Start Game / Test
-Test:   Game / Save / Test Chapter / System / Back
+Test:   Game / Save / Test Chapter / Ending / System / Back
 Game:   Chapter 1 / Chapter 2 / Back
 Save:   Write + Load / Write / Load / Back
 ```

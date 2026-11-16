@@ -122,7 +122,7 @@ static struct MenuEntInfo CONST_DATA test_root_entries[] = {
 
 ### 3.3 第三层：领域用例
 
-当前已实现 `Game`、`Save`、`Test Chapter`、`System` 领域：
+当前已实现 `Game`、`Save`、`Test Chapter`、`System`、`Ending` 领域：
 
 ```
 src/Test/cases/game/
@@ -140,6 +140,10 @@ src/Test/cases/battle/
 src/Test/cases/prep/
 ├── prep_cases.c      # MenuEntInfo_TestPrep[] + Test Prep 回调
 └── prep_cases.h
+
+src/Test/cases/ending/
+├── ending_cases.c    # MenuEntInfo_TestEnding[] + Character Ending 回调
+└── ending_cases.h
 ```
 
 `MenuInfo_TestGame` 目前有：
@@ -165,6 +169,13 @@ src/Test/cases/prep/
 | 条目 | 行为 |
 |---|---|
 | `Test Chapter` | 启动统一测试章节 `CHAPTER_TEST`；默认进入准备画面；脚本按 出撃 进入地图 |
+| `Back` | 返回 `MenuInfo_TestRoot` |
+
+`Ending` 入口目前有：
+
+| 条目 | 行为 |
+|---|---|
+| `Character` | 进 `CHAPTER_TEST`，等地图稳定后补齐 `gEndingDispType` / `gEndingUids1,2` / `gCreditInfoDispStep` 等全局状态，再 `StartEventLocking(EventScr_CharacterEnding)` 跑 `StartGameEnding → CleanupGame`；结束后回标题 |
 | `Back` | 返回 `MenuInfo_TestRoot` |
 
 后续领域照这个模式加 `cases/<domain>/<domain>_cases.c/h`，并在
@@ -233,6 +244,7 @@ BG3 HOFS 在 900/1000 帧保持不变（滚动 proc 已停）。
 | `include/hacks/test_probe.h` | 探针结构体、`gTestMenuProbe`、接口声明 |
 | `src/Test/harness/test_scene.c` | 场景辅助：开章节、写/读章节存档、启动 test chapter |
 | `include/hacks/test_scene.h` | 场景辅助接口 |
+| `src/Test/cases/ending/` | `MenuInfo_TestEnding`、Character Ending case（补 ending 全局状态、启动 `EventScr_CharacterEnding`、watchdog 写探针） |
 | `src/Test/fixtures/test-chapter.c` | test-only `ChapterEventInfo_Test`、单位和事件脚本 |
 | `include/hacks/test_chapter.h` | test event / 单位 extern 声明 |
 | `include/constants/chapters.h` | test chapter id 与 `CHAPTER_COUNT` |
