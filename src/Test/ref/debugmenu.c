@@ -61,10 +61,16 @@ extern void PutBuildInfo(u16 * tm);
 
 static void DebugTextFrame_DoPut(struct ProcDebugTextFrame * proc);
 
+static void DebugMonitor_Loop(struct ProcDebugMonitor * proc)
+{
+}
+
 struct ProcScr CONST_DATA ProcScr_DebugMonitor[] =
 {
+    PROC_REPEAT(DebugMonitor_Loop),
     PROC_END,
 };
+
 
 struct ProcScr CONST_DATA ProcScr_DebugTextFrame[] =
 {
