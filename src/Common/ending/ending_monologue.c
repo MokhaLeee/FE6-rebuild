@@ -6,6 +6,7 @@
 #include "banim.h"
 #include "eventfunctions.h"
 #include "hardware.h"
+#include "klib.h"
 #include "scanline.h"
 #include "ending_monologue.h"
 
@@ -100,7 +101,7 @@ void EndingMonologueText_Loop(struct ProcEndingMonologueText * proc)
 
     proc->main_timer++;
 
-    if ((proc->main_timer % 24) != 0)
+    if (k_umod(proc->main_timer, 24) != 0)
         return;
 
     if (proc->paulse_timer != 0)
@@ -109,15 +110,15 @@ void EndingMonologueText_Loop(struct ProcEndingMonologueText * proc)
     }
     else
     {
-        if (proc->ctrl_y[proc->main_timer / 24] == -2 && proc->ctrl_y == Ctrl_EndingMonologueText4)
+        if (proc->ctrl_y[k_udiv(proc->main_timer, 24)] == -2 && proc->ctrl_y == Ctrl_EndingMonologueText4)
         {
             Decompress(Img_EndingMonologueText_d, (void *) VRAM + 1 * CHR_SIZE);
         }
 
-        EndingMonologue_MoveText(proc->main_timer / 8, proc->ctrl_y[proc->main_timer / 24]);
+        EndingMonologue_MoveText(proc->main_timer / 8, proc->ctrl_y[k_udiv(proc->main_timer, 24)]);
     }
 
-    if (proc->paulse_timer != 0 || proc->ctrl_y[proc->main_timer / 24] == -3)
+    if (proc->paulse_timer != 0 || proc->ctrl_y[k_udiv(proc->main_timer, 24)] == -3)
     {
         proc->paulse_timer++;
 

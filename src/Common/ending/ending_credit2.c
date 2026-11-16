@@ -8,13 +8,13 @@
 #include "ending.h"
 
 CONST_DATA struct EndingCreditWordLenConf gEndingCredit_WordLenConf[] = {
-	{ 'a', 't', 9 },
-	{ 't', 'a', 9 },
-	{ 'o', 'm', 7 },
-	{ 'I', 't', 6 },
-	{ 'T', 'o', 7 },
-	{ 'a', 'w', 9 },
-	{ 'r', 'u', 9 },
+	{ 'a', 't', 9, 0 },
+	{ 't', 'a', 9, 0 },
+	{ 'o', 'm', 7, 0 },
+	{ 'I', 't', 6, 0 },
+	{ 'T', 'o', 7, 0 },
+	{ 'a', 'w', 9, 0 },
+	{ 'r', 'u', 9, 0 },
 	{}
 };
 

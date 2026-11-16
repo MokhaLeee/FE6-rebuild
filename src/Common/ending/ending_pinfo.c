@@ -83,29 +83,43 @@ void HBlank_Ending_SinglePInfo(void)
 	case 0x3C:
 		pal_bank++;
 
+		/* fallthrough */
+
 	case 0x3A:
 	case 0x90:
 		pal_bank++;
+
+		/* fallthrough */
 
 	case 0x38:
 	case 0x92:
 		pal_bank++;
 
+		/* fallthrough */
+
 	case 0x36:
 	case 0x94:
 		pal_bank++;
+
+		/* fallthrough */
 
 	case 0x34:
 	case 0x96:
 		pal_bank++;
 
+		/* fallthrough */
+
 	case 0x32:
 	case 0x98:
 		pal_bank++;
 
+		/* fallthrough */
+
 	case 0x30:
 	case 0x9A:
 		pal_bank++;
+
+		/* fallthrough */
 
 	case 0:
 	case 0x9C: {
