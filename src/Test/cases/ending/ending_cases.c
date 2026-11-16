@@ -7,14 +7,18 @@
 #include "event.h"
 #include "eventfunctions.h"
 #include "eventinfo.h"
+#include "faction.h"
 #include "gamecontroller.h"
 #include "menu.h"
 #include "proc.h"
 #include "ui.h"
+#include "unit.h"
 
 #include "constants/chapters.h"
+#include "constants/pids.h"
 
 #include "test_cases.h"
+#include "test_chapter.h"
 #include "test_probe.h"
 #include "test_scene.h"
 #include "testmenu_common.h"
@@ -24,7 +28,13 @@
 #if CONFIG_TEST_MENU
 
 /* 进章节后最多等这么多帧，超过就判失败，避免 watchdog 永远挂着。 */
-enum { TEST_ENDING_START_TIMEOUT = 600 };
+enum {
+	TEST_ENDING_START_TIMEOUT = 600,
+
+	/* 前这么多单位按"出击"进 gEndingUids2（角色卡），
+	 * 其余标成未出击进 gEndingUids1（rank 后的双人结局段）。 */
+	TEST_ENDING_DEPLOYED_COUNT = 5,
+};
 
 static bool sEndingStarted;
 
@@ -44,6 +54,28 @@ static bool test_ending_wait_map_ready(ProcPtr proc)
 }
 
 /*
+ * 把队伍拆成两段：前 TEST_ENDING_DEPLOYED_COUNT 个保持出击，
+ * 其余标记 UNIT_FLAG_NOT_DEPLOYED。SetupTrueEndingUids() 据此
+ * 填 gEndingUids2 / gEndingUids1，credits 里的角色卡和 rank 后的
+ * 双人结局段（ProcScr_EndingPInfo_x2）才都能跑到。
+ */
+static void test_ending_split_deploy(void)
+{
+	int iuid;
+	int count = 0;
+
+	for (iuid = 1; iuid < (FACTION_BLUE + 0x40); iuid++) {
+		struct Unit *unit = GetUnit(iuid);
+
+		if (!UNIT_IS_VALID(unit))
+			continue;
+
+		if (++count > TEST_ENDING_DEPLOYED_COUNT)
+			unit->flags |= UNIT_FLAG_NOT_DEPLOYED;
+	}
+}
+
+/*
  * 补齐 EndingCredit_Reinit() 平时负责的全局状态。
  *
  * 不补的话 StartGameEnding() 会从脏的 step 开始；
@@ -59,6 +91,15 @@ static void test_ending_prepare_globals(void)
 	gCreditNameDispMode = 0;
 	gGameEndingFlag = 0;
 	gEndingPInfoIsDyad = false;
+
+	/*
+	 * 章节跳过准备画面时不会创建蓝方单位，不补的话单位表是空的，
+	 * SetupTrueEndingUids() 两个名单都只剩 {-1}，角色卡会全部退化成 CG。
+	 */
+	if (GetUnitByPid(PID_ROY) == NULL)
+		BatchCreateUnits(UnitInfo_TestPrep_Blue);
+
+	test_ending_split_deploy();
 
 	/*
 	 * 直接填出击/待机名单，绕开 GetEndingId()：

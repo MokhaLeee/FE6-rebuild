@@ -47,14 +47,14 @@ static struct MenuEntInfo CONST_DATA test_root_entries[] = {
 		.on_select = testmenu_test_on_select_test_chapter,
 	},
 	{
-		.label = " Ending",
-		.available = MenuEntryEnabled,
-		.on_select = testmenu_test_on_select_ending,
-	},
-	{
 		.label = " System",
 		.available = MenuEntryEnabled,
 		.on_select = testmenu_test_on_select_system,
+	},
+	{
+		.label = " Ending",
+		.available = MenuEntryEnabled,
+		.on_select = testmenu_test_on_select_ending,
 	},
 	{
 		.label = " Back",

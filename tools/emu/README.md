@@ -61,6 +61,7 @@ tools/emu/
 | 15 save corrupt | Save → Corrupt Check；写有效存档后改坏一个字节，`IsSaveValid()` 从 1 变 0 |
 | 16 level cap | System → Level Cap；98→99 封顶、99 级不再升级、20/99 级转职保留等级、竞技场等级夹取、Devil 反伤率、promoted 自动等级 19、99 级存档往返 |
 | 17 level map | Test Chapter → 出撃 → Map Test；test event 把 Roy 设为 98 级/99 经验并放在 99 级 1 HP 敌人旁；shell 真实按键「选人 → 攻撃 → 战斗预测 → 开战 → 升级」；断言 level=99/exp=0xFF；同时验证地图上 20 级转职保留等级 |
+| 18 ending character | 顶层 → Test → Ending → Character；进 CHAPTER_TEST 后补单位并拆分出击/待机名单，跑完 `StartGameEnding` 的 credits → rank → 双人结局 → FIN；断言 `state=CASE_DONE`、credit step=50、dyad 段跑过（`value[3]=9`）、画面有内容 |
 
 脚本设计和新增 case 的方法见 [testmenu/README.md](testmenu/README.md)。
 测试项目录和 EWRAM 探针方案见 [../../src/Test/README.md](../../src/Test/README.md)。
@@ -72,7 +73,7 @@ debug 构建（`CONFIG_TEST_MENU=1`）开机直接进入 `StartGame_TestMenu()`�
 
 ```
 顶层:  Start Game / Test
-Test:   Game / Save / Test Chapter / Ending / System / Back
+Test:   Game / Save / Test Chapter / System / Ending / Back
 Game:   Chapter 1 / Chapter 2 / Back
 Save:   Write + Load / Write / Load / Back
 ```

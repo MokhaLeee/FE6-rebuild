@@ -33,8 +33,9 @@ ROOT=$(cd "$HERE/../.." && pwd)
 . "$HERE/testmenu/cases/15-save-corrupt.sh"
 . "$HERE/testmenu/cases/16-level-cap.sh"
 . "$HERE/testmenu/cases/17-level-map.sh"
+. "$HERE/testmenu/cases/18-ending-character.sh"
 
-CASE_KEYS=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17)
+CASE_KEYS=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18)
 CASE_FUNCS=(
 	case_01_start_game
 	case_02_test_root
@@ -53,6 +54,7 @@ CASE_FUNCS=(
 	case_15_save_corrupt
 	case_16_level_cap
 	case_17_level_map
+	case_18_ending_character
 )
 CASE_TITLES=(
 	"start-game         开机 → Start Game → 章节"
@@ -72,6 +74,7 @@ CASE_TITLES=(
 	"save-corrupt       Save Corrupt Check"
 	"level-cap          System → Level Cap 自检"
 	"level-map          System → Map Test（真实按键攻击 → 升级）"
+	"ending-character   Test → Ending → Character 结局流程"
 )
 
 usage() {

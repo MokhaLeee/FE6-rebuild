@@ -175,7 +175,7 @@ src/Test/cases/ending/
 
 | 条目 | 行为 |
 |---|---|
-| `Character` | 进 `CHAPTER_TEST`，等地图稳定后补齐 `gEndingDispType` / `gEndingUids1,2` / `gCreditInfoDispStep` 等全局状态，再 `StartEventLocking(EventScr_CharacterEnding)` 跑 `StartGameEnding → CleanupGame`；结束后回标题 |
+| `Character` | 进 `CHAPTER_TEST`，等地图稳定后补单位、把前 5 人留作出击、其余标成未出击，再补齐 `gEndingDispType` / `gEndingUids1,2` / `gCreditInfoDispStep` 等全局状态，`StartEventLocking(EventScr_CharacterEnding)` 跑 `StartGameEnding → CleanupGame`；结束后回标题 |
 | `Back` | 返回 `MenuInfo_TestRoot` |
 
 后续领域照这个模式加 `cases/<domain>/<domain>_cases.c/h`，并在
@@ -383,7 +383,7 @@ PROBE frame=200 addr=... width=8  value=<TEST_MENU_STATE_MENU>
 
 ## 6. 测试脚本
 
-当前入口是 `tools/emu/testmenu-tests.sh`，已经覆盖十五个 case：
+当前入口是 `tools/emu/testmenu-tests.sh`，已经覆盖十八个 case：
 
 ```
 case 1: 开机 → 顶层 testmenu（Roy/Lilina）→ Start Game → 章节
@@ -401,6 +401,9 @@ case 12: Sortie → Map R → MSS
 case 13: Test Chapter → 記録する / マップを見る
 case 14: Game → Chapter 2
 case 15: Save → Corrupt Check
+case 16: System → Level Cap
+case 17: System → Map Test（真实按键攻击 → 升级）
+case 18: Test → Ending → Character（credits → rank → dyad → FIN）
 ```
 
 case 1 会断言：
@@ -532,6 +535,16 @@ value[1] == 0   # 改坏一个字节后 IsSaveValid
 state    == CASE_DONE
 ```
 
+case 18 会断言：
+
+```
+state    == CASE_DONE
+value[0] == 1   # Character Ending 已启动
+value[1] == 50  # credits 列表走完
+value[3] == 9   # rank 后的 dyad 段跑过（gEndingUid1 推进到 9）
+74000 帧画面仍有内容
+```
+
 脚本已经分层：
 
 ```
@@ -555,7 +568,10 @@ tools/emu/
 │       ├── 12-mss-statscreen.sh
 │       ├── 13-prep-save-map.sh
 │       ├── 14-game-chapter2.sh
-│       └── 15-save-corrupt.sh
+│       ├── 15-save-corrupt.sh
+│       ├── 16-level-cap.sh
+│       ├── 17-level-map.sh
+│       └── 18-ending-character.sh
 └── legacy/                    # 旧 run-tests.sh / gdb-check.sh / 文档
 ```
 

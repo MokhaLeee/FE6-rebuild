@@ -27,7 +27,8 @@ tools/emu/
 │   │   ├── 14-game-chapter2.sh
 │   │   ├── 15-save-corrupt.sh
 │   │   ├── 16-level-cap.sh
-│   │   └── 17-level-map.sh
+│   │   ├── 17-level-map.sh
+│   │   └── 18-ending-character.sh
 │   └── README.md              # 本文件
 └── legacy/                    # 旧 run-tests.sh / gdb-check.sh / 文档
 ```
