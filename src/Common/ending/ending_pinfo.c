@@ -870,10 +870,10 @@ void Ending_DrawPInfoTitle(u8 x, u8 y, struct Unit *unit, u8 type)
 	PutText(&text, gBg0Tm + TM_OFFSET(x + 2, y + 4));
 
 	Text_InsertDrawNumberOrBlank(&text, 0x1E, TEXT_COLOR_SYSTEM_WHITE, pid_status->battle_count);
-	Text_InsertDrawString(&text, 0x26, TEXT_COLOR_SYSTEM_WHITE, DecodeMsg(MSG_9C6)); // 戦
+	Text_InsertDrawString(&text, 0x26, TEXT_COLOR_SYSTEM_WHITE, DecodeMsg(MSG_9C6)); /* 戦 */
 	off = pid_status->loss_count >= 100 ? 0 : 6;
 	Text_InsertDrawNumberOrBlank(&text, off + 0x3F, TEXT_COLOR_SYSTEM_WHITE, pid_status->win_count);
-	Text_InsertDrawString(&text, off + 0x47, TEXT_COLOR_SYSTEM_WHITE, DecodeMsg(MSG_9C7)); // 勝
+	Text_InsertDrawString(&text, off + 0x47, TEXT_COLOR_SYSTEM_WHITE, DecodeMsg(MSG_9C7)); /* 勝 */
 	Text_InsertDrawNumberOrBlank(&text, 0x5F, TEXT_COLOR_SYSTEM_WHITE, pid_status->loss_count);
-	Text_InsertDrawString(&text, 0x67, TEXT_COLOR_SYSTEM_WHITE, DecodeMsg(MSG_9C8)); // 敗
+	Text_InsertDrawString(&text, 0x67, TEXT_COLOR_SYSTEM_WHITE, DecodeMsg(MSG_9C8)); /* 敗 */
 }

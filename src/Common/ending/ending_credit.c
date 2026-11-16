@@ -8,11 +8,11 @@
 #include "ending.h"
 
 u16 CONST_DATA BgConf_Ending[] = {
-	// tile offset  map offset  screen size
-	0x0000,         0x6000,     0,          // BG 0
-	0x0000,         0x6800,     0,          // BG 1
-	0x8000,         0x7000,     0,          // BG 2
-	0x8000,         0x7800,     0,          // BG 3
+	/* tile offset  map offset  screen size */
+	0x0000,         0x6000,     0, /* BG 0 */
+	0x0000,         0x6800,     0, /* BG 1 */
+	0x8000,         0x7000,     0, /* BG 2 */
+	0x8000,         0x7800,     0, /* BG 3 */
 };
 
 void SetupCreditCharacterGlyphs(void)
