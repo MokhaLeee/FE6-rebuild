@@ -199,7 +199,7 @@ const u16 CONST_DATA *Pals_ArenaBattleBg[] = {
 
 void NewEkrTogiColor(void)
 {
-	const static u16 frames[] = {
+	static const i16 frames[] = {
 		0, 10,
 		1, 10,
 		2, 10,

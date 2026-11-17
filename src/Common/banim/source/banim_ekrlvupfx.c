@@ -180,7 +180,6 @@ void EfxPartsofScroll2_Loop(ProcPtr proc)
 
 	for (; i < 0xA0; i++) {
 		const i16 *src = EfxPartsofScroll2_RefTable;
-		src = src - 0x28;
 
 		if (i < 0x28) {
 			*buf1++ = 0;
@@ -189,7 +188,7 @@ void EfxPartsofScroll2_Loop(ProcPtr proc)
 		}
 
 		if (i <= 0x47) {
-			s16 val2 = (src[i] * gEkrLvupScrollPos1) >> 0xC;
+			s16 val2 = (src[i - 0x28] * gEkrLvupScrollPos1) >> 0xC;
 
 			if (i + val2 < 0x2F)
 				val2 = -0x20;

@@ -22,7 +22,7 @@ void NewEfxFlashBgWhite(struct Anim *anim, int duartion)
 	proc->anim = anim;
 	proc->timer = 0;
 	proc->terminator = duartion;
-	CpuFastFill16(-1, gEfxPal, PLTT_SIZE);
+	CpuFastFill(-1, gEfxPal, PLTT_SIZE);
 }
 
 void NewEfxFlashBgRed(struct Anim *anim, int duartion)
@@ -32,7 +32,7 @@ void NewEfxFlashBgRed(struct Anim *anim, int duartion)
 	proc->anim = anim;
 	proc->timer = 0;
 	proc->terminator = duartion;
-	CpuFastFill16(0x001F001F, gEfxPal, PLTT_SIZE);
+	CpuFastFill(0x001F001F, gEfxPal, PLTT_SIZE);
 }
 
 void EfxFlashBg_Loop(struct ProcEfxFlashing *proc)
@@ -175,7 +175,7 @@ struct ProcScr CONST_DATA ProcScr_EfxHpBarColorChange[] = {
 
 void NewEfxHpBarColorChange(struct Anim *anim)
 {
-	static const u16 frame_conf[] = {
+	static const i16 frame_conf[] = {
 		0x01, 0x02,
 		0x02, 0x02,
 		0x03, 0x02,
@@ -200,12 +200,12 @@ void NewEfxHpBarColorChange(struct Anim *anim)
 
 	EfxSplitColor(
 		gPalEfxHpBarPurple + gBanimFactionPal[POS_L] * 0x10,
-		gEfxSplitedColorBufA[0],
+		(u8 *)gEfxSplitedColorBufA[0],
 		0x10);
 
 	EfxSplitColor(
 		Pal_081134C4 + gBanimFactionPal[POS_L] * 0x10,
-		gEfxSplitedColorBufB[0],
+		(u8 *)gEfxSplitedColorBufB[0],
 		0x10);
 
 	func_fe6_0805B88C(
@@ -216,12 +216,12 @@ void NewEfxHpBarColorChange(struct Anim *anim)
 
 	EfxSplitColor(
 		gPalEfxHpBarPurple + gBanimFactionPal[POS_R] * 0x10,
-		gEfxSplitedColorBufA[1],
+		(u8 *)gEfxSplitedColorBufA[1],
 		0x10);
 
 	EfxSplitColor(
 		Pal_081134C4 + gBanimFactionPal[POS_R] * 0x10,
-		gEfxSplitedColorBufB[1],
+		(u8 *)gEfxSplitedColorBufB[1],
 		0x10);
 
 	func_fe6_0805B88C(
@@ -411,12 +411,12 @@ void NewEfxStatusUnit(struct Anim *anim)
 	gpProcEfxStatusUnits[GetAnimPosition(anim)] = proc;
 
 	if (GetAnimPosition(anim) == POS_L) {
-		EfxSplitColor(gpEfxUnitPaletteBackup[POS_L], &gFadeComponents[0], 0x10);
-		EfxSplitColorPetrify(gpEfxUnitPaletteBackup[POS_L], &gFadeComponents[0x30], 0x10);
+		EfxSplitColor(gpEfxUnitPaletteBackup[POS_L], (u8 *)&gFadeComponents[0], 0x10);
+		EfxSplitColorPetrify(gpEfxUnitPaletteBackup[POS_L], (u8 *)&gFadeComponents[0x30], 0x10);
 		func_fe6_0805B88C(&gFadeComponents[0], &gFadeComponents[0x30], (void *)&gFadeComponents[0x180], 0x10, 0x10);
 	} else {
-		EfxSplitColor(gpEfxUnitPaletteBackup[POS_R], &gFadeComponents[0x60], 0x10);
-		EfxSplitColorPetrify(gpEfxUnitPaletteBackup[POS_R], &gFadeComponents[0x90], 0x10);
+		EfxSplitColor(gpEfxUnitPaletteBackup[POS_R], (u8 *)&gFadeComponents[0x60], 0x10);
+		EfxSplitColorPetrify(gpEfxUnitPaletteBackup[POS_R], (u8 *)&gFadeComponents[0x90], 0x10);
 		func_fe6_0805B88C(&gFadeComponents[0x60], &gFadeComponents[0x90], (void *)&gFadeComponents[0x300], 0x10, 0x10);
 	}
 }
@@ -500,7 +500,7 @@ void EfxStatusUnit_Loop(struct ProcEfxStatusUnit *proc)
 		proc->debuf_bak = proc->debuff;
 	}
 
-	ret = EfxAdvanceFrameLut(&proc->timer, (i16 *)&proc->frame, proc->frame_lut);
+	ret = EfxAdvanceFrameLut((i16 *)&proc->timer, (i16 *)&proc->frame, proc->frame_lut);
 	if (ret >= 0) {
 		switch (proc->debuff) {
 		case UNIT_STATUS_POISON:
@@ -598,7 +598,7 @@ void NewEfxWeaponIcon(i16 eff1, i16 eff2)
 {
 	struct ProcEfxWeaponIcon *proc;
 
-	static const u16 frame_conf[] = {
+	static const i16 frame_conf[] = {
 		0x00, 0x1,
 		0x04, 0x2,
 		0x07, 0x1,

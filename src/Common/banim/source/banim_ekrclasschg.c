@@ -244,7 +244,7 @@ CONST_DATA u16 *PalArray_EkrClasschgBG[] = {
 
 void NewEkrClasschgBG1(struct Anim * anim)
 {
-	static const u16 frame_array[] = {
+	static const i16 frame_array[] = {
 		7, 2,
 		5, 15,
 		8, 2,
@@ -293,7 +293,7 @@ void NewEkrClasschgBG1(struct Anim * anim)
 
 void NewEkrClasschgBG2(struct Anim * anim)
 {
-	static const u16 frame_array[] = {
+	static const i16 frame_array[] = {
 		22, 66,
 		21, 2,
 		20, 2,
