@@ -272,7 +272,7 @@ level != UNIT_LEVEL_MAX
 等级显示都是“右对齐、按实际位数向左写”，99 是 2 位数，不需要改布局。已检查的点：
 
 - 状态画面：`src/Core/Statscreen/modern-screen/draw-pages.c:31`、`vanilla-screen/pageleft.c:44`
-- 准备画面：`vanilla/prepmenu.c:221`
+- 准备画面：`src/Common/prepscreen/prepmenu.c:221`
 - 部队列表：`vanilla/unitlistscreen.c:1641`
 - 竞技场对手：`vanilla/arena_ui.c:361`
 - 升级动画：`src/Core/Lvup/lvupfx-efx.c:137`（文本缓冲 3 字符，2 位数没问题）

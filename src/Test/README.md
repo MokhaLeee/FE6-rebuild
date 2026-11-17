@@ -204,7 +204,7 @@ Test Chapter 共用同一个正式 test chapter，注册方式和 `CHAPTER_TUTOR
 - `src/Test/harness/test_scene.c`：
   - `test_scene_start_chapter()` 设置 `gTestSkipPrep = true`，直接进地图
   - `test_scene_start_prep()` 设置 `gTestSkipPrep = false`，正常打开准备画面
-- `vanilla/prepphase.c` 在 `CONFIG_TEST_MENU` 下检查 `gTestSkipPrep`，仅用于测试跳过
+- `src/Common/prepscreen/prepphase.c` 在 `CONFIG_TEST_MENU` 下检查 `gTestSkipPrep`，仅用于测试跳过
 - testmenu 的 Test Chapter 启动 `CHAPTER_TEST`
 
 因此：
