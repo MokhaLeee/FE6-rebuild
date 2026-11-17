@@ -1,1 +1,0 @@
-*(ewram_data)

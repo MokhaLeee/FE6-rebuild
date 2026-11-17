@@ -49,7 +49,6 @@ SECTIONS
 	. = __ewram_overlay_start;
 	.ov0 ALIGN(4) (NOLOAD) : AT (__ewram_overlay_start)
 	{
-		INCLUDE "./lds/section_ewram_ov0.lds"
 		. = ALIGN(4);
 		*(.ewram_overlay_0)
 		*(ewram_overlay_0)
@@ -70,7 +69,7 @@ SECTIONS
 	. = __ewram_overlay_start;
 	.ov1 ALIGN(4) (NOLOAD) : AT (__ewram_overlay_start)
 	{
-		. = ALIGN(4); INCLUDE "./lds/section_ewram_ov1.lds"
+		. = ALIGN(4);
 		*(ewram_overlay_banim)
 		. = ALIGN(4);
 		__ewram_ov1_end = .;
