@@ -123,8 +123,8 @@ int NumberToString(int number, char *buf)
 
 char const *GetStringLineEnd(char const *str)
 {
-	while (*str != '\0') {
-		if (*str == '\1')
+	while (*str != TEXT_CHAR_END) {
+		if (*str == TEXT_CHAR_NEWLINE)
 			break;
 
 		// str += GetChLenUtf8(str);

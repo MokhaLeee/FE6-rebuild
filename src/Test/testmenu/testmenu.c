@@ -107,7 +107,7 @@ void StartGame_TestMenu(void)
 	test_probe_reset();
 
 	InitBmDisplay();
-	DebugInitBg(BG_2, 0);
+	DebugInitBg(BG_2, DEBUGTEXT_BG_VRAM_DEFAULT);
 
 	StartMenu(&test_menu_info);
 	/* Root proc: keep the mural scrolling when a submenu replaces the top menu. */

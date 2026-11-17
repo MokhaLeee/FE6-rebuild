@@ -8,6 +8,7 @@
 #include "sprite.h"
 #include "face.h"
 #include "msg.h"
+#include "chapter_title.h"
 #include "util.h"
 #include "unit.h"
 #include "chapterinfo.h"
@@ -149,10 +150,10 @@ char const * GetRedLeaderName(void)
 
 void PutStatusScreenChapterTitle(void)
 {
-    int hard_flag = (gPlaySt.flags & PLAY_FLAG_HARD) != 0 ? 4 : 0;
+    int hard_flag = (gPlaySt.flags & PLAY_FLAG_HARD) != 0 ? CHAPTER_TITLE_PAL_HARD : 0;
 
-    PutChapterTitlePalettle(hard_flag + 0, BGPAL_STATUSSCREEN_4);
-    PutChapterTitlePalettle(hard_flag + 1, BGPAL_STATUSSCREEN_5);
+    PutChapterTitlePalette(hard_flag + 0, BGPAL_STATUSSCREEN_4);
+    PutChapterTitlePalette(hard_flag + CHAPTER_TITLE_PAL_BG1, BGPAL_STATUSSCREEN_5);
     PutChapterTitleGfx(0x400 + BGCHR_B_STATUSSCREEN_3C0, GetChapterTitleExtra(&gPlaySt));
     PutChapterTitleBG1(BGCHR_STATUSSCREEN_280);
     PutChapterTitleTextTSA(gBg2Tm + TM_OFFSET(3, 1), BGPAL_STATUSSCREEN_4);

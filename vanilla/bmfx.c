@@ -4,6 +4,7 @@
 #include "bmfx.h"
 
 #include "armfunc.h"
+#include "chapter_title.h"
 #include "hardware.h"
 #include "oam.h"
 #include "icon.h"
@@ -993,7 +994,7 @@ void UpdateEquipInfoWindow(int item_slot)
             Text_InsertDrawString(proc->text + line, 0, TEXT_COLOR_SYSTEM_WHITE, str);
             str = GetStringLineEnd(str);
 
-            if (str[0] == '\0')
+            if (str[0] == TEXT_CHAR_END)
                 break;
 
             str++;
@@ -1808,8 +1809,8 @@ static void ChapterIntro_Init(struct Proc * proc)
 
     SetWin0Box(0, 0, 0, 0);
 
-    PutChapterTitlePalettle(8, BGPAL_CHAPTERINTRO_0);
-    PutChapterTitlePalettle(0, BGPAL_CHAPTERINTRO_1);
+    PutChapterTitlePalette(CHAPTER_TITLE_PAL_BG2, BGPAL_CHAPTERINTRO_0);
+    PutChapterTitlePalette(0, BGPAL_CHAPTERINTRO_1);
 
     PutChapterTitleBG2(BGCHR_CHAPTERINTRO_80);
 

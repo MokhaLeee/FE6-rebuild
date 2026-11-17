@@ -357,7 +357,7 @@ void InitSpriteTalk(int chr, int lines, int palid)
 {
     int i;
 
-    InitSpriteTextFont(&sTalkFont, (u8 *) VRAM + 0x10000 + ((chr & 0x3FF) << 5), palid);
+    InitSpriteTextFont(&sTalkFont, OBJ_VRAM0 + ((chr & 0x3FF) << 5), palid);
 
     SetTextFont(&sTalkFont);
     SetTextFontGlyphs(TEXT_GLYPHS_TALK);
@@ -707,14 +707,14 @@ static int TalkInterpret(ProcPtr proc)
             }
 
             gproc = SpawnProcLocking(ProcScr_TalkPause, proc);
-            gproc->timer1 = GetTalkPauseCmdDuration(4);
+            gproc->timer1 = GetTalkPauseCmdDuration(TEXT_CHAR_PAUSE_8);
 
             return 3;
         }
 
         return 1;
 
-    case 0x00: // end
+    case TEXT_CHAR_END:
         if (sTalkSt->str_back == NULL)
             return 0;
 
@@ -723,7 +723,7 @@ static int TalkInterpret(ProcPtr proc)
 
         return TalkInterpret(proc);
 
-    case 0x01: // newline
+    case TEXT_CHAR_NEWLINE:
         if (sTalkSt->put_lines == TRUE || sTalkSt->line_active == 1)
         {
             sTalkSt->line_active++;
@@ -734,7 +734,7 @@ static int TalkInterpret(ProcPtr proc)
         sTalkSt->str++;
         return 2;
 
-    case 0x02:
+    case TEXT_CHAR_CLEAR:
         if (!CheckTalkFlag(TALK_FLAG_INSTANTSHIFT))
             SpawnProcLocking(ProcScr_TalkShiftClearAll, proc);
         else
@@ -743,7 +743,7 @@ static int TalkInterpret(ProcPtr proc)
         sTalkSt->str++;
         return 3;
 
-    case 0x03: // wait for input to continue
+    case TEXT_CHAR_WAIT:
         StartTalkWaitForInput(proc,
             sTalkSt->x_text*8 + Text_GetCursor(TALK_TEXT_BY_LINE(sTalkSt->line_active)) + 4,
             sTalkSt->y_text*8 + sTalkSt->line_active*16 + 8);
@@ -751,7 +751,7 @@ static int TalkInterpret(ProcPtr proc)
         sTalkSt->str++;
         return 3;
 
-    case 0x04 ... 0x07:
+    case TEXT_CHAR_PAUSE_8 ... TEXT_CHAR_PAUSE_64:
         if (sTalkSt->instant_print)
         {
             sTalkSt->str++;
@@ -1359,7 +1359,7 @@ static void TalkSpritePrepNextChar_Step2(ProcPtr proc)
 
 static int GetTalkPauseCmdDuration(int cmd)
 {
-    return gTalkPauseDurations[cmd - 4];
+    return gTalkPauseDurations[cmd - TEXT_CHAR_PAUSE_8];
 }
 
 void ClearTalkBubble(void)
@@ -1737,11 +1737,11 @@ void PrintStringToTexts(struct Text ** texts, char const * str, int x, int y)
         switch (*str)
         {
 
-        case 0: // end
+        case TEXT_CHAR_END:
             uh += 1;
             break;
 
-        case 1: // newline
+        case TEXT_CHAR_NEWLINE:
             PutText(texts[line], gBg0Tm + TM_OFFSET(x, line*2 + y));
 
             line += 1;
@@ -1824,7 +1824,7 @@ int GetStrTalkLen(char const * str, bool isBubbleOpen)
         switch (*str)
         {
 
-        case 0x00: // end
+        case TEXT_CHAR_END:
             if (currentLineLen > maxLineLen)
                 maxLineLen = currentLineLen;
 
@@ -1832,7 +1832,7 @@ int GetStrTalkLen(char const * str, bool isBubbleOpen)
 
             goto ret;
 
-        case 0x01 ... 0x02:
+        case TEXT_CHAR_NEWLINE ... TEXT_CHAR_CLEAR:
             if (currentLineLen > maxLineLen)
                 maxLineLen = currentLineLen;
 
@@ -1841,12 +1841,12 @@ int GetStrTalkLen(char const * str, bool isBubbleOpen)
             str++;
             break;
 
-        case 0x03:
+        case TEXT_CHAR_WAIT:
             currentLineLen += 12;
             str++;
             break;
 
-        case 0x04 ... 0x07:
+        case TEXT_CHAR_PAUSE_8 ... TEXT_CHAR_PAUSE_64:
             str++;
             break;
 
@@ -2045,7 +2045,7 @@ static void TalkDebug_OnIdle(struct Proc * proc)
 
     if (proc->unk34 == 0)
     {
-        DebugInitObj(-1, 9);
+        DebugInitObj(DEBUGTEXT_OBJ_VRAM_DEFAULT, OBPAL_DEBUGTEXT);
         TalkDebug_Unk_0800CA88(proc);
     }
 
@@ -2086,7 +2086,7 @@ static void TalkDebug_OnIdle(struct Proc * proc)
         ClearTalk();
         EndTalk();
 
-        DebugInitObj(-1, 9);
+        DebugInitObj(DEBUGTEXT_OBJ_VRAM_DEFAULT, OBPAL_DEBUGTEXT);
 
         proc->x = msg;
 

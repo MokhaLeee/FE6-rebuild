@@ -284,8 +284,8 @@ void WmSpriteDisp_Loop(struct Proc * proc)
 
 void StartWmSprite(void)
 {
-    Decompress(Img_WorldMapStuff, OBJ_VRAM0 + 0x6200);
-    ApplyPalettes(Pal_WorldMapStuff, 0x10, 4);
+    Decompress(Img_WmSprites, OBJ_VRAM0 + OBCHR_WM_SPRITES * CHR_SIZE);
+    ApplyPalettes(Pal_WmSprites, 0x10, 4);
     ApplyPalettes(Pal_WmMapText, 0x14, 2);
     ResetWmArrowSt();
 
@@ -346,8 +346,8 @@ void DisplayWmArrow(int id, int color)
 
 void SetupWmTalkBoxGfx(void)
 {
-    Decompress(Img_WorldMapStuff, OBJ_VRAM0 + 0x6200);
-    ApplyPalettes(Pal_WorldMapStuff, 0x10, 4);
+    Decompress(Img_WmSprites, OBJ_VRAM0 + OBCHR_WM_SPRITES * CHR_SIZE);
+    ApplyPalettes(Pal_WmSprites, 0x10, 4);
     ApplyPalettes(Pal_SystemObjects, 0x1B, 2);
     Decompress(Img_WmDialogueBox, OBJ_VRAM0 + 0x6800);
     ApplyPalette(Pal_WmDialogueBox, 0x19);
@@ -434,7 +434,7 @@ void WmRotIntro_End(struct Proc * proc)
 
 void StartWmHighlight(int nation, int id)
 {
-    struct ProcWmHighLight * proc = SpawnProc(ProcScr_WroldMapRmBorder, PROC_TREE_3);
+    struct ProcWmHighLight * proc = SpawnProc(ProcScr_WorldMapRmBorder, PROC_TREE_3);
 
     proc->nation = nation;
     proc->id = id;
@@ -494,7 +494,7 @@ struct WmHighlightConfig CONST_DATA Config_WmHighlight[7] =
     },
 };
 
-struct ProcScr CONST_DATA ProcScr_WroldMapRmBorder[] =
+struct ProcScr CONST_DATA ProcScr_WorldMapRmBorder[] =
 {
     PROC_MARK(PROC_MARK_WMSTUFF),
     PROC_ONEND(WmHighlight_End),
@@ -609,9 +609,9 @@ void StartWmDot(int x, int y, int palid, int id)
     ModifyWmSpritePosition(&vec);
 
     if (proc)
-        SetSpriteAnimProcParameters(proc, vec.x, vec.y, 0x310);
+        SetSpriteAnimProcParameters(proc, vec.x, vec.y, OBCHR_WM_SPRITES);
     else
-        SetWMDot(id, StartSpriteAnimProc(ApInfo_WmDot, vec.x, vec.y, OAM2_PAL(palid) | 0x310, 1, 0xA));
+        SetWMDot(id, StartSpriteAnimProc(ApInfo_WmDot, vec.x, vec.y, OAM2_PAL(palid) | OBCHR_WM_SPRITES, 1, 0xA));
 }
 
 void EndWMDot(int id)
@@ -632,9 +632,9 @@ void StartWmFlag(int x, int y, int palid, int id)
     ModifyWmSpritePosition(&vec);
 
     if (proc)
-        SetSpriteAnimProcParameters(proc, vec.x, vec.y, OAM2_PAL(palid) | 0x310);
+        SetSpriteAnimProcParameters(proc, vec.x, vec.y, OAM2_PAL(palid) | OBCHR_WM_SPRITES);
     else
-        SetWmFlag(id, StartSpriteAnimProc(ApInfo_WmDot, vec.x, vec.y, OAM2_PAL(palid) | 0x310, 0, 0x7));
+        SetWmFlag(id, StartSpriteAnimProc(ApInfo_WmDot, vec.x, vec.y, OAM2_PAL(palid) | OBCHR_WM_SPRITES, 0, 0x7));
 }
 
 void EndWmFlag(int id)

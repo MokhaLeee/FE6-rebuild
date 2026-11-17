@@ -123,7 +123,7 @@ fu8 StartDebugMainMenu(struct MenuProc * menu)
     ClearUi();
 
     StartMenu(&MenuInfo_DebugMain);
-    DebugInitBg(BG_2, 0);
+    DebugInitBg(BG_2, DEBUGTEXT_BG_VRAM_DEFAULT);
 
     return MENU_ACTION_NOCURSOR;
 }
@@ -203,7 +203,7 @@ fu8 DebugMenu_Idle_DebugInfo(struct MenuProc * menu, struct MenuEntProc * ent)
         proc->debug_info ^= 1;
         DebugMenu_Display_DebugInfo(menu, ent);
 
-        DebugInitObj(-1, 9);
+        DebugInitObj(DEBUGTEXT_OBJ_VRAM_DEFAULT, OBPAL_DEBUGTEXT);
     }
 
     return 0;
@@ -408,7 +408,7 @@ void StartDebugMenu_LoadGame(void)
 
     InitBmDisplay();
 
-    DebugInitBg(BG_2, 0);
+    DebugInitBg(BG_2, DEBUGTEXT_BG_VRAM_DEFAULT);
 
     if (!IsSaveWorking())
         PutDrawText(NULL, gBg0Tm + TM_OFFSET(0, 18), 0, 0, 30, JTEXT("ＳＲＡＭが装着されていません"));
@@ -620,7 +620,7 @@ fu8 DebugMenu_OnSelect_ReleaseEntry(struct MenuProc * menu, struct MenuEntProc *
 
 fu8 DebugMenu_OnSelect_Sleep(struct MenuProc * menu, struct MenuEntProc * ent)
 {
-    func_fe6_0800285C(KEY_BUTTON_L | KEY_BUTTON_R);
+    SleepUntilKeyCombo(KEY_BUTTON_L | KEY_BUTTON_R);
 
     return MENU_ACTION_NOCURSOR | MENU_ACTION_END | MENU_ACTION_SE_6A | MENU_ACTION_CLEAR;
 }

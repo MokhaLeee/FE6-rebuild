@@ -10,6 +10,7 @@
 #include "text.h"
 #include "ui.h"
 #include "helpbox.h"
+#include "chapter_title.h"
 #include "save_core.h"
 #include "save_game.h"
 
@@ -1497,14 +1498,14 @@ void SaveMenu_UpdateChapterTitlePalettes(fu8 save_id)
 
 	for (i = 0; i < 3; i++) {
 		fu8 flags = (gSaveMenuSlotPlayFlags[i] & PLAY_FLAG_HARD) != 0 ?
-				    4 :
+				    CHAPTER_TITLE_PAL_HARD :
 				    0;
 
 		if (i != save_id)
-			flags |= 2;
+			flags |= CHAPTER_TITLE_PAL_UNSELECTED;
 
-		PutChapterTitlePalettle(flags | 1, 0x1A + i * 2);
-		PutChapterTitlePalettle(flags | 0, 0x1B + i * 2);
+		PutChapterTitlePalette(flags | CHAPTER_TITLE_PAL_BG1, 0x1A + i * 2);
+		PutChapterTitlePalette(flags, 0x1B + i * 2);
 	}
 
 	EnablePalSync();

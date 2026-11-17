@@ -117,11 +117,11 @@ void SetVCount(int vcount)
 	gDispIo.disp_stat.vcount_compare = vcount;
 }
 
-void func_fe6_0800285C(int unk)
+void SleepUntilKeyCombo(int keys)
 {
 	u16 ie = REG_IE;
 
-	REG_KEYCNT = unk - 0x4000;
+	REG_KEYCNT = keys - 0x4000;
 	REG_IE &= ~(INTR_FLAG_SERIAL | INTR_FLAG_GAMEPAK);
 	REG_IE |= INTR_FLAG_KEYPAD;
 	REG_DISPCNT |= DISPCNT_FORCE_BLANK;
