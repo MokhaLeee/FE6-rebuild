@@ -1,6 +1,5 @@
-// TODO: maybe there's a better way to do this
-// like generate off a CSV or something?
-// it would introduce some build complexity though...
+#include "prelude.h"
+#include "constants/terrains.h"
 
 i8 CONST_DATA MoveTable_BigFootie[TERRAIN_COUNT] =
 {
