@@ -1,6 +1,7 @@
 #include "prelude.h"
 #include "hardware.h"
 #include "proc.h"
+#include "klib.h"
 #include "prepscreen.h"
 
 struct ProcScr CONST_DATA ProcScr_PrepBgScrolling[] =
@@ -59,7 +60,7 @@ void PrepBgScrolling_Loop(struct Proc_0867968C *proc)
 
 		u16 const *src = Tsa_MonologueScrollingBG;
 		u32 dst_row_off = TM_OFFSET(0, (proc->pos / 8 - 1) & 0x1F);
-		fu8 src_row = (proc->pos / 8 + 30) % 40;
+		fu8 src_row = k_umod(proc->pos / 8 + 30, 40);
 
 		for (ix = 0; ix < 30; ix++)
 			(gBg3Tm + dst_row_off)[ix] = (src + (40 - (src_row + 1)) * 30)[ix] + TILEREF(0, 10);

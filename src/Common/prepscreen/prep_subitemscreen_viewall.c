@@ -24,7 +24,7 @@
 void PrepSubItem_StartViewAllScreen(struct PrepSubItemProc *proc)
 {
 	int iuid, tmp;
-	u8 i, i2, count;
+	u8 i, i2;
 	const u16 *supply_items = GetSupplyItems();
 
 	PutUiWindowFrame(15, 4, 15, 16, 0);

@@ -6,6 +6,7 @@
 #include "unitsprite.h"
 #include "unitlistscreen.h"
 #include "chapterinfo.h"
+#include "klib.h"
 #include "prepscreen.h"
 
 void PrepMenuFade_Init(struct ProcPrepFade * proc)
@@ -134,8 +135,7 @@ void PrepDisp_SetWorldMapInfo(struct ProcPrepUpperDisp * proc, fu8 x, fu8 y, int
 
 void PrepDisp_PutScrollArrow(u8 bottom, u8 clock, int visible)
 {
-    u8 _visible = visible;
-    u8 frame = ((clock / 8) % PREPDISP_ARROW_FRAMES) * 2;
+    u8 frame = (k_umod(clock / 8, PREPDISP_ARROW_FRAMES)) * 2;
 
     if (bottom == FALSE)
     {
@@ -172,7 +172,7 @@ void PrepUnit_DrawSMSAndObjs(struct ProcPrepUpperDisp * proc)
 {
     u8 i;
     int r6, r8;
-    u32 x, y;
+    u32 y;
     i16 ydiff_mod;
     u32 ydiff_quo;
 
@@ -445,9 +445,9 @@ void PrepMenu_DrawGmapSprites(struct ProcPrepUpperDisp * proc)
         if (index_gaiden < 10)
             PutSpriteExt(4, xpos + 0x28, ypos, Sprites_PrepChapterDigits[PREPDISP_CHAPTER_DIGIT_BLANK], 0);
         else
-            PutSpriteExt(4, xpos + 0x28, ypos, Sprites_PrepChapterDigits[index_gaiden / 10], 0);
+            PutSpriteExt(4, xpos + 0x28, ypos, Sprites_PrepChapterDigits[k_udiv10(index_gaiden)], 0);
 
-            PutSpriteExt(4, xpos + 0x30, ypos, Sprites_PrepChapterDigits[(proc->index_gaiden / 2) % 10], 0);
+        PutSpriteExt(4, xpos + 0x30, ypos, Sprites_PrepChapterDigits[k_umod10(proc->index_gaiden / 2)], 0);
     }
 
     if ((0xF & proc->marker_anim) == 0)
@@ -634,7 +634,7 @@ void PrepDisp_PutPressStart(struct ProcPrepUpperDisp * proc)
         gPal[OBPAL_OFFSET(OBPAL_PREPMENU_3) + 0xD] = *(Pal_PrepGoldPulse + (proc->clock / 8) % 0x10);
         EnablePalSync();
 
-        if ((proc->start_blink_clock % 10) <= 4)
+        if (k_umod10(proc->start_blink_clock) <= 4)
         {
             SetObjAffineAuto(0, 0, 0x100, proc->press_start_scale);
             PutSprite(4, 0x68, 0x1FE, Sprite_PrepPressStart, OAM2_PAL(OBPAL_PREPMENU_3));
@@ -658,7 +658,7 @@ void PrepDisp_PutTitleSprite(struct ProcPrepUpperDisp * proc)
 
     if (proc->title_slide_clock != 0)
     {
-        proc->title_slide_x = (proc->title_slide_clock * 320 - (proc->title_slide_clock * 0x10) * proc->title_slide_clock) / 10;
+        proc->title_slide_x = k_sdiv(proc->title_slide_clock * 320 - (proc->title_slide_clock * 0x10) * proc->title_slide_clock, 10);
 
         if (proc->title_slide_clock < 10)
             proc->title_slide_clock++;
@@ -859,4 +859,6 @@ ProcPtr StartPrepUpperDisp(ProcPtr parent)
     struct ProcPrepUpperDisp * proc;
     proc = SpawnProc(ProcScr_PrepUpperDisp, parent);
     proc->press_start_scale = 0;
+
+    return proc;
 }

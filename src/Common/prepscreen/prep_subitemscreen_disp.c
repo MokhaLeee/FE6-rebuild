@@ -9,6 +9,7 @@
 #include "ui.h"
 #include "armfunc.h"
 
+#include "klib.h"
 #include "prepscreen.h"
 
 #include "constants/msg.h"
@@ -401,7 +402,6 @@ void PrepItem_PutItemDesc(u8 x, u8 y, int item, struct ProcPrepSubItemfx *proc)
 		TmFillRect(gBg0Tm, 0xE, 0x13, 0);
 		TmFillRect(gBg1Tm, 0xE, 0x13, 0);
 	} else {
-		int i;
 		const char *str;
 		struct Text *text;
 		int iy;
@@ -517,7 +517,7 @@ void PrepAllItems_SortByKind(fu8 page)
 
 	gap = 1;
 
-	while (gap < gPrepMenuScrollPos / 3)
+	while (gap < (int)k_udiv(gPrepMenuScrollPos, 3))
 	{
 		gap = gap * 3 + 1;
 	}
@@ -551,7 +551,7 @@ void PrepAllItems_SortByKind(fu8 page)
 			}
 		}
 
-		gap = gap / 3;
+		gap = k_udiv(gap, 3);
 	}
 
 	/* import in the remaining items */

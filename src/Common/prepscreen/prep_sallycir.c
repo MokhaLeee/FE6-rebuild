@@ -1,6 +1,7 @@
 #include "prelude.h"
 #include "hardware.h"
 #include "proc.h"
+#include "klib.h"
 #include "prepscreen.h"
 
 EWRAM_OVERLAY(0) struct Win1H sSallyCirWinH_obj[2][160] = {};
@@ -157,7 +158,7 @@ void SallyCir2_Loop(struct ProcSallyCir *proc)
 	SetWinEnable(0, 1, 0);
 
 	a = proc->timer;
-	t = ((a * 1280 - (a * 640 * a) / 15) / 15) >> 4;
+	t = (k_sdiv(a * 1280 - k_sdiv(a * 640 * a, 15), 15)) >> 4;
 
 	if (proc->direct > 0) {
 		SetWin1Box(

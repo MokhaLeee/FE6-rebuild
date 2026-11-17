@@ -10,6 +10,12 @@ u64 k_u64mod(u64 a, u64 b);
 u32 k_udiv10(u32 n);       // n / 10
 u32 k_umod10(u32 n);       // n % 10
 
+/* 有符号除法：klib 只提供无符号接口，符号在调用点处理（见 AGENTS「除法/取模」） */
+static inline int k_sdiv(int a, int b)
+{
+	return a >= 0 ? (int)k_udiv(a, b) : -(int)k_udiv(-a, b);
+}
+
 static inline int perc_of(u32 num, u32 perc)
 {
 	return k_udiv(num * perc, 100);

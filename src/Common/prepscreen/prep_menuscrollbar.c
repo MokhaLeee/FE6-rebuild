@@ -2,6 +2,7 @@
 #include "proc.h"
 #include "oam.h"
 #include "sprite.h"
+#include "klib.h"
 #include "prepscreen.h"
 
 u16 CONST_DATA Sprite_MenuScrollContainer8[] = {
@@ -187,8 +188,8 @@ void MenuScroll_Loop(struct MenuScrollBarProc *proc)
 		u8 visible = proc->numVisibleRows;
 
 		if (total > visible) {
-			u32 unit = len / total;
-			u32 bar = len * visible / total;
+			u32 unit = k_udiv(len, total);
+			u32 bar = k_udiv(len * visible, total);
 			u32 n32;
 
 			if (cur != 0)

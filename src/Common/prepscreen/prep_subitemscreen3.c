@@ -73,7 +73,7 @@ void PrepSubItem_StartSupplyScreen(struct PrepSubItemProc *proc)
 
 	if (proc->unk30 == 0xFF) {
 		const u16 *supply_items = GetSupplyItems();
-		u16 i, j;
+		u16 i;
 
 		proc->unk30 = 0;
 		proc->sel_action = 0;

@@ -883,8 +883,9 @@ void PrepMenu_InitExt(struct PrepMenuProc *proc)
 	proc->a_button_actions = 0;
 	proc->end_prep = 0;
 
-	// BUG: this should be 2, not 3
-	for (i = 0; i < 3; i++)
+	/* disp_idx has two entries; the original bound of 3 also cleared
+	 * submenu_level, which is zeroed right below anyway. */
+	for (i = 0; i < 2; i++)
 		proc->disp_idx[i] = 0;
 
 	proc->submenu_level = 0;

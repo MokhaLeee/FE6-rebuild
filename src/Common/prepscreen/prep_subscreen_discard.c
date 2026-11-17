@@ -46,7 +46,6 @@ void func_fe6_0808166C(struct Text *text, bool disp)
 void PrepDiscard_Init(struct ProcPrepDiscardScreen *proc)
 {
 	u8 i;
-	int x;
 
 	ResetTextFont();
 	ClearIcons();
