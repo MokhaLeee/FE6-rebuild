@@ -1,11 +1,12 @@
-# 上游同步状态（fe6 @ 977cbd5）
+# 上游同步状态（fe6 @ 22aed05）
 
 记录本仓库与 `MokhaLeee/fe6` 主线的同步情况，便于下次跟进时知道做到哪、还剩什么、哪些是故意不跟的。
 
-- 上游基线：`977cbd5`（2026-10-31，#133 合并）
+- 上游基线：`22aed05`（2026-11-17，#160 合并）
 - 本仓库在上游的最后一次整体快照：`6546afd`（#114，2026-10-30）
-- 当前跟进目标：`7927a77`（45 commits / 17 PR），分批计划见 `upstream-sync-plan-7927a77.md`；
-  已完成批 1（#144/#147/#151）、批 2（#134/#135）、批 3（#136–#138）、批 4（#141/#142）、批 6（#148–#150 + LUT 强类型）与 #140（titlescreen 命名）
+- 当前跟进目标：`22aed05`。`7927a77` 那一轮的 17 个 PR 已清（批 1–4、批 6、#140，计划见
+  `upstream-sync-plan-7927a77.md`）；其后的 #152–#160 这一轮也已跟进，只整批跳过 #152（xmap）
+  与 #156（opinfo_classdemo），原因见「有意未同步」
 
 ## 已同步
 
@@ -44,8 +45,22 @@
 | 工具 | 用例 8：准备画面子菜单交互（部署 / 物品 / 存档 / 地图 / 出击） | `1a9021f` |
 | 工具 | 用例 9：帮助框（prepscreen 主菜单按 R，覆盖 `helpbox.c`/`helpbox_display.c`；`helpbox_alt` 是 dead code，`helpdialogue` 走教程路径未覆盖） | `709bece` |
 | 工具 | 用例 10：准备画面物品子菜单（交換/捨てる/輸送隊/リスト/武器屋，覆盖 #141 的 PrepItem/PrepTrade/PrepSupply 与 #142 的 PrepDisp） | `08a9e53` |
+| #157 | `SleepUntilKeyCombo` 命名（原 `func_fe6_0800285C`，本仓库定义在 `src/Common/sys/sys.c`） | `1c79a7a` |
+| #159 | debug 文本默认哨兵 `DEBUGTEXT_BG_VRAM_DEFAULT`/`DEBUGTEXT_OBJ_VRAM_DEFAULT` + `OBPAL_DEBUGTEXT` | `1c79a7a` |
+| #160 | `OBJ_VRAM0` 替换 OBJ VRAM 字面量（本仓库 10 处，无 `sio_bm.c`） | `1c79a7a` |
+| #155 | 文本控制字符 `TEXT_CHAR_*`（含本仓库 `src/Common/utf8/decoding.c` 的 `GetStringLineEnd`；未跟 `opanim.c`/`xmap.c`） | `1c79a7a` |
+| #154 | chapter_title 命名（51 个枚举、`CHAPTER_TITLE_PAL_*`、44 个素材标签、`PutChapterTitlePalette` 等 6 个函数、`gChapterTitleData` 改 `u8 const *`） | `1c79a7a` |
+| #153 | worldmap 命名（122 个符号、`WmArrowSt` 字段、`Pals_Wm_082*` → `WorldMapGfxTable`） | `1c79a7a` |
+| #158 | 世界地图精灵表 `Img_WorldMapStuff` → `Img_WmSprites`、`OBCHR_WM_SPRITES`、`OBCHR_WM_ARROW_*` | `1c79a7a` |
 
 ## 有意未同步
+
+- **#152（xmap 命名）**：本仓库没有 `src/xmap.c`，`include/xmap.h` 是 85 行的本地裁剪版且无人
+  `#include`；该 PR 在 `savemenu.c` 的改动只是把本地 `extern StartXmap` 换成 `#include "xmap.h"`，
+  搬进来没有消费者。等补 xmap 模块时再整批复刻。
+- **#156（opinfo_classdemo 命名）**：本仓库没有 `src/opinfo.c` / `opinfo_classdemo.c` /
+  `opinfo_img.s` / `data/opinfo.s`，`include/opinfo.h` 是本地裁剪版（与上游差 67 行）。等同
+  #139 soundroom，整批跳过。
 
 - **#118（trim-includes）**：尝试过机械应用（按 basename 把上游 `src/*.c` 映射到本仓库的 `vanilla/`、`gameinfo/`、`src/Common/`），但本仓库的文件依赖与上游不同（`opanim.c`、`worldmap.c`、`iwram-data.c` 删掉 include 就缺声明），10 轮"编译-恢复-重编"不收敛，且映射会误改 `gameinfo/chapterinfo/*` 和 `src/Core/*`。全部回退，不做这批：收益只是少 1048 行 include，不值得逐个手工验证 249 个文件。
 
