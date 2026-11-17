@@ -445,7 +445,6 @@ void EkrLvup_InitCounterForMainAnim(struct ProcEkrlvup *proc)
 void EkrLvup_MainAnime(struct ProcEkrlvup *proc)
 {
 	int base, diff;
-	s16 stat_index;
 
 	if (++proc->timer == 0x14) {
 		proc->timer = 0;

@@ -236,8 +236,6 @@ void func_fe6_08043980(struct Anim * anim, int a, int b)
     }
 }
 
-#define gBg0Tm2D ((u16 (*)[1])gBg0Tm)
-
 void EkrGauge_Loop(struct ProcEkrGauge * proc)
 {
     struct Anim AStack_130;
@@ -303,8 +301,8 @@ void EkrGauge_Loop(struct ProcEkrGauge * proc)
         FillBGRect(gBg0Tm + 0x1A0, 30, 8, 0, 0x9f);
 
         if (0 == proc->unk4C) {
-            EfxTmCpyBG(gUnk_08112AD0 + r8, &gBg0Tm2D[r7][r9], 15, r6, -1, -1);
-            FillBGSafelyRect(&gBg0Tm2D[r7][r9], 15, r6, 2, 0x80);
+            EfxTmCpyBG(gUnk_08112AD0 + r8, &gBg0Tm[r7 + r9], 15, r6, -1, -1);
+            FillBGSafelyRect(&gBg0Tm[r7 + r9], 15, r6, 2, 0x80);
         }
 
         if (0 == proc->unk50) {
@@ -312,8 +310,8 @@ void EkrGauge_Loop(struct ProcEkrGauge * proc)
 
             ptr = (u8 *)gUnk_08112BA4 + r8;
 
-            EfxTmCpyBG(ptr, &gBg0Tm2D[r7][spDC], 16, r6, -1, -1);
-            FillBGSafelyRect(&gBg0Tm2D[r7][spDC], 16, r6, 3, 128);
+            EfxTmCpyBG(ptr, &gBg0Tm[r7 + spDC], 16, r6, -1, -1);
+            FillBGSafelyRect(&gBg0Tm[r7 + spDC], 16, r6, 3, 128);
         }
 
         EnableBgSync(1);

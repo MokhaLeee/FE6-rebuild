@@ -55,7 +55,7 @@ void EfxDeathEvent_Init(struct ProcEfxDead * proc)
 
     proc->timer = 7;
 
-    if (gEkrDistanceType != EKR_DISTANCE_CLOSE && GetAnimPosition(proc->anim1) != gEkrInitPosReal)
+    if (gEkrDistanceType != EKR_DISTANCE_CLOSE && (u32)GetAnimPosition(proc->anim1) != gEkrInitPosReal)
     {
         NewEfxFarAttackWithDistance(another, -1);
         proc->timer = 0;

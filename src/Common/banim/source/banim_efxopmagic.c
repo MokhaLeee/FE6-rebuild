@@ -208,7 +208,7 @@ CONST_DATA u16 *TsaArray_EfxopFireBG[] = {
 	Tsa_EfxFireBG_0812EE90
 };
 
-const u16 FrameArray_EfxopFireBG[] = {
+const i16 FrameArray_EfxopFireBG[] = {
 	0, 3,
 	1, 2,
 	2, 2,
@@ -341,7 +341,7 @@ u16 *CONST_DATA TsaArray_EfxopThunderBG[] = {
 
 void NewEfxopThunderBG(struct Anim *anim, struct ProcEfx *unused)
 {
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0, 4,
 		1, 40,
 		-1,
@@ -404,7 +404,7 @@ struct ProcScr CONST_DATA ProcScr_EfxopThunderBGCOL[] = {
 
 void NewEfxopThunderBGCOL(struct Anim *anim, struct ProcEfx *unused)
 {
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0, 4,
 		1, 4,
 		2, 2,
@@ -535,7 +535,7 @@ u16 *CONST_DATA TsaArray_EfxopLiveBG[] = {
 
 void NewEfxopLiveBG(struct Anim *anim, struct ProcEfx *unused)
 {
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0, 62,
 		-1,
 	};
@@ -583,7 +583,7 @@ struct ProcScr CONST_DATA ProcScr_EfxopLiveBGCOL[] = {
 
 void NewEfxopLiveBGCOL(struct Anim *anim, struct ProcEfx *unused)
 {
-	static const u16 frames[] = {
+	static const i16 frames[] = {
 		0, 3,
 		1, 3,
 		2, 3,

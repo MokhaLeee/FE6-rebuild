@@ -648,8 +648,6 @@ int EfxCheckRetaliation(int is_retaliation)
 
 int EfxCheckStaffType(int weapon)
 {
-	int ret;
-
 	if (!weapon)
 		return EFX_STAFF_NOPE;
 
