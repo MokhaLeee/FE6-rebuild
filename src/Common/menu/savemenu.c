@@ -1,5 +1,7 @@
 #include "savemenu.h"
 
+#include "klib.h"
+
 #include "gbaio.h"
 #include "armfunc.h"
 #include "hardware.h"
@@ -707,9 +709,7 @@ void SaveMenu_PanelScrollIn_Loop(struct SaveMenuProc *proc)
 
 	/* TODO: what */
 	proc->panel_scroll_x =
-		(((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) -
-		 (220 * proc->anim_clock * proc->anim_clock / 14)) /
-		14;
+		k_udiv(((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) - k_udiv(220 * proc->anim_clock * proc->anim_clock, 14), 14);
 
 	if (proc->anim_clock == 14) {
 		LoadHelpBoxGfx(OBJ_VRAM0 + OBCHR_SAVEMENU_1C0 * CHR_SIZE,
@@ -725,9 +725,7 @@ void SaveMenu_PanelScrollOut_Loop(struct SaveMenuProc *proc)
 
 	/* TODO: what */
 	proc->panel_scroll_x =
-		-36 - (((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) -
-		       (220 * proc->anim_clock * proc->anim_clock / 14)) /
-			      14;
+		-36 - k_udiv(((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) - k_udiv(220 * proc->anim_clock * proc->anim_clock, 14), 14);
 
 	if (proc->anim_clock == 14) {
 		Decompress(Img_SaveMenuDefaultObjGfx,
@@ -743,9 +741,7 @@ void SaveMenu_ExtraMenuScrollIn(struct SaveMenuProc *proc)
 
 	/* TODO: what */
 	proc->extra_panel_scroll_x =
-		(((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) -
-		 (220 * proc->anim_clock * proc->anim_clock / 14)) /
-		14;
+		k_udiv(((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) - k_udiv(220 * proc->anim_clock * proc->anim_clock, 14), 14);
 
 	if (proc->anim_clock == 14) {
 		Proc_Goto(proc, L_SAVEMENU_EXTRA_MENU);
@@ -759,9 +755,9 @@ void SaveMenu_ExtraMenuScrollOut(struct SaveMenuProc *proc)
 
 	/* TODO: what */
 	proc->extra_panel_scroll_x =
-		220 - (((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) -
-		       (220 * proc->anim_clock * proc->anim_clock / 14)) /
-			      14;
+		220 - (int)k_udiv(((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) -
+				    k_udiv(220 * proc->anim_clock * proc->anim_clock, 14),
+			     14);
 
 	if (proc->anim_clock == 14) {
 		Proc_Goto(proc, L_SAVEMENU_1);
@@ -775,9 +771,7 @@ void SaveMenu_XMap1ScrollIn(struct SaveMenuProc *proc)
 
 	/* TODO: what */
 	proc->extra_panel_scroll_x =
-		220 + (((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) -
-		       (220 * proc->anim_clock * proc->anim_clock / 14)) /
-			      14;
+		220 + k_udiv(((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) - k_udiv(220 * proc->anim_clock * proc->anim_clock, 14), 14);
 	proc->panel_scroll_x = proc->extra_panel_scroll_x + 36;
 
 	if (proc->anim_clock == 14) {
@@ -792,9 +786,7 @@ void SaveMenu_XMap1ScrollOut(struct SaveMenuProc *proc)
 
 	/* TODO: what */
 	proc->extra_panel_scroll_x =
-		440 - (((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) -
-		       (220 * proc->anim_clock * proc->anim_clock / 14)) /
-			      14;
+		440 - k_udiv(((7 * proc->anim_clock * 8 - proc->anim_clock) * 8) - k_udiv(220 * proc->anim_clock * proc->anim_clock, 14), 14);
 	proc->panel_scroll_x = proc->extra_panel_scroll_x + 36;
 
 	if (proc->anim_clock == 14) {

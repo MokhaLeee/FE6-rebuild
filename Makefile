@@ -316,6 +316,9 @@ CFLAGS += -fno-jump-tables
 # reordering top-level data, which changes the addresses the startup
 # code and the stored pointers expect. Keep this file in source order.
 src/Common/sys/iwram-data.o: CFLAGS += -fno-toplevel-reorder
+# savemenu_2 deliberately type-puns the BG registers as 32-bit words;
+# keep the deprecated alias behaviour of the original build.
+src/Common/menu/savemenu_2.o: CFLAGS += -fno-strict-aliasing
 # CFLAGS += -fno-inline
 CDEPFLAGS := # -MMD -MQ "$*.o" -MQ "$*.asm" -MF "$(CACHE_DIR)/$*.d" -MP
 

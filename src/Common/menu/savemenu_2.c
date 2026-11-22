@@ -14,6 +14,14 @@
 #include "save_core.h"
 #include "save_game.h"
 
+#include "klib.h"
+
+static int save_menu_div_signed(int value, int divisor)
+{
+	return (value >= 0) ? (int)k_udiv(value, divisor)
+			    : -(int)k_udiv(-value, divisor);
+}
+
 extern u16 const SpriteAnim_SaveMenuSuspendIcon[]; /* sprite anim */
 
 extern struct SaveMenuOptionSprite SaveMenu_ExtraMenuOptionSprites[];
@@ -534,7 +542,7 @@ void SaveMenu_DrawPlayTime(ProcPtr proc)
 	fu8 y, x;
 	u16 hours, minutes, seconds;
 
-	y = (0x20 - (sm_proc->panel_scroll_x * 0x20 / 220));
+	y = (0x20 - save_menu_div_signed(sm_proc->panel_scroll_x * 0x20, 220));
 	y = y + 144;
 	x = 144;
 
@@ -555,10 +563,10 @@ void SaveMenu_DrawPlayTime(ProcPtr proc)
 		PutSpriteExt(13,
 			     x + 0x12,
 			     y - 8,
-			     Sprite_SaveMenuPlayTimeLargeDigits[hours / 100],
+			     Sprite_SaveMenuPlayTimeLargeDigits[k_udiv(hours, 100)],
 			     OAM2_PAL(5));
 		hours = hours -
-			(hours / 100 * 100); /* sure, 'hours % 100' would have
+			(k_udiv(hours, 100) * 100); /* sure, 'k_umod10(hours)0' would have
 						been fine too */
 	}
 
@@ -566,14 +574,14 @@ void SaveMenu_DrawPlayTime(ProcPtr proc)
 		PutSpriteExt(13,
 			     x + 0x1A,
 			     y - 8,
-			     Sprite_SaveMenuPlayTimeLargeDigits[hours / 10],
+			     Sprite_SaveMenuPlayTimeLargeDigits[k_udiv10(hours)],
 			     OAM2_PAL(5));
 	}
 
 	PutSpriteExt(13,
 		     x + 0x22,
 		     y - 8,
-		     Sprite_SaveMenuPlayTimeLargeDigits[hours % 10],
+		     Sprite_SaveMenuPlayTimeLargeDigits[k_umod10(hours)],
 		     OAM2_PAL(5));
 
 	PutSpriteExt(13,
@@ -585,12 +593,12 @@ void SaveMenu_DrawPlayTime(ProcPtr proc)
 	PutSpriteExt(13,
 		     x + 0x32,
 		     y - 8,
-		     Sprite_SaveMenuPlayTimeLargeDigits[minutes / 10],
+		     Sprite_SaveMenuPlayTimeLargeDigits[k_udiv10(minutes)],
 		     OAM2_PAL(5));
 	PutSpriteExt(13,
 		     x + 0x3A,
 		     y - 8,
-		     Sprite_SaveMenuPlayTimeLargeDigits[minutes % 10],
+		     Sprite_SaveMenuPlayTimeLargeDigits[k_umod10(minutes)],
 		     OAM2_PAL(5));
 
 	PutSpriteExt(13,
@@ -602,12 +610,12 @@ void SaveMenu_DrawPlayTime(ProcPtr proc)
 	PutSpriteExt(13,
 		     x + 0x4A,
 		     y,
-		     Sprite_SaveMenuPlayTimeSmallDigits[seconds / 10],
+		     Sprite_SaveMenuPlayTimeSmallDigits[k_udiv10(seconds)],
 		     OAM2_PAL(5));
 	PutSpriteExt(13,
 		     x + 0x52,
 		     y,
-		     Sprite_SaveMenuPlayTimeSmallDigits[seconds % 10],
+		     Sprite_SaveMenuPlayTimeSmallDigits[k_umod10(seconds)],
 		     OAM2_PAL(5));
 }
 
@@ -625,8 +633,8 @@ void SaveMenu_SetBgAffine(fu8 bg,
 	affine_src.tex_y = tex_y;
 	affine_src.scr_x = scr_x >> 8;
 	affine_src.scr_y = scr_y >> 8;
-	affine_src.sx = 0x10000 / scale;
-	affine_src.sy = 0x10000 / scale;
+	affine_src.sx = k_udiv(0x10000, scale);
+	affine_src.sy = k_udiv(0x10000, scale);
 	affine_src.alpha = angle << 6;
 
 	/* TODO: put proper affine structs inside gDispIo instead of using
@@ -763,7 +771,7 @@ void SaveMenu_DrawMainMenuHeader(struct SaveMenuUiDrawProc *proc)
 	fu8 id;
 	fu16 y;
 
-	y = (0x100 + (0xD0 + proc->proc_parent->panel_scroll_x * 48 / 220)) &
+	y = (0x100 + (0xD0 + save_menu_div_signed(proc->proc_parent->panel_scroll_x * 48, 220))) &
 	    0x1FF;
 
 	PutSpriteExt(4, 0x38, y, Sprite_0868A0FC, OAM2_PAL(2));
