@@ -1,5 +1,7 @@
 #include "text.h"
 
+#include "klib.h"
+
 #include "hardware.h"
 #include "armfunc.h"
 #include "proc.h"
@@ -28,9 +30,9 @@ static u8 * GetTextDrawDest(struct Text * text);
 static u16 const * GetColorLut(int color);
 static void DrawTextGlyph(struct Text * text, struct Glyph const * glyph);
 static void DrawTextGlyphNoClear(struct Text * text, struct Glyph const * glyph);
-static void Text_DrawStringAscii(struct Text * text, char const * str);
-static char const * Text_DrawCharacterAscii(struct Text * text, char const * str);
-static int GetStringTextLenAscii(char const * str);
+static _UNUSED void Text_DrawStringAscii(struct Text * text, char const * str);
+static _UNUSED char const * Text_DrawCharacterAscii(struct Text * text, char const * str);
+static _UNUSED int GetStringTextLenAscii(char const * str);
 static u8 * GetSpriteTextDrawDest(struct Text * text);
 static void DrawSpriteTextGlyph(struct Text * text, struct Glyph const * glyph);
 static void TextPrint_OnLoop(struct TextPrintProc * proc);
@@ -292,8 +294,8 @@ void Text_DrawNumber(struct Text * text, int number)
 
     while (number != 0)
     {
-        u16 c = '0' + number % 10;
-        number /= 10;
+        u16 c = '0' + k_umod10(number);
+        number = k_udiv10(number);
 
         Text_DrawCharacter(text, (char *)&c);
         text->x -= 15;
@@ -347,8 +349,6 @@ static void DrawTextGlyphNoClear(struct Text * text, struct Glyph const * glyph)
 
     u16 const * maskLut = GetColorLut(TEXT_COLOR_MASK);
     u16 const * colorLut = GetColorLut(text->color);
-
-    int unused;
 
     for (i = 0; i < 16; ++i)
     {
@@ -425,13 +425,13 @@ void Text_InsertDrawNumberOrBlank(struct Text * text, int x, int color, int numb
     Text_DrawNumberOrBlank(text, number);
 }
 
-static void Text_DrawStringAscii(struct Text * text, char const * str)
+static _UNUSED void Text_DrawStringAscii(struct Text * text, char const * str)
 {
     struct Glyph const * glyph;
 
     while (*str != 0)
     {
-        glyph = gActiveFont->glyphs[*str++];
+        glyph = gActiveFont->glyphs[(u8)*str++];
 
         if (glyph == NULL)
             glyph = gActiveFont->glyphs['?'];
@@ -440,9 +440,9 @@ static void Text_DrawStringAscii(struct Text * text, char const * str)
     }
 }
 
-static char const * Text_DrawCharacterAscii(struct Text * text, char const * str)
+static _UNUSED char const * Text_DrawCharacterAscii(struct Text * text, char const * str)
 {
-    struct Glyph const * glyph = gActiveFont->glyphs[*str++];
+    struct Glyph const * glyph = gActiveFont->glyphs[(u8)*str++];
 
     if (glyph == NULL)
         glyph = gActiveFont->glyphs['?'];
@@ -452,7 +452,7 @@ static char const * Text_DrawCharacterAscii(struct Text * text, char const * str
     return str;
 }
 
-static int GetStringTextLenAscii(char const * str)
+static _UNUSED int GetStringTextLenAscii(char const * str)
 {
     struct Glyph const * glyph;
 
@@ -460,7 +460,7 @@ static int GetStringTextLenAscii(char const * str)
 
     while (*str != 0)
     {
-        glyph = gActiveFont->glyphs[*str++];
+        glyph = gActiveFont->glyphs[(u8)*str++];
         result += glyph->width;
     }
 
@@ -738,8 +738,8 @@ void PutNumberExt(u16 * tm, int color, int number, int id_zero)
 
     while (number != 0)
     {
-        PutSpecialChar(tm, color, number % 10 + id_zero);
-        number /= 10;
+        PutSpecialChar(tm, color, k_umod10(number) + id_zero);
+        number = k_udiv10(number);
 
         tm--;
     }
@@ -788,8 +788,8 @@ void SpecialCharTest(void)
 
 inline void PutNumber2DigitExt(u16 * tm, int color, int number, int id_zero)
 {
-    PutSpecialChar(tm, color, number % 10 + id_zero);
-    PutSpecialChar(tm - 1, color, (number / 10) % 10 + id_zero);
+    PutSpecialChar(tm, color, k_umod10(number) + id_zero);
+    PutSpecialChar(tm - 1, color, k_umod10(k_udiv10(number)) + id_zero);
 }
 
 inline void PutNumber2Digit(u16 * tm, int color, int number)

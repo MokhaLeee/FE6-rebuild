@@ -1,5 +1,7 @@
 #include "helpbox.h"
 
+#include "klib.h"
+
 #include "oam.h"
 #include "sound.h"
 #include "sprite.h"
@@ -45,7 +47,7 @@ bool IsHelpDialogueActive(void)
     return FALSE;
 }
 
-struct HelpBoxSt EWRAM_DATA gHelpDialogueSt = { { 0 } };
+struct HelpBoxSt EWRAM_DATA gHelpDialogueSt = { 0 };
 
 void LoadHelpDialogueGfx(void * vram, int pal)
 {
@@ -163,7 +165,7 @@ void HelpDialogueBox_OnClose(struct HelpBoxProc * proc)
 {
     ResetHelpBoxInitSize(proc);
 
-    proc->timer_end = proc->timer_end / 3;
+    proc->timer_end = k_udiv(proc->timer_end, 3);
     proc->timer = proc->timer_end;
 }
 
@@ -193,7 +195,7 @@ void CloseHelpDialogueBox(void)
 
 void StartHelpDialogue(int x, int y, int msg, ProcPtr parent)
 {
-    struct HelpDialogueProc * proc;
+    struct HelpDialogueProc * proc = NULL;
 
     // BUG: this function uses proc where it should use parent
 #if BUGFIX
@@ -225,7 +227,7 @@ void StartHelpDialogue(int x, int y, int msg, ProcPtr parent)
 // unused
 void StartHelpDialogueExt(int x, int y, int msg, ProcPtr parent, u8 pal)
 {
-    struct HelpDialogueProc * proc;
+    struct HelpDialogueProc * proc = NULL;
 
     // BUG: this function uses proc where it should use parent
 #if BUGFIX

@@ -1,5 +1,7 @@
 #include "helpbox.h"
 
+#include "klib.h"
+
 #include "oam.h"
 #include "sound.h"
 #include "msg.h"
@@ -22,7 +24,7 @@ void HelpBoxAlt_OnClose(struct HelpBoxProc * proc)
     ResetHelpBoxAltInitSize(proc);
     SetHelpBoxAltInitPosition(proc, proc->info->x, proc->info->y);
 
-    proc->timer_end = proc->timer_end / 3;
+    proc->timer_end = k_udiv(proc->timer_end, 3);
     proc->timer = proc->timer_end;
 }
 
@@ -187,7 +189,7 @@ void ApplyHelpBoxAltPosition(struct HelpBoxProc * proc, int x, int y)
     int x_span = proc->w_box_fini + 0x10;
     int y_span = proc->h_box_fini + 0x10;
 
-    proc->x_box_fini = x - 0x10 - x_span / 6;
+    proc->x_box_fini = x - 0x10 - k_udiv(x_span, 6);
 
     if (proc->x_box_fini < 0)
         proc->x_box_fini = 0;

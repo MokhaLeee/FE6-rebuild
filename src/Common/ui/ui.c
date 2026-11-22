@@ -213,7 +213,7 @@ u8 CONST_DATA gUiHandOffsetLut[] =
 
 void PutUiHand(int x, int y)
 {
-    if ((GetGameTime() - 1) == gPrevUiHandClockFrame)
+    if ((int)(GetGameTime() - 1) == gPrevUiHandClockFrame)
     {
         x = (x + gPrevUiHandPutPosition.x) >> 1;
         y = (y + gPrevUiHandPutPosition.y) >> 1;

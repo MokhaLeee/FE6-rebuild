@@ -9,7 +9,7 @@
 #include "constants/videoalloc_global.h"
 
 int EWRAM_DATA unused_0203D408 = 0;
-struct HelpBoxSt EWRAM_DATA gHelpBoxSt = { { 0 } };
+struct HelpBoxSt EWRAM_DATA gHelpBoxSt = { 0 };
 
 void LoadHelpBoxGfx(void * vram, int pal)
 {

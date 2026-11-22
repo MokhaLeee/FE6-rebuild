@@ -1,5 +1,7 @@
 #include "helpbox.h"
 
+#include "klib.h"
+
 #include "hardware.h"
 #include "oam.h"
 #include "sound.h"
@@ -340,7 +342,7 @@ void ApplyHelpBoxPosition(struct HelpBoxProc *proc, int x, int y)
 	x += gHelpBoxOrigin.x * 8;
 	y += gHelpBoxOrigin.y * 8;
 
-	proc->x_box_fini = x - 0x10 - x_span / 6;
+	proc->x_box_fini = x - 0x10 - k_udiv(x_span, 6);
 
 	if (proc->x_box_fini < 0)
 		proc->x_box_fini = 0;
