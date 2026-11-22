@@ -1,4 +1,6 @@
 #include "prelude.h"
+
+#include "klib.h"
 #include "proc.h"
 #include "hardware.h"
 #include "armfunc.h"
@@ -106,7 +108,6 @@ void StartMuralBackgroundExt(ProcPtr parent, void * vram_dst, int pal_bank)
 {
     int i, tileref;
     int oam2_chr, oam2_pal;
-    const struct ProcScr * proc_scr;
     u16 * tm = gBg3Tm;
 
     if (vram_dst == NULL)
@@ -578,7 +579,7 @@ bool GenericOptionChangeHandler(ProcPtr proc)
         if (ret)
         {
             SpawnProc(ProcScr_RewriteUiConfigExplanition, proc);
-            DrawOptionValueTexts(sel_index, sel_index % 7, sel_index * 2 + 4);
+            DrawOptionValueTexts(sel_index, k_umod(sel_index, 7), sel_index * 2 + 4);
             EnableBgSync(BG0_SYNC_BIT | BG2_SYNC_BIT);
             PlaySe(SONG_67);
         }
@@ -684,6 +685,8 @@ void SetGameOption(u8 item_index, u8 option_value)
         break;
 #endif
 
+        /* fall through */
+
     case GAME_OPTION_TERRAIN:
         gPlaySt.config_terrain_mapui = option_value;
         break;
@@ -746,7 +749,7 @@ void RefrashUiConfigScreen(ProcPtr proc, int sel_index, int tm_offset)
         gBg2Tm[iy + 0x22 + i] = 0;
     }
 
-    text_index = sel_index % 7;
+    text_index = k_umod(sel_index, 7);
 
     DrawGameOptionIcon(sel_index, 4);
     DrawGameOptionText(sel_index, text_index, y);

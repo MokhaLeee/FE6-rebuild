@@ -1,5 +1,7 @@
 #include "menu.h"
 
+#include "klib.h"
+
 #include "hardware.h"
 #include "sound.h"
 #include "text.h"
@@ -166,7 +168,7 @@ ProcPtr EndMenu(struct MenuProc * proc)
 
 void EndMenus(void)
 {
-    Proc_ForEach(ProcScr_Menu, (ProcFunc) EndMenu);
+    Proc_ForEach(ProcScr_Menu, (ProcFunc)(void *) EndMenu);
 }
 
 inline bool HasMenuChangedItem(struct MenuProc * proc)
@@ -511,7 +513,7 @@ void ApplyMenuCursorScroll(struct MenuProc * proc, int * x_ref, int * y_ref)
 
     if (proc->entry_count > THRESHOLD)
     {
-        int offset = (proc->entry_count * 16 - THRESHOLD * 16) * proc->active_entry / THRESHOLD;
+        int offset = k_udiv((proc->entry_count * 16 - THRESHOLD * 16) * proc->active_entry, THRESHOLD);
 
         SetBgOffset(0, 0, offset);
         SetBgOffset(1, 0, offset);

@@ -1,4 +1,6 @@
 #include "prelude.h"
+
+#include "klib.h"
 #include "util.h"
 #include "armfunc.h"
 #include "gamecontroller.h"
@@ -337,7 +339,7 @@ void TitleLensFlare_Put(struct ProcTitleDisp * proc)
 
     PutOamHi(
         OAM1_X(x / 8 + 0x23C),
-        OAM0_Y(y / 6 + 0x120),
+        OAM0_Y(k_udiv(y, 6) + 0x120),
         Sprite_TitleLensFlareSmall,
         OAM2_CHR(OBCHR_TITLE_LENSFLARE) + OAM2_PAL(OBPAL_TITLE_LENSFLARE)
     );
