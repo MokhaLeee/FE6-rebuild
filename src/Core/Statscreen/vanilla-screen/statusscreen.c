@@ -1,5 +1,7 @@
 #include "statusscreen.h"
 
+#include "klib.h"
+
 #include "hardware.h"
 #include "oam.h"
 #include "armfunc.h"
@@ -118,7 +120,7 @@ void StatusScreenSprites_Loop(struct StatusScreenProc * proc)
     {
         // D=
         int oam2 = OAM2_CHR(0x280 + 10) + OAM2_PAL(3);
-        oam2 += (GetGameTime() / 8) % 6;
+        oam2 += k_umod(GetGameTime() / 8, 6);
 
         if (gStatusScreenSt.page == 0)
         {
