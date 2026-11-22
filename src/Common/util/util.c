@@ -1,5 +1,13 @@
 #include "util.h"
 
+#include "klib.h"
+
+static int util_div_signed(int value, int divisor)
+{
+	return (value >= 0) ? (int)k_udiv(value, divisor)
+			    : -(int)k_udiv(-value, divisor);
+}
+
 #include "hardware.h"
 #include "datamove.h"
 #include "armfunc.h"
@@ -148,6 +156,8 @@ struct Unk * Unused_08013CEC(struct Unk_08013CEC * unk, int arg_1, int arg_2)
     arg_2 = (arg_2 & 0xFFE0) >> 5;
 
     unk->unk_04 = arg_2 - arg_1;
+
+    return (struct Unk *)unk;
 }
 
 int Unused_08013D04(struct Unk_08013CEC * unk, u8 const * src)
@@ -357,7 +367,7 @@ void func_fe6_08013F04(i16 * array, int x_a, int y_a, int x_b, int y_b)
         y_a = tmp;
     }
 
-    q16_slope = ((x_b - x_a) << 16) / (y_b - y_a);
+    q16_slope = util_div_signed((x_b - x_a) << 16, y_b - y_a);
     q16_x = x_a << 16;
 
     if (y_b > DISPLAY_HEIGHT)
@@ -487,7 +497,7 @@ void func_fe6_0801412C(void)
 void func_fe6_08014130(char const * arg_0)
 {
     SHOULD_BE_STATIC char SHOULD_BE_CONST unk[] = "@@LWFOVDBK@@";
-    func_fe6_08014130(unk);
+    (void)unk;
 }
 
 static void SpacialSeTest_OnInit(struct Proc * proc)
