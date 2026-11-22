@@ -312,6 +312,10 @@ CFLAGS := -g $(ARCH) -mtune=arm7tdmi \
 		  -std=gnu99 -O2 -fno-builtin \
 		  -Wall -Wextra -Werror -Wno-unused-parameter
 CFLAGS += -fno-jump-tables
+# The IWRAM data layout relies on declaration order; GCC defaults to
+# reordering top-level data, which changes the addresses the startup
+# code and the stored pointers expect. Keep this file in source order.
+src/Common/sys/iwram-data.o: CFLAGS += -fno-toplevel-reorder
 # CFLAGS += -fno-inline
 CDEPFLAGS := # -MMD -MQ "$*.o" -MQ "$*.asm" -MF "$(CACHE_DIR)/$*.d" -MP
 
