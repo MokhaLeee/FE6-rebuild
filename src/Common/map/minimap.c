@@ -1,5 +1,7 @@
 #include "minimap.h"
 
+#include "klib.h"
+
 #include <string.h>
 
 #include "armfunc.h"
@@ -492,7 +494,7 @@ void MinimapOnHBlank(void)
 
 void InitMinimapWindowBuffers(void)
 {
-    u16 * tmp = gMinimapFrontWinBuf;
+    i16 * tmp = gMinimapFrontWinBuf;
     gMinimapFrontWinBuf = gMinimapBackWinBuf;
     gMinimapBackWinBuf = tmp;
 }
@@ -760,7 +762,7 @@ void Minimap_AdjustDisplay(struct MinimapProc * proc)
     if (gMapSize.y * 4 > DISPLAY_HEIGHT - 16)
     {
         y = gMapSize.y * 4 - DISPLAY_HEIGHT + 16;
-        y = ((gBmSt.camera.y * 0x10000) / gBmSt.camera_max.y) * y / 0x10000;
+        y = (int)k_udiv(gBmSt.camera.y * 0x10000, gBmSt.camera_max.y) * y / 0x10000;
         y = 8 - y;
     }
 

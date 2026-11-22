@@ -1,5 +1,7 @@
 #include "targetlist.h"
 
+#include "klib.h"
+
 #include "random.h"
 #include "item.h"
 #include "unit.h"
@@ -456,7 +458,7 @@ void ListTerrainHealingTargets(int faction)
 
         if ((GetTerrainHealAmount(terrain) != 0) && (GetUnitCurrentHp(unit) != GetUnitMaxHp(unit)))
         {
-            int heal = GetTerrainHealAmount(terrain) * GetUnitMaxHp(unit) / 100;
+            int heal = k_udiv(GetTerrainHealAmount(terrain) * GetUnitMaxHp(unit), 100);
             EnlistTarget(unit->x, unit->y, unit->id, heal);
         }
 
@@ -474,8 +476,6 @@ void ListPoisonDamageTargets(int faction)
     for (i = faction + 1; i < faction + 0x40; ++i)
     {
         struct Unit * unit = GetUnit(i);
-
-        int terrain;
 
         if (!unit)
             continue;
