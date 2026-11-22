@@ -124,7 +124,6 @@ int GetDevilReversalChance(int level);
 void InitBattleUnit(struct BattleUnit *bu, struct Unit *unit);
 void InitBattleUnitWithoutBonuses(struct BattleUnit *bu, struct Unit *unit);
 void SetBattleUnitTerrainBonusesAuto(struct BattleUnit *bu);
-void SetBattleUnitWeapon(struct BattleUnit *bu, int item_slot);
 void ComputeBattleUnitStats(struct BattleUnit *attacker, struct BattleUnit *defender);
 void ComputeBattleUnitSupportBonuses(struct BattleUnit *attacker, struct BattleUnit *defender);
 void ClearBattleHits(void);

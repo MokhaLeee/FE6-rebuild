@@ -22,7 +22,7 @@ static u16 const gStatScreenPageNameChrOffsetLut[] = {
 	OAM2_CHR(0x14),
 };
 
-void PutUpdateStatScreenPageName(int page_id)
+static void PutUpdateStatScreenPageName(int page_id)
 {
 	int color_num;
 
@@ -44,13 +44,13 @@ void PutUpdateStatScreenPageName(int page_id)
 
 enum { STATSCREEN_PAGE_NAME_SCALE_STEPS = 6 };
 
-void StatScreenPageName_Init(struct StatScreenSpritesProc *proc)
+static void StatScreenPageName_Init(struct StatScreenSpritesProc *proc)
 {
 	SetObjAffineAuto(8, 0, 0x100, 0x100);
 	proc->page_id = gStatScreenSt.page;
 }
 
-void StatScreenPageName_Main(struct StatScreenSpritesProc *proc)
+static void StatScreenPageName_Main(struct StatScreenSpritesProc *proc)
 {
 	PutUpdateStatScreenPageName(proc->page_id);
 
@@ -63,7 +63,7 @@ void StatScreenPageName_Main(struct StatScreenSpritesProc *proc)
 	proc->page_id = gStatScreenSt.page;
 }
 
-void StatScreenPageName_CloseMain(struct StatScreenSpritesProc *proc)
+static void StatScreenPageName_CloseMain(struct StatScreenSpritesProc *proc)
 {
 	SetObjAffineAuto(8, 0, 0x100, k_udiv(proc->vertical_scale * 0x100, STATSCREEN_PAGE_NAME_SCALE_STEPS));
 	PutUpdateStatScreenPageName(proc->page_id);
@@ -76,7 +76,7 @@ void StatScreenPageName_CloseMain(struct StatScreenSpritesProc *proc)
 	}
 }
 
-void StatScreenPageName_OpenMain(struct StatScreenSpritesProc *proc)
+static void StatScreenPageName_OpenMain(struct StatScreenSpritesProc *proc)
 {
 	SetObjAffineAuto(8, 0, 0x100, k_udiv(proc->vertical_scale * 0x100, STATSCREEN_PAGE_NAME_SCALE_STEPS));
 	PutUpdateStatScreenPageName(gStatScreenSt.page);

@@ -7,7 +7,7 @@ const char AgbLibSramVersion[] = "SRAM_F_V102";
 
 extern u32 VerifySramFast(void const *_src, void *_dest, int size);
 
-void WriteSramFast(u8 const * src, u8 * dest, int size)
+static void WriteSramFast(u8 const * src, u8 * dest, int size)
 {
 
 	REG_WAITCNT = (REG_WAITCNT & ~3) | 3;

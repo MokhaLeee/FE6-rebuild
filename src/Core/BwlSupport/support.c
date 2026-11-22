@@ -95,7 +95,7 @@ int GetUnitTotalSupportLevel(struct Unit *unit)
 	return result;
 }
 
-void UnitGainSupportExp(struct Unit *unit, int num)
+static void UnitGainSupportExp(struct Unit *unit, int num)
 {
 	struct PidStats *bwl = GetPidStats(UNIT_PID(unit));
 
@@ -115,7 +115,7 @@ void UnitGainSupportExp(struct Unit *unit, int num)
 	}
 }
 
-void UnitGainSupportLevel(struct Unit *unit, int num)
+static void UnitGainSupportLevel(struct Unit *unit, int num)
 {
 	struct PidStats *bwl = GetPidStats(UNIT_PID(unit));
 
@@ -155,7 +155,7 @@ bool CanUnitSupportNow(struct Unit *unit, int num)
 	return (exp == maxExp) ? TRUE : FALSE;
 }
 
-int GetUnitInitialSupportExp(struct Unit *unit, int num)
+static int GetUnitInitialSupportExp(struct Unit *unit, int num)
 {
 	if (!unit->pinfo->support_info)
 		return -1;

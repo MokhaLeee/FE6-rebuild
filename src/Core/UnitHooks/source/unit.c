@@ -21,6 +21,9 @@
 #include "constants/icons.h"
 #include "constants/faces.h"
 
+static void func_fe6_08017764(struct Unit *unit);
+static void UnitAutolevelWeaponExp(struct Unit *unit, struct UnitInfo const *info);
+
 _Static_assert(sizeof(struct Unit) == 0x48, "size not match: Unit");
 const int sizeof_unit = sizeof(struct Unit);
 
@@ -486,13 +489,13 @@ void UnitInitFromInfo(struct Unit *unit, struct UnitInfo const *info)
 	UnitInitAiFromInfo(unit, info);
 }
 
-void func_fe6_08017764(struct Unit *unit)
+static void func_fe6_08017764(struct Unit *unit)
 {
 	if (UNIT_ATTRIBUTES(unit) & UNIT_ATTR_ALT_PINFO)
 		unit->pinfo = GetPInfo(unit->pinfo->id - 1);
 }
 
-void UnitAutolevelWeaponExp(struct Unit *unit, struct UnitInfo const *info)
+static void UnitAutolevelWeaponExp(struct Unit *unit, struct UnitInfo const *info)
 {
 	int i;
 

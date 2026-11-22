@@ -8,7 +8,6 @@
 #if CONFIG_SAVE_USE_SRAM
 extern void SramInit(void);
 extern void WipeSram(void);
-extern void WriteSramFast(u8 const * src, u8 * dest, int size);
 extern u32 WriteAndVerifySramFast(void const * src, void * dest, int size);
 extern void ReadSramFast(void const *_src, void *_dest, int size);
 

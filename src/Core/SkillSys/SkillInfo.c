@@ -10,7 +10,7 @@ u16 GetSkillDescMsg(const u16 sid)
 	return gpSkillInfo[sid].msg_desc;
 }
 
-u16 GetSkillNameMsg(const u16 sid)
+static u16 GetSkillNameMsg(const u16 sid)
 {
 	return gpSkillInfo[sid].msg_name;
 }
@@ -45,7 +45,7 @@ static char *SkillDescToName(char *str)
 	return str;
 }
 
-char *GetSkillNameStrFormDesc(const u16 sid)
+static char *GetSkillNameStrFormDesc(const u16 sid)
 {
 	char *str;
 	u16 msg = GetSkillDescMsg(sid);

@@ -141,7 +141,7 @@ int flash_reset()
 }
 
 // Erase 4Kbyte Sector (all device types, except Atmel)
-int flash_erase(u32 addr)
+static int flash_erase(u32 addr)
 {
 	int err;
 
@@ -165,7 +165,7 @@ int flash_erase(u32 addr)
 }
 
 // Bank Switching (devices bigger than 64K only)
-void flash_switch_bank(int bank)
+static void flash_switch_bank(int bank)
 {
 	// select bank command
 	FLASH_CMD(FLASH_CMD_SWITCH_BANK);
@@ -206,7 +206,7 @@ int flash_read(u32 addr, u8 *data, size_t size)
 }
 
 // Write Single Data Byte (all device types, except Atmel)
-int flash_write_byte(u32 addr, u8 data) {
+static int flash_write_byte(u32 addr, u8 data) {
 	// write byte command
 	FLASH_CMD(FLASH_CMD_WRITE);
 
@@ -218,7 +218,7 @@ int flash_write_byte(u32 addr, u8 data) {
 }
 
 // Erase-and-Write 128 Bytes Sector (only Atmel devices)
-int flash_erase_and_write_atmel(u32 addr, u8 *data) {
+static int flash_erase_and_write_atmel(u32 addr, u8 *data) {
 	// disable interrupts
 	u32 i;
 	u16 REG_IME_old = REG_IME;
@@ -239,7 +239,7 @@ int flash_erase_and_write_atmel(u32 addr, u8 *data) {
 	return wait_until(addr | (FLASH_SECTOR_SIZE_128B - 1), &data[(FLASH_SECTOR_SIZE_128B - 1) - (addr & (FLASH_SECTOR_SIZE_128B - 1))], 20);
 }
 
-int flash_write_common(u32 addr, u8 *data, size_t size) {
+static int flash_write_common(u32 addr, u8 *data, size_t size) {
 	int err;
 	int sectors;
 
@@ -267,7 +267,7 @@ int flash_write_common(u32 addr, u8 *data, size_t size) {
 	return 0;
 }
 
-int flash_write_atmel(u32 addr, u8 *data, size_t size) {
+static int flash_write_atmel(u32 addr, u8 *data, size_t size) {
 	int err;
 	int sectors;
 

@@ -39,7 +39,7 @@ static struct StatScreenTextInfo const gStatScreenPersonalInfoLabelsInfo[] = {
 	{ 0 }, // end
 };
 
-void PutStatScreenStatWithBar(int num, int x, int y, int base, int total, int max)
+static void PutStatScreenStatWithBar(int num, int x, int y, int base, int total, int max)
 {
 	int bonus = total - base;
 

@@ -61,10 +61,8 @@ int PidStatsCountTotalWins(void);
 int PidStatsCountTotalLosses(void);
 int PidStatsCountTotalLevelsGained(void);
 void PidStatsUpdateFromBattleOutcome(void);
-bool IsPlaythroughIdUnique(int playthrough_id);
 int GetNewPlaythroughId(void);
 int GetGlobalCompletedPlaythroughCount(void);
-bool RegisterCompletedPlaythrough(struct GlobalSaveInfo * info, int index);
 void WriteCompletedPlaythroughSaveData(void);
 void func_fe6_08084F48(void);
 

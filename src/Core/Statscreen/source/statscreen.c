@@ -33,6 +33,8 @@
 
 #include "klib.h"
 
+static void StatScreen_InitUnit(ProcPtr proc);
+
 EWRAM_DATA struct StatScreenInfo gStatScreenInfo;
 EWRAM_OVERLAY(0) struct StatScreenSt gStatScreenSt;
 
@@ -97,7 +99,7 @@ struct TextInitInfo CONST_DATA gStatScreenTextList[] = {
 	{ 0 }, // end!
 };
 
-void InitStatScreenText(void)
+static void InitStatScreenText(void)
 {
 	InitTextList(gStatScreenTextList);
 }
@@ -155,7 +157,7 @@ i8 CONST_DATA gStatScreenPageSlideOffsetLut[] =
 	INT8_MIN, // end
 };
 
-void StatScreenPageSlide_Loop(struct StatScreenPageSlideProc *proc)
+static void StatScreenPageSlide_Loop(struct StatScreenPageSlideProc *proc)
 {
 	int off;
 	int len, dst_offset, src_offset;
@@ -219,7 +221,7 @@ void StatScreenPageSlide_Loop(struct StatScreenPageSlideProc *proc)
 		Proc_Break(proc);
 }
 
-void StatScreenPageSlide_End(struct StatScreenPageSlideProc *proc)
+static void StatScreenPageSlide_End(struct StatScreenPageSlideProc *proc)
 {
 	gStatScreenSt.is_transitioning = FALSE;
 }
@@ -231,7 +233,7 @@ struct ProcScr CONST_DATA ProcScr_StatScreenPageSlide[] =
 	PROC_END,
 };
 
-void StartStatScreenPageSlide(fu16 key_bit, int new_page, ProcPtr parent)
+static void StartStatScreenPageSlide(fu16 key_bit, int new_page, ProcPtr parent)
 {
 	struct StatScreenPageSlideProc *proc;
 
@@ -251,7 +253,7 @@ void StartStatScreenPageSlide(fu16 key_bit, int new_page, ProcPtr parent)
 	gStatScreenSt.is_transitioning = TRUE;
 }
 
-void StatScreenUnitSlide_FadeOutInit(struct StatScreenUnitSlideProc *proc)
+static void StatScreenUnitSlide_FadeOutInit(struct StatScreenUnitSlideProc *proc)
 {
 	gStatScreenSt.is_transitioning = TRUE;
 
@@ -278,7 +280,7 @@ void StatScreenUnitSlide_FadeOutInit(struct StatScreenUnitSlideProc *proc)
 	}
 }
 
-void StatScreenUnitSlide_FadeOutLoop(struct StatScreenUnitSlideProc *proc)
+static void StatScreenUnitSlide_FadeOutLoop(struct StatScreenUnitSlideProc *proc)
 {
 	enum { CLOCK_STEP = 3, CLOCK_END = 0x10 };
 
@@ -294,7 +296,7 @@ void StatScreenUnitSlide_FadeOutLoop(struct StatScreenUnitSlideProc *proc)
 		Proc_Break(proc);
 }
 
-void StatScreenUnitSlide_FadeInInit(struct StatScreenUnitSlideProc *proc)
+static void StatScreenUnitSlide_FadeInInit(struct StatScreenUnitSlideProc *proc)
 {
 	proc->clock = 1;
 
@@ -319,7 +321,7 @@ void StatScreenUnitSlide_FadeInInit(struct StatScreenUnitSlideProc *proc)
 	}
 }
 
-void StatScreenUnitSlide_FadeInLoop(struct StatScreenUnitSlideProc *proc)
+static void StatScreenUnitSlide_FadeInLoop(struct StatScreenUnitSlideProc *proc)
 {
 	enum { CLOCK_STEP = 3, CLOCK_END = 0x10 };
 
@@ -335,14 +337,14 @@ void StatScreenUnitSlide_FadeInLoop(struct StatScreenUnitSlideProc *proc)
 		Proc_Break(proc);
 }
 
-void StatScreenUnitSlide_ChangeUnit(struct StatScreenUnitSlideProc *proc)
+static void StatScreenUnitSlide_ChangeUnit(struct StatScreenUnitSlideProc *proc)
 {
 	gStatScreenSt.unit = GetUnit(proc->new_unit_id);
 	StatScreen_InitUnit(NULL);
 	Proc_Break(proc);
 }
 
-void StatScreenUnitSlide_End(struct StatScreenUnitSlideProc *proc)
+static void StatScreenUnitSlide_End(struct StatScreenUnitSlideProc *proc)
 {
 	if (gStatScreenSt.mu != NULL)
 	{
@@ -374,7 +376,7 @@ struct ProcScr CONST_DATA ProcScr_StatScreenUnitSlide[] =
 	PROC_END,
 };
 
-void StartStatScreenUnitSlide(struct Unit *unit, int direction, ProcPtr parent)
+static void StartStatScreenUnitSlide(struct Unit *unit, int direction, ProcPtr parent)
 {
 	struct StatScreenUnitSlideProc *proc;
 
@@ -386,7 +388,7 @@ void StartStatScreenUnitSlide(struct Unit *unit, int direction, ProcPtr parent)
 	PlaySe(SONG_C8);
 }
 
-void StatScreenSprites_Init(struct StatScreenSpritesProc *proc)
+static void StatScreenSprites_Init(struct StatScreenSpritesProc *proc)
 {
 	proc->x_left = 101;
 	proc->x_right = 198;
@@ -396,7 +398,7 @@ void StatScreenSprites_Init(struct StatScreenSpritesProc *proc)
 	proc->anim_speed_left = 4;
 }
 
-void StatScreenSprites_BumpCheck(struct StatScreenSpritesProc *proc)
+static void StatScreenSprites_BumpCheck(struct StatScreenSpritesProc *proc)
 {
 	if (gStatScreenSt.page_slide_key_bit & KEY_DPAD_LEFT) {
 		proc->anim_speed_left = 31;
@@ -411,7 +413,7 @@ void StatScreenSprites_BumpCheck(struct StatScreenSpritesProc *proc)
 	gStatScreenSt.page_slide_key_bit = 0;
 }
 
-void StatScreenSprites_PutArrows(struct StatScreenSpritesProc *proc)
+static void StatScreenSprites_PutArrows(struct StatScreenSpritesProc *proc)
 {
 	int base_oam2 = OAM2_CHR(OBCHR_STATSCREEN_240) + OAM2_PAL(OBPAL_STATSCREEN_SPRITES) + OAM2_LAYER(3);
 
@@ -444,7 +446,7 @@ void StatScreenSprites_PutArrows(struct StatScreenSpritesProc *proc)
 		base_oam2 + 0x4A + k_umod(proc->clock_right >> 5, 6));
 }
 
-void StatScreenSprites_PutNumberLabel(struct StatScreenSpritesProc *proc)
+static void StatScreenSprites_PutNumberLabel(struct StatScreenSpritesProc *proc)
 {
 	enum {
 		PAGENUM_X = 214,
@@ -490,7 +492,7 @@ u16 CONST_DATA Sprite_StatScreenMuAreaBackground[] =
 	OAM0_SHAPE_8x32  + OAM0_Y(120) + OAM0_BLEND, OAM1_SIZE_8x32  + OAM1_X(96) + OAM1_VFLIP, OAM2_CHR(0x4),
 };
 
-void StatScreenSprites_PutMuAreaSprites(struct StatScreenSpritesProc *proc)
+static void StatScreenSprites_PutMuAreaSprites(struct StatScreenSpritesProc *proc)
 {
 	PutSprite(12,
 		gStatScreenSt.x_disp_off,
@@ -523,7 +525,7 @@ PROC_LABEL(0),
 	PROC_END,
 };
 
-void StatScreen_DisableScreen(ProcPtr proc)
+static void StatScreen_DisableScreen(ProcPtr proc)
 {
 	SetDispEnable(0, 0, 0, 0, 0);
 	SetBlendDarken(0x10);
@@ -532,7 +534,7 @@ void StatScreen_DisableScreen(ProcPtr proc)
 	SetBackdropColor(0);
 }
 
-void StatScreen_Init(ProcPtr proc)
+static void StatScreen_Init(ProcPtr proc)
 {
 	static u16 const bg_config[12] = {
 		0x0000, 0x6000, 0,
@@ -575,7 +577,7 @@ void StatScreen_Init(ProcPtr proc)
 	StatScreenUnitSlide_End(proc);
 }
 
-void StatScreen_InitUnit(ProcPtr proc)
+static void StatScreen_InitUnit(ProcPtr proc)
 {
 	/* update statscreen page */
 	gStatScreenSt.page_count = STATSCREEN_PAGE_MAX;
@@ -603,7 +605,7 @@ void StatScreen_InitUnit(ProcPtr proc)
 	EnableBgSync(BG0_SYNC_BIT + BG1_SYNC_BIT + BG2_SYNC_BIT);
 }
 
-void StatScreen_Main(ProcPtr proc)
+static void StatScreen_Main(ProcPtr proc)
 {
 	struct Unit *unit;
 
@@ -656,19 +658,19 @@ void StatScreen_Main(ProcPtr proc)
 	}
 }
 
-void StatScreen_BackUpStatus(ProcPtr proc)
+static void StatScreen_BackUpStatus(ProcPtr proc)
 {
 	gPlaySt.flags = (gPlaySt.flags & ~PLAY_FLAG_STATSCREENPAGE_MASK) | (gStatScreenSt.page & PLAY_FLAG_STATSCREENPAGE_MASK);
 	gStatScreenInfo.unit_id = gStatScreenSt.unit->id;
 	SetOnVMatch(NULL);
 }
 
-void StatScreen_UpdateLastHelpInfo(ProcPtr proc)
+static void StatScreen_UpdateLastHelpInfo(ProcPtr proc)
 {
 	gStatScreenSt.help = GetLastHelpBoxInfo();
 }
 
-void SyncStatScreenBgOffset(void)
+static void SyncStatScreenBgOffset(void)
 {
 	int y_bg = 0xFF & -gStatScreenSt.y_disp_off;
 
@@ -682,7 +684,7 @@ struct ProcScr CONST_DATA ProcScr_SyncStatScreenBgOffset[] = {
 	PROC_END,
 };
 
-void StatScreen_CleanUp(ProcPtr proc)
+static void StatScreen_CleanUp(ProcPtr proc)
 {
 	EndMuralBackground();
 }

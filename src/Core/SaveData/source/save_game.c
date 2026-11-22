@@ -147,7 +147,7 @@ void ReadGameSavePlaySt(int save_id, struct PlaySt *play_st)
 	memcpy(play_st, gBuf, sizeof(struct PlaySt));
 }
 
-void WriteLastGameSaveId(int save_id)
+static void WriteLastGameSaveId(int save_id)
 {
 	struct GlobalSaveInfo info;
 

@@ -251,7 +251,7 @@ static const struct ProcScr ProcScr_SkillMapAnimMini[] = {
 	PROC_END
 };
 
-void NewSkillMapAnimMini(int x, int y, u16 sid, ProcPtr parent)
+static void NewSkillMapAnimMini(int x, int y, u16 sid, ProcPtr parent)
 {
 	struct ProcSkillMapAnimMini *proc;
 
@@ -267,7 +267,7 @@ void NewSkillMapAnimMini(int x, int y, u16 sid, ProcPtr parent)
 	proc->y_disp = y;
 }
 
-bool SkillMapAnimMiniExists(void)
+static bool SkillMapAnimMiniExists(void)
 {
 	return Proc_Exists(ProcScr_SkillMapAnimMini);
 }

@@ -119,7 +119,6 @@ struct SuspendSaveBlock
     u8 chapter_flags[sizeof(gChapterFlagBits)];
 };
 
-void WriteLastGameSaveId(int save_id);
 int ReadLastGameSaveId(void);
 void InvalidateGameSave(int save_id);
 void CopyGameSave(int src_save_id, int dst_save_id);

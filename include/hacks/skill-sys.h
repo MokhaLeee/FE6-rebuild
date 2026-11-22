@@ -14,9 +14,7 @@ struct SkillInfo {
 extern struct SkillInfo const *const gpSkillInfo;
 
 u16 GetSkillDescMsg(const u16 sid);
-u16 GetSkillNameMsg(const u16 sid);
 char *GetSkillDescStr(const u16 sid);
-char *GetSkillNameStrFormDesc(const u16 sid);
 char *GetSkillNameStr(const u16 sid);
 char *GetMenuSkillNameStr(const u16 sid);
 
@@ -81,8 +79,6 @@ void NewEfxSkill(struct Anim *anim, int sid);
 bool EfxSkillExists(void);
 
 bool MapAnimRoundAnim_DisplaySkillIcon(ProcPtr parent);
-void NewSkillMapAnimMini(int x, int y, u16 sid, ProcPtr parent);
-bool SkillMapAnimMiniExists(void);
 void NewMuSkillAnimOnActiveUnit(
 		u16 sid,
 		ProcPtr parent,

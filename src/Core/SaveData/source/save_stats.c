@@ -154,7 +154,7 @@ void PidStatsUpdateFromBattleOutcome(void)
 {
 }
 
-bool IsPlaythroughIdUnique(int playthrough_id)
+static bool IsPlaythroughIdUnique(int playthrough_id)
 {
 	struct GlobalSaveInfo info;
 	struct PlaySt play_st;
@@ -209,7 +209,7 @@ int GetGlobalCompletedPlaythroughCount(void)
 	return result;
 }
 
-bool RegisterCompletedPlaythrough(struct GlobalSaveInfo *info, int playthrough_id)
+static bool RegisterCompletedPlaythrough(struct GlobalSaveInfo *info, int playthrough_id)
 {
 	int i;
 

@@ -10,7 +10,7 @@ void BackgroundSlide_Init(struct MuralBackgroundProc *proc)
 	proc->offset = 0;
 }
 
-void BackgroundSlide_Loop(struct MuralBackgroundProc *proc)
+static void BackgroundSlide_Loop(struct MuralBackgroundProc *proc)
 {
 	proc->offset++;
 

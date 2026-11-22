@@ -28,6 +28,8 @@
 #include "constants/jids.h"
 #include "constants/terrains.h"
 
+static void SetBattleUnitWeapon(struct BattleUnit *bu, int item_slot);
+
 /*
  * File-local helpers that are called before their definitions; the public
  * header only keeps the API used by other translation units.
@@ -292,7 +294,7 @@ void SetBattleUnitTerrainBonusesAuto(struct BattleUnit *bu)
 	bu->terrain_resistance = bu->unit.jinfo->res_terrain_table[bu->terrain];
 }
 
-void SetBattleUnitWeapon(struct BattleUnit *bu, int item_slot)
+static void SetBattleUnitWeapon(struct BattleUnit *bu, int item_slot)
 {
 	if (item_slot == -1)
 		item_slot = GetUnitEquippedWeaponSlot(&bu->unit);
