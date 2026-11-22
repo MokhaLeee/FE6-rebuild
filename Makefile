@@ -319,9 +319,6 @@ src/Common/sys/iwram-data.o: CFLAGS += -fno-toplevel-reorder
 # savemenu_2 deliberately type-puns the BG registers as 32-bit words;
 # keep the deprecated alias behaviour of the original build.
 src/Common/menu/savemenu_2.o: CFLAGS += -fno-strict-aliasing
-# mapmenu has callbacks that fall off the end of non-void functions;
-# keep the agbcc behaviour instead of inventing return values.
-src/Common/menu/mapmenu.o: CFLAGS += -Wno-return-type
 # CFLAGS += -fno-inline
 CDEPFLAGS := # -MMD -MQ "$*.o" -MQ "$*.asm" -MF "$(CACHE_DIR)/$*.d" -MP
 

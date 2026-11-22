@@ -860,6 +860,7 @@ u32 UnitItemMenu_Entry_Display(struct MenuProc * menu, struct MenuEntProc * ent)
 
     DrawItemMenuLine(&ent->text, item, is_usable, gBg0Tm + TM_OFFSET(ent->x, ent->y));
     EnableBgSync(BG0_SYNC_BIT);
+    return 0;
 }
 
 fu8 UnitItemMenu_Entry_Available(struct MenuEntInfo const * info, int id)
@@ -896,10 +897,12 @@ fu8 UnitItemMenu_Entry_Select(struct MenuProc * menu, struct MenuEntProc * ent)
 fu8 SingleItemMenu_Entry_SwitchIn(struct MenuProc * menu, struct MenuEntProc * ent)
 {
     UpdateEquipInfoWindow(ent->id);
+    return 0;
 }
 
 fu8 SingleItemMenu_Entry_SwitchOut(struct MenuProc * menu, struct MenuEntProc * ent)
 {
+    return 0;
 }
 
 void func_fe6_0801F854(int x, int y)
@@ -1107,6 +1110,7 @@ u32 UnitAttackBallista_Entry_Display(struct MenuProc * menu, struct MenuEntProc 
     int item = GetBallistaItemAt(gActiveUnit->x, gActiveUnit->y);
 
     DrawItemMenuLine(&ent->text, item, is_usable, gBg0Tm + TM_OFFSET(ent->x, ent->y));
+    return 0;
 }
 
 fu8 UnitAttackBallista_Entry_Select(struct MenuProc * menu, struct MenuEntProc * ent)
@@ -1535,6 +1539,7 @@ fu8 StealMapSelect_SwitchIn(struct MapSelectProc * proc, struct SelectTarget * t
 {
     MakeActiveMuWatchPosition(target->x, target->y);
     RefreshUnitStealInventoryPanel(GetUnit(target->uid));
+    return 0;
 }
 
 fu8 StealMapSelect_Select(struct MapSelectProc * proc, struct SelectTarget * target)
@@ -1579,6 +1584,7 @@ u32 StealItemMenu_Entry_Display(struct MenuProc * menu, struct MenuEntProc * ent
     bool is_usable = IsItemStealable(item);
 
     DrawItemMenuLine(&ent->text, item, is_usable, gBg0Tm + TM_OFFSET(ent->x, ent->y));
+    return 0;
 }
 
 fu8 StealItemMenu_Entry_Select(struct MenuProc * menu, struct MenuEntProc * ent)
@@ -1604,12 +1610,14 @@ fu8 MenuHelpBoxActiveUnitInventory(struct MenuProc * menu, struct MenuEntProc * 
     }
 
     StartItemHelpBox(ent->x*8, ent->y*8, gActiveUnit->items[ent->id]);
+    return 0;
 }
 
 fu8 MenuHelpBoxTargetUnitInventory(struct MenuProc * menu, struct MenuEntProc * ent)
 {
     struct Unit * unit = GetUnit(gAction.target);
     StartItemHelpBox(ent->x*8, ent->y*8, unit->items[ent->id]);
+    return 0;
 }
 
 fu8 MenuHelpBoxActiveUnitBallista(struct MenuProc * menu, struct MenuEntProc * ent)
@@ -1634,6 +1642,7 @@ fu8 MenuHelpBoxActiveUnitBallista(struct MenuProc * menu, struct MenuEntProc * e
     }
 
     StartItemHelpBox(ent->x*8, ent->y*8, iid);
+    return 0;
 }
 
 void HealMapSelect_Init(struct MapSelectProc * proc)
@@ -1645,6 +1654,7 @@ fu8 HealMapSelect_SwitchIn(struct MapSelectProc * proc, struct SelectTarget * ta
 {
     MakeActiveMuWatchPosition(target->x, target->y);
     RefreshUnitHpPanel(GetUnit(target->uid));
+    return 0;
 }
 
 void RescueMapSelect_Init(struct MapSelectProc * proc)
@@ -1657,6 +1667,7 @@ fu8 RescueMapSelect_SwitchIn(struct MapSelectProc * proc, struct SelectTarget * 
 {
     MakeActiveMuWatchPosition(target->x, target->y);
     RefreshUnitRescuePanels(GetUnit(target->uid));
+    return 0;
 }
 
 void DropRescueMapSelect_Init(struct MapSelectProc * proc)
@@ -1666,6 +1677,7 @@ void DropRescueMapSelect_Init(struct MapSelectProc * proc)
 
 fu8 func_fe6_080207F4(struct MapSelectProc * proc, struct SelectTarget * target)
 {
+    return 0;
 }
 
 void GiveRescueMapSelect_Init(struct MapSelectProc * proc)
@@ -1678,6 +1690,7 @@ fu8 GiveRescueMapSelect_SwitchIn(struct MapSelectProc * proc, struct SelectTarge
 {
     MakeActiveMuWatchPosition(target->x, target->y);
     RefreshUnitGivePanels(GetUnit(target->uid));
+    return 0;
 }
 
 void TakeRescueMapSelect_Init(struct MapSelectProc * proc)
@@ -1690,6 +1703,7 @@ fu8 TakeRescueMapSelect_SwitchIn(struct MapSelectProc * proc, struct SelectTarge
 {
     MakeActiveMuWatchPosition(target->x, target->y);
     RefreshUnitTakePanels(GetUnit(target->uid));
+    return 0;
 }
 
 void TradeMapSelect_Init(struct MapSelectProc * proc)
@@ -1702,6 +1716,7 @@ fu8 TradeMapSelect_SwitchIn(struct MapSelectProc * proc, struct SelectTarget * t
 {
     MakeActiveMuWatchPosition(target->x, target->y);
     RefreshUnitInventoryPanel(GetUnit(target->uid));
+    return 0;
 }
 
 void TalkMapSelect_Init(struct MapSelectProc * proc)
@@ -1714,6 +1729,7 @@ fu8 TalkMapSelect_SwitchIn(struct MapSelectProc * proc, struct SelectTarget * ta
 {
     MakeActiveMuWatchPosition(target->x, target->y);
     RefreshUnitHpPanel(GetUnit(target->uid));
+    return 0;
 }
 
 void RefreshMapSelect_Init(struct MapSelectProc * proc)
@@ -1726,6 +1742,7 @@ fu8 RefreshMapSelect_SwitchIn(struct MapSelectProc * proc, struct SelectTarget *
 {
     MakeActiveMuWatchPosition(target->x, target->y);
     RefreshUnitHpPanel(GetUnit(target->uid));
+    return 0;
 }
 
 void WarpUnitMapSelect_Init(struct MapSelectProc * proc)
@@ -1737,4 +1754,5 @@ fu8 WarpUnitMapSelect_SwitchIn(struct MapSelectProc * proc, struct SelectTarget 
 {
     MakeActiveMuWatchPosition(target->x, target->y);
     RefreshUnitHpPanel(GetUnit(target->uid));
+    return 0;
 }
