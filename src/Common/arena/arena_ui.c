@@ -129,8 +129,7 @@ struct ProcScr CONST_DATA ProcScr_ArenaUiResultBgm[] =
 
 void StartArenaResultsScreen(void)
 {
-    ProcPtr proc;
-    proc = SpawnProc(ProcScr_ArenaUiResults, PROC_TREE_3);
+    SpawnProc(ProcScr_ArenaUiResults, PROC_TREE_3);
 }
 
 void ArenaUi_Init(ProcPtr proc)

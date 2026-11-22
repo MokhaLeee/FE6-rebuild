@@ -54,13 +54,13 @@ CONST_DATA int AuguryDescMsgsB[] = {
 };
 
 CONST_DATA struct AuguryDispConfig gAuguryDispConfig[] = {
-	{ 0x0D, 2, 0, 0 },
-	{ 0x0D, 4, 0, 0 },
-	{ 0x0D, 6, 0, 0 },
-	{ 0x0D, 8, 0, 0 },
-	{ 0x14, 2, 0, 0 },
-	{ 0x14, 4, 0, 0 },
-	{ 0x14, 6, 0, 0 }
+	{ 0x0D, 2, { 0, 0 } },
+	{ 0x0D, 4, { 0, 0 } },
+	{ 0x0D, 6, { 0, 0 } },
+	{ 0x0D, 8, { 0, 0 } },
+	{ 0x14, 2, { 0, 0 } },
+	{ 0x14, 4, { 0, 0 } },
+	{ 0x14, 6, { 0, 0 } }
 };
 
 CONST_DATA struct AuguryConfig gAuguryConfig[] = {

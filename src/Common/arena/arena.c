@@ -1,6 +1,8 @@
 
 #include "arena.h"
 
+#include "klib.h"
+
 #include "random.h"
 #include "item.h"
 #include "unit.h"
@@ -154,7 +156,7 @@ int ArenaGenOpposingJid(int weapon_kind)
 
     for (i = 0; joblist[i] != 0; ++i)
     {
-        if ((GetJInfo(joblist[i])->attributes & UNIT_ATTR_PROMOTED) != promoteflag)
+        if ((GetJInfo(joblist[i])->attributes & UNIT_ATTR_PROMOTED) != (u32)promoteflag)
             continue; // skip jobs that aren't of the same tier as player
 
         ++jobcount;
@@ -169,7 +171,7 @@ int ArenaGenOpposingJid(int weapon_kind)
 
     for (i = 0, jobcount = 0; TRUE; ++i)
     {
-        if ((GetJInfo(joblist[i])->attributes & UNIT_ATTR_PROMOTED) != promoteflag)
+        if ((GetJInfo(joblist[i])->attributes & UNIT_ATTR_PROMOTED) != (u32)promoteflag)
             continue; // skip jobs that aren't of the same tier as player
 
         if (jobcount == jobnum)
@@ -243,7 +245,7 @@ void ArenaGenOpponentUnit(void)
 {
     struct UnitInfo info;
 
-    int level, i;
+    int level;
 
     struct Unit * unit = &gArenaOpponent;
 
@@ -273,7 +275,7 @@ void ArenaGenOpponentUnit(void)
 
     level = unit->level;
 
-    unit->level = ((gPlaySt.flags & PLAY_FLAG_HARD) ? level*18 : level*12) / 10;
+    unit->level = k_udiv((gPlaySt.flags & PLAY_FLAG_HARD) ? level*18 : level*12, 10);
     UnitAutolevel(unit);
 
     unit->level = level;
@@ -364,7 +366,7 @@ bool ArenaAdjustOpponentDamage(void)
     else
         gBattleUnitB.battle_defense = GetUnitDefense(gArenaSt.opponent);
 
-    if (gBattleUnitA.battle_attack - gBattleUnitB.battle_defense < GetUnitMaxHp(gArenaSt.opponent)/6)
+    if (gBattleUnitA.battle_attack - gBattleUnitB.battle_defense < (int)k_udiv(GetUnitMaxHp(gArenaSt.opponent), 6))
     {
         // Player does too little damage
         // Nerfing opponent defenses
@@ -390,7 +392,7 @@ bool ArenaAdjustOpponentDamage(void)
         gArenaSt.opponent->skl += 1;
     }
 
-    if (gBattleUnitB.battle_attack - gBattleUnitA.battle_defense < GetUnitMaxHp(gArenaSt.player)/6)
+    if (gBattleUnitB.battle_attack - gBattleUnitA.battle_defense < (int)k_udiv(GetUnitMaxHp(gArenaSt.player), 6))
     {
         // Opponent does too little damage
         // Buffing opponent offenses
@@ -419,7 +421,7 @@ bool ArenaAdjustOpponentPowerRanking(void)
 
     diff = ABS(gArenaSt.player_power_ranking - gArenaSt.opponent_power_ranking);
 
-    if (diff*100/max <= 20)
+    if ((int)k_udiv(diff * 100, max) <= 20)
         return FALSE;
 
     if (gArenaSt.player_power_ranking < gArenaSt.opponent_power_ranking)

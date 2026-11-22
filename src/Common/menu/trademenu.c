@@ -1,5 +1,7 @@
 #include "trademenu.h"
 
+#include "klib.h"
+
 #include "hardware.h"
 #include "oam.h"
 #include "sound.h"
@@ -510,8 +512,8 @@ static bool TradeMenu_LoadForcedInitialHover(struct TradeMenuProc * proc)
     if (gBmSt.unk_3F < 0)
         return TRUE;
 
-    proc->hoverColumn = gBmSt.unk_3F / ITEMSLOT_INV_COUNT;
-    proc->hoverRow = gBmSt.unk_3F % ITEMSLOT_INV_COUNT;
+    proc->hoverColumn = k_udiv(gBmSt.unk_3F, ITEMSLOT_INV_COUNT);
+    proc->hoverRow = k_umod(gBmSt.unk_3F, ITEMSLOT_INV_COUNT);
 
     TradeMenu_RefreshSelectableCells(proc);
     Proc_Goto(proc, L_TRADEMENU_SELECTED);
