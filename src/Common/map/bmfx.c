@@ -3,6 +3,14 @@
 
 #include "bmfx.h"
 
+#include "klib.h"
+
+static int bmfx_div_signed(int value, int divisor)
+{
+	return (value >= 0) ? (int)k_udiv(value, divisor)
+			    : -(int)k_udiv(-value, divisor);
+}
+
 #include "armfunc.h"
 #include "chapter_title.h"
 #include "hardware.h"
@@ -1090,8 +1098,8 @@ static void UnitPrepSwapAnim_Loop(struct UnitPrepSwapAnimProc * proc)
     int xd = proc->x_target - proc->x_from;
     int yd = proc->y_target - proc->y_from;
 
-    int xunk = xd * SIN_Q12(var >> 9) / proc->unk_44;
-    int yunk = yd * SIN_Q12(var >> 9) / proc->unk_44;
+    int xunk = bmfx_div_signed(xd * SIN_Q12(var >> 9), proc->unk_44);
+    int yunk = bmfx_div_signed(yd * SIN_Q12(var >> 9), proc->unk_44);
 
     int x = ((xd * var) >> 16) + yunk;
     int y = ((yd * var) >> 16) - xunk;
@@ -1559,7 +1567,7 @@ static void func_fe6_0801D8B8(struct ShowMapChangeProc * proc)
 
 static void func_fe6_0801D8E4(struct ShowMapChangeProc * proc)
 {
-    int x, song;
+    int song;
 
     RenderMapForFade();
 
@@ -2192,7 +2200,7 @@ static void GameOverScreenHBlank(void)
     if (val > DISPLAY_HEIGHT/2)
         val = DISPLAY_HEIGHT - val;
 
-    val = val / 3;
+    val = k_udiv(val, 3);
 
     if (val > 0x10)
         val = 0x10;

@@ -1,5 +1,13 @@
 #include "bm.h"
 
+#include "klib.h"
+
+static int bm_div_signed(int value, int divisor)
+{
+	return (value >= 0) ? (int)k_udiv(value, divisor)
+			    : -(int)k_udiv(-value, divisor);
+}
+
 #include "hardware.h"
 #include "datamove.h"
 #include "oam.h"
@@ -790,7 +798,7 @@ void SetMapCursorPosition(int x, int y)
 
 void PutSysArrow(int x, int y, u8 isDown)
 {
-    int frame = (GetGameTime() / 8) % ARRAY_COUNT(gSysDownArrowSpriteLut);
+    int frame = k_umod(GetGameTime() / 8, ARRAY_COUNT(gSysDownArrowSpriteLut));
 
     PutSprite(4, x, y,
         isDown ? gSysDownArrowSpriteLut[frame] : gSysUpArrowSpriteLut[frame],
@@ -864,8 +872,8 @@ static void CamMove_OnLoop(struct CamMoveProc * proc)
 
     proc->distance -= sCameraAnimTable[proc->frame--];
 
-    gBmSt.camera.x = proc->to.x + (proc->from.x - proc->to.x) * proc->distance / proc->calibration;
-    gBmSt.camera.y = proc->to.y + (proc->from.y - proc->to.y) * proc->distance / proc->calibration;
+    gBmSt.camera.x = proc->to.x + bm_div_signed((proc->from.x - proc->to.x) * proc->distance, proc->calibration);
+    gBmSt.camera.y = proc->to.y + bm_div_signed((proc->from.y - proc->to.y) * proc->distance, proc->calibration);
 }
 
 bool CameraMoveWatchPosition(ProcPtr proc, int x, int y)
@@ -932,8 +940,8 @@ static void UnkMapCursor_OnLoop(struct UnkMapCursorProc * proc)
     // BUG: should this be proc->from.xy + ...?
 
     PutMapCursor(
-        (proc->to.x - proc->from.x) * proc->clock / proc->duration,
-        (proc->to.y - proc->from.y) * proc->clock / proc->duration,
+        bm_div_signed((proc->to.x - proc->from.x) * proc->clock, proc->duration),
+        bm_div_signed((proc->to.y - proc->from.y) * proc->clock, proc->duration),
         MAP_CURSOR_DEFAULT);
 
     proc->clock--;
