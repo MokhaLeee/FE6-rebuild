@@ -1,5 +1,7 @@
 #include "unitlistscreen.h"
 
+#include "klib.h"
+
 #include "armfunc.h"
 #include "hardware.h"
 #include "oam.h"
@@ -130,7 +132,7 @@ void UnitList_TrackItemIcon(int icon)
 
     for (i = 0; i < 8; i++)
     {
-        if (gUnitListItemIcons[i] == icon)
+        if (gUnitListItemIcons[i] == (u32)icon)
             return;
     }
 
@@ -175,7 +177,7 @@ void UnitList_ClearOffscreenItemIcons(fu16 scroll_y)
 
             for (j = 0; j < 8; j++)
             {
-                if (icons_to_display[j] == gUnitListItemIcons[i])
+                if ((u32)icons_to_display[j] == gUnitListItemIcons[i])
                     icon_in_use = TRUE;
             }
 
@@ -192,7 +194,7 @@ void UnitList_PutPageArrow(fu8 is_right, fu8 clock, fi8 visible)
 {
     // TODO: chr & pal constants
 
-    fu8 chr_offset = (clock / 8) % 6;
+    fu8 chr_offset = k_umod(clock / 8, 6);
 
     if (is_right == 0)
     {
@@ -516,7 +518,7 @@ void UnitList_CollectFactionUnits(struct UnitListScreenProc * proc)
         }
 
         if (support_now_count > 3)
-            proc->max_page = 6 + (support_now_count - 1) / 3;
+            proc->max_page = 6 + k_udiv(support_now_count - 1, 3);
 
         gSortedUnitsBuf[gUnitListCount].support_talk_count = support_now_count;
         gSortedUnits[gUnitListCount] = &gSortedUnitsBuf[gUnitListCount];
@@ -564,7 +566,7 @@ void UnitList_CollectBlueUnits(struct UnitListScreenProc * proc)
         }
 
         if (support_now_count > 3)
-            proc->max_page = 6 + (support_now_count - 1) / 3;
+            proc->max_page = 6 + k_udiv(support_now_count - 1, 3);
 
         gSortedUnitsBuf[gUnitListCount].support_talk_count = support_now_count;
         gSortedUnits[gUnitListCount] = &gSortedUnitsBuf[gUnitListCount];
@@ -675,7 +677,7 @@ void UnitList_Setup(struct UnitListScreenProc * proc)
     Text_DrawString(&gUnitListNameLabelText, JTEXT("名　前"));
     PutText(&gUnitListNameLabelText, gBg2Tm + TM_OFFSET(3, 5));
 
-    for (i = 0; i < 20; i++)
+    for (i = 0; i < ARRAY_COUNT(gUnitListItemIcons); i++)
     {
         gUnitListItemIcons[i] = UINT8_MAX;
     }
@@ -805,7 +807,7 @@ void CycleUnitSoloAnim(struct Unit * unit, int step)
     anim_param = unit->flags & UNIT_FLAG_SOLOANIM;
 
     anim_param = anim_param >> 14;
-    anim_param = ((anim_param + step + 3)) % 3;
+    anim_param = k_umod(anim_param + step + 3, 3);
     anim_param = anim_param << 14;
 
     unit->flags = anim_param | (unit->flags & ~UNIT_FLAG_SOLOANIM);
@@ -1244,7 +1246,7 @@ void UnitList_PageSlideOut_Loop(struct UnitListScreenProc * proc)
     TmFillRect(gBg2Tm+0x150/2, 0x16, 1, 0);
     TmFillRect(gBg0Tm+0x10/2, 0x16, 0x1F, 0);
 
-    for (row = 0; row < 20; row++)
+    for (row = 0; row < (int)ARRAY_COUNT(gUnitListItemIcons); row++)
         gUnitListItemIcons[row] = UINT8_MAX;
 
     ClearIcons();
@@ -1559,7 +1561,7 @@ void UnitList_PutUnitRow(struct UnitListScreenProc * proc, fu8 unit_num, u16 * t
     // this is something permuter found, it matches but ugh
     int dummy_zero = 0;
 
-    int row = unit_num % 7;
+    int row = k_umod(unit_num, 7);
     int y = (unit_num * 2) & 0x1F;
 
     if ((gSortedUnits[unit_num]->unit->flags & UNIT_FLAG_NOT_DEPLOYED) != 0)
@@ -1823,7 +1825,7 @@ bool SortUnitList(fu8 key, fu8 order)
 
     #define PREPARE_VARS \
         bool changed = FALSE; \
-        fu8 i, j, tmp_cache; \
+        fu8 i, j, tmp_cache _UNUSED; \
         void * tmp_addr;
 
     #define BUILD_CACHE(key) \
