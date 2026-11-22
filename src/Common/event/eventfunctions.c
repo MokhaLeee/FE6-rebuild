@@ -1,5 +1,7 @@
 #include "eventfunctions.h"
 
+#include "klib.h"
+
 #include "random.h"
 #include "armfunc.h"
 #include "hardware.h"
@@ -292,8 +294,8 @@ bool Chapter24_CheckReinforcementWave6(struct EventInfo * info)
 #  define IsKleinNonBlueBugged IsKleinNonBlue
 #  define IsKleinBlueBugged IsKleinBlue
 #else
-#  define IsKleinNonBlueBugged ((int (*)(void))(IsKleinNonBlue))
-#  define IsKleinBlueBugged ((int (*)(void))(IsKleinBlue))
+#  define IsKleinNonBlueBugged() ((int)IsKleinNonBlue())
+#  define IsKleinBlueBugged() ((int)IsKleinBlue())
 #endif
 
 bool Chapter10B_CheckTalkShannaThea(struct EventInfo * info)
@@ -1870,9 +1872,9 @@ void Chapter21x_ChooseTrappedChests(void)
 
     for (i = 0, count = 0;; i++)
     {
-        if (!CheckFlag(Chapter21x_TrappedChestFlags[i % (int) ARRAY_COUNT(Chapter21x_TrappedChestFlags)]) && EventRandNext_N(11) == 0)
+        if (!CheckFlag(Chapter21x_TrappedChestFlags[k_umod(i, ARRAY_COUNT(Chapter21x_TrappedChestFlags))]) && EventRandNext_N(11) == 0)
         {
-            SetFlag(Chapter21x_TrappedChestFlags[i % (int) ARRAY_COUNT(Chapter21x_TrappedChestFlags)]);
+            SetFlag(Chapter21x_TrappedChestFlags[k_umod(i, ARRAY_COUNT(Chapter21x_TrappedChestFlags))]);
 
             count++;
 
@@ -2804,7 +2806,7 @@ bool GameEnding_TryBuildGreatLycia(void)
 #if BUGFIX
     if (IsLilinaBlue())
 #else
-    if (IsLilinaBlue != NULL)
+    if (TRUE)
 #endif
     {
         struct Unit * roy = GetUnitByPid(PID_ROY);
@@ -3047,7 +3049,7 @@ struct GameEndingPosition CONST_DATA gGameEndingPosition2[] = {
 
 void GameEnding_PutUnitsOnPosition2(void)
 {
-    int i, j, pid;
+    int i, j;
     int next_slot = 2;
 
     for (i = FACTION_BLUE + 1; i < FACTION_BLUE + 0x40; i++)

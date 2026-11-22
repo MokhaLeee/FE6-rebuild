@@ -1306,9 +1306,9 @@ int EventGotoLabel(ProcPtr proc, int label)
 {
     EventScr const * it;
 
-    for (it = ((struct EventProc *) proc)->script_start; it[0] != EVT_CMD_END; it += gEventCmdInfoTable[it[0]].size)
+    for (it = ((struct EventProc *) proc)->script_start; it[0] != (EventScr)EVT_CMD_END; it += gEventCmdInfoTable[it[0]].size)
     {
-        if (it[0] == EVT_CMD_LABEL && it[1] == label)
+        if (it[0] == EVT_CMD_LABEL && it[1] == (EventScr)label)
         {
             ((struct EventProc *) proc)->script = it + gEventCmdInfoTable[EVT_CMD_LABEL].size;
             return EVENT_CMDRET_JUMPED;
@@ -1415,9 +1415,9 @@ int EvtCmd_GotoIfyFlag(struct EventProc * proc)
     if (!CheckFlag(proc->script[1]))
         return EVENT_CMDRET_CONTINUE;
 
-    while (it[0] != EVT_CMD_END)
+    while (it[0] != (EventScr)EVT_CMD_END)
     {
-        if (it[0] == EVT_CMD_LABEL && it[1] == label)
+        if (it[0] == EVT_CMD_LABEL && it[1] == (EventScr)label)
         {
             proc->script = it + gEventCmdInfoTable[EVT_CMD_LABEL].size;
             return EVENT_CMDRET_JUMPED;
@@ -1441,9 +1441,9 @@ int EvtCmd_GotoIfnFlag(struct EventProc * proc)
     if (CheckFlag(proc->script[1]))
         return EVENT_CMDRET_CONTINUE;
 
-    while (it[0] != EVT_CMD_END)
+    while (it[0] != (EventScr)EVT_CMD_END)
     {
-        if (it[0] == EVT_CMD_LABEL && it[1] == label)
+        if (it[0] == EVT_CMD_LABEL && it[1] == (EventScr)label)
         {
             proc->script = it + gEventCmdInfoTable[EVT_CMD_LABEL].size;
             return EVENT_CMDRET_JUMPED;
@@ -1467,9 +1467,9 @@ int EvtCmd_GotoIfyActive(struct EventProc * proc)
     if (gActiveUnit->pinfo->id != proc->script[1])
         return EVENT_CMDRET_CONTINUE;
 
-    while (it[0] != EVT_CMD_END)
+    while (it[0] != (EventScr)EVT_CMD_END)
     {
-        if (it[0] == EVT_CMD_LABEL && it[1] == label)
+        if (it[0] == EVT_CMD_LABEL && it[1] == (EventScr)label)
         {
             proc->script = it + gEventCmdInfoTable[EVT_CMD_LABEL].size;
             return EVENT_CMDRET_JUMPED;
@@ -1607,15 +1607,13 @@ int EvtCmd_SetFaction(struct EventProc * proc)
     // script[0]: pid
     // script[1]: faction
 
-    u8 pid = proc->script[0], id /* unused */;
+    u8 pid = proc->script[0];
     int faction = proc->script[1];
 
     FOR_UNITS_ALL(unit,
     {
         if (unit->flags & UNIT_FLAG_DEAD)
             continue;
-
-        id = unit->pinfo->id; // unused
 
         if (unit->pinfo->id == pid)
             UnitChangeFaction(unit, faction);

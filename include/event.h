@@ -55,8 +55,8 @@ enum
 #define EVTCMD_GET_X_RAW(script) (((script) & 0x0000FFFF))
 #define EVTCMD_GET_Y_RAW(script) (((script) & 0xFFFF0000) >> 16)
 
-#define EVTCMD_GET_X(script) (EVTCMD_GET_X_RAW(script) & 0x8000 ? -1 : EVTCMD_GET_X_RAW(script))
-#define EVTCMD_GET_Y(script) (EVTCMD_GET_Y_RAW(script) & 0x8000 ? -1 : EVTCMD_GET_Y_RAW(script))
+#define EVTCMD_GET_X(script) ((int)(EVTCMD_GET_X_RAW(script) & 0x8000 ? (EventScr)-1 : EVTCMD_GET_X_RAW(script)))
+#define EVTCMD_GET_Y(script) ((int)(EVTCMD_GET_Y_RAW(script) & 0x8000 ? (EventScr)-1 : EVTCMD_GET_Y_RAW(script)))
 
 struct EventProc
 {
