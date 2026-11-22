@@ -41,8 +41,7 @@ src/Test/
 │   ├── save/                     # 存档、读档、中断
 │   ├── ui/                       # statscreen、helpbox、菜单、字体
 │   └── system/                   # 内存、随机数、性能
-├── data/                         # 测试专用数据（单位表、章节 id 等）
-└── ref/                          # debugmenu 参考，不参与构建
+└── data/                         # 测试专用数据（单位表、章节 id 等）
 
 include/hacks/
 ├── testmenu.h                    # testmenu 公开入口
@@ -57,7 +56,6 @@ include/hacks/
 - `testmenu/` 只放菜单外壳，不放具体测试逻辑。
 - 每个领域一个 `cases/<domain>/`，里面放该领域的 `MenuEntInfo[]` 和 case 回调。
 - 公共的“开章节/放单位/给道具/重置存档”放 `harness/`，不要复制到每个 case。
-- `ref/` 继续只做参考，不参与构建。
 - `src/Test/` 下的实现文件统一用 `#if CONFIG_TEST_MENU` 包住；关闭时编译为空目标文件。
 - 跨目录共享的头文件放 `include/hacks/`；领域本地头文件可以跟源文件放在
   `cases/<domain>/` 里。

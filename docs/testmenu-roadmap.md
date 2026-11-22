@@ -146,7 +146,7 @@ UI 菜单项只负责启动对应场景，按键步骤放到测试脚本里。
 - [ ] Testmenu 分类定稿（Game / Save / Test Chapter / System）
 - [ ] Game 章节按需扩展
 - [ ] Test Chapter 场景按需扩展
-- [ ] 旧 debugmenu / legacy 文档收尾
+- [x] 删除旧 debugmenu 及其参考文档
 
 ## 6. 约定
 

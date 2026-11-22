@@ -15,7 +15,6 @@
 #include "util.h"
 #include "item.h"
 #include "unit.h"
-#include "debugmenu.h"
 #include "faction.h"
 #include "unitsprite.h"
 #include "battle.h"

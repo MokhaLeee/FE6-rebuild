@@ -84,8 +84,8 @@ Save:   Write + Load / Write / Load / Back
 - `Save → Write + Load` 写 `SAVE_GAME0`、校验 checksum、读回 playstate、清 RAM 后再加载
 - `Test Chapter` 启动注册在 `ChapterInfoTable` 的唯一测试章节 `CHAPTER_TEST`（`has_prep=true`）；准备画面直接检查，Battle/Map 由脚本出撃后继续，不影响 debug 第一章和正常章节
 
-debug menu 已不参与编译（`CONFIG_DEBUG_MENU=0`），源码只作为参考留在
-`src/Test/ref/`。旧的 `SELECT+START` / `章開始` 入口说明已过时。
+debug menu 已删除，测试入口只有 testmenu；旧的 `SELECT+START` / `章開始`
+入口说明已过时。
 
 ## 旧套件（归档）
 
