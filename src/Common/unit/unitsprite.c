@@ -1,5 +1,7 @@
 #include "unitsprite.h"
 
+#include "klib.h"
+
 #include "armfunc.h"
 #include "bm.h"
 #include "faction.h"
@@ -461,7 +463,7 @@ static int ApplyUnitSpriteImage32x32(int slot, u32 id)
 
 void SyncUnitSpriteSheet(void)
 {
-    int frame = GetGameTime() % UNITSPRITE_FRAME_END;
+    int frame = k_umod(GetGameTime(), UNITSPRITE_FRAME_END);
 
     if (frame == UNITSPRITE_FRAME_A)
         CpuFastCopy(gUnitSpriteBuf[0], OBJ_VRAM0 + CHR_SIZE * OBCHR_MAPSPRITES, sizeof(gUnitSpriteBuf[0]));
@@ -482,7 +484,7 @@ void ForceSyncUnitSpriteSheet(void)
 
     gUnitSpriteSyncRequest = 0;
 
-    frame = GetGameTime() % UNITSPRITE_FRAME_END;
+    frame = k_umod(GetGameTime(), UNITSPRITE_FRAME_END);
 
     if (frame >= UNITSPRITE_FRAME_D)
     {
@@ -533,6 +535,8 @@ int GetUnitSpritePalette(struct Unit * unit)
         case FACTION_PURPLE:
             return OBPAL_UNITSPRITE_PURPLE;
     }
+
+    return OBPAL_UNITSPRITE_BLUE;
 }
 
 void RefreshUnitSprites(void)
@@ -697,10 +701,10 @@ void PutUnitSpriteIconsOam(void)
 
     bool display_rescue_icon = GetGameTime() % 32 < 20 ? TRUE : FALSE;
 
-    int poison_icon_frame = GetGameTime() / 8 % ARRAY_COUNT(PoisonIconSprites);
-    int sleep_icon_frame = GetGameTime() / 16 % ARRAY_COUNT(SleepIconSprites);
-    int berserk_icon_frame = GetGameTime() / 8 % ARRAY_COUNT(BerserkIconSprites);
-    int silence_icon_frame = GetGameTime() / 4 % ARRAY_COUNT(SilenceIconSprites);
+    int poison_icon_frame = k_umod(GetGameTime() / 8, ARRAY_COUNT(PoisonIconSprites));
+    int sleep_icon_frame = k_umod(GetGameTime() / 16, ARRAY_COUNT(SleepIconSprites));
+    int berserk_icon_frame = k_umod(GetGameTime() / 8, ARRAY_COUNT(BerserkIconSprites));
+    int silence_icon_frame = k_umod(GetGameTime() / 4, ARRAY_COUNT(SilenceIconSprites));
 
     for (i = 1; i < FACTION_PURPLE; ++i)
     {
