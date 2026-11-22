@@ -730,6 +730,7 @@ bool DoHandleStepTraps(ProcPtr proc)
                 goto trap_step_fire;
 
             // continue;
+            /* fall through */
 
         case TRAP_STEP_PIKE:
             if (gActiveUnit->x != trap->x)

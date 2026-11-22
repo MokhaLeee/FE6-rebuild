@@ -1,6 +1,8 @@
 
 #include "bmio.h"
 
+#include "klib.h"
+
 #include "random.h"
 #include "armfunc.h"
 #include "hardware.h"
@@ -408,7 +410,7 @@ static void WeatherInit_Sandstorm(void)
     for (i = 0; i < 0x40; ++i)
     {
         gWeatherEffect.particles[i].x = RandNextB();
-        gWeatherEffect.particles[i].y = (RandNextB() % DISPLAY_HEIGHT + DISPLAY_HEIGHT*3/2) & 0xFF;
+        gWeatherEffect.particles[i].y = (k_umod(RandNextB(), DISPLAY_HEIGHT) + DISPLAY_HEIGHT*3/2) & 0xFF;
 
         gWeatherEffect.particles[i].x_speed = (RandNextB() & 0x7) - 32;
         gWeatherEffect.particles[i].y_speed = 0;
@@ -518,7 +520,7 @@ static void WeatherInit_Blue(void)
     u16 * colors = gWeatherGradient.lines;
 
     for (i = 0; i < 320; ++i)
-        *colors++ = RGB(0, 0, (31 - i / 10));
+        *colors++ = RGB(0, 0, (31 - k_udiv10(i)));
 
     SetOnHBlankB(BlueWeatherHBlank);
 }
@@ -784,7 +786,7 @@ static void WeatherUpdate_Clouds(void)
 {
     int y = gBmSt.camera.y;
 
-    PutSprite(14, 0, -(y/5),
+    PutSprite(14, 0, -(int)k_udiv(y, 5),
         Sprite_CloudWeather, OAM2_CHR(OBCHR_CLOUDS) + OAM2_LAYER(3) + OAM2_PAL(OBPAL_10));
 }
 

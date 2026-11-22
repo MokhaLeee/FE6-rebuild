@@ -271,7 +271,7 @@ void StartShopScreen(struct Unit *unit, u16 const *iid_list, u8 shopType, ProcPt
 	else
 		items = gDefaultShopItems;
 
-	for (i = 0; i <= SHOP_ITEMS_MAX_AMT; i++)
+	for (i = 0; i < SHOP_ITEMS_MAX_AMT; i++)
 		proc->shopItems[i] = CreateItem(*items++);
 
 	UpdateShopItemCounts(proc);
@@ -950,7 +950,7 @@ u16 GetItemPurchasePrice(struct Unit *unit, int item)
 
 	if (gBmSt.flags & BM_FLAG_PREP) {
 		// WTF
-		cost = cost * 1.5; // cost + (cost / 2);
+		cost = cost + cost / 2;
 	}
 
 	if (UnitHasItem(unit, IID_SILVERCARD))
