@@ -1,5 +1,7 @@
 #include "manim.h"
 
+#include "klib.h"
+
 #include "random.h"
 #include "armfunc.h"
 #include "hardware.h"
@@ -860,8 +862,8 @@ void PutManimWindowNumber(u16 * tm, int num, int tileref, int len, u16 blank_til
 
     for (i = sizeof(buf)-1; i >= 0; --i)
     {
-        buf[i] = '0' + num % 10;
-        num = num / 10;
+        buf[i] = '0' + k_umod10(num);
+        num = k_udiv10(num);
 
         if (num == 0)
         {
@@ -872,7 +874,7 @@ void PutManimWindowNumber(u16 * tm, int num, int tileref, int len, u16 blank_til
         }
     }
 
-    PutDigits(tm, buf + sizeof(buf) - 1, tileref, len);
+    PutDigits(tm, (u8 const *)(buf + sizeof(buf) - 1), tileref, len);
 
     for (i = len - 1; i > 0; --i)
     {
@@ -919,7 +921,7 @@ void PutManimWindowBar(u16 * tm, int max, int fill, int pal_num, u16 const * bas
     if (max == fill)
         segments_left = max_segments;
     else
-        segments_left = ((max_segments << 8) / max * fill) >> 8;
+        segments_left = (k_udiv(max_segments << 8, max) * fill) >> 8;
 
     if (segments_left == 0 && fill > 0)
         segments_left++;
@@ -1205,7 +1207,7 @@ void ManimExpBar_Fill(struct ManimExpBarProc * proc)
 
     PutManimExpBar(6, 8, proc->exp_from);
 
-    if (proc->exp_from == proc->exp_to % 100)
+    if (proc->exp_from == (i16)k_umod(proc->exp_to, 100))
     {
         Proc_Break(proc);
         m4aSongNumStop(SONG_74);
@@ -1956,7 +1958,7 @@ void ManimTorchFx_Expand(struct ManimTorchFxProc * proc)
 
     proc->clock++;
 
-    ca = (proc->clock * 0x10) / 40;
+    ca = k_udiv(proc->clock * 0x10, 40);
 
     if (ca >= 0x10)
         ca = 0x10;
@@ -1979,7 +1981,7 @@ void ManimTorchFx_Fade(struct ManimTorchFxProc * proc)
 
     proc->clock++;
 
-    ca = 0x10 - ((proc->clock - 40) * 0x10) / 30;
+    ca = 0x10 - k_udiv((proc->clock - 40) * 0x10, 30);
 
     if (ca <= 0)
         ca = 0;
@@ -3750,8 +3752,6 @@ void Manim_AttackerFaceDefenderDelayed(ProcPtr proc)
 
 void Manim_AttackerRefreshAnim(ProcPtr proc)
 {
-    int unk;
-
     if (UNIT_JID(gManimSt.actor[gManimSt.attacker_actor].unit) == JID_DANCER)
     {
         CallDelayed(ManimAttackerDanceSe, 9);
