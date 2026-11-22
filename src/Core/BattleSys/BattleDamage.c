@@ -29,12 +29,12 @@ static int battle_real_damage_calc_hook(int damage,
 	return damage;
 }
 
-int GetMaxDamage(struct BattleUnit *attacker, struct BattleUnit *defender)
+static int GetMaxDamage(struct BattleUnit *attacker, struct BattleUnit *defender)
 {
 	return CONFIG_BATTLE_MAX_DAMAGE;
 }
 
-int CalcBattleRealDamage(struct BattleUnit *attacker,
+static int CalcBattleRealDamage(struct BattleUnit *attacker,
 			 struct BattleUnit *defender)
 {
 	/*

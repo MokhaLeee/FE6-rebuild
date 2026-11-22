@@ -28,6 +28,34 @@
 #include "constants/jids.h"
 #include "constants/terrains.h"
 
+/*
+ * File-local helpers that are called before their definitions; the public
+ * header only keeps the API used by other translation units.
+ */
+static void SetBattleUnitWeaponBallista(struct BattleUnit *bu);
+static void BattleGenerate(struct Unit *instigator, struct Unit *target);
+static void ComputeBattleUnitEffectiveStats(struct BattleUnit *attacker, struct BattleUnit *defender);
+static void BattleInitTargetCanCounter(void);
+static void BattleApplyWeaponTriangleEffect(struct BattleUnit *attacker, struct BattleUnit *defender);
+static void BattleUnitTargetCheckCanCounter(struct BattleUnit *bu);
+static void BattleUnitTargetSetEquippedWeapon(struct BattleUnit *bu);
+static void ComputeBattleUnitEffectiveHitRate(struct BattleUnit *attacker, struct BattleUnit *defender);
+static void ComputeBattleUnitEffectiveCritRate(struct BattleUnit *attacker, struct BattleUnit *defender);
+static void ComputeBattleUnitSpecialWeaponStats(struct BattleUnit *attacker, struct BattleUnit *defender);
+static void BattleGetBattleUnitOrder(struct BattleUnit **attacker, struct BattleUnit **defender);
+static bool BattleGenerateRoundHits(struct BattleUnit *attacker, struct BattleUnit *defender);
+static int GetBattleUnitHitCount(struct BattleUnit *attacker);
+static int BattleCheckBraveEffect(struct BattleUnit *attacker);
+static bool BattleGenerateHit(struct BattleUnit *attacker, struct BattleUnit *defender);
+static void BattleApplyUnitUpdates(void);
+static void BattleApplyBallistaUpdates(void);
+static int GetBattleUnitExpGain(struct BattleUnit *bu, struct BattleUnit *other);
+static int GetBattleUnitStaffExp(struct BattleUnit *bu);
+static void ComputeBattleObstacleStats(void);
+static void UpdateObstacleFromBattle(struct BattleUnit *bu);
+static void BattlePrintDebugUnitInfo(struct BattleUnit *actor, struct BattleUnit *target);
+static void BattlePrintDebugHitInfo(void);
+
 struct WeaponTriangleRule {
 	i8 attackerKind;
 	i8 defenderKind;
@@ -66,7 +94,7 @@ struct BattleHit EWRAM_DATA gBattleHits[BATTLE_HIT_MAX] = {};
 struct BattleHitExpa EWRAM_DATA gBattleHitExpa[BATTLE_HIT_MAX] = {};
 struct BattleHit *EWRAM_DATA gBattleHitIt = NULL;
 
-void BattleGenerateSimulationInternal(struct Unit *instigator, struct Unit *target, int x, int y, int item_slot)
+static void BattleGenerateSimulationInternal(struct Unit *instigator, struct Unit *target, int x, int y, int item_slot)
 {
 	InitBattleUnit(&gBattleUnitA, instigator);
 	InitBattleUnit(&gBattleUnitB, target);
@@ -100,7 +128,7 @@ void BattleGenerateSimulationInternal(struct Unit *instigator, struct Unit *targ
 	BattleGenerate(instigator, target);
 }
 
-void BattleGenerateRealInternal(struct Unit *instigator, struct Unit *target)
+static void BattleGenerateRealInternal(struct Unit *instigator, struct Unit *target)
 {
 	InitBattleUnit(&gBattleUnitA, instigator);
 	InitBattleUnit(&gBattleUnitB, target);
@@ -180,7 +208,7 @@ void BattleGenerateBallistaReal(struct Unit *instigator, struct Unit *target)
 	BattleGenerateRealInternal(instigator, target);
 }
 
-void BattleGenerate(struct Unit *instigator, struct Unit *target)
+static void BattleGenerate(struct Unit *instigator, struct Unit *target)
 {
 	ComputeBattleUnitStats(&gBattleUnitA, &gBattleUnitB);
 	ComputeBattleUnitStats(&gBattleUnitB, &gBattleUnitA);
@@ -238,7 +266,7 @@ bool BattleRandRoll(u16 threshold, bool simulationResult)
 	return RandRoll(threshold);
 }
 
-bool BattleRandRoll2Rn(u16 threshold, bool simulationResult)
+static bool BattleRandRoll2Rn(u16 threshold, bool simulationResult)
 {
 	if (gBattleSt.flags & BATTLE_FLAG_SIMULATE)
 		return simulationResult;
@@ -246,7 +274,7 @@ bool BattleRandRoll2Rn(u16 threshold, bool simulationResult)
 	return RandRoll2Rn(threshold);
 }
 
-void SetBattleUnitTerrainBonuses(struct BattleUnit *bu, int terrain)
+static void SetBattleUnitTerrainBonuses(struct BattleUnit *bu, int terrain)
 {
 	bu->terrain = terrain;
 
@@ -342,7 +370,7 @@ void SetBattleUnitWeapon(struct BattleUnit *bu, int item_slot)
 	}
 }
 
-void SetBattleUnitWeaponBallista(struct BattleUnit *bu)
+static void SetBattleUnitWeaponBallista(struct BattleUnit *bu)
 {
 	bu->weapon = GetBallistaItemAt(bu->unit.x, bu->unit.y);
 
@@ -357,7 +385,7 @@ void func_fe6_0802478C(void)
 {
 }
 
-void ComputeBattleUnitEffectiveStats(struct BattleUnit *attacker, struct BattleUnit *defender)
+static void ComputeBattleUnitEffectiveStats(struct BattleUnit *attacker, struct BattleUnit *defender)
 {
 	ComputeBattleUnitEffectiveHitRate(attacker, defender);
 	ComputeBattleUnitEffectiveCritRate(attacker, defender);
@@ -378,12 +406,12 @@ void ComputeBattleUnitSupportBonuses(struct BattleUnit *attacker, struct BattleU
 	attacker->battle_dodge += bonuses.bonus_dodge;
 }
 
-void ComputeBattleUnitBaseDefense(struct BattleUnit *bu)
+static void ComputeBattleUnitBaseDefense(struct BattleUnit *bu)
 {
 	bu->battle_defense = bu->terrain_defense + bu->unit.def;
 }
 
-void ComputeBattleUnitEffectiveHitRate(struct BattleUnit *attacker, struct BattleUnit *defender)
+static void ComputeBattleUnitEffectiveHitRate(struct BattleUnit *attacker, struct BattleUnit *defender)
 {
 	attacker->battle_effective_hit = attacker->battle_hit - defender->battle_avoid;
 
@@ -394,7 +422,7 @@ void ComputeBattleUnitEffectiveHitRate(struct BattleUnit *attacker, struct Battl
 		attacker->battle_effective_hit = 0;
 }
 
-void ComputeBattleUnitEffectiveCritRate(struct BattleUnit *attacker, struct BattleUnit *defender)
+static void ComputeBattleUnitEffectiveCritRate(struct BattleUnit *attacker, struct BattleUnit *defender)
 {
 	attacker->battle_effective_crit = attacker->battle_crit - defender->battle_dodge;
 
@@ -402,7 +430,7 @@ void ComputeBattleUnitEffectiveCritRate(struct BattleUnit *attacker, struct Batt
 		attacker->battle_effective_crit = 0;
 }
 
-void ComputeBattleUnitSpecialWeaponStats(struct BattleUnit *attacker, struct BattleUnit *defender)
+static void ComputeBattleUnitSpecialWeaponStats(struct BattleUnit *attacker, struct BattleUnit *defender)
 {
 	if (attacker->weapon_attributes & ITEM_ATTR_LIGHTBRAND) {
 		attacker->battle_attack = 10;
@@ -472,7 +500,7 @@ void BattleUnwind(void)
 	gBattleHitIt->info |= BATTLE_HIT_INFO_END;
 }
 
-void BattleGetBattleUnitOrder(struct BattleUnit ** attacker, struct BattleUnit ** defender)
+static void BattleGetBattleUnitOrder(struct BattleUnit ** attacker, struct BattleUnit ** defender)
 {
 	*attacker = &gBattleUnitA;
 	*defender = &gBattleUnitB;
@@ -500,7 +528,7 @@ bool BattleGetFollowUpOrder(struct BattleUnit ** attacker, struct BattleUnit ** 
 	return TRUE;
 }
 
-bool BattleGenerateRoundHits(struct BattleUnit *attacker, struct BattleUnit *defender)
+static bool BattleGenerateRoundHits(struct BattleUnit *attacker, struct BattleUnit *defender)
 {
 	int i, count;
 	u16 attrs;
@@ -521,7 +549,7 @@ bool BattleGenerateRoundHits(struct BattleUnit *attacker, struct BattleUnit *def
 	return FALSE;
 }
 
-int GetBattleUnitHitCount(struct BattleUnit *attacker)
+static int GetBattleUnitHitCount(struct BattleUnit *attacker)
 {
 	int result = 1;
 
@@ -530,7 +558,7 @@ int GetBattleUnitHitCount(struct BattleUnit *attacker)
 	return result;
 }
 
-int BattleCheckBraveEffect(struct BattleUnit *attacker)
+static int BattleCheckBraveEffect(struct BattleUnit *attacker)
 {
 	if (!(attacker->weapon_attributes & ITEM_ATTR_BRAVE))
 		return FALSE;
@@ -539,7 +567,7 @@ int BattleCheckBraveEffect(struct BattleUnit *attacker)
 	return TRUE;
 }
 
-bool BattleCheckTriangleAttack(struct BattleUnit *attacker, struct BattleUnit *defender)
+static bool BattleCheckTriangleAttack(struct BattleUnit *attacker, struct BattleUnit *defender)
 {
 	SHOULD_BE_STATIC i8 SHOULD_BE_CONST adjacentLut[] = {
 		-1,  0,
@@ -589,7 +617,7 @@ bool BattleCheckTriangleAttack(struct BattleUnit *attacker, struct BattleUnit *d
 	return count >= 2 ? TRUE : FALSE;
 }
 
-void BattleUpdateBattleStats(struct BattleUnit *attacker, struct BattleUnit *defender)
+static void BattleUpdateBattleStats(struct BattleUnit *attacker, struct BattleUnit *defender)
 {
 	gBattleSt.attack = attacker->battle_attack;
 	gBattleSt.defense = defender->battle_defense;
@@ -597,7 +625,7 @@ void BattleUpdateBattleStats(struct BattleUnit *attacker, struct BattleUnit *def
 	gBattleSt.crit = attacker->battle_effective_crit;
 }
 
-void BattleGenerateHitAttributes(struct BattleUnit *attacker, struct BattleUnit *defender)
+static void BattleGenerateHitAttributes(struct BattleUnit *attacker, struct BattleUnit *defender)
 {
 	gBattleSt.damage = 0;
 
@@ -612,7 +640,7 @@ void BattleGenerateHitAttributes(struct BattleUnit *attacker, struct BattleUnit 
 		attacker->dealt_damage = TRUE;
 }
 
-void BattleGenerateHitTriangleAttack(struct BattleUnit *attacker, struct BattleUnit *defender)
+static void BattleGenerateHitTriangleAttack(struct BattleUnit *attacker, struct BattleUnit *defender)
 {
 	if (!(UNIT_ATTRIBUTES(&attacker->unit) & UNIT_ATTR_TRIANGLE_ATTACK_ANY))
 		return;
@@ -651,7 +679,7 @@ int GetDevilReversalChance(int level)
 	return chance;
 }
 
-void BattleGenerateHitEffects(struct BattleUnit *attacker, struct BattleUnit *defender)
+static void BattleGenerateHitEffects(struct BattleUnit *attacker, struct BattleUnit *defender)
 {
 	int devil_chance;
 
@@ -709,7 +737,7 @@ void BattleGenerateHitEffects(struct BattleUnit *attacker, struct BattleUnit *de
 	}
 }
 
-bool BattleGenerateHit(struct BattleUnit *attacker, struct BattleUnit *defender)
+static bool BattleGenerateHit(struct BattleUnit *attacker, struct BattleUnit *defender)
 {
 	if (attacker == &gBattleUnitB)
 		gBattleHitIt->info |= BATTLE_HIT_INFO_ACTORB;
@@ -772,7 +800,7 @@ int GetAutoleveledStatIncrease(int growth, int levels)
 	return GetStatIncrease(growth*levels + (RandNext(growth*levels/4) - growth*levels/8));
 }
 
-void BattleApplyUnitUpdates(void)
+static void BattleApplyUnitUpdates(void)
 {
 	struct Unit *instigator = GetUnit(gBattleUnitA.unit.id);
 	struct Unit *target = GetUnit(gBattleUnitB.unit.id);
@@ -854,7 +882,7 @@ void UpdateUnitDuringBattle(struct Unit *unit, struct BattleUnit *bu)
 		unit->wexp[bu->weapon_kind] = wexp;
 }
 
-void BattleApplyBallistaUpdates(void)
+static void BattleApplyBallistaUpdates(void)
 {
 	if (gBattleSt.flags & BATTLE_FLAG_BALLISTA) {
 		int uses = GetItemUses(gBattleUnitA.weapon);
@@ -866,7 +894,7 @@ void func_fe6_08025780(void)
 {
 }
 
-int GetUnitExpLevel(struct Unit *unit)
+static int GetUnitExpLevel(struct Unit *unit)
 {
 	int result = unit->level;
 
@@ -876,7 +904,7 @@ int GetUnitExpLevel(struct Unit *unit)
 	return result;
 }
 
-int GetUnitRoundExp(struct Unit *unit, struct Unit *other)
+static int GetUnitRoundExp(struct Unit *unit, struct Unit *other)
 {
 	int expLevel;
 
@@ -890,7 +918,7 @@ int GetUnitRoundExp(struct Unit *unit, struct Unit *other)
 	return k_udiv(expLevel, unit->jinfo->power_level);
 }
 
-int GetUnitPowerLevel(struct Unit *unit)
+static int GetUnitPowerLevel(struct Unit *unit)
 {
 	int result = unit->level * unit->jinfo->power_level;
 
@@ -900,7 +928,7 @@ int GetUnitPowerLevel(struct Unit *unit)
 	return result;
 }
 
-int GetUnitClassKillExpBonus(struct Unit *unit, struct Unit *defeated)
+static int GetUnitClassKillExpBonus(struct Unit *unit, struct Unit *defeated)
 {
 	int result = 0;
 
@@ -913,7 +941,7 @@ int GetUnitClassKillExpBonus(struct Unit *unit, struct Unit *defeated)
 	return result;
 }
 
-int GetUnitKillExpBonus(struct Unit *unit, struct Unit *other)
+static int GetUnitKillExpBonus(struct Unit *unit, struct Unit *other)
 {
 	int result;
 
@@ -933,7 +961,7 @@ int GetUnitKillExpBonus(struct Unit *unit, struct Unit *other)
 	return result;
 }
 
-int GetBattleUnitExpGain(struct BattleUnit *bu, struct BattleUnit *other)
+static int GetBattleUnitExpGain(struct BattleUnit *bu, struct BattleUnit *other)
 {
 	int result;
 
@@ -955,7 +983,7 @@ int GetBattleUnitExpGain(struct BattleUnit *bu, struct BattleUnit *other)
 	return result;
 }
 
-void BattleApplyItemExpGains(void)
+static void BattleApplyItemExpGains(void)
 {
 	if ((gBattleUnitA.weapon_attributes & ITEM_ATTR_STAFF) && !(gPlaySt.flags & PLAY_FLAG_COMPLETE)) {
 		if (UNIT_FACTION(&gBattleUnitA.unit) == FACTION_BLUE)
@@ -968,7 +996,7 @@ void BattleApplyItemExpGains(void)
 	}
 }
 
-int GetBattleUnitStaffExp(struct BattleUnit *bu)
+static int GetBattleUnitStaffExp(struct BattleUnit *bu)
 {
 	int result;
 
@@ -989,7 +1017,7 @@ int GetBattleUnitStaffExp(struct BattleUnit *bu)
 	return result;
 }
 
-void BattleApplyMiscActionExpGains(void)
+static void BattleApplyMiscActionExpGains(void)
 {
 	if (UNIT_FACTION(&gBattleUnitA.unit) != FACTION_BLUE)
 		return;
@@ -1006,7 +1034,7 @@ void BattleApplyMiscActionExpGains(void)
 	CheckBattleUnitLevelUp(&gBattleUnitA);
 }
 
-void BattleUnitTargetSetEquippedWeapon(struct BattleUnit *bu)
+static void BattleUnitTargetSetEquippedWeapon(struct BattleUnit *bu)
 {
 	int i;
 
@@ -1031,7 +1059,7 @@ void BattleUnitTargetSetEquippedWeapon(struct BattleUnit *bu)
 	}
 }
 
-void BattleUnitTargetCheckCanCounter(struct BattleUnit *bu)
+static void BattleUnitTargetCheckCanCounter(struct BattleUnit *bu)
 {
 	if (!bu->has_inventory_weapon)
 	{
@@ -1043,7 +1071,7 @@ void BattleUnitTargetCheckCanCounter(struct BattleUnit *bu)
 	}
 }
 
-void BattleApplyReaverEffect(struct BattleUnit *attacker, struct BattleUnit *defender)
+static void BattleApplyReaverEffect(struct BattleUnit *attacker, struct BattleUnit *defender)
 {
 	// those <<1>>1 are useless but without them it doesn't match :/
 
@@ -1053,7 +1081,7 @@ void BattleApplyReaverEffect(struct BattleUnit *attacker, struct BattleUnit *def
 	defender->advantage_bonus_damage = -defender->advantage_bonus_damage <<1>>1;
 }
 
-void BattleApplyWeaponTriangleEffect(struct BattleUnit *attacker, struct BattleUnit *defender)
+static void BattleApplyWeaponTriangleEffect(struct BattleUnit *attacker, struct BattleUnit *defender)
 {
 	struct WeaponTriangleRule const * it;
 
@@ -1076,7 +1104,7 @@ void BattleApplyWeaponTriangleEffect(struct BattleUnit *attacker, struct BattleU
 		BattleApplyReaverEffect(attacker, defender);
 }
 
-void BattleInitTargetCanCounter(void)
+static void BattleInitTargetCanCounter(void)
 {
 	// Target cannot counter if either units are using "uncounterable" weapons
 
@@ -1111,7 +1139,7 @@ void InitObstacleBattleUnit(void)
 	gBattleUnitB.unit.y = gAction.y_target;
 }
 
-void ComputeBattleObstacleStats(void)
+static void ComputeBattleObstacleStats(void)
 {
 	gBattleUnitA.battle_effective_hit = 100;
 	gBattleUnitA.battle_effective_crit = 0;
@@ -1123,7 +1151,7 @@ void ComputeBattleObstacleStats(void)
 	gBattleUnitB.advantage_bonus_damage = 0;
 }
 
-void UpdateObstacleFromBattle(struct BattleUnit *bu)
+static void UpdateObstacleFromBattle(struct BattleUnit *bu)
 {
 	struct Trap * trap = GetTrapAt(bu->unit.x, bu->unit.y);
 
@@ -1174,7 +1202,7 @@ void BeginBattleAnimations(void)
 	}
 }
 
-int GetUnitSoloBattleAnimType(struct Unit *unit)
+static int GetUnitSoloBattleAnimType(struct Unit *unit)
 {
 	if (unit->flags & UNIT_FLAG_SOLOANIM_1)
 		return PLAY_ANIMCONF_ON;
@@ -1212,12 +1240,12 @@ int GetBattleAnimType(void)
 		return GetUnitSoloBattleAnimType(&gBattleUnitB.unit);
 }
 
-void BattlePrintDebugUnitInfo(struct BattleUnit *actor, struct BattleUnit *target)
+static void BattlePrintDebugUnitInfo(struct BattleUnit *actor, struct BattleUnit *target)
 {
 	// prints battle unit information to debug output
 }
 
-void BattlePrintDebugHitInfo(void)
+static void BattlePrintDebugHitInfo(void)
 {
 	struct BattleHit *it;
 

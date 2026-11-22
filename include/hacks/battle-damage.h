@@ -34,9 +34,6 @@ static inline struct BaseDmg *GetBaseDmg(struct BattleUnit *bu)
 extern const u16 _DmgDecreaseRef[100];
 #define DAMAGE_DECREASE(rate) (_DmgDecreaseRef[rate])
 
-int GetMaxDamage(struct BattleUnit *attacker, struct BattleUnit *defender);
-int CalcBattleRealDamage(struct BattleUnit *attacker,
-			 struct BattleUnit *defender);
 void PreBattleCalcInit_BaseDamage(struct BattleUnit *attacker,
 				  struct BattleUnit *defender);
 int BattleHit_CalcDamage(struct BattleUnit *attacker,
