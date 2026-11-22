@@ -1,4 +1,6 @@
 #include "prelude.h"
+
+#include "klib.h"
 #include "proc.h"
 #include "unit.h"
 #include "faction.h"
@@ -314,9 +316,9 @@ CONST_DATA struct PlayRankMissionGlyph PlayRankMissionGlyphs_Failed[] = {
 };
 
 CONST_DATA struct PlayRankMissionObjInfo gPlayRankMissonObjInfo[] = {
-	{ PlayRankMissionGlyphs_PlayRank, 0x0E, 0x00 },
-	{ PlayRankMissionGlyphs_Complete, 0x10, 0x12 },
-	{ PlayRankMissionGlyphs_Failed, 0x1C, 0x12 }
+	{ PlayRankMissionGlyphs_PlayRank, 0x0E, 0x00, { 0, 0 } },
+	{ PlayRankMissionGlyphs_Complete, 0x10, 0x12, { 0, 0 } },
+	{ PlayRankMissionGlyphs_Failed, 0x1C, 0x12, { 0, 0 } }
 };
 
 void SetupPlayRanks(void)
@@ -808,8 +810,8 @@ int PlayRank_ChapterTurns_DrawBase(struct Text *text, int chapter_gaiden, u8 cen
 	lens[0] = GetStringTextLen(DecodeMsg(MSG_PLAYRANK_PREFIX));
 	ret = lens[0];
 
-	hi = (chapter_gaiden >> 1) / 10;
-	lo = (chapter_gaiden >> 1) % 10;
+	hi = k_udiv10(chapter_gaiden >> 1);
+	lo = k_umod10(chapter_gaiden >> 1);
 
 	if (hi != 0) {
 		lens[1] = GetStringTextLen(DecodeMsg(Msgs_PlayRankNum[hi])) - 1;
@@ -1386,7 +1388,7 @@ u16 PlayRank_GetWinningRate(void)
 	int denominator = PidStatsCountTotalBattles();
 	int numerator   = PidStatsCountTotalWins() * 100;
 
-	return numerator / denominator;
+	return k_udiv(numerator, denominator);
 }
 
 u8 PlayRankGetter_Combat(void)
@@ -1408,7 +1410,7 @@ u8 PlayRankGetter_XmapCombat(void)
 {
 	int denominator = PidStatsCountTotalBattles();
 	int numerator   = PidStatsCountTotalWins() * 100;
-	int winning_rate = numerator / denominator;
+	int winning_rate = k_udiv(numerator, denominator);
 	int i;
 
 	i = 0;

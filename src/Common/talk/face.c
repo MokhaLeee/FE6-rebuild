@@ -624,8 +624,6 @@ void StartFaceFadeIn(struct FaceProc * proc)
 
 void StartFaceFadeOut(struct FaceProc * proc)
 {
-    struct FaceInfo const * info = GetFaceInfo(proc->fid);
-
     StartPalFadeToBlack(0x10 + gFaceConfig[proc->slot].palid, 12, proc);
     EndFaceIn8Frames(proc);
 }

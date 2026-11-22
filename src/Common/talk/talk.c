@@ -1,5 +1,7 @@
 #include "talk.h"
 
+#include "klib.h"
+
 #include <string.h>
 
 #include "armfunc.h"
@@ -95,7 +97,7 @@ static void TalkDebug_OnInit(struct Proc * proc);
 static void TalkDebug_OnIdle(struct Proc * proc);
 static void TalkBgSync(int bgflags);
 
-#define TALK_TEXT_BY_LINE(line) (sTalkText + ((line) + sTalkSt->top_text_num) % sTalkSt->lines)
+#define TALK_TEXT_BY_LINE(line) (sTalkText + k_umod((line) + sTalkSt->top_text_num, sTalkSt->lines))
 
 static struct TalkSt sTalkStObj;
 static struct TalkSt * CONST_DATA sTalkSt = &sTalkStObj;
