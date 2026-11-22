@@ -48,12 +48,12 @@ Pal_ManimDivineDragonMu: @ 082AA988
 .align 2,0
 .global Img_WmDialogueBox
 Img_WmDialogueBox: @ 082AA9A8
-    .incbin "vanilla/data/worldmap/graphics/Img_WmDialogueBox.4bpp.lz"
+    .incbin "src/Common/worldmap/data/graphics/Img_WmDialogueBox.4bpp.lz"
 
 .align 2,0
 .global Pal_WmDialogueBox
 Pal_WmDialogueBox: @ 082AAD5C
-    .incbin "vanilla/data/worldmap/graphics/Img_WmDialogueBox.gbapal", 0, 0x20
+    .incbin "src/Common/worldmap/data/graphics/Img_WmDialogueBox.gbapal", 0, 0x20
 
     .incbin "fe6-base.gba", 0x2AAD7C, (0x2AADA4 - 0x2AAD7C)
 
@@ -95,37 +95,37 @@ Pal_WorldMap:    @ 0x082D1BA0
 .align 2,0
 .global Img_WmHighlight_Nation1
 Img_WmHighlight_Nation1:
-    .incbin "vanilla/data/worldmap/graphics/Img_WmHighlight_Nation1.4bpp.lz"
+    .incbin "src/Common/worldmap/data/graphics/Img_WmHighlight_Nation1.4bpp.lz"
 
 .align 2,0
 .global Img_WmHighlight_Nation2
 Img_WmHighlight_Nation2:
-    .incbin "vanilla/data/worldmap/graphics/Img_WmHighlight_Nation2.4bpp.lz"
+    .incbin "src/Common/worldmap/data/graphics/Img_WmHighlight_Nation2.4bpp.lz"
 
 .align 2,0
 .global Img_WmHighlight_Nation3
 Img_WmHighlight_Nation3:
-    .incbin "vanilla/data/worldmap/graphics/Img_WmHighlight_Nation3.4bpp.lz"
+    .incbin "src/Common/worldmap/data/graphics/Img_WmHighlight_Nation3.4bpp.lz"
 
 .align 2,0
 .global Img_WmHighlight_Nation4
 Img_WmHighlight_Nation4:
-    .incbin "vanilla/data/worldmap/graphics/Img_WmHighlight_Nation4.4bpp.lz"
+    .incbin "src/Common/worldmap/data/graphics/Img_WmHighlight_Nation4.4bpp.lz"
 
 .align 2,0
 .global Img_WmHighlight_Nation5
 Img_WmHighlight_Nation5:
-    .incbin "vanilla/data/worldmap/graphics/Img_WmHighlight_Nation5.4bpp.lz"
+    .incbin "src/Common/worldmap/data/graphics/Img_WmHighlight_Nation5.4bpp.lz"
 
 .align 2,0
 .global Img_WmHighlight_Nation6
 Img_WmHighlight_Nation6:
-    .incbin "vanilla/data/worldmap/graphics/Img_WmHighlight_Nation6.4bpp.lz"
+    .incbin "src/Common/worldmap/data/graphics/Img_WmHighlight_Nation6.4bpp.lz"
 
 .align 2,0
 .global Img_WmHighlight_Nation7
 Img_WmHighlight_Nation7:
-    .incbin "vanilla/data/worldmap/graphics/Img_WmHighlight_Nation7.4bpp.lz"
+    .incbin "src/Common/worldmap/data/graphics/Img_WmHighlight_Nation7.4bpp.lz"
 
 .align 2,0
 .global ApInfo_WmHighlight_Nation1
@@ -170,7 +170,7 @@ Pal_WmHightlight: @ 082D3398
 .align 2,0
 .global Img_WmSprites
 Img_WmSprites: @ 082D33B8
-    .incbin "vanilla/data/worldmap/graphics/Img_WmSprites.4bpp.lz"
+    .incbin "src/Common/worldmap/data/graphics/Img_WmSprites.4bpp.lz"
 
 .align 2,0
 .global ApInfo_WmDot
