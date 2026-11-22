@@ -24,7 +24,6 @@ tools/emu/
 │   │   ├── 11-prep-statscreen.sh
 │   │   ├── 12-mss-statscreen.sh
 │   │   ├── 13-prep-save-map.sh
-│   │   ├── 14-game-chapter2.sh
 │   │   ├── 15-save-corrupt.sh
 │   │   ├── 16-level-cap.sh
 │   │   ├── 17-level-map.sh
