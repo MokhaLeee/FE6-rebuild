@@ -17,6 +17,7 @@ static EWRAM_DATA u16 IconReSts[MAX_SIMULTANEOUS_ICONS];
 typedef const u8 *(* IconGetterFunc)(const u8 index);
 
 extern u8 const *const gpImg_Icons;
+extern u16 const *const gpPal_Icons;
 extern u8 const *const *const gpAffinIcons;
 extern u8 const *const *const gpMountIcons;
 extern u8 const *const *const gpWTypeIcons;
@@ -122,6 +123,21 @@ static int GetIconNewSlot(const u32 icon)
 void ClearIcons(void)
 {
 	CpuFill32(-1, IconReSts, sizeof(IconReSts));
+}
+
+void InitIcons(void)
+{
+	ClearIcons();
+}
+
+void ApplyIconPalettes(int palid)
+{
+	ApplyPalettes(gpPal_Icons, palid, 2);
+}
+
+void ApplyIconPalette(int num, int palid)
+{
+	ApplyPalette(gpPal_Icons + 0x10 * num, palid);
 }
 
 void ClearIcon(int icon)
