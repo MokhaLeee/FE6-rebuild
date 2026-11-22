@@ -1,5 +1,9 @@
 #include "subtitlehelp.h"
 
+#include <string.h>
+
+#include "klib.h"
+
 #include "hardware.h"
 #include "oam.h"
 #include "proc.h"
@@ -23,7 +27,7 @@ void PutSubtitleHelpText(struct SubtitleHelpProc * proc, int y)
     for (i = 0; i < 9; ++i)
     {
         int x = i*32 - 32 + proc->text_offset;
-        int num = (proc->text_num + i) % proc->text_count;
+        int num = k_umod(proc->text_num + i, proc->text_count);
 
         PutSprite(2, x, y,
             Sprite_32x16, OAM2_CHR(OBCHR_SUBTITLEHELP_TEXT) + OAM2_PAL(OBPAL_SUBTITLEHELP_TEXT) + lut[num]);
@@ -92,8 +96,13 @@ void SubtitleHelpDarkenerOnHBlank(void)
 
     if (vcount < 140 || vcount > 160)
     {
-        REG_BLDCNT   = *(u16 *)(&gDispIo.blend_ct);
-        REG_BLDALPHA = *(u16 *)(&gDispIo.blend_coef_a);
+        u16 blend_ct, blend_coef_a;
+
+        memcpy(&blend_ct, &gDispIo.blend_ct, sizeof(blend_ct));
+        memcpy(&blend_coef_a, &gDispIo.blend_coef_a, sizeof(blend_coef_a));
+
+        REG_BLDCNT   = blend_ct;
+        REG_BLDALPHA = blend_coef_a;
         REG_BLDY     = gDispIo.blend_y;
     }
     else
