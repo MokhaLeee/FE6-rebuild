@@ -319,6 +319,9 @@ src/Common/sys/iwram-data.o: CFLAGS += -fno-toplevel-reorder
 # savemenu_2 deliberately type-puns the BG registers as 32-bit words;
 # keep the deprecated alias behaviour of the original build.
 src/Common/menu/savemenu_2.o: CFLAGS += -fno-strict-aliasing
+# movepath cuts a path to index -1 in the original build; keep that
+# behaviour instead of adding a guard that changes the path.
+src/Common/map/movepath.o: CFLAGS += -Wno-array-bounds -Wno-stringop-overflow
 # CFLAGS += -fno-inline
 CDEPFLAGS := # -MMD -MQ "$*.o" -MQ "$*.asm" -MF "$(CACHE_DIR)/$*.d" -MP
 

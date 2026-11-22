@@ -29,8 +29,6 @@ static void DelaySong_OnLoop(struct MusicProc * proc);
 static void PlaySongDelayed(int song, int delay, struct MusicPlayer * music_player);
 extern void PlaySongCore(int song, struct MusicPlayer * music_player);
 
-static void SetBgmChannels(int song_id);
-
 struct SoundSt EWRAM_DATA sSoundSt;
 
 IWRAM_DATA struct SoundInfo gSoundInfo = { 0 };

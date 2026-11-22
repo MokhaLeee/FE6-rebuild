@@ -128,7 +128,7 @@ void GenMovePathFromMoveScript(void)
         case MOVE_CMD_SLEEP:
             continue;
 
-        case MOVE_CMD_END:
+        case (u8)MOVE_CMD_END:
         case MOVE_CMD_HALT:
             return;
 
@@ -284,6 +284,8 @@ static u8 GetMovePathDirFrom(u8 path)
 
     if (gMovePath->y[path-1] > gMovePath->y[path])
         return MOVEPATH_DIR_DOWN;
+
+    return MOVEPATH_DIR_NONE;
 }
 
 static u8 GetMovePathDirTo(u8 path)
@@ -302,6 +304,8 @@ static u8 GetMovePathDirTo(u8 path)
 
     if (gMovePath->y[path] > gMovePath->y[path+1])
         return MOVEPATH_DIR_UP;
+
+    return MOVEPATH_DIR_NONE;
 }
 
 static bool ShouldDrawMovePathBitAt(short x, short y, u8 xEdge, u8 yEdge)
