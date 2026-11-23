@@ -67,9 +67,6 @@ export CPP := $(PREFIX)cpp
 export LD := $(PREFIX)ld
 export STRIP := $(PREFIX)strip
 
-CC1     := $(AGBCC_HOME)/bin/old_agbcc$(EXE)
-CC1_NEW := $(AGBCC_HOME)/bin/agbcc$(EXE)
-
 GRIT := $(DEVKITPRO)/tools/bin/grit
 LZSS := $(DEVKITPRO)/tools/bin/gbalzss
 GRITLZ77ARGS      := -gu 16 -gzl -gB 4 -p! -m! -ft bin -fh!
@@ -87,20 +84,17 @@ SHASUM ?= sha1sum
 
 C_GENERATED_OBJ :=
 
-VANILLA_DIR := vanilla
 HACK_SRC  := src
 HACK_DIRS := $(HACK_SRC) gamedata gameinfo
 
 # find $(1) for name $(2), skip */unused/*
 find-src = $(shell find $(1) -name '$(2)' -not -path '*/unused/*')
 
-VANILLA_SRCS := $(call find-src,$(VANILLA_DIR),*.c)
-C_SRCS       := $(call find-src,$(HACK_DIRS),*.c)
+C_SRCS   := $(call find-src,$(HACK_DIRS),*.c)
+S_SRCS   := $(call find-src,$(HACK_DIRS),*.S)
+ASM_SRCS := $(call find-src,$(HACK_DIRS),*.s)
 
-S_SRCS       := $(call find-src,$(HACK_DIRS),*.S)
-ASM_SRCS     := $(call find-src,$(VANILLA_DIR) $(HACK_DIRS),*.s)
-
-SRC_DIRS := $(VANILLA_DIR) $(HACK_DIRS)
+SRC_DIRS := $(HACK_DIRS)
 LIB_DIRS := $(DEVKITPRO)/libgba $(AGBCC_HOME)
 
 # The C dependency generator is disabled (see CDEPFLAGS), so make config
@@ -325,10 +319,6 @@ src/Common/map/movepath.o: CFLAGS += -Wno-array-bounds -Wno-stringop-overflow
 # CFLAGS += -fno-inline
 CDEPFLAGS := # -MMD -MQ "$*.o" -MQ "$*.asm" -MF "$(CACHE_DIR)/$*.d" -MP
 
-CPPFLAGS := $(INC_FLAG) -nostdinc -undef
-AGB_CFLAGS := -g -mthumb-interwork -O2 -Wimplicit -Wparentheses -Werror -fhex-asm -ffix-debug-line
-ASFLAGS := -g $(ARCH) $(INC_FLAG)
-
 # Pass include dirs to GAS (.include); required on devkitARM 16+ where gcc no
 # longer forwards -I to the assembler when compiling .S/.s via the driver.
 ASM_WA_INC := $(foreach dir, $(INC_DIRS), -Wa,-I$(dir)) \
@@ -336,15 +326,6 @@ ASM_WA_INC := $(foreach dir, $(INC_DIRS), -Wa,-I$(dir)) \
 ASM_CC_FLAGS := -x assembler-with-cpp $(ASM_WA_INC)
 
 ASM_DEP := $(PYTHON) tools/asmtools/asmdep.py
-
-# == vanilla ==
-$(VANILLA_DIR)/%.o: $(VANILLA_DIR)/%.c
-	@echo "[CC1]	$<"
-	@$(CPP) $(CPPFLAGS) $< | $(CC1) $(AGB_CFLAGS) -o $(VANILLA_DIR)/$*.asm
-	@echo ".text\n\t.align\t2, 0\n" >> $(VANILLA_DIR)/$*.asm
-	@$(AS) $(ASFLAGS) $(VANILLA_DIR)/$*.asm -o $@
-	@$(STRIP) -N .gcc2_compiled. $@
-	@rm -f $(VANILLA_DIR)/$*.asm
 
 # == hacks ==
 %.o:        EXT_FLAGS := -mthumb -mthumb-interwork
@@ -396,7 +377,7 @@ $(CACHE_DIR)/%.d: %.S
 # = Targets =
 # ===========
 
-C_OBJS := $(VANILLA_SRCS:%.c=%.o) $(C_SRCS:%.c=%.o)
+C_OBJS := $(C_SRCS:%.c=%.o)
 ASM_OBJS := $(ASM_SRCS:%.s=%.o) $(S_SRCS:%.S=%.o)
 
 # mssfx.S .incbin's the compressed TSA blobs, which make cannot see on its own.
@@ -417,7 +398,6 @@ endif
 ALL_OBJS += $(C_GENERATED_OBJ)
 
 CLEAN_FILES1 += $(ALL_OBJS) $(ALL_OBJS:%.o=%.asm) $(ALL_DEPS)
-CLEAN_FILES1 += $(VANILLA_SRCS:%.c=%.asm)
 
 # ===========
 # = RECIPES =
@@ -467,9 +447,3 @@ clean:
 	@echo "all cleaned..."
 
 .PHONY: clean
-
-# ======================
-# = AGB_CFLAGS overrides =
-# ======================
-
-%/main.o:           AGB_CFLAGS += -mtpcs-frame
