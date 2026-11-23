@@ -4,27 +4,27 @@
 
 	.global Img_BanimTerrain1
 Img_BanimTerrain1:	@ 0x7EAC00
-	.incbin "vanilla/data/banim_terrain/BanimTerrain1.4bpp.lz"
+	.incbin "gamedata/banim-data/terrain/BanimTerrain1.4bpp.lz"
 
 	.global Pal_BanimTerrain1
 Pal_BanimTerrain1:	@ 0x7EB444
-	.incbin "vanilla/data/banim_terrain/BanimTerrain1.gbapal", 0, 0x20
+	.incbin "gamedata/banim-data/terrain/BanimTerrain1.gbapal", 0, 0x20
 
 	.global BanimTerrain_087EB464
 BanimTerrain_087EB464:	@ 0x7EB464
-	.incbin "vanilla/data/banim_terrain/BanimTerrain2.4bpp.lz"
+	.incbin "gamedata/banim-data/terrain/BanimTerrain2.4bpp.lz"
 
 	.global Pal_BanimTerrain2
 Pal_BanimTerrain2:	@ 0x7EBC28
-	.incbin "vanilla/data/banim_terrain/BanimTerrain2.gbapal", 0, 0x20
+	.incbin "gamedata/banim-data/terrain/BanimTerrain2.gbapal", 0, 0x20
 
 	.global BanimTerrain_087EBC48
 BanimTerrain_087EBC48:	@ 0x7EBC48
-	.incbin "vanilla/data/banim_terrain/BanimTerrain3.4bpp.lz"
+	.incbin "gamedata/banim-data/terrain/BanimTerrain3.4bpp.lz"
 
 	.global Pal_BanimTerrain3
 Pal_BanimTerrain3:	@ 0x7EC570
-	.incbin "vanilla/data/banim_terrain/BanimTerrain3.gbapal", 0, 0x20
+	.incbin "gamedata/banim-data/terrain/BanimTerrain3.gbapal", 0, 0x20
 
 	.global BanimTerrain_087EC590
 BanimTerrain_087EC590:	@ 0x7EC590

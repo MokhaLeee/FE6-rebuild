@@ -3,12 +3,12 @@
 .align 2,0
 .global Img_UnitSprite_Roylord
 Img_UnitSprite_Roylord:	@ 0x2504B4
-	.incbin "vanilla/data/unitsprite/Img_UnitSprite_Roylord.4bpp.lz"
+	.incbin "gamedata/unit-sprite/assets/Img_UnitSprite_Roylord.4bpp.lz"
 
 .align 2,0
 .global Img_UnitSprite_Mercenary
 Img_UnitSprite_Mercenary:	@ 0x250604
-	.incbin "vanilla/data/unitsprite/Img_UnitSprite_Mercenary.4bpp.lz"
+	.incbin "gamedata/unit-sprite/assets/Img_UnitSprite_Mercenary.4bpp.lz"
 
 .align 2,0
 .global Img_UnitSprite_0825073C

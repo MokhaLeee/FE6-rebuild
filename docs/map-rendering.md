@@ -19,7 +19,7 @@ VBlank 时整块拷进 VRAM。
 
 ### 1.1 完整图：ConfImg（源图）
 
-`vanilla/data/mapassets/MapAsset01_ConfImg.png`
+`contents/tileset/MapAsset01/ConfImg.png`
 
 - 512x512 像素，8bpp（P 模式 256 色）。
 - 按 32x32 格排列，每格 16x16 像素，**一格就是一个 metatile**，
@@ -402,17 +402,19 @@ VBlank 中按 `time` 轮流把 `data` 写进 **tileset 里固定的 tile 位置*
 %.lz:   %            -> tools/gbagfx          （LZ77 压缩）
 ```
 
-`rodata_chapterinfo1.s` 里已经改成引用解包后的资源：
+序章地图和 MapAsset01 图集分别在各自的汇编文件中引用源资源的构建产物：
 
 ```asm
+@ gamedata/maps/rodata_chapterinfo1.s
 MapTsa_Chapter0:
-    .incbin "vanilla/data/mapassets/MapTsa_Chapter0.tsa.lz"
+    .incbin "gamedata/maps/assets/MapTsa_Chapter0.tsa.lz"
 
+@ gamedata/tileset/MapAsset01.S
 MapAsset01_Img1:
-    .incbin "vanilla/data/mapassets/MapAsset01_Img1.4bpp.lz"
+    .incbin "contents/tileset/MapAsset01/Img1.4bpp.lz"
 
 MapAsset01_Img2:
-    .incbin "vanilla/data/mapassets/MapAsset01_Img2.4bpp.lz"
+    .incbin "contents/tileset/MapAsset01/Img2.4bpp.lz"
 ```
 
 其余章节的地图仍然 `.incbin "fe6-base.gba", <offset>, <len>`，
@@ -499,6 +501,6 @@ MapAsset01_Img2:
 | 地形常量 | `include/constants/terrains.h` |
 | 章节资源表 | `gameinfo/chapterinfo/chapterinfo_assets.c` |
 | 章节参数表 | `gameinfo/chapterinfo/chapterinfo_data.c` |
-| 地图资源 incbin | `vanilla/data/rodata_chapterinfo1.s` |
+| 地图资源 incbin | `gamedata/maps/rodata_chapterinfo1.s` |
 | LZ77 实现 | `tools/gbagfx/lz.c` |
 | 原版笔记 | `~/fe6/docs/map.md` |

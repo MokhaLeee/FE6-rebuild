@@ -173,12 +173,12 @@ Img_EndingFighterText: @ 08344304
 .align 2,0
 .global Img_Fin
 Img_Fin: @ 083449F8
-	.incbin "vanilla/data/GameEnding/Img_Fin_len26.4bpp.lz"
+	.incbin "gamedata/scenes/ending/Img_Fin_len26.4bpp.lz"
 
 .align 2,0
 .global Pal_Fin
 Pal_Fin: @ 08344CB0
-	.incbin "vanilla/data/GameEnding/Img_Fin_len26.gbapal", 0, 0x20
+	.incbin "gamedata/scenes/ending/Img_Fin_len26.gbapal", 0, 0x20
 
 .align 2,0
 .global Img_Ending_CopyRight

@@ -7,7 +7,7 @@
  *               左下、右下），位域用 TILEREF / TILE_HFLIP / TILE_VFLIP 表示。
  * 后 1024 字节：地形 LUT，每个 metatile 一个 terrain id。
  *
- * 数据来源：vanilla/data/mapassets/MapAsset01_TsaConf.tsa
+ * 数据来源：gamedata/maps/assets/MapAsset01_TsaConf.tsa
  * 构建时：.c -> .o -> .dmp -> .dmp.lz，由 gamedata/maps/MapAsset01_TsaConf.s incbin。
  */
 

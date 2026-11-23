@@ -55,7 +55,7 @@ gamedata/
 .S   -> incbin 上述产物 -> 链接
 ```
 
-`vanilla/data/rodata_chapterinfo1.s` 里原来的相关符号定义都已移除，
+`gamedata/maps/rodata_chapterinfo1.s` 里原来的相关符号定义都已移除，
 `MapAsset01_Anims` 从 `vanilla/data/tileset/anims.h` 抽出，
 `MapChange_Ch1` 从 `gameinfo/chapterinfo/map_changes.c` 抽出。
 Makefile 不需要改。

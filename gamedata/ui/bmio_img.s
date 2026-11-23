@@ -5,27 +5,27 @@
 .align 2,0
 .global Img_SystemObjects
 Img_SystemObjects: @ 081004A4
-	.incbin "vanilla/data/bmio/Img_SystemObjects.4bpp.lz"
+	.incbin "gamedata/ui/bmio/Img_SystemObjects.4bpp.lz"
 
 .align 2,0
 .global Pal_SystemObjects
 Pal_SystemObjects: @ 08100928
 	@.incbin "fe6-base.gba", 0x100928, (0x100968 - 0x100928) @ length: 0040
-	.incbin "vanilla/data/bmio/Img_SystemObjects.gbapal",  0, 0x20
-	.incbin "vanilla/data/bmio/Img_SystemObjects2.gbapal", 0, 0x20
+	.incbin "gamedata/ui/bmio/Img_SystemObjects.gbapal",  0, 0x20
+	.incbin "gamedata/ui/bmio/Img_SystemObjects2.gbapal", 0, 0x20
 
 .align 2,0
 .global Pal_UnitSprites
 Pal_UnitSprites: @ 08100968
-	.incbin "vanilla/data/bmio/Img_UnitSpritesBlue.gbapal", 0, 0x20
-	.incbin "vanilla/data/bmio/Img_UnitSpritesRed.gbapal", 0, 0x20
-	.incbin "vanilla/data/bmio/Img_UnitSpritesGreen.gbapal", 0, 0x20
-	.incbin "vanilla/data/bmio/Img_UnitSpritesGray.gbapal", 0, 0x20
+	.incbin "gamedata/ui/bmio/Img_UnitSpritesBlue.gbapal", 0, 0x20
+	.incbin "gamedata/ui/bmio/Img_UnitSpritesRed.gbapal", 0, 0x20
+	.incbin "gamedata/ui/bmio/Img_UnitSpritesGreen.gbapal", 0, 0x20
+	.incbin "gamedata/ui/bmio/Img_UnitSpritesGray.gbapal", 0, 0x20
 
 .align 2,0
 .global Pal_UnitSpritesPurple
 Pal_UnitSpritesPurple: @ 081009E8
-	.incbin "vanilla/data/bmio/Img_UnitSpritesPurple.gbapal", 0, 0x20
+	.incbin "gamedata/ui/bmio/Img_UnitSpritesPurple.gbapal", 0, 0x20
 
 .align 2,0
 .global Pal_Text

@@ -108,33 +108,33 @@ Img_ShopGoldBox: @ 082DCA2C
 .align 2,0
 .global Img_ManimRubble
 Img_ManimRubble: @ 082DCAE4
-    .incbin "vanilla/data/mapanim/Img_ManimRubble.4bpp.lz"
+    .incbin "gamedata/map-animation/assets/Img_ManimRubble.4bpp.lz"
 
 .align 2,0
 .global Pal_ManimRubble
 Pal_ManimRubble: @ 082DCD70
-    .incbin "vanilla/data/mapanim/Img_ManimRubble.gbapal", 0, 0x20
+    .incbin "gamedata/map-animation/assets/Img_ManimRubble.gbapal", 0, 0x20
 
 .align 2,0
 .global Img_MuFogBump
 Img_MuFogBump: @ 082DCD90
     @ pal: OBPAL_SYSTEM_OBJECTS+1
-    .incbin "vanilla/data/mapanim/Img_MuFogBump.4bpp.lz"
+    .incbin "gamedata/map-animation/assets/Img_MuFogBump.4bpp.lz"
 
 .align 2,0
 .global Img_ManimPoison
 Img_ManimPoison: @ 082DCEF4
-    .incbin "vanilla/data/mapanim/Img_ManimPoison.4bpp.lz"
+    .incbin "gamedata/map-animation/assets/Img_ManimPoison.4bpp.lz"
 
 .align 2,0
 .global Pal_ManimPoison
 Pal_ManimPoison: @ 082DD248
-    .incbin "vanilla/data/mapanim/Img_ManimPoison.gbapal", 0, 0x20
+    .incbin "gamedata/map-animation/assets/Img_ManimPoison.gbapal", 0, 0x20
 
 .align 2,0
 .global Img_ManimWarp
 Img_ManimWarp: @ 082DD268
-    .incbin "vanilla/data/mapanim/Img_ManimWarp.4bpp.lz"
+    .incbin "gamedata/map-animation/assets/Img_ManimWarp.4bpp.lz"
 
 .align 2,0
 .global Pal_ManimWarp
@@ -149,7 +149,7 @@ TsaRef_ManimWarp: @ 082DD4E8
 .align 2,0
 .global Img_ManimStar
 Img_ManimStar: @ 082DD7E8
-    .incbin "vanilla/data/mapanim/Img_ManimStar.4bpp.lz"
+    .incbin "gamedata/map-animation/assets/Img_ManimStar.4bpp.lz"
 
 .align 2,0
 .global Pal_ManimStar

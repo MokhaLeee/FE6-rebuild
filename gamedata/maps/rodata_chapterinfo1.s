@@ -272,7 +272,7 @@ MapAsset03_Pal:	@ 0x0823C700
 .global MapAsset02_Pal
 MapAsset02_Pal:	@ 0x0823C840
 	.incbin "fe6-base.gba", 0x23C840, 0x23C980 - 0x23C840
-	@.incbin "vanilla/data/mapassets/MapAsset02_ConfImg.gbapal", 0, 0x140
+	@.incbin "gamedata/maps/assets/MapAsset02_ConfImg.gbapal", 0, 0x140
 
 .align 2,0
 
@@ -495,7 +495,7 @@ MapTsa_Ch2:	@ 0x08247230
 .align 2,0
 .global MapTsa_Chapter0
 MapTsa_Chapter0:	@ 0x08247718
-	.incbin "vanilla/data/mapassets/MapTsa_Chapter0.tsa.lz"
+	.incbin "gamedata/maps/assets/MapTsa_Chapter0.tsa.lz"
 
 .align 2,0
 

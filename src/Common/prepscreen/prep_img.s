@@ -73,12 +73,12 @@ Pal_MonologueBG: @ 08320D98
 .align 2,0
 .global Img_VeriticalSpinningArrow
 Img_VeriticalSpinningArrow: @ 08320E18
-	.incbin "vanilla/data/prep/Img_VeriticalSpinningArrow.4bpp.lz"
+	.incbin "gamedata/ui/prep/Img_VeriticalSpinningArrow.4bpp.lz"
 
 .align 2,0
 .global Img_HorizontalSpinningArrow
 Img_HorizontalSpinningArrow: @ 08320EEC
-	.incbin "vanilla/data/prep/Img_HorizontalSpinningArrow.4bpp.lz"
+	.incbin "gamedata/ui/prep/Img_HorizontalSpinningArrow.4bpp.lz"
 
 .short 0x70C
 
@@ -95,12 +95,12 @@ Tsa_UnitList_083210A0: @ 083210A0
 .align 2,0
 .global Img_UnitList_Title
 Img_UnitList_Title: @ 083215B8
-	.incbin "vanilla/data/unitlistscreen/Img_UnitList_Title.4bpp.lz"
+	.incbin "gamedata/ui/unit-list/Img_UnitList_Title.4bpp.lz"
 
 .align 2,0
 .global Pal_UnitList_Title
 Pal_UnitList_Title: @ 08321EE4
-	.incbin "vanilla/data/unitlistscreen/Img_UnitList_Title.gbapal", 0, 0x20
+	.incbin "gamedata/ui/unit-list/Img_UnitList_Title.gbapal", 0, 0x20
 
 	.incbin "fe6-base.gba", 0x321F04, (0x321F24 - 0x321F04)
 
@@ -112,12 +112,12 @@ gUnk_Ui_Pal_08321F24: @ 08321F24
 .align 2,0
 .global Img_PrepWorldMap
 Img_PrepWorldMap: @ 08321FA4
-	.incbin "vanilla/data/prep/Img_PrepWorldMap.4bpp.lz"
+	.incbin "gamedata/ui/prep/Img_PrepWorldMap.4bpp.lz"
 
 .align 2,0
 .global Pal_PrepWorldMap
 Pal_PrepWorldMap: @ 08326910
-	.incbin "vanilla/data/prep/Img_PrepWorldMap.gbapal", 0, 0x20
+	.incbin "gamedata/ui/prep/Img_PrepWorldMap.gbapal", 0, 0x20
 
 .align 2,0
 .global Img_Prep_08326930
