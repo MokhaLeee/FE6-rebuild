@@ -21,8 +21,6 @@
 #include "popup.h"
 #include "eventinfo.h"
 
-#include "post-action.h"
-
 #include "constants/chapters.h"
 #include "constants/terrains.h"
 #include "constants/songs.h"

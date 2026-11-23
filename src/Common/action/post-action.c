@@ -1,7 +1,8 @@
 #include "prelude.h"
-#include "skill-effects.h"
 #include "skill-sys.h"
-#include "post-action.h"
+#include "klib.h"
+
+#include "skill-effects.h"
 
 static bool PostActionPadFunc(ProcPtr proc)
 {
@@ -13,7 +14,7 @@ static bool PostAction_OnEnd(ProcPtr proc)
 	return false;
 }
 
-const HookProcFunc_t gPostActionFuncs[] = {
+static const HookProcFunc_t gPostActionFuncs[] = {
 	PostActionSkill_AlertStance,
 	PostActionPadFunc,
 
@@ -22,3 +23,9 @@ const HookProcFunc_t gPostActionFuncs[] = {
 	PostAction_OnEnd,
 	NULL
 };
+
+
+void CallPostActionHook(ProcPtr proc)
+{
+	SpawnHookProc(gPostActionFuncs, proc);
+}

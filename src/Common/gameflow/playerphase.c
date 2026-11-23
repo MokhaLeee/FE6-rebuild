@@ -30,8 +30,6 @@
 #include "constants/pids.h"
 #include "constants/songs.h"
 
-#include "post-action.h"
-
 struct ProcScr CONST_DATA ProcScr_PlayerPhase[] =
 {
     PROC_19,

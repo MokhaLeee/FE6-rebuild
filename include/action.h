@@ -82,4 +82,6 @@ void func_fe6_0802A7F4(void);
 
 extern struct ProcScr CONST_DATA ProcScr_CombatAction[];
 
+void CallPostActionHook(ProcPtr proc);
+
 #endif // ACTION_H
