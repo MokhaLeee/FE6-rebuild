@@ -286,6 +286,12 @@ void GetStringTextBox(char const * str, int * out_width, int * out_height)
 
 void Text_DrawNumber(struct Text * text, int number)
 {
+	/* Negative values do not have a numeric glyph; keep them in one cell. */
+	if (number < 0) {
+		Text_DrawCharacter(text, JTEXT("-"));
+		return;
+	}
+
     if (number == 0)
     {
         Text_DrawCharacter(text, JTEXT("0"));
@@ -730,6 +736,12 @@ void PutSpecialChar(u16 * tm, int color, int id)
 
 void PutNumberExt(u16 * tm, int color, int number, int id_zero)
 {
+	/* Match the one-cell fallback used by Text_DrawNumber. */
+	if (number < 0) {
+		PutSpecialChar(tm, color, TEXT_SPECIAL_DASH);
+		return;
+	}
+
     if (number == 0)
     {
         PutSpecialChar(tm, color, id_zero);

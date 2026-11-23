@@ -12,6 +12,8 @@
 
 #include "constants/videoalloc_global.h"
 
+int vsnprintf(char *str, size_t len, const char *fmt, va_list ap);
+
 /*
  * Debug text support: a 256x32 character screen rendered through BG2 and a
  * single-line OBJ string renderer. Moved out of vanilla/ so it can be built
@@ -99,7 +101,7 @@ void DebugPutFmt(u16 *tm, char const *fmt, ...)
 	va_list args;
 
 	va_start(args, fmt);
-	vsprintf(buffer, fmt, args);
+	vsnprintf(buffer, sizeof(buffer), fmt, args);
 	va_end(args);
 
 	DebugPutStr(tm, buffer);
@@ -125,7 +127,7 @@ void DebugPrintFmt(char const *fmt, ...)
 	va_list args;
 
 	va_start(args, fmt);
-	vsprintf(buffer, fmt, args);
+	vsnprintf(buffer, sizeof(buffer), fmt, args);
 	va_end(args);
 
 	DebugPrintStr(buffer);

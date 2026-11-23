@@ -407,7 +407,7 @@ void NewEkrUnitKakudai(int identifier)
 
 void EkrUnitKakudai_PrepareAnimScript(struct ProcEkrUnitKakudai *proc)
 {
-    void *vram;
+	u8 *vram;
 	int std_type, front_mode;
 
     std_type = BanimDefaultStandingTypes[gEkrDistanceType];
@@ -437,8 +437,8 @@ void EkrUnitKakudai_PrepareAnimScript(struct ProcEkrUnitKakudai *proc)
 
 	SetupBanimBallistaImage();
 
-    vram = OBJ_VRAM1;
-	RegisterDataMove(gBanimImgSheetBuf_Left, vram, 0x4000);
+	vram = OBJ_VRAM1;
+	RegisterDataMove(gBanimImgSheetBuf, vram, sizeof(gBanimImgSheetBuf));
 
 	proc->timer = 0;
 	proc->terminator = 0xB;

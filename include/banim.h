@@ -119,8 +119,11 @@ enum banim_sprites_size {
 extern u8 gBanimScrs[2 * BAS_SCR_MAX_SIZE];
 extern u8 *gpBanimScrs[2];
 extern u8 gBanimOamBufs[2 * BAS_OAM_MAX_SIZE];
-extern u8 gBanimImgSheetBuf_Left[];
-extern u8 gBanimImgSheetBuf_Right[];
+enum { BANIM_IMG_SIDE_SIZE = BAS_IMG_MAX_SIZE * 2 };
+
+extern u8 gBanimImgSheetBuf[BANIM_IMG_SIDE_SIZE * 2];
+#define gBanimImgSheetBuf_Left  (gBanimImgSheetBuf)
+#define gBanimImgSheetBuf_Right (gBanimImgSheetBuf + BANIM_IMG_SIDE_SIZE)
 extern u8 gBanimTerrainfxBufObj[0x2000];
 
 struct ProcEfx {
