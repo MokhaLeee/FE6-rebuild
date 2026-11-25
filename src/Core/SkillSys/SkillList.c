@@ -178,11 +178,16 @@ void SetupBattleSkillList(void)
 	}
 }
 
-bool PostAction_ResetSkillList(ProcPtr proc)
+void ResetSkillList(void)
 {
 	memset(sSkillLists, 0, sizeof(sSkillLists));
 	memset(gBattleUnitA.skills_bitfile, 0, sizeof(gBattleUnitA.skills_bitfile));
 	memset(gBattleUnitB.skills_bitfile, 0, sizeof(gBattleUnitB.skills_bitfile));
+}
+
+bool PostAction_ResetSkillList(ProcPtr proc)
+{
+	ResetSkillList();
 	return false;
 }
 

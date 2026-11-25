@@ -6,7 +6,7 @@
 
 extern struct MenuInfo CONST_DATA MenuInfo_Map;
 extern struct MenuInfo CONST_DATA MenuInfo_TutorialInterruptMenu;
-extern struct MenuInfo CONST_DATA MenuInfo_UnitAction;
+extern const struct MenuInfo MenuInfo_UnitAction;
 extern struct MenuInfo CONST_DATA MenuInfo_DiscardItem;
 extern struct MenuInfo CONST_DATA MenuInfo_UnitAttackMethodPrompt;
 extern struct MenuInfo CONST_DATA MenuInfo_UnitAttackBallista;

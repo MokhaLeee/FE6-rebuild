@@ -36,6 +36,7 @@ struct SkillList *GetSkillList(struct Unit *unit);
 void SetupBattleUnitSkillList(struct BattleUnit *bu);
 void SetupBattleSkillList(void);
 void AppendSkillListInBattle(struct BattleUnit *bu, int sid);
+void ResetSkillList(void);
 bool PostAction_ResetSkillList(ProcPtr proc);
 
 /* skill table */
@@ -90,8 +91,6 @@ bool MuSkillAnimExists(void);
 /**
  * skill menu
  */
-
-/* Per-skill menu entry, defined in SkillMenuData.c (kernel data). */
 extern struct MenuEntInfo const *const gSkillMenuInfos[MAX_SKILL_NUM + 1];
 
 fu8 UpperMenuSkill_Usability(const struct MenuEntInfo *self, int number);
@@ -101,8 +100,6 @@ fu8 UpperMenuSkill_OnSelected(struct MenuProc *menu, struct MenuEntProc *ent);
  * skill action
  */
 typedef bool (*SkillActionFunc_t)(ProcPtr proc);
-
-/* Per-skill action entry, defined in SkillActionData.c (kernel data). */
 extern SkillActionFunc_t const gSkillActionFuncTable[MAX_SKILL_NUM + 1];
 
 bool ActionExecSkill(ProcPtr proc);
