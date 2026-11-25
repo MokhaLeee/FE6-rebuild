@@ -90,32 +90,12 @@ bool MuSkillAnimExists(void);
 /**
  * skill menu
  */
-#define UNIT_MENU_SKILL_AMOUNT 4
-
-extern u16 UnitMenuSkills[UNIT_MENU_SKILL_AMOUNT];
 
 /* Per-skill menu entry, defined in SkillMenuData.c (kernel data). */
 extern struct MenuEntInfo const *const gSkillMenuInfos[MAX_SKILL_NUM + 1];
 
-const struct MenuEntInfo *GetSkillMenuInfo(int sid);
-
 fu8 UpperMenuSkill_Usability(const struct MenuEntInfo *self, int number);
 fu8 UpperMenuSkill_OnSelected(struct MenuProc *menu, struct MenuEntProc *ent);
-
-fu8 MenuSkills_OnHelpBox(struct MenuProc *menu, struct MenuEntProc *ent);
-
-/*
- * Kept extern: IS_SKILL_MENU_ITEM below identifies the generic entries by this
- * callback, so the symbol must stay visible to every translation unit.
- */
-fu8 MenuSkills_Usability(const struct MenuEntInfo *self, int number);
-
-/*
- * The 4 generic entries borrow msg_help as slot index, so the help box of the
- * sub menu must be routed through MenuSkills_OnHelpBox.
- */
-#define MENU_SKILL_INDEX(menu_item)   ((menu_item)->msg_help)
-#define IS_SKILL_MENU_ITEM(menu_item) ((menu_item)->available == MenuSkills_Usability)
 
 /**
  * skill action

@@ -751,7 +751,7 @@ struct MenuInfo CONST_DATA MenuInfo_UnitAction =
 	.entries = MenuEntInfo_UnitAction,
 	.on_b_press = MenuActionClose,
 	.on_r_press = MenuActionHelpBox,
-	.on_help_box = MenuSkills_OnHelpBox,
+	.on_help_box = MenuHelpBoxRegular,
 };
 
 struct MenuInfo CONST_DATA MenuInfo_PrepMap =

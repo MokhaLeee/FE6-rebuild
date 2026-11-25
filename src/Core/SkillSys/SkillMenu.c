@@ -8,17 +8,22 @@
 
 #include "skill-sys.h"
 
+#define UNIT_MENU_SKILL_AMOUNT 4
+#define MENU_SKILL_INDEX(menu_item)   ((menu_item)->msg_help)
+
 static u32 MenuSkills_StandardDraw(struct MenuProc *menu, struct MenuEntProc *ent);
 static u32 MenuSkills_OnDraw(struct MenuProc *menu, struct MenuEntProc *ent);
+static fu8 MenuSkills_OnHelpBox(struct MenuProc *menu, struct MenuEntProc *ent);
+static fu8 MenuSkills_Usability(const struct MenuEntInfo *self, int number);
 static fu8 MenuSkills_OnSelected(struct MenuProc *menu, struct MenuEntProc *ent);
 static fu8 MenuSkills_Idle(struct MenuProc *menu, struct MenuEntProc *ent);
 static fu8 MenuSkills_Hover(struct MenuProc *menu, struct MenuEntProc *ent);
 static fu8 MenuSkills_Unhover(struct MenuProc *menu, struct MenuEntProc *ent);
 static void GenerateUnitMenuSkillList(struct Unit *unit);
 
-EWRAM_DATA u16 UnitMenuSkills[UNIT_MENU_SKILL_AMOUNT];
+static EWRAM_DATA u16 UnitMenuSkills[UNIT_MENU_SKILL_AMOUNT];
 
-const struct MenuEntInfo *GetSkillMenuInfo(int sid)
+static const struct MenuEntInfo *GetSkillMenuInfo(int sid)
 {
 	if (sid < 0 || sid >= MAX_SKILL_NUM)
 		return NULL;
@@ -137,27 +142,24 @@ static void GenerateUnitMenuSkillList(struct Unit *unit)
 	}
 }
 
-fu8 MenuSkills_OnHelpBox(struct MenuProc *menu, struct MenuEntProc *ent)
+static fu8 MenuSkills_OnHelpBox(struct MenuProc *menu, struct MenuEntProc *ent)
 {
-	if (IS_SKILL_MENU_ITEM(ent->info)) {
-		u16 sid = UnitMenuSkills[MENU_SKILL_INDEX(ent->info)];
-		const struct MenuEntInfo *def = GetSkillMenuInfo(sid);
-		u16 msg = 0;
+	u16 sid = UnitMenuSkills[MENU_SKILL_INDEX(ent->info)];
+	const struct MenuEntInfo *def = GetSkillMenuInfo(sid);
+	u16 msg = 0;
 
-		if (def)
-			msg = def->msg_help;
+	if (def)
+		msg = def->msg_help;
 
-		if (msg == 0)
-			msg = GetSkillDescMsg(sid);
+	if (msg == 0)
+		msg = GetSkillDescMsg(sid);
 
-		StartHelpBox(ent->x * 8, ent->y * 8, msg);
-		return 0;
-	}
+	StartHelpBox(ent->x * 8, ent->y * 8, msg);
 
-	return MenuHelpBoxRegular(menu, ent);
+	return 0;
 }
 
-fu8 MenuSkills_Usability(const struct MenuEntInfo *self, int number)
+static fu8 MenuSkills_Usability(const struct MenuEntInfo *self, int number)
 {
 	u16 sid;
 	const struct MenuEntInfo *def;
