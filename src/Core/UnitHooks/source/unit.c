@@ -710,6 +710,7 @@ void UnitBeginAction(struct Unit *unit)
 	gAction.instigator = unit->id;
 	gAction.id = ACTION_NONE;
 	gAction.move_count = 0;
+	gAction.skill_sid = 0;
 
 	gBmSt.partial_actions_taken = 0;
 	gBmSt.unk_3F = 0xFF;
@@ -729,6 +730,7 @@ void UnitBeginReMoveAction(struct Unit *unit)
 	gActiveUnitMoveOrigin.y = unit->y;
 
 	gAction.id = ACTION_NONE;
+	gAction.skill_sid = 0;
 
 	gBmSt.partial_actions_taken = 0;
 

@@ -15,7 +15,9 @@
 | `SkillMapAnim.c` | 地图动画里的技能图标与小人动画 |
 | `EfxSkkill.c` | 逐回合登记技能特效（`RegisterActorEfxSkill()` 等） |
 | `SkillMenu.c` | 单位行动菜单的「特技」入口与技能子菜单分派 |
-| `SkillMenuData.c` | 按 sid 索引的技能菜单项表（kdata，`CONST_DATA`） |
+| `SkillMenuData.c` | 按 sid 索引的技能菜单项表（kdata） |
+| `SkillAction.c` | `ActionExecSkill()`：按 sid 分派菜单技能的行动 |
+| `SkillActionData.c` | 按 sid 索引的技能行动函数表（kdata） |
 
 对外 API 见 `include/hacks/skill-sys.h`。
 

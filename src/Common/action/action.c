@@ -1,6 +1,7 @@
 #include "prelude.h"
 #include "action.h"
 #include "unit.h"
+#include "skill-sys.h"
 
 typedef bool (*UnitActionFunc_t)(ProcPtr proc);
 
@@ -50,6 +51,7 @@ static const UnitActionFunc_t UnitActionTable[ACTION_AMT] = {
 	[ACTION_STEAL] = DoStealAction,
 	[ACTION_ARENA] = DoArenaAction,
 	[ACTION_USEITEM] = local_item_action,
+	[ACTION_SKILL] = ActionExecSkill,
 };
 
 bool DoAction(ProcPtr proc)

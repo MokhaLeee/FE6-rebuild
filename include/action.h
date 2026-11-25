@@ -34,6 +34,7 @@ enum
     ACTION_TRADED_NOCHANGES = 0x1A,
     ACTION_TRAPPED = 0x1B,
     ACTION_1C = 0x1C,
+    ACTION_SKILL = 0x1D,
 
     ACTION_AMT,
     ACTION_MAX = 0x30,
@@ -67,6 +68,8 @@ struct Action
     /* 13 */ u8 x_target, y_target;
     /* 15 */ u8 extra;
     /* 16 */ u8 suspend_point;
+    /* 17 */ u8 _pad_[1];
+    /* 18 */ u16 skill_sid;
 };
 
 extern struct Action gAction;

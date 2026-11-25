@@ -116,3 +116,13 @@ fu8 MenuSkills_Usability(const struct MenuEntInfo *self, int number);
  */
 #define MENU_SKILL_INDEX(menu_item)   ((menu_item)->msg_help)
 #define IS_SKILL_MENU_ITEM(menu_item) ((menu_item)->available == MenuSkills_Usability)
+
+/**
+ * skill action
+ */
+typedef bool (*SkillActionFunc_t)(ProcPtr proc);
+
+/* Per-skill action entry, defined in SkillActionData.c (kernel data). */
+extern SkillActionFunc_t const gSkillActionFuncTable[MAX_SKILL_NUM + 1];
+
+bool ActionExecSkill(ProcPtr proc);
