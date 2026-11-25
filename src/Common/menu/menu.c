@@ -112,6 +112,9 @@ struct MenuProc * StartLockingMenuExt(struct MenuInfo const * info, struct MenuR
         {
             struct MenuEntProc * ent_proc;
 
+            if (menu_item_count >= MENU_MAX_ENTRIES)
+                break;
+
             ent_proc = SpawnProc(ProcScr_MenuItem, proc);
             proc->entries[menu_item_count++] = ent_proc;
 

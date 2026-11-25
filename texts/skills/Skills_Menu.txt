@@ -1,0 +1,2 @@
+## MSG_MenuSkill_UM_DESC
+特技を使います[X]

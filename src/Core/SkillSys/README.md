@@ -14,6 +14,8 @@
 | `SkillTester.iwram.c` | 快速判定 `JudgeSkillFast()`、战斗位图判定 `JudgeSkillInBattle()` |
 | `SkillMapAnim.c` | 地图动画里的技能图标与小人动画 |
 | `EfxSkkill.c` | 逐回合登记技能特效（`RegisterActorEfxSkill()` 等） |
+| `SkillMenu.c` | 单位行动菜单的「特技」入口与技能子菜单分派 |
+| `SkillMenuData.c` | 按 sid 索引的技能菜单项表（kdata，`CONST_DATA`） |
 
 对外 API 见 `include/hacks/skill-sys.h`。
 

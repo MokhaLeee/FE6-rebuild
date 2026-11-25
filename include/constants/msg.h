@@ -3363,7 +3363,8 @@
 #define MSG_SKILL_MoveObstruct 0x0D1D
 #define MSG_SKILL_DetailedReport_NAME 0x0D1E
 #define MSG_SKILL_DetailedReport 0x0D1F
+#define MSG_MenuSkill_UM_DESC 0x0D20
 
-#define MSG_COUNT 0x0D20
+#define MSG_COUNT 0x0D21
 
 #endif /* MSG_H */

@@ -9,6 +9,8 @@
 
 #include "constants/msg.h"
 
+#include "skill-sys.h"
+
 // we use this to denote when the function signature doesn't quite fit the pointer type in the relevant info struct
 #define MISMATCHED_SIGNATURE(func) ((void const *) (func))
 
@@ -463,6 +465,13 @@ struct MenuEntInfo CONST_DATA MenuEntInfo_UnitAction[] =
 	},
 
 	{
+		.label = TEXT("　特技", " Skill"),
+		.msg_help = MSG_MenuSkill_UM_DESC,
+		.available = UpperMenuSkill_Usability,
+		.on_select = UpperMenuSkill_OnSelected,
+	},
+
+	{
 		.label = TEXT("　話す", " Talk"),
 		.msg_help = MSG_642,
 		.available = UnitActionMenu_Talk_Available,
@@ -742,7 +751,7 @@ struct MenuInfo CONST_DATA MenuInfo_UnitAction =
 	.entries = MenuEntInfo_UnitAction,
 	.on_b_press = MenuActionClose,
 	.on_r_press = MenuActionHelpBox,
-	.on_help_box = MenuHelpBoxRegular,
+	.on_help_box = MenuSkills_OnHelpBox,
 };
 
 struct MenuInfo CONST_DATA MenuInfo_PrepMap =
