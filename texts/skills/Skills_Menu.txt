@@ -1,2 +1,9 @@
 ## MSG_MenuSkill_UM_DESC
 特技を使います[X]
+
+## MSG_SKILL_HealingFocus
+Heal Focus:[NL]
+Fully restores HP.[X]
+
+## MSG_SKILL_HealingFocus_FR
+Unit has already full on HP![X]

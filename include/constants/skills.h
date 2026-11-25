@@ -40,6 +40,9 @@ enum skills {
 	SID_MovePass,
 	SID_MoveObstruct,
 	SID_MoveDetailedReport,
+
+	// Menu skills
+	SID_HealingFocus,
 }; 
 
 #endif

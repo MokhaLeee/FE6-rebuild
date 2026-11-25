@@ -94,4 +94,9 @@ struct SkillInfo const gSkillInfo[0x400] = {
 		.msg_desc = MSG_SKILL_DetailedReport,
 		.icon = Gfx_SkillIcon_MoveDetailedReport,
 	},
+
+	[SID_HealingFocus] = {
+		.msg_desc = MSG_SKILL_HealingFocus,
+		.icon = Gfx_SkillIcon_BonusHp,
+	},
 };
