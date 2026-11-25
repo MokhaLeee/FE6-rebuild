@@ -76,12 +76,13 @@
 ## 4. 构建与验证
 
 - 环境需要 `DEVKITPRO` / `DEVKITARM` 已导出；构建入口 `make all`（产物 `fe6re.gba` / `.elf` / `.sym` / `.map`，均被 gitignore）。
-- 涉及 ROM 行为的改动，优先用 `tools/emu` 验证：
-  - **新入口**：`./tools/emu/testmenu-tests.sh`（debug 构建从 testmenu 启动；
-    当前覆盖 testmenu → Start Game → 章节，后续按需求把旧用例逐步迁进来）。
-  - **旧套件**：`./tools/emu/legacy/run-tests.sh` 仍假设开机直接到标题，正在迁移；
-    不要把它当作新测试的默认入口。
-  - 首次使用需 `./tools/emu/build.sh`。
+- **提交 patch 只做到编译通过为止**：`make all` 成功即视为验证完成，不自行追加运行期验证。
+- **未经用户明确要求，禁止开始任何测试**：包括 `tools/emu/testmenu-tests.sh`、
+  `tools/emu/legacy/run-tests.sh`、`./tools/emu/build.sh`，以及任何无头模拟器 / GDB 跑测。
+  需要测试时先向用户确认，得到指令后再跑；不得用“涉及 ROM 行为”之类的理由自行启动。
+- 用户明确要求测试时，优先用新入口 `./tools/emu/testmenu-tests.sh`（debug 构建从 testmenu
+  启动；旧套件 `./tools/emu/legacy/run-tests.sh` 仍假设开机直接到标题，正在迁移，不要当作
+  新测试的默认入口；首次使用需先 `./tools/emu/build.sh`）。
 - 只改文档/脚本、不影响 ROM 时，可以说明未跑构建。
 - 汇报时写清楚：跑了什么、结果如何、没跑什么及原因。
 
