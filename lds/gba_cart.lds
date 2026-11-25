@@ -129,10 +129,16 @@ SECTIONS
 	__ewram_lma = __ewram_overlay_end;
 	.ewdata ALIGN(0x100) (NOLOAD) : AT (__ewram_lma)
 	{
-		*(.ewram.crt0)
 		*(.ewram*)
 		*(ewram_data)
 		*(.ewram_data)
+
+		/*
+		 * gBuf is the crt0 scratch area; keep it at the end of EWRAM so the
+		 * overlays and the ordinary ewram data stay at low addresses.
+		 */
+		. = ALIGN(0x100);
+		*(ewram_scratch)
 
 		. = ALIGN(4);
 		__ewram_end = ABSOLUTE(.);

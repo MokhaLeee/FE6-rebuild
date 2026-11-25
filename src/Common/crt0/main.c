@@ -24,7 +24,7 @@ void InitGlobalSaveInfo(void);
 static const char build_version[] = CONFIG_VERSION;
 static const char build_time[] = __DATE__" "__TIME__;
 
-SECTION(".ewram.crt0") u8 gBuf[0x2000] = { 0 };
+SECTION("ewram_scratch") u8 gBuf[0x2000] = { 0 };
 
 void AgbMain(void)
 {
