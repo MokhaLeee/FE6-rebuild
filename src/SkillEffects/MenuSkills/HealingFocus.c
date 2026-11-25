@@ -1,6 +1,7 @@
 #include "prelude.h"
 #include "action.h"
 #include "menu.h"
+#include "mu.h"
 #include "unit.h"
 #include "masseffect.h"
 
@@ -40,10 +41,20 @@ fu8 HealingFocus_OnSelected(struct MenuProc *menu, struct MenuEntProc *ent)
 
 bool Action_HealingFocus(ProcPtr parent)
 {
+	struct MuProc *mu;
 	int amount;
 
 	amount = perc_of(GetUnitMaxHp(gActiveUnit), SKILL_EFF0(SID_HealingFocus));
 	AddUnitHp(gActiveUnit, amount);
+
+	/*
+	 * The unit is normally shown through a hover MuProc while the action menu
+	 * is open.  The heal effect draws its own blended copy of the unit sprite,
+	 * so the Mu must be gone first or both sprites overlap.
+	 */
+	mu = GetUnitMu(gActiveUnit);
+	if (mu)
+		EndMu(mu);
 
 	StartStatusHealEffect(gActiveUnit, parent);
 
