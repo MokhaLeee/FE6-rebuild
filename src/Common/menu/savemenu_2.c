@@ -1286,7 +1286,7 @@ void SaveMenu_BuildMainMenuMask(struct SaveMenuProc *proc)
 		proc->main_menu_count++;
 	}
 
-	if (func_fe6_08084714()) {
+	if (IsTutorialAvailable()) {
 		proc->extra_menu_mask |= 4;
 		proc->max_index++;
 	}

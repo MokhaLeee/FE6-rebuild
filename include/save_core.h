@@ -47,7 +47,7 @@ void WriteSaveBlockInfo(struct SaveBlockInfo * block_info, int save_id);
 void * GetSaveWriteAddr(int save_id);
 void * GetSaveReadAddr(int save_id);
 bool IsNotFirstPlaythrough(void);
-bool func_fe6_08084714(void);
+bool IsTutorialAvailable(void);
 bool IsMultiArenaAvailable(void);
 bool IsNotFirstPlaythrough_2(void);
 bool CheckHasCompletedSave(void);
