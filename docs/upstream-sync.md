@@ -6,8 +6,9 @@
 - 本仓库在上游的最后一次整体快照：`6546afd`（#114，2026-10-30）
 - 当前跟进目标：`8df37fd`。`7927a77` 那一轮的 17 个 PR 已清（批 1–4、批 6、#140，计划见
   `upstream-sync-plan-7927a77.md`）；#152–#160 这一轮已跟进，只整批跳过 #152（xmap）
-  与 #156（opinfo_classdemo），原因见「有意未同步」；#161–#174 这一轮已跟进 7 个
-  （#161 / #163 / #164 / #165 / #168 / #170 / #173），其余见「剩余待跟进」
+  与 #156（opinfo_classdemo），原因见「有意未同步」；#161–#174 这一轮已处理完
+  （#161 / #163 / #164 / #165 / #166 / #168 / #170 / #172 / #173 全量跟进，#174 只取
+  `IsTutorialAvailable`，其余见「有意未同步」）
 
 ## 已同步
 
@@ -60,21 +61,17 @@
 | #165 | debug 字体映射改用字符字面量（`'@' - ' '`、`' ' + 'a' - 'A'`）+ `OBJ_VRAM0_OFFSET` | `d0ff877` |
 | #168 | 裸 BG VRAM 地址 → `BG_SCREEN_ADDR()` / `BG_CHAR_ADDR()`（banim、ending、config、mapmenu、savemenu_2、sioerror、两套 statscreen） | `b09b8e2` |
 | #170 | 字面 BG tile 索引 + manim tile / 调色板槽（`BGCHR_EKRPOPUP_*`、`BGCHR_EKREXPBAR*`、`EKREXPBAR_FILL_TILES`、`BGCHR_MANIM_*`、`OBCHR_MANIM_*`、`OBPAL_MANIM_*`、`BGCHR_SAVEMENU_TEXT`、`BGCHR_STATUSSCREEN_BG`；`SkillMapAnim.c`、`HealAnim.c` 跟着改名） | `b09b8e2` |
-
-## 剩余待跟进（#166 / #172 / #174）
-
-同一轮里还剩 3 个，都是纯命名 / 常量替换，按可移植度排序（hunk 通过数来自
-`git apply --check --ignore-whitespace` 的实测）：
-
-| 上游 | 内容 | 通过情况 | 备注 |
-|---|---|---|---|
-| #166 `eaa3138` | 结局独白滚动 BG 常量（`MONOLOGUE_BG_WIDTH`/`HEIGHT`/`SCROLL_WRAP`） | 5/7 | `prep_bgscroll.c` 1 处（本地是 `k_umod`，还留着 `VRAM + 0x7800` 待换成 `BG_SCREEN_ADDR(15)`）；`xmap.c` 本仓库没有。带一个行偏移修复，包在 `#if BUGFIX` 里，本仓库未定义 `BUGFIX` → 保持原行为 |
-| #172 `3c82a79` | ending_monologue 命名 | 2/7 | 涉及 `ending_monologue_img.s` 数据标签、`iwram-data.c`、`eventinfo.h` 联动 |
-| #174 `bda20ea` | savemenu_2 命名 | `savemenu_2.c` 31/33 | 本地已自行重命名过（如 `gSaveMenuObjHighlightPalette`），要逐块挑，别整批打；`savemenu.h` 的槽位枚举已被 #164 改过，需要重算 |
-
-三个都可以独立进行，没有前后依赖。
+| #166 | 结局独白滚动 BG 几何常量（`MONOLOGUE_BG_WIDTH`/`_HEIGHT`/`_SCROLL_WRAP`）、`BGPAL_PREP_BGSCROLL`、`BG_SCREEN_ADDR(15)`、`func_fe6_08082560` → `StartPrepBgScrolling`。行偏移修复留在 `#if BUGFIX`（本仓库未定义 → 行为不变）；`xmap.c` 本仓库没有 | `7413691` |
+| #172 | ending_monologue 命名（4 张控制表 → `Ctrl_EndingMonologueText_{TrueEnding,NormalEnding,NormalClosing,FalseEnding}` + `ENDING_MONOLOGUE_LINE_*`、4 张图 → `_FinalChapter`/`_NormalClosing`/`_FalseEnding`/`_FalseEnding2`、`lines`/`end_timer` 字段、`gEndingMonologueState` → `gEndingMonologueId` + `ENDING_MONOLOGUE_*`、`MoveText(row, line)` 的 tile 表达式） | `7413691` |
 
 ## 有意未同步
+
+- **#174（savemenu_2 命名）主体**：`src/Common/menu/savemenu_2.c` 在本仓库已自行重构
+  （`SaveMenuUiDrawProc`、`SaveMenu_MainMenuOptionSprites`、`gSaveMenuObjHighlightPalette`、
+  klib 除法），上游 bda20ea 的 33 个 hunk 里大半的 pre-image 已不存在（`SaveMenuSlotProc`、
+  `Sprites_0868A4F8`、`gUnk_0832C39C` 等本地都没有），`savemenufx.s` / `rodata_3278AC.s`
+  的标签改名也随之落空。只取了独立的 `func_fe6_08084714` → `IsTutorialAvailable`（`3c2b1cf`）。
+  其余改名要等这个文件再做一轮自己的命名整理时才值得跟。
 
 - **#152（xmap 命名）**：本仓库没有 `src/xmap.c`，`include/xmap.h` 是 85 行的本地裁剪版且无人
   `#include`；该 PR 在 `savemenu.c` 的改动只是把本地 `extern StartXmap` 换成 `#include "xmap.h"`，
