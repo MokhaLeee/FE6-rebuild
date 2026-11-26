@@ -94,3 +94,13 @@ Gfx_SkillIcon_MoveObstruct:
 .global Gfx_SkillIcon_MoveDetailedReport
 Gfx_SkillIcon_MoveDetailedReport:
 	.incbin "contents/skillsys/SkillIcon/MoveDetailedReport.4bpp"
+
+.align 2, 0
+.global Gfx_SkillIcon_Lifetaker
+Gfx_SkillIcon_Lifetaker:
+	.incbin "contents/skillsys/SkillIcon/Lifetaker.4bpp"
+
+.align 2, 0
+.global Gfx_SkillIcon_EndlessVitality
+Gfx_SkillIcon_EndlessVitality:
+	.incbin "contents/skillsys/SkillIcon/EndlessVitality.4bpp"

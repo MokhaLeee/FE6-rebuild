@@ -3366,7 +3366,9 @@
 #define MSG_MenuSkill_UM_DESC 0x0D20
 #define MSG_SKILL_HealingFocus 0x0D21
 #define MSG_SKILL_HealingFocus_FR 0x0D22
+#define MSG_SKILL_Lifetaker 0x0D23
+#define MSG_SKILL_EndlessVitality 0x0D24
 
-#define MSG_COUNT 0x0D23
+#define MSG_COUNT 0x0D25
 
 #endif /* MSG_H */

@@ -43,6 +43,11 @@ enum skills {
 
 	// Menu skills
 	SID_HealingFocus,
+
+	/* Appended after the skills above so their ids stay stable in existing
+	 * unit/save data. */
+	SID_Lifetaker,
+	SID_EndlessVitality,
 }; 
 
 #endif

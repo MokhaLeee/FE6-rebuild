@@ -52,6 +52,7 @@ struct ProcMapHealAnim {
 	/* 34 */ int hp_shown_q4;	/* displayed hp, manim keeps 4 fractional bits */
 	/* 38 */ int bar_x;		/* BG0 tilemap spot of the number block */
 	/* 3C */ int bar_y;
+	/* 40 */ bool mu_generated;	/* we hid the sprite, so we put it back */
 };
 
 static void map_heal_bar_put(struct ProcMapHealAnim *proc)
@@ -90,6 +91,7 @@ static void map_heal_anim_init(struct ProcMapHealAnim *proc)
 	if (!mu) {
 		HideUnitSprite(unit);
 		mu = StartMu(unit);
+		proc->mu_generated = true;
 	}
 
 	if (mu) {
@@ -203,6 +205,18 @@ static void map_heal_anim_end(struct ProcMapHealAnim *proc)
 	InitBmBgLayers();
 
 	mu = GetUnitMu(proc->unit);
+
+	if (proc->mu_generated) {
+		/* Nobody owns this Mu but us: drop it and show the map sprite
+		 * again, the way the hazard displays do. */
+		if (mu)
+			EndMu(mu);
+
+		ShowUnitSprite(proc->unit);
+
+		return;
+	}
+
 	if (mu) {
 		SetMuDefaultFacing(mu);
 		ResetSpriteAnimClock(mu->sprite_anim);
@@ -235,6 +249,7 @@ void StartMapHealAnim(ProcPtr parent, struct Unit *unit, int amount)
 
 	proc->unit = unit;
 	proc->amount = amount;
+	proc->mu_generated = false;
 }
 
 bool MapHealAnimExists(void)

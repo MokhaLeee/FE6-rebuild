@@ -17,3 +17,5 @@ extern const unsigned char Gfx_SkillIcon_BlowKilling[];
 extern const unsigned char Gfx_SkillIcon_MovePass[];
 extern const unsigned char Gfx_SkillIcon_MoveObstruct[];
 extern const unsigned char Gfx_SkillIcon_MoveDetailedReport[];
+extern const unsigned char Gfx_SkillIcon_Lifetaker[];
+extern const unsigned char Gfx_SkillIcon_EndlessVitality[];

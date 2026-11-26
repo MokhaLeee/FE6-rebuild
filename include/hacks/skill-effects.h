@@ -6,6 +6,7 @@
 
 /* Post-action skills */
 bool PostActionSkill_AlertStance(ProcPtr parent);
+bool PostActionSkill_HealAfterAction(ProcPtr parent);
 
 /* Menu skills */
 fu8 HealingFocus_Usability(const struct MenuEntInfo *self, int number);

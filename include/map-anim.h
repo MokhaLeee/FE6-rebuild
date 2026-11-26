@@ -14,11 +14,9 @@
  * The animation runs as a child of the given proc and locks it until the
  * animation is over; pass NULL to run detached in PROC_TREE_3.
  *
- * Hook users: a post-action hook is re-entered every frame, so guard it with
- * XxxExists() instead of starting a second animation:
- *
- *	if (MapHealAnimExists())
- *		return true;
+ * Hook users: the post-action hook list calls each hook once and stops at the
+ * first one that returns true (the rest are picked up again after a frame),
+ * so just start the animation and return true:
  *
  *	StartMapHealAnim(proc, unit, amount);
  *	return true;

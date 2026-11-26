@@ -8,4 +8,5 @@ GAMEINFO_DATA
 struct SkillTable const gSkillPTable[0x100] = {
 	[PID_ROY] = {{ SID_PowBonus, SID_MovePass }},
 	[PID_LILINA] = {{ SID_MagBonus, 0 }},
+	[PID_MARCUS] = {{ SID_Lifetaker, 0 }},
 };

@@ -99,4 +99,14 @@ struct SkillInfo const gSkillInfo[0x400] = {
 		.msg_desc = MSG_SKILL_HealingFocus,
 		.icon = Gfx_SkillIcon_BonusHp,
 	},
+
+	[SID_Lifetaker] = {
+		.msg_desc = MSG_SKILL_Lifetaker,
+		.icon = Gfx_SkillIcon_Lifetaker,
+	},
+
+	[SID_EndlessVitality] = {
+		.msg_desc = MSG_SKILL_EndlessVitality,
+		.icon = Gfx_SkillIcon_EndlessVitality,
+	},
 };
