@@ -56,6 +56,19 @@ struct BattleSt {
 	/* 10 */ struct Unit *extra_unit_b;
 };
 
+/**
+ * Per-battle scratch for skill effects.  Reset by InitBattleUnit(),
+ * written once by the battle flow and read afterwards (e.g. from a
+ * post-action hook).  Keep it to neutral battle facts: per-skill
+ * bookkeeping belongs with that skill, not in here.
+ */
+struct BattleUnitResult {
+	u16 foe_defeated : 1;	/* the opposing unit died in this battle */
+	u16 hit : 1;		/* this unit landed at least one hit */
+	u16 foe_hit : 1;	/* this unit took at least one hit */
+	u16 crit : 1;		/* this unit landed at least one critical */
+};
+
 struct BattleUnit {
 	/* 00 */ struct Unit unit;
 
@@ -111,6 +124,8 @@ struct BattleUnit {
 	/* 7B */ i8 change_mag;
 
 	u32 skills_bitfile[0x400 / 32];
+
+	/* FC */ struct BattleUnitResult result;
 };
 
 void BattleApplyGameStateUpdates(void);

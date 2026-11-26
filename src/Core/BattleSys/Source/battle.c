@@ -739,6 +739,18 @@ static void BattleGenerateHitEffects(struct BattleUnit *attacker, struct BattleU
 	}
 }
 
+static void BattleRecordHitResult(struct BattleUnit *attacker, struct BattleUnit *defender)
+{
+	if (gBattleHitIt->attributes & BATTLE_HIT_ATTR_MISS)
+		return;
+
+	attacker->result.hit = TRUE;
+	defender->result.foe_hit = TRUE;
+
+	if (gBattleHitIt->attributes & BATTLE_HIT_ATTR_CRIT)
+		attacker->result.crit = TRUE;
+}
+
 static bool BattleGenerateHit(struct BattleUnit *attacker, struct BattleUnit *defender)
 {
 	if (attacker == &gBattleUnitB)
@@ -750,6 +762,8 @@ static bool BattleGenerateHit(struct BattleUnit *attacker, struct BattleUnit *de
 	BattleGenerateHitAttributes(attacker, defender);
 	BattleGenerateHitEffects(attacker, defender);
 
+	BattleRecordHitResult(attacker, defender);
+
 	if (attacker->unit.hp == 0 || defender->unit.hp == 0) {
 		attacker->wexp_gain++;
 
@@ -757,6 +771,12 @@ static bool BattleGenerateHit(struct BattleUnit *attacker, struct BattleUnit *de
 
 		if (gBattleUnitB.unit.hp == 0)
 			gBattleHitIt->info |= BATTLE_HIT_INFO_KILLS_TARGET;
+
+		if (defender->unit.hp == 0)
+			attacker->result.foe_defeated = TRUE;
+
+		if (attacker->unit.hp == 0)
+			defender->result.foe_defeated = TRUE;
 
 		gBattleHitIt++;
 		return TRUE;

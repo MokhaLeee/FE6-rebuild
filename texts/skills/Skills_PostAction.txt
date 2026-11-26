@@ -1,7 +1,7 @@
 ## MSG_SKILL_Lifetaker
 Lifetaker:[NL]
 Restore up to 25% HP after[NL]
-the unit's action.[X]
+defeating an enemy.[X]
 
 ## MSG_SKILL_EndlessVitality
 Endless Vitality:[NL]

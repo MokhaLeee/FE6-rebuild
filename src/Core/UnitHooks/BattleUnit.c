@@ -68,6 +68,9 @@ static void InitBattleUnitVanilla(struct BattleUnit *bu, struct Unit *unit)
 	 * whatever the previous battle left behind.
 	 */
 	memset(bu->skills_bitfile, 0, sizeof(bu->skills_bitfile));
+
+	/* Same deal for the skill-visible battle result. */
+	memset(&bu->result, 0, sizeof(bu->result));
 }
 
 void InitBattleUnit(struct BattleUnit * bu, struct Unit * unit)
