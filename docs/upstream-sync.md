@@ -1,12 +1,13 @@
-# 上游同步状态（fe6 @ 22aed05）
+# 上游同步状态（fe6 @ 8df37fd）
 
 记录本仓库与 `MokhaLeee/fe6` 主线的同步情况，便于下次跟进时知道做到哪、还剩什么、哪些是故意不跟的。
 
-- 上游基线：`22aed05`（2026-11-17，#160 合并）
+- 上游基线：`8df37fd`（2026-11-26，#176 合并）
 - 本仓库在上游的最后一次整体快照：`6546afd`（#114，2026-10-30）
-- 当前跟进目标：`22aed05`。`7927a77` 那一轮的 17 个 PR 已清（批 1–4、批 6、#140，计划见
-  `upstream-sync-plan-7927a77.md`）；其后的 #152–#160 这一轮也已跟进，只整批跳过 #152（xmap）
-  与 #156（opinfo_classdemo），原因见「有意未同步」
+- 当前跟进目标：`8df37fd`。`7927a77` 那一轮的 17 个 PR 已清（批 1–4、批 6、#140，计划见
+  `upstream-sync-plan-7927a77.md`）；#152–#160 这一轮已跟进，只整批跳过 #152（xmap）
+  与 #156（opinfo_classdemo），原因见「有意未同步」；#161–#174 这一轮已跟进 3 个
+  （#161 / #163 / #173），其余见「下一批待跟进」
 
 ## 已同步
 
@@ -52,6 +53,28 @@
 | #154 | chapter_title 命名（51 个枚举、`CHAPTER_TITLE_PAL_*`、44 个素材标签、`PutChapterTitlePalette` 等 6 个函数、`gChapterTitleData` 改 `u8 const *`） | `1c79a7a` |
 | #153 | worldmap 命名（122 个符号、`WmArrowSt` 字段、`Pals_Wm_082*` → `WorldMapGfxTable`） | `1c79a7a` |
 | #158 | 世界地图精灵表 `Img_WorldMapStuff` → `Img_WmSprites`、`OBCHR_WM_SPRITES`、`OBCHR_WM_ARROW_*` | `1c79a7a` |
+| #173 | eventinfo 命名（16 个 `func_fe6_*` → `Chapter6_*` / `Chapter11B_*` / `Chapter21_*` / `EventInfo_*Stub*`、`BattleTalkEnt.unk_0C` → `final_chapter_msg`、`CheckAnyRedUnitArea`；含 `gameinfo/chapterinfo/events/ch{6,11b,21}.c` 调用点） | `11c3869` |
+| #161 | `KEY_INTR_ENABLE` 由 `0x0400` 修正为 `0x4000`，`SleepUntilKeyCombo` 改用 `KEY_INTR_ENABLE \| KEY_AND_INTR`（本仓库该函数在 `src/Common/sys/sys.c`，不在 `hardware.c`）；与 `keys - 0x4000` 行为等价 | `ae1be20` |
+| #163 | 世界地图 OBJ 调色板 / chr 槽常量（`OBCHR_WM_NATION_*`、`OBPAL_WM_{SPRITES,MAPTEXT,HIGHLIGHT,SYSTEM_OBJECTS}`、`worldmapfx.c` 的 `0x10`/`0x14`/`0x1B`/`0x19`/`0xA` 调色板号与 `0x4000`/`0x5100`/`0x4200`/`0x5300` VRAM 偏移） | `f9abdc8` |
+
+## 下一批待跟进（#165–#174）
+
+同一轮里剩下的 7 个，都是纯命名 / 常量替换，按可移植度排序（hunk 通过数来自
+`git apply --check --ignore-whitespace` 的实测）：
+
+| 上游 | 内容 | 通过情况 | 备注 |
+|---|---|---|---|
+| #165 `3c90df5` | debug 字体用字符字面量 + `OBJ_VRAM0_OFFSET` | `defines.h` 0/1、`debugtext.c` 2/4 | 依赖 #164 的 `defines.h` 常量；`debugtext.c` 本地已重写（`s_debug_text_st`、klib 除法），要按新名改 |
+| #166 `eaa3138` | 结局独白滚动 BG 常量（`MONOLOGUE_BG_WIDTH`/`HEIGHT`/`SCROLL_WRAP`） | 5/7 | `prep_bgscroll.c` 1 处（本地是 `k_umod`）；`xmap.c` 本仓库没有。带一个行偏移修复，包在 `#if BUGFIX` 里，本仓库未定义 `BUGFIX` → 保持原行为 |
+| #168 `77af880` | 裸 BG VRAM 字面量 → `BG_SCREEN_ADDR` / `BG_CHAR_ADDR` | 15 个文件里 12 个干净 | `statusscreen.c`（vanilla）0/2、`statscreen.c`（Core）0/2、`savemenu_2.c` 1/3 需手改；`sio*.c`、`banim_ekrpopup.c` 本仓库没有 |
+| #170 `446963e` | 字面 BG tile 索引 + manim tile / 调色板槽 | 5 个文件干净、9 个手改 | `manim.c` 37/39，剩两处是本地 klib 改写的 `%100` |
+| #172 `3c82a79` | ending_monologue 命名 | 2/7 | 涉及 `ending_monologue_img.s` 数据标签、`iwram-data.c`、`eventinfo.h` 联动 |
+| #164 `a4c74c8` | 存档菜单 / sio 章节标题槽常量 + `VRAM_OFFSET_MASK`、`OBJ_VRAM0_CHR` | 4 个文件干净、3 个手改 | 是 #165 / #168 / #170 的前置；`sio.h`/`sio.c`/`soundroom.c`/`xmap.c` 本仓库没有，跳过 |
+| #174 `bda20ea` | savemenu_2 命名 | `savemenu_2.c` 31/33 | 本地已自行重命名过（如 `gSaveMenuObjHighlightPalette`），要逐块挑，别整批打 |
+
+落地顺序建议：`a4c74c8` → `3c90df5` → `77af880` → `446963e`（`defines.h` 里的
+`OBJ_VRAM0_OFFSET` / `VRAM_OFFSET_MASK` 是后面几个的前置），`eaa3138` / `3c82a79` /
+`bda20ea` 可独立进行。
 
 ## 有意未同步
 
