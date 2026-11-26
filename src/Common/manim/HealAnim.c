@@ -154,7 +154,7 @@ static void map_heal_anim_start_fx(struct ProcMapHealAnim *proc)
 	 * blend, so preload the palette and start it fully transparent; otherwise
 	 * that frame would show the glow with whatever palette slot 4 held.
 	 */
-	ApplyPalette(Pal_ManimHeal, BGPAL_MANIM_4);
+	ApplyPalette(Pal_ManimHeal, BGPAL_MANIM_EFFECT);
 
 	SetBlendAlpha(0, HEAL_ANIM_ALPHA_MAX);
 	SetBlendTargetA(0, 0, 1, 0, 0);

@@ -654,18 +654,22 @@ void SaveMenuUiDraw_Init(struct SaveMenuUiDrawProc *proc)
 	proc->unk_3A = 0;
 	proc->unk_3B = 40;
 
-	PutChapterTitleBG1(0xAC << 4);
+	PutChapterTitleBG1(OBJ_VRAM0_CHR + OBCHR_SAVEMENU_CHAPTER_TITLE_BG);
 
 	for (i = 0; i < 3; i++) {
-		/* TODO: make sense of these constants */
-
 		if (proc->proc_parent->chapter_title_ids[i] != 0xFF) {
 			PutChapterTitleGfx(
-				((u32)(0x16800 + 0x800 * i) & 0x1FFFF) >> 5,
+				((u32) (OBJ_VRAM0_CHR + OBCHR_SAVEMENU_CHAPTER_TITLE_TEXT +
+				       i * CHAPTER_TITLE_TEXT_TILES) *
+					 CHR_SIZE &
+				 VRAM_OFFSET_MASK) / CHR_SIZE,
 				proc->proc_parent->chapter_title_ids[i]);
 		} else {
 			PutChapterTitleGfx(
-				((u32)(0x16800 + 0x800 * i) & 0x1FFFF) >> 5,
+				((u32) (OBJ_VRAM0_CHR + OBCHR_SAVEMENU_CHAPTER_TITLE_TEXT +
+				       i * CHAPTER_TITLE_TEXT_TILES) *
+					 CHR_SIZE &
+				 VRAM_OFFSET_MASK) / CHR_SIZE,
 				-1);
 		}
 	}
@@ -895,13 +899,13 @@ void SaveMenuUiDraw_Loop(struct SaveMenuUiDrawProc *proc)
 					    proc->proc_parent->panel_scroll_x),
 				     0x20 + r2 + i * 0x20,
 				     SaveMenu_SaveSlotFrameSprites[i],
-				     OAM2_PAL(10 + i * 2));
+				     OAM2_PAL(OBPAL_SAVEMENU_CHAPTER_TITLE_BG + i * 2));
 			PutSpriteExt(4,
 				     OAM1_X(0xF4 -
 					    proc->proc_parent->panel_scroll_x),
 				     0x20 + r2 + i * 0x20 + 8,
 				     SaveMenu_SaveSlotLabelSprites[i],
-				     OAM2_PAL(11 + i * 2));
+				     OAM2_PAL(OBPAL_SAVEMENU_CHAPTER_TITLE_TEXT + i * 2));
 		}
 
 		if (proc->proc_parent->suspend_save_id != 0xFF) {
@@ -1198,7 +1202,7 @@ struct SaveMenuCursorProc *StartSaveMenuCursor(ProcPtr parent)
 
 void SaveMenu_InitText(void)
 {
-	InitTextFont(&gSaveMenuFont, (void *)VRAM + 0x601 * 0x20, 1, 0);
+	InitTextFont(&gSaveMenuFont, BG_CHAR_ADDR(3) + BGCHR_SAVEMENU_TEXT * CHR_SIZE, BGCHR_SAVEMENU_TEXT, 0);
 	InitText(&gSaveMenuText, 10);
 }
 
@@ -1241,8 +1245,8 @@ void SaveMenu_SetConfirmPrompt(struct SaveMenuProc *proc, bool display)
 
 void SaveMenu_ClearChapterTitleVram(void)
 {
-	CpuFastFill(0, (void *)VRAM + 0x8000, 0x40 * 0x20);
-	CpuFastFill(0, (void *)VRAM + 0xC000, 0x40 * 0x20);
+	CpuFastFill(0, BG_CHAR_ADDR(2), 0x40 * 0x20);
+	CpuFastFill(0, BG_CHAR_ADDR(3), 0x40 * 0x20);
 }
 
 void SaveMenu_BuildMainMenuMask(struct SaveMenuProc *proc)
@@ -1450,7 +1454,7 @@ void SaveMenu_StartWindowEffectProc(ProcPtr parent,
 
 void SaveMenu_CopyBg2Tilemap(ProcPtr proc)
 {
-	RegisterDataMove(gBg2Tm, (void *)VRAM + 0x7000, sizeof(gBg2Tm));
+	RegisterDataMove(gBg2Tm, BG_SCREEN_ADDR(14), sizeof(gBg2Tm));
 }
 
 struct ProcScr CONST_DATA ProcScr_SaveMenuBg2TilemapCopy[] = {
@@ -1512,8 +1516,9 @@ void SaveMenu_UpdateChapterTitlePalettes(fu8 save_id)
 		if (i != save_id)
 			flags |= CHAPTER_TITLE_PAL_UNSELECTED;
 
-		PutChapterTitlePalette(flags | CHAPTER_TITLE_PAL_BG1, 0x1A + i * 2);
-		PutChapterTitlePalette(flags, 0x1B + i * 2);
+		PutChapterTitlePalette(flags | CHAPTER_TITLE_PAL_BG1,
+				       0x10 + OBPAL_SAVEMENU_CHAPTER_TITLE_BG + i * 2);
+		PutChapterTitlePalette(flags, 0x10 + OBPAL_SAVEMENU_CHAPTER_TITLE_TEXT + i * 2);
 	}
 
 	EnablePalSync();

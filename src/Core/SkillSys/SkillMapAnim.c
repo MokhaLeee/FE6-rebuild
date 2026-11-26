@@ -159,7 +159,7 @@ bool MapAnimRoundAnim_DisplaySkillIcon(ProcPtr parent)
 
 	Decompress(
 		gpImg_MapAnimSKILL,
-		OBJ_VRAM0 + 0x20 * OBCHR_MANIM_180);
+		OBJ_VRAM0 + 0x20 * OBCHR_MANIM_HITFX);
 
 	if (actor_icon != 0) {
 		struct Unit *unit = gManimSt.actor[gManimSt.attacker_actor].unit;
@@ -168,7 +168,7 @@ bool MapAnimRoundAnim_DisplaySkillIcon(ProcPtr parent)
 			Ap_ManimMissTag,
 			16 * (SCREEN_TILE_X(unit->x)) + 8,
 			16 * (SCREEN_TILE_Y(unit->y)) + 16,
-			TILEREF(OBCHR_MANIM_180, 0), 0, 2);
+			TILEREF(OBCHR_MANIM_HITFX, 0), 0, 2);
 	}
 
 	if (target_icon != 0) {
@@ -178,7 +178,7 @@ bool MapAnimRoundAnim_DisplaySkillIcon(ProcPtr parent)
 			Ap_ManimMissTag,
 			16 * (SCREEN_TILE_X(unit->x)) + 8,
 			16 * (SCREEN_TILE_Y(unit->y)) + 16,
-			TILEREF(OBCHR_MANIM_180, 0), 0, 2);
+			TILEREF(OBCHR_MANIM_HITFX, 0), 0, 2);
 	}
 
 	if (actor_icon != 0)
@@ -212,13 +212,13 @@ static void SkillMapAnimMini_Init(struct ProcSkillMapAnimMini *proc)
 	/* Sprite anim */
 	Decompress(
 		gpImg_MapAnimSKILL,
-		OBJ_VRAM0 + 0x20 * OBCHR_MANIM_180);
+		OBJ_VRAM0 + 0x20 * OBCHR_MANIM_HITFX);
 
 	StartSpriteAnimProc(
 		Ap_ManimMissTag,
 		16 * (SCREEN_TILE_X(proc->x)) + 8,
 		16 * (SCREEN_TILE_Y(proc->y)) + 16,
-		TILEREF(OBCHR_MANIM_180, 0), 0, 2);
+		TILEREF(OBCHR_MANIM_HITFX, 0), 0, 2);
 
 	PlaySeSpacial(0x3D1, SCREEN_TILE_IX(proc->x));
 
