@@ -1,11 +1,10 @@
 #include "prelude.h"
 #include "action.h"
 #include "menu.h"
-#include "mu.h"
 #include "unit.h"
-#include "masseffect.h"
 
 #include "klib.h"
+#include "map-anim.h"
 #include "skill-sys.h"
 #include "skill-effects.h"
 #include "constants/skills.h"
@@ -14,9 +13,10 @@
 /*
  * "瞑想" (Heal Focus), ported from fe8u-cskillsys-kernel MenuSkills/HealingFocus.c
  *
- * fe8 uses CallMapAnim_HealExt() for the map animation; fe6 does not have that
- * helper, so the HP restore is applied here and the vanilla heal flash covers
- * the animation side.
+ * fe8 uses CallMapAnim_HealExt() for the map animation, which fe6 does not
+ * have.  StartMapHealAnim() is the equivalent here: the unit plays the
+ * vulnerary "use item" pose, the heal glow blooms on it and the hp comes back,
+ * without touching the battle unit snapshot or the manim state.
  */
 fu8 HealingFocus_Usability(const struct MenuEntInfo *self, int number)
 {
@@ -41,22 +41,11 @@ fu8 HealingFocus_OnSelected(struct MenuProc *menu, struct MenuEntProc *ent)
 
 bool Action_HealingFocus(ProcPtr parent)
 {
-	struct MuProc *mu;
 	int amount;
 
 	amount = perc_of(GetUnitMaxHp(gActiveUnit), SKILL_EFF0(SID_HealingFocus));
-	AddUnitHp(gActiveUnit, amount);
 
-	/*
-	 * The unit is normally shown through a hover MuProc while the action menu
-	 * is open.  The heal effect draws its own blended copy of the unit sprite,
-	 * so the Mu must be gone first or both sprites overlap.
-	 */
-	mu = GetUnitMu(gActiveUnit);
-	if (mu)
-		EndMu(mu);
-
-	StartStatusHealEffect(gActiveUnit, parent);
+	StartMapHealAnim(parent, gActiveUnit, amount);
 
 	return false;
 }

@@ -181,7 +181,7 @@ void StartManimFortifyShine(int x, int y, int square_size, int freeze_duration, 
 // ManimAntitoxinFx_Loop
 // StartManimStatusHealSe
 // ManimStatusHealSe_Play
-// StartManimHealFx
+void StartManimHealFx(struct Unit * unit, void const * img, void const * pal, fu16 song);
 // ManimHealFx_Init
 // ManimHealFx_FadeIn
 // ManimHealFx_FadeOut
