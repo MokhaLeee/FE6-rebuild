@@ -24,8 +24,9 @@
 
 static void setup_status(void)
 {
-#if 0
+#if 1
 	/* for debug */
+	GetUnitByPid(PID_ROY)->hp = 10;
 	GetUnitByPid(PID_MARCUS)->hp = 10;
 	GetUnitByPid(PID_MARCUS)->status = UNIT_STATUS_POISON;
 #endif
