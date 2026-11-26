@@ -24,5 +24,5 @@
  *	return true;
  */
 
-void StartMapHealAnim(ProcPtr parent, struct Unit * unit, int amount);
+void StartMapHealAnim(ProcPtr parent, struct Unit *unit, int amount);
 bool MapHealAnimExists(void);

@@ -128,10 +128,11 @@ void InitManimHits(struct BattleUnit * bu_a, struct BattleUnit * bu_b, struct Ba
 void InitManimActors(struct BattleUnit * bu_a, struct BattleUnit * bu_b, struct BattleHit * battle_hits);
 int GetFacingFromTo(int xa, int ya, int xb, int yb);
 // UnpackManimWindowDigits
-// PutManimWindowNumber
-// UnpackManimWindowGraphics
+void PutManimWindowNumber(u16 *tm, int num, int tileref, int len, u16 blank_tileref);
+void UnpackManimWindowGraphics(void const *hp_bar_img);
 // PutManimWindowBarTile
-// PutManimWindowBar
+void PutManimWindowBar(u16 *tm, int max, int fill, int pal_num, u16 const *base_tiles);
+extern u16 CONST_DATA gManimHpBarTilesBaseInfo[];
 void EndManimInfoWindow(void);
 void StartManimInfoWindow(int x, int y, ProcPtr proc);
 // Manim_StartBattleTalk
@@ -181,7 +182,7 @@ void StartManimFortifyShine(int x, int y, int square_size, int freeze_duration, 
 // ManimAntitoxinFx_Loop
 // StartManimStatusHealSe
 // ManimStatusHealSe_Play
-void StartManimHealFx(struct Unit * unit, void const * img, void const * pal, fu16 song);
+void StartManimHealFx(struct Unit *unit, void const *img, void const *pal, fu16 song);
 // ManimHealFx_Init
 // ManimHealFx_FadeIn
 // ManimHealFx_FadeOut
