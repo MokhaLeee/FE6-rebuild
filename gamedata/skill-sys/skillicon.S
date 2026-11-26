@@ -104,3 +104,13 @@ Gfx_SkillIcon_Lifetaker:
 .global Gfx_SkillIcon_EndlessVitality
 Gfx_SkillIcon_EndlessVitality:
 	.incbin "contents/skillsys/SkillIcon/EndlessVitality.4bpp"
+
+.align 2, 0
+.global Gfx_SkillIcon_SorceryBlade
+Gfx_SkillIcon_SorceryBlade:
+	.incbin "contents/skillsys/SkillIcon/SorceryBlade.4bpp"
+
+.align 2, 0
+.global Gfx_SkillIcon_MysticBoost
+Gfx_SkillIcon_MysticBoost:
+	.incbin "contents/skillsys/SkillIcon/MysticBoost.4bpp"

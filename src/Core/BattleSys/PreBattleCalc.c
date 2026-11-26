@@ -7,7 +7,12 @@
 #include "str-mag.h"
 #include "skill-sys.h"
 #include "battle-damage.h"
+#include "constants/skills.h"
 
+/*
+ * `attacker` here is the unit whose defense is being computed, and
+ * `defender` is the one whose attack lands on it.
+ */
 static void ComputeBattleUnitDefense(struct BattleUnit *attacker, struct BattleUnit *defender)
 {
 	int status;
@@ -19,6 +24,18 @@ static void ComputeBattleUnitDefense(struct BattleUnit *attacker, struct BattleU
 		/* def */
 		status = attacker->terrain_defense + attacker->unit.def;
 	 }
+
+	/*
+	 * Sorcery Blade makes the target defend with whichever of DEF/RES is
+	 * lower; Mystic Boost on the target ignores it.
+	 */
+	if (BattleSkillTester(defender, SID_SorceryBlade) &&
+	    !BattleSkillTester(attacker, SID_MysticBoost)) {
+		int def = attacker->terrain_defense + attacker->unit.def;
+		int res = attacker->terrain_resistance + attacker->unit.res;
+
+		status = (def < res) ? def : res;
+	}
 
 	attacker->battle_defense = status;
 }

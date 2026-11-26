@@ -17,6 +17,7 @@ static bool PostAction_OnEnd(ProcPtr proc)
 static const HookProcFunc_t gPostActionFuncs[] = {
 	PostActionSkill_AlertStance,
 	PostActionSkill_HealAfterAction,
+	PostActionSkill_HealAfterActionTarget,
 	PostActionPadFunc,
 
 	/* end */

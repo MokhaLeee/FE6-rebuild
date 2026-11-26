@@ -1,0 +1,9 @@
+## MSG_SKILL_SorceryBlade
+Sorcery Blade:[NL]
+The foe defends with the lower[NL]
+of its DEF or RES.[X]
+
+## MSG_SKILL_MysticBoost
+Mystic Boost:[NL]
+Ignores Sorcery Blade, and heals[NL]
+6 HP after every battle.[X]

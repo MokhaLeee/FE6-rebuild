@@ -3368,7 +3368,9 @@
 #define MSG_SKILL_HealingFocus_FR 0x0D22
 #define MSG_SKILL_Lifetaker 0x0D23
 #define MSG_SKILL_EndlessVitality 0x0D24
+#define MSG_SKILL_SorceryBlade 0x0D25
+#define MSG_SKILL_MysticBoost 0x0D26
 
-#define MSG_COUNT 0x0D25
+#define MSG_COUNT 0x0D27
 
 #endif /* MSG_H */

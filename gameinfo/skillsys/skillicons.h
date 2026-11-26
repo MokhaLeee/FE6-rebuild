@@ -19,3 +19,5 @@ extern const unsigned char Gfx_SkillIcon_MoveObstruct[];
 extern const unsigned char Gfx_SkillIcon_MoveDetailedReport[];
 extern const unsigned char Gfx_SkillIcon_Lifetaker[];
 extern const unsigned char Gfx_SkillIcon_EndlessVitality[];
+extern const unsigned char Gfx_SkillIcon_SorceryBlade[];
+extern const unsigned char Gfx_SkillIcon_MysticBoost[];

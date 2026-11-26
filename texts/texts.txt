@@ -88,3 +88,4 @@
 #include "skills/Skills_Movement.txt"
 #include "skills/Skills_Menu.txt"
 #include "skills/Skills_PostAction.txt"
+#include "skills/Skills_Battle.txt"

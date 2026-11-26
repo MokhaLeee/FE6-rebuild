@@ -23,4 +23,5 @@ struct SkillExtraInfo const gSkillExtraInfo[MAX_SKILL_NUM] = {
 	[SID_HealingFocus] = {{ 100 }},
 	[SID_Lifetaker] = {{ 25 }},
 	[SID_EndlessVitality] = {{ 20 }},
+	[SID_MysticBoost] = {{ 6 }},
 };

@@ -11,11 +11,19 @@
 
 /*
  * Post-action healing skills, ported from fe8u-cskillsys
- * Kernel/Wizardry/Misc/SkillEffects/PostActionSkills/Heal.c:
+ * Kernel/Wizardry/Misc/SkillEffects/PostActionSkills/Heal.c.  Upstream has two
+ * hooks, one for the unit that acted and one for the unit that got attacked;
+ * both live here.
  *
- * - Lifetaker: heal 25% of max hp after the unit acts, but only if the battle
- *   of that action defeated a foe.
- * - Endless Vitality: heal 20% of max hp after the unit acts.
+ * After its own action:
+ * - Lifetaker: heal 25% of max hp, but only if the battle defeated a foe.
+ * - Endless Vitality: heal 20% of max hp.
+ * - Mystic Boost: heal a flat 6 hp (its other half, the counter to Sorcery
+ *   Blade, lives in ComputeBattleUnitDefense()).
+ *
+ * After being attacked:
+ * - Endless Vitality and Mystic Boost heal the defender as well; Lifetaker
+ *   stays with the unit that won the exchange.
  *
  * "Defeated a foe" is a per-battle fact on the battle unit itself
  * (BattleUnit::result), set by the battle flow and reset by InitBattleUnit(),
@@ -49,6 +57,50 @@ bool PostActionSkill_HealAfterAction(ProcPtr parent)
 
 	if (SkillTester(unit, SID_EndlessVitality))
 		heal += perc_of(hp_max, SKILL_EFF0(SID_EndlessVitality));
+
+	if (SkillTester(unit, SID_MysticBoost))
+		heal += SKILL_EFF0(SID_MysticBoost);
+
+	if (heal > hp_max - hp_cur)
+		heal = hp_max - hp_cur;
+
+	if (heal <= 0)
+		return false;
+
+	StartMapHealAnim(parent, unit, heal);
+
+	return true;
+}
+
+bool PostActionSkill_HealAfterActionTarget(ProcPtr parent)
+{
+	struct Unit *unit;
+	int hp_cur, hp_max, heal;
+
+	/* Only a battle has a defender to heal; Lifetaker is not in here, it
+	 * rewards the unit that defeated a foe. */
+	if (gAction.id != ACTION_COMBAT)
+		return false;
+
+	unit = GetUnit(gAction.target);
+
+	if (!UnitAvailable(unit) || UNIT_STONED(unit))
+		return false;
+
+	hp_cur = GetUnitCurrentHp(unit);
+	hp_max = GetUnitMaxHp(unit);
+
+	/* A unit killed in that battle is out of the picture. */
+	if (hp_cur == 0)
+		return false;
+
+	heal = 0;
+
+	if (SkillTester(unit, SID_EndlessVitality))
+		heal += perc_of(hp_max, SKILL_EFF0(SID_EndlessVitality));
+
+	if (SkillTester(unit, SID_MysticBoost))
+		heal += SKILL_EFF0(SID_MysticBoost);
 
 	if (heal > hp_max - hp_cur)
 		heal = hp_max - hp_cur;

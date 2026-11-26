@@ -6,4 +6,4 @@ defeating an enemy.[X]
 ## MSG_SKILL_EndlessVitality
 Endless Vitality:[NL]
 Restore up to 20% HP after[NL]
-the unit's action.[X]
+every battle it fights.[X]

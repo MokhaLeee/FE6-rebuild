@@ -109,4 +109,14 @@ struct SkillInfo const gSkillInfo[0x400] = {
 		.msg_desc = MSG_SKILL_EndlessVitality,
 		.icon = Gfx_SkillIcon_EndlessVitality,
 	},
+
+	[SID_SorceryBlade] = {
+		.msg_desc = MSG_SKILL_SorceryBlade,
+		.icon = Gfx_SkillIcon_SorceryBlade,
+	},
+
+	[SID_MysticBoost] = {
+		.msg_desc = MSG_SKILL_MysticBoost,
+		.icon = Gfx_SkillIcon_MysticBoost,
+	},
 };
