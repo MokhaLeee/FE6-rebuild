@@ -51,7 +51,6 @@ int GetUnitDisplayedSpritePalette(struct Unit * unit);
 int GetUnitSpritePalette(struct Unit * unit);
 void RefreshUnitSprites(void);
 void PutUnitSpritesOam(void);
-void PutUnitSpriteIconsOam(void);
 void func_fe6_08022618(void);
 void ResetUnitSpritHover(void);
 void UnitSpriteHoverUpdate(void);
