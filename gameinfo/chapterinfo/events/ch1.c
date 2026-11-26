@@ -24,6 +24,11 @@
 
 static void setup_status(void)
 {
+#if 0
+	/* for debug */
+	GetUnitByPid(PID_MARCUS)->hp = 10;
+	GetUnitByPid(PID_MARCUS)->status = UNIT_STATUS_POISON;
+#endif
 	SetGold(GetGold() + 5000);
 }
 
