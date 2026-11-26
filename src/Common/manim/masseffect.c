@@ -44,7 +44,7 @@ static void RenderMapForFogFadeIfUnitDied(struct Unit * unit)
         RenderMapForFade();
 }
 
-void BeginUnitHealAnim(struct Unit * unit, int hp)
+static void BeginUnitHealAnim(struct Unit * unit, int hp)
 {
     BattleInitItemEffect(unit, -1);
 
@@ -60,7 +60,7 @@ void BeginUnitHealAnim(struct Unit * unit, int hp)
     BeginBattleAnimations();
 }
 
-void BeginPoisonDamageAnim(struct Unit * unit, int damage)
+static void BeginPoisonDamageAnim(struct Unit * unit, int damage)
 {
     BattleInitItemEffect(unit, -1);
 
@@ -105,76 +105,6 @@ void BeginUnitTrapDamageAnim(struct Unit * unit, int damage)
     RenderMapForFogFadeIfUnitDied(unit);
 }
 
-static void KillAllRedUnits_Init(struct Proc * proc)
-{
-    BeginTargetList(0, 0);
-
-    FOR_UNITS_FACTION(FACTION_RED, unit,
-    {
-        if (unit->flags & (UNIT_FLAG_DEAD | UNIT_FLAG_NOT_DEPLOYED))
-            continue;
-
-        EnlistTarget(unit->x, unit->y, unit->id, 0);
-    })
-
-    proc->unk4C = 0;
-}
-
-static void KillAllRedUnits_Loop(struct Proc * proc)
-{
-    struct Unit * unit;
-    int x, y;
-
-    if (proc->unk4C == CountTargets())
-    {
-        Proc_Goto(proc, 99);
-        return;
-    }
-
-    unit = GetUnit(GetTarget(proc->unk4C)->uid);
-
-    HideUnitSprite(unit);
-    KillUnit(unit);
-
-    x = unit->x*16 - gBmSt.camera.x;
-    y = unit->y*16 - gBmSt.camera.y;
-
-    if (x < 0 || x > DISPLAY_WIDTH || y < 0 || y > DISPLAY_HEIGHT)
-    {
-        proc->unk4C++;
-        Proc_Goto(proc, 0);
-    }
-    else
-    {
-        struct MuProc * mu;
-
-        mu = StartMu(unit);
-        StartMuDeathFade(mu);
-
-        proc->unk4C++;
-        Proc_Break(proc);
-    }
-}
-
-struct ProcScr CONST_DATA ProcScr_Unused_KillAllRedUnits[] =
-{
-    PROC_CALL(KillAllRedUnits_Init),
-
-PROC_LABEL(0),
-    PROC_REPEAT(KillAllRedUnits_Loop),
-    PROC_SLEEP(0x20),
-
-    PROC_CALL(EndAllMus),
-
-    PROC_GOTO(0),
-
-PROC_LABEL(99),
-    PROC_CALL(RefreshEntityMaps),
-    PROC_CALL(RenderMap),
-    PROC_CALL(RefreshUnitSprites),
-    PROC_END,
-};
-
 static void StatusHealEffect_OverlayBg_Init(void)
 {
     int i;
@@ -197,7 +127,7 @@ static void StatusHealEffect_OverlayBg_Loop(void)
         -(gActiveUnit->x*16 - gBmSt.camera.x), GetGameTime());
 }
 
-struct ProcScr CONST_DATA ProcScr_StatusHealEffect_OverlayBg[] =
+static struct ProcScr CONST_DATA ProcScr_StatusHealEffect_OverlayBg[] =
 {
     PROC_CALL(StatusHealEffect_OverlayBg_Init),
     PROC_REPEAT(StatusHealEffect_OverlayBg_Loop),
@@ -241,7 +171,7 @@ static void StatusHealEffect_BlendedSprite_Finish(struct Proc * proc)
     ShowUnitSprite(gActiveUnit);
 }
 
-struct ProcScr CONST_DATA ProcScr_StatusHealEffect_BlendedSprite[] =
+static struct ProcScr CONST_DATA ProcScr_StatusHealEffect_BlendedSprite[] =
 {
     PROC_CALL(StatusHealEffect_BlendedSprite_Init),
     PROC_REPEAT(StatusHealEffect_BlendedSprite_Loop),
@@ -277,7 +207,7 @@ static void StatusHealEffect_BlendSpriteAnim_Loop(struct Proc * proc)
         Proc_Break(proc);
 }
 
-struct ProcScr CONST_DATA ProcScr_StatusHealEffect_BlendAnim[] =
+static struct ProcScr CONST_DATA ProcScr_StatusHealEffect_BlendAnim[] =
 {
     PROC_CALL(StatusHealEffect_BlendSpriteAnim_InitIn),
     PROC_REPEAT(StatusHealEffect_BlendSpriteAnim_Loop),
@@ -348,7 +278,7 @@ static void StatusHealEffect_PalSpriteAnim_LoopOut(struct Proc * proc)
         Proc_Break(proc);
 }
 
-struct ProcScr CONST_DATA ProcScr_StatusHealEffect_PalAnim[] =
+static struct ProcScr CONST_DATA ProcScr_StatusHealEffect_PalAnim[] =
 {
     PROC_CALL(StatusHealEffect_PalSpriteAnim_Init),
     PROC_REPEAT(StatusHealEffect_PalSpriteAnim_LoopIn),
@@ -369,7 +299,7 @@ static void StatusHealEffect_Finish(struct Proc * proc)
     gDispIo.win_ct.wobj_enable_blend = 1;
 }
 
-struct ProcScr CONST_DATA ProcScr_StatusHealEffect[] =
+static struct ProcScr CONST_DATA ProcScr_StatusHealEffect[] =
 {
     PROC_START_CHILD(ProcScr_StatusHealEffect_OverlayBg),
     PROC_START_CHILD(ProcScr_StatusHealEffect_BlendedSprite),
