@@ -518,9 +518,16 @@ void UnitSpriteHoverUpdate(void)
 
             if (gUnitSpriteHoverClock == 5)
             {
-                StartMu(unit);
-                HideUnitSprite(unit);
+                /* If the Mu cannot be spawned (proc pool briefly full after a
+                 * map animation), keep the map sprite visible instead of
+                 * leaving the unit with no sprite at all. */
+                if (StartMu(unit) != NULL)
+                {
+                    HideUnitSprite(unit);
+                    return;
+                }
 
+                gUnitSpriteHoverClock = 0;
                 return;
             }
         }

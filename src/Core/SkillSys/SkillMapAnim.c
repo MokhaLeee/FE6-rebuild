@@ -292,13 +292,12 @@ static void muskillanim_init(struct ProcMuSkillAnim *proc)
 	proc->mu_gen = false;
 
 	/*
-	 * Reset the map the way cskillsys' MapAnim_CommonInit() does: drop stale
-	 * Mus and rebuild the unit sprites before taking the unit over.  Without
-	 * this a leftover battle Mu / stale map sprite can stack with the
-	 * activation animation.
+	 * Drop stale Mus (a battle leaves one behind), but do not rebuild the
+	 * unit sprites here: during an action gMapUnit can be cleared for the
+	 * unit, and RefreshUnitSprites() would then drop its map_sprite, leaving
+	 * no sprite once the Mu goes away.
 	 */
 	EndAllMus();
-	RefreshUnitSprites();
 
 	HideUnitSprite(proc->unit);
 	mu = StartMu(proc->unit);
@@ -347,19 +346,20 @@ static void muskillanim_end(struct ProcMuSkillAnim *proc)
 {
 	struct MuProc *mu = GetUnitMu(proc->unit);
 
-	if (proc->mu_gen) {
-		if (mu)
-			EndMu(mu);
+	ShowUnitSprite(proc->unit);
+	ForceSyncUnitSpriteSheet();
 
-		ShowUnitSprite(proc->unit);
-
-		return;
-	}
-
+	/*
+	 * Do not EndMu() here: the action is still finishing (WatchActiveUnit /
+	 * FinishAction) and ending the Mu now leaves the unit with neither the
+	 * Mu nor the map sprite.  Leave it to the action's EndAllMus().
+	 */
 	if (mu) {
 		SetMuDefaultFacing(mu);
 		ResetSpriteAnimClock(mu->sprite_anim);
 	}
+
+	ResetUnitSpritHover();
 }
 
 static const struct ProcScr ProcScr_MuSkillAnim[] = {

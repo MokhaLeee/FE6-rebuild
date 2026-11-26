@@ -95,13 +95,12 @@ static void map_heal_anim_init(struct ProcMapHealAnim *proc)
 	struct MuProc *mu;
 
 	/*
-	 * Take the map over the way cskillsys' MapAnim_CommonInit() does: drop
-	 * stale Mus and rebuild the unit sprites, then hide the map sprite and
-	 * build the Mu this animation owns.  A leftover battle Mu or a stale map
-	 * sprite would otherwise stack with the heal.
+	 * Drop stale Mus (a battle leaves one behind), but do not rebuild the
+	 * unit sprites here: during an action gMapUnit can be cleared for the
+	 * unit, and RefreshUnitSprites() would then drop its map_sprite, leaving
+	 * no sprite once the Mu goes away.
 	 */
 	EndAllMus();
-	RefreshUnitSprites();
 
 	HideUnitSprite(unit);
 	mu = StartMu(unit);
@@ -220,21 +219,16 @@ static void map_heal_anim_end(struct ProcMapHealAnim *proc)
 {
 	struct MuProc *mu = GetUnitMu(proc->unit);
 
-	if (proc->mu_generated) {
-		/* Nobody owns this Mu but us: drop it and show the map sprite
-		 * again, the way the hazard displays do. */
-		if (mu)
-			EndMu(mu);
+	ShowUnitSprite(proc->unit);
+	ForceSyncUnitSpriteSheet();
 
-		ShowUnitSprite(proc->unit);
-
-		return;
-	}
-
+	/* Same as muskillanim_end(): keep the Mu until the action's EndAllMus(). */
 	if (mu) {
 		SetMuDefaultFacing(mu);
 		ResetSpriteAnimClock(mu->sprite_anim);
 	}
+
+	ResetUnitSpritHover();
 }
 
 static void map_heal_anim_start_effect(struct ProcMapHealAnim *proc)
