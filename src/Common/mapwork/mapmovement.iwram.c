@@ -2,8 +2,6 @@
 #include "map.h"
 #include "mapwork.h"
 
-#define LOCAL_HACK_TRIG 1
-
 extern EWRAM_OVERLAY(0) u8 **KernelExtMoveBarrierMap;
 extern EWRAM_OVERLAY(0) u8 **KernelExtMovePioneerMap;
 extern EWRAM_OVERLAY(0) bool KernelPassSkillActivated;
@@ -20,24 +18,18 @@ static void MapFloodCoreStep(int connect, int x, int y)
 	cost = (u8)gWorkingMovTable[gMapTerrain[y][x]]
 		+ (u8)gWorkingMap[(u8)src->y][(u8)src->x];
 
-#if LOCAL_HACK_TRIG
 	cost += KernelExtMoveBarrierMap[y][x];
-#endif
 
 	if (cost >= gWorkingMap[y][x])
 		return;
 
 	if (gMapFloodSt.has_unit && gMapUnit[y][x]
 		&& ((gMapUnit[y][x] ^ gMapFloodSt.uid) & 0x80))
-#if LOCAL_HACK_TRIG
 		if (!KernelPassSkillActivated)
-#endif
 			return;
 
 	if (cost > gMapFloodSt.move)
-#if LOCAL_HACK_TRIG
 		if (KernelExtMovePioneerMap[y][x] == 0)
-#endif
 			return;
 
 	gMapFloodSt.waiting_queue->x = x;
