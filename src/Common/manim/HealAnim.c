@@ -15,8 +15,15 @@
 #include "constants/videoalloc_global.h"
 
 /*
- * Map heal animation: the unit does the "use item" pose, the hp goes back and
- * the heal glow blooms on it, with the hp gauge counting up next to it.
+ * Map heal animation, in two layers:
+ *
+ * - StartMapHealAnim() is the outer "use item" act: prepare the Mu, make the
+ *   unit take the vulnerary pose, then run the heal effect and put the Mu
+ *   back.
+ * - StartMapHealEffect() is the heal itself: add the hp, bloom the glow and
+ *   count the hp gauge up.  It owns no Mu and plays no pose, so a caller that
+ *   already has the unit in the "use item" pose (a skill activation animation
+ *   such as NewMuSkillAnim()) can run just this layer.
  *
  * The glow is the vanilla StartManimHealFx() proc and the gauge reuses the
  * manim hp bar helpers (art + PutManimWindowBar/PutManimWindowNumber), all of
@@ -87,12 +94,20 @@ static void map_heal_anim_init(struct ProcMapHealAnim *proc)
 	struct Unit *unit = proc->unit;
 	struct MuProc *mu;
 
+	/*
+	 * The battle animation may leave its own Mu behind: the map battle keeps
+	 * it on screen, the banim one only resets it.  Reusing it would either
+	 * stack two units or play the pose on a stale sprite, so take the unit
+	 * over - end the leftover, hide the map sprite and build a fresh Mu.  The
+	 * animation then owns the Mu it has to put back in map_heal_anim_end().
+	 */
 	mu = GetUnitMu(unit);
-	if (!mu) {
-		HideUnitSprite(unit);
-		mu = StartMu(unit);
-		proc->mu_generated = true;
-	}
+	if (mu)
+		EndMu(mu);
+
+	HideUnitSprite(unit);
+	mu = StartMu(unit);
+	proc->mu_generated = true;
 
 	if (mu) {
 		SetMuDefaultFacing(mu);
@@ -112,14 +127,14 @@ static void map_heal_anim_pose(struct ProcMapHealAnim *proc)
 		StartMuActionAnim(mu);
 }
 
-static void map_heal_anim_apply(struct ProcMapHealAnim *proc)
+static void map_heal_effect_apply(struct ProcMapHealAnim *proc)
 {
 	proc->hp_shown_q4 = GetUnitCurrentHp(proc->unit) << 4;
 
 	AddUnitHp(proc->unit, proc->amount);
 }
 
-static void map_heal_anim_start_bar(struct ProcMapHealAnim *proc)
+static void map_heal_effect_start_bar(struct ProcMapHealAnim *proc)
 {
 	struct Unit *unit = proc->unit;
 	int x = SCREEN_TILE_X(unit->x);
@@ -147,7 +162,7 @@ static void map_heal_anim_start_bar(struct ProcMapHealAnim *proc)
 	map_heal_bar_put(proc);
 }
 
-static void map_heal_anim_start_fx(struct ProcMapHealAnim *proc)
+static void map_heal_effect_start_fx(struct ProcMapHealAnim *proc)
 {
 	/*
 	 * The vanilla fx proc draws its tiles one frame before it starts the
@@ -165,7 +180,7 @@ static void map_heal_anim_start_fx(struct ProcMapHealAnim *proc)
 	StartManimHealFx(proc->unit, Img_ManimHeal, Pal_ManimHeal, SONG_89);
 }
 
-static void map_heal_anim_loop(struct ProcMapHealAnim *proc)
+static void map_heal_effect_loop(struct ProcMapHealAnim *proc)
 {
 	int target_q4 = GetUnitCurrentHp(proc->unit) << 4;
 	int val = proc->hp_shown_q4;
@@ -192,10 +207,8 @@ static void map_heal_anim_loop(struct ProcMapHealAnim *proc)
 		Proc_Break(proc);
 }
 
-static void map_heal_anim_end(struct ProcMapHealAnim *proc)
+static void map_heal_effect_end(struct ProcMapHealAnim *proc)
 {
-	struct MuProc *mu;
-
 	map_heal_bar_clear(proc);
 
 	/* Give the map ui/window frame their graphics and palettes back. */
@@ -203,8 +216,11 @@ static void map_heal_anim_end(struct ProcMapHealAnim *proc)
 	ApplyIconPalettes(BGPAL_ICONS);
 
 	InitBmBgLayers();
+}
 
-	mu = GetUnitMu(proc->unit);
+static void map_heal_anim_end(struct ProcMapHealAnim *proc)
+{
+	struct MuProc *mu = GetUnitMu(proc->unit);
 
 	if (proc->mu_generated) {
 		/* Nobody owns this Mu but us: drop it and show the map sprite
@@ -223,17 +239,30 @@ static void map_heal_anim_end(struct ProcMapHealAnim *proc)
 	}
 }
 
+static void map_heal_anim_start_effect(struct ProcMapHealAnim *proc)
+{
+	StartMapHealEffect(proc, proc->unit, proc->amount);
+}
+
+static const struct ProcScr ProcScr_MapHealEffect[] = {
+	PROC_YIELD,
+	PROC_CALL(map_heal_effect_apply),
+	PROC_CALL(map_heal_effect_start_bar),
+	PROC_CALL(map_heal_effect_start_fx),
+	PROC_REPEAT(map_heal_effect_loop),
+	PROC_SLEEP(HEAL_ANIM_BAR_HOLD),
+	PROC_CALL(map_heal_effect_end),
+	PROC_END
+};
+
 static const struct ProcScr ProcScr_MapHealAnim[] = {
 	PROC_YIELD,
 	PROC_CALL(map_heal_anim_init),
 	PROC_YIELD,
 	PROC_CALL(map_heal_anim_pose),
 	PROC_SLEEP(HEAL_ANIM_POSE_FRAMES),
-	PROC_CALL(map_heal_anim_apply),
-	PROC_CALL(map_heal_anim_start_bar),
-	PROC_CALL(map_heal_anim_start_fx),
-	PROC_REPEAT(map_heal_anim_loop),
-	PROC_SLEEP(HEAL_ANIM_BAR_HOLD),
+	PROC_CALL(map_heal_anim_start_effect),
+	PROC_YIELD,
 	PROC_CALL(map_heal_anim_end),
 	PROC_END
 };
@@ -246,6 +275,25 @@ void StartMapHealAnim(ProcPtr parent, struct Unit *unit, int amount)
 		proc = SpawnProcLocking(ProcScr_MapHealAnim, parent);
 	else
 		proc = SpawnProc(ProcScr_MapHealAnim, PROC_TREE_3);
+
+	proc->unit = unit;
+	proc->amount = amount;
+	proc->mu_generated = false;
+}
+
+/*
+ * Heal effect only: no Mu handling and no "use item" pose.  The caller is
+ * responsible for the unit being visible in the pose already (and for
+ * cleaning the Mu up afterwards).
+ */
+void StartMapHealEffect(ProcPtr parent, struct Unit *unit, int amount)
+{
+	struct ProcMapHealAnim *proc;
+
+	if (parent)
+		proc = SpawnProcLocking(ProcScr_MapHealEffect, parent);
+	else
+		proc = SpawnProc(ProcScr_MapHealEffect, PROC_TREE_3);
 
 	proc->unit = unit;
 	proc->amount = amount;

@@ -20,7 +20,14 @@
  *
  *	StartMapHealAnim(proc, unit, amount);
  *	return true;
+ *
+ * StartMapHealEffect() runs only the heal itself (hp + glow + hp gauge) and
+ * neither touches the Mu nor plays the "use item" pose.  A skill activation
+ * animation that already has the unit in that pose uses it from its callback:
+ *
+ *	StartMapHealEffect(proc, unit, amount);
  */
 
 void StartMapHealAnim(ProcPtr parent, struct Unit *unit, int amount);
+void StartMapHealEffect(ProcPtr parent, struct Unit *unit, int amount);
 bool MapHealAnimExists(void);

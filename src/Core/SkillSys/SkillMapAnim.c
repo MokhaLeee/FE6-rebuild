@@ -291,12 +291,18 @@ static void muskillanim_init(struct ProcMuSkillAnim *proc)
 
 	proc->mu_gen = false;
 
+	/*
+	 * A battle animation may leave its Mu behind (displayed after a map
+	 * battle, only reset after a banim one).  Reusing it would either stack
+	 * two units or animate a stale sprite, so end it and take the unit over.
+	 */
 	mu = GetUnitMu(proc->unit);
-	if (!mu) {
-		HideUnitSprite(proc->unit);
-		mu = StartMu(proc->unit);
-		proc->mu_gen = true;
-	}
+	if (mu)
+		EndMu(mu);
+
+	HideUnitSprite(proc->unit);
+	mu = StartMu(proc->unit);
+	proc->mu_gen = true;
 
 	if (!SKILL_IS_VALID(proc->sid)) {
 		Proc_Goto(proc, 1);
@@ -337,6 +343,25 @@ static void muskillanim_wait(ProcPtr proc)
 		Proc_Break(proc);
 }
 
+static void muskillanim_end(struct ProcMuSkillAnim *proc)
+{
+	struct MuProc *mu = GetUnitMu(proc->unit);
+
+	if (proc->mu_gen) {
+		if (mu)
+			EndMu(mu);
+
+		ShowUnitSprite(proc->unit);
+
+		return;
+	}
+
+	if (mu) {
+		SetMuDefaultFacing(mu);
+		ResetSpriteAnimClock(mu->sprite_anim);
+	}
+}
+
 static const struct ProcScr ProcScr_MuSkillAnim[] = {
 	// PROC_CALL(LockGame),
 	// PROC_CALL(MapAnim_CommonInit),
@@ -354,6 +379,7 @@ PROC_LABEL(1),
 	PROC_YIELD,
 	PROC_REPEAT(muskillanim_wait),
 	PROC_YIELD,
+	PROC_CALL(muskillanim_end),
 	// PROC_CALL(UnlockGame),
 	PROC_CALL(Manim_Finish),
 	// PROC_CALL(MapAnim_CommonEnd),

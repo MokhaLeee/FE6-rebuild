@@ -14,9 +14,11 @@
  * "瞑想" (Heal Focus), ported from fe8u-cskillsys-kernel MenuSkills/HealingFocus.c
  *
  * fe8 uses CallMapAnim_HealExt() for the map animation, which fe6 does not
- * have.  StartMapHealAnim() is the equivalent here: the unit plays the
- * vulnerary "use item" pose, the heal glow blooms on it and the hp comes back,
- * without touching the battle unit snapshot or the manim state.
+ * have.  Here the shared skill activation animation (NewMuSkillAnim) forces
+ * the unit into the vulnerary "use item" pose and pops the skill icon; its
+ * callback then runs the heal effect only (StartMapHealEffect), so the pose is
+ * played once and the hp/glow come after the icon.  Neither path touches the
+ * battle unit snapshot or the manim state.
  */
 fu8 HealingFocus_Usability(const struct MenuEntInfo *self, int number)
 {
@@ -39,13 +41,19 @@ fu8 HealingFocus_OnSelected(struct MenuProc *menu, struct MenuEntProc *ent)
 	return MENU_ACTION_NOCURSOR | MENU_ACTION_END | MENU_ACTION_SE_6A | MENU_ACTION_CLEAR;
 }
 
-bool Action_HealingFocus(ProcPtr parent)
+static void healing_focus_heal(ProcPtr proc)
 {
 	int amount;
 
 	amount = perc_of(GetUnitMaxHp(gActiveUnit), SKILL_EFF0(SID_HealingFocus));
 
-	StartMapHealAnim(parent, gActiveUnit, amount);
+	StartMapHealEffect(proc, gActiveUnit, amount);
+}
+
+bool Action_HealingFocus(ProcPtr parent)
+{
+	NewMuSkillAnim(gActiveUnit, SID_HealingFocus, parent,
+			healing_focus_heal, NULL);
 
 	return false;
 }
