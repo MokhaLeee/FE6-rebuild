@@ -81,6 +81,12 @@ void NewEfxSkill(struct Anim *anim, int sid);
 bool EfxSkillExists(void);
 
 bool MapAnimRoundAnim_DisplaySkillIcon(ProcPtr parent);
+void NewMuSkillAnim(
+		struct Unit *unit,
+		u16 sid,
+		ProcPtr parent,
+		void (*callback1)(ProcPtr proc),
+		void (*callback2)(ProcPtr proc));
 void NewMuSkillAnimOnActiveUnit(
 		u16 sid,
 		ProcPtr parent,
