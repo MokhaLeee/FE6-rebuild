@@ -21,44 +21,42 @@
  * The icon art lives here too: nothing else draws it.
  */
 
-// clang-format off
-
-u16 CONST_DATA Sprite_SleepIconA[] =
+static const u16 Sprite_SleepIconA[] =
 {
 	1, OAM0_SHAPE_16x16, OAM1_SIZE_16x16, OAM2_CHR(0x64) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_SleepIconB[] =
+static const u16 Sprite_SleepIconB[] =
 {
 	1, OAM0_SHAPE_16x16 + OAM0_Y(-1), OAM1_SIZE_16x16, OAM2_CHR(0x64) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_SleepIconC[] =
+static const u16 Sprite_SleepIconC[] =
 {
 	1, OAM0_SHAPE_16x16 + OAM0_Y(-2), OAM1_SIZE_16x16 + OAM1_X(-1), OAM2_CHR(0x64) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_SleepIconD[] =
+static const u16 Sprite_SleepIconD[] =
 {
 	1, OAM0_SHAPE_16x16 + OAM0_Y(-3), OAM1_SIZE_16x16 + OAM1_X(-1), OAM2_CHR(0x4A) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_SleepIconE[] =
+static const u16 Sprite_SleepIconE[] =
 {
 	1, OAM0_SHAPE_16x16 + OAM0_Y(-4), OAM1_SIZE_16x16 + OAM1_X(-2), OAM2_CHR(0x4A) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_SleepIconF[] =
+static const u16 Sprite_SleepIconF[] =
 {
 	1, OAM0_SHAPE_16x16 + OAM0_Y(-5), OAM1_SIZE_16x16 + OAM1_X(-2), OAM2_CHR(0x4A) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_SleepIconG[] =
+static const u16 Sprite_SleepIconG[] =
 {
 	1, OAM0_SHAPE_16x16 + OAM0_Y(-6), OAM1_SIZE_16x16 + OAM1_X(-3), OAM2_CHR(0x4A) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 const * CONST_DATA SleepIconSprites[] =
+static u16 const *const SleepIconSprites[] =
 {
 	Sprite_SleepIconA,
 	Sprite_SleepIconB,
@@ -69,52 +67,52 @@ u16 const * CONST_DATA SleepIconSprites[] =
 	Sprite_SleepIconG,
 };
 
-u16 CONST_DATA Sprite_BerserkIconA[] =
+static const u16 Sprite_BerserkIconA[] =
 {
 	1, OAM0_SHAPE_16x8, OAM1_SIZE_16x8, OAM2_CHR(0x42) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_BerserkIconB[] =
+static const u16 Sprite_BerserkIconB[] =
 {
 	1, OAM0_SHAPE_16x8 + OAM0_Y(+1), OAM1_SIZE_16x8 + OAM1_X(+1), OAM2_CHR(0x62) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_BerserkIconC[] =
+static const u16 Sprite_BerserkIconC[] =
 {
 	1, OAM0_SHAPE_16x8 + OAM0_Y(+1), OAM1_SIZE_16x8, OAM2_CHR(0x44) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_BerserkIconD[] =
+static const u16 Sprite_BerserkIconD[] =
 {
 	1, OAM0_SHAPE_16x8, OAM1_SIZE_16x8 + OAM1_X(+1), OAM2_CHR(0x42) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_BerserkIconE[] =
+static const u16 Sprite_BerserkIconE[] =
 {
 	1, OAM0_SHAPE_16x8, OAM1_SIZE_16x8 + OAM1_X(+2), OAM2_CHR(0x62) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_BerserkIconF[] =
+static const u16 Sprite_BerserkIconF[] =
 {
 	1, OAM0_SHAPE_16x8 + OAM0_Y(+1), OAM1_SIZE_16x8, OAM2_CHR(0x44) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_BerserkIconG[] =
+static const u16 Sprite_BerserkIconG[] =
 {
 	1, OAM0_SHAPE_16x8, OAM1_SIZE_16x8 + OAM1_X(-1), OAM2_CHR(0x42) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_BerserkIconH[] =
+static const u16 Sprite_BerserkIconH[] =
 {
 	1, OAM0_SHAPE_16x8 + OAM0_Y(+1), OAM1_SIZE_16x8 + OAM1_X(+1), OAM2_CHR(0x62) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_BerserkIconI[] =
+static const u16 Sprite_BerserkIconI[] =
 {
 	1, OAM0_SHAPE_16x8 + OAM0_Y(+1), OAM1_SIZE_16x8 + OAM1_X(+2), OAM2_CHR(0x44) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 const * CONST_DATA BerserkIconSprites[] =
+static u16 const *const BerserkIconSprites[] =
 {
 	Sprite_BerserkIconA,
 	Sprite_BerserkIconB,
@@ -127,24 +125,24 @@ u16 const * CONST_DATA BerserkIconSprites[] =
 	Sprite_BerserkIconI,
 };
 
-u16 CONST_DATA Sprite_None[] = { 0 };
+static const u16 Sprite_None[] = { 0 };
 
-u16 CONST_DATA Sprite_SilenceIconA[] =
+static const u16 Sprite_SilenceIconA[] =
 {
 	1, OAM0_SHAPE_16x8, OAM1_SIZE_16x8, OAM2_CHR(0x66) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_SilenceIconB[] =
+static const u16 Sprite_SilenceIconB[] =
 {
 	1, OAM0_SHAPE_16x8 + OAM0_Y(-1), OAM1_SIZE_16x8, OAM2_CHR(0x46) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_SilenceIconC[] =
+static const u16 Sprite_SilenceIconC[] =
 {
 	1, OAM0_SHAPE_16x16 + OAM0_Y(-2), OAM1_SIZE_16x16, OAM2_CHR(0x48) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 const * CONST_DATA SilenceIconSprites[] =
+static u16 const *const SilenceIconSprites[] =
 {
 	Sprite_SilenceIconA,
 	Sprite_SilenceIconB,
@@ -166,55 +164,55 @@ u16 const * CONST_DATA SilenceIconSprites[] =
 	Sprite_None,
 };
 
-u16 CONST_DATA Sprite_PoisonIconA[] =
+static const u16 Sprite_PoisonIconA[] =
 {
 	2,
 	OAM0_SHAPE_8x16, OAM1_SIZE_8x16 + OAM1_X(2), OAM2_CHR(0x40) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 	OAM0_SHAPE_8x16 + OAM0_Y(3), OAM1_SIZE_8x16 + OAM1_X(10), OAM2_CHR(0x41) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_PoisonIconB[] =
+static const u16 Sprite_PoisonIconB[] =
 {
 	2,
 	OAM0_SHAPE_8x16 + OAM0_Y(-1), OAM1_SIZE_8x16 + OAM1_X(2) + OAM1_HFLIP, OAM2_CHR(0x40) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 	OAM0_SHAPE_8x16 + OAM0_Y(2), OAM1_SIZE_8x16 + OAM1_X(8) + OAM1_HFLIP, OAM2_CHR(0x41) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_PoisonIconC[] =
+static const u16 Sprite_PoisonIconC[] =
 {
 	2,
 	OAM0_SHAPE_8x16 + OAM0_Y(-2), OAM1_SIZE_8x16 + OAM1_X(2), OAM2_CHR(0x40) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 	OAM0_SHAPE_8x16 + OAM0_Y(1), OAM1_SIZE_8x16 + OAM1_X(10), OAM2_CHR(0x41) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_PoisonIconD[] =
+static const u16 Sprite_PoisonIconD[] =
 {
 	2,
 	OAM0_SHAPE_8x16 + OAM0_Y(-3), OAM1_SIZE_8x16 + OAM1_X(2) + OAM1_HFLIP, OAM2_CHR(0x40) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 	OAM0_SHAPE_8x16, OAM1_SIZE_8x16 + OAM1_X(8) + OAM1_HFLIP, OAM2_CHR(0x41) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_PoisonIconE[] =
+static const u16 Sprite_PoisonIconE[] =
 {
 	1, OAM0_SHAPE_8x16 + OAM0_Y(-4), OAM1_SIZE_8x16 + OAM1_X(4), OAM2_CHR(0x40) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_PoisonIconF[] =
+static const u16 Sprite_PoisonIconF[] =
 {
 	1, OAM0_SHAPE_8x16 + OAM0_Y(-5), OAM1_SIZE_8x16 + OAM1_X(4), OAM2_CHR(0x41) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_PoisonIconG[] =
+static const u16 Sprite_PoisonIconG[] =
 {
 	1, OAM0_SHAPE_8x16 + OAM0_Y(-6), OAM1_SIZE_8x16 + OAM1_X(4), OAM2_CHR(0x40) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 CONST_DATA Sprite_PoisonIconH[] =
+static const u16 Sprite_PoisonIconH[] =
 {
 	1, OAM0_SHAPE_8x16 + OAM0_Y(-7), OAM1_SIZE_8x16 + OAM1_X(4) + OAM1_HFLIP, OAM2_CHR(0x41) + OAM2_LAYER(2) + OAM2_PAL(OBPAL_1),
 };
 
-u16 const * CONST_DATA PoisonIconSprites[] =
+static u16 const *const PoisonIconSprites[] =
 {
 	Sprite_PoisonIconA,
 	Sprite_PoisonIconB,
@@ -229,8 +227,6 @@ u16 const * CONST_DATA PoisonIconSprites[] =
 	Sprite_None,
 	Sprite_None,
 };
-
-// clang-format on
 
 /* One frame of every animated status icon; resolved once per OAM pass. */
 struct UnitStatusIconFrame {
