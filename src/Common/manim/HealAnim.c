@@ -95,15 +95,13 @@ static void map_heal_anim_init(struct ProcMapHealAnim *proc)
 	struct MuProc *mu;
 
 	/*
-	 * The battle animation may leave its own Mu behind: the map battle keeps
-	 * it on screen, the banim one only resets it.  Reusing it would either
-	 * stack two units or play the pose on a stale sprite, so take the unit
-	 * over - end the leftover, hide the map sprite and build a fresh Mu.  The
-	 * animation then owns the Mu it has to put back in map_heal_anim_end().
+	 * Take the map over the way cskillsys' MapAnim_CommonInit() does: drop
+	 * stale Mus and rebuild the unit sprites, then hide the map sprite and
+	 * build the Mu this animation owns.  A leftover battle Mu or a stale map
+	 * sprite would otherwise stack with the heal.
 	 */
-	mu = GetUnitMu(unit);
-	if (mu)
-		EndMu(mu);
+	EndAllMus();
+	RefreshUnitSprites();
 
 	HideUnitSprite(unit);
 	mu = StartMu(unit);

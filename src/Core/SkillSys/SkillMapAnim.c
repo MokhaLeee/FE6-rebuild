@@ -292,13 +292,13 @@ static void muskillanim_init(struct ProcMuSkillAnim *proc)
 	proc->mu_gen = false;
 
 	/*
-	 * A battle animation may leave its Mu behind (displayed after a map
-	 * battle, only reset after a banim one).  Reusing it would either stack
-	 * two units or animate a stale sprite, so end it and take the unit over.
+	 * Reset the map the way cskillsys' MapAnim_CommonInit() does: drop stale
+	 * Mus and rebuild the unit sprites before taking the unit over.  Without
+	 * this a leftover battle Mu / stale map sprite can stack with the
+	 * activation animation.
 	 */
-	mu = GetUnitMu(proc->unit);
-	if (mu)
-		EndMu(mu);
+	EndAllMus();
+	RefreshUnitSprites();
 
 	HideUnitSprite(proc->unit);
 	mu = StartMu(proc->unit);

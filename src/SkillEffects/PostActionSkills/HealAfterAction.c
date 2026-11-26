@@ -29,9 +29,44 @@
  * (BattleUnit::result), set by the battle flow and reset by InitBattleUnit(),
  * so no skill needs to own a global flag for it.
  *
- * The animation is the self-contained map heal (map-anim.h), so this needs no
- * battle unit snapshot either.
+ * The heal first plays the shared skill activation animation (NewMuSkillAnim:
+ * forced "use item" pose + skill icon), then its callback runs the heal effect
+ * only (StartMapHealEffect), so the pose is played once.  The animation is
+ * started on the healed unit, which is not necessarily the active one for the
+ * defender hook.
  */
+
+/* NewMuSkillAnim() callbacks only get the proc, so the heal parameters go
+ * through here; the post-action hooks run one at a time and the animation
+ * blocks the hook proc, so nothing can overwrite them mid-animation. */
+static struct Unit *s_heal_unit;
+static int s_heal_amount;
+
+static void heal_after_action_anim(ProcPtr proc)
+{
+	StartMapHealEffect(proc, s_heal_unit, s_heal_amount);
+}
+
+static bool start_post_action_heal(struct Unit *unit, ProcPtr parent,
+				   int heal, u16 sid)
+{
+	if (heal <= 0)
+		return false;
+
+	if (sid == 0) {
+		/* No skill id to show an icon for: fall back to the plain heal. */
+		StartMapHealAnim(parent, unit, heal);
+		return true;
+	}
+
+	s_heal_unit = unit;
+	s_heal_amount = heal;
+
+	NewMuSkillAnim(unit, sid, parent, heal_after_action_anim, NULL);
+
+	return true;
+}
+
 static bool action_defeated_foe(void)
 {
 	/* gBattleUnitA still holds the battle of this action; a wait or an item
@@ -43,6 +78,7 @@ bool PostActionSkill_HealAfterAction(ProcPtr parent)
 {
 	struct Unit *unit = gActiveUnit;
 	int hp_cur, hp_max, heal;
+	u16 sid = 0;
 
 	if (!UnitAvailable(unit) || UNIT_STONED(unit))
 		return false;
@@ -52,30 +88,36 @@ bool PostActionSkill_HealAfterAction(ProcPtr parent)
 
 	heal = 0;
 
-	if (SkillTester(unit, SID_Lifetaker) && action_defeated_foe())
+	if (SkillTester(unit, SID_Lifetaker) && action_defeated_foe()) {
 		heal += perc_of(hp_max, SKILL_EFF0(SID_Lifetaker));
+		sid = SID_Lifetaker;
+	}
 
-	if (SkillTester(unit, SID_EndlessVitality))
+	if (SkillTester(unit, SID_EndlessVitality)) {
 		heal += perc_of(hp_max, SKILL_EFF0(SID_EndlessVitality));
 
-	if (SkillTester(unit, SID_MysticBoost))
+		if (!sid)
+			sid = SID_EndlessVitality;
+	}
+
+	if (SkillTester(unit, SID_MysticBoost)) {
 		heal += SKILL_EFF0(SID_MysticBoost);
+
+		if (!sid)
+			sid = SID_MysticBoost;
+	}
 
 	if (heal > hp_max - hp_cur)
 		heal = hp_max - hp_cur;
 
-	if (heal <= 0)
-		return false;
-
-	StartMapHealAnim(parent, unit, heal);
-
-	return true;
+	return start_post_action_heal(unit, parent, heal, sid);
 }
 
 bool PostActionSkill_HealAfterActionTarget(ProcPtr parent)
 {
 	struct Unit *unit;
 	int hp_cur, hp_max, heal;
+	u16 sid = 0;
 
 	/* Only a battle has a defender to heal; Lifetaker is not in here, it
 	 * rewards the unit that defeated a foe. */
@@ -96,19 +138,20 @@ bool PostActionSkill_HealAfterActionTarget(ProcPtr parent)
 
 	heal = 0;
 
-	if (SkillTester(unit, SID_EndlessVitality))
+	if (SkillTester(unit, SID_EndlessVitality)) {
 		heal += perc_of(hp_max, SKILL_EFF0(SID_EndlessVitality));
+		sid = SID_EndlessVitality;
+	}
 
-	if (SkillTester(unit, SID_MysticBoost))
+	if (SkillTester(unit, SID_MysticBoost)) {
 		heal += SKILL_EFF0(SID_MysticBoost);
+
+		if (!sid)
+			sid = SID_MysticBoost;
+	}
 
 	if (heal > hp_max - hp_cur)
 		heal = hp_max - hp_cur;
 
-	if (heal <= 0)
-		return false;
-
-	StartMapHealAnim(parent, unit, heal);
-
-	return true;
+	return start_post_action_heal(unit, parent, heal, sid);
 }

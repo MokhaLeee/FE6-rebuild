@@ -1121,7 +1121,9 @@ struct MuProc *GetUnitMu(struct Unit *unit)
 	for (i = 0; i < MU_COUNT; i++) {
 		struct MuProc *proc = sMuConfig[i].mu;
 
-		if (proc && proc->unit == unit)
+		/* Mu_OnEnd() only clears the slot id, so a stale sMuConfig[i].mu
+		 * may still point at a freed proc; never hand that out. */
+		if (proc && sMuConfig[i].id != 0 && proc->unit == unit)
 			return proc;
 	}
 	return NULL;
