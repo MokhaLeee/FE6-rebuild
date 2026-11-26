@@ -498,7 +498,7 @@ void InitBmBgLayers(void)
 void ApplySystemObjectsGraphics(void)
 {
     Decompress(Img_SystemObjects, gBuf);
-    Copy2dChr(gBuf, OBJ_VRAM0 + CHR_SIZE * OBCHR_SYSTEM_OBJECTS, 18, 4);
+    Copy2dChr(gBuf, OBJ_VRAM0 + CHR_SIZE * OBCHR_SYSTEM_OBJECTS, 24, 4);
 
     ApplyPalettes(Pal_SystemObjects, 0x10 + OBPAL_SYSTEM_OBJECTS, 2);
 }

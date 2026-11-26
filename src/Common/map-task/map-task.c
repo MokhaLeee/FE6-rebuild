@@ -236,6 +236,37 @@ struct UnitStatusIconFrame {
 	int silence;
 };
 
+/*
+ * The hp bar follows the fe8u-cskillsys map task: one 16x8 OAM per unit, at
+ * the unit's feet.  Its graphics live in the system objects sheet
+ * (Img_SystemObjects), so the chr table below is all the bar needs; $74 is the
+ * empty bar.
+ */
+static const u8 sHpBarChr[] = {
+	0x74, 0x74,
+	0x56, 0x54, 0x52,
+	0x36, 0x34, 0x32,
+	0x16, 0x14, 0x12,
+};
+
+static void put_unit_hp_bar_oam(struct Unit *unit, int x, int y)
+{
+	int hp = GetUnitCurrentHp(unit);
+	int max = GetUnitMaxHp(unit);
+
+	if (hp == max)
+		return;
+
+	if (hp > max)
+		hp = max;
+
+	PutOamHi(
+		OAM1_X(0x200 + x), OAM0_Y(0x100 + y + 9),
+		Sprite_16x8,
+		OAM2_PAL(OBPAL_SYSTEM_OBJECTS) + OAM2_LAYER(2) +
+		OAM2_CHR(sHpBarChr[k_udiv(hp * 10, max)]));
+}
+
 static void put_unit_status_icon_oam(struct Unit *unit, int x, int y,
 				     const struct UnitStatusIconFrame *frame)
 {
@@ -327,14 +358,10 @@ void PutMapTaskOam(void)
 		if (!unit_oam_overlays_visible(unit, &x, &y))
 			continue;
 
+		put_unit_hp_bar_oam(unit, x, y);
 		put_unit_status_icon_oam(unit, x, y, &frame);
 
 		if (display_rescue_icon)
 			put_unit_rescue_icon_oam(unit, x, y);
-
-		/*
-		 * Overlays that any unit can carry (the hp bar, ...) go here:
-		 * the unit is visible and x/y is its screen position.
-		 */
 	}
 }
