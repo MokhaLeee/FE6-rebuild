@@ -140,6 +140,7 @@ void InitBattleUnit(struct BattleUnit *bu, struct Unit *unit);
 void InitBattleUnitWithoutBonuses(struct BattleUnit *bu, struct Unit *unit);
 void SetBattleUnitTerrainBonusesAuto(struct BattleUnit *bu);
 void SetBattleUnitTerrainBonuses(struct BattleUnit *bu, int terrain);
+int GetItemFromSlot(struct Unit *unit, int item_slot);
 void SetBattleUnitWeapon(struct BattleUnit *bu, int item_slot);
 void SetBattleUnitWeaponBallista(struct BattleUnit *bu);
 void BattleInitTargetCanCounter(void);

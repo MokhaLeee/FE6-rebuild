@@ -3,6 +3,7 @@
 #include "item.h"
 #include "itemuse.h"
 #include "mapwork.h"
+#include "battle.h"
 
 #include "debug.h"
 #include "skill-sys.h"
@@ -140,7 +141,7 @@ int GetUnitWeaponReach(struct Unit *unit, int item_slot)
 	int i, item, result = 0;
 
 	if (item_slot >= 0)
-		return get_item_reach(unit->items[item_slot], unit);
+		return get_item_reach(GetItemFromSlot(unit, item_slot), unit);
 
 	for (i = 0; (i < ITEMSLOT_INV_COUNT) && (item = unit->items[i]); ++i) {
 		if (CanUnitUseWeapon(unit, item))
@@ -156,7 +157,7 @@ int GetUnitItemUseReach(struct Unit *unit, int item_slot)
 	u32 mask = 0;
 
 	if (item_slot >= 0) {
-		int item = unit->items[item_slot];
+		int item = GetItemFromSlot(unit, item_slot);
 
 		if (CanUnitUseItem(unit, item))
 			return get_item_reach(item, unit);

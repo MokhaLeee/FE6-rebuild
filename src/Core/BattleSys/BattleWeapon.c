@@ -19,6 +19,37 @@
  * the item-effect init path that reuses the same slot rules.
  */
 
+/*
+ * Resolve an item slot to the item it holds.
+ *
+ * Slots 0..4 index the unit inventory; every other slot reads dedicated
+ * storage instead (the overflow item, the arena weapons, or the ballista the
+ * unit currently stands on), so a raw Unit::items[slot] load is only valid
+ * inside the inventory range.
+ */
+int GetItemFromSlot(struct Unit *unit, int item_slot)
+{
+	switch (item_slot) {
+	case ITEMSLOT_INV0 ... ITEMSLOT_INV_COUNT - 1:
+		return unit->items[item_slot];
+
+	case ITEMSLOT_OVERFLOW:
+		return gBmSt.inventory_item_overflow;
+
+	case ITEMSLOT_ARENA_PLAYER:
+		return gArenaSt.player_weapon;
+
+	case ITEMSLOT_ARENA_OPPONENT:
+		return gArenaSt.opponent_weapon;
+
+	case ITEMSLOT_BALLISTA:
+		return GetBallistaItemAt(unit->x, unit->y);
+
+	default:
+		return 0;
+	}
+}
+
 void SetBattleUnitWeapon(struct BattleUnit *bu, int item_slot)
 {
 	if (item_slot == -1)
@@ -27,51 +58,38 @@ void SetBattleUnitWeapon(struct BattleUnit *bu, int item_slot)
 	bu->has_inventory_weapon = TRUE;
 
 	switch (item_slot) {
-	case ITEMSLOT_INV0 ... ITEMSLOT_INV_COUNT-1:
+	case ITEMSLOT_INV0 ... ITEMSLOT_INV_COUNT - 1:
 		bu->weapon_inventory_slot = item_slot;
-		bu->weapon = bu->unit.items[bu->weapon_inventory_slot];
 
 		break;
 
 	case ITEMSLOT_OVERFLOW:
 		bu->weapon_inventory_slot = -1;
-		bu->weapon = gBmSt.inventory_item_overflow;
 
 		break;
 
 	case ITEMSLOT_ARENA_PLAYER:
-		bu->weapon_inventory_slot = 0;
-
-		bu->weapon = gArenaSt.player_weapon;
-		bu->has_inventory_weapon = FALSE;
-
-		break;
-
 	case ITEMSLOT_ARENA_OPPONENT:
 		bu->weapon_inventory_slot = 0;
-
-		bu->weapon = gArenaSt.opponent_weapon;
 		bu->has_inventory_weapon = FALSE;
 
 		break;
 
 	case ITEMSLOT_BALLISTA:
 		bu->weapon_inventory_slot = -1;
-
-		bu->weapon = GetBallistaItemAt(bu->unit.x, bu->unit.y);
 		bu->has_inventory_weapon = FALSE;
 
 		break;
 
 	default:
 		bu->weapon_inventory_slot = -1;
-
-		bu->weapon = 0;
 		bu->has_inventory_weapon = FALSE;
 
 		break;
 
 	}
+
+	bu->weapon = GetItemFromSlot(&bu->unit, item_slot);
 
 	bu->weapon_before = bu->weapon;
 	bu->weapon_attributes = GetItemAttributes(bu->weapon);
@@ -163,10 +181,7 @@ void BattleUnitTargetCheckCanCounter(struct BattleUnit *bu)
 
 void BattleInitItemEffect(struct Unit *unit, int item_slot)
 {
-	int item = unit->items[item_slot];
-
-	if (item_slot < 0)
-		item = 0;
+	int item = GetItemFromSlot(unit, item_slot);
 
 	gBattleSt.flags = 0;
 

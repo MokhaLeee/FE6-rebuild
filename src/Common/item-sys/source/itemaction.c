@@ -38,7 +38,7 @@ void DoItemHealStaffAction(ProcPtr proc)
 
 	healed = GetUnitItemHealAmount(
 		GetUnit(gAction.instigator),
-		GetUnit(gAction.instigator)->items[gAction.item_slot]);
+		GetItemFromSlot(GetUnit(gAction.instigator), gAction.item_slot));
 	AddUnitHp(GetUnit(gAction.target), healed);
 
 	gBattleHitIt->damage = gBattleUnitB.unit.hp -
@@ -233,7 +233,7 @@ void DoItemFortifyStaffAction(ProcPtr proc)
 
 	healed = GetUnitItemHealAmount(
 		GetUnit(gAction.instigator),
-		GetUnit(gAction.instigator)->items[gAction.item_slot]);
+		GetItemFromSlot(GetUnit(gAction.instigator), gAction.item_slot));
 
 	for (count = CountTargets(), i = 0; i < count; ++i)
 		AddUnitHp(GetUnit(GetTarget(i)->uid), healed);
@@ -478,7 +478,7 @@ void DoItemStatBoostAction(ProcPtr proc)
 void DoItemAction(ProcPtr proc)
 {
 	int iid = GetItemIid(
-		GetUnit(gAction.instigator)->items[gAction.item_slot]);
+		GetItemFromSlot(GetUnit(gAction.instigator), gAction.item_slot));
 
 	gBattleUnitA.has_item_effect_target = FALSE;
 
