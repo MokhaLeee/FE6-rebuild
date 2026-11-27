@@ -171,26 +171,80 @@ static void put_dual_card(void)
 	PutNumberOrBlank(tm + TM_OFFSET(15, 16), TEXT_COLOR_SYSTEM_BLUE, GetUnitAid(unit));
 }
 
+/*
+ * Page 1 left panel: skills. The layout adapts to how many there are.
+ *
+ *  0            "No skills"
+ *  1..3         one icon + name per row
+ *  more         icons only, up to 9 per row and 5 rows
+ *
+ * Black magic is not listed here: the concept belongs to the cskillsys port and
+ * has no data source yet, so a label plus rows would always be empty. Add the
+ * list (and rerun the split) when that port lands.
+ */
+enum {
+	MSS_LPAGE1_NAME_ROWS = 3,
+	MSS_LPAGE1_ICON_COLS = 9,
+	MSS_LPAGE1_ICON_ROWS = 5,
+};
+
 static struct StatScreenTextInfo const textinfo_lpage1[] = {
-	{ gMssSt.texts + MSS_TEXT_P1_SKILLS, TmBuff_MssL0 + TM_OFFSET(1, 1),  TEXT_COLOR_SYSTEM_GOLD, 0, "Skills:" },
-	{ gMssSt.texts + MSS_TEXT_P1_BMAGS, TmBuff_MssL0 + TM_OFFSET(1, 8),  TEXT_COLOR_SYSTEM_GOLD, 0, "B.Magic:" },
+	{ gMssSt.texts + MSS_TEXT_P1_SKILLS, TmBuff_MssL0 + TM_OFFSET(1, 1), TEXT_COLOR_SYSTEM_GOLD, 0, "Skills:" },
 	{ 0 }, // end
 };
 
 static void put_lpage1(void)
 {
-	int i;
 	struct Unit *unit = gMssSt.unit;
 	struct SkillList *slist = GetSkillList(unit);
+	int count = slist->amt;
+	int i;
 
 	PutStatScreenText(textinfo_lpage1);
 
-	for (i = 0; i < slist->amt; i++) {
-		PutIcon(
-			TmBuff_MssL0 + TM_OFFSET(1 + i * 2, 3),
-			SKILL_ICON(slist->sid[i]),
-			TILEREF(0, BGPAL_MSS_ICON0)
-		);
+	if (count == 0) {
+		PutDrawText(&gMssSt.texts[MSS_TEXT_P1_NOSKILL],
+			TmBuff_MssL0 + TM_OFFSET(3, 3), TEXT_COLOR_SYSTEM_GRAY, 0, 0, "No skills");
+		return;
+	}
+
+	if (count <= MSS_LPAGE1_NAME_ROWS) {
+		for (i = 0; i < count; i++) {
+			int sid = slist->sid[i];
+			int y = 3 + i * 2;
+			char *name = GetSkillNameStr(sid);
+
+			PutIcon(TmBuff_MssL0 + TM_OFFSET(1, y),
+				SKILL_ICON(sid), TILEREF(0, BGPAL_MSS_ICON0));
+
+			/*
+			 * A name wider than its slot would be drawn into the next one's
+			 * glyphs. Drop it and keep the icon instead of corrupting the
+			 * neighbouring rows.
+			 */
+			if (GetStringTextLen(name) > 16 * 8)
+				continue;
+
+			PutDrawText(&gMssSt.texts[MSS_TEXT_P1_SKILL1 + i],
+				TmBuff_MssL0 + TM_OFFSET(3, y),
+				TEXT_COLOR_SYSTEM_WHITE, 0, 0, name);
+		}
+
+		return;
+	}
+
+	/* too many for names: nine 16x16 icons per row, five rows */
+	for (i = 0; i < count && i < MSS_LPAGE1_ICON_COLS * MSS_LPAGE1_ICON_ROWS; i++) {
+		int col = i;
+		int row = 0;
+
+		while (col >= MSS_LPAGE1_ICON_COLS) {
+			col -= MSS_LPAGE1_ICON_COLS;
+			row++;
+		}
+
+		PutIcon(TmBuff_MssL0 + TM_OFFSET(1 + col * 2, 3 + row * 2),
+			SKILL_ICON(slist->sid[i]), TILEREF(0, BGPAL_MSS_ICON0));
 	}
 }
 

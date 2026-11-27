@@ -117,9 +117,12 @@ static const struct TextInitInfo mss_text_init_info_page0[] = {
 	{ &gMssSt.texts[MSS_TEXT_RES], 3 },
 	{ &gMssSt.texts[MSS_TEXT_MOV], 3 },
 	{ &gMssSt.texts[MSS_TEXT_P1_SKILLS], 5 },
-	{ &gMssSt.texts[MSS_TEXT_P1_BMAGS], 5 },
+	{ &gMssSt.texts[MSS_TEXT_P1_NOSKILL], 9 },
+	{ &gMssSt.texts[MSS_TEXT_P1_SKILL1], 16 },
+	{ &gMssSt.texts[MSS_TEXT_P1_SKILL2], 16 },
+	{ &gMssSt.texts[MSS_TEXT_P1_SKILL3], 16 },
 
-	{ &gMssSt.texts[MSS_TEXT_PAD], MSS_TEXT_PAGE_SLOTS - (26 + 5 + 5) },
+	{ &gMssSt.texts[MSS_TEXT_PAD], MSS_TEXT_PAGE_SLOTS - (26 + 5 + 9 + 48) },
 
 	{}
 };
