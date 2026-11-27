@@ -27,6 +27,14 @@ static void ComputeBattleUnitEffectiveCritRate(struct BattleUnit *attacker, stru
 
 	if (attacker->battle_effective_crit < 0)
 		attacker->battle_effective_crit = 0;
+
+	/*
+	 * CONFIG_DEBUG_CRIT_HIT forces the crit in BattleHit_CalcDamage(); mirror
+	 * it here so the battle forecast and the stat screen agree with it.
+	 */
+#if CONFIG_DEBUG_CRIT_HIT
+	attacker->battle_effective_crit = 100;
+#endif
 }
 
 static void ComputeBattleUnitSpecialWeaponStats(struct BattleUnit *attacker, struct BattleUnit *defender)

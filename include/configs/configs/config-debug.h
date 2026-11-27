@@ -10,4 +10,7 @@
 
 #define CONFIG_DEBUG_CH0_EVENT 0
 
+/* force every battle hit to crit, and show 100 crit in the forecast */
+#define CONFIG_DEBUG_CRIT_HIT 0
+
 #endif
