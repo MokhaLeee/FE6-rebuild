@@ -370,11 +370,11 @@ CpuCopy16(
  9  | |                      |Sup     B    ||     ############ |
 10  | |                      |             || Def     12       |
 11  | +----------------------+             ||     ############ |
-12  | Lv  12  E 45    HP  32  / 40         || Res     12       |
+12  |   NAME                Lv  12  E 45   || Res     12       |
 13  |                                      ||     ############ |
-14  |     NAME                CLASS        || Lck     12       |
+14  |   CLASS               HP  32  / 40   || Lck     12       |
 15  |                                      ||     ############ |
-16  | Con   11      Aid   14               || Mov     12       |
+16  |   Con     11      Aid     14         || Mov     12       |
 17  |                                      ||     ############ |
 18  |                                      ||                  |
 19  +--------------------------------------++------------------+
@@ -390,14 +390,15 @@ CpuCopy16(
   用 `BGPAL_MSS_ICON0` 会串色。
   `PutIcon()` 画的是 **16x16（2x2 格）**，不是 8x8，所以图标在 x=13..14，属性名必须从 x=15 起
   （slot 4 格），否则字会压到图标右半边。
-- 相框下方三行：`Lv/Exp + HP`（y=12，复用 `put_upage()` 的图标与数字写法）、
-  名字 / 职业（y=14，各自在本半屏居中）、`Con / Aid`（y=16）。
-- 名字和职业必须用**各自的 tilemap 基址**（x=1 和 x=10）：`PutText()` 会把整个 slot 的格子
-  都写一遍，两个文本共用一个基址时后画的会把先画的 TM 覆盖掉。居中偏移也要对齐到 8px
-  （`dual_center()` 里 `& ~7`），否则字形会跨格溢到相邻 slot，再被 `PutText()` 擦掉。
+- 相框下方是左/右分栏的三行：
+  - 左栏 `x=2..11`：名字（y=12）、职业（y=14），**左对齐**（左对齐才不会让短名字虚浮在中间）；
+  - 右栏 `x=12..18`：`Lv n / Exp n`（y=12）、`HP a/b`（y=14），图标占 2 格、数字按个位往左画；
+  - 底行 `y=16`：`Con`（x=2）+ 值（x=6..7）、`Aid`（x=10）+ 值（x=14..15），和名字同一条左边线。
+- 名字/职业各占 10 格 slot（x=2..11）。`PutText()` 会把整个 slot 的格子都写一遍，
+  所以 slot 不能超过 10 格，否则会盖掉右边的 Lv/HP 列。
 - 这些内容全部画进 `TmBuff_MssD0`，翻页/换人时跟 `slide_dual_left()` 整块滑，不单独动。
 - 角色描述（`pinfo->msg_desc`）**暂时不显示**：`texts/gamedata/character_desc.txt` 还是占位符，
-  代码里留了 `MSS_TEXT_DUAL_NAME/JNAME/...` 的槽位，等文本写好再决定是否挤掉 footer。
+  代码里留了 `MSS_TEXT_DUAL_*` 的槽位，等文本写好再决定往哪儿塞。
 - Right：`Str/Mag/Skl/Spd/Def/Res/Lck/Mov`，y=2,4,...,16（与 PERSONAL 页共用同一段绘制）。
 - 这一页**不放左侧标题**：左面板顶到画面最上沿，标题会压内容；只有右侧 `STATS`。
 
@@ -664,7 +665,7 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 | （本次） | 翻页涉及 page 0 时 Upper 改回单独垂直滑：`0 -> 1` 从上落下、`1 -> 0` 向上飞出，不再和 Left 合成整块水平滑 |
 | （本次） | prep 适配：新增平行顶层 proc `ProcScr_modern_prep_statscreen` + `StartModernPrepStatScreen()`，prep 菜单 / unit list / prep map R 全部接 modern；prep 脚本自己重建屏幕、在 BG3 跑 prep 滚动背景、换人不碰相机、退场关屏 |
 | （本次） | 右下角页码和左右箭头改成固定读位：切页时不再跟 Right 面板飞出/飞入，只在 `mss_apply_page()` 那一帧换页码数字；`mss_page_slide_offset()` 删除 |
-| （本次） | Page 0 左面板从「立绘 + 三行占位描述」改成人物卡：相框右侧放 `Cond/Affin/Sup`，下方三行放 `Lv/Exp+HP`、名字/职业、`Con/Aid`；`put_multi_line_text()` 随描述一起删除 |
+| （本次） | Page 0 左面板从「立绘 + 三行占位描述」改成人物卡：相框右侧竖条 `Cond/Affin/Sup`，下方左栏名字/职业、右栏 `Lv+Exp`/`HP`、底行 `Con/Aid`；`put_multi_line_text()` 随描述一起删除 |
 | （本次） | 修 Page 0 人物卡的两处排版错误：竖条标签/值只隔 1 tile 导致重叠；名字和职业共用 tilemap 基址 + 居中偏移超出 slot，导致整行空白并把 `Cond` 的字形槽画花 |
 
 具体：

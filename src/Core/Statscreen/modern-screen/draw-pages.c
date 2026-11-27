@@ -82,8 +82,8 @@ static struct StatScreenTextInfo const textinfo_dual_side[] = {
 };
 
 static struct StatScreenTextInfo const textinfo_dual_footer[] = {
-	{ gMssSt.texts + MSS_TEXT_DUAL_CON_LBL, TmBuff_MssD0 + TM_OFFSET(1, 16), TEXT_COLOR_SYSTEM_GOLD, 0, "Con" },
-	{ gMssSt.texts + MSS_TEXT_DUAL_AID_LBL, TmBuff_MssD0 + TM_OFFSET(8, 16), TEXT_COLOR_SYSTEM_GOLD, 0, "Aid" },
+	{ gMssSt.texts + MSS_TEXT_DUAL_CON_LBL, TmBuff_MssD0 + TM_OFFSET(2, 16),  TEXT_COLOR_SYSTEM_GOLD, 0, "Con" },
+	{ gMssSt.texts + MSS_TEXT_DUAL_AID_LBL, TmBuff_MssD0 + TM_OFFSET(10, 16), TEXT_COLOR_SYSTEM_GOLD, 0, "Aid" },
 	{ 0 }, // end
 };
 
@@ -104,18 +104,6 @@ static int dual_best_support_level(struct Unit *unit)
 	}
 
 	return best;
-}
-
-static int dual_center(int area, char *str)
-{
-	int x = GetStringTextCenteredPos(area, str);
-
-	if (x < 0)
-		x = 0;
-
-	/* keep the glyphs on tile boundaries: an odd x makes them spill into the
-	 * neighbouring slot, which PutText() then overwrites */
-	return x & ~7;
 }
 
 /*
@@ -149,39 +137,38 @@ static void put_dual_card(void)
 	PutSpecialChar(tm + TM_OFFSET(17, 9), TEXT_COLOR_SYSTEM_BLUE,
 		GetSupportLevelSpecialChar(dual_best_support_level(unit)));
 
-	/* level / exp, then hp: PutNumber() writes leftwards from the ones digit */
-	PutTwoSpecialChar(tm + TM_OFFSET(1, 12), TEXT_COLOR_SYSTEM_GOLD,
+	/* level / exp on the name row, hp on the class row: PutNumber() writes
+	 * leftwards from the ones digit */
+	PutTwoSpecialChar(tm + TM_OFFSET(12, 12), TEXT_COLOR_SYSTEM_GOLD,
 		TEXT_SPECIAL_LV_A, TEXT_SPECIAL_LV_B);
-	PutNumberOrBlank(tm + TM_OFFSET(4, 12), TEXT_COLOR_SYSTEM_BLUE, unit->level);
-	PutSpecialChar(tm + TM_OFFSET(5, 12), TEXT_COLOR_SYSTEM_GOLD, TEXT_SPECIAL_EXP_E);
-	PutNumberOrBlank(tm + TM_OFFSET(7, 12), TEXT_COLOR_SYSTEM_BLUE, unit->exp);
+	PutNumberOrBlank(tm + TM_OFFSET(15, 12), TEXT_COLOR_SYSTEM_BLUE, unit->level);
+	PutSpecialChar(tm + TM_OFFSET(16, 12), TEXT_COLOR_SYSTEM_GOLD, TEXT_SPECIAL_EXP_E);
+	PutNumberOrBlank(tm + TM_OFFSET(18, 12), TEXT_COLOR_SYSTEM_BLUE, unit->exp);
 
-	PutTwoSpecialChar(tm + TM_OFFSET(9, 12), TEXT_COLOR_SYSTEM_GOLD,
+	PutTwoSpecialChar(tm + TM_OFFSET(12, 14), TEXT_COLOR_SYSTEM_GOLD,
 		TEXT_SPECIAL_HP_A, TEXT_SPECIAL_HP_B);
-	PutNumberOrBlank(tm + TM_OFFSET(12, 12), TEXT_COLOR_SYSTEM_BLUE, GetUnitCurrentHp(unit));
-	PutSpecialChar(tm + TM_OFFSET(13, 12), TEXT_COLOR_SYSTEM_GOLD, TEXT_SPECIAL_SLASH);
-	PutNumberOrBlank(tm + TM_OFFSET(15, 12), TEXT_COLOR_SYSTEM_BLUE, GetUnitMaxHp(unit));
+	PutNumberOrBlank(tm + TM_OFFSET(15, 14), TEXT_COLOR_SYSTEM_BLUE, GetUnitCurrentHp(unit));
+	PutSpecialChar(tm + TM_OFFSET(16, 14), TEXT_COLOR_SYSTEM_GOLD, TEXT_SPECIAL_SLASH);
+	PutNumberOrBlank(tm + TM_OFFSET(18, 14), TEXT_COLOR_SYSTEM_BLUE, GetUnitMaxHp(unit));
 
 	/*
-	 * Name and class share the row under the frame, each centred inside its own
-	 * half of the panel. PutText() writes the whole slot, so they need separate
-	 * tilemap bases: sharing one would make the second draw erase the first.
+	 * Name and class are left aligned in the left column, level/exp and hp sit
+	 * to their right. PutText() writes the whole slot, so each needs its own
+	 * tilemap base; both start at x=2 like the Con/Aid labels below them.
 	 */
 	str = DecodeMsg(unit->pinfo->msg_name);
 	PutDrawText(&gMssSt.texts[MSS_TEXT_DUAL_NAME],
-		tm + TM_OFFSET(1, 14), TEXT_COLOR_SYSTEM_WHITE,
-		dual_center(8 * 9, str), 0, str);
+		tm + TM_OFFSET(2, 12), TEXT_COLOR_SYSTEM_WHITE, 0, 0, str);
 
 	str = DecodeMsg(unit->jinfo->msg_name);
 	PutDrawText(&gMssSt.texts[MSS_TEXT_DUAL_JNAME],
-		tm + TM_OFFSET(10, 14), TEXT_COLOR_SYSTEM_WHITE,
-		dual_center(8 * 9, str), 0, str);
+		tm + TM_OFFSET(2, 14), TEXT_COLOR_SYSTEM_WHITE, 0, 0, str);
 
 	/* footer: con / aid */
 	PutStatScreenText(textinfo_dual_footer);
 
-	PutNumberOrBlank(tm + TM_OFFSET(5, 16), TEXT_COLOR_SYSTEM_BLUE, GetUnitCon(unit));
-	PutNumberOrBlank(tm + TM_OFFSET(12, 16), TEXT_COLOR_SYSTEM_BLUE, GetUnitAid(unit));
+	PutNumberOrBlank(tm + TM_OFFSET(7, 16), TEXT_COLOR_SYSTEM_BLUE, GetUnitCon(unit));
+	PutNumberOrBlank(tm + TM_OFFSET(15, 16), TEXT_COLOR_SYSTEM_BLUE, GetUnitAid(unit));
 }
 
 static struct StatScreenTextInfo const textinfo_lpage1[] = {

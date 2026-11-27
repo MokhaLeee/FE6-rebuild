@@ -359,7 +359,7 @@ enum mss_text_index {
 	MSS_TEXT_DUAL_SKILL2,
 	MSS_TEXT_DUAL_SKILL3,
 
-	/* page 0 unit card: names, status, affinity, support rank and the footer */
+	/* page 0 unit card: names, status, affinity and support rank */
 	MSS_TEXT_DUAL_NAME,
 	MSS_TEXT_DUAL_JNAME,
 	MSS_TEXT_DUAL_COND_LBL,

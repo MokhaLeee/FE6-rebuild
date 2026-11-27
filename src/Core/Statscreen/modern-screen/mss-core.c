@@ -180,8 +180,8 @@ static const struct TextInitInfo mss_text_init_info_dual[] = {
 	{ &gMssSt.texts[MSS_TEXT_RES], 3 },
 	{ &gMssSt.texts[MSS_TEXT_MOV], 3 },
 
-	{ &gMssSt.texts[MSS_TEXT_DUAL_NAME], 9 },
-	{ &gMssSt.texts[MSS_TEXT_DUAL_JNAME], 9 },
+	{ &gMssSt.texts[MSS_TEXT_DUAL_NAME], 10 },
+	{ &gMssSt.texts[MSS_TEXT_DUAL_JNAME], 10 },
 	{ &gMssSt.texts[MSS_TEXT_DUAL_COND_LBL], 5 },
 	{ &gMssSt.texts[MSS_TEXT_DUAL_COND], 6 },
 	{ &gMssSt.texts[MSS_TEXT_DUAL_AFFIN_LBL], 6 },
@@ -190,7 +190,7 @@ static const struct TextInitInfo mss_text_init_info_dual[] = {
 	{ &gMssSt.texts[MSS_TEXT_DUAL_CON_LBL], 4 },
 	{ &gMssSt.texts[MSS_TEXT_DUAL_AID_LBL], 4 },
 
-	{ &gMssSt.texts[MSS_TEXT_PAD], MSS_TEXT_PAGE_SLOTS - (26 + 51) },
+	{ &gMssSt.texts[MSS_TEXT_PAD], MSS_TEXT_PAGE_SLOTS - (26 + 53) },
 
 	{}
 };
