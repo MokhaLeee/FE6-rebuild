@@ -358,11 +358,17 @@ enum mss_text_index {
 	MSS_TEXT_DUAL_SKILL1,
 	MSS_TEXT_DUAL_SKILL2,
 	MSS_TEXT_DUAL_SKILL3,
-	MSS_TEXT_DUAL_CON,
-	MSS_TEXT_DUAL_AID,
-	MSS_TEXT_DUAL_DESC1,
-	MSS_TEXT_DUAL_DESC2,
-	MSS_TEXT_DUAL_DESC3,
+
+	/* page 0 unit card: names, status, affinity, support rank and the footer */
+	MSS_TEXT_DUAL_NAME,
+	MSS_TEXT_DUAL_JNAME,
+	MSS_TEXT_DUAL_COND_LBL,
+	MSS_TEXT_DUAL_COND,
+	MSS_TEXT_DUAL_AFFIN_LBL,
+	MSS_TEXT_DUAL_AFFIN,
+	MSS_TEXT_DUAL_SUP_LBL,
+	MSS_TEXT_DUAL_CON_LBL,
+	MSS_TEXT_DUAL_AID_LBL,
 
 	/* unused text slot, only reserved to line up page 0/1 glyph positions */
 	MSS_TEXT_PAD,

@@ -72,25 +72,116 @@ static void put_upage(void)
 }
 
 /**
- * page 0
+ * page 0 unit card
  */
-static void put_multi_line_text(const char *str, struct Text *texts, u16 *tm, int max_line)
+static struct StatScreenTextInfo const textinfo_dual_side[] = {
+	{ gMssSt.texts + MSS_TEXT_DUAL_COND_LBL,  TmBuff_MssD0 + TM_OFFSET(13, 1), TEXT_COLOR_SYSTEM_GOLD, 0, "Cond" },
+	{ gMssSt.texts + MSS_TEXT_DUAL_AFFIN_LBL, TmBuff_MssD0 + TM_OFFSET(13, 5), TEXT_COLOR_SYSTEM_GOLD, 0, "Affin" },
+	{ gMssSt.texts + MSS_TEXT_DUAL_SUP_LBL,   TmBuff_MssD0 + TM_OFFSET(13, 9), TEXT_COLOR_SYSTEM_GOLD, 0, "Sup" },
+	{ 0 }, // end
+};
+
+static struct StatScreenTextInfo const textinfo_dual_footer[] = {
+	{ gMssSt.texts + MSS_TEXT_DUAL_CON_LBL, TmBuff_MssD0 + TM_OFFSET(1, 16), TEXT_COLOR_SYSTEM_GOLD, 0, "Con" },
+	{ gMssSt.texts + MSS_TEXT_DUAL_AID_LBL, TmBuff_MssD0 + TM_OFFSET(8, 16), TEXT_COLOR_SYSTEM_GOLD, 0, "Aid" },
+	{ 0 }, // end
+};
+
+static int dual_best_support_level(struct Unit *unit)
 {
+	int count = GetUnitSupportCount(unit);
+	int best = 0;
 	int i;
 
-	for (i = 0; i < max_line; i++) {
-		PutDrawText(
-			&texts[i],
-			tm + TM_OFFSET(0, i * 2),
-			TEXT_COLOR_SYSTEM_WHITE,
-			0, 0, str);
+	if (count > UNIT_SUPPORT_COUNT)
+		count = UNIT_SUPPORT_COUNT;
 
-		str = GetStringLineEnd(str);
-		if (*str == '\0')
-			break;
+	for (i = 0; i < count; i++) {
+		int level = GetUnitSupportLevel(unit, i);
 
-		str++;
+		if (level > best)
+			best = level;
 	}
+
+	return best;
+}
+
+static int dual_center(int area, char *str)
+{
+	int x = GetStringTextCenteredPos(area, str);
+
+	if (x < 0)
+		x = 0;
+
+	/* keep the glyphs on tile boundaries: an odd x makes them spill into the
+	 * neighbouring slot, which PutText() then overwrites */
+	return x & ~7;
+}
+
+/*
+ * The portrait takes the top left, so the identity and the fields page 1 does
+ * not show (Cond, Affin, support rank, Con, Aid) sit beside and under it.
+ * Everything lands in the D0 buffer, which slide_dual_left() moves as one block.
+ */
+static void put_dual_card(void)
+{
+	struct Unit *unit = gMssSt.unit;
+	u16 *tm = TmBuff_MssD0;
+	char *str;
+
+	PutStatScreenText(textinfo_dual_side);
+
+	PutDrawText(&gMssSt.texts[MSS_TEXT_DUAL_COND],
+		tm + TM_OFFSET(13, 3), TEXT_COLOR_SYSTEM_BLUE, 0, 0,
+		GetUnitStatusName(unit));
+
+	if (unit->pinfo->affinity != 0) {
+		/* affinity icons live in the second icon palette bank, like the
+		 * support list on page 3 and the vanilla personal page */
+		PutIcon(tm + TM_OFFSET(13, 7),
+			GetUnitAffinityIcon(unit), TILEREF(0, BGPAL_MSS_ICON1));
+
+		PutDrawText(&gMssSt.texts[MSS_TEXT_DUAL_AFFIN],
+			tm + TM_OFFSET(15, 7), TEXT_COLOR_SYSTEM_BLUE, 0, 0,
+			GetAffinityName(unit->pinfo->affinity));
+	}
+
+	PutSpecialChar(tm + TM_OFFSET(17, 9), TEXT_COLOR_SYSTEM_BLUE,
+		GetSupportLevelSpecialChar(dual_best_support_level(unit)));
+
+	/* level / exp, then hp: PutNumber() writes leftwards from the ones digit */
+	PutTwoSpecialChar(tm + TM_OFFSET(1, 12), TEXT_COLOR_SYSTEM_GOLD,
+		TEXT_SPECIAL_LV_A, TEXT_SPECIAL_LV_B);
+	PutNumberOrBlank(tm + TM_OFFSET(4, 12), TEXT_COLOR_SYSTEM_BLUE, unit->level);
+	PutSpecialChar(tm + TM_OFFSET(5, 12), TEXT_COLOR_SYSTEM_GOLD, TEXT_SPECIAL_EXP_E);
+	PutNumberOrBlank(tm + TM_OFFSET(7, 12), TEXT_COLOR_SYSTEM_BLUE, unit->exp);
+
+	PutTwoSpecialChar(tm + TM_OFFSET(9, 12), TEXT_COLOR_SYSTEM_GOLD,
+		TEXT_SPECIAL_HP_A, TEXT_SPECIAL_HP_B);
+	PutNumberOrBlank(tm + TM_OFFSET(12, 12), TEXT_COLOR_SYSTEM_BLUE, GetUnitCurrentHp(unit));
+	PutSpecialChar(tm + TM_OFFSET(13, 12), TEXT_COLOR_SYSTEM_GOLD, TEXT_SPECIAL_SLASH);
+	PutNumberOrBlank(tm + TM_OFFSET(15, 12), TEXT_COLOR_SYSTEM_BLUE, GetUnitMaxHp(unit));
+
+	/*
+	 * Name and class share the row under the frame, each centred inside its own
+	 * half of the panel. PutText() writes the whole slot, so they need separate
+	 * tilemap bases: sharing one would make the second draw erase the first.
+	 */
+	str = DecodeMsg(unit->pinfo->msg_name);
+	PutDrawText(&gMssSt.texts[MSS_TEXT_DUAL_NAME],
+		tm + TM_OFFSET(1, 14), TEXT_COLOR_SYSTEM_WHITE,
+		dual_center(8 * 9, str), 0, str);
+
+	str = DecodeMsg(unit->jinfo->msg_name);
+	PutDrawText(&gMssSt.texts[MSS_TEXT_DUAL_JNAME],
+		tm + TM_OFFSET(10, 14), TEXT_COLOR_SYSTEM_WHITE,
+		dual_center(8 * 9, str), 0, str);
+
+	/* footer: con / aid */
+	PutStatScreenText(textinfo_dual_footer);
+
+	PutNumberOrBlank(tm + TM_OFFSET(5, 16), TEXT_COLOR_SYSTEM_BLUE, GetUnitCon(unit));
+	PutNumberOrBlank(tm + TM_OFFSET(12, 16), TEXT_COLOR_SYSTEM_BLUE, GetUnitAid(unit));
 }
 
 static struct StatScreenTextInfo const textinfo_lpage1[] = {
@@ -508,7 +599,6 @@ static void put_dual_backdrop(void)
 
 static void put_dual_page(void)
 {
-	int msg;
 	struct Unit *unit = gMssSt.unit;
 
 	/*
@@ -529,6 +619,13 @@ static void put_dual_page(void)
 
 	put_rpage1_stats();
 
+	/*
+	 * The unit card comes after the shared panels: it reuses the digits' glyph
+	 * slots, and drawing it last keeps the right panel on the slots it has on
+	 * page 1.
+	 */
+	put_dual_card();
+
 	put_dual_backdrop();
 
 	/*
@@ -542,20 +639,6 @@ static void put_dual_page(void)
 	PutFace80x72(TmBuff_MssD1 + TM_OFFSET(2, 2),
 		GetUnitFid(unit),
 		BGCHR_MSS_FACE_BIG, BGPAL_MSS_FACE);
-
-	/* character description, three lines under the frame */
-	msg = unit->pinfo->msg_desc;
-
-	if (msg == 0)
-		msg = unit->jinfo->msg_desc;
-
-	if (msg != 0) {
-		put_multi_line_text(
-			DecodeMsg(msg),
-			&gMssSt.texts[MSS_TEXT_DUAL_DESC1],
-			TmBuff_MssD0 + TM_OFFSET(1, 12),
-			3);
-	}
 }
 
 /* Default frame TSA: the three-panel layout that pages 1..3 share. */
