@@ -207,7 +207,14 @@ void BattleInitItemEffect(struct Unit *unit, int item_slot)
 	gBattleUnitA.weapon_kind = GetItemKind(item);
 	gBattleUnitA.weapon_attributes = GetItemAttributes(item);
 
-	gBattleUnitA.has_inventory_weapon = TRUE;
+	/*
+	 * Only the inventory range has a slot in Unit::items[]; a misc action
+	 * (-1) carries no item of its own, and BattleApplyItemEffect() writes
+	 * the slot back, so claiming an inventory weapon there would corrupt
+	 * whatever follows the item array.
+	 */
+	gBattleUnitA.has_inventory_weapon =
+		(item_slot >= ITEMSLOT_INV0 && item_slot < ITEMSLOT_INV_COUNT);
 	gBattleUnitA.has_item_effect_target = FALSE;
 
 	gBattleUnitA.output_status = -1;
