@@ -45,6 +45,16 @@
 #define CONFIG_BATTLE_MAX_DAMAGE 99
 #define CONFIG_BATTLE_CRIT_CORRECTION 300
 
+/* gaiden magic: magic books that live outside the inventory */
+#define CONFIG_USE_GAIDEN_MAGIC 1
+
+#if CONFIG_USE_GAIDEN_MAGIC
+/* 0: every weapon may enter the B.Mag list, not just the magic ones */
+#define CONFIG_GAIDEN_MAGIC_MUST_BE_MAGIC 0
+/* 0: magic beyond the unit's weapon rank is allowed */
+#define CONFIG_GAIDEN_MAGIC_REQUIRES_WRANK 0
+#endif
+
 /* debug config */
 #define CONFIG_USE_DEBUG 1
 
