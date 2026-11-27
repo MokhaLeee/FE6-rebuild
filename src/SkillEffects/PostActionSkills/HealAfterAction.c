@@ -29,23 +29,16 @@
  * (BattleUnit::result), set by the battle flow and reset by InitBattleUnit(),
  * so no skill needs to own a global flag for it.
  *
- * The heal first plays the shared skill activation animation (NewMuSkillAnim:
- * forced "use item" pose + skill icon), then its callback runs the heal effect
- * only (StartMapHealEffect), so the pose is played once.  The animation is
+ * The heal plays the shared skill activation animation first (NewMuSkillAnim:
+ * forced "use item" pose + skill icon) and runs the heal effect only from its
+ * callback (StartMapHealEffect), so the pose is played once; the animation is
  * started on the healed unit, which is not necessarily the active one for the
- * defender hook.
+ * defender hook.  StartMapSkillHealAnim() is that whole composition in one
+ * call: the heal request (unit + amount + skill id) rides in the proc it
+ * spawns, so these hooks keep no file-scope state and only decide who heals
+ * how much (a zero skill id, i.e. no icon to show, falls back to the plain
+ * heal inside that call).
  */
-
-/* NewMuSkillAnim() callbacks only get the proc, so the heal parameters go
- * through here; the post-action hooks run one at a time and the animation
- * blocks the hook proc, so nothing can overwrite them mid-animation. */
-static struct Unit *s_heal_unit;
-static int s_heal_amount;
-
-static void heal_after_action_anim(ProcPtr proc)
-{
-	StartMapHealEffect(proc, s_heal_unit, s_heal_amount);
-}
 
 static bool start_post_action_heal(struct Unit *unit, ProcPtr parent,
 				   int heal, u16 sid)
@@ -53,16 +46,7 @@ static bool start_post_action_heal(struct Unit *unit, ProcPtr parent,
 	if (heal <= 0)
 		return false;
 
-	if (sid == 0) {
-		/* No skill id to show an icon for: fall back to the plain heal. */
-		StartMapHealAnim(parent, unit, heal);
-		return true;
-	}
-
-	s_heal_unit = unit;
-	s_heal_amount = heal;
-
-	NewMuSkillAnim(unit, sid, parent, heal_after_action_anim, NULL);
+	StartMapSkillHealAnim(parent, unit, heal, sid);
 
 	return true;
 }

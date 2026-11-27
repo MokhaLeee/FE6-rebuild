@@ -11,19 +11,23 @@
 #include "manim.h"
 
 #include "map-anim.h"
+#include "skill-sys.h"
 #include "constants/songs.h"
 #include "constants/videoalloc_global.h"
 
 /*
- * Map heal animation, in two layers:
+ * Map heal animation, in three layers:
  *
  * - StartMapHealAnim() is the outer "use item" act: prepare the Mu, make the
  *   unit take the vulnerary pose, then run the heal effect and put the Mu
  *   back.
+ * - StartMapSkillHealAnim() is the same act, but the pose and the icon come
+ *   from the shared skill activation animation (NewMuSkillAnim()): the heal
+ *   request rides in a shell proc, the shell starts that animation as its
+ *   child and the heal effect runs from the animation's callback.
  * - StartMapHealEffect() is the heal itself: add the hp, bloom the glow and
  *   count the hp gauge up.  It owns no Mu and plays no pose, so a caller that
- *   already has the unit in the "use item" pose (a skill activation animation
- *   such as NewMuSkillAnim()) can run just this layer.
+ *   already has the unit in the "use item" pose can run just this layer.
  *
  * The glow is the vanilla StartManimHealFx() proc and the gauge reuses the
  * manim hp bar helpers (art + PutManimWindowBar/PutManimWindowNumber), all of
@@ -274,6 +278,65 @@ void StartMapHealAnim(ProcPtr parent, struct Unit *unit, int amount)
 }
 
 /*
+ * Skill heal shell: NewMuSkillAnim() callbacks only get the animation proc, so
+ * the heal request (unit + amount) rides in a proc of its own instead of a
+ * file-scope variable.  The shell starts the skill activation as its child;
+ * the callback gets the request back through proc_parent (the animation is the
+ * shell's own child) and runs the heal effect from there.  The locking child
+ * also keeps the shell alive until the animation is over, so the shell has
+ * nothing left to do afterwards but end.
+ */
+struct ProcMapSkillHealAnim {
+	PROC_HEADER;
+
+	/* 2C */ struct Unit *unit;
+	/* 30 */ int amount;
+	/* 34 */ u16 sid;
+};
+
+static void map_skill_heal_effect(ProcPtr proc)
+{
+	/* proc is the Mu skill animation started below, so its parent is us. */
+	struct ProcMapSkillHealAnim *self =
+		(struct ProcMapSkillHealAnim *) ((struct Proc *) proc)->proc_parent;
+
+	StartMapHealEffect(proc, self->unit, self->amount);
+}
+
+static void map_skill_heal_start(struct ProcMapSkillHealAnim *proc)
+{
+	NewMuSkillAnim(proc->unit, proc->sid, proc, map_skill_heal_effect, NULL);
+}
+
+static const struct ProcScr ProcScr_MapSkillHealAnim[] = {
+	PROC_YIELD,
+	PROC_CALL(map_skill_heal_start),
+	/* Locked by the animation child until the heal effect is over. */
+	PROC_YIELD,
+	PROC_END
+};
+
+void StartMapSkillHealAnim(ProcPtr parent, struct Unit *unit, int amount, u16 sid)
+{
+	struct ProcMapSkillHealAnim *proc;
+
+	if (!SKILL_IS_VALID(sid)) {
+		/* No icon to pop: the plain heal act is the whole animation. */
+		StartMapHealAnim(parent, unit, amount);
+		return;
+	}
+
+	if (parent)
+		proc = SpawnProcLocking(ProcScr_MapSkillHealAnim, parent);
+	else
+		proc = SpawnProc(ProcScr_MapSkillHealAnim, PROC_TREE_3);
+
+	proc->unit = unit;
+	proc->amount = amount;
+	proc->sid = sid;
+}
+
+/*
  * Heal effect only: no Mu handling and no "use item" pose.  The caller is
  * responsible for the unit being visible in the pose already (and for
  * cleaning the Mu up afterwards).
@@ -294,5 +357,6 @@ void StartMapHealEffect(ProcPtr parent, struct Unit *unit, int amount)
 
 bool MapHealAnimExists(void)
 {
-	return Proc_Exists(ProcScr_MapHealAnim);
+	return Proc_Exists(ProcScr_MapHealAnim) ||
+		Proc_Exists(ProcScr_MapSkillHealAnim);
 }

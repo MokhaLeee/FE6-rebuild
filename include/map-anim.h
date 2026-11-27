@@ -21,6 +21,13 @@
  *	StartMapHealAnim(proc, unit, amount);
  *	return true;
  *
+ * StartMapSkillHealAnim() is the same heal with a skill activation in front of
+ * it: the unit takes the "use item" pose and the skill icon pops up, then the
+ * heal effect runs from that animation's callback.  No file-scope state is
+ * needed, the heal request rides in the proc it spawns:
+ *
+ *	StartMapSkillHealAnim(proc, unit, amount, sid);
+ *
  * StartMapHealEffect() runs only the heal itself (hp + glow + hp gauge) and
  * neither touches the Mu nor plays the "use item" pose.  A skill activation
  * animation that already has the unit in that pose uses it from its callback:
@@ -29,5 +36,6 @@
  */
 
 void StartMapHealAnim(ProcPtr parent, struct Unit *unit, int amount);
+void StartMapSkillHealAnim(ProcPtr parent, struct Unit *unit, int amount, u16 sid);
 void StartMapHealEffect(ProcPtr parent, struct Unit *unit, int amount);
 bool MapHealAnimExists(void);
