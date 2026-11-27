@@ -309,6 +309,7 @@ static void mss_init(struct ProcMss *proc)
 	BattleGenerateDisplayStats(unit, GetUnitEquippedWeaponSlot(unit));
 }
 
+/* Tear the panels down and stop drawing the page / title OAM. */
 static void mss_end(struct ProcMss *proc)
 {
 	SetBlendNone();
@@ -319,6 +320,16 @@ static void mss_end(struct ProcMss *proc)
 	EnableBgSync(BG0_SYNC_BIT | BG1_SYNC_BIT | BG2_SYNC_BIT);
 
 	Proc_End(proc->proc_sprite);
+}
+
+/*
+ * The caller (map, prep menu, unit list) puts its cursor back on the last viewed
+ * unit through SetStatScreenLastUnitId() on its way out, so the statscreen has
+ * to report it before it leaves.
+ */
+static void mss_set_last_unit(struct ProcMss *proc)
+{
+	SetStatScreenLastUnitId(gMssSt.unit->id);
 }
 
 /**
@@ -904,6 +915,16 @@ static void mss_unit_change_prepare(struct ProcMss *proc)
 	gMssSt.unit = proc->unit_to_change;
 	gMssSt.help = NULL;
 
+	/* the caller puts its cursor back on the last viewed unit */
+	SetStatScreenLastUnitId(gMssSt.unit->id);
+
+	/*
+	 * The prep flow stays on the screen, so the battle numbers have to be
+	 * regenerated here instead of in mss_init().
+	 */
+	BattleGenerateDisplayStats(gMssSt.unit,
+		GetUnitEquippedWeaponSlot(gMssSt.unit));
+
 	proc->page_to_change = 0;
 }
 
@@ -973,6 +994,16 @@ static void mss_begin_page_slide(struct ProcMss *proc)
 	s_mss_left_block = (proc->page == 0 || proc->page_to_change == 0);
 	s_mss_right_slides = mss_right_panel_kind(proc->page)
 		!= mss_right_panel_kind(proc->page_to_change);
+}
+
+/*
+ * A unit change replaces the content of every panel, so unlike a page change
+ * all of them slide out and back in.
+ */
+static void mss_begin_unit_slide(struct ProcMss *proc)
+{
+	s_mss_left_block = 1;
+	s_mss_right_slides = 1;
 }
 
 static const struct ProcScr ProcScr_mss_slide_page_in[] = {
@@ -1045,6 +1076,20 @@ static void mss_spawn_slide_out(struct ProcMss *proc)
 /**
  * main
  */
+/*
+ * Two top level scripts share every slide / draw step; only the three places
+ * where the screen owner differs are written twice:
+ *  - entry: the prep variant rebuilds the display and its BG3 backdrop first
+ *    (see mss-prep.c);
+ *  - unit change: the map variant tears the screen down so it can follow the map
+ *    camera and map cursor, the prep variant keeps the screen and slides the new
+ *    unit in place;
+ *  - exit: the prep variant switches the display off for the caller to redraw.
+ *
+ * Both scripts define the same labels, and Proc_Goto() resolves a label inside
+ * the running script, so mss_main() does not need to know the variant. Keep the
+ * shared sections in step.
+ */
 static const struct ProcScr ProcScr_modern_statscreen[] = {
 PROC_LABEL(PL_MSS_START),
 	// PROC_CALL(LockBmDisplay),
@@ -1102,12 +1147,75 @@ PROC_LABEL(PL_MSS_END),
 	PROC_YIELD,
 	PROC_CALL(mss_end),
 	PROC_YIELD,
+	PROC_CALL(mss_set_last_unit),
 	// PROC_CALL(UnlockBmDisplay),
 	PROC_CALL(EndGreenText),
 	PROC_END,
 };
 
-void StartModernStatScreen(struct Unit *unit, ProcPtr parent)
+static const struct ProcScr ProcScr_modern_prep_statscreen[] = {
+PROC_LABEL(PL_MSS_START),
+	PROC_CALL(StartGreenText),
+	PROC_CALL(Mss_Prep_ScreenInit),
+	PROC_CALL(mss_init),
+	PROC_CALL(Mss_Prep_BgStart),
+
+PROC_LABEL(PL_MSS_SLIDE_UNIT_IN),
+	PROC_YIELD,
+	PROC_YIELD,
+	PROC_CALL(mss_load_gfx),
+	PROC_CALL(mss_apply_page),
+	PROC_CALL(Mss_PreparePage),
+	PROC_CALL(mss_spawn_slide_in),
+	PROC_YIELD,
+	PROC_GOTO(PL_MSS_IDLE),
+
+PROC_LABEL(PL_MSS_IDLE),
+	PROC_CALL(mss_slide_idle),
+	PROC_REPEAT(mss_main),
+
+PROC_LABEL(PL_MSS_SLIDE_PAGE),
+	PROC_CALL(mss_begin_page_slide),
+	PROC_CALL(mss_spawn_page_slide_out),
+	PROC_YIELD,
+	PROC_CALL(mss_apply_page),
+	PROC_CALL(Mss_PreparePage),
+	PROC_CALL(mss_spawn_page_slide_in),
+	PROC_YIELD,
+	PROC_GOTO(PL_MSS_IDLE),
+
+PROC_LABEL(PL_MSS_SLIDE_PAGEUNIT),
+	/*
+	 * No map camera or map cursor to follow: every panel slides out, the new
+	 * unit is prepared in place and slides back in, without tearing the screen
+	 * down or reloading the graphics.
+	 */
+	PROC_CALL(mss_unit_change_prepare),
+	PROC_CALL(mss_begin_unit_slide),
+	PROC_CALL(mss_spawn_page_slide_out),
+	PROC_YIELD,
+	PROC_CALL(mss_apply_page),
+	PROC_CALL(Mss_PreparePage),
+	PROC_CALL(mss_spawn_page_slide_in),
+	PROC_YIELD,
+	PROC_GOTO(PL_MSS_IDLE),
+
+PROC_LABEL(PL_MSS_END),
+	PROC_CALL(mss_spawn_slide_out),
+	PROC_YIELD,
+	PROC_CALL(mss_end),
+	PROC_YIELD,
+	PROC_CALL(mss_set_last_unit),
+	PROC_CALL(Mss_Prep_ScreenEnd),
+	PROC_CALL(EndGreenText),
+	PROC_END,
+};
+
+/*
+ * Shared start-up: stop the map sprites the caller left running and block it
+ * until the statscreen proc ends.
+ */
+static void mss_start(struct Unit *unit, ProcPtr parent, const struct ProcScr *scr)
 {
 	struct ProcMss *proc;
 
@@ -1117,12 +1225,30 @@ void StartModernStatScreen(struct Unit *unit, ProcPtr parent)
 	PidStatsAddStatView(unit->pinfo->id);
 	PlaySe(SONG_6A);
 
-	EndAllMus();
-	unit->flags &= ~UNIT_FLAG_HIDDEN;
-	ShowUnitSprite(unit);
-
-	proc = SpawnProcLocking(ProcScr_modern_statscreen, parent);
+	proc = SpawnProcLocking(scr, parent);
 	proc->page = 0;
 	proc->page_count = 4;
 	proc->page_to_change = 0;
+}
+
+void StartModernStatScreen(struct Unit *unit, ProcPtr parent)
+{
+	EndAllMus();
+
+	/* the map already has the unit on screen: keep its sprite visible */
+	unit->flags &= ~UNIT_FLAG_HIDDEN;
+	ShowUnitSprite(unit);
+
+	mss_start(unit, parent, ProcScr_modern_statscreen);
+}
+
+void StartModernPrepStatScreen(struct Unit *unit, ProcPtr parent)
+{
+	EndAllMus();
+
+	/*
+	 * Do not reveal the map sprite here: the prep menu can show units that are
+	 * not deployed, and clearing UNIT_FLAG_HIDDEN would put them on the map.
+	 */
+	mss_start(unit, parent, ProcScr_modern_prep_statscreen);
 }

@@ -247,6 +247,12 @@ enum videoalloc_mss {
 	OBPAL_MSS_TITLES = 3,
 };
 
+/*
+ * Both top level scripts (ProcScr_modern_statscreen and
+ * ProcScr_modern_prep_statscreen) define these labels. Proc_Goto() resolves a
+ * label inside the running script, so shared code can jump around without
+ * knowing which variant is driving it.
+ */
 enum mss_proc_label {
 	PL_MSS_START,
 	PL_MSS_IDLE,
@@ -291,6 +297,12 @@ struct ProcMss {
 };
 
 void StartModernStatScreen(struct Unit *unit, ProcPtr parent);
+void StartModernPrepStatScreen(struct Unit *unit, ProcPtr parent);
+
+/* mss-prep.c: screen and backdrop for the prep / unit list variant */
+void Mss_Prep_ScreenInit(void);
+void Mss_Prep_BgStart(void);
+void Mss_Prep_ScreenEnd(void);
 
 void Mss_InitPageText(int page);
 void Mss_PreparePage(struct ProcMss *proc);

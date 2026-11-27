@@ -1275,7 +1275,11 @@ void AtMenu_StartSubmenu(struct PrepMenuProc *proc)
 		PrepItem_BlockUpperfxDisp(proc);
 		SetDispEnable(0, 0, 0, 0, 0);
 		SetStatScreenExcludedUnitFlags(UNIT_FLAG_DEAD);
+#if CONFIG_USE_MODERN_STATSCREEN
+		StartModernPrepStatScreen(GetUnitFromPrepList(proc->list_num_cur), proc);
+#else
 		StartStatScreen(GetUnitFromPrepList(proc->list_num_cur), proc);
+#endif
 		break;
 
 	default:

@@ -10,6 +10,7 @@
 ```
 src/Core/Statscreen/modern-screen/
 ├── mss-core.c      入口 proc、初始化、每页独立的滑动 proc、sprites（页码/箭头/标题）
+├── mss-prep.c      prep / unit list 变体：重建屏幕（InitBgs/窗口/OAM）、BG3 滚动背景、退场关屏
 ├── draw-pages.c    四页内容绘制（DUAL / PERSONAL / ITEMS / WEXP）+ 每页边框
 ├── mssfx.S         图形资源 incbin（TSA、UI 图、标题图、sprites 图）
 └── README.md       本文件
@@ -404,10 +405,21 @@ PNG → `.4bpp` / `.gbapal` / `.lz` 由 Makefile 自动生成，不要提交这�
 
 ### 7.1 关键点
 
-- `CONFIG_USE_MODERN_STATSCREEN = 1` 时，只有在 **playerphase** 按 R 才会走 `StartModernStatScreen`。
-- 准备画面（prep）按 R 打开的是 **vanilla statscreen**（`prepphase.c` 里直接调 `StartStatScreen`），不是 modern。
-- 所以必须先出击进入战斗地图，把光标移到角色上，再按 R。
-- 不要为了截图去改 `playerphase.c` 加 hook；用户明确要求走正常流程。
+- `CONFIG_USE_MODERN_STATSCREEN = 1` 时有两个顶层脚本，区别只在「谁拥有这块屏幕」：
+  - **`ProcScr_modern_statscreen`**（`StartModernStatScreen`）：playerphase / prep map 按 R。
+    地图已经提供显示状态和背景；换人时滑出后跟随地图相机和光标，再重新进 `PL_MSS_START`；
+    退场由调用方重建地图。
+  - **`ProcScr_modern_prep_statscreen`**（`StartModernPrepStatScreen`）：prep 菜单的 STATUS /
+    单位列表按 R。屏幕由 `mss-prep.c` 整个重建（`InitBgs(NULL)` + 窗口/OAM/display + BG3
+    滚动背景）；换人不碰相机、不重建 gfx，走「全部面板滑出 → 准备 → 滑入」；退场关显示等
+    调用方自己重画。
+- 两个脚本定义**同名 label**，`Proc_Goto()` 只在当前 proc 自己的脚本里找 label，所以共享的
+  `mss_main()` / slide / 绘制代码不需要知道当前是哪个变体。改共享段时两个脚本要一起改。
+- 两种模式都会在退场时写 `SetStatScreenLastUnitId()`，调用方靠它把光标放回最后查看的单位
+  （prep 菜单的 `GetLastStatScreenUnitId()`、unit list 的 `UnitList_MoveCursorToLastUnit()`、
+  `ProcScr_ReturnFromStatScreen`）。
+- PREP 模式不要把 `UNIT_FLAG_HIDDEN` 清掉：prep 菜单可以查看未出击单位，清了会把它显示到地图上。
+- 进 modern statscreen 不需要再为了截图去改 `playerphase.c` / `prepphase.c`；两个入口都已经接好。
 
 ### 7.2 状态判据
 
@@ -517,6 +529,7 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 | `9f9583c` | 相框改成 6px 金色装饰框：外圈暗金细线 + 四角菱形角花 |
 | `fd14dd6` | 翻页只滑「内容真的变了」的面板：`0<->1` 右栏不动、`1/2/3` 上栏不动 |
 | （本次） | 翻页涉及 page 0 时 Upper 改回单独垂直滑：`0 -> 1` 从上落下、`1 -> 0` 向上飞出，不再和 Left 合成整块水平滑 |
+| （本次） | prep 适配：新增平行顶层 proc `ProcScr_modern_prep_statscreen` + `StartModernPrepStatScreen()`，prep 菜单 / unit list / prep map R 全部接 modern；prep 脚本自己重建屏幕、在 BG3 跑 prep 滚动背景、换人不碰相机、退场关屏 |
 
 具体：
 

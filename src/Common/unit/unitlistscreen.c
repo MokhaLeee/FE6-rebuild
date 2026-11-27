@@ -346,7 +346,11 @@ void UnitList_StartStatScreen(struct UnitListScreenProc * proc)
         SetStatScreenExcludedUnitFlags(UNIT_FLAG_DEAD | UNIT_FLAG_NOT_DEPLOYED);
     }
 
+#if CONFIG_USE_MODERN_STATSCREEN
+    StartModernPrepStatScreen(gSortedUnits[proc->cursor_unit]->unit, proc);
+#else
     StartStatScreen(gSortedUnits[proc->cursor_unit]->unit, proc);
+#endif
 
     gPlaySt.last_sort_key = (proc->sort_order << 7) + proc->sort_key;
 

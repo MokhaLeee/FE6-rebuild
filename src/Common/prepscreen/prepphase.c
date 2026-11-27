@@ -285,7 +285,11 @@ static void PrepPhase_MapIdle(struct Proc * proc)
             EndMapUi();
             SetStatScreenExcludedUnitFlags(UNIT_FLAG_DEAD | UNIT_FLAG_NOT_DEPLOYED | UNIT_FLAG_UNDER_ROOF | UNIT_FLAG_CONCEALED);
 
+#if CONFIG_USE_MODERN_STATSCREEN
+            StartModernStatScreen(GetUnit(gMapUnit[gBmSt.cursor.y][gBmSt.cursor.x]), proc);
+#else
             StartStatScreen(GetUnit(gMapUnit[gBmSt.cursor.y][gBmSt.cursor.x]), proc);
+#endif
             Proc_Goto(proc, L_PLAYERPHASE_5);
 
             return;
