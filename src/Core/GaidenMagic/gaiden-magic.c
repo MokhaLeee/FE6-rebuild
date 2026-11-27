@@ -1,10 +1,16 @@
 #include "prelude.h"
 #include "unit.h"
 #include "item.h"
+#include "targetlist.h"
+#include "mapselect.h"
+#include "text.h"
+#include "icon.h"
+#include "hardware.h"
 
 #include "gaiden-magic.h"
 
 #include "constants/iids.h"
+#include "constants/videoalloc_global.h"
 
 /*
  * One list serves the whole game.  The signature below is what makes that
@@ -134,6 +140,26 @@ int GetGaidenMagicItem(struct Unit *unit, int slot)
 int GetGaidenWeaponHpCost(struct Unit *unit, int item)
 {
 	return gGaidenWeaponCostList[GetItemIid(item)];
+}
+
+int GetGaidenMagicAutoEquipSlot(struct Unit *unit)
+{
+	struct GaidenMagicList *list = GetGaidenMagicList(unit);
+	int i, item;
+
+	for (i = 0; i < list->bmag_cnt; i++) {
+		item = list->bmags[i];
+
+		if (!(GetItemAttributes(item) & ITEM_ATTR_WEAPON))
+			continue;
+
+		if (!CanUnitUseGaidenMagicNow(unit, item))
+			continue;
+
+		return ITEMSLOT_GAIDEN_BMAG1 + i;
+	}
+
+	return -1;
 }
 
 bool CanUnitUseGaidenMagic(struct Unit *unit, int item)

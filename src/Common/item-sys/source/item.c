@@ -11,6 +11,9 @@
 #include "itemuse.h"
 #include "supply.h"
 #include "gamedata.h"
+#include "battle.h"
+
+#include "gaiden-magic.h"
 
 #include "constants/videoalloc_global.h"
 #include "constants/iids.h"
@@ -427,6 +430,16 @@ u16 GetUnitEquippedWeapon(struct Unit *unit)
 			return unit->items[i];
 	}
 
+#if CONFIG_USE_GAIDEN_MAGIC
+	/*
+	 * Books are not in the inventory, so resolve them through the slot
+	 * instead of reading Unit::items[].
+	 */
+	i = GetGaidenMagicAutoEquipSlot(unit);
+	if (i >= 0)
+		return GetItemFromSlot(unit, i);
+#endif
+
 	return 0;
 }
 
@@ -438,6 +451,12 @@ int GetUnitEquippedWeaponSlot(struct Unit *unit)
 		if (CanUnitUseWeapon(unit, unit->items[i]))
 			return i;
 	}
+
+#if CONFIG_USE_GAIDEN_MAGIC
+	i = GetGaidenMagicAutoEquipSlot(unit);
+	if (i >= 0)
+		return i;
+#endif
 
 	return -1;
 }

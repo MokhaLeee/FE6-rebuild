@@ -59,6 +59,13 @@ struct GaidenMagicList *GetGaidenMagicList(struct Unit *unit);
 /* Resolve an ITEMSLOT_GAIDEN_* slot to its iid, or IID_NONE. */
 int GetGaidenMagicItem(struct Unit *unit, int slot);
 
+/*
+ * First B.Mag book the unit can pay for, as an ITEMSLOT_GAIDEN_BMAG* slot,
+ * or -1.  The fallback auto-equip, used when the inventory holds no usable
+ * weapon (enemy AI, arena, plain auto-equip).
+ */
+int GetGaidenMagicAutoEquipSlot(struct Unit *unit);
+
 int GetGaidenWeaponHpCost(struct Unit *unit, int item);
 
 /* Static usability: rank and magic seal are not considered here. */
