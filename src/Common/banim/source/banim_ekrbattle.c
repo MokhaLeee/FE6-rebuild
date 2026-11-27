@@ -60,6 +60,13 @@ EWRAM_OVERLAY(banim) struct ProcEkrBattle *gpProcEkrBattle = NULL;
 
 CONST_DATA char gNopStr[] = "\0";
 
+/*
+ * 经验条框贴图暂存区。法术 BG 图最大 0x2000，会占满 gSpellAnimBgfx；
+ * 条框和法术 BG 图不会同时出现，所以借用同一块缓冲的末尾 0x300（0x1D00 起）。
+ * 保留这个名字，banim_ekrbattle.c 的用法和原版源码保持一致。
+ */
+#define gEkrBarfxBuf ((u16 *) (void *) (gSpellAnimBgfx + 0x1D00))
+
 void SetBanimLinkArenaFlag(int flag)
 {
 	gBanimLinkArenaFlag = flag;
