@@ -715,7 +715,7 @@ void UnitBeginAction(struct Unit *unit)
 	gBmSt.partial_actions_taken = 0;
 	gBmSt.unk_3F = 0xFF;
 
-	func_fe6_08025780();
+	ClearBattleGlobalState();
 
 	gActiveUnit->flags |= UNIT_FLAG_HIDDEN;
 	gMapUnit[unit->y][unit->x] = 0;
@@ -734,7 +734,7 @@ void UnitBeginReMoveAction(struct Unit *unit)
 
 	gBmSt.partial_actions_taken = 0;
 
-	func_fe6_08025780();
+	ClearBattleGlobalState();
 
 	gActiveUnit->flags |= UNIT_FLAG_HIDDEN;
 	gMapUnit[unit->y][unit->x] = 0;
