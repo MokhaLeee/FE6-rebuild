@@ -231,8 +231,9 @@ Left 仍水平滑，两者各飞各的，不合成整块（见 3.3）。
 
 `mss_begin_page_slide()` 在起滑出 proc 之前根据 `page` / `page_to_change` 设置
 `s_mss_left_block` 和 `s_mss_right_slides`；`mss_page_slide_frame()` 再按
-`s_mss_left_block && page != 0` 决定 Upper 是否参与。OBJ（页码、箭头、标题）的偏移也读
-`s_mss_right_slides`：右栏不动时 `mss_page_slide_offset()` 返回 0，标题的 `rx` 不加偏移。
+`s_mss_left_block && page != 0` 决定 Upper 是否参与。OBJ 里只有右标题还读
+`s_mss_right_slides`：右栏不动时标题的 `rx` 不加偏移；页码和箭头不读偏移，
+永远留在原地（见「页码与箭头」）。
 
 > 右栏不再滑出以后，准备新页那一帧（`Mss_PreparePage()` 里的 `ResetTextFont()` +
 > `InitTextList()`）会清掉字形槽，所以做了三件事：
@@ -252,16 +253,17 @@ Left 仍水平滑，两者各飞各的，不合成整块（见 3.3）。
 > 字形没来及重画（例如职业名 `Lord` 少两个字）。这是同帧内改字形 VRAM 的固有限制，
 > 只有把准备过程挪进 VBlank 才能彻底消掉（代价是整帧停顿）。
 
-### 页码跟随
+### 页码与箭头
 
-页码和箭头是 OAM，位于 Right 面板底部。`mss_page_slide_offset()` 返回：
+页码（`1/4` 那三格，x=185/193/202, y=150）和左右箭头（x=175/212, y=147）都是**固定读位**：
+翻页时原地不动，不跟 Right 面板飞出/飞入；只有 `mss_apply_page()` 那一帧把页码数字换成新页。
+这样 page 1↔2/3 切页时右下角不会闪一下，箭头也不再瞬移。
 
-- OUT：`slide_r.step * 8`（向右飞出）
-- IN：`(MSS_R_WIDTH - slide_r.step) * 8`（从右侧飞入）
-- 右栏不滑（`0 <-> 1`，`s_mss_right_slides == 0`）：恒为 0，原地显示
+原来这两块跟着 `slide_r.step` 位移（`mss_page_slide_offset()`），现在该函数已删除；
+右栏的滑动只影响面板内容和右标题。
 
-`ProcMss.page_to_change` 记录目标页，滑出结束、重画之前由 `mss_apply_page()` 才真正写回 `page`。
-所以滑出阶段显示旧页码，滑入阶段显示新页码。
+`ProcMss.page_to_change` 记录目标页，滑出结束、重画之前由 `mss_apply_page()` 才真正写回 `page`，
+所以右下角看到的页码在面板滑出时还是旧页，滑入时已经是新页。
 
 ---
 
@@ -497,6 +499,7 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 4. **页码/箭头跟 Right 面板一起飞**，不要瞬切：
    - 滑出显示旧页码；
    - 滑入显示新页码。
+   > 后来改成反过来的：页码和箭头固定不动，只有页码数字跳变（见「页码与箭头」）。
 5. 每页内容太少、空白多 → **填充有效信息**（技能名、支援、状态、Con/Aid/Talk、武器摘要等）。
 6. 装饰太少、缺旧版华丽感 → 加装饰（标题、分隔线、图标、边框、高光/阴影、底栏、背景）。
 7. **标题不要用 BG 文字**：
@@ -530,6 +533,7 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
 | `fd14dd6` | 翻页只滑「内容真的变了」的面板：`0<->1` 右栏不动、`1/2/3` 上栏不动 |
 | （本次） | 翻页涉及 page 0 时 Upper 改回单独垂直滑：`0 -> 1` 从上落下、`1 -> 0` 向上飞出，不再和 Left 合成整块水平滑 |
 | （本次） | prep 适配：新增平行顶层 proc `ProcScr_modern_prep_statscreen` + `StartModernPrepStatScreen()`，prep 菜单 / unit list / prep map R 全部接 modern；prep 脚本自己重建屏幕、在 BG3 跑 prep 滚动背景、换人不碰相机、退场关屏 |
+| （本次） | 右下角页码和左右箭头改成固定读位：切页时不再跟 Right 面板飞出/飞入，只在 `mss_apply_page()` 那一帧换页码数字；`mss_page_slide_offset()` 删除 |
 
 具体：
 
@@ -578,7 +582,7 @@ frames[0].save('/tmp/slide.gif', save_all=True, append_images=frames[1:], durati
   而这些 blob 被 gitignore），clean 后能重建。
 - 三块面板独立 tick，`MssSlideState` 每块一份。
 - 16 段 ease-out 表（`s_mss_ease_out`）。
-- 页码/箭头 OAM 按 `slide_r.step` 跟随 Right 面板。
+- 页码和左右箭头 OAM 是固定读位，不再按 `slide_r.step` 跟随 Right 面板（见「页码与箭头」）。
 - `page_to_change` + `mss_apply_page`，滑出旧页、滑入新页。
 - 标题图 `ModernStatScreen_Titles.png`（16x384，六整词艺术字，11 级渐变主体 + 深棕描边）；`CONFIG_MSS_TITLE_WHOLE_WORD = 0` 时改用 `ModernStatScreen_TitleLetters.png` 的旧版逐字母方案，两套资源都保留。
 - `Img_MssTitles` / `Pal_MssTitles`，加载到 `OBCHR_MSS_TITLES` / `OBPAL_MSS_TITLES`。

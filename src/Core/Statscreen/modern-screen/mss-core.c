@@ -45,19 +45,19 @@ enum mss_slide_ops {
 /*
  * Alpha blend for the panels. BG2 (frames + fill) is the first target and BG3
  * (the backdrop) is the only second target that can sit below it, so EVB is the
- * visible strength of the backdrop through the fill. EVA + EVB must stay <= 16,
- * otherwise the hardware saturates and the panel's light pixels (gold frame,
- * pale fill) wash out to white instead of blending.
+ * visible strength of the backdrop through the fill.
+ *
+ * This is the pair the screen was tuned with, kept as the reference look. Note
+ * it asks for 19/16, so the hardware saturates: the panel's light pixels (gold
+ * frame, pale fill) read a little brighter than the source art. If the panels
+ * ever have to be exact, use a pair that sums to 16 (e.g. 14/2 or 13/3); summing
+ * to less than 16 makes the whole screen darker instead.
  */
 enum {
-	MSS_BLEND_EVA = 12, /* BG2: panels */
+	MSS_BLEND_EVA = 15, /* BG2: panels */
 	MSS_BLEND_EVB = 4,  /* BG3: backdrop */
 };
 
-/*
- * The page label and arrows sit on top of the right panel, so they follow its
- * horizontal slide: off-screen while the panel is out, then back in with it.
- */
 /*
  * Slide state lives in file scope: the slide procs are spawned children, and a
  * child's PROC_CALL only sees its own proc, not the parent that owns the
@@ -76,20 +76,6 @@ static int s_mss_slide_mode;
  */
 static int s_mss_right_slides;
 static int s_mss_left_block;
-
-static int mss_page_slide_offset(struct ProcMss *mss)
-{
-	if (!s_mss_right_slides)
-		return 0;
-
-	if (s_mss_slide_mode == MSS_SLIDE_OUT)
-		return s_mss_slide_r.step * 8;
-
-	if (s_mss_slide_mode == MSS_SLIDE_IN)
-		return (MSS_R_WIDTH - s_mss_slide_r.step) * 8;
-
-	return 0;
-}
 
 static const struct ProcScr ProcScr_mss_sprites[];
 
@@ -435,23 +421,21 @@ static void mss_sprites_loop(struct ProcMssSprite *proc)
 {
 	struct ProcMss *mss = proc->proc_parent;
 	int base_oam2 = OAM2_CHR(OBCHR_MSS_SPRITES) + OAM2_PAL(OBPAL_MSS_SPRITES) + OAM2_LAYER(0);
-	int page_dx = mss_page_slide_offset(mss);
 
 	proc->clock_left += proc->anim_speed_left;
 	proc->clock_right += proc->anim_speed_right;
 
-	/**
-	 * page index
+	/*
+	 * Page counter and both arrows are fixed readouts: they stay in the corner
+	 * while the right panel slides out and back, and only the digits change when
+	 * the page is applied. Flying them with the panel reads as a flicker.
 	 */
-	PutSprite(1, 185 + page_dx, 150, Sprite_8x8, base_oam2 + 0x64 + mss->page + 1);
-	PutSprite(1, 193 + page_dx, 150, Sprite_8x8, base_oam2 + 5);
-	PutSprite(1, 202 + page_dx, 150, Sprite_8x8, base_oam2 + 0x64 + mss->page_count);
+	PutSprite(1, 185, 150, Sprite_8x8, base_oam2 + 0x64 + mss->page + 1);
+	PutSprite(1, 193, 150, Sprite_8x8, base_oam2 + 5);
+	PutSprite(1, 202, 150, Sprite_8x8, base_oam2 + 0x64 + mss->page_count);
 
-	/**
-	 * arrow
-	 */
-	PutSprite(1, 175 + page_dx, 147, Sprite_8x16, base_oam2 + 0x4A + k_umod(proc->clock_left >> 5, 6));
-	PutSprite(1, 212 + page_dx, 147, Sprite_8x16_HFlipped, base_oam2 + 0x4A + k_umod(proc->clock_right >> 5, 6));
+	PutSprite(1, 175, 147, Sprite_8x16, base_oam2 + 0x4A + k_umod(proc->clock_left >> 5, 6));
+	PutSprite(1, 212, 147, Sprite_8x16_HFlipped, base_oam2 + 0x4A + k_umod(proc->clock_right >> 5, 6));
 
 	/**
 	 * panel titles
