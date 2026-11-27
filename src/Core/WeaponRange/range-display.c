@@ -4,12 +4,15 @@
 #include "mapwork.h"
 #include "trap.h"
 
+#include "weapon-range.h"
+
 void BuildUnitCompleteAttackRange(struct Unit *unit)
 {
 	int ix, iy;
 	u32 mask;
 
-	mask = GetUnitWeaponReach(unit, -1);
+	/* Books outside the inventory still threaten a reach. */
+	mask = GetUnitWeaponReach(unit, -1) | GetGaidenMagicWeaponReach(unit);
 
 	MapFill(gMapRange, 0);
 
@@ -57,7 +60,7 @@ void BuildUnitStandingRangeForReach(struct Unit *unit, int reach)
 void BuildUnitCompleteStaffRange(struct Unit *unit)
 {
 	int ix, iy;
-	int reach = GetUnitStaffReach(gActiveUnit);
+	int reach = GetUnitStaffReach(gActiveUnit) | GetGaidenMagicStaffReach(gActiveUnit);
 
 	MapFill(gMapRange, 0);
 

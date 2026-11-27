@@ -7,6 +7,8 @@
 
 #include "debug.h"
 #include "skill-sys.h"
+#include "gaiden-magic.h"
+#include "weapon-range.h"
 #include "constants/skills.h"
 
 #define LOCAL_TRACE 0
@@ -123,6 +125,62 @@ static int get_item_reach(int item, struct Unit *unit)
 	int max = GetItemMaxRange(item, unit);
 
 	return get_range_mask(min, max);
+}
+
+/*
+ * Gaiden reach.
+ *
+ * Contract for the three GetUnit*Reach() scans below: they report the
+ * inventory only.  Callers that answer "how far can this unit threaten"
+ * (the cursor range display, the AI danger map) OR the matching gaiden
+ * helper in themselves; callers that paint a unit action menu entry do
+ * not, because those menus list inventory items exclusively.  That keeps a
+ * menu from advertising a range for a book it will never offer.
+ */
+u32 GetGaidenMagicWeaponReach(struct Unit *unit)
+{
+	struct GaidenMagicList *list = GetGaidenMagicList(unit);
+	u32 mask = 0;
+	int i, item;
+
+	for (i = 0; i < list->bmag_cnt; i++) {
+		item = list->bmags[i];
+
+		if (!(GetItemAttributes(item) & ITEM_ATTR_WEAPON))
+			continue;
+
+		if (!CanUnitUseGaidenMagic(unit, item))
+			continue;
+
+		mask |= get_item_reach(item, unit);
+	}
+
+	return mask;
+}
+
+u32 GetGaidenMagicStaffReach(struct Unit *unit)
+{
+	struct GaidenMagicList *list = GetGaidenMagicList(unit);
+	u32 mask = 0;
+	int i, item;
+
+	for (i = 0; i < list->wmag_cnt; i++) {
+		item = list->wmags[i];
+
+		if (GetItemKind(item) != ITEM_KIND_STAFF)
+			continue;
+
+		if (!CanUnitUseGaidenMagic(unit, item))
+			continue;
+
+		/* Whole-map staves have no reach map of their own. */
+		if (GetItemEncodedRange(item) == 0xFF)
+			continue;
+
+		mask |= get_item_reach(item, unit);
+	}
+
+	return mask;
 }
 
 bool CanItemReachDistance(int item, int distance, struct Unit *unit)

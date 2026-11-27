@@ -11,6 +11,7 @@
 #include "eventinfo.h"
 
 #include "commandflags.h"
+#include "weapon-range.h"
 
 #include "constants/terrains.h"
 
@@ -123,7 +124,7 @@ void ListAttackPositions(struct Unit * unit)
 {
     int ix, iy;
 
-    int reach = GetUnitWeaponReach(unit, -1);
+    int reach = GetUnitWeaponReach(unit, -1) | GetGaidenMagicWeaponReach(unit);
 
     MapFill(gMapOther, 0);
 

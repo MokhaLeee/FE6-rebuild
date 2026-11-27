@@ -11,6 +11,7 @@
 #include "battle.h"
 #include "trap.h"
 #include "action.h"
+#include "gaiden-magic.h"
 #include "ai_utility.h"
 #include "gamedata.h"
 #include "save_stats.h"
@@ -866,6 +867,7 @@ int GetUnitKeyItemSlotForTerrain(struct Unit *unit, int terrain)
 
 int GetUnitUseBits(struct Unit *unit)
 {
+	struct GaidenMagicList *list;
 	int i, item, result = 0;
 
 	for (i = 0; (i < ITEMSLOT_INV_COUNT) && (item = unit->items[i]); ++i) {
@@ -873,6 +875,26 @@ int GetUnitUseBits(struct Unit *unit)
 			result |= UNIT_USEBIT_WEAPON;
 
 		if ((GetItemAttributes(item) & ITEM_ATTR_STAFF) && CanUnitUseStaff(unit, item))
+			result |= UNIT_USEBIT_STAFF;
+	}
+
+	/*
+	 * Books never enter the inventory, but they still decide whether the
+	 * unit can attack or use a staff.  The range display gates on this.
+	 */
+	list = GetGaidenMagicList(unit);
+
+	for (i = 0; i < list->bmag_cnt; i++) {
+		item = list->bmags[i];
+
+		if ((GetItemAttributes(item) & ITEM_ATTR_WEAPON) && CanUnitUseGaidenMagic(unit, item))
+			result |= UNIT_USEBIT_WEAPON;
+	}
+
+	for (i = 0; i < list->wmag_cnt; i++) {
+		item = list->wmags[i];
+
+		if ((GetItemAttributes(item) & ITEM_ATTR_STAFF) && CanUnitUseGaidenMagic(unit, item))
 			result |= UNIT_USEBIT_STAFF;
 	}
 
