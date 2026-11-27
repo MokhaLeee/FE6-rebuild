@@ -9,6 +9,7 @@
 #include "battle.h"
 
 #include "skill-sys.h"
+#include "gaiden-magic.h"
 
 #include "constants/jids.h"
 
@@ -20,12 +21,24 @@
  */
 
 /*
+ * Gaiden magic has no entry in Unit::items[]; it is derived from the unit
+ * on demand.  Hand it out at full durability so that a stray GetItemAfterUse()
+ * can never break a book that was never in the inventory to begin with.
+ */
+static int gaiden_slot_item(struct Unit *unit, int item_slot)
+{
+	int iid = GetGaidenMagicItem(unit, item_slot);
+
+	return iid ? (iid | (0xFF << ITEM_USES_SHIFT)) : 0;
+}
+
+/*
  * Resolve an item slot to the item it holds.
  *
  * Slots 0..4 index the unit inventory; every other slot reads dedicated
- * storage instead (the overflow item, the arena weapons, or the ballista the
- * unit currently stands on), so a raw Unit::items[slot] load is only valid
- * inside the inventory range.
+ * storage instead (the overflow item, the arena weapons, the ballista the
+ * unit currently stands on, or the gaiden magic list), so a raw
+ * Unit::items[slot] load is only valid inside the inventory range.
  */
 int GetItemFromSlot(struct Unit *unit, int item_slot)
 {
@@ -44,6 +57,9 @@ int GetItemFromSlot(struct Unit *unit, int item_slot)
 
 	case ITEMSLOT_BALLISTA:
 		return GetBallistaItemAt(unit->x, unit->y);
+
+	case ITEMSLOT_GAIDEN_BMAG1 ... ITEMSLOT_GAIDEN_WMAG7:
+		return gaiden_slot_item(unit, item_slot);
 
 	default:
 		return 0;
@@ -77,6 +93,16 @@ void SetBattleUnitWeapon(struct BattleUnit *bu, int item_slot)
 
 	case ITEMSLOT_BALLISTA:
 		bu->weapon_inventory_slot = -1;
+		bu->has_inventory_weapon = FALSE;
+
+		break;
+
+	case ITEMSLOT_GAIDEN_BMAG1 ... ITEMSLOT_GAIDEN_WMAG7:
+		/*
+		 * The book is not in the inventory, so nothing may be written
+		 * back to Unit::items[] after the battle.
+		 */
+		bu->weapon_inventory_slot = item_slot;
 		bu->has_inventory_weapon = FALSE;
 
 		break;

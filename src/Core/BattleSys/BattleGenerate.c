@@ -78,6 +78,21 @@ static void BattleGenerateSimulationInternal(struct Unit *instigator, struct Uni
 	BattleGenerate(instigator, target);
 }
 
+/*
+ * The unit attack menu can park a gaiden book in gAction.item_slot.  Only
+ * that range is trusted, so a slot left over from an earlier action can
+ * never change which weapon an ordinary attack uses.
+ */
+static int battle_actor_slot(void)
+{
+	int slot = gAction.item_slot;
+
+	if (slot >= ITEMSLOT_GAIDEN_BMAG1 && slot <= ITEMSLOT_GAIDEN_WMAG7)
+		return slot;
+
+	return -1;
+}
+
 static void BattleGenerateRealInternal(struct Unit *instigator, struct Unit *target)
 {
 	InitBattleUnit(&gBattleUnitA, instigator);
@@ -96,7 +111,7 @@ static void BattleGenerateRealInternal(struct Unit *instigator, struct Unit *tar
 	if (gBattleSt.flags & BATTLE_FLAG_BALLISTA)
 		SetBattleUnitWeaponBallista(&gBattleUnitA);
 	else
-		SetBattleUnitWeapon(&gBattleUnitA, -1);
+		SetBattleUnitWeapon(&gBattleUnitA, battle_actor_slot());
 
 	SetBattleUnitWeapon(&gBattleUnitB, -1);
 

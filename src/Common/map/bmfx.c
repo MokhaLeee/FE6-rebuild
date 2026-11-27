@@ -23,6 +23,7 @@ static int bmfx_div_signed(int value, int divisor)
 #include "util.h"
 #include "msg.h"
 #include "bm.h"
+#include "battle.h"
 #include "item.h"
 #include "unit.h"
 #include "map.h"
@@ -977,6 +978,10 @@ void UpdateEquipInfoWindow(int item_slot)
 
     case ITEMSLOT_OVERFLOW:
         item = gBmSt.inventory_item_overflow;
+        break;
+
+    case ITEMSLOT_GAIDEN_BMAG1 ... ITEMSLOT_GAIDEN_WMAG7:
+        item = GetItemFromSlot(proc->unit, item_slot);
         break;
 
     default:
