@@ -43,6 +43,18 @@ enum mss_slide_ops {
 };
 
 /*
+ * Alpha blend for the panels. BG2 (frames + fill) is the first target and BG3
+ * (the backdrop) is the only second target that can sit below it, so EVB is the
+ * visible strength of the backdrop through the fill. EVA + EVB must stay <= 16,
+ * otherwise the hardware saturates and the panel's light pixels (gold frame,
+ * pale fill) wash out to white instead of blending.
+ */
+enum {
+	MSS_BLEND_EVA = 12, /* BG2: panels */
+	MSS_BLEND_EVB = 4,  /* BG3: backdrop */
+};
+
+/*
  * The page label and arrows sit on top of the right panel, so they follow its
  * horizontal slide: off-screen while the panel is out, then back in with it.
  */
@@ -285,7 +297,12 @@ static void mss_init(struct ProcMss *proc)
 	gDispIo.bg2_ct.priority = 1;
 	gDispIo.bg3_ct.priority = 3;
 
-	SetBlendAlpha(15, 4);
+	SetBlendAlpha(MSS_BLEND_EVA, MSS_BLEND_EVB);
+	/*
+	 * BG2 is the first target; of the second targets only BG3 can ever sit
+	 * below it, since BG1 (same priority, lower number) and the OAM layer are
+	 * drawn above BG2.
+	 */
 	SetBlendTargetA(0, 0, 1, 0, 0);
 	SetBlendBackdropA(0);
 	SetBlendTargetB(0, 1, 0, 1, 1);
